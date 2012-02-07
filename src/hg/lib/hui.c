@@ -7386,15 +7386,18 @@ enum trackVisibility tdbVisLimitedByAncestors(struct cart *cart, struct trackDb 
 {
 boolean subtrackOverride = FALSE;
 enum trackVisibility vis = tdbLocalVisibility(cart,tdb,&subtrackOverride);
-if (subtrackOverride)
-    return vis;
 
-// subtracks without explicit (cart) vis but are selected, should get inherited vis
 if (tdbIsContainerChild(tdb))
     {
-    if (!checkBoxToo || fourStateVisible(subtrackFourStateChecked(tdb,cart)))
-        vis = tvFull; // to be limited by ancestry
+    // subtracks without explicit (cart) vis but are selected, should get inherited vis
+    if (!subtrackOverride)
+        vis = tvFull;
+    // subtracks with checkbox that says no, are stopped cold
+    if (checkBoxToo && !fourStateVisible(subtrackFourStateChecked(tdb,cart)))
+        vis = tvHide; // Checkbox says no
     }
+if (subtrackOverride)
+    return vis;
 
 if (vis == tvHide || tdb->parent == NULL || (!foldersToo && tdbIsFolder(tdb->parent)))  // aka superTrack
     return vis; // end of line

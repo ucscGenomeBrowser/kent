@@ -53,49 +53,43 @@ Two different GIS RNA-PET protocols were used to generate the full length transc
 (unpublished), and the other is a cloning-based library construction (Ng <i>et al.</i>
 2005) and recent Illumina paired end sequencing.
 </P>
-
 <h3>Cloning-free RNA-PET (50 bp reads, 25 bp and 25 bp tag for each of the 5' and 3' ends)</h3>
 <P>
 <B>Method:</B>
-The cloning-free RNA-PET libraries were generated from polyA mRNA samples and constructed using a recently modified GIS protocol (unpublished). Total RNA in good quality was used as starting material and purified through MACs polyT column to obtain full length polyA mRNAs. Approximately 5 micrograms of enriched polyA mRNA were used for reverse transcription to convert polyA mRNA to full length cDNA. The obtained full length cDNA was modified and ligated with specific linker sequences, followed by circularization through ligation to generate circular cDNA molecules. The 25 bp tag from each end of the full length cDNA was extracted by type II enzyme EcoP15I digestion. The resulting PETs were ligated with sequencing adaptors at the both ends, amplified by PCR, and further purified as complex templates for paired end (PE) sequencing using Illumina platforms.
+The cloning-free RNA-PET libraries were generated from polyA mRNA samples and constructed using a recently modified GIS protocol (unpublished). Total RNA in good quality was used as starting material and purified with a MACs polyT column to obtain full length polyA mRNAs. Approximately 5 micrograms of enriched polyA mRNA was used for reverse transcription to convert polyA mRNA to full length cDNA. Specific linker sequences were ligated to the full length cDNA. The modified cDNA was circularized by ligation generating circular cDNA molecules. The 25 bp tag from each end of the full length cDNA was extracted by type II enzyme EcoP15I digestion. The resulting PETs were ligated with sequencing adaptors at the both ends, amplified by PCR, and further purified as complex templates for paired end (PE) sequencing using Illumina platforms.
 </P>
 <P>
 <B>Data:</B>
-The sequenced RNA-PETs are unified in 25/25 bp length from each end of a cDNA. After filtering out redundant and noise tags, the unique PETs will proceed to analysis pipeline. Initially, the orientation of each tag will be screened out by the barcode built in the sequencing-template, then paired into a given orientation-PET.  The orientation-determined RNA-PET is mapped onto reference genome allowing up to two mismatches. Majority of PETs are mapped on the known transcripts, or splice variants. A small portion of misaligned PETs, defined as discordant PETs, are mapped either too far from each tag, have wrong orientations, or mapped in different chromosomes, indicating exist some transcription variations which could be caused by genome structure variations: such as fusion, deletion, insertion, inversion, tandem repeat and translocation; or RNA trans-splicing etc. 
+The sequenced RNA-PETs resulted in paired 2x25 bp reads from 5' and 3' ends of a cDNA. Redundant and noisy reads were excluded from downstream analysis. Strand specific orientation of each PET was determined using the barcode built into the sequencing template. The oriented RNA-PET was mapped onto the reference genome allowing up to two mismatches. Majority of PETs mapped to known transcripts. A small portion of misaligned PETs, defined as discordant PETs, mapped too far from each tag, with wrong orientations, or to different chromosomes. These discordant PETs indicated the existence of some transcription variants that could be caused by genomic structural variants such as: fusions, deletions, insertions, inversions, tandem repeats, translocations or RNA trans-splicing etc. 
 </P>
 
 <h3>Cloning-based RNA-PET (34 bp reads, 18 bp and 16 bp tag for each of the 5' and 3' ends)</h3>
 <P>
 <B>Method:</B>
-The cloning-based RNA-PET (GIS-PET) libraries were generated from polyA RNA samples and constructed using the protocol described by Ng et al. (2005). Total RNA in good quality was used as starting material and further purified through MACs polyT column to enrich polyA mRNA and remove any contaminants (e.g., rRNA, tRNA, DNA, protein etc). Approximately 10 micrograms of polyA mRNA were then used for reverse transcription to convert polyA mRNA into full length cDNA. The obtained full length cDNA was modified with specific linker sequences, then, ligated to a GIS-developed (pGIS4) vector to form a complex full length cDNA library, which was cloned into E. coli. The plasmid DNA was then isolated from the library, followed by MmeI (a type II enzyme) digestion to generate a final length of 18 bp/16 bp ditags from each end of the full length cDNA. The single ditag (or called PET) was then ligated to form a diPET structure (a concatemer with two unrelated PET linked by a linker sequence) to facilitate Illuminaa Paired End sequencing. 
+The cloning-based RNA-PET (GIS-PET) libraries were generated from polyA RNA samples and constructed using the protocol described by Ng et al. (2005). Total RNA in good quality was used as starting material and further purified with a MACs polyT column to enrich polyA mRNA. Approximately 10 micrograms of polyA enriched mRNA was reverse transcribed resulting in full length cDNA. The obtained full length cDNA was modified with specific linker sequences and ligated to a GIS-developed (pGIS4) vector. The resulting plasmids form a complex full length cDNA library, which was cloned into E. coli. The plasmid DNA was then isolated from the library, followed by MmeI (a type II enzyme) digestion to generate a final length of 18 bp/16 bp ditags from each end of the full length cDNA. The single ditag (or PET) was then ligated to form a diPET structure (a concatemer with two unrelated PET linked by a linker sequence) to facilitate Illumina Paired End sequencing. 
 </P>
 
-
-<p><b>Data:</b>The cloning-based RNA-PETs are unified in 18 bp and 16 bp length, respectively extracted from 5' and 3' 
-end of each cDNA. The redundant reads were filtered out initially and unique ones were included for analysis. PET sequences 
+<p><b>Data:</b>Sequencing of clone-based RNA-pets resulted in paired reads of 18bp and 16bp corresponding to the 5' and 3' end of each cDNA, respectively. The redundant reads were filtered out and unique reads were included for analysis. PET sequences 
 were then mapped to (GRCh37, hg19, excluding mitochondirion, haplotypes, randoms and chromosome Y) reference genome using 
 the following specific criteria (Ruan et al. 2007): </p>
 <ul>
- <li>A minimal continuous 16 bp match must exist for the 5' signature; the 3' signature must have a minimal continuous 14 bp match</li>
- <li>Both 5' and 3' signatures must be present on the same chromosome</li>
- <li>Their 5' to 3' orientation must be correct (5' signature followed by 3' signature)</li>
- <li>The maximal genomic span of a PET genomic alignment must be less than one million bp</li>
+<li>A minimal continuous 16 bp match must exist for the 5' signature; the 3' signature must have a minimal continuous 14 bp match</li>
+<li>Both 5' and 3' signatures must be present on the same chromosome</li>
+<li>Their 5' to 3' orientation must be correct (5' signature followed by 3' signature)</li>
+<li>The maximal genomic span of a PET genomic alignment must be less than one million bp</li>
 </ul>
 <P>
-PETs mapping to 2-10 locations are also included and may represent duplicated genes or pseudogenes in the genome.   
+PETs mapping to 2-10 locations are also included and may represent duplicated genes or pseudogenes in the genome. 
 A majority of PETs mapped on the known transcripts or splice variants. A small portion of misaligned PETs, 
-defined as discordant PETs, were mapped either too far from each other, mapped in the wrong orientation, or mapped 
-to different chromosomes, indicating that some transcription variations exist which could be caused by genome structure 
-variations: such as fusion, deletion, insertion, inversion, tandem repeat and translocation; or RNA trans-splicing etc. 
+defined as discordant PETs, mapped either too far from each other, in the wrong orientation, or 
+to different chromosomes. The presence of discordant PETs indicates that some transcriptional variants exist. These variants could be caused by genomic structural variants such as: fusions, deletions, insertions, inversions, tandem repeats, translocation or RNA trans-splicing etc. 
 </P>
 <h3>Clusters</h3>
-<p>To cluster the PETs the following procedure was applied: the mapping location of the 5' and 3' tag of a given PET was extended by 100 bp in both directions creating 5' and 3' search windows.  
+<p>PETs were clustered using the following procedure: the mapping location of the 5' and 3' tag of a given PET was extended by 100 bp in both directions creating 5' and 3' search windows. 
 If the 5' and 3' tags of a second PET mapped within the 5' and 3' search window of the first PET then the two PETs were clustered 
-and the search windows were adjusted so that they contained the tag extensions of the second PET.  PETs which subsequently 
+and the search windows were adjusted so that they contained the tag extensions of the second PET. PETs which subsequently 
 mapped with their 5' and 3' tags within the adjusted 5' and 3' search window, respectively, were also assigned to this cluster 
-and search window readjusted.  This iterative process continued till no new PET was found to fall within the search window, at 
-which stage all the found PETs are classified as belonging to a single cluster.   This process is repeated till all PETs are 
-assigned to a cluster.</p>
+and search window was readjusted. This iterative process continued until no new PETs were fell within the search window. This process is repeated until all PETs were assigned to a cluster.</p>
 
 <P>
 The total count of PET 

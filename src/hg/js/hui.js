@@ -100,6 +100,10 @@ function exposeAll()
             $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
 	        $(visDD).change();// trigger on change code, which may trigger supertrack reshaping
         }                         // and effecting inherited subtrack vis
+
+        // If superChild and hidden by supertrack, wierd things go on unless we trigger reshape
+        if ($(visDD).hasClass('superChild'))
+            visTriggersHiddenSelect(visDD);
     }
 }
 
