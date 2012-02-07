@@ -140,7 +140,7 @@ switch (head.type)
         internalErr();
 	break;
     }
-assert(blockPt == blockEnd);
+assert( (maxCount != 0 && outCount >= maxCount) || (blockPt == blockEnd));
 return outCount;
 }
 
@@ -336,7 +336,11 @@ for (block = blockList; block != NULL; )
 	if (maxCount != 0)
 	    {
 	    if (oneCount >= maxCount)
+		{
+		block = NULL;	 // we want to drop out of the outer loop too
 		break;
+		}
+
 	    maxCount -= oneCount;
 	    }
 	blockBuf += block->size;
