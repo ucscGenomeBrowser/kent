@@ -485,6 +485,8 @@ may have the following variables, which will be substituted:
                chainNet html page.
      $downloadsServer - the value of the hg.conf downloads.server variable, or
                          hgdownload.cse.ucsc.edu if not set.
+     $linkToGatewayPage - a link to the current database's gateway page is 
+               generated.
 In addition, if there is an $otherDb field set in the .ra file, these
 variables are available:
      $o_ORGANISM - all upper case other organism, like 'MOUSE'
