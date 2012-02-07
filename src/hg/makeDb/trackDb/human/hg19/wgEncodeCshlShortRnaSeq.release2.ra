@@ -158,7 +158,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         # subId=3293 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep1
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel BJ cell sm A 1
         longLabel BJ whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
@@ -166,6 +166,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         origAssembly hg19
         # subId=3294 dateSubmitted=2011-01-18
+        # was wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep1 cricket Tue Feb  7 13:42:40 2012
 
         track wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -287,7 +288,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 46,0,184
         # subId=3296 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK nucl sm A 1
         longLabel NHEK nucleus small RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
@@ -296,6 +297,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3380 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3 cricket Tue Feb  7 13:42:39 2012
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -306,7 +308,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         # subId=3353 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep2
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel SKRA cell sm A 2
         longLabel SK-N-SH_RA whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
@@ -314,8 +316,9 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         origAssembly hg19
         # subId=3377 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep2 cricket Tue Feb  7 13:42:36 2012
 
-        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep1
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel SKRA cell sm A 1
         longLabel SK-N-SH_RA whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
@@ -323,8 +326,9 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         origAssembly hg19
         # subId=3376 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep1 cricket Tue Feb  7 13:42:36 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep4
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cyto sm A 2
         longLabel NHEK cytosol small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
@@ -333,8 +337,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3374 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep4 cricket Tue Feb  7 13:42:39 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep3
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cyto sm A 1
         longLabel NHEK cytosol small RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
@@ -343,8 +348,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3373 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep3 cricket Tue Feb  7 13:42:38 2012
 
-        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep4
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK nucl sm A 2
         longLabel NHEK nucleus small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
@@ -353,8 +359,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3375 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep4 cricket Tue Feb  7 13:42:40 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep1
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cell sm A 1
         longLabel NHEK whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
@@ -363,8 +370,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3371 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep1 cricket Tue Feb  7 13:42:37 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cell sm A 2
         longLabel NHEK whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
@@ -373,6 +381,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3372 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2 cricket Tue Feb  7 13:42:38 2012
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -453,7 +462,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 224,75,0
         # subId=3362 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa nucl sm A 2
         longLabel HeLa-S3 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
@@ -462,8 +471,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3349 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2 cricket Tue Feb  7 13:42:45 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep2
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa cyto sm A 2
         longLabel HeLa-S3 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
@@ -472,8 +482,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3347 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep2 cricket Tue Feb  7 13:42:44 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep1
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa nucl sm A 1
         longLabel HeLa-S3 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
@@ -482,8 +493,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3348 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep1 cricket Tue Feb  7 13:42:44 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep1
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa cyto sm A 1
         longLabel HeLa-S3 cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
@@ -492,8 +504,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3346 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep1 cricket Tue Feb  7 13:42:43 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep2
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa cell sm A 2
         longLabel HeLa-S3 whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
@@ -502,8 +515,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3345 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep2 cricket Tue Feb  7 13:42:43 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep1
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa cell sm A 1
         longLabel HeLa-S3 whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
@@ -512,6 +526,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3344 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep1 cricket Tue Feb  7 13:42:42 2012
 
         track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -553,7 +568,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 0,107,27
         # subId=3340 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep2
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel AG50 cell sm A 2
         longLabel AG04450 whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
@@ -561,8 +576,9 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         origAssembly hg19
         # subId=3336 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep2 cricket Tue Feb  7 13:42:41 2012
 
-        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep1
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel AG50 cell sm A 1
         longLabel AG04450 whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
@@ -570,6 +586,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         origAssembly hg19
         # subId=3335 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep1 cricket Tue Feb  7 13:42:41 2012
 
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -581,21 +598,23 @@ html wgEncodeCshlShortRnaSeq.release2
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel A549 cell sm A 2
 	longLabel A549 whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=A549 localization=cell rnaExtract=SHORTTOTAL protocol=TAP rep=rep2
         type bam
         # subId=4059 dateSubmitted=2011-05-11
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2 cricket Tue Feb  7 13:42:34 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel A549 cell sm A 1
 	longLabel A549 whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=A549 localization=cell rnaExtract=SHORTTOTAL protocol=TAP rep=rep1
         type bam
         # subId=4058 dateSubmitted=2011-05-09
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1 cricket Tue Feb  7 13:42:34 2012
 
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
     	parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -780,7 +799,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         # subId=3293 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep1
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel BJ cell sm - 1
         longLabel BJ whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
@@ -788,6 +807,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 5947156.000000
         origAssembly hg19
         # subId=3294 dateSubmitted=2011-01-18
+        # was wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:41 2012
 
         track wgEncodeCshlShortRnaSeqK562CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal on
@@ -909,7 +929,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 46,0,184
         # subId=3296 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep3
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapMinusRawRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel NHEK nucl sm - 1
         longLabel NHEK nucleus small RNA-seq Minus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
@@ -918,6 +938,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3380 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep3 cricket Tue Feb  7 13:42:40 2012
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -928,7 +949,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         # subId=3353 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep2
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel SKRA cell sm - 2
         longLabel SK-N-SH_RA whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
@@ -936,8 +957,9 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 3559664.000000
         origAssembly hg19
         # subId=3377 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:37 2012
 
-        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep1
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel SKRA cell sm - 1
         longLabel SK-N-SH_RA whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
@@ -945,8 +967,9 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 3043844.000000
         origAssembly hg19
         # subId=3376 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:36 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep4
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapMinusRawRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel NHEK cyto sm - 2
         longLabel NHEK cytosol small RNA-seq Minus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
@@ -955,8 +978,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3374 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep4 cricket Tue Feb  7 13:42:39 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep3
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapMinusRawRep3
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel NHEK cyto sm - 1
         longLabel NHEK cytosol small RNA-seq Minus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
@@ -965,8 +989,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3373 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep3 cricket Tue Feb  7 13:42:39 2012
 
-        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep4
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapMinusRawRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel NHEK nucl sm - 2
         longLabel NHEK nucleus small RNA-seq Minus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
@@ -975,8 +1000,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3375 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep4 cricket Tue Feb  7 13:42:40 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep1
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel NHEK cell sm - 1
         longLabel NHEK whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
@@ -985,8 +1011,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3371 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:38 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep2
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel NHEK cell sm - 2
         longLabel NHEK whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
@@ -995,6 +1022,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3372 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:38 2012
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -1075,7 +1103,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 224,75,0
         # subId=3362 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep2
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel HeLa nucl sm - 2
         longLabel HeLa-S3 nucleus small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
@@ -1084,8 +1112,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3349 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:45 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep2
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel HeLa cyto sm - 2
         longLabel HeLa-S3 cytosol small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
@@ -1094,8 +1123,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3347 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:44 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep1
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel HeLa nucl sm - 1
         longLabel HeLa-S3 nucleus small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
@@ -1104,8 +1134,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3348 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:45 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep1
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel HeLa cyto sm - 1
         longLabel HeLa-S3 cytosol small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
@@ -1114,8 +1145,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3346 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:44 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep2
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel HeLa cell sm - 2
         longLabel HeLa-S3 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
@@ -1124,8 +1156,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3345 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:43 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep1
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel HeLa cell sm - 1
         longLabel HeLa-S3 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
@@ -1134,6 +1167,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3344 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:43 2012
 
         track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -1175,7 +1209,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 0,107,27
         # subId=3340 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep2
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel AG50 cell sm - 2
         longLabel AG04450 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
@@ -1183,8 +1217,9 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 2108017.000000
         origAssembly hg19
         # subId=3336 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:42 2012
 
-        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep1
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel AG50 cell sm - 1
         longLabel AG04450 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
@@ -1192,6 +1227,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 1741127.000000
         origAssembly hg19
         # subId=3335 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:41 2012
 
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -1203,21 +1239,23 @@ html wgEncodeCshlShortRnaSeq.release2
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel A549 cell sm - 2
 	longLabel A549 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL protocol=TAP rep=rep2
         type bigWig 1.000000 1785277.000000
         # subId=4059 dateSubmitted=2011-05-11
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2 cricket Tue Feb  7 13:42:35 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel A549 cell sm - 1
 	longLabel A549 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL protocol=TAP rep=rep1
         type bigWig 1.000000 2036805.000000
         # subId=4058 dateSubmitted=2011-05-09
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1 cricket Tue Feb  7 13:42:34 2012
 
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -1226,8 +1264,8 @@ html wgEncodeCshlShortRnaSeq.release2
         subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL protocol=TAP rep=rep1
         type bigWig 1.000000 2034826.000000
         color 189,0,157
-        type bigWig 1.000000 2627394.000000
-        color 189,0,157
+        # subId=4061 dateSubmitted=2011-05-11
+        #type bigWig 1.000000 2627394.000000
         # subId=4112 dateSubmitted=2011-06-01
 
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
@@ -1404,7 +1442,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         # subId=3293 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep1
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel BJ cell sm + 1
         longLabel BJ whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
@@ -1412,6 +1450,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 3537517.000000
         origAssembly hg19
         # subId=3294 dateSubmitted=2011-01-18
+        # was wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:41 2012
 
         track wgEncodeCshlShortRnaSeqK562CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal on
@@ -1533,7 +1572,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 46,0,184
         # subId=3296 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep3
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel NHEK nucl sm + 1
         longLabel NHEK nucleus small RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
@@ -1542,6 +1581,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3380 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep3 cricket Tue Feb  7 13:42:40 2012
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -1552,7 +1592,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         # subId=3353 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep2
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel SKRA cell sm + 2
         longLabel SK-N-SH_RA whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
@@ -1560,8 +1600,9 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 5728503.000000
         origAssembly hg19
         # subId=3377 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:37 2012
 
-        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep1
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel SKRA cell sm + 1
         longLabel SK-N-SH_RA whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
@@ -1569,8 +1610,9 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 4415282.000000
         origAssembly hg19
         # subId=3376 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:37 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep4
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel NHEK cyto sm + 2
         longLabel NHEK cytosol small RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
@@ -1579,8 +1621,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3374 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep4 cricket Tue Feb  7 13:42:39 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep3
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep3
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel NHEK cyto sm + 1
         longLabel NHEK cytosol small RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
@@ -1589,8 +1632,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3373 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep3 cricket Tue Feb  7 13:42:39 2012
 
-        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep4
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel NHEK nucl sm + 2
         longLabel NHEK nucleus small RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
@@ -1599,8 +1643,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3375 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep4 cricket Tue Feb  7 13:39:01 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep1
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel NHEK cell sm + 1
         longLabel NHEK whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
@@ -1609,8 +1654,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3371 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:38 2012
 
-        track wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep2
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel NHEK cell sm + 2
         longLabel NHEK whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
@@ -1619,6 +1665,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 179,0,134
         # subId=3372 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:38 2012
 
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -1699,7 +1746,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 224,75,0
         # subId=3362 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep2
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel HeLa nucl sm + 2
         longLabel HeLa-S3 nucleus small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
@@ -1708,8 +1755,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3349 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:45 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep2
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel HeLa cyto sm + 2
         longLabel HeLa-S3 cytosol small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
@@ -1718,8 +1766,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3347 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:44 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep1
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel HeLa nucl sm + 1
         longLabel HeLa-S3 nucleus small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
@@ -1728,8 +1777,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3348 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:45 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep1
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel HeLa cyto sm + 1
         longLabel HeLa-S3 cytosol small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
@@ -1738,8 +1788,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3346 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:44 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep2
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel HeLa cell sm + 2
         longLabel HeLa-S3 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
@@ -1748,8 +1799,9 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3345 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:43 2012
 
-        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep1
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel HeLa cell sm + 1
         longLabel HeLa-S3 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
@@ -1758,6 +1810,7 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 0,119,158
         # subId=3344 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:43 2012
 
         track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -1799,7 +1852,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 0,107,27
         # subId=3340 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep2
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel AG50 cell sm + 2
         longLabel AG04450 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
@@ -1807,8 +1860,9 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 3606106.000000
         origAssembly hg19
         # subId=3336 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:42 2012
 
-        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep1
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel AG50 cell sm + 1
         longLabel AG04450 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
@@ -1816,6 +1870,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 4359540.000000
         origAssembly hg19
         # subId=3335 dateSubmitted=2011-01-19
+        # was wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:42 2012
 
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
@@ -1827,21 +1882,23 @@ html wgEncodeCshlShortRnaSeq.release2
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel A549 cell sm + 2
 	longLabel A549 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL protocol=TAP rep=rep2
         type bigWig 1.000000 10013224.000000
         # subId=4059 dateSubmitted=2011-05-11
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2 cricket Tue Feb  7 13:42:35 2012
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel A549 cell sm + 1
 	longLabel A549 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL protocol=TAP rep=rep1
         type bigWig 1.000000 7091328.000000
         # subId=4058 dateSubmitted=2011-05-09
+        # was wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1 cricket Tue Feb  7 13:42:35 2012
 
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
