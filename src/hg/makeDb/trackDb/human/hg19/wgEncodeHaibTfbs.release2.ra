@@ -1,7 +1,7 @@
 # HAIB TFBS (wrangler: vsmalladi)
 track wgEncodeHaibTfbs
 compositeTrack on
-superTrack wgEncodeTfBindingSuper full
+superTrack wgEncodeTfBindingSuper dense
 shortLabel HAIB TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/HAIB
 group regulation
@@ -21,7 +21,7 @@ filterComposite dimB=one dimC=one
 sortOrder cellType=+ factor=+ treatment=+ protocol=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target protocol=Protocol treatment=Treatment replicate=Rep view=View labExpId=Lab_ID controlId=Control_ID setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
-controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protocol treatment=treatment
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protocol treatment=treatment rep=replicate i]
 priority 0
 type bed 3
 wgEncode 1
@@ -30,141 +30,133 @@ noInherit on
 html wgEncodeHaibTfbs.release2
 #dataVersion through the ENCODE Jan 2010 Freeze
 
-	#Peak Track HAIB TFBS#
-	#Short Labels for peak =Pk #
+    #Peak Track HAIB TFBS#
+    #Short Labels for peak =Pk #
     track wgEncodeHaibTfbsViewPeaks
     shortLabel Peaks
     view Peaks
     visibility pack
-   # viewUi on
+    # viewUi on
     subTrack wgEncodeHaibTfbs
     scoreFilter 0
     scoreFilterLimits 0:1000
     minGrayLevel 3
     minScore 0
 
+        track wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HESC TCF1 PCR1 2
+        longLabel H1-hESC TCF12 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=TCF12 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
+        type broadPeak
+        color 0,107,27
 
-	    track wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep2
-	    subTrack wgEncodeHaibTfbsViewPeaks off
-	    shortLabel HESC TCF1 PCR1 2
-	    longLabel H1-hESC TCF12 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-	    subGroups view=Peaks factor=TCF12 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
-	    type broadPeak
-	    color 0,107,27
+        track wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HESC TCF1 PCR1 1
+        longLabel H1-hESC TCF12 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=TCF12 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
+        type broadPeak
+        color 0,107,27
 
+        track wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks on
+        shortLabel HESC USF1 PCR1 2
+        longLabel H1-hESC USF-1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=USF1 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
+        type broadPeak
+        color 0,107,27
 
-	    track wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep1
-	    subTrack wgEncodeHaibTfbsViewPeaks off
-	    shortLabel HESC TCF1 PCR1 1
-	    longLabel H1-hESC TCF12 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-	    subGroups view=Peaks factor=TCF12 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
-	    type broadPeak
-	    color 0,107,27
+        track wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks on
+        shortLabel HESC USF1 PCR1 1
+        longLabel H1-hESC USF-1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=USF1 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
+        type broadPeak
+        color 0,107,27
 
-	    track wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep2
-	    subTrack wgEncodeHaibTfbsViewPeaks on
-	    shortLabel HESC USF1 PCR1 2
-	    longLabel H1-hESC USF-1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-	    subGroups view=Peaks factor=USF1 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
-	    type broadPeak
-	    color 0,107,27
+        track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HESC SIN3 PCR1 2
+        longLabel H1-hESC Sin3Ak-20 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=SIN3AK20 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
+        type broadPeak
+        color 0,107,27
 
+        track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HESC SIN3 PCR1 1
+        longLabel H1-hESC Sin3Ak-20 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=SIN3AK20 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
+        type broadPeak
+        color 0,107,27
 
-	    track wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep1
-	    subTrack wgEncodeHaibTfbsViewPeaks on
-	    shortLabel HESC USF1 PCR1 1
-	    longLabel H1-hESC USF-1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-	    subGroups view=Peaks factor=USF1 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
-	    type broadPeak
-	    color 0,107,27
+        track wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HESC SP1 PCR1 2
+        longLabel H1-hESC SP1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=SP1 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
+        type broadPeak
+        color 0,107,27
 
-		track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep2
-    	subTrack wgEncodeHaibTfbsViewPeaks off
-    	shortLabel HESC SIN3 PCR1 2
-    	longLabel H1-hESC Sin3Ak-20 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-    	subGroups view=Peaks factor=SIN3AK20 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
-    	type broadPeak
-    	color 0,107,27
+        track wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HESC SP1 PCR1 1
+        longLabel H1-hESC SP1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=SP1 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
+        type broadPeak
+        color 0,107,27
 
+        track wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HESC SIX5 PCR1 2
+        longLabel H1-hESC SIX5 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=SIX5 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
+        type broadPeak
+        color 0,107,27
 
-    	track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep1
-    	subTrack wgEncodeHaibTfbsViewPeaks off
-    	shortLabel HESC SIN3 PCR1 1
-    	longLabel H1-hESC Sin3Ak-20 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-    	subGroups view=Peaks factor=SIN3AK20 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
-    	type broadPeak
-    	color 0,107,27
+        #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
+        track wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HESC SIX5 PCR1 1
+        longLabel H1-hESC SIX5 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=SIX5 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
+        type broadPeak
+        color 0,107,27
 
-	    track wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep2
-	    subTrack wgEncodeHaibTfbsViewPeaks off
-	    shortLabel HESC SP1 PCR1 2
-	    longLabel H1-hESC SP1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-	    subGroups view=Peaks factor=SP1 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
-	    type broadPeak
-	    color 0,107,27
+        track wgEncodeHaibTfbsH1hescSrfPcr1xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HESC SRF PCR1 2
+        longLabel H1-hESC SRF PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=SRF cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
+        type broadPeak
+        color 0,107,27
 
+        track wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HESC SRF PCR1 1
+        longLabel H1-hESC SRF PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=SRF cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
+        type broadPeak
+        color 0,107,27
 
-		track wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep1
-	    subTrack wgEncodeHaibTfbsViewPeaks off
-	    shortLabel HESC SP1 PCR1 1
-	    longLabel H1-hESC SP1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-	    subGroups view=Peaks factor=SP1 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
-	    type broadPeak
-	    color 0,107,27
+        track wgEncodeHaibTfbsH1hescGabpPcr1xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks on
+        shortLabel HESC GABP PCR1 2
+        longLabel H1-hESC GABP PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=GABP cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
+        type broadPeak
+        color 0,107,27
 
-	    track wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep2
-	    subTrack wgEncodeHaibTfbsViewPeaks off
-	    shortLabel HESC SIX5 PCR1 2
-	    longLabel H1-hESC SIX5 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-	    subGroups view=Peaks factor=SIX5 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
-	    type broadPeak
-	    color 0,107,27
+        track wgEncodeHaibTfbsH1hescGabpPcr1xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks on
+        shortLabel HESC GABP PCR1 1
+        longLabel H1-hESC GABP PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=GABP cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
+        type broadPeak
+        color 0,107,27
 
-	    #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
-	    track wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep1
-	    subTrack wgEncodeHaibTfbsViewPeaks off
-	    shortLabel HESC SIX5 PCR1 1
-	    longLabel H1-hESC SIX5 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-	    subGroups view=Peaks factor=SIX5 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
-	    type broadPeak
-	    color 0,107,27
-
-	    track wgEncodeHaibTfbsH1hescSrfPcr1xPkRep2
-	    subTrack wgEncodeHaibTfbsViewPeaks off
-	    shortLabel HESC SRF PCR1 2
-	    longLabel H1-hESC SRF PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-	    subGroups view=Peaks factor=SRF cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
-	    type broadPeak
-	    color 0,107,27
-
-
-	    track wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1
-	    subTrack wgEncodeHaibTfbsViewPeaks off
-	    shortLabel HESC SRF PCR1 1
-	    longLabel H1-hESC SRF PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-	    subGroups view=Peaks factor=SRF cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
-	    type broadPeak
-	    color 0,107,27
-
-	    track wgEncodeHaibTfbsH1hescGabpPcr1xPkRep2
-	    subTrack wgEncodeHaibTfbsViewPeaks on
-	    shortLabel HESC GABP PCR1 2
-	    longLabel H1-hESC GABP PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-	    subGroups view=Peaks factor=GABP cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
-	    type broadPeak
-	    color 0,107,27
-
-
-	    track wgEncodeHaibTfbsH1hescGabpPcr1xPkRep1
-	    subTrack wgEncodeHaibTfbsViewPeaks on
-	    shortLabel HESC GABP PCR1 1
-	    longLabel H1-hESC GABP PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-	    subGroups view=Peaks factor=GABP cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
-	    type broadPeak
-	    color 0,107,27
-
-
-		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
+        #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsH1hescEgr1V0416102PkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel HESC EGR1 V102 2
@@ -172,7 +164,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=EGR1 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
         color 0,107,27
-    # subId=1215 dateSubmitted=2010-05-27
+        # subId=1215 dateSubmitted=2010-05-27
 
         track wgEncodeHaibTfbsH1hescEgr1V0416102PkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -181,7 +173,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=EGR1 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
         color 0,107,27
-    # subId=1215 dateSubmitted=2010-05-27
+        # subId=1215 dateSubmitted=2010-05-27
 
         track wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -189,7 +181,7 @@ html wgEncodeHaibTfbs.release2
         longLabel ECC-1 ERa-a Estradiol 10nM v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ERAA cellType=ECC1 protocol=V0416102 treatment=EST10NM1H rep=rep2
         type broadPeak
-    # subId=1216 dateSubmitted=2010-05-27
+        # subId=1216 dateSubmitted=2010-05-27
         # was wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep2 wong Tue Jun  7 12:09:22 2011
 
         track wgEncodeHaibTfbsEcc1EralphaaV0416102Est10nm1hPkRep1
@@ -198,9 +190,8 @@ html wgEncodeHaibTfbs.release2
         longLabel ECC-1 ERa-a Estradiol 10nM v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ERAA cellType=ECC1 protocol=V0416102 treatment=EST10NM1H rep=rep1
         type broadPeak
-    # subId=1216 dateSubmitted=2010-05-27
+        # subId=1216 dateSubmitted=2010-05-27
         # was wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep1 wong Tue Jun  7 12:09:21 2011
-
 
         track wgEncodeHaibTfbsGm12891Pu1Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -208,7 +199,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 PU.1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=PU1 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
-    # subId=1224 dateSubmitted=2010-06-01
+        # subId=1224 dateSubmitted=2010-06-01
 
         track wgEncodeHaibTfbsGm12891Pu1Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -216,7 +207,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 PU.1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=PU1 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
-    # subId=1224 dateSubmitted=2010-06-01
+        # subId=1224 dateSubmitted=2010-06-01
 
         track wgEncodeHaibTfbsGm12891Pol24h8Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -224,7 +215,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 Pol2-4H8 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
-    # subId=1224 dateSubmitted=2010-06-01
+        # subId=1224 dateSubmitted=2010-06-01
 
         track wgEncodeHaibTfbsGm12891Pol2Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -232,7 +223,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 Pol2 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL2 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
-    # subId=1224 dateSubmitted=2010-06-01
+        # subId=1224 dateSubmitted=2010-06-01
 
         track wgEncodeHaibTfbsGm12891Taf1Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -240,7 +231,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 TAF1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=TAF1 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
-    # subId=1224 dateSubmitted=2010-06-01
+        # subId=1224 dateSubmitted=2010-06-01
 
         track wgEncodeHaibTfbsGm12891Pol24h8Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -248,7 +239,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 Pol2-4H8 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
-    # subId=1224 dateSubmitted=2010-06-01
+        # subId=1224 dateSubmitted=2010-06-01
 
         track wgEncodeHaibTfbsGm12891Pol2Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -256,7 +247,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 Pol2 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL2 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
-    # subId=1224 dateSubmitted=2010-06-01
+        # subId=1224 dateSubmitted=2010-06-01
 
         track wgEncodeHaibTfbsGm12891Pou2f2Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -264,7 +255,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 POU2F2 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POU2F2 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
-    # subId=1224 dateSubmitted=2010-06-01
+        # subId=1224 dateSubmitted=2010-06-01
 
         track wgEncodeHaibTfbsGm12891Taf1Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -272,7 +263,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 TAF1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=TAF1 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
-    # subId=1224 dateSubmitted=2010-06-01
+        # subId=1224 dateSubmitted=2010-06-01
 
         #lab not confident in result
         #track wgEncodeHaibTfbsK562Hey1Pcr1xPkRep2
@@ -282,7 +273,7 @@ html wgEncodeHaibTfbs.release2
         #subGroups view=Peaks factor=HEY1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
         #type broadPeak
         #color 46,0,184
-    # subId=1240 dateSubmitted=2010-06-07
+        # subId=1240 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsK562Six5Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -291,9 +282,9 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=SIX5 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 46,0,184
-    # subId=1240 dateSubmitted=2010-06-07
+        # subId=1240 dateSubmitted=2010-06-07
 
-		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
+        #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         #lab not confident in results
         #track wgEncodeHaibTfbsK562Hey1Pcr1xPkRep1
         #subTrack wgEncodeHaibTfbsViewPeaks off
@@ -302,7 +293,7 @@ html wgEncodeHaibTfbs.release2
         #subGroups view=Peaks factor=HEY1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
         #type broadPeak
         #color 46,0,184
-    # subId=1240 dateSubmitted=2010-06-07
+        # subId=1240 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsK562Pu1Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -311,7 +302,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=PU1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 46,0,184
-    # subId=1240 dateSubmitted=2010-06-07
+        # subId=1240 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsK562Pu1Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -320,7 +311,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=PU1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 46,0,184
-    # subId=1240 dateSubmitted=2010-06-07
+        # subId=1240 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsHepg2Zbtb33Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -329,7 +320,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=ZBTB33 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 189,0,157
-    # subId=1239 dateSubmitted=2010-06-04
+        # subId=1239 dateSubmitted=2010-06-04
 
         track wgEncodeHaibTfbsHepg2RxraPcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -338,7 +329,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=RXRA cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 189,0,157
-    # subId=1239 dateSubmitted=2010-06-04
+        # subId=1239 dateSubmitted=2010-06-04
 
         track wgEncodeHaibTfbsHepg2RxraPcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -347,7 +338,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=RXRA cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 189,0,157
-    # subId=1239 dateSubmitted=2010-06-04
+        # subId=1239 dateSubmitted=2010-06-04
 
         track wgEncodeHaibTfbsHepg2Zbtb33Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -356,7 +347,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=ZBTB33 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 189,0,157
-    # subId=1239 dateSubmitted=2010-06-04
+        # subId=1239 dateSubmitted=2010-06-04
 
         track wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -365,7 +356,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=SIN3AK20 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 189,0,157
-    # subId=1239 dateSubmitted=2010-06-04
+        # subId=1239 dateSubmitted=2010-06-04
 
         track wgEncodeHaibTfbsHepg2Usf1Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -374,7 +365,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=USF1 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 189,0,157
-    # subId=1239 dateSubmitted=2010-06-04
+        # subId=1239 dateSubmitted=2010-06-04
 
         track wgEncodeHaibTfbsHepg2JundPcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -383,7 +374,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=JUND cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 189,0,157
-    # subId=1239 dateSubmitted=2010-06-04
+        # subId=1239 dateSubmitted=2010-06-04
 
         track wgEncodeHaibTfbsHepg2Fosl2V0416101PkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -392,7 +383,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=FOSL2 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
         color 189,0,157
-    # subId=1239 dateSubmitted=2010-06-04
+        # subId=1239 dateSubmitted=2010-06-04
 
         track wgEncodeHaibTfbsHepg2JundPcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -401,7 +392,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=JUND cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 189,0,157
-    # subId=1239 dateSubmitted=2010-06-04
+        # subId=1239 dateSubmitted=2010-06-04
 
         track wgEncodeHaibTfbsHepg2Usf1Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -410,7 +401,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=USF1 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 189,0,157
-    # subId=1239 dateSubmitted=2010-06-04
+        # subId=1239 dateSubmitted=2010-06-04
 
         track wgEncodeHaibTfbsHelas3Taf1Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -419,7 +410,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=TAF1 cellType=2HELA protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 0,119,158
-    # subId=1242 dateSubmitted=2010-06-02
+        # subId=1242 dateSubmitted=2010-06-02
 
         track wgEncodeHaibTfbsHelas3Pol2Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -428,7 +419,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=POL2 cellType=2HELA protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 0,119,158
-    # subId=1242 dateSubmitted=2010-06-02
+        # subId=1242 dateSubmitted=2010-06-02
 
         track wgEncodeHaibTfbsHelas3GabpPcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -437,7 +428,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=GABP cellType=2HELA protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 0,119,158
-    # subId=1242 dateSubmitted=2010-06-02
+        # subId=1242 dateSubmitted=2010-06-02
 
         track wgEncodeHaibTfbsHelas3GabpPcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -446,7 +437,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=GABP cellType=2HELA protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 0,119,158
-    # subId=1242 dateSubmitted=2010-06-02
+        # subId=1242 dateSubmitted=2010-06-02
 
         track wgEncodeHaibTfbsHelas3Taf1Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -455,7 +446,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=TAF1 cellType=2HELA protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 0,119,158
-    # subId=1242 dateSubmitted=2010-06-02
+        # subId=1242 dateSubmitted=2010-06-02
 
         track wgEncodeHaibTfbsGm12878Tcf12Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -464,7 +455,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=TCF12 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878P300Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -473,7 +464,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=P300 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878P300Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -482,9 +473,9 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=P300 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
-		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
+        #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Pu1Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel GM78 PU.1 PCR1 1
@@ -492,7 +483,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=PU1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Pou2f2Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -501,7 +492,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=POU2F2 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Pbx3Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -510,7 +501,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=PBX3 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Pbx3Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -519,7 +510,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=PBX3 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Pou2f2Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -528,7 +519,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=POU2F2 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Pu1Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -537,7 +528,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=PU1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Bcl11aPcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -546,7 +537,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=BCL11A cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Tcf12Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -555,7 +546,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=TCF12 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId= dateSubmitted=2010-06-08
+        # subId= dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Pax5c20Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -564,7 +555,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=PAX5C20 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Pax5c20Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -573,7 +564,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=PAX5C20 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Ebfsc137065Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -582,7 +573,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=EBF1SC137065 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsGm12878EbfPcr1xPkRep1 cricket Tue Apr 19 11:11:44 2011
 
         track wgEncodeHaibTfbsGm12878Sp1Pcr1xPkRep1
@@ -592,9 +583,9 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=SP1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
-		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
+        #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks on
         shortLabel GM78 POL24 PCR1 1
@@ -602,7 +593,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=POL24H8 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Zbtb33Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -611,7 +602,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=ZBTB33 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878BatfPcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -620,7 +611,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=BATF cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Sp1Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -629,7 +620,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=SP1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks on
@@ -638,7 +629,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=POL24H8 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Pax5n19Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -647,7 +638,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=PAX5N19 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Zbtb33Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -656,7 +647,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=ZBTB33 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Irf4sc6059Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -665,7 +656,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=IRF4SC6059 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep2 cricket Tue Apr 19 11:11:45 2011
 
         track wgEncodeHaibTfbsGm12878Bcl11aPcr1xPkRep2
@@ -675,7 +666,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=BCL11A cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878BatfPcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -684,7 +675,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=BATF cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Ebfsc137065Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -693,9 +684,8 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=EBF1SC137065 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1241 dateSubmitted=2010-06-08
+        # subId=1241 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsGm12878EbfPcr1xPkRep2 cricket Tue Apr 19 11:11:45 2011
-
 
         track wgEncodeHaibTfbsGm12878Six5Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -704,7 +694,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=SIX5 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 153,38,0
-    # subId=1252 dateSubmitted=2010-06-07
+        # subId=1252 dateSubmitted=2010-06-07
 
         #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Six5Pcr1xPkRep1
@@ -714,7 +704,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=SIX5 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1252 dateSubmitted=2010-06-07
+        # subId=1252 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsHepg2Tcf12Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -723,7 +713,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=TCF12 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
         color 189,0,157
-    # subId=1251 dateSubmitted=2010-06-07
+        # subId=1251 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsA549GrPcr1xDex500pmPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -732,7 +722,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX500PM rep=rep2
         type broadPeak
         origAssembly hg18
-    # subId=1258 dateSubmitted=2010-06-08
+        # subId=1258 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsA549GrPcr1xDexdPkRep2 wong Tue Jun  7 11:58:08 2011
 
         track wgEncodeHaibTfbsA549GrPcr1xDex500pmPkRep1
@@ -742,7 +732,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX500PM rep=rep1
         type broadPeak
         origAssembly hg18
-    # subId=1258 dateSubmitted=2010-06-08
+        # subId=1258 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsA549GrPcr1xDexdPkRep1 wong Tue Jun  7 11:58:08 2011
 
         track wgEncodeHaibTfbsA549GrPcr1xDex50nmPkRep2
@@ -752,7 +742,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX50NM rep=rep2
         type broadPeak
         origAssembly hg18
-    # subId=1258 dateSubmitted=2010-06-08
+        # subId=1258 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsA549GrPcr1xDexbPkRep2 wong Tue Jun  7 11:57:59 2011
 
         track wgEncodeHaibTfbsA549GrPcr1xDex50nmPkRep1
@@ -762,7 +752,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX50NM rep=rep1
         type broadPeak
         origAssembly hg18
-    # subId=1258 dateSubmitted=2010-06-08
+        # subId=1258 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsA549GrPcr1xDexbPkRep1 wong Tue Jun  7 11:57:59 2011
 
         track wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep1
@@ -772,7 +762,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX5NM rep=rep1
         type broadPeak
         origAssembly hg18
-    # subId=1258 dateSubmitted=2010-06-08
+        # subId=1258 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsA549GrPcr1xDexcPkRep1 wong Tue Jun  7 11:58:03 2011
 
         track wgEncodeHaibTfbsEcc1GrV0416102Dex100nmPkRep2
@@ -781,7 +771,7 @@ html wgEncodeHaibTfbs.release2
         longLabel ECC-1 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=ECC1 protocol=PCR2X treatment=DEX100NM rep=rep2
         type broadPeak
-    # subId=1254 dateSubmitted=2010-06-07
+        # subId=1254 dateSubmitted=2010-06-07
         # was wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep2 wong Tue Jun  7 11:53:59 2011
 
         track wgEncodeHaibTfbsEcc1GrV0416102Dex100nmPkRep1
@@ -790,7 +780,7 @@ html wgEncodeHaibTfbs.release2
         longLabel ECC-1 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=ECC1 protocol=PCR2X treatment=DEX100NM rep=rep1
         type broadPeak
-    # subId=1254 dateSubmitted=2010-06-07
+        # subId=1254 dateSubmitted=2010-06-07
         # was wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep1 wong Tue Jun  7 11:53:59 2011
 
         track wgEncodeHaibTfbsGm12891Pou2f2Pcr1xPkRep2
@@ -799,7 +789,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 POU2F2 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POU2F2 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
-    # subId=1261 dateSubmitted=2010-06-08
+        # subId=1261 dateSubmitted=2010-06-08
 
         track wgEncodeHaibTfbsGm12878Irf4sc6059Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -808,7 +798,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=IRF4SC6059 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1261 dateSubmitted=2010-06-08
+        # subId=1261 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep1 cricket Tue Apr 19 11:11:45 2011
 
         #lab not confident in results
@@ -819,7 +809,7 @@ html wgEncodeHaibTfbs.release2
         #subGroups view=Peaks factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         #type broadPeak
         #color 189,0,157
-    # subId=1452 dateSubmitted=2010-06-16
+        # subId=1452 dateSubmitted=2010-06-16
 
         track wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -827,10 +817,10 @@ html wgEncodeHaibTfbs.release2
         longLabel A549 GR DEX 5nM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX5NM rep=rep2
         type broadPeak
-    # subId=1452 dateSubmitted=2010-06-16
+        # subId=1452 dateSubmitted=2010-06-16
         # was wgEncodeHaibTfbsA549GrPcr1xDexcPkRep2 wong Tue Jun  7 11:58:03 2011
 
-		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
+        #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsK562Six5Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 SIX5 PCR1 1
@@ -838,7 +828,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=SIX5 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 46,0,184
-    # subId=1452 dateSubmitted=2010-06-16
+        # subId=1452 dateSubmitted=2010-06-16
 
         track wgEncodeHaibTfbsGm12878Pax5n19Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -847,7 +837,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=PAX5N19 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 153,38,0
-    # subId=1452 dateSubmitted=2010-06-16
+        # subId=1452 dateSubmitted=2010-06-16
 
         track wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -856,7 +846,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=SIN3AK20 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
         color 189,0,157
-    # subId=1452 dateSubmitted=2010-06-16
+        # subId=1452 dateSubmitted=2010-06-16
 
         track wgEncodeHaibTfbsGm12891Pax5c20V0416101PkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -864,7 +854,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 PAX5-C20 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=PAX5C20 cellType=GM12891 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
-    # subId=1510 dateSubmitted=2010-06-17
+        # subId=1510 dateSubmitted=2010-06-17
 
         track wgEncodeHaibTfbsGm12891Pax5c20V0416101PkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -872,7 +862,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12891 PAX5-C20 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=PAX5C20 cellType=GM12891 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
-    # subId=1510 dateSubmitted=2010-06-17
+        # subId=1510 dateSubmitted=2010-06-17
 
         track wgEncodeHaibTfbsGm12892Pax5c20V0416101PkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -880,7 +870,7 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12892 PAX5-C20 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=PAX5C20 cellType=GM12892 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
-    # subId=1512 dateSubmitted=2010-06-17
+        # subId=1512 dateSubmitted=2010-06-17
 
         track wgEncodeHaibTfbsGm12892Pax5c20V0416101PkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -888,272 +878,271 @@ html wgEncodeHaibTfbs.release2
         longLabel GM12892 PAX5-C20 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=PAX5C20 cellType=GM12892 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
-    # subId=1512 dateSubmitted=2010-06-17
+        # subId=1512 dateSubmitted=2010-06-17
 
-
-            track wgEncodeHaibTfbsHepg2Pol2Pcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel HEPG POL2 PCR2 2
-            longLabel HepG2 Pol2 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
-            color 189,0,157
+        track wgEncodeHaibTfbsHepg2Pol2Pcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HEPG POL2 PCR2 2
+        longLabel HepG2 Pol2 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=POL2 cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
+        color 189,0,157
         # subId=1583 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsHepg2Pol2Pcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel HEPG POL2 PCR2 1
-            longLabel HepG2 Pol2 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep1
-            type broadPeak
-            color 189,0,157
+        track wgEncodeHaibTfbsHepg2Pol2Pcr2xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HEPG POL2 PCR2 1
+        longLabel HepG2 Pol2 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=POL2 cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep1
+        type broadPeak
+        color 189,0,157
         # subId=1583 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsHepg2Taf1Pcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel HEPG TAF1 PCR2 2
-            longLabel HepG2 TAF1 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=TAF1 cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
-            color 189,0,157
+        track wgEncodeHaibTfbsHepg2Taf1Pcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HEPG TAF1 PCR2 2
+        longLabel HepG2 TAF1 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=TAF1 cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
+        color 189,0,157
         # subId=1583 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsHepg2Taf1Pcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel HEPG TAF1 PCR2 1
-            longLabel HepG2 TAF1 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=TAF1 cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep1
-            type broadPeak
-            color 189,0,157
+        track wgEncodeHaibTfbsHepg2Taf1Pcr2xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HEPG TAF1 PCR2 1
+        longLabel HepG2 TAF1 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=TAF1 cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep1
+        type broadPeak
+        color 189,0,157
         # subId=1583 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsHepg2GabpPcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel HEPG GABP PCR2 2
-            longLabel HepG2 GABP PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=GABP cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
-            color 189,0,157
+        track wgEncodeHaibTfbsHepg2GabpPcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HEPG GABP PCR2 2
+        longLabel HepG2 GABP PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=GABP cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
+        color 189,0,157
         # subId=1583 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsHepg2GabpPcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel HEPG GABP PCR2 1
-            longLabel HepG2 GABP PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=GABP cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep1
-            type broadPeak
-            color 189,0,157
+        track wgEncodeHaibTfbsHepg2GabpPcr2xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HEPG GABP PCR2 1
+        longLabel HepG2 GABP PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=GABP cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep1
+        type broadPeak
+        color 189,0,157
         # subId=1583 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsHepg2NrsfPcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel HEPG NRSF PCR2 2
-            longLabel HepG2 NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=NRSF cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
-            color 189,0,157
+        track wgEncodeHaibTfbsHepg2NrsfPcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HEPG NRSF PCR2 2
+        longLabel HepG2 NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=NRSF cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
+        color 189,0,157
         # subId=1583 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsHepg2NrsfPcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel HEPG NRSF PCR2 1
-            longLabel HepG2 NRSF PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=NRSF cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep1
-            type broadPeak
-            color 189,0,157
+        track wgEncodeHaibTfbsHepg2NrsfPcr2xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HEPG NRSF PCR2 1
+        longLabel HepG2 NRSF PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=NRSF cellType=2HEPG2 protocol=PCR2X treatment=NONE rep=rep1
+        type broadPeak
+        color 189,0,157
         # subId=1583 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsGm12878Usf1Pcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks on
-            shortLabel GM78 USF1 PCR2 2
-            longLabel GM12878 USF-1 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=USF1 cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
-            color 153,38,0
+        track wgEncodeHaibTfbsGm12878Usf1Pcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks on
+        shortLabel GM78 USF1 PCR2 2
+        longLabel GM12878 USF-1 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=USF1 cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
+        color 153,38,0
         # subId=1582 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsGm12878Usf1Pcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks on
-            shortLabel GM78 USF1 PCR2 1
-            longLabel GM12878 USF-1 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=USF1 cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep1
-            type broadPeak
-            color 153,38,0
+        track wgEncodeHaibTfbsGm12878Usf1Pcr2xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks on
+        shortLabel GM78 USF1 PCR2 1
+        longLabel GM12878 USF-1 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=USF1 cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep1
+        type broadPeak
+        color 153,38,0
         # subId=1582 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsGm12878SrfPcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel GM78 SRF PCR2 2
-            longLabel GM12878 SRF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=SRF cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
-            color 153,38,0
+        track wgEncodeHaibTfbsGm12878SrfPcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 SRF PCR2 2
+        longLabel GM12878 SRF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=SRF cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
+        color 153,38,0
         # subId=1582 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsGm12878SrfPcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel GM78 SRF PCR2 1
-            longLabel GM12878 SRF PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=SRF cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep1
-            type broadPeak
-            color 153,38,0
+        track wgEncodeHaibTfbsGm12878SrfPcr2xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 SRF PCR2 1
+        longLabel GM12878 SRF PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=SRF cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep1
+        type broadPeak
+        color 153,38,0
         # subId=1582 dateSubmitted=2010-06-21
 
-			#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
-            track wgEncodeHaibTfbsGm12878Pol2Pcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel GM78 POL2 PCR2 1
-            longLabel GM12878 Pol2 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep1
-            type broadPeak
-            color 153,38,0
+        #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
+        track wgEncodeHaibTfbsGm12878Pol2Pcr2xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 POL2 PCR2 1
+        longLabel GM12878 Pol2 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=POL2 cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep1
+        type broadPeak
+        color 153,38,0
         # subId=1796 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsGm12878Pol2Pcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel GM78 POL2 PCR2 2
-            longLabel GM12878 Pol2 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
-            color 153,38,0
+        track wgEncodeHaibTfbsGm12878Pol2Pcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 POL2 PCR2 2
+        longLabel GM12878 Pol2 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=POL2 cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
+        color 153,38,0
         # subId=1796 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsGm12878GabpPcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks on
-            shortLabel GM78 GABP PCR2 2
-            longLabel GM12878 GABP PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=GABP cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
-            color 153,38,0
+        track wgEncodeHaibTfbsGm12878GabpPcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks on
+        shortLabel GM78 GABP PCR2 2
+        longLabel GM12878 GABP PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=GABP cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
+        color 153,38,0
         # subId=1796 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsGm12878NrsfPcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel GM78 NRSF PCR2 2
-            longLabel GM12878 NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=NRSF cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
-            color 153,38,0
+        track wgEncodeHaibTfbsGm12878NrsfPcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 NRSF PCR2 2
+        longLabel GM12878 NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=NRSF cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
+        color 153,38,0
         # subId=1796 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsGm12878GabpPcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks on
-            shortLabel GM78 GABP PCR2 1
-            longLabel GM12878 GABP PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=GABP cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep1
-            type broadPeak
-            color 153,38,0
+        track wgEncodeHaibTfbsGm12878GabpPcr2xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks on
+        shortLabel GM78 GABP PCR2 1
+        longLabel GM12878 GABP PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=GABP cellType=1GM12878 protocol=PCR2X treatment=NONE rep=rep1
+        type broadPeak
+        color 153,38,0
         # subId=1796 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsHelas3Pol2Pcr1xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel HELA POL2 PCR1 2
-            longLabel HeLa-S3 Pol2 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=2HELA protocol=PCR1X treatment=NONE rep=rep2
-            type broadPeak
-            color 0,119,158
+        track wgEncodeHaibTfbsHelas3Pol2Pcr1xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel HELA POL2 PCR1 2
+        longLabel HeLa-S3 Pol2 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=POL2 cellType=2HELA protocol=PCR1X treatment=NONE rep=rep2
+        type broadPeak
+        color 0,119,158
         # subId=1585 dateSubmitted=2010-06-21
 
-			#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
-            #track wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
-            #subTrack wgEncodeHaibTfbsViewPeaks off
-            #shortLabel U87 NRSF PCR2 2
-            #longLabel U87 NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            #subGroups view=Peaks factor=NRSF cellType=U87 protocol=PCR2X treatment=NONE rep=rep2
-            #type broadPeak
+        #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
+        #track wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
+        #subTrack wgEncodeHaibTfbsViewPeaks off
+        #shortLabel U87 NRSF PCR2 2
+        #longLabel U87 NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=NRSF cellType=U87 protocol=PCR2X treatment=NONE rep=rep2
+        #type broadPeak
         # subId=1585 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsPfsk1NrsfPcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel PFSK NRSF PCR2 2
-            longLabel PFSK-1 NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=NRSF cellType=PFSK1 protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
+        track wgEncodeHaibTfbsPfsk1NrsfPcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel PFSK NRSF PCR2 2
+        longLabel PFSK-1 NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=NRSF cellType=PFSK1 protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
         # subId=1585 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsSknshNrsfPcr2xPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel SKSH NRSF PCR2 2
-            longLabel SK-N-SH NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=NRSF cellType=SKNSH protocol=PCR2X treatment=NONE rep=rep2
-            type broadPeak
+        track wgEncodeHaibTfbsSknshNrsfPcr2xPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel SKSH NRSF PCR2 2
+        longLabel SK-N-SH NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=NRSF cellType=SKNSH protocol=PCR2X treatment=NONE rep=rep2
+        type broadPeak
         # subId=1585 dateSubmitted=2010-06-21
-            # was wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep2 wong Fri Jun  3 11:47:45 2011
+        # was wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep2 wong Fri Jun  3 11:47:45 2011
 
-            track wgEncodeHaibTfbsPanc1NrsfPcr2xPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel PANC NRSF PCR2 1
-            longLabel PANC-1 NRSF PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=NRSF cellType=PANC1 protocol=PCR2X treatment=NONE rep=rep1
-            type broadPeak
+        track wgEncodeHaibTfbsPanc1NrsfPcr2xPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel PANC NRSF PCR2 1
+        longLabel PANC-1 NRSF PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=NRSF cellType=PANC1 protocol=PCR2X treatment=NONE rep=rep1
+        type broadPeak
         # subId=1585 dateSubmitted=2010-06-21
 
-            track wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel A549 POL2 Dx100 1
-            longLabel A549 Pol2 DEX 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep1
-            type broadPeak
+        track wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549 POL2 Dx100 1
+        longLabel A549 Pol2 DEX 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep1
+        type broadPeak
         # subId=1681 dateSubmitted=2010-06-22
-            # was wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep1 wong Tue Jun  7 11:53:57 2011
+        # was wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep1 wong Tue Jun  7 11:53:57 2011
 
-            track wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel A549 POL2 Dx100 2
-            longLabel A549 Pol2 DEX 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep2
-            type broadPeak
+        track wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549 POL2 Dx100 2
+        longLabel A549 Pol2 DEX 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep2
+        type broadPeak
         # subId=1681 dateSubmitted=2010-06-22
-            # was wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep2 wong Tue Jun  7 11:53:58 2011
+        # was wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep2 wong Tue Jun  7 11:53:58 2011
 
-            track wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02PkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel A549 POL2 ETOH 1
-            longLabel A549 Pol2 EtOH .02% PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2X treatment=ETOH02 rep=rep1
-            type broadPeak
-        # subId=1681 dateSubmitted=2010-06-22
-
-            track wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02PkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel A549 POL2 ETOH 2
-            longLabel A549 Pol2 EtOH .02% PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2X treatment=ETOH02 rep=rep2
-            type broadPeak
+        track wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02PkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549 POL2 ETOH 1
+        longLabel A549 Pol2 EtOH .02% PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2X treatment=ETOH02 rep=rep1
+        type broadPeak
         # subId=1681 dateSubmitted=2010-06-22
 
-            track wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel A549 GR Dx100 1
-            longLabel A549 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep1
-            type broadPeak
+        track wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02PkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549 POL2 ETOH 2
+        longLabel A549 Pol2 EtOH .02% PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2X treatment=ETOH02 rep=rep2
+        type broadPeak
         # subId=1681 dateSubmitted=2010-06-22
-            # was wgEncodeHaibTfbsA549GrPcr2xDexaPkRep1 wong Tue Jun  7 11:53:56 2011
 
-            track wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel A549 GR Dx100 2
-            longLabel A549 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep2
-            type broadPeak
+        track wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549 GR Dx100 1
+        longLabel A549 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep1
+        type broadPeak
         # subId=1681 dateSubmitted=2010-06-22
-            # was wgEncodeHaibTfbsA549GrPcr2xDexaPkRep2 wong Tue Jun  7 11:53:56 2011
+        # was wgEncodeHaibTfbsA549GrPcr2xDexaPkRep1 wong Tue Jun  7 11:53:56 2011
 
-            track wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep2
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel T47D ERaa GENI 2
-            longLabel T-47D ERa-a Genistein 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-            subGroups view=Peaks factor=ERAA cellType=T47D protocol=PCR2X treatment=GEN1H rep=rep2
-            type broadPeak
+        track wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549 GR Dx100 2
+        longLabel A549 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep2
+        type broadPeak
+        # subId=1681 dateSubmitted=2010-06-22
+        # was wgEncodeHaibTfbsA549GrPcr2xDexaPkRep2 wong Tue Jun  7 11:53:56 2011
+
+        track wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep2
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel T47D ERaa GENI 2
+        longLabel T-47D ERa-a Genistein 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=ERAA cellType=T47D protocol=PCR2X treatment=GEN1H rep=rep2
+        type broadPeak
         # subId=1826 dateSubmitted=2010-06-22
 
-            track wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep1
-            subTrack wgEncodeHaibTfbsViewPeaks off
-            shortLabel T47D ERaa GENI 1
-            longLabel T-47D ERa-a Genistein 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-            subGroups view=Peaks factor=ERAA cellType=T47D protocol=PCR2X treatment=GEN1H rep=rep1
-            type broadPeak
+        track wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep1
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel T47D ERaa GENI 1
+        longLabel T-47D ERa-a Genistein 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=ERAA cellType=T47D protocol=PCR2X treatment=GEN1H rep=rep1
+        type broadPeak
         # subId=1826 dateSubmitted=2010-06-22
 
         track wgEncodeHaibTfbsHepg2Fosl2V0416101PkRep2
@@ -1163,7 +1152,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=FOSL2 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
         color 189,0,157
-    # subId=1227 dateSubmitted=2010-06-07
+        # subId=1227 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsHepg2Bhlhe40V0416101PkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
@@ -1172,7 +1161,7 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=BHLHE40 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
         color 189,0,157
-    # subId=1227 dateSubmitted=2010-06-07
+        # subId=1227 dateSubmitted=2010-06-07
 
         #lab not confident in results
         #track wgEncodeHaibTfbsHepg2Hey1V0416101PkRep1
@@ -1182,7 +1171,7 @@ html wgEncodeHaibTfbs.release2
         #subGroups view=Peaks factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         #type broadPeak
         #color 189,0,157
-    # subId=1227 dateSubmitted=2010-06-07
+        # subId=1227 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsPanc1NrsfPcr2xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -1264,22 +1253,22 @@ html wgEncodeHaibTfbs.release2
         # subId=2212 dateSubmitted=2010-09-15
         # was wgEncodeHaibTfbsGm12878Bclaf1m33V0416101PkRep1 cricket Tue Apr 19 10:19:31 2011
 
-        track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 ETS1 PCR1 2
-        longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
-        type broadPeak
-        color 153,38,0
+        #track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel GM78 ETS1 PCR1 2
+        #longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
+        #type broadPeak
+        #color 153,38,0
         # subId=2208 dateSubmitted=2010-09-15
 
-        track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 ETS1 PCR1 1
-        longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
-        type broadPeak
-        color 153,38,0
+        #track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel GM78 ETS1 PCR1 1
+        #longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
+        #type broadPeak
+        #color 153,38,0
         # subId=2208 dateSubmitted=2010-09-15
 
         track wgEncodeHaibTfbsGm12878Mef2aPcr1xPkRep2
@@ -1758,7 +1747,6 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=3058 dateSubmitted=2010-12-03
 
-
         track wgEncodeHaibTfbsK562E2f6V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 E2F6 V102 2
@@ -1768,7 +1756,7 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=3069 dateSubmitted=2010-12-08
         # was wgEncodeHaibTfbsK562E2f6h50V0416102PkRep2 cricket Tue Apr 19 10:32:38 2011
-	# sas wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
+        # sas wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
         # was wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2 wong Thu Jan 19 11:39:53 2012
 
         track wgEncodeHaibTfbsK562E2f6V0416102PkRep1
@@ -1780,7 +1768,7 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=3069 dateSubmitted=2010-12-08
         # was wgEncodeHaibTfbsK562E2f6h50V0416102PkRep1 cricket Tue Apr 19 10:32:37 2011
-	# was wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
+        # was wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
         # was wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1 wong Thu Jan 19 11:39:53 2012
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101PkRep2
@@ -4288,7 +4276,23 @@ html wgEncodeHaibTfbs.release2
         type broadPeak
         # subId=5456 dateSubmitted=2012-01-24
 
+        track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1V2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 ETS1 PCR1 1
+        longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=5502 dateSubmitted=2012-02-02
 
+        track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2V2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 ETS1 PCR1 2
+        longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
+        type broadPeak
+        color 153,38,0
+        # subId=5502 dateSubmitted=2012-02-02
 
     #Raw Signal Track HAIB TFBS#
     #Short Labels for Raw Signal =Ra #
@@ -4543,8 +4547,7 @@ html wgEncodeHaibTfbs.release2
         #color 189,0,157
         # subId=3021 dateSubmitted=2010-11-29
 
-
-		track wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101RawRep1
+        track wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HEPG HNFA V101 1
         longLabel HepG2 HNF4A v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
@@ -4552,7 +4555,7 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.422290 325.691010
         color 189,0,157
         # subId=3264 dateSubmitted=2011-01-19
-		# was wgEncodeHaibTfbsHepg2Hnf4ah171V0416101RawRep1 cricket Tue Apr 19 10:32:46 2011
+        # was wgEncodeHaibTfbsHepg2Hnf4ah171V0416101RawRep1 cricket Tue Apr 19 10:32:46 2011
 
         track wgEncodeHaibTfbsH1hescNrsfV0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4596,7 +4599,6 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.206820 181.897995
         color 153,38,0
         # subId=3021 dateSubmitted=2010-11-29
-
 
         track wgEncodeHaibTfbsH1hescP300V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4694,7 +4696,6 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.160464 114.411003
         color 153,38,0
         # subId=3021 dateSubmitted=2010-11-29
-
 
         track wgEncodeHaibTfbsH1hescSix5Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4856,7 +4857,6 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=3021 dateSubmitted=2010-11-29
 
-
         track wgEncodeHaibTfbsH1hescAtf3V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HESC ATF3 V102 1
@@ -4875,7 +4875,6 @@ html wgEncodeHaibTfbs.release2
         #color 46,0,184
         # subId=3026 dateSubmitted=2011-01-21
 
-
         track wgEncodeHaibTfbsGm12878Atf3Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 ATF3 PCR1 2
@@ -4885,7 +4884,6 @@ html wgEncodeHaibTfbs.release2
         color 153,38,0
         # subId=3026 dateSubmitted=2011-01-21
 
-
         track wgEncodeHaibTfbsGm12878Ets1Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 ETS1 PCR1 1
@@ -4894,7 +4892,6 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.221942 138.214005
         color 153,38,0
         # subId=3026 dateSubmitted=2011-01-21
-
 
         track wgEncodeHaibTfbsH1hescSrfPcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4914,16 +4911,14 @@ html wgEncodeHaibTfbs.release2
         color 153,38,0
         # subId=3026 dateSubmitted=2011-01-21
 
-
-	track wgEncodeHaibTfbsH1hescUsf1Pcr1xRawRep2
+        track wgEncodeHaibTfbsH1hescUsf1Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal on
         shortLabel HESC USF1 PCR1 2
         longLabel H1-hESC USF-1 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=USF1 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.266269 191.847000
         color 0,107,27
-   	# subId=3026 dateSubmitted=2011-01-21
-
+        # subId=3026 dateSubmitted=2011-01-21
 
         track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -4933,7 +4928,6 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.245489 212.654999
         color 0,107,27
         # subId=3026 dateSubmitted=2011-01-21
-
 
         track wgEncodeHaibTfbsGm12878Atf3Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -5008,7 +5002,6 @@ html wgEncodeHaibTfbs.release2
         # subId=3026 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsPfsk1ControlPcr2xRawRep1 vsmalladi Wed Jul  6 14:19:19 2011
 
-
         track wgEncodeHaibTfbsH1hescRxlchPcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HESC RvXL PCR1 1
@@ -5018,7 +5011,6 @@ html wgEncodeHaibTfbs.release2
         color 0,107,27
         # subId=3026 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsH1hescControlPcr1xRawRep1 vsmalladi Wed Jul  6 14:19:08 2011
-
 
         track wgEncodeHaibTfbsGm12878RxlchPcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -5157,7 +5149,6 @@ html wgEncodeHaibTfbs.release2
         color 189,0,157
         # subId=3027 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsHepg2ControlV0416101RawRep1 vsmalladi Wed Jul  6 14:19:14 2011
-
 
         track wgEncodeHaibTfbsGm12892RxlchV0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -5486,7 +5477,7 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=3029 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsK562E2f6h50V0416102RawRep2 cricket Tue Apr 19 10:32:38 2011
-	# was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
+        # was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
         # was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2 wong Thu Jan 19 11:39:54 2012
 
         track wgEncodeHaibTfbsK562Ets1V0416101RawRep2
@@ -6028,7 +6019,7 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=3069 dateSubmitted=2010-12-08
         # was wgEncodeHaibTfbsK562E2f6h50V0416102RawRep1 cricket Tue Apr 19 10:32:38 2011
-	#was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
+        #was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
         # was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1 wong Thu Jan 19 11:39:54 2012
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101RawRep2
@@ -7946,11 +7937,11 @@ html wgEncodeHaibTfbs.release2
         # subId=4064 dateSubmitted=2011-05-20
 
         #revoked
-    #track wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
+        #track wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
         #parent wgEncodeHaibTfbsViewRawSignal off
         #shortLabel HUVEC Cont PCR1 1
         #longLabel HUVEC Control PCR1x  ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-    #subGroups view=RawSignal factor=zRXLCH cellType=2HUVEC protocol=PCR1X treatment=NONE rep=rep1
+        #subGroups view=RawSignal factor=zRXLCH cellType=2HUVEC protocol=PCR1X treatment=NONE rep=rep1
         #type bigWig 0.279927 170.895004
         #color 224,75,0
         # subId=4160 dateSubmitted=2011-05-23
@@ -9353,3 +9344,5 @@ html wgEncodeHaibTfbs.release2
         subGroups view=RawSignal factor=NRSF cellType=U87 protocol=PCR2X treatment=NONE rep=rep2
         type bigWig 0.190402 245.143005
         # subId=5456 dateSubmitted=2012-01-24
+
+

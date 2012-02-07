@@ -11,7 +11,8 @@ include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV10.ra alpha,beta
 
 # UNC/BSU Proteogenomics (wrangler: cline,cricket)
-include wgEncodeUncBsuProt.ra
+include wgEncodeUncBsuProt.ra beta,public
+include wgEncodeUncBsuProt.new.ra alpha
 include wgEncodeUncBsuProtFasp.ra alpha
 
 # Integrated Regulation (wrangler: kent)
@@ -28,8 +29,8 @@ include wgEncodeUwRepliSeq.ra alpha
 include wgEncodeSydhNsome.ra
 
 # GIS RNA PET (wrangler: cricket)
-include wgEncodeGisRnaPet.ra 
-#include wgEncodeGisRnaPet.release2.ra alpha
+include wgEncodeGisRnaPet.ra beta,public
+include wgEncodeGisRnaPet.release2.ra alpha
 
 # GIS DNA PET (wrangler: cricket)
 include wgEncodeGisDnaPet.ra
@@ -71,8 +72,8 @@ include wgEncodeOpenChromFaire.new.ra alpha
 include wgEncodeOpenChromFaire.ra beta,public
 
 #Open Chrom Synth (wrangler: Matt)
-include wgEncodeOpenChromSynth.release2.ra alpha
-include wgEncodeOpenChromSynth.ra beta,public
+include wgEncodeOpenChromSynth.release2.ra alpha,beta
+include wgEncodeOpenChromSynth.ra public
 
 #Duke DNaseI HS (wrangler: Matt)
 include wgEncodeOpenChromDnase.new.ra alpha
@@ -94,7 +95,8 @@ include wgEncodeUwDgf.ra beta,public
 # ENCODE RNA SEQ -----------------------------------
 
 # Riken CAGE (wrangler: cricket)
-include wgEncodeRikenCage.ra
+include wgEncodeRikenCage.ra beta,public
+include wgEncodeRikenCage.release3.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.ra beta,public
@@ -158,7 +160,8 @@ include wgEncodeSydhHistone.ra
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release2.ra
+include wgEncodeUwTfbs.release2.ra beta,public
+include wgEncodeUwTfbs.release3.ra alpha
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha

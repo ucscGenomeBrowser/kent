@@ -62,15 +62,6 @@ wgEncode 1
 	qValueFilter 0
 	qValueFilterLimits 0:300
 
-		track wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputPk
-		parent wgEncodePsuHistoneViewPeaks 
-		shortLabel G1E-ER4 H3K4me1
-		longLabel G1E-ER4+E2 H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
-		subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=G1E_ER4_E2 control=INPUT sex=M strain=S129
-		type broadPeak
-		color 153,38,0
-		# subId=3040 dateSubmitted=2010-12-01
-
         track wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
         shortLabel G1E H3K27me3
@@ -308,16 +299,6 @@ wgEncode 1
 	configurable on
 	maxHeightPixels 100:16:16
 	windowingFunction mean+whiskers
-
-		track wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputSig
-		parent wgEncodePsuHistoneViewSignal
-		shortLabel G1E-ER4 H3K4me1
-		longLabel G1E-ER4+E2 H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/PSU
-		subGroups view=Signal age=E0 factor=H3K04ME1 cellType=G1E_ER4_E2 control=INPUT sex=M strain=S129
-		type bigWig 1.000000 158.000000
-		viewLimits 2:250
-		color 153,38,0
-		# subId=3040 dateSubmitted=2010-12-01
 
         track wgEncodePsuHistoneG1eH3k27me3ME0S129InputSig
         parent wgEncodePsuHistoneViewSignal

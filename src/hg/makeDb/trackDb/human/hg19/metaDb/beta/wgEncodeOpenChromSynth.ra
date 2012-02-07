@@ -1,7 +1,29 @@
 metaObject wgEncodeOpenChromSynth
 objType composite
 composite wgEncodeOpenChromSynth
-expVars lab,dataType,cell,composite
+expVars lab,dataType,cell,treatment,composite
+treatment None
+
+metaObject wgEncodeOpenChromSynthGlioblaPk
+objType table
+cell Gliobla
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002257
+expId 2257
+fileName wgEncodeOpenChromSynthGlioblaPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum 4001eab6c14c396891ac2d2f92c8aa8b
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthGlioblaPk
+treatment None
+view Peaks
 
 metaObject wgEncodeOpenChromSynthGm12878Pk
 objType table
@@ -17,10 +39,95 @@ fileName wgEncodeOpenChromSynthGm12878Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
-origAssembly hg19
+md5sum 432a6a005eb5a4e9542829fa14e3911d
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthGm12878Pk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthGm12891Pk
+objType table
+cell GM12891
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002253
+expId 2253
+fileName wgEncodeOpenChromSynthGm12891Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum 1e8db33ef29303c41a260cb4bc5518bf
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthGm12891Pk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthGm12892Pk
+objType table
+cell GM12892
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002254
+expId 2254
+fileName wgEncodeOpenChromSynthGm12892Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum 0a632f387b0ecc253df8e8499bef8ec5
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthGm12892Pk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthGm18507Pk
+objType table
+cell GM18507
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002255
+expId 2255
+fileName wgEncodeOpenChromSynthGm18507Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum b9a60346b34792d1f2c5a5a24056a2e0
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthGm18507Pk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthGm19239Pk
+objType table
+cell GM19239
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002256
+expId 2256
+fileName wgEncodeOpenChromSynthGm19239Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum 8055cda0cb3530ce4bb57c750cd53978
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthGm19239Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthH1hescPk
@@ -37,10 +144,32 @@ fileName wgEncodeOpenChromSynthH1hescPk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
-origAssembly hg19
+md5sum a5586ad68d9ca490dfd6f46ae28fbcc3
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthH1hescPk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthHelas3Ifna4hPk
+objType table
+cell HeLa-S3
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002259
+expId 2259
+fileName wgEncodeOpenChromSynthHelas3Ifna4hPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum dd43de36e3aded60312a1ad6e5242e77
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthHelas3Ifna4hPk
+treatment IFNa4h
 view Peaks
 
 metaObject wgEncodeOpenChromSynthHelas3Pk
@@ -57,10 +186,11 @@ fileName wgEncodeOpenChromSynthHelas3Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
-origAssembly hg19
+md5sum f5f18abedcc21ca0a32a5f5b50255dce
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthHelas3Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthHepg2Pk
@@ -77,10 +207,32 @@ fileName wgEncodeOpenChromSynthHepg2Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
-origAssembly hg19
+md5sum a7373cc87034a4e806cff980a0e9541f
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthHepg2Pk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthHtr8Pk
+objType table
+cell HTR8svn
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002258
+expId 2258
+fileName wgEncodeOpenChromSynthHtr8Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum 55c4d80ca7be27a798b9889fbda95980
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthHtr8Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthHuvecPk
@@ -97,10 +249,11 @@ fileName wgEncodeOpenChromSynthHuvecPk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
-origAssembly hg19
+md5sum 3ebff382caa60f894af73dea5e4a2600
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthHuvecPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthK562Pk
@@ -117,10 +270,32 @@ fileName wgEncodeOpenChromSynthK562Pk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
-origAssembly hg19
+md5sum 5535b34df7d91969cb662cd13928c34d
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthK562Pk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthMedulloPk
+objType table
+cell Medullo
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002260
+expId 2260
+fileName wgEncodeOpenChromSynthMedulloPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum 65200285985f5f99df3f8aee46462c4d
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthMedulloPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthNhekPk
@@ -137,10 +312,53 @@ fileName wgEncodeOpenChromSynthNhekPk.bed.gz
 grant Crawford
 lab Duke
 labVersion 1.0
-origAssembly hg19
+md5sum dc58c6d7f8bb72fa26f807ea3a6f2de7
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthNhekPk
+treatment None
 view Peaks
 
-# MAGIC: 1484753089
+metaObject wgEncodeOpenChromSynthPanisletsPk
+objType table
+cell PanIslets
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002261
+expId 2261
+fileName wgEncodeOpenChromSynthPanisletsPk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum 64f21f424a357c4c1915409c33e3f999
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthPanisletsPk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromSynthUrothelUt189Pk
+objType table
+cell Urothelia
+composite wgEncodeOpenChromSynth
+dataType Combined
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002262
+expId 2262
+fileName wgEncodeOpenChromSynthUrothelUt189Pk.bed.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum 8dd4d9a803605ece4fad76bed3b6f118
+project wgEncode
+subId 4630
+tableName wgEncodeOpenChromSynthUrothelUt189Pk
+treatment UT189
+view Peaks
+
+# MAGIC: -2096279381

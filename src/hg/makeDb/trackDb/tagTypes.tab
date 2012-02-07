@@ -193,7 +193,7 @@ itemClassClassColumn genePred
 itemCount customTracks
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed bedLogR
+itemRgb bedDetail bedGraph bed bedLogR bigBed
 linesAt chromGraph
 longLabel *
 longlabel genePred
@@ -283,11 +283,11 @@ sGroup_vertebrate wigMaf
 sGroup_worm wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Nematode wigMaf
-scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping
-scoreFilterByRange bigBed bed peptideMapping
-scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping
-scoreFilterMax bed bedlogR peptideMapping
-scoreMax bed bedlogR interaction peptideMapping
+scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
+scoreFilterByRange bed peptideMapping bigBed
+scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
+scoreFilterMax bed bedlogR peptideMapping bigBed
+scoreMax bed bedlogR interaction peptideMapping bigBed
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping
 searchMethod bed
 searchType bed
@@ -332,6 +332,7 @@ subGroup5 *
 subGroup6 *
 subGroup7 *
 subGroup8 *
+subGroup9 *
 subGroups *
 subTrack *
 subgroups bed
