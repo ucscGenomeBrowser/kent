@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "transMapInfo.h"
 
-static char const rcsid[] = "$Id: transMapInfo.c,v 1.4 2008/06/30 16:56:02 markd Exp $";
 
 /* definitions for chainSubset column */
 static char *values_chainSubset[] = {"unknown", "all", "syn", "rbest", NULL};

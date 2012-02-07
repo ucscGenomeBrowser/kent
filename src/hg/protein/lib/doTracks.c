@@ -15,7 +15,6 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.24 2010/06/05 19:29:48 braney Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];

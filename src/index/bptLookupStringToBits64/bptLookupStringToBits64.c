@@ -6,7 +6,6 @@
 #include "options.h"
 #include "bPlusTree.h"
 
-static char const rcsid[] = "$Id: bptLookupStringToBits64.c,v 1.2 2009/01/09 08:09:37 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

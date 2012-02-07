@@ -8,7 +8,6 @@
 #include "sqlList.h"
 #include "jobDb.h"
 
-static char const rcsid[] = "$Id: jobDb.c,v 1.9 2008/05/29 20:18:42 galt Exp $";
 
 struct submission *submissionCommaIn(char **pS, struct submission *ret)
 /* Create a submission out of a comma separated string. 

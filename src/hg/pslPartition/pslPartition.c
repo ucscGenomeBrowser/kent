@@ -6,7 +6,6 @@
 #include "dystring.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: pslPartition.c,v 1.6 2007/03/18 18:19:41 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =

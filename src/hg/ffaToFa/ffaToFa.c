@@ -5,7 +5,6 @@
 #include "hash.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: ffaToFa.c,v 1.4 2006/03/30 16:53:35 angie Exp $";
 
 FILE *errLog;
 

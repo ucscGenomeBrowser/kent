@@ -16,12 +16,11 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.13 2006/06/20 18:31:24 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
 
-#define MAXPARTSIZE 512*1024*1024  /* max size before gets put in a tempfile to save memory */
+#define MAXPARTSIZE 64LL*1024*1024*1024  /* max size before gets put in a tempfile to save memory. It currently has been set so large that it will not be triggered. */
 #define MAXPARTLINESIZE 1024 /* header lines should be small, so bad if bigger than this */
 #define MAXDATASIZE 64LL*1024*1024*1024 /* max size allowable for large uploads */
 #define MAXBOUNDARY 72+5     /* max size of buffer for boundary 72+--""0 */

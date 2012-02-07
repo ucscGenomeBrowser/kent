@@ -18,7 +18,6 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.116 2010/03/10 19:21:46 galt Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */

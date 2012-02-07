@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "recombRateMouse.h"
 
-static char const rcsid[] = "$Id: recombRateMouse.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 void recombRateMouseStaticLoad(char **row, struct recombRateMouse *ret)
 /* Load a row from recombRateMouse table into ret.  The contents of ret will

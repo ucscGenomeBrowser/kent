@@ -7,7 +7,6 @@
 #include "common.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.3 2010/05/29 22:25:51 kent Exp $";
 
 struct correlate *correlateNew()
 /* Return new correlation handler. */

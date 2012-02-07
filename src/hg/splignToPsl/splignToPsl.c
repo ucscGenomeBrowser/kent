@@ -12,7 +12,6 @@
 #include "alignSeqSizes.h"
 #include "splignAlign.h"
 
-static char const rcsid[] = "$Id: splignToPsl.c,v 1.2 2008/02/21 02:13:24 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

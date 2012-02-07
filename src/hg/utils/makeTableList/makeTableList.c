@@ -6,6 +6,10 @@
 #include "hdb.h"
 #include "hgConfig.h"
 
+static char *host = NULL;
+static char *user = NULL;
+static char *password = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -20,6 +24,9 @@ errAbort(
 
 static struct optionSpec options[] = {
     {"all", OPTION_BOOLEAN},
+    {"host", OPTION_STRING},
+    {"password", OPTION_STRING},
+    {"user", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -95,7 +102,11 @@ for (; dbs != NULL; dbs = dbs->next)
     // make sure assembly exists (on hgwdev some entries in hgcentraltest.dbDb do not exist).
     if(!all || sqlDatabaseExists(dbs->name))
         {
-        struct sqlConnection *conn = sqlConnect(dbs->name);
+        struct sqlConnection *conn;
+        if(host)
+            conn = sqlConnectRemote(host, user, password, dbs->name);
+        else
+            conn = sqlConnect(dbs->name);
         verbose(2, "db: %s\n", dbs->name);
         makeTableListConn(tableListName, conn);
         sqlDisconnect(&conn);
@@ -108,6 +119,9 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 boolean all = optionExists("all");
+host = optionVal("host", NULL);
+user = optionVal("user", NULL);
+password = optionVal("password", NULL);
 if (argc < 2 && !all)
     usage();
 char *tableListName = cfgOptionDefault("showTableCache", "tableList");

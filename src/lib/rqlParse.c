@@ -9,7 +9,6 @@
 #include "sqlNum.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlParse.c,v 1.7 2009/12/05 03:51:27 kent Exp $";
 
 char *rqlOpToString(enum rqlOp op)
 /* Return string representation of parse op. */

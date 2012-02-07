@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "sgdAbundance.h"
 
-static char const rcsid[] = "$Id: sgdAbundance.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 void sgdAbundanceStaticLoad(char **row, struct sgdAbundance *ret)
 /* Load a row from sgdAbundance table into ret.  The contents of ret will

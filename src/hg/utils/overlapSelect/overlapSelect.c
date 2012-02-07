@@ -7,7 +7,6 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: overlapSelect.c,v 1.42 2009/07/31 18:09:23 markd Exp $";
 
 /* FIXME:
  * - would be nice to be able to specify ranges in the same manner

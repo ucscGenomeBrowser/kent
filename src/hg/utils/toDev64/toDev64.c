@@ -9,7 +9,6 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: toDev64.c,v 1.6 2006/05/21 15:39:18 kent Exp $";
 
 /* Command line flags - all default to false. */
 boolean oldOk, chrom, prefix, allTables, test;

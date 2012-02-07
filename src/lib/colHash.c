@@ -5,7 +5,6 @@
 #include "memgfx.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: colHash.c,v 1.3 2003/05/06 07:33:41 kate Exp $";
 
 struct colHash *colHashNew()
 /* Get a new color hash. */

@@ -7,7 +7,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.9 2006/02/17 00:40:02 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;

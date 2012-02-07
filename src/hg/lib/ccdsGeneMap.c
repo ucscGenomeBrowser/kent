@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: ccdsGeneMap.c,v 1.2 2007/12/14 22:44:18 markd Exp $";
 
 void ccdsGeneMapStaticLoad(char **row, struct ccdsGeneMap *ret)
 /* Load a row from ccdsGeneMap table into ret.  The contents of ret will

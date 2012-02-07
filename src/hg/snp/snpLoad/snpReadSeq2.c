@@ -3,7 +3,6 @@
 #include "common.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpReadSeq2.c,v 1.4 2006/10/24 23:55:28 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */

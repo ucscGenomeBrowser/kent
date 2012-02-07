@@ -6,6 +6,8 @@
 #
 #	"$Id: ponAbe2.txt,v 1.23 2010/02/12 23:51:36 hiram Exp $"
 #
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABGA00
+#
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
     ssh kkstore02
@@ -2176,7 +2178,7 @@ TMPDIR=/scratch/tmp
     #	1978857628 bases of 2752505800 (71.893%) in intersection
 
 ############################################################################
-# LASTZ Gorilla GorGor3 (DONE - 2011-10-21 - Hiram)
+# LASTZ Gorilla GorGor3 (DONE - 2011-10-21,23 - Hiram)
     mkdir /hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21
     cd /hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21
 
@@ -2219,15 +2221,14 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running - Fri Oct 21 13:50:22 PDT 2011
-    #	real    159m46.598s
+    #	1441m58s
     cat fb.ponAbe2.chainGorGor3Link.txt  
-    #	2603997992 bases of 2897316137 (89.876%) in intersection
+    #	2584628377 bases of 3093572278 (83.548%) in intersection
 
     cd /hive/data/genomes/ponAbe2/bed
     ln -s lastzGorGor3.2011-10-21 lastz.gorGor3
 
-    #	running the swap - DONE - 2011-09-21
+    #	running the swap
     mkdir /hive/data/genomes/gorGor3/bed/blastz.ponAbe2.swap
     cd /hive/data/genomes/gorGor3/bed/blastz.ponAbe2.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -2236,8 +2237,8 @@ XXX - running - Fri Oct 21 13:50:22 PDT 2011
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
-    #	real    69m39.685s
+    #	real    86m19.901s
     cat fb.gorGor3.chainPonAbe2Link.txt 
-    #	2571797450 bases of 2822760080 (91.109%) in intersection
+    #	2437562544 bases of 2822760080 (86.354%) in intersection
 
 ############################################################################

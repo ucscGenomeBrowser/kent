@@ -8,7 +8,6 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: chimpChromContigAgp.c,v 1.1 2004/08/31 22:53:57 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

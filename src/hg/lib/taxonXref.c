@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "taxonXref.h"
 
-static char const rcsid[] = "$Id: taxonXref.c,v 1.1 2006/04/11 21:43:11 baertsch Exp $";
 
 void taxonXrefStaticLoad(char **row, struct taxonXref *ret)
 /* Load a row from taxonXref table into ret.  The contents of ret will

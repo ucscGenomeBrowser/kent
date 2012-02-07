@@ -10,7 +10,6 @@
 #include "hdb.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.28 2009/02/05 08:05:17 markd Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)

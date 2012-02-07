@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ucscRetroInfo.h"
 
-static char const rcsid[] = "$Id:$";
 
 struct ucscRetroInfo *ucscRetroInfoLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all ucscRetroInfo from table that satisfy the query given.  

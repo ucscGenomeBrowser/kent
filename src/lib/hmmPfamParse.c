@@ -6,7 +6,6 @@
 #include "spacedColumn.h"
 #include "hmmPfamParse.h"
 
-static char const rcsid[] = "$Id: hmmPfamParse.c,v 1.3 2007/03/23 16:38:40 kent Exp $";
 
 void hpfModelFree(struct hpfModel **pMod)
 /* Free memory associated with hpfModel */

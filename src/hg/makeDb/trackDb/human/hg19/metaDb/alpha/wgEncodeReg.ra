@@ -141,7 +141,7 @@ view Signal
 
 metaObject wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled
 cell HeLa-S3
-composite wgEncodeRegTxnCaltechRnaSeq
+composite wgEncodeRegTxn
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
@@ -168,7 +168,7 @@ view Signal
 
 metaObject wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled
 cell HepG2
-composite wgEncodeRegTxnCaltechRnaSeq
+composite wgEncodeRegTxn
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2011-01-22
@@ -193,10 +193,6 @@ submittedDataVersion V2 - A better mapping technique.
 tableName wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled
 view Signal
 
-metaObject wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
-cell HSMM
-composite wgEncodeRegTxnCaltechRnaSeq
-dataType RnaSeq
 metaObject wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled
 cell HUVEC
 composite wgEncodeRegTxn

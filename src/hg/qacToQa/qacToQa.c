@@ -6,7 +6,6 @@
 #include "options.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: qacToQa.c,v 1.5 2006/04/27 00:49:51 kate Exp $";
 
 static struct optionSpec optionSpecs[] = {
         {"name", OPTION_STRING},

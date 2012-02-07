@@ -4,7 +4,6 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredHisto.c,v 1.2 2005/12/06 00:40:27 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {

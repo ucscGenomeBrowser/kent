@@ -6,7 +6,6 @@
 #include "obscure.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: roundNewViewLimitsInRa.c,v 1.1 2009/11/25 17:31:25 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -9,7 +9,6 @@
 #include "nibTwo.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainAntiRepeat.c,v 1.5 2006/06/20 15:50:58 angie Exp $";
 
 int minScore = 5000;
 int noCheckScore = 200000;

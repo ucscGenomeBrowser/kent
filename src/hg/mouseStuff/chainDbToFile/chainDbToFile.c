@@ -9,7 +9,6 @@
 #include "chain.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainDbToFile.c,v 1.3 2008/09/03 19:20:34 markd Exp $";
 
 static struct optionSpec options[] = {
 /*   {"option", OPTION_STRING}, */

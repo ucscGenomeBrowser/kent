@@ -6,7 +6,6 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: checkChain.c,v 1.1 2006/08/15 20:24:56 heather Exp $";
 
 static struct hash *idHash = NULL;
 static struct hash *duplicateHash = NULL;

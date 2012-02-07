@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "transRegCode.h"
 
-static char const rcsid[] = "$Id: transRegCode.c,v 1.1 2004/09/13 03:08:55 kent Exp $";
 
 void transRegCodeStaticLoad(char **row, struct transRegCode *ret)
 /* Load a row from transRegCode table into ret.  The contents of ret will

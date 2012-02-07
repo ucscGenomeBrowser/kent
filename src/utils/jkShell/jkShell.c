@@ -13,7 +13,6 @@
 #include <sys/stat.h>
 #include <conio.h>
 
-static char const rcsid[] = "$Id: jkShell.c,v 1.2 2003/05/06 07:41:07 kate Exp $";
 
 boolean checkAbort();
 /* Check and clear abort */

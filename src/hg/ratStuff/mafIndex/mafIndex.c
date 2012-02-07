@@ -5,7 +5,6 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafIndex.c,v 1.2 2007/03/22 06:58:04 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

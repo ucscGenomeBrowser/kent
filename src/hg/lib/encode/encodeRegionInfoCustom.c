@@ -6,7 +6,6 @@
 #include "hdb.h"
 #include "encode/encodeRegionInfo.h"
 
-static char const rcsid[] = "$Id: encodeRegionInfoCustom.c,v 1.1 2008/08/01 17:59:44 aamp Exp $";
 
 char *getEncodeRegionDescr(char *name)
 /* Get descriptive text for a region */

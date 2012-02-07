@@ -77,11 +77,11 @@ _EOF_
   print STDERR "
 Automates UCSC's RepeatMasker process for genome database \$db.  Steps:
     cluster: Do a cluster run of RepeatMasker on 500kb sequence chunks.
-    cat:     Concatenate the cluster run results into \$db.fa.out.
-    mask:    Create a \$db.2bit masked by \$db.fa.out.
-    install: Load \$db.fa.out into the rmsk table (possibly split) in \$db,
+    cat:     Concatenate the cluster run results into \$db.sorted.fa.out.
+    mask:    Create a \$db.2bit masked by \$db.sorted.fa.out.
+    install: Load \$db.sorted.fa.out into the rmsk table (possibly split) in \$db,
              install \$db.2bit in $HgAutomate::clusterData/\$db/, and if \$db is
-             chrom-based, split \$db.fa.out into per-chrom files.
+             chrom-based, split \$db.sorted.fa.out into per-chrom files.
     cleanup: Removes or compresses intermediate files.
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/RepeatMasker.\$date unless -buildDir is given.
@@ -273,7 +273,7 @@ sub doCat {
 				      "$buildDir/run.cluster/run.time");
 
   my $whatItDoes = 
-"It concatenates .out files from cluster run into a single $db.fa.out.\n" .
+"It concatenates .out files from cluster run into a single $db.sorted.fa.out.\n" .
 "liftUp (with no lift specs) is used to concatenate .out files because it\n" .
 "uniquifies (per input file) the .out IDs which can then be used to join\n" .
 "fragmented repeats in the Nested Repeats track.";
@@ -315,13 +315,15 @@ _EOF_
 
 liftUp $db.fa.out /dev/null carry $partDir/???/*.out
 cat $partDir/???/*.align >> $db.fa.align
+head -3 $db.fa.out > $db.sorted.fa.out
+tail -n +4 $db.fa.out | sort -k5,5 -k6,6n >> $db.sorted.fa.out
 _EOF_
   );
   $bossScript->add(<<_EOF_
 
 # Use the ID column to join up fragments of interrupted repeats for the
 # Nested Repeats track.
-$Bin/extractNestedRepeats.pl $db.fa.out > $db.nestedRepeats.bed
+$Bin/extractNestedRepeats.pl $db.fa.out | sort -k1,1 -k2,2n > $db.nestedRepeats.bed
 _EOF_
   );
   $bossScript->execute();
@@ -332,7 +334,7 @@ _EOF_
 # * step: mask [workhorse]
 sub doMask {
   my $runDir = "$buildDir";
-  &HgAutomate::checkExistsUnlessDebug('cat', 'mask', "$buildDir/$db.fa.out");
+  &HgAutomate::checkExistsUnlessDebug('cat', 'mask', "$buildDir/$db.sorted.fa.out");
 
   my $whatItDoes = "It makes a masked .2bit in this build directory.";
   my $workhorse = &HgAutomate::chooseWorkhorse();
@@ -340,7 +342,7 @@ sub doMask {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-twoBitMask $unmaskedSeq $db.fa.out $db.rmsk.2bit
+twoBitMask $unmaskedSeq $db.sorted.fa.out $db.rmsk.2bit
 twoBitToFa $db.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
 _EOF_
   );
@@ -352,12 +354,12 @@ _EOF_
 # * step: install [dbHost, maybe fileServer]
 sub doInstall {
   my $runDir = "$buildDir";
-  &HgAutomate::checkExistsUnlessDebug('cat', 'install', "$buildDir/$db.fa.out");
+  &HgAutomate::checkExistsUnlessDebug('cat', 'install', "$buildDir/$db.sorted.fa.out");
 
   my $split = $chromBased ? " (split)" : "";
   $split = "" if ($opt_noSplit);
   my $whatItDoes =
-"It loads $db.fa.out into the$split rmsk table and $db.nestedRepeats.bed\n" .
+"It loads $db.sorted.fa.out into the$split rmsk table and $db.nestedRepeats.bed\n" .
 "into the nestedRepeats table.  It also installs the masked 2bit.";
   my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
 				      $runDir, $whatItDoes);
@@ -366,7 +368,7 @@ sub doInstall {
   $split = "-nosplit" if ($opt_noSplit);
   my $installDir = "$HgAutomate::clusterData/$db";
   $bossScript->add(<<_EOF_
-hgLoadOut -table=rmsk $split $db $db.fa.out
+hgLoadOut -table=rmsk $split $db $db.sorted.fa.out
 hgLoadBed $db nestedRepeats $db.nestedRepeats.bed \\
   -sqlTable=\$HOME/kent/src/hg/lib/nestedRepeats.sql
 
@@ -380,13 +382,13 @@ _EOF_
   if ($chromBased) {
     my $fileServer = &HgAutomate::chooseFileServer($runDir);
     $whatItDoes =
-"It splits $db.fa.out into per-chromosome files in chromosome directories\n" .
+"It splits $db.sorted.fa.out into per-chromosome files in chromosome directories\n" .
 "where makeDownload.pl will expect to find them.\n";
     my $bossScript = new HgRemoteScript("$runDir/doSplit.csh", $fileServer,
 					$runDir, $whatItDoes);
     $bossScript->add(<<_EOF_
-head -3 $db.fa.out > /tmp/rmskHead.txt
-tail -n +4 $db.fa.out \\
+head -3 $db.sorted.fa.out > /tmp/rmskHead.txt
+tail -n +4 $db.sorted.fa.out \\
 | splitFileByColumn -col=5 stdin /cluster/data/$db -chromDirs \\
     -ending=.fa.out -head=/tmp/rmskHead.txt
 _EOF_

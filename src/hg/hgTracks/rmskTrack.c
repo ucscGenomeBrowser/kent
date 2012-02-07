@@ -97,16 +97,22 @@ if (isFull)
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	rmskOutStaticLoad(row+rowOffset, &ro);
-	if (endsWith(ro.repClass, "RNA"))
-	    ri = hashFindVal(hash, "RNA");
-	else
-	    ri = hashFindVal(hash, ro.repClass);
+	char class[256];
+	// Simplify repClass for lookup: strip trailing '?', simplify *RNA to RNA:
+	safecpy(class, sizeof(class), ro.repClass);
+	char *p = &(class[strlen(class)-1]);
+	if (*p == '?')
+	    *p = '\0';
+	if (endsWith(class, "RNA"))
+	    safecpy(class, sizeof(class), "RNA");
+	ri = hashFindVal(hash, class);
 	if (ri == NULL)
 	   ri = otherRepeatItem;
 	percId = 1000 - ro.milliDiv - ro.milliDel - ro.milliIns;
 	grayLevel = grayInRange(percId, 500, 1000);
 	col = shadesOfGray[grayLevel];
 	x1 = roundingScale(ro.genoStart-winStart, width, baseWidth)+xOff;
+	x1 = max(x1, 0);
 	x2 = roundingScale(ro.genoEnd-winStart, width, baseWidth)+xOff;
 	w = x2-x1;
 	if (w <= 0)

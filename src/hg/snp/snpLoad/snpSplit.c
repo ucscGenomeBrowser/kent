@@ -7,7 +7,6 @@
 #include "hdb.h"
 #include "snpTmp.h"
 
-static char const rcsid[] = "$Id: snpSplit.c,v 1.7 2006/01/22 03:48:28 heather Exp $";
 
 /* these are described in b125_mapping.doc */
 /* Also snpFixed.LocTypeCode */

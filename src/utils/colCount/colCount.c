@@ -3,7 +3,6 @@
 #include "linefile.h"
 #define MAXCOLS 10000
 
-static char const rcsid[] = "$Id: colCount.c,v 1.2 2008/08/27 23:02:15 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

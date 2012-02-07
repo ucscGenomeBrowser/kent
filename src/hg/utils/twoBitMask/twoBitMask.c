@@ -10,7 +10,6 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: twoBitMask.c,v 1.3 2006/08/16 18:46:19 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -13,7 +13,6 @@
 #include "dystring.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.17 2009/12/08 20:42:50 kent Exp $";
 
 boolean raSkipLeadingEmptyLines(struct lineFile *lf, struct dyString *dy)
 /* Skip leading empty lines and comments.  Returns FALSE at end of file.
@@ -315,7 +314,7 @@ struct hash *raReadWithFilter(char *fileName, char *keyField,char *filterKey,cha
  * Example raReadWithFilter(file,"term","type","antibody"): returns hash of hashes of every term with type=antibody */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct hash *bigHash = hashNew(10);
+struct hash *bigHash = hashNew(14);
 struct hash *hash;
 while ((hash = raNextRecord(lf)) != NULL)
     {
@@ -343,6 +342,41 @@ lineFileClose(&lf);
 if (hashNumEntries(bigHash) == 0)
     hashFree(&bigHash);
 return bigHash;
+}
+
+struct hash *raReadThreeLevels(char *fileName, char *lowKeyField, char *middleKeyField)
+/* Return 3 level hash that contains all ra records in file keyed by lowKeyField, which must exist.
+ * and broken into sub hashes based upon middleKeyField that must exist.
+ * Example raReadThreeLevels("cv.ra","term","type"):
+ *         returns hash of 'type' hashes of 'term' hashes of every stanza in cv.ra */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *topHash = hashNew(0); // Not expecting that many types
+struct hash *bottomHash;
+while ((bottomHash = raNextRecord(lf)) != NULL)
+    {
+    char *lowKey = hashFindVal(bottomHash, lowKeyField);
+    if (lowKey == NULL)
+        errAbort("Couldn't find key field %s line %d of %s",
+                lowKeyField, lf->lineIx, lf->fileName);
+
+    char *middleKey = hashFindVal(bottomHash, middleKeyField);
+    if (middleKey == NULL)
+        errAbort("Couldn't find middle key field %s line %d of %s",
+                middleKeyField, lf->lineIx, lf->fileName);
+
+    struct hash *middleHash = hashFindVal(topHash, middleKey);
+    if (middleHash == NULL)
+        {
+        middleHash = hashNew(16); // could be quite a few terms per type.
+        hashAdd(topHash, middleKey, middleHash);
+        }
+    hashAdd(middleHash, lowKey, bottomHash);
+    }
+lineFileClose(&lf);
+if (hashNumEntries(topHash) == 0)
+    hashFree(&topHash);
+return topHash;
 }
 
 struct hash *raTagVals(char *fileName, char *tag)

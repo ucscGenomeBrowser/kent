@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "hapmapAllelesSummary.h"
 
-static char const rcsid[] = "$Id: hapmapAllelesSummary.c,v 1.1 2007/03/05 23:30:44 heather Exp $";
 
 void hapmapAllelesSummaryStaticLoad(char **row, struct hapmapAllelesSummary *ret)
 /* Load a row from hapmapAllelesSummary table into ret.  The contents of ret will

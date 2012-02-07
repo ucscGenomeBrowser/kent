@@ -1,7 +1,6 @@
 #include "common.h"
 #include "blatStats.h"
 
-static char const rcsid[] = "$Id: blatStats.c,v 1.4 2003/06/14 16:31:25 kent Exp $";
 
 
 float divAsPercent(double a, double b)

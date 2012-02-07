@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "codeBlastScore.h"
 
-static char const rcsid[] = "$Id: codeBlastScore.c,v 1.2 2004/10/08 19:07:03 kschneid Exp $";
 
 void codeBlastScoreStaticLoad(char **row, struct codeBlastScore *ret)
 /* Load a row from codeBlastScore table into ret.  The contents of ret will

@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: t.c,v 1.2 2003/05/06 07:41:06 kate Exp $";
 
 int countFaRecords(char *file) 
 /* Count fasta records in a file */

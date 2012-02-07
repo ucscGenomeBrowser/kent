@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ensXRefZfish.h"
 
-static char const rcsid[] = "$Id: ensXRefZfish.c,v 1.2 2006/11/08 22:21:54 hartera Exp $";
 
 void ensXRefZfishStaticLoad(char **row, struct ensXRefZfish *ret)
 /* Load a row from ensXRefZfish table into ret.  The contents of ret will

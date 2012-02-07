@@ -8,7 +8,6 @@
 #include "options.h"
 #include "splatAli.h"
 
-static char const rcsid[] = "$Id: splatMerge.c,v 1.4 2008/11/06 06:55:57 kent Exp $";
 
 boolean big = FALSE;
 boolean dupeOk = FALSE;

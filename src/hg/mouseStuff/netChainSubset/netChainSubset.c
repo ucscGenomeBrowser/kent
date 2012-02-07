@@ -6,7 +6,6 @@
 #include "chain.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netChainSubset.c,v 1.12 2008/06/24 05:10:50 markd Exp $";
 
 char *type = NULL;
 boolean splitOnInsert = FALSE;

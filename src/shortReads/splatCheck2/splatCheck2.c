@@ -8,7 +8,6 @@
 #include "options.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: splatCheck2.c,v 1.2 2008/11/06 07:03:00 kent Exp $";
 
 int offset = 0;
 boolean bed = FALSE;

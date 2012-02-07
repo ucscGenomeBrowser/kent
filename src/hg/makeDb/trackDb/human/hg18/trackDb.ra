@@ -4,6 +4,7 @@ include trackDb.chainNet.ra
 include trackDb.encode.ra
 include trackDb.wgEncode.ra
 include trackDb.pipeline.ra
+include trackDb.merckPolyA.all.ra
 
 track clonePos override
 longLabel Clone Coverage
@@ -452,17 +453,6 @@ oldToNew kg3ToKg4
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-track tRNAs
-shortLabel tRNA Genes
-longLabel Transfer RNA genes identified with tRNAscan-SE
-group genes
-priority 53.5
-visibility hide
-color 0,20,150
-type bed 6 +
-nextItemButton on
-noScoreFilter .
-
 # Overrides for track pgSnp:
     track pgKb1Comb override
     pgSiftPredTab pgKb1Sift
@@ -596,14 +586,6 @@ searchTable nscanGene
 searchType genePred
 termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]+
 searchPriority 50
-
-searchName tRNA-name
-searchTable tRNAs
-searchType bed
-searchMethod fuzzy
-query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
-searchDescription tRNAscan-SE tRNA Name
-searchPriority 63
 
 searchTable nscanPasaGene
 searchType genePred
@@ -3988,3 +3970,11 @@ priority 500.4
 visibility hide
 type bedDetail 6
 color 128,0,128
+
+track sibGene override
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg18&query_str=$$
+urlLabel SIB link:
+
+track sibTxGraph override
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg18&species=H.+sapiens&tromer=$$
+

@@ -16,7 +16,6 @@
 #include "htmshell.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: git-reports.c,v 1.1 2010/03/02 08:43:07 galt Exp $";
 
 
 struct hash *userHash = NULL;

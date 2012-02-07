@@ -2,10 +2,13 @@
 
 #	$Id: calJac3.txt,v 1.16 2010/06/11 16:00:57 chinhli Exp $
 
-# Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
+# Marmoset sequence:
 # ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
 #	Callithrix_jacchus/Callithrix_jacchus-3.2
 #	Callithrix jacchus
+
+# http://www.hgsc.bcm.tmc.edu/project-species-p-Marmoset.hgsc?pageLocation=Marmoset
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ACFV00
 
 ##########################################################################
 # Download sequence (DONE - 2010-02-04 - Hiram)
@@ -2961,7 +2964,7 @@ liftUp /hive/data/genomes/calJac3/jkStuff/ens.62.lft
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
 ############################################################################
-# LASTZ Gorilla calJac3 (DONE - 2011-10-21 - Hiram)
+# LASTZ Gorilla calJac3 (DONE - 2011-10-21,27 - Hiram)
     mkdir /hive/data/genomes/calJac3/bed/lastzGorGor3.2011-10-21
     cd /hive/data/genomes/calJac3/bed/lastzGorGor3.2011-10-21
 
@@ -3004,15 +3007,21 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running - Fri Oct 21 15:38:47 PDT 2011
-    #	real    159m46.598s
-    cat fb.calJac3.chainGorGor3Link.txt  
-    #	2603997992 bases of 2897316137 (89.876%) in intersection
+    #	after recovering manually after a hive filesystem outage
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> cat.log 2>&1 &
+    #	real    147m39.439s
+    cat fb.calJac3.chainGorGor3Link.txt
+    #	1928768328 bases of 2752505800 (70.073%) in intersection
 
     cd /hive/data/genomes/calJac3/bed
     ln -s lastzGorGor3.2011-10-21 lastz.gorGor3
 
-    #	running the swap - DONE - 2011-09-21
+    #	running the swap
     mkdir /hive/data/genomes/gorGor3/bed/blastz.calJac3.swap
     cd /hive/data/genomes/gorGor3/bed/blastz.calJac3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -3021,8 +3030,9 @@ XXX - running - Fri Oct 21 15:38:47 PDT 2011
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
-    #	real    69m39.685s
-    cat fb.calJac3.chainGorGor3Link.txt 
-    #	2571797450 bases of 2822760080 (91.109%) in intersection
+    #	real    86m1.559s
+
+    cat fb.gorGor3.chainCalJac3Link.txt 
+    #	1933784568 bases of 2822760080 (68.507%) in intersection
 
 ############################################################################

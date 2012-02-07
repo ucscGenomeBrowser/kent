@@ -7,7 +7,6 @@
 #include "localmem.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: metaData.c,v 1.3 2006/01/22 08:10:00 markd Exp $";
 
 struct metaDataTbls
 /* Object with metadata collect from various tables */

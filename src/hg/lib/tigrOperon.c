@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "tigrOperon.h"
 
-static char const rcsid[] = "$Id: tigrOperon.c,v 1.1 2004/08/25 12:05:00 aamp Exp $";
 
 struct tigrOperon *tigrOperonLoad(char **row)
 /* Load a tigrOperon from row fetched with select * from tigrOperon

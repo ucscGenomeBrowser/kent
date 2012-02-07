@@ -7,7 +7,6 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgCeOrfToGene.c,v 1.3 2003/10/26 08:16:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

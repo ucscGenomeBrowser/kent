@@ -15,7 +15,6 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.47 2009/09/17 21:25:09 hiram Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */

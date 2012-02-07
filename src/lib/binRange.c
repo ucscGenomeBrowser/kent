@@ -13,7 +13,6 @@
 #include "common.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binRange.c,v 1.20 2006/07/01 05:01:25 kent Exp $";
 
 /* add one new level to get coverage past chrom sizes of 512 Mb
  *	effective limit is now the size of an integer since chrom start

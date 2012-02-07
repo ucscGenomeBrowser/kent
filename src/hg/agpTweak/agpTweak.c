@@ -15,7 +15,6 @@
 #include "agpGap.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: agpTweak.c,v 1.1 2005/07/22 03:25:50 galt Exp $";
 
 static void usage()
 /* Explain usage and exit. */

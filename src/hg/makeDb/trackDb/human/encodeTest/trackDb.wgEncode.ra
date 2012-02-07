@@ -1,0 +1,2 @@
+include wgEncodeTest.ra alpha
+include wgEncodeMetaCheckTest.ra alpha

@@ -1,0 +1,190 @@
+
+track wgEncodeGencodeV9
+compositeTrack on
+shortLabel GENCODE Genes V9
+longLabel Gene Annotations from ENCODE/GENCODE Version 9
+group genes
+#visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
+dragAndDrop subTracks
+priority 34.302
+visibility hide
+ensemblTranscriptIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
+ensemblGeneIdUrl http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s
+vegaTranscriptIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Transcript/Summary?db=core;t=%s
+vegaGeneIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Gene/Summary?db=core;g=%s
+yalePseudoUrl http://tables.pseudogene.org/%s
+type genePred
+fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
+hgGene on
+hgsid on
+# html wgEncodeGencodeV9
+baseColorUseCds given
+baseColorDefault genomicCodons
+subGroup1 view View 1Basic=Basic 2Comp=Comprehensive 3Pseudo=PseudoGenes 42-way=2-way_PseudoGene  5Polya=Polya
+sortOrder view=+
+wgEncode 1
+wgEncodeGencodeVersion 9
+wgEncodeGencodeAttrs wgEncodeGencodeAttrsV9
+wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV9
+wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV9
+wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV9
+wgEncodeGencodePdb wgEncodeGencodePdbV9
+wgEncodeGencodePubMed wgEncodeGencodePubMedV9
+wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqV9
+wgEncodeGencodeTag wgEncodeGencodeTagV9
+wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV9
+wgEncodeGencodeUniProt wgEncodeGencodeUniProtV9
+wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV9
+wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV9
+cdsDrawDefault genomic\ codons
+itemClassTbl wgEncodeGencodeAttrsV9
+itemClassNameColumn transcriptId
+itemClassClassColumn transcriptClass
+geneClasses coding nonCoding pseudo problem
+gClass_coding 12,12,120
+gClass_nonCoding 0,100,0
+gClass_pseudo 255,51,255
+gClass_problem 254,0,0
+# filterBy notes:
+#  - attrs is an alias for the current wgEncodeGencodeAttrs in the sql
+#  - transcriptMethod is a pseudo-column name, which is handled explictly in the code
+filterBy attrs.transcriptClass:Transcript_class=coding,nonCoding,pseudo,problem \
+         transcriptMethod:Annotation_Method=manual,automatic,manual_only,automatic_only \
+         attrs.transcriptType:Transcript_Type=ambiguous_orf,antisense,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_rRNA,Mt_tRNA,Mt_tRNA_pseudogene,ncrna_host,non_coding,nonsense_mediated_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,TR_C_gene,TR_J_gene,tRNA_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene
+
+    track wgEncodeGencodeBasicV9
+    subTrack wgEncodeGencodeV9
+    shortLabel Basic
+    subGroups view=1Basic
+    longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version 9
+    type genePred
+    priority 1
+
+    track wgEncodeGencodeCompV9
+    subTrack wgEncodeGencodeV9 off
+    subGroups view=2Comp
+    shortLabel Comprehensive
+    longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version 9 
+    type genePred
+    priority 2
+
+    track wgEncodeGencodePseudoGeneV9
+    subTrack wgEncodeGencodeV9 off
+    subGroups view=3Pseudo
+    shortLabel Pseudo
+    longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version 9
+    type genePred
+    color 255,51,255
+    priority 3
+
+    track wgEncodeGencode2wayConsPseudoV9
+    subTrack wgEncodeGencodeV9 off
+    subGroups view=42-way
+    shortLabel 2-Way Pseudo
+    longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version 9
+    type genePred
+    color 255,51,255
+    priority 4
+
+    track wgEncodeGencodePolyaV9
+    subTrack wgEncodeGencodeV9 off
+    subGroups view=5Polya
+    shortLabel PolyA
+    longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version 9
+    type genePred
+    color 0,0,0
+    priority 5
+
+# searchs for basic
+searchName wgEncodeGencodeBasicV9
+searchTable wgEncodeGencodeBasicV9
+searchMethod prefix
+searchType genePred
+termRegex ENST[0-9.]+
+searchPriority 2.2
+
+searchName wgEncodeGencodeBasicGeneSymV9
+searchTable wgEncodeGencodeBasicV9
+searchMethod exact
+searchType genePred
+searchPriority 2.4
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeBasicGeneV9
+searchTable wgEncodeGencodeBasicV9
+searchMethod prefix
+searchType genePred
+termRegex ENSG[0-9.]+
+searchPriority 2.4
+xrefTable wgEncodeGencodeAttrsV9
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodeBasicHavanaTranscriptV9
+searchTable wgEncodeGencodeBasicV9
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMT[0-9.]+
+searchPriority 2.4
+xrefTable wgEncodeGencodeAttrsV9
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodeBasicHavanaGeneV9
+searchTable wgEncodeGencodeBasicV9
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMG[0-9.]+
+searchPriority 2.4
+xrefTable wgEncodeGencodeAttrsV9
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searchs for comp
+searchName wgEncodeGencodeCompV9
+searchTable wgEncodeGencodeCompV9
+searchMethod prefix
+searchType genePred
+termRegex ENST[0-9.]+
+searchPriority 2.2
+
+searchName wgEncodeGencodeCompGeneSymV9
+searchTable wgEncodeGencodeCompV9
+searchMethod exact
+searchType genePred
+searchPriority 2.4
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeCompGeneV9
+searchTable wgEncodeGencodeCompV9
+searchMethod prefix
+searchType genePred
+termRegex ENSG[0-9.]+
+searchPriority 2.4
+xrefTable wgEncodeGencodeAttrsV9
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodeCompHavanaTranscriptV9
+searchTable wgEncodeGencodeCompV9
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMT[0-9.]+
+searchPriority 2.4
+xrefTable wgEncodeGencodeAttrsV9
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodeCompHavanaGeneV9
+searchTable wgEncodeGencodeCompV9
+searchMethod prefix
+searchType genePred
+termRegex OTTHUMG[0-9.]+
+searchPriority 2.4
+xrefTable wgEncodeGencodeAttrsV9
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searchs for 2-way consensus
+searchName wgEncodeGencode2wayConsPseudoV9
+searchTable wgEncodeGencode2wayConsPseudoV9
+searchMethod exact
+searchType genePred
+termRegex PGOHUM[0-9.]+
+searchPriority 2.6
+
+

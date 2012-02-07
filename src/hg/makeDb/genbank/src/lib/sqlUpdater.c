@@ -8,7 +8,6 @@
 #include "gbFileOps.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: sqlUpdater.c,v 1.9 2007/03/04 18:18:17 markd Exp $";
 
 struct sqlUpdateCmd 
 /* object to hold one update command */

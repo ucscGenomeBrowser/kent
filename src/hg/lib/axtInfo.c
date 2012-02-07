@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "axtInfo.h"
 
-static char const rcsid[] = "$Id: axtInfo.c,v 1.5 2005/04/11 08:13:43 markd Exp $";
 
 void axtInfoStaticLoad(char **row, struct axtInfo *ret)
 /* Load a row from axtInfo table into ret.  The contents of ret will

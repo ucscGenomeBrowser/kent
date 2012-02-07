@@ -9,7 +9,6 @@
 #include "axt.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: chainToAxt.c,v 1.7 2010/03/23 17:10:49 markd Exp $";
 
 int maxGap = 100;
 int maxChain = BIGNUM;

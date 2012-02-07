@@ -23,9 +23,10 @@ use warnings;
 use warnings FATAL => 'all';
 use strict;
 
-use DataBrowser qw(browse);
+#use DataBrowser qw(browse);
 use File::stat;
 use File::Basename;
+use File::Temp qw/ tempfile tempdir /;
 use Getopt::Long;
 use English;
 use Carp qw(cluck);
@@ -33,7 +34,8 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
+use FindBin qw($Bin);
+use lib "$Bin";
 use Encode;
 use HgAutomate;
 use HgDb;
@@ -70,17 +72,25 @@ our $quickOpt = "";     # option to pass to validateFiles prog
 our $time0 = time;
 our $timeStart = time;
 our %chromInfo;         # chromInfo from assembly for chrom validation
+our %chromSizes;
 our $maxBedRows=80_000_000; # number of rows to allow in a bed-type file
 our %tableNamesUsed;
-our ($grants, $fields, $daf);
+our ($fields, $daf);
 our $SORT_BUF = " -S 5G ";
 our $assembly;
 
 sub usage {
     print STDERR <<END;
-usage: encodeValidate.pl submission-type project-submission-dir
+usage: encodeValidate.pl pipeline-instance project-submission-dir
 
-submission-type is currently ignored.
+The pipeline instance variable is a switch that changes the behavior of doEncodeValidate.
+The changes if the instance is:
+
+standard
+    allows use of hg19 and mm9 databases only
+
+anything else
+    allows use of the encodeTest database only
 
 Current dafVersion is: $Encode::dafVersion
 
@@ -134,11 +144,7 @@ sub doTime
 sub dieTellWrangler
 {
     my ($msg) = @_;
-    my $email;
-    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
-        $email = $grants->{$daf->{grant}}{wranglerEmail};
-    }
-    $msg .= "Please contact your wrangler" . (defined($email) ? " at $email" : "") . "\n";
+    $msg .= "Please contact the ENCODE staff at encode-staff\@soe.ucsc.edu\n";
     die $msg;
 }
 
@@ -189,6 +195,7 @@ our %validators = (
     tissueSourceType => \&validateControlledVocabOrNone,
     spikeInPool => \&validateNoValidation,
     readType => \&validateControlledVocabOrNone,
+	region => \&validateControlledVocabOrNone,
     default => \&validateControlledVocab,
     );
 
@@ -237,7 +244,15 @@ sub validateFiles {
     }
     $files = \@newFiles;
     doTime("done validateFiles") if $opt_timing;
-    return @errors;
+    unless (@errors) {
+        return ();
+    } else {
+        my $errstr = "";
+        for my $error (@errors) {
+            $errstr = $errstr . "$error\n";
+        }
+        return $errstr;
+    }
 }
 
 sub validateDatasetName {
@@ -345,6 +360,7 @@ our %formatCheckers = (
     psl  => \&validatePsl,
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     bigWig => \&validateBigWig,
+    bigBed => \&validateBigBed,
     bam => \&validateBam,
     shortFrags => \&validateBed,
     bedLogR => \&validateBed,
@@ -523,43 +539,76 @@ sub validateBed {
     my $lineNumber = 0;
     doTime("beginning validateBed") if $opt_timing;
     my $fh = Encode::openUtil($file, $path);
+    my @localerrors;
+    my $errorCount = 0;
+    my $errorLimit = 20;
+    my $oldError = 0;
     while(<$fh>) {
-        chomp;
+        my $line = $_;
+        chomp $_;
         $lineNumber++;
+        if (scalar(@localerrors) != $oldError) {
+            $oldError = scalar(@localerrors);
+            $errorCount++;
+        }
+        if ($errorCount >= $errorLimit) {
+            push @localerrors, "Error limit exceeded, there may be more after this point.\n";
+            last
+        }
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        my @fields = split /\s+/;
-        my $fieldCount = @fields;
+        my @fields = split /\s+/, $line;
+        my $fieldCount = scalar(@fields);
         next if(!$fieldCount);
-        my $prefix = "Failed bed validation, file '$file'; line $lineNumber:";
-        if(/^(track|browser)/) {
-            ;
-        } elsif($fieldCount < 3) {
-            die "$prefix not enough fields; " . scalar(@fields) . " present; at least 3 are required\n";
+        my $prefix = "line $lineNumber:";
+        if ($fields[0] =~ m/(track|browser)/) {
+            next
+        }
+        if($fieldCount <= 2) {
+            push @localerrors, "$prefix not enough fields; " . scalar(@fields) . " present; at least 3 are required\n";
+            next
+        }
+        if ($fields[1] !~ /^\d+$/) {
+            push @localerrors, "$prefix field 2 value ($fields[1]) is invalid; value must be a positive integer\n";
+        }
+        if ($fields[2] !~ /^\d+$/) {
+            push @localerrors, "$prefix field 3 value ($fields[2]) is invalid; value must be a positive integer\n";
+        }
+        if ($fields[2] < $fields[1]) {
+            push @localerrors, "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
         } elsif (!$chromInfo{$fields[0]}) {
-            die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
-        } elsif ($fields[1] !~ /^\d+$/) {
-            die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
-        } elsif ($fields[2] !~ /^\d+$/) {
-            die "$prefix field 3 value ($fields[2]) is invalid; value must be a positive number\n";
-        } elsif ($fields[2] < $fields[1]) {
-            die "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
-        } elsif ($fieldCount < 3 && $fields[4] !~ /^\d+$/ && $fields[4] !~ /^\d+\.\d+$/) {
-            die "$prefix field 5 value ($fields[4]) is invalid; value must be a positive number\n";
-        } elsif ($fieldCount < 3 && $fields[4] < 0 || $fields[4] > 1000) {
-            die "$prefix field 5 value ($fields[4]) is invalid; score must be 0-1000\n";
-        } elsif ($type eq 'bed5FloatScore' && $fieldCount < 6) {
-            die "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
-        } elsif ($type eq 'bed5FloatScore' && $fields[5] !~ /^$floatRegEx$/) {
-            die "$prefix field 6 value '$fields[5]' is invalid; must be a float\n";
-        } else {
-            ;
+            push @localerrors, "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
+            next
+        } elsif ($fields[0] !~ m/chrM/) {
+            if ($fields[2] > $chromSizes{$fields[0]}) {
+                push @localerrors, "$prefix field 3 value ($fields[2]) exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
+            }
+        } 
+        if ($fieldCount >= 5 && ($fields[4] !~ /^\d+$/ or $fields[4] > 1000)) {
+            push @localerrors, "$prefix field 5 value ($fields[4]) is invalid; value must be a positive integer between 0-1000\n";
+        }
+        if ($fieldCount >= 5 && $type ne 'bed5FloatScore' && $fields[5] !~ m/^(\+|\-|\.)$/) {
+            push @localerrors, "$prefix field 6 ($fields[5]) value must be either + or - or .\n";
+        }
+        if ($type eq 'bed5FloatScore' && $fieldCount < 6) {
+            push @localerrors, "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
+            next
+        }
+        if ($type eq 'bed5FloatScore' && $fields[5] !~ /^$floatRegEx$/) {
+            push @localerrors, "$prefix field 6 value '$fields[5]' is invalid; must be a float\n";
+            next
         }
         last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
     doTime("done validateBed",$lineNumber) if $opt_timing;
-    return ();
+    if (scalar(@localerrors)) {
+        my $errstr = join "", @localerrors;
+        $errstr = "Failed BED validation in $file:\n" . $errstr;
+        return $errstr;
+    } else {
+        return ();
+    }
 }
 
 sub validateBedGraph {
@@ -870,6 +919,34 @@ sub validateBam
     doTime("done validateBam") if $opt_timing;
     return ();
 }
+
+sub validateBigBed
+{
+    my ($path, $file, $type) = @_;
+    doTime("Beginning validateBigBed") if $opt_timing;
+    HgAutomate::verbose(2, "validateBigBed($path,$file,$type)\n");
+    my $fh = File::Temp->new(UNLINK => 1);
+    $fh->unlink_on_destroy( 1 );
+    my $tempfilename = $fh->filename;
+    #print STDERR "tempfilename = $tempfilename\n";
+    my $safe = SafePipe->new(CMDS => ["bigBedToBed $file $tempfilename"]);
+    if(my $err = $safe->exec()) {
+        print STDERR  "ERROR: failed validateBigBed : " . $safe->stderr() . "\n";
+        return("failed validateBigBed for '$file'");
+    }
+    my ($tmpfile, $basedir, $bar) = fileparse($tempfilename);
+    my $bedError = &validateBed($basedir, $tmpfile, "bed");
+    if ($bedError) {
+        $bedError =~ s/$tmpfile/$file/g;
+        print STDERR "ERROR: failed validateBigBed : " . $bedError . "\n";
+        return("failed validateBigBed for '$file'");
+    }
+    HgAutomate::verbose(2, "File \'$file\' passed validateBigBed\n");
+    doTime("done validateBigBed") if $opt_timing;
+    return ();
+}
+
+
 
 sub validateBigWig
 {
@@ -1357,7 +1434,7 @@ sub makeDownloadTargetFileName {
     }
 
     my $target;
-    if (($type eq "bam") || ($type eq "bigWig"))  {
+    if (($type eq "bam") || ($type eq "bigWig") || ($type eq "bigBed"))  {
         $target = "$tablename.$type";
 
     } else {
@@ -1450,7 +1527,7 @@ if($opt_metaDataOnly) {
 usage() if (scalar(@ARGV) < 2);
 
 # Get command-line args
-my $submitType = $ARGV[0];     # currently not used
+my $pipelineInstance = $ARGV[0];     # currently not used
 my $submitDir = $ARGV[1];
 
 $ENV{TMPDIR} = $Encode::tempDir;
@@ -1464,6 +1541,7 @@ if($opt_validateFile) {
     }
     my $db = HgDb->new(DB => $assembly);
     $db->getChromInfo(\%chromInfo);
+    $db->getChromSizes(\%chromSizes);
     if(my @errors = checkDataFormat($opt_fileType, $submitDir)) {
         die "Invalid file: " . join(", ", @errors) . "\n";
     } else {
@@ -1517,33 +1595,24 @@ if(!$opt_validateDaf) {
 }
 
 # labs is now in fact the list of grants (labs are w/n grants, and are not currently validated).
-$grants = Encode::getGrants($configPath);
 $fields = Encode::getFields($configPath);
 
 if($opt_validateDaf) {
     if(-f $submitDir) {
-        Encode::parseDaf($submitDir, $grants, $fields);
+        Encode::parseDaf($submitDir,  $fields, $pipelineInstance);
     } else {
-        Encode::getDaf($submitDir, $grants, $fields);
+        Encode::getDaf($submitDir, $fields, $pipelineInstance);
     }
     print STDERR "DAF is valid\n";
     exit(0);
 }
 
-$daf = Encode::getDaf($submitDir, $grants, $fields);
+$daf = Encode::getDaf($submitDir, $fields, $pipelineInstance);
 $assembly = $daf->{assembly};
 
 my $db = HgDb->new(DB => $daf->{assembly});
 $db->getChromInfo(\%chromInfo);
-
-if($opt_sendEmail) {
-    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
-        my $email = $grants->{$daf->{grant}}{wranglerEmail};
-        if($email) {
-            `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab has been submitted for validation." $email`;
-        }
-    }
-}
+$db->getChromSizes(\%chromSizes);
 
 # Add the variables in the DAF file to the required fields list
 if (defined($daf->{variables})) {
@@ -1936,9 +2005,6 @@ if(!$opt_skipOutput && !$compositeExists) {
 my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
 
-# use pi.ra file to map pi/lab/institution/grant/project for metadata line
-my $labRef = Encode::getLabs($configPath);
-my %labs = %{$labRef};
 my $subId = 0;
 foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
@@ -2001,7 +2067,11 @@ foreach my $ddfLine (@ddfLines) {
     $metadata .= " labVersion=$ddfLine->{labVersion}" if $ddfLine->{labVersion};
     $metadata .= " softwareVersion=$ddfLine->{softwareVersion}" if $ddfLine->{softwareVersion};
     $metadata .= " origAssembly=$ddfLine->{origAssembly}" if $ddfLine->{origAssembly};
-    $metadata .= ' dataVersion="' . $Encode::dataVersion .'"';
+    if ($daf->{assembly} eq "mm9"){
+        $metadata .= ' dataVersion="' . $Encode::mouseDataVersion . '"';
+    } else {
+        $metadata .= ' dataVersion="' . $Encode::dataVersion .'"';
+    }
     if($submitDir =~ /(\d+)$/) {
         $subId = $1;
     } elsif($submitDir =~ /(\d+)/) {
@@ -2132,8 +2202,7 @@ foreach my $ddfLine (@ddfLines) {
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }
-            #print "term = $terms\n"
-            #$subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
+            $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
         }
         #Venkat: Commented out the below line such that if any lab has replicates the replicate number will be placed
         # in the table name. The below code was found to be to specific, however if there are any problems
@@ -2235,6 +2304,12 @@ foreach my $ddfLine (@ddfLines) {
         if ($db->tableExist( $tableName)) {
             die "view '$view' has already been loaded as track '$tableName'\nPlease contact your wrangler if you need to reload this data\n";
         }
+    }
+
+    $submitDir = `pwd`;
+    chomp $submitDir;
+    unless ($pipelineInstance eq "beta" or $pipelineInstance eq "standard") {
+        $tableName = $tableName . "_$pipelineInstance" . "_" . basename($submitDir);
     }
 
     my $targetFile = makeDownloadTargetFileName($tableName, $type, \@{$ddfLine->{files}} );

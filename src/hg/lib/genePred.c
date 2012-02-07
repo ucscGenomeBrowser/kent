@@ -12,7 +12,6 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.103 2010/05/10 08:23:35 kent Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 

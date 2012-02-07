@@ -3,7 +3,6 @@
 #include "common.h"
 #include "spacedSeed.h"
 
-static char const rcsid[] = "$Id: spacedSeed.c,v 1.1 2005/01/10 00:02:37 kent Exp $";
 
 /* Seeds - the weight 9 and 11 seeds are from PatternHunter paper.
  * The weights 10,12,13,14,15,16,17 and 18 are from the Choi, Zeng,

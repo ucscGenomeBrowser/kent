@@ -22,7 +22,6 @@
 #include "log.h"
 #include "internet.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.57 2009/10/09 19:36:03 kent Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"canStop", OPTION_BOOLEAN},

@@ -16,7 +16,6 @@
 #include <utime.h>
 
 
-static char const rcsid[] = "$Id: osunix.c,v 1.48 2010/06/03 05:14:39 kent Exp $";
 
 
 off_t fileSize(char *pathname)

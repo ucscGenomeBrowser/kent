@@ -11,7 +11,7 @@ table gwasCatalog
     string journal;    "Journal of publication"
     string title;      "Title of publication"
     string trait;      "Disease or trait assessed in study"
-    string initSample; "Initial sample size"
+    lstring initSample; "Initial sample size"
     lstring replSample; "Replication sample size"
     string region;     "Chromosome band / region of SNP"
     string genes;      "Reported Gene(s)"

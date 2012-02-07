@@ -13,7 +13,6 @@
 #include "hdb.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: coordConv.c,v 1.14 2006/03/09 18:26:57 angie Exp $";
 
 /* #define DEBUG */
 

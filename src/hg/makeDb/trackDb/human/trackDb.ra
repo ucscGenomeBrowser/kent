@@ -1678,6 +1678,7 @@ group varRep
 priority 144.48
 visibility hide
 type bed 6 +
+configureByPopup off
 exonArrows off
 
     track hapmapSnpsASW
@@ -3014,7 +3015,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-tableBrowser off omimGeneMap omimPhenotype omimGeneSymbol mim2gene
+tableBrowser off omimGeneMap omimPhenotype omimGeneSymbol omim2gene
 
 track omimAvSnp
 shortLabel OMIM AV SNPs
@@ -3038,6 +3039,20 @@ color 200, 0, 0
 type bed 4
 hgsid on
 url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
+release beta,public
+
+track cosmic
+shortLabel COSMIC
+longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
+group phenDis
+priority 29.80
+visibility hide
+color 200, 0, 0
+type bed 4
+hgsid on
+url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
+dataVersion v57
+release alpha
 
 searchName cosmicId
 searchTable cosmic
@@ -3802,6 +3817,7 @@ longLabel SNP Genotyping Arrays
 group varRep
 priority 101
 visibility hide
+configureByPopup off
 type bed 4 .
 
     track snpArrayAffy6
@@ -3890,7 +3906,7 @@ type bed 4 .
 
 track iscaRetrospective
 shortLabel ISCA Retro
-longLabel International Standards for Cytogenetic Arrays Consortium - Retrospective variants
+longLabel International Standards for Cytogenomic Arrays Consortium - Retrospective variants
 group varRep
 priority 110
 visibility hide
@@ -3901,8 +3917,8 @@ release beta,public
 track iscaComposite
 compositeTrack on
 shortLabel ISCA
-longLabel International Standards for Cytogenetic Arrays Consortium
-group varRep
+longLabel International Standards for Cytogenomic Arrays Consortium
+group phenDis
 priority 110
 visibility hide
 type gvf
@@ -3912,44 +3928,44 @@ noScoreFilter .
 
     track iscaCuratedPathogenic
     parent iscaComposite
-    shortLabel ISCA Cur. Pathog.
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Curated Pathogenic
+    shortLabel ISCA Curated Path
+    longLabel ISCA CNVs: Curated Pathogenic
     priority 1
 
     track iscaPathogenic
     parent iscaComposite
     shortLabel ISCA Pathogenic
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Pathogenic
+    longLabel ISCA CNVs: Pathogenic
     priority 2
 
     track iscaLikelyPathogenic
     parent iscaComposite
-    shortLabel ISCA Likely Path.
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Likely Pathogenic
+    shortLabel ISCA Uncert Path
+    longLabel ISCA CNVs: Uncertain: Likely Pathogenic
     priority 3
 
     track iscaUncertain
     parent iscaComposite
     shortLabel ISCA Uncertain
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Uncertain
+    longLabel ISCA CNVs: Uncertain
     priority 4
 
     track iscaLikelyBenign
     parent iscaComposite
-    shortLabel ISCA Likely Ben.
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Likely Benign
+    shortLabel ISCA Uncert Ben
+    longLabel ISCA CNVs: Uncertain: Likely Benign
     priority 5
 
     track iscaBenign
     parent iscaComposite
     shortLabel ISCA Benign
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Benign
+    longLabel ISCA CNVs: Benign
     priority 6
 
     track iscaCuratedBenign
     parent iscaComposite
-    shortLabel ISCA Cur. Benign
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Curated Benign
+    shortLabel ISCA Curated Ben
+    longLabel ISCA CNVs: Curated Benign
     priority 7
 
 searchName decipherId
@@ -4187,5 +4203,10 @@ color 0, 80, 0
 type bed 4
 html geneReviews
 
-
-
+searchName geneReviews
+searchTable geneReviews
+searchType bed
+searchPriority 50
+xrefTable geneReviewsRefGene
+xrefQuery select geneSymbol,diseaseName from %s where diseaseName like '%%%s%%'
+searchBoth on

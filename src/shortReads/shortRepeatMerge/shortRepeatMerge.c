@@ -11,7 +11,6 @@
 #include "sqlNum.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: shortRepeatMerge.c,v 1.4 2008/11/06 07:03:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

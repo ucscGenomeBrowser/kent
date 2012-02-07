@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "stsAlias.h"
 
-static char const rcsid[] = "$Id: stsAlias.c,v 1.6 2005/04/13 06:25:57 markd Exp $";
 
 void stsAliasStaticLoad(char **row, struct stsAlias *ret)
 /* Load a row from stsAlias table into ret.  The contents of ret will

@@ -1,21 +1,40 @@
-# generated with encodeMkChangeNotes 0.9
-This is a release3 of the "ENCODE wgEncodeMapability"
-The composite track is wgEncodeMapability
+mkChangeNotes v2
+hg19 wgEncodeMapability Release 3 vs Release 2
 
-Categories of tables and files('):
-A) Untouched - are on public browser and should remain
-B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
-   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
-   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
-C) New - are only currently on test but will need to be pushed to the RR.
-D) Additional items of note
+NOTE: HAND-EDITED to include the 6 untouched gbdb files. This current version of mkChangeNotes 
+      failed to detect them because the names end with .bw instead of .bigWig.
 
-Summary total counts for release3 (new+untouched):
-    Tables: 10
-    Files: 13
-    Gbdbs: 8
+QA Count Summaries for Release 3:
+Tables: 10
+Files: 10
+Gbdbs: 8
+Supplemental: 0
+Other: 3
 
-A) Untouched Tables (6):
+
+Sizes of New:
+Tables: 1 MB
+Files: 2321 MB (2 GB)
+Gbdbs: 2321 MB (2 GB)
+Supplemental: 0 MB
+Other: 1 MB
+Total: 4644 MB (4 GB)
+
+
+TABLES:
+New: 4
+Untouched: 6
+Revoked/Replaced/Renamed: 0
+New + Untouched: 10
+Total (New + Untouched + Revoked/Replaced/Renamed): 10
+
+New Tables (4):
+wgEncodeDacMapabilityConsensusExcludable
+wgEncodeDukeMapabilityRegionsExcludable
+wgEncodeDukeMapabilityUniqueness20bp
+wgEncodeDukeMapabilityUniqueness35bp
+
+Untouched (6):
 wgEncodeCrgMapabilityAlign100mer
 wgEncodeCrgMapabilityAlign24mer
 wgEncodeCrgMapabilityAlign36mer
@@ -23,64 +42,74 @@ wgEncodeCrgMapabilityAlign40mer
 wgEncodeCrgMapabilityAlign50mer
 wgEncodeCrgMapabilityAlign75mer
 
-A') Untouched Files (6 downloadables, 6 gbdbs):
-    current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/
-    on RR:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/
+Revoked/Replaced/Renamed Tables (0):
 
-wgEncodeCrgMapabilityAlign100mer.bigWig
-wgEncodeCrgMapabilityAlign24mer.bigWig
-wgEncodeCrgMapabilityAlign36mer.bigWig
-wgEncodeCrgMapabilityAlign40mer.bigWig
-wgEncodeCrgMapabilityAlign50mer.bigWig
-wgEncodeCrgMapabilityAlign75mer.bigWig
 
+DOWNLOAD FILES:
+New: 4
+Untouched: 6
+Revoked/Replaced/Renamed: 0
+New + Untouched: 10
+Total (New + Untouched + Revoked/Replaced/Renamed): 10
+
+New Download Files (4):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/wgEncodeDacMapabilityConsensusExcludable.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/wgEncodeDukeMapabilityRegionsExcludable.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/wgEncodeDukeMapabilityUniqueness20bp.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/wgEncodeDukeMapabilityUniqueness35bp.bigWig
+
+Untouched Download Files (6):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/wgEncodeCrgMapabilityAlign100mer.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/wgEncodeCrgMapabilityAlign24mer.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/wgEncodeCrgMapabilityAlign36mer.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/wgEncodeCrgMapabilityAlign40mer.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/wgEncodeCrgMapabilityAlign50mer.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/wgEncodeCrgMapabilityAlign75mer.bigWig
+
+Revoked/Replaced/Renamed Download Files (0):
+
+
+GBDBS:
+New: 2
+Untouched: 6
+Revoked/Replaced/Renamed: 0
+New + Untouched: 8
+Total (New + Untouched + Revoked/Replaced/Renamed): 8
+
+New Gbdb Files (2):
+/gbdb/hg19/bbi/wgEncodeDukeMapabilityUniqueness20bp.bigWig
+/gbdb/hg19/bbi/wgEncodeDukeMapabilityUniqueness35bp.bigWig
+
+NOTE: HAND-EDITED ---
+Untouched Gbdb Files (6):
 /gbdb/hg19/bbi/wgEncodeCrgMapabilityAlign100mer.bw
 /gbdb/hg19/bbi/wgEncodeCrgMapabilityAlign24mer.bw
 /gbdb/hg19/bbi/wgEncodeCrgMapabilityAlign36mer.bw
 /gbdb/hg19/bbi/wgEncodeCrgMapabilityAlign40mer.bw
 /gbdb/hg19/bbi/wgEncodeCrgMapabilityAlign50mer.bw
 /gbdb/hg19/bbi/wgEncodeCrgMapabilityAlign75mer.bw
+NOTE: HAND-EDITED ---
 
-B) Deprecated tables (0):
-
-B') Deprecated files (0 downloadables, 0 gbdbs):
-    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
-    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
-    current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release2/
-    on RR:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/
+Revoked/Replaced/Renamed Gbdb Files (0):
 
 
+OTHER FILES:
+New: 3
+Revoked/Replace: 2
+Total: 5
 
-C) New tables (4):
-wgEncodeDacMapabilityConsensusExcludable
-wgEncodeDukeMapabilityRegionsExcludable
-wgEncodeDukeMapabilityUniqueness20bp
-wgEncodeDukeMapabilityUniqueness35bp
+New Other Files (3):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/README.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/md5sum.txt
 
-C') New files (4 downloadables, 2 gbdbs):
-    current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/
-    NOT on RR but must be placed in:
-      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeMapability/
+Revoked Other Files (2):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/preamble.html
 
-wgEncodeDacMapabilityConsensusExcludable.bed.gz
-wgEncodeDukeMapabilityRegionsExcludable.bed.gz
-wgEncodeDukeMapabilityUniqueness20bp.bigWig
-wgEncodeDukeMapabilityUniqueness35bp.bigWig
 
-/gbdb/hg19/bbi/wgEncodeDukeMapabilityUniqueness20bp.bigWig
-/gbdb/hg19/bbi/wgEncodeDukeMapabilityUniqueness35bp.bigWig
+Files that dropped between releases (2):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release2/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release2/preamble.html
 
-D) Additional items:
-    current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeMapability/release3/
-    should be placed on the RR in (overwritting any existing copy):
-      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeMapability/
 
-index.html
-files.txt
-md5sum.txt

@@ -1,5 +1,6 @@
 mkChangeNotes v2
 mm9 wgEncodeCaltechTfbs Release 1
+2011-11-17
 
 QA Count Summaries for Release 1:
 Tables: 55
@@ -13,15 +14,13 @@ Tables: 0
 Files: 0
 Gbdbs: 0
 
-
 Sizes of New:
-Tables: 32 MB
-Files: 72664 MB (70 GB)
-Gbdbs: 3332 MB (3 GB)
+Table: 32 MB
+Files: 72665 MB (71 GB)
+Gbdbs: 3333 MB (3 GB)
 Supplemental: 0 MB
-Other: 0 MB
-Total: 76028 MB (74 GB)
-
+Other: 1 MB
+Total: 76031 MB (74 GB)
 
 
 New Tables (55):
@@ -265,20 +264,10 @@ New Gbdb Files (31):
 /gbdb/mm9/bbi/wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xSigRep1.bigWig
 
 
-New Supplemental Files (0):
-
-
 New Other Files (3):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechTfbs/release1/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechTfbs/release1/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechTfbs/release1/md5sum.txt
-
-
-Revoked Tables (0):
-Revoked Files (0):
-
-
-Revoked Gbdbs (0):
 
 
 No Errors

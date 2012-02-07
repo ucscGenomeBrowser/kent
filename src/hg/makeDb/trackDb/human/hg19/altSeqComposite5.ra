@@ -35,7 +35,7 @@ dataVersion GRCh37 Patch 5 update, June 2011
 	html altSeqComposite
 	priority 1
 	urlLabel Fetch alternate sequence (GRCh37.p5):
-	url http:/cgi-bin/hgc?db=hg19Patch5&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
+	url /cgi-bin/hgc?db=hg19Patch5&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
 	track altSeqPatches
         parent altSeqCompositeViewlocation
@@ -46,7 +46,7 @@ dataVersion GRCh37 Patch 5 update, June 2011
 	html altSeqComposite
 	priority 2
 	urlLabel Fetch alternate sequence (GRCh37.p5):
-	url http:/cgi-bin/hgc?db=hg19Patch5&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
+	url /cgi-bin/hgc?db=hg19Patch5&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
     track altSeqCompositeViewpsl
     shortLabel Alignment

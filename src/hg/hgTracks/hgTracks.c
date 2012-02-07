@@ -58,7 +58,6 @@
 #include "search.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -77,8 +76,11 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
 	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
-            "hgt.contentType",
+            "hgt.contentType", "hgt.positionInput", "hgt.internal",
             NULL };
+
+// MERGE_GENE_SUGGEST is used for work on redmine #5933
+// #define MERGE_GENE_SUGGEST
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -184,8 +186,9 @@ int tgCmpPriority(const void *va, const void *vb)
 {
 const struct track *a = *((struct track **)va);
 const struct track *b = *((struct track **)vb);
-float dif = a->group->priority - b->group->priority;
-
+float dif = 0;
+if (a->group && b->group)
+    dif = a->group->priority - b->group->priority;
 if (dif == 0)
     dif = a->priority - b->priority;
 if (dif < 0)
@@ -951,6 +954,7 @@ tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
 tdb->priority = tg->priority;
 tdb->type = cloneString("psl");
+tdb->canPack = tg->canPack;
 trackDbPolish(tdb);
 addUserSeqBaseAndIndelSettings(tdb);
 tg->tdb = tdb;
@@ -1111,6 +1115,7 @@ tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
 tdb->priority = tg->priority;
+tdb->canPack = tg->canPack;
 trackDbPolish(tdb);
 tg->tdb = tdb;
 return tg;
@@ -1335,7 +1340,6 @@ static void doLabelNextItemButtons(struct track *track, struct track *parentTrac
 {
 int portWidth = insideWidth;
 int portX = insideX;
-#ifdef IMAGEv2_DRAG_SCROLL
 // If a portal was established, then set the portal dimensions
 int portalStart,chromStart;
 double basesPerPixel;
@@ -1347,7 +1351,6 @@ if (theImgBox && imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&po
         portX += tl.leftLabelWidth + gfxBorder;
     portWidth = portWidth-gfxBorder-insideX;
     }
-#endif//def IMAGEv2_DRAG_SCROLL
 int arrowWidth = insideHeight;
 int arrowButtonWidth = arrowWidth + 2 * NEXT_ITEM_ARROW_BUFFER;
 int rightButtonX = portX + portWidth - arrowButtonWidth - 1;
@@ -1776,6 +1779,11 @@ if (baseShowScaleBar)
 	    y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
     hvGfxLine(hvg, scaleBarEndX, y+scaleBarPad, scaleBarEndX,
 	    y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
+    if(cartUsualBoolean(cart, BASE_SHOWASM_SCALEBAR, TRUE))
+        {
+        int fHeight = vgGetFontPixelHeight(hvg->vg, font);
+        hvGfxText(hvg, scaleBarEndX + 10, y + (scaleBarTotalHeight - fHeight)/2 + ((font == mgSmallFont()) ?  1 : 0), MG_BLACK, font, database);
+        }
     y += scaleBarTotalHeight;
     }
 if (baseShowRuler)
@@ -1957,7 +1965,6 @@ if(theImgBox)
     hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
     hPrintf("<input type='hidden' name='r' value='%d'>\n", winEnd);
     hPrintf("<input type='hidden' name='pix' value='%d'>\n", tl.picWidth);
-    #ifdef IMAGEv2_DRAG_SCROLL
     // If a portal was established, then set the global dimensions to the entire image size
     if(imgBoxPortalDimensions(theImgBox,&winStart,&winEnd,&(tl.picWidth),NULL,NULL,NULL,NULL,NULL))
         {
@@ -1965,7 +1972,6 @@ if(theImgBox)
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
-    #endif//def IMAGEv2_DRAG_SCROLL
     memset((char *)sliceWidth,  0,sizeof(sliceWidth));
     memset((char *)sliceOffsetX,0,sizeof(sliceOffsetX));
     if (withLeftLabels)
@@ -2552,13 +2558,29 @@ if(sameString(type, "jsonp"))
     printf(")\n");
     return;
     }
-else if(sameString(type, "png"))
+else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "eps"))
     {
-    // following is (currently dead) experimental code to bypass hgml and return png's directly - see redmine 4888
-    printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+    // following code bypasses html and return png's directly - see redmine 4888
+    char *file;
+    if(sameString(type, "pdf"))
+        {
+        printf("Content-Disposition: filename=hgTracks.pdf\nContent-Type: application/pdf\n\n");
+        file = convertEpsToPdf(psOutput);
+        unlink(psOutput);
+        }
+    else if(sameString(type, "eps"))
+        {
+        printf("Content-Disposition: filename=hgTracks.eps\nContent-Type: application/eps\n\n");
+        file = psOutput;
+        }
+    else
+        {
+        printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+        file = gifTn.forCgi;
+        }
 
     char buf[4096];
-    FILE *fd = fopen(gifTn.forCgi, "r");
+    FILE *fd = fopen(file, "r");
     if(fd == NULL)
         // fail some other way (e.g. HTTP 500)?
         errAbort("Couldn't open png for reading");
@@ -2571,15 +2593,14 @@ else if(sameString(type, "png"))
             break;
         }
     fclose(fd);
-    unlink(gifTn.forCgi);
+    unlink(file);
     return;
     }
-#endif
+#endif///def SUPPORT_CONTENT_TYPE
 
 if(theImgBox)
     {
     imageBoxDraw(theImgBox);
-    #ifdef IMAGEv2_DRAG_SCROLL
     // If a portal was established, then set the global dimensions back to the portal size
     if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
         {
@@ -2587,7 +2608,6 @@ if(theImgBox)
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
-    #endif//def IMAGEv2_DRAG_SCROLL
     imgBoxFree(&theImgBox);
     }
 else
@@ -2759,7 +2779,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         }
     else
         {
-        handler = lookupTrackHandler(tdb->table);
+        handler = lookupTrackHandlerClosestToHome(tdb);
         if (handler != NULL)
             handler(track);
         }
@@ -3145,7 +3165,7 @@ else if (sameString(type, "bigBed"))
     /* Finish wrapping track around tdb. */
     tg = trackFromTrackDb(tdb);
     tg->bbiFile = bbi;
-    tg->nextItemButtonable = FALSE;
+    tg->nextItemButtonable = TRUE;
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
@@ -3271,8 +3291,6 @@ else
     {
     errAbort("Unrecognized custom track type %s", type);
     }
-if (!ct->dbTrack)
-    tg->nextItemButtonable = FALSE;
 tg->hasUi = TRUE;
 tg->customTrack = TRUE;// Explicitly declare this a custom track for flatTrack ordering
 
@@ -3448,7 +3466,7 @@ hubConnectStatusFreeList(&hubList);
 boolean restrictionEnzymesOk()
 /* Check to see if it's OK to do restriction enzymes. */
 {
-return (hTableExists("hgFixed", "cutters") &&
+return (hDbExists("hgFixed") && hTableExists("hgFixed", "cutters") &&
     hTableExists("hgFixed", "rebaseRefs") &&
     hTableExists("hgFixed", "rebaseCompanies"));
 }
@@ -3842,6 +3860,17 @@ const struct trackHub *b = *((struct trackHub **)vb);
 return strcmp(a->shortLabel, b->shortLabel);
 }
 
+static void rPropagateGroup(struct track *track, struct group *group)
+// group should spread to multiple levels of children.
+{
+struct track *subtrack = track->subtracks;
+for ( ;subtrack != NULL;subtrack = subtrack->next)
+    {
+    subtrack->group = group;
+    rPropagateGroup(subtrack, group);
+    }
+}
+
 static void groupTracks(struct trackHub *hubList, struct track **pTrackList,
 	struct group **pGroupList, int vis)
 /* Make up groups and assign tracks to groups.
@@ -3987,6 +4016,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
 	group = unknown;
 	}
     track->group = group;
+    rPropagateGroup(track, group);
     }
 
 /* Sort tracks by combined group/track priority, and
@@ -4127,22 +4157,16 @@ return NULL;
 }
 
 static void setSearchedTrackToPackOrFull(struct track *trackList)
-/* Open track associated with search position if any.   Also open its parents
- * if any.  At the moment parents include composites but not supertracks. */
+// Open track associated with search position if any. Also open its parents if any.
 {
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     char *tableName = hgp->tableList->name;
     struct track *matchTrack = rFindTrackWithTable(tableName, trackList);
     if (matchTrack != NULL)
-	{
-	struct track *track;
-	for (track = matchTrack; track != NULL; track = track->parent)
-	    cartSetString(cart, track->track, hCarefulTrackOpenVis(database, track->track));
-	}
+        tdbSetCartVisibility(matchTrack->tdb, cart, hCarefulTrackOpenVis(database, matchTrack->track));
     }
 }
-
 
 struct track *getTrackList( struct group **pGroupList, int vis)
 /* Return list of all tracks, organizing by groups.
@@ -4300,7 +4324,7 @@ for (track = trackList; track != NULL; track = track->next)
     {
     char *cartVis = cartOptionalString(cart, track->track);
     if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
-    cartRemove(cart, track->track);
+        cartRemove(cart, track->track);
     }
 }
 
@@ -4415,7 +4439,6 @@ for (;track != NULL; track = track->next)
         if(shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
-
     if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility
         // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
@@ -4425,9 +4448,12 @@ for (;track != NULL; track = track->next)
             {
             struct trackDb * childTdb = childRef->val;
             struct track *child = hashFindVal(trackHash, childTdb->track);
-            char *cartVis = cartOptionalString(cart,child->track);
-            if (cartVis)
-                child->visibility = hTvFromString(cartVis);
+            if (child != NULL && child->track!=NULL)
+                {
+                char *cartVis = cartOptionalString(cart,child->track);
+                if (cartVis)
+                    child->visibility = hTvFromString(cartVis);
+                }
             }
         }
     }
@@ -4676,7 +4702,6 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" MET
 jsonHashAddNumber(jsonForClient, "insideX", insideX);
 jsonHashAddBoolean(jsonForClient, "revCmplDisp", revCmplDisp);
 
-hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
 if (hPrintStatus()) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
@@ -4731,14 +4756,12 @@ if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     if (withLeftLabels)
         sideSliceWidth   = (insideX - gfxBorder*3) + 2;
     theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,tl.picWidth);
-    #ifdef IMAGEv2_DRAG_SCROLL
     // Define a portal with a default expansion size, then set the global dimensions to the full image size
     if(imgBoxPortalDefine(theImgBox,&winStart,&winEnd,&(tl.picWidth),0))
         {
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
-    #endif//def IMAGEv2_DRAG_SCROLL
     }
 
 char *jsCommand = cartCgiUsualString(cart, hgtJsCommand, "");
@@ -4838,7 +4861,6 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-#ifdef IMAGEv2_DRAG_SCROLL
 if(theImgBox)
     {
     // If a portal was established, then set the global dimensions back to the portal size
@@ -4848,7 +4870,6 @@ if(theImgBox)
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
     }
-#endif//def IMAGEv2_DRAG_SCROLL
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
@@ -4988,6 +5009,18 @@ if (!hideControls)
 
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
+#ifdef MERGE_GENE_SUGGEST
+	hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(database, position));
+	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
+	sprintLongWithCommas(buf, winEnd - winStart);
+	hPrintf(" <span id='size'>%s</span> bp. ", buf);
+	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
+	hWrites(" ");
+	hButtonWithOnClick("hgt.jump", "go", NULL, "imageV2.jumpButtonOnClick()");
+	jsonHashAddBoolean(jsonForClient, "assemblySupportsGeneSuggest", assemblySupportsGeneSuggest(database));
+	if(assemblySupportsGeneSuggest(database))
+	    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
+#else///ifndef MERGE_GENE_SUGGEST
 	hWrites("position/search ");
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
@@ -5002,6 +5035,7 @@ if (!hideControls)
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
+#endif///ndef MERGE_GENE_SUGGEST
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	hPutc('\n');
@@ -5033,7 +5067,7 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
     hPrintf("<td width='30' align='right'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
     hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
     hPrintf("</tr></table>\n");
-#endif//def USE_NAVIGATION_LINKS
+#endif///def USE_NAVIGATION_LINKS
 
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
@@ -5077,10 +5111,7 @@ if (!hideControls)
     hWrites("Click or drag in the base position track to zoom in. ");
     hWrites("Click side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
-#ifdef IMAGEv2_DRAG_SCROLL
     hWrites("Drag tracks left or right to new position. ");
-#endif//def IMAGEv2_DRAG_SCROLL
-//#if !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
     hPrintf("</TD>");
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<td width='30'>&nbsp;</td>\n");
@@ -5121,9 +5152,12 @@ if (!hideControls)
         hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
 
     hPrintf(" ");
-    hPrintf("<INPUT TYPE='button' VALUE='track hubs' onClick='document.trackHubForm.submit();return false;' title='Import tracks from hubs'>");
+    if (hubConnectTableExists())
+	{
+	hPrintf("<INPUT TYPE='button' VALUE='track hubs' onClick='document.trackHubForm.submit();return false;' title='Import tracks from hubs'>");
+	hPrintf(" ");
+	}
 
-    hPrintf(" ");
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
@@ -5200,8 +5234,14 @@ if (!hideControls)
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
+        //#define BUTTONS_BY_CSS_NOT_HERE
+        #ifdef BUTTONS_BY_CSS_NOT_HERE
+            hPrintf("<span class='pmButton toggleButton' onclick=\"vis.toggleForGroup(this,'%s')\" id='%s_button' title='%s this group'>%s</span>&nbsp;&nbsp;",
+                group->name, group->name, isOpen?"Collapse":"Expand", indicator);
+        #else///ifndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+        #endif///ndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");
@@ -5268,7 +5308,7 @@ if (!hideControls)
 			{
 			/* check for option of limiting visibility to one mode */
 			hTvDropDownClassVisOnly(track->track, track->visibility,
-				    track->canPack, (track->visibility == tvHide) ?
+				    rTdbTreeCanPack(track->tdb), (track->visibility == tvHide) ?
 				    "hiddenText" : "normalText",
 				    trackDbSetting(track->tdb, "onlyVisibility"));
 			}
@@ -5463,11 +5503,14 @@ char *pdfFile = NULL, *ideoPdfFile = NULL;
 ZeroVar(&ideoPsTn);
 trashDirFile(&psTn, "hgt", "hgt", ".eps");
 
-hotLinks();
-printf("<H1>PostScript/PDF Output</H1>\n");
-printf("PostScript images can be printed at high resolution "
-       "and edited by many drawing programs such as Adobe "
-       "Illustrator.");
+if(!trackImgOnly)
+    {
+    hotLinks();
+    printf("<H1>PostScript/PDF Output</H1>\n");
+    printf("PostScript images can be printed at high resolution "
+           "and edited by many drawing programs such as Adobe "
+           "Illustrator.");
+    }
 doTrackForm(psTn.forCgi, &ideoPsTn);
 
 // postscript
@@ -5684,7 +5727,7 @@ sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "org", organism);
 cartSetString(cart, "db", database);
 cartSetString(cart, "position", newPos);
-if (cgiVarExists("hgt.psOutput"))
+if (cartUsualBoolean(cart, "hgt.psOutput", FALSE))
     handlePostscript();
 else
     doTrackForm(NULL, NULL);
@@ -5890,6 +5933,14 @@ hubCheckForNew(database, cart);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 }
 
+void ajaxWarnHandler(char *format, va_list args)
+{
+// When we are generating a response for ajax client and hit an error, put any warnings into hgTracks.err in the response.
+char buf[4096];
+vsnprintf(buf, sizeof(buf), format, args);
+jsonHashAddString(jsonForClient, "err", buf);
+}
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -5943,6 +5994,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     withNextItemArrows = FALSE;
     withNextExonArrows = FALSE;
     hgFindMatches = NULL;     // XXXX necessary ???
+    pushWarnHandler(ajaxWarnHandler);
     }
 
 jsonForClient = newJsonHash(newHash(8));
@@ -5957,6 +6009,9 @@ if(!trackImgOnly)
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
+#ifdef MERGE_GENE_SUGGEST
+    jsIncludeFile("jquery.watermarkinput.js", NULL);
+#endif///def MERGE_GENE_SUGGEST
     if(!searching)
         {
         jsIncludeFile("jquery.imgareaselect.js", NULL);
@@ -5966,7 +6021,7 @@ if(!trackImgOnly)
 
 #ifdef LOWELAB
     jsIncludeFile("lowetooltip.js", NULL);
-#endif
+#endif///def LOWELAB
 
         webIncludeResourceFile("jquery-ui.css");
         if (!searching) // NOT doing search

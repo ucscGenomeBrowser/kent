@@ -56,3 +56,16 @@ metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_G
 track nscanGene override
 informant Cow N-SCAN uses mouse (mm9) as the informant.
 
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+semiShortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex [a-z0-9][a-z0-9_][a-z0-9._-]*
+
+searchTable nscanGene
+searchType genePred
+termRegex chr[0-9UnX]+.[0-9]{3}.[0-9.]+
+searchPriority 50

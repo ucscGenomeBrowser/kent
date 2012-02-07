@@ -6,7 +6,6 @@
 #include "obscure.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: raToTab.c,v 1.1 2007/03/15 03:23:17 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

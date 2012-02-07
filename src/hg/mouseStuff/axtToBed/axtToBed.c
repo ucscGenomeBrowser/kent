@@ -6,7 +6,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: axtToBed.c,v 1.10 2007/05/07 17:26:10 hiram Exp $";
 static bool extendedOp = FALSE;
 static bool bed4 = FALSE;
 static bool axtName = FALSE;

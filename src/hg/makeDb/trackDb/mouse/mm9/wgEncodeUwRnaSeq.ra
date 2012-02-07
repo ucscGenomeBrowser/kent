@@ -31,11 +31,11 @@ shortLabel UW RNA-seq
 longLabel RNA-seq from ENCODE/UW
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal
-subGroup2 cellType Cell_Line 416B=416B A20=A20 CBELLUM=Cerebellum CEREBRUM=Cerebrum FAT=FatPad HLEMBRYO=HeadlessEmbryo KIDNEY=Kidney LIVER=Liver MEL=MEL NIH3T3=NIH-3T3 PATSKI=Patski WHOLEBRAIN=WholeBrain
+subGroup2 cellType Cell_Line 416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum FAT=FatPad GFAT=GenitalFatPad HEART=Heart HLEMBRYO=HeadlessEmbryo KIDNEY=Kidney LGINT=LgIntestine LUNG=Lung LIVER=Liver MEL=MEL NIH3T3=NIH-3T3 PATSKI=Patski SKMUSCLE=SkMuscle SPLEEN=Spleen THYMUS=Thymus TNAIVE=T-Naive WBRAIN=WholeBrain
 subGroup3 localization Localization CELL=cell
 subGroup4 rnaExtract RnaExtract POLYA=polyA
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
-subGroup6 sex Sex M=M
+subGroup6 sex Sex M=M F=F
 subGroup7 age Age ADULT8WKS=adult-8wks E11HALF=E11.5 E14HALF=E14.5 E18HALF=E18.5
 subGroup8 strain Strain BALBCANN=BALB/cAnN C57BL6=C57BL/6 CD1=CD-1 NIHS=NIH/Swiss SPBL6=Spretus.BL6-Xist
 dimensions dimensionX=cellType dimensionY=rep 
@@ -92,7 +92,7 @@ noInherit on
         longLabel ENCODE UW RNA-seq Signal Replicate 1 (polyA in Kidney cell)
         subGroups view=Signal age=ADULT8WKS cellType=KIDNEY localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 108242.000000
-        color 204,121,16
+        color 204,121,167
         # subId=4424 dateSubmitted=2011-06-28
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6SigRep4
@@ -221,50 +221,218 @@ noInherit on
         color 230,159,0
         # subId=4439 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel WholeBrain cell polyA Sig 1
         longLabel ENCODE UW RNA-seq Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=Signal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=Signal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 29009.000000
         color 105,105,105
         # subId=4440 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep1 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel WholeBrain cell polyA Sig 2
         longLabel ENCODE UW RNA-seq Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=Signal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=Signal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 46115.000000
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6SigRep1
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel Patski cell polyA Sig 1
         longLabel ENCODE UW RNA-seq Signal Replicate 1 (polyA in Patski cell)
-        subGroups view=Signal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=M strain=SPBL6 rep=rep1
+        subGroups view=Signal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep1
         type bigWig 1.000000 471388.000000
-        color 204,121,167
+        color 204,121,1677
         # subId=4437 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6SigRep1 vsmalladi Tue Jan  3 09:20:59 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel WholeBrain cell polyA Sig 2
         longLabel ENCODE UW RNA-seq Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=Signal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=Signal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 36131.000000
         color 105,105,105
         # subId=4441 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2 vsmalladi Tue Jan 10 15:20:52 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel WholeBrain cell polyA Sig 1
         longLabel ENCODE UW RNA-seq Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=Signal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=Signal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 177312.000000
         color 105,105,105
         # subId=4443 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep1 vsmalladi Tue Jan 10 15:20:52 2012
+
+        track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6SigRep1
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel B-cell_(CD19+) cell polyA Sig 1
+        longLabel B-cell (CD19+) adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 168799.000000
+        color 86,180,233
+        # subId=5329 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannSigRep2
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel A20 cell polyA Sig 2
+        longLabel A20 adult-8wks BALB/cAnN cell polyA RNA-seq Signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=A20 localization=CELL rnaExtract=POLYA sex=M strain=BALBCANN rep=rep2
+        type bigWig 1.000000 40090.000000
+        color 86,180,233
+        # subId=5323 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6SigRep1
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel GenitalFatPad cell polyA Sig 1
+        longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=GFAT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 1726627.000000
+        color 189,0,157
+        # subId=5324 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6SigRep2
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel GenitalFatPad cell polyA Sig 2
+        longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=GFAT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 145608.000000
+        color 189,0,157
+        # subId=5325 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6SigRep1
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel Heart cell polyA Sig 1
+        longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 334960.000000
+        color 153,38,0
+        # subId=5326 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6SigRep2
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel Heart cell polyA Sig 2
+        longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 530077.000000
+        color 153,38,0
+        # subId=5327 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6SigRep2
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel B-cell_(CD43-) cell polyA Sig 2
+        longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 60860.000000
+        color 86,180,233
+        # subId=5330 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6SigRep1
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel B-cell_(CD43-) cell polyA Sig 1
+        longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 130092.000000
+        color 86,180,233
+        # subId=5331 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6SigRep1
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel T-Naive cell polyA Sig 1
+        longLabel T-Naive adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=TNAIVE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 84237.000000
+        color 86,180,233
+        # subId=5332 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6SigRep1
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel Lung cell polyA Sig 1
+        longLabel Lung adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=LUNG localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 672685.000000
+        # subId=5333 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6SigRep1
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel LgIntestine cell polyA Sig 1
+        longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=LGINT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 180585.000000
+        color 230,159,0
+        # subId=5335 dateSubmitted=2011-12-22
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6SigRep1 vsmalladi Tue Jan  3 10:46:33 2012
+
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6SigRep2
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel LgIntestine cell polyA Sig 2
+        longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=LGINT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 416478.000000
+        color 230,159,0
+        # subId=5336 dateSubmitted=2011-12-22
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6SigRep2 vsmalladi Tue Jan  3 10:46:33 2012
+
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6SigRep1
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel SkMuscle cell polyA Sig 1
+        longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 161097.000000
+        color 139,69,19
+        # subId=5337 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6SigRep2
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel SkMuscle cell polyA Sig 2
+        longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 244287.000000
+        color 139,69,19
+        # subId=5338 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6SigRep1
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel Spleen cell polyA Sig 1
+        longLabel Spleen adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=SPLEEN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 373038.000000
+        color 86,180,233
+        # subId=5339 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6SigRep1
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel Thymus cell polyA Sig 1
+        longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=THYMUS localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 25819.000000
+        color 86,180,233
+        # subId=5340 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6SigRep2
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel Thymus cell polyA Sig 2
+        longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Signal Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=THYMUS localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 42756.000000
+        color 86,180,233
+        # subId=5341 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6SigRep2
+        parent wgEncodeUwRnaSeqViewSignal off
+        shortLabel Patski cell polyA Sig 2
+        longLabel Patski adult-8wks Spretus.BL6-Xist cell polyA RNA-seq Signal Rep 2 from ENCODE/UW #too long length = 81 #autogenerated
+        subGroups view=Signal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep2
+        type bigWig 1.000000 74697.000000
+        color 204,121,1677
+        # subId=5311 dateSubmitted=2011-12-23
 
 
 	track wgEncodeUwRnaSeqViewPlusRawSig
@@ -311,7 +479,7 @@ noInherit on
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in Kidney cell)
         subGroups view=PlusRawSignal age=ADULT8WKS cellType=KIDNEY localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 108237.000000
-        color 204,121,16
+        color 204,121,167
         # subId=4424 dateSubmitted=2011-06-28
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep4
@@ -440,50 +608,218 @@ noInherit on
         color 230,159,0
         # subId=4439 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=PlusRawSignal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=PlusRawSignal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 29009.000000
         color 105,105,105
         # subId=4440 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep1 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=PlusRawSignal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=PlusRawSignal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 46115.000000
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6PlusRawSigRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Patski cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in Patski cell)
-        subGroups view=PlusRawSignal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=M strain=SPBL6 rep=rep1
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep1
         type bigWig 1.000000 471388.000000
-        color 204,121,167
+        color 204,121,1677
         # subId=4437 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6PlusRawSigRep1 vsmalladi Tue Jan  3 09:20:31 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=PlusRawSignal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=PlusRawSignal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 36131.000000
         color 105,105,105
         # subId=4441 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=PlusRawSignal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=PlusRawSignal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 177312.000000
         color 105,105,105
         # subId=4443 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep1 vsmalladi Tue Jan 10 15:20:51 2012
+
+        track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6PlusRawRep1
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel B-cell_(CD19+) cell polyA PlusRaw 1
+        longLabel B-cell (CD19+) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #too long length = 86 #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 168798.000000
+        color 86,180,233
+        # subId=5329 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawRep2
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel A20 cell polyA PlusRaw 2
+        longLabel A20 adult-8wks BALB/cAnN cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=A20 localization=CELL rnaExtract=POLYA sex=M strain=BALBCANN rep=rep2
+        type bigWig 1.000000 40085.000000
+        color 86,180,233
+        # subId=5323 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6PlusRawRep1
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel GenitalFatPad cell polyA PlusRaw 1
+        longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #too long length = 85 #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=GFAT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 1643654.000000
+        color 189,0,157
+        # subId=5324 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6PlusRawRep2
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel GenitalFatPad cell polyA PlusRaw 2
+        longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #too long length = 85 #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=GFAT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 145604.000000
+        color 189,0,157
+        # subId=5325 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6PlusRawRep1
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel Heart cell polyA PlusRaw 1
+        longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 334960.000000
+        color 153,38,0
+        # subId=5326 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6PlusRawRep2
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel Heart cell polyA PlusRaw 2
+        longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 530077.000000
+        color 153,38,0
+        # subId=5327 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawRep2
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel B-cell_(CD43-) cell polyA PlusRaw 2
+        longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #too long length = 86 #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 60848.000000
+        color 86,180,233
+        # subId=5330 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawRep1
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel B-cell_(CD43-) cell polyA PlusRaw 1
+        longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #too long length = 86 #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 130053.000000
+        color 86,180,233
+        # subId=5331 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6PlusRawRep1
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel T-Naive cell polyA PlusRaw 1
+        longLabel T-Naive adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=TNAIVE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 84237.000000
+        color 86,180,233
+        # subId=5332 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6PlusRawRep1
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel Lung cell polyA PlusRaw 1
+        longLabel Lung adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=LUNG localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 66940.000000
+        # subId=5333 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep1
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel LgIntestine cell polyA PlusRaw 1
+        longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #too long length = 83 #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=LGINT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 180585.000000
+        color 230,159,0
+        # subId=5335 dateSubmitted=2011-12-22
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawRep1 vsmalladi Tue Jan  3 10:46:33 2012
+
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep2
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel LgIntestine cell polyA PlusRaw 2
+        longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #too long length = 83 #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=LGINT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 416478.000000
+        color 230,159,0
+        # subId=5336 dateSubmitted=2011-12-22
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawRep2 vsmalladi Tue Jan  3 10:46:33 2012
+
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6PlusRawRep1
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel SkMuscle cell polyA PlusRaw 1
+        longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 161096.000000
+        color 139,69,19
+        # subId=5337 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6PlusRawRep2
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel SkMuscle cell polyA PlusRaw 2
+        longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 244245.000000
+        color 139,69,19
+        # subId=5338 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6PlusRawRep1
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel Spleen cell polyA PlusRaw 1
+        longLabel Spleen adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=SPLEEN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 123819.000000
+        color 86,180,233
+        # subId=5339 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6PlusRawRep1
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel Thymus cell polyA PlusRaw 1
+        longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=THYMUS localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 25819.000000
+        color 86,180,233
+        # subId=5340 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6PlusRawRep2
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel Thymus cell polyA PlusRaw 2
+        longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=THYMUS localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 42756.000000
+        color 86,180,233
+        # subId=5341 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6PlusRawRep2
+        parent wgEncodeUwRnaSeqViewPlusRawSig off
+        shortLabel Patski cell polyA PlusRaw 2
+        longLabel Patski adult-8wks Spretus.BL6-Xist cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #too long length = 87 #autogenerated
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep2
+        type bigWig 1.000000 74697.000000
+        color 204,121,1677
+        # subId=5311 dateSubmitted=2011-12-23
 
 
 	track wgEncodeUwRnaSeqViewMinusRawSig
@@ -530,7 +866,7 @@ noInherit on
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in Kidney cell)
         subGroups view=MinusRawSignal age=ADULT8WKS cellType=KIDNEY localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 107185.000000
-        color 204,121,16
+        color 204,121,167
         # subId=4424 dateSubmitted=2011-06-28
 
         track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep4
@@ -659,50 +995,218 @@ noInherit on
         color 230,159,0
         # subId=4439 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=MinusRawSignal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=MinusRawSignal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 24820.000000
         color 105,105,105
         # subId=4440 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep1 vsmalladi Tue Jan 10 15:20:50 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=MinusRawSignal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=MinusRawSignal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 19618.000000
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep2 vsmalladi Tue Jan 10 15:20:50 2012
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6MinusRawSigRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Patski cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in Patski cell)
-        subGroups view=MinusRawSignal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=M strain=SPBL6 rep=rep1
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep1
         type bigWig 1.000000 223741.000000
-        color 204,121,167
+        color 204,121,1677
         # subId=4437 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6MinusRawSigRep1 vsmalladi Tue Jan  3 09:19:48 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=MinusRawSignal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=MinusRawSignal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 30690.000000
         color 105,105,105
         # subId=4441 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=MinusRawSignal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=MinusRawSignal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 89685.000000
         color 105,105,105
         # subId=4443 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep1 vsmalladi Tue Jan 10 15:20:51 2012
+
+        track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6MinusRawRep1
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel B-cell_(CD19+) cell polyA MinusRaw 1
+        longLabel B-cell (CD19+) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #too long length = 86 #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 92881.000000
+        color 86,180,233
+        # subId=5329 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawRep2
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel A20 cell polyA MinusRaw 2
+        longLabel A20 adult-8wks BALB/cAnN cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=A20 localization=CELL rnaExtract=POLYA sex=M strain=BALBCANN rep=rep2
+        type bigWig 1.000000 39293.000000
+        color 86,180,233
+        # subId=5323 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6MinusRawRep1
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel GenitalFatPad cell polyA MinusRaw 1
+        longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #too long length = 85 #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=GFAT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 1726627.000000
+        color 189,0,157
+        # subId=5324 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6MinusRawRep2
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel GenitalFatPad cell polyA MinusRaw 2
+        longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #too long length = 85 #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=GFAT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 145542.000000
+        color 189,0,157
+        # subId=5325 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6MinusRawRep1
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel Heart cell polyA MinusRaw 1
+        longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 334329.000000
+        color 153,38,0
+        # subId=5326 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6MinusRawRep2
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel Heart cell polyA MinusRaw 2
+        longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 528486.000000
+        color 153,38,0
+        # subId=5327 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawRep2
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel B-cell_(CD43-) cell polyA MinusRaw 2
+        longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #too long length = 86 #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 60777.000000
+        color 86,180,233
+        # subId=5330 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawRep1
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel B-cell_(CD43-) cell polyA MinusRaw 1
+        longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #too long length = 86 #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 129927.000000
+        color 86,180,233
+        # subId=5331 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6MinusRawRep1
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel T-Naive cell polyA MinusRaw 1
+        longLabel T-Naive adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=TNAIVE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 69036.000000
+        color 86,180,233
+        # subId=5332 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6MinusRawRep1
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel Lung cell polyA MinusRaw 1
+        longLabel Lung adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=LUNG localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 672685.000000
+        # subId=5333 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep1
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel LgIntestine cell polyA MinusRaw 1
+        longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #too long length = 83 #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=LGINT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 180503.000000
+        color 230,159,0
+        # subId=5335 dateSubmitted=2011-12-22
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawRep1 vsmalladi Tue Jan  3 10:46:33 2012
+
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep2
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel LgIntestine cell polyA MinusRaw 2
+        longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #too long length = 83 #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=LGINT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 295554.000000
+        color 230,159,0
+        # subId=5336 dateSubmitted=2011-12-22
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawRep2 vsmalladi Tue Jan  3 10:46:33 2012
+
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6MinusRawRep1
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel SkMuscle cell polyA MinusRaw 1
+        longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 161056.000000
+        color 139,69,19
+        # subId=5337 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6MinusRawRep2
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel SkMuscle cell polyA MinusRaw 2
+        longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 244287.000000
+        color 139,69,19
+        # subId=5338 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6MinusRawRep1
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel Spleen cell polyA MinusRaw 1
+        longLabel Spleen adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=SPLEEN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 373038.000000
+        color 86,180,233
+        # subId=5339 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6MinusRawRep1
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel Thymus cell polyA MinusRaw 1
+        longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=THYMUS localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bigWig 1.000000 16221.000000
+        color 86,180,233
+        # subId=5340 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6MinusRawRep2
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel Thymus cell polyA MinusRaw 2
+        longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=THYMUS localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bigWig 1.000000 42518.000000
+        color 86,180,233
+        # subId=5341 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6MinusRawRep2
+        parent wgEncodeUwRnaSeqViewMinusRawSig off
+        shortLabel Patski cell polyA MinusRaw 2
+        longLabel Patski adult-8wks Spretus.BL6-Xist cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #too long length = 87 #autogenerated
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep2
+        type bigWig 1.000000 48875.000000
+        color 204,121,1677
+        # subId=5311 dateSubmitted=2011-12-23
 
 	track wgEncodeUwRnaSeqViewAlignments
 	shortLabel Alignments
@@ -758,7 +1262,7 @@ noInherit on
         longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in Kidney cell)
         subGroups view=Alignments age=ADULT8WKS cellType=KIDNEY localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
-        color 204,121,16
+        color 204,121,167
         # subId=4424 dateSubmitted=2011-06-28
 
 
@@ -890,48 +1394,216 @@ noInherit on
         color 230,159,0
         # subId=4439 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel WholeBrain cell polyA Aln 1
         longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=Alignments age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=Alignments age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 105,105,105
         # subId=4440 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep1 vsmalladi Tue Jan 10 15:20:50 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel WholeBrain cell polyA Aln 2
         longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=Alignments age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=Alignments age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep2 vsmalladi Tue Jan 10 15:20:50 2012
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6AlnRep1
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Patski cell polyA Aln 1
         longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in Patski cell)
-        subGroups view=Alignments age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=M strain=SPBL6 rep=rep1
+        subGroups view=Alignments age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep1
         type bam
-        color 204,121,167
+        color 204,121,1677
         # subId=4437 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6AlnRep1 vsmalladi Tue Jan  3 09:19:34 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel WholeBrain cell polyA Aln 2
         longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=Alignments age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=Alignments age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 105,105,105
         # subId=4441 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel WholeBrain cell polyA Aln 1
         longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=Alignments age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=Alignments age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 105,105,105
         # subId=4443 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep1 vsmalladi Tue Jan 10 15:20:51 2012
+
+        track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6AlnRep1
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel B-cell_(CD19+) cell polyA Aln 1
+        longLabel B-cell (CD19+) adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #too long length = 84 #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=BCELLCD19P localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bam
+        color 86,180,233
+        # subId=5329 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannAlnRep2
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel A20 cell polyA Aln 2
+        longLabel A20 adult-8wks BALB/cAnN cell polyA RNA-seq Alignments Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=A20 localization=CELL rnaExtract=POLYA sex=M strain=BALBCANN rep=rep2
+        type bam
+        color 86,180,233
+        # subId=5323 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6AlnRep1
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel GenitalFatPad cell polyA Aln 1
+        longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #too long length = 83 #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=GFAT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bam
+        color 189,0,157
+        # subId=5324 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6AlnRep2
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel GenitalFatPad cell polyA Aln 2
+        longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 2 from ENCODE/UW #too long length = 83 #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=GFAT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bam
+        color 189,0,157
+        # subId=5325 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6AlnRep1
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel Heart cell polyA Aln 1
+        longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bam
+        color 153,38,0
+        # subId=5326 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6AlnRep2
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel Heart cell polyA Aln 2
+        longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bam
+        color 153,38,0
+        # subId=5327 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6AlnRep2
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel B-cell_(CD43-) cell polyA Aln 2
+        longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 2 from ENCODE/UW #too long length = 84 #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bam
+        color 86,180,233
+        # subId=5330 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6AlnRep1
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel B-cell_(CD43-) cell polyA Aln 1
+        longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #too long length = 84 #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=BCELLCD43N localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bam
+        color 86,180,233
+        # subId=5331 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6AlnRep1
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel T-Naive cell polyA Aln 1
+        longLabel T-Naive adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=TNAIVE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bam
+        color 86,180,233
+        # subId=5332 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6AlnRep1
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel Lung cell polyA Aln 1
+        longLabel Lung adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=LUNG localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bam
+        # subId=5333 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6AlnRep1
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel LgIntestine cell polyA Aln 1
+        longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #too long length = 81 #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=LGINT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bam
+        color 230,159,0
+        # subId=5335 dateSubmitted=2011-12-22
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6AlnRep1 vsmalladi Tue Jan  3 10:46:32 2012
+
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6AlnRep2
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel LgIntestine cell polyA Aln 2
+        longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 2 from ENCODE/UW #too long length = 81 #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=LGINT localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bam
+        color 230,159,0
+        # subId=5336 dateSubmitted=2011-12-22
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6AlnRep2 vsmalladi Tue Jan  3 10:46:32 2012
+
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6AlnRep1
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel SkMuscle cell polyA Aln 1
+        longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bam
+        color 139,69,19
+        # subId=5337 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6AlnRep2
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel SkMuscle cell polyA Aln 2
+        longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=SKMUSCLE localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bam
+        color 139,69,19
+        # subId=5338 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6AlnRep1
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel Spleen cell polyA Aln 1
+        longLabel Spleen adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=SPLEEN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bam
+        color 86,180,233
+        # subId=5339 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6AlnRep1
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel Thymus cell polyA Aln 1
+        longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 1 from ENCODE/UW #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=THYMUS localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        type bam
+        color 86,180,233
+        # subId=5340 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6AlnRep2
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel Thymus cell polyA Aln 2
+        longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Alignments Rep 2 from ENCODE/UW #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=THYMUS localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        type bam
+        color 86,180,233
+        # subId=5341 dateSubmitted=2011-12-22
+
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6AlnRep2
+        parent wgEncodeUwRnaSeqViewAlignments off
+        shortLabel Patski cell polyA Aln 2
+        longLabel Patski adult-8wks Spretus.BL6-Xist cell polyA RNA-seq Alignments Rep 2 from ENCODE/UW #too long length = 85 #autogenerated
+        subGroups view=Alignments age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep2
+        type bam
+        color 204,121,1677
+        # subId=5311 dateSubmitted=2011-12-23
 

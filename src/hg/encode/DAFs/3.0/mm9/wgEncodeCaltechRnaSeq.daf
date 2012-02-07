@@ -1,12 +1,12 @@
 # Data Agreement File for Caltech RNA-Seq  experiments for mm9
 
-#$Revision: 1.3 $
+#$Revision: 1.6 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated DDF should look like this:
-# files view  cell	replicate   readType    mapAlgorithm    insertLength sex	age	strain	seqPlatform    labVersion  softwareVersion
+# files view  cell	replicate   readType    mapAlgorithm    insertLength treatment sex	age	strain	seqPlatform    labVersion  softwareVersion
 
 #Explanation of DDF terms
 #files: The name of the files to be associated with this data
@@ -16,6 +16,7 @@
 #readType       the read type (single, paired, directional, length) (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#readType)
 #mapAlgorithm   the mapping algorithm (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#mapAlgorithm )
 #insertLength   the insert length for the read (ttp://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#mapAlgorithm )
+#treatment: The treatment used to treat a specific cell.The treatment registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Treatments
 #sex: The sex of the individual the tissue originated or cell sex type. The sex registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sex
 #age: The age of the sample used. The age registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
 #strain: The strain that the sample originated from. the strain registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
@@ -32,10 +33,10 @@ lab               Caltech-m
 dataType          RnaSeq 
 compositeSuffix   CaltechRnaSeq
 group             expression
-variables         cell,strain,sex,readType,mapAlgorithm,insertLength
+variables         cell,strain,sex,readType,mapAlgorithm,insertLength,treatment
 assembly          mm9
 
-validationSettings validateFiles.fastq:mmCheckOneInN=100;validateFiles.bam:mismatches=8
+validationSettings validateFiles.bam:mismatches=8,bamPercent=99.99
 
 # Track/view definition
 view             RawSignal
@@ -45,7 +46,7 @@ required         no
 
 view             Alignments
 type             bam
-hasReplicates    no
+hasReplicates    yes
 required         no
 
 # the following views are download only

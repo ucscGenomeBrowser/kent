@@ -7,7 +7,6 @@
 #include "bed.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: affyUclaMergePslData.c,v 1.4 2004/02/17 01:36:01 sugnet Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 char *prefix = ":";  /* Prefext to our affymetrix names. */
 
@@ -40,17 +39,8 @@ void usage()
 /** Print usage and quit. */
 {
 int i=0;
-char *version = cloneString((char*)rcsid);
-char *key = "affyUclaMergePslData.c,v ";
-char *tmp = strstr(version, key);
-if(tmp != NULL)
-    version = tmp + strlen(key);
-tmp = strrchr(version, 'E');
-if(tmp != NULL)
-    (*tmp) = '\0';
 warn("affyUclaMergePslData - Merge data from Allen at UCLA and alignments\n"
-     "   of HG-U133B Consensus sequences in pslFile.\n"
-     "   (version: %s)", version );
+     "   of HG-U133B Consensus sequences in pslFile.\n");
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n"

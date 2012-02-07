@@ -4,7 +4,6 @@
 #include "jksql.h"
 #include "gbDefs.h"
 
-static char const rcsid[] = "$Id: imageCloneTbl.c,v 1.2 2003/07/25 18:25:33 markd Exp $";
 
 /* name of the table */
 char *IMAGE_CLONE_TBL = "imageClone";

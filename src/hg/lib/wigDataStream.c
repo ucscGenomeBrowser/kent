@@ -15,7 +15,6 @@
  * namely, psl/bed custom tracks, this doesn't make any sense */
 #define	HUGE_LIMIT	2100000000
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.87 2009/12/21 23:09:17 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.

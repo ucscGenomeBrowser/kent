@@ -14,7 +14,6 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.28 2010/04/28 17:42:53 galt Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */

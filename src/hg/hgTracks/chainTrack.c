@@ -15,7 +15,6 @@
 #include "chainCart.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.39 2010/05/11 01:43:27 kent Exp $";
 
 
 struct cartOptions

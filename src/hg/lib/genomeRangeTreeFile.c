@@ -7,7 +7,6 @@
 #include "genomeRangeTreeFile.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: genomeRangeTreeFile.c,v 1.4 2008/09/17 19:45:00 mikep Exp $";
 
 struct genomeRangeTree *genomeRangeTreeRead(char *fileName)
 /* Read in the genomeRangeTree data for each chromosome and

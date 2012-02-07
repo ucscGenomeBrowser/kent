@@ -9,7 +9,6 @@
 #include "kgXref.h"
 
 
-static char const rcsid[] = "$Id: txGeneAlias.c,v 1.4 2008/08/29 01:37:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -8,7 +8,6 @@
 #include "portable.h"
 #include "rle.h"
 
-static char const rcsid[] = "$Id: chimpHiQualDiffs.c,v 1.3 2006/05/24 11:23:40 daryl Exp $";
 
 void usage()
 /* Explain usage and exit. */

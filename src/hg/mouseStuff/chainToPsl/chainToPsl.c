@@ -16,7 +16,6 @@
 #include "twoBit.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.19 2007/03/11 14:24:41 braney Exp $";
 
 /* command line options */
 static struct optionSpec optionSpecs[] = {

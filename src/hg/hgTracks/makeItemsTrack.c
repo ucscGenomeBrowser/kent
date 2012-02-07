@@ -11,7 +11,6 @@
 #include "binRange.h"
 #include "makeItemsItem.h"
 
-static char const rcsid[] = "$Id: makeItemsTrack.c,v 1.11 2010/05/11 01:43:28 kent Exp $";
 
 void makeItemsJsCommand(char *command, struct track *trackList, struct hash *trackHash)
 /* Execute some command sent to us from the javaScript.  All we know for sure is that

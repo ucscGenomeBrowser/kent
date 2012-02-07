@@ -7,7 +7,6 @@
 #include "options.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: elandToSplat.c,v 1.5 2008/11/06 07:03:00 kent Exp $";
 
 boolean multi = FALSE;
 char *dna = NULL;

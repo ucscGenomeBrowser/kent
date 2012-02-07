@@ -27,7 +27,6 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: nibbParseImageDir.c,v 1.1 2006/07/26 04:00:07 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

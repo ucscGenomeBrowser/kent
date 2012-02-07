@@ -6,7 +6,6 @@
 #include "common.h"
 #include "slog.h"
 
-static char const rcsid[] = "$Id: slog.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
 
 double fSlogScale = 8192.0;	/* Convert to fixed point by multiplying by this. */
 double invSlogScale = 0.0001220703125; /* Conver back to floating point with this. */

@@ -9,7 +9,6 @@
 #include "bwgInternal.h"
 #include "zlibFace.h"
 
-static char const rcsid[] = "$Id: wigToBigWig.c,v 1.9 2009/11/16 18:12:04 kent Exp $";
 
 static int blockSize = 256;
 static int itemsPerSlot = 1024;

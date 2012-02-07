@@ -11,7 +11,6 @@
 #include "refCluster.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: txGeneBakeOff.c,v 1.2 2007/04/03 01:50:52 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

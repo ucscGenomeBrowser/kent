@@ -57,7 +57,6 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgFlyBase.c,v 1.1 2006/07/26 03:59:28 markd Exp $";
 
 char *tabDir = ".";
 boolean doLoad;

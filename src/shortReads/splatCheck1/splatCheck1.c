@@ -9,7 +9,6 @@
 #include "sqlNum.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: splatCheck1.c,v 1.3 2008/11/06 06:58:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

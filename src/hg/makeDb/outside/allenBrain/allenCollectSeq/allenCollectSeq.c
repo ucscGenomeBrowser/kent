@@ -8,7 +8,6 @@
 #include "fa.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: allenCollectSeq.c,v 1.2 2006/12/19 22:49:52 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */

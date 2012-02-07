@@ -12,6 +12,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000841
 fileName wgEncodeUwDgfAoafAln.bam
 grant Stam
 lab UW
@@ -29,6 +30,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000841
 fileName wgEncodeUwDgfAoafHotspots.broadPeak.gz
 grant Stam
 lab UW
@@ -47,6 +49,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000841
 fileName wgEncodeUwDgfAoafPk.narrowPeak.gz
 grant Stam
 lab UW
@@ -65,6 +68,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000841
 fileName wgEncodeUwDgfAoafRaw.bigWig
 grant Stam
 lab UW
@@ -83,6 +87,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000841
 fileName wgEncodeUwDgfAoafRawData.fastq.gz
 grant Stam
 lab UW
@@ -99,6 +104,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000841
 fileName wgEncodeUwDgfAoafSig.bigWig
 grant Stam
 lab UW
@@ -117,6 +123,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000479
 fileIndex wgEncodeUwDgfGm06990Aln.bam.bai
 fileName wgEncodeUwDgfGm06990Aln.bam
 geoSampleAccession GSM646568
@@ -137,6 +144,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000479
 fileName wgEncodeUwDgfGm06990Hotspots.broadPeak.gz
 geoSampleAccession GSM646568
 grant Stam
@@ -157,6 +165,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000479
 fileName wgEncodeUwDgfGm06990Pk.narrowPeak.gz
 geoSampleAccession GSM646568
 grant Stam
@@ -177,6 +186,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000479
 fileName wgEncodeUwDgfGm06990Raw.bigWig
 geoSampleAccession GSM646568
 grant Stam
@@ -196,6 +206,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
+dccAccession wgEncodeEH000479
 fileName wgEncodeUwDgfGm06990RawData.fastq.gz
 geoSampleAccession GSM646568
 grant Stam
@@ -214,6 +225,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000479
 fileName wgEncodeUwDgfGm06990Sig.bigWig
 geoSampleAccession GSM646568
 grant Stam
@@ -232,6 +244,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000834
 fileName wgEncodeUwDgfH7esAln.bam
 geoSampleAccession GSM646563
 grant Stam
@@ -250,6 +263,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000834
 fileName wgEncodeUwDgfH7esHotspots.broadPeak.gz
 geoSampleAccession GSM646563
 grant Stam
@@ -288,6 +302,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
+dccAccession wgEncodeEH000834
 fileName wgEncodeUwDgfH7esPkV2.narrowPeak.gz
 grant Stam
 lab UW
@@ -307,6 +322,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000834
 fileName wgEncodeUwDgfH7esRaw.bigWig
 geoSampleAccession GSM646563
 grant Stam
@@ -326,6 +342,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000834
 fileName wgEncodeUwDgfH7esRawData.fastq.gz
 geoSampleAccession GSM646563
 grant Stam
@@ -343,6 +360,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000834
 fileName wgEncodeUwDgfH7esSig.bigWig
 geoSampleAccession GSM646563
 grant Stam
@@ -361,6 +379,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000835
 fileName wgEncodeUwDgfHaeAln.bam
 geoSampleAccession GSM646560
 grant Stam
@@ -379,6 +398,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000835
 fileName wgEncodeUwDgfHaeHotspots.broadPeak.gz
 geoSampleAccession GSM646560
 grant Stam
@@ -417,6 +437,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
+dccAccession wgEncodeEH000835
 fileName wgEncodeUwDgfHaePkV2.narrowPeak.gz
 grant Stam
 lab UW
@@ -436,6 +457,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000835
 fileName wgEncodeUwDgfHaeRaw.bigWig
 geoSampleAccession GSM646560
 grant Stam
@@ -455,6 +477,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000835
 fileName wgEncodeUwDgfHaeRawData.fastq.gz
 geoSampleAccession GSM646560
 grant Stam
@@ -472,6 +495,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000835
 fileName wgEncodeUwDgfHaeSig.bigWig
 geoSampleAccession GSM646560
 grant Stam
@@ -490,6 +514,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000836
 fileName wgEncodeUwDgfHcpeAln.bam
 geoSampleAccession GSM646565
 grant Stam
@@ -508,6 +533,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000836
 fileName wgEncodeUwDgfHcpeHotspots.broadPeak.gz
 geoSampleAccession GSM646565
 grant Stam
@@ -546,6 +572,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
+dccAccession wgEncodeEH000836
 fileName wgEncodeUwDgfHcpePkV2.narrowPeak.gz
 grant Stam
 lab UW
@@ -565,6 +592,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000836
 fileName wgEncodeUwDgfHcpeRaw.bigWig
 geoSampleAccession GSM646565
 grant Stam
@@ -584,6 +612,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000836
 fileName wgEncodeUwDgfHcpeRawData.fastq.gz
 geoSampleAccession GSM646565
 grant Stam
@@ -601,6 +630,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000836
 fileName wgEncodeUwDgfHcpeSig.bigWig
 geoSampleAccession GSM646565
 grant Stam
@@ -620,6 +650,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000476
 fileIndex wgEncodeUwDgfHepg2Aln.bam.bai
 fileName wgEncodeUwDgfHepg2Aln.bam
 geoSampleAccession GSM646559
@@ -640,6 +671,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000476
 fileName wgEncodeUwDgfHepg2Hotspots.broadPeak.gz
 geoSampleAccession GSM646559
 grant Stam
@@ -660,6 +692,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000476
 fileName wgEncodeUwDgfHepg2Pk.narrowPeak.gz
 geoSampleAccession GSM646559
 grant Stam
@@ -680,6 +713,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000476
 fileName wgEncodeUwDgfHepg2Raw.bigWig
 geoSampleAccession GSM646559
 grant Stam
@@ -699,6 +733,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000476
 fileName wgEncodeUwDgfHepg2RawData.fastq.gz
 geoSampleAccession GSM646559
 grant Stam
@@ -717,6 +752,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000476
 fileName wgEncodeUwDgfHepg2Sig.bigWig
 geoSampleAccession GSM646559
 grant Stam
@@ -735,6 +771,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000837
 fileName wgEncodeUwDgfHmfAln.bam
 geoSampleAccession GSM646561
 grant Stam
@@ -753,6 +790,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000837
 fileName wgEncodeUwDgfHmfHotspots.broadPeak.gz
 geoSampleAccession GSM646561
 grant Stam
@@ -791,6 +829,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
+dccAccession wgEncodeEH000837
 fileName wgEncodeUwDgfHmfPkV2.narrowPeak.gz
 grant Stam
 lab UW
@@ -810,6 +849,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000837
 fileName wgEncodeUwDgfHmfRaw.bigWig
 geoSampleAccession GSM646561
 grant Stam
@@ -829,6 +869,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000837
 fileName wgEncodeUwDgfHmfRawData.fastq.gz
 geoSampleAccession GSM646561
 grant Stam
@@ -846,6 +887,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000837
 fileName wgEncodeUwDgfHmfSig.bigWig
 geoSampleAccession GSM646561
 grant Stam
@@ -864,6 +906,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000838
 fileName wgEncodeUwDgfHmvecdbladAln.bam
 geoSampleAccession GSM646570
 grant Stam
@@ -882,6 +925,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000838
 fileName wgEncodeUwDgfHmvecdbladHotspots.broadPeak.gz
 geoSampleAccession GSM646570
 grant Stam
@@ -920,6 +964,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
+dccAccession wgEncodeEH000838
 fileName wgEncodeUwDgfHmvecdbladPkV2.narrowPeak.gz
 grant Stam
 lab UW
@@ -939,6 +984,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000838
 fileName wgEncodeUwDgfHmvecdbladRaw.bigWig
 geoSampleAccession GSM646570
 grant Stam
@@ -958,6 +1004,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000838
 fileName wgEncodeUwDgfHmvecdbladRawData.fastq.gz
 geoSampleAccession GSM646570
 grant Stam
@@ -975,6 +1022,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
+dccAccession wgEncodeEH000838
 fileName wgEncodeUwDgfHmvecdbladSig.bigWig
 geoSampleAccession GSM646570
 grant Stam
@@ -993,6 +1041,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000842
 fileName wgEncodeUwDgfHpafAln.bam
 grant Stam
 lab UW
@@ -1010,6 +1059,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000842
 fileName wgEncodeUwDgfHpafHotspots.broadPeak.gz
 grant Stam
 lab UW
@@ -1028,6 +1078,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000842
 fileName wgEncodeUwDgfHpafPk.narrowPeak.gz
 grant Stam
 lab UW
@@ -1046,6 +1097,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000842
 fileName wgEncodeUwDgfHpafRaw.bigWig
 grant Stam
 lab UW
@@ -1064,6 +1116,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000842
 fileName wgEncodeUwDgfHpafRawData.fastq.gz
 grant Stam
 lab UW
@@ -1080,6 +1133,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000842
 fileName wgEncodeUwDgfHpafSig.bigWig
 grant Stam
 lab UW
@@ -1097,6 +1151,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000843
 fileName wgEncodeUwDgfHpdlfAln.bam
 grant Stam
 lab UW
@@ -1114,6 +1169,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000843
 fileName wgEncodeUwDgfHpdlfHotspots.broadPeak.gz
 grant Stam
 lab UW
@@ -1132,6 +1188,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000843
 fileName wgEncodeUwDgfHpdlfPk.narrowPeak.gz
 grant Stam
 lab UW
@@ -1150,6 +1207,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000843
 fileName wgEncodeUwDgfHpdlfRaw.bigWig
 grant Stam
 lab UW
@@ -1168,6 +1226,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000843
 fileName wgEncodeUwDgfHpdlfRawData.fastq.gz
 grant Stam
 lab UW
@@ -1184,6 +1243,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000843
 fileName wgEncodeUwDgfHpdlfSig.bigWig
 grant Stam
 lab UW
@@ -1201,6 +1261,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000844
 fileName wgEncodeUwDgfHpfAln.bam
 grant Stam
 lab UW
@@ -1218,6 +1279,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000844
 fileName wgEncodeUwDgfHpfHotspots.broadPeak.gz
 grant Stam
 lab UW
@@ -1236,6 +1298,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000844
 fileName wgEncodeUwDgfHpfPk.narrowPeak.gz
 grant Stam
 lab UW
@@ -1254,6 +1317,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000844
 fileName wgEncodeUwDgfHpfRaw.bigWig
 grant Stam
 lab UW
@@ -1272,6 +1336,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000844
 fileName wgEncodeUwDgfHpfRawData.fastq.gz
 grant Stam
 lab UW
@@ -1288,6 +1353,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000844
 fileName wgEncodeUwDgfHpfSig.bigWig
 grant Stam
 lab UW
@@ -1305,6 +1371,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000845
 fileName wgEncodeUwDgfHrceAln.bam
 grant Stam
 lab UW
@@ -1322,6 +1389,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000845
 fileName wgEncodeUwDgfHrceHotspots.broadPeak.gz
 grant Stam
 lab UW
@@ -1340,6 +1408,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000845
 fileName wgEncodeUwDgfHrcePk.narrowPeak.gz
 grant Stam
 lab UW
@@ -1358,6 +1427,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000845
 fileName wgEncodeUwDgfHrceRaw.bigWig
 grant Stam
 lab UW
@@ -1376,6 +1446,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000845
 fileName wgEncodeUwDgfHrceRawData.fastq.gz
 grant Stam
 lab UW
@@ -1392,6 +1463,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000845
 fileName wgEncodeUwDgfHrceSig.bigWig
 grant Stam
 lab UW
@@ -1410,6 +1482,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000480
 fileIndex wgEncodeUwDgfK562Aln.bam.bai
 fileName wgEncodeUwDgfK562Aln.bam
 geoSampleAccession GSM646567
@@ -1430,6 +1503,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000480
 fileName wgEncodeUwDgfK562Hotspots.broadPeak.gz
 geoSampleAccession GSM646567
 grant Stam
@@ -1450,6 +1524,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000480
 fileName wgEncodeUwDgfK562Pk.narrowPeak.gz
 geoSampleAccession GSM646567
 grant Stam
@@ -1470,6 +1545,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000480
 fileName wgEncodeUwDgfK562Raw.bigWig
 geoSampleAccession GSM646567
 grant Stam
@@ -1489,6 +1565,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
+dccAccession wgEncodeEH000480
 fileName wgEncodeUwDgfK562RawData.fastq.gz
 geoSampleAccession GSM646567
 grant Stam
@@ -1507,6 +1584,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000480
 fileName wgEncodeUwDgfK562Sig.bigWig
 geoSampleAccession GSM646567
 grant Stam
@@ -1525,6 +1603,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000846
 fileName wgEncodeUwDgfNhaAln.bam
 grant Stam
 lab UW
@@ -1542,6 +1621,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000846
 fileName wgEncodeUwDgfNhaHotspots.broadPeak.gz
 grant Stam
 lab UW
@@ -1560,6 +1640,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000846
 fileName wgEncodeUwDgfNhaPk.narrowPeak.gz
 grant Stam
 lab UW
@@ -1578,6 +1659,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000846
 fileName wgEncodeUwDgfNhaRaw.bigWig
 grant Stam
 lab UW
@@ -1596,6 +1678,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000846
 fileName wgEncodeUwDgfNhaRawData.fastq.gz
 grant Stam
 lab UW
@@ -1612,6 +1695,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000846
 fileName wgEncodeUwDgfNhaSig.bigWig
 grant Stam
 lab UW
@@ -1629,6 +1713,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000839
 fileName wgEncodeUwDgfNhdfadAln.bam
 geoSampleAccession GSM646564
 grant Stam
@@ -1647,6 +1732,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000839
 fileName wgEncodeUwDgfNhdfadHotspots.broadPeak.gz
 geoSampleAccession GSM646564
 grant Stam
@@ -1685,6 +1771,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
+dccAccession wgEncodeEH000839
 fileName wgEncodeUwDgfNhdfadPkV2.narrowPeak.gz
 grant Stam
 lab UW
@@ -1704,6 +1791,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000839
 fileName wgEncodeUwDgfNhdfadRaw.bigWig
 geoSampleAccession GSM646564
 grant Stam
@@ -1723,6 +1811,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000839
 fileName wgEncodeUwDgfNhdfadRawData.fastq.gz
 geoSampleAccession GSM646564
 grant Stam
@@ -1740,6 +1829,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000839
 fileName wgEncodeUwDgfNhdfadSig.bigWig
 geoSampleAccession GSM646564
 grant Stam
@@ -1758,6 +1848,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000847
 fileName wgEncodeUwDgfSaecAln.bam
 grant Stam
 lab UW
@@ -1775,6 +1866,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000847
 fileName wgEncodeUwDgfSaecHotspots.broadPeak.gz
 grant Stam
 lab UW
@@ -1793,6 +1885,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000847
 fileName wgEncodeUwDgfSaecPk.narrowPeak.gz
 grant Stam
 lab UW
@@ -1811,6 +1904,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000847
 fileName wgEncodeUwDgfSaecRaw.bigWig
 grant Stam
 lab UW
@@ -1829,6 +1923,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000847
 fileName wgEncodeUwDgfSaecRawData.fastq.gz
 grant Stam
 lab UW
@@ -1845,6 +1940,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
+dccAccession wgEncodeEH000847
 fileName wgEncodeUwDgfSaecSig.bigWig
 grant Stam
 lab UW
@@ -1862,6 +1958,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000840
 fileName wgEncodeUwDgfSkmcAln.bam
 geoSampleAccession GSM646562
 grant Stam
@@ -1880,6 +1977,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000840
 fileName wgEncodeUwDgfSkmcHotspots.broadPeak.gz
 geoSampleAccession GSM646562
 grant Stam
@@ -1918,6 +2016,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
+dccAccession wgEncodeEH000840
 fileName wgEncodeUwDgfSkmcPkV2.narrowPeak.gz
 grant Stam
 lab UW
@@ -1937,6 +2036,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000840
 fileName wgEncodeUwDgfSkmcRaw.bigWig
 geoSampleAccession GSM646562
 grant Stam
@@ -1956,6 +2056,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000840
 fileName wgEncodeUwDgfSkmcRawData.fastq.gz
 geoSampleAccession GSM646562
 grant Stam
@@ -1973,6 +2074,7 @@ dataType DnaseDgf
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
+dccAccession wgEncodeEH000840
 fileName wgEncodeUwDgfSkmcSig.bigWig
 geoSampleAccession GSM646562
 grant Stam
@@ -1992,6 +2094,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000477
 fileIndex wgEncodeUwDgfSknshraAln.bam.bai
 fileName wgEncodeUwDgfSknshraAln.bam
 geoSampleAccession GSM646566
@@ -2012,6 +2115,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000477
 fileName wgEncodeUwDgfSknshraHotspots.broadPeak.gz
 geoSampleAccession GSM646566
 grant Stam
@@ -2032,6 +2136,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000477
 fileName wgEncodeUwDgfSknshraPk.narrowPeak.gz
 geoSampleAccession GSM646566
 grant Stam
@@ -2052,6 +2157,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000477
 fileName wgEncodeUwDgfSknshraRaw.bigWig
 geoSampleAccession GSM646566
 grant Stam
@@ -2071,6 +2177,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000477
 fileName wgEncodeUwDgfSknshraRawData.fastq.gz
 geoSampleAccession GSM646566
 grant Stam
@@ -2089,6 +2196,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
+dccAccession wgEncodeEH000477
 fileName wgEncodeUwDgfSknshraSig.bigWig
 geoSampleAccession GSM646566
 grant Stam
@@ -2108,6 +2216,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+dccAccession wgEncodeEH000478
 fileIndex wgEncodeUwDgfTh1Aln.bam.bai
 fileName wgEncodeUwDgfTh1Aln.bam
 geoSampleAccession GSM646569
@@ -2128,6 +2237,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+dccAccession wgEncodeEH000478
 fileName wgEncodeUwDgfTh1Hotspots.broadPeak.gz
 geoSampleAccession GSM646569
 grant Stam
@@ -2148,6 +2258,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+dccAccession wgEncodeEH000478
 fileName wgEncodeUwDgfTh1Pk.narrowPeak.gz
 geoSampleAccession GSM646569
 grant Stam
@@ -2168,6 +2279,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+dccAccession wgEncodeEH000478
 fileName wgEncodeUwDgfTh1Raw.bigWig
 geoSampleAccession GSM646569
 grant Stam
@@ -2187,6 +2299,7 @@ dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+dccAccession wgEncodeEH000478
 fileName wgEncodeUwDgfTh1RawData.fastq.gz
 geoSampleAccession GSM646569
 grant Stam
@@ -2205,6 +2318,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
+dccAccession wgEncodeEH000478
 fileName wgEncodeUwDgfTh1Sig.bigWig
 geoSampleAccession GSM646569
 grant Stam

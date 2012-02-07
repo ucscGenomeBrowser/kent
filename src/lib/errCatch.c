@@ -21,7 +21,6 @@
 #include <pthread.h>
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: errCatch.c,v 1.7 2010/04/01 16:35:37 markd Exp $";
 
 
 struct errCatch *errCatchNew()

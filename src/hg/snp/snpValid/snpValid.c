@@ -21,7 +21,6 @@
 
 #include <time.h>
 
-static char const rcsid[] = "";
 
 /* Command line variables. */
 char *db  = NULL;	/* DB from command line */

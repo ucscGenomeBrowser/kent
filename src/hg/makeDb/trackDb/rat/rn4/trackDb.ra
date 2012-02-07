@@ -1,14 +1,15 @@
 include trackDb.chainNet.ra
+include trackDb.merckPolyA.all.ra
 
 track knownGene override
 shortLabel Known Genes
 longLabel UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
 
 track rgdGene2
-shortLabel RGD Genes 2
-longLabel RGD Genes 2
+shortLabel RGD Genes
+longLabel RGD Genes
 group genes
-priority 34
+priority 35.1
 hgGene on
 hgsid on
 directUrl ../cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
@@ -42,17 +43,6 @@ sGroup_mammal mm8 hg18 canFam2 bosTau2 monDom4
 sGroup_vertebrate galGal2 xenTro1 danRer3
 speciesDefaultOff bosTau2 danRer3
 treeImage phylo/rn4_9way.gif
-
-track tRNAs
-shortLabel tRNA Genes
-longLabel Transfer RNA genes identified with tRNAscan-SE
-group genes
-priority 53.5
-visibility hide
-color 0,20,150
-type bed 6 +
-nextItemButton on
-noScoreFilter .
 
 track phastConsElements9way
 shortLabel Most Conserved
@@ -96,6 +86,65 @@ priority 1.1
 visibility hide
 type bed 6
 
+track polyASeqSites
+compositeTrack on
+shortLabel PolyA-Seq
+longLabel Poly(A)-sequencing from Merck Research Laboratories
+group rna
+subGroup1 view Views Signal=Signal 
+subGroup2 tissType Tissue_Type Brain=Brain Testis=Testis
+subGroup3 strand Strand fwd=Forward rev=Reverse
+dimensions dimensionY=tissType dimensionX=strand
+sortOrder tissType=+ strand=+ view=+
+priority 79.2
+type bed 
+dragAndDrop subTracks
+visibility hide
+noInherit on
+
+    track polyASeqSitesSignalView
+    shortLabel Signal
+    view Signal
+    visibility full
+    subTrack polyASeqSites
+    maxHeightPixels 50:50:5
+    autoScale on
+    yLineOnOff on
+    type bigWig -1 2 
+
+        track polyASeqSitesBrainFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Brain strand=fwd
+        shortLabel PolyA-Seq Brain
+        longLabel Poly(A)-tail sequencing of Brain from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.180000 57691.570312
+
+        track polyASeqSitesBrainRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Brain strand=rev
+        shortLabel PolyA-Seq Brain
+        longLabel Poly(A)-tail sequencing of Brain from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.180000 7306.160156
+
+        track polyASeqSitesTestisFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Testis strand=fwd
+        shortLabel PolyA-Seq Testis
+        longLabel Poly(A)-tail sequencing of Testis from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.130000 87920.906250
+
+        track polyASeqSitesTestisRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Testis strand=rev
+        shortLabel PolyA-Seq Testis
+        longLabel Poly(A)-tail sequencing of Testis from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.130000 44293.531250
+
+
 # ENCODE NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 track wgEncodeNhgriBip
 shortLabel NHGRI BiP
@@ -120,35 +169,32 @@ shortCircuit 1
 termRegex [AB][A-Z]+[0-9]+(\.[0-9]+)?|chr(M|Un|[0-9UnXY]+_random)_[0-9]+
 searchPriority 8
 
-searchName ensGeneGtpGene
-searchTable ensGene
+searchName rgdGene2Acc
+searchTable rgdGene2
+searchType genePred
+searchMethod exact
+shortCircuit 1
+termRegex RGD:[0-9]+
+searchPriority 0.9
+
+searchName rgdGene2Symbol
+searchTable rgdGene2
 searchType genePred
 searchMethod prefix
-shortCircuit 1
-xrefTable ensGtp
-xrefQuery select transcript,gene from %s where gene like '%s%%'
-query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
-termRegex ENSRNOG[0-9]+(\.[0-9]+)?
-searchPriority 50
+semiShortCircuit 1
+xrefTable rgdGene2ToSymbol
+xrefQuery select rgdId,geneSymbol from %s where geneSymbol like '%%%s%%'
+termRegex [A-Za-z0-9_\.-]+
+searchPriority 0.9
 
-searchName ensGeneGtpProtein
-searchTable ensGene
-searchType genePred
-searchMethod prefix
-shortCircuit 1
-xrefTable ensGtp
-xrefQuery select transcript,protein from %s where protein like '%s%%'
-query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
-termRegex ENSRNOP[0-9]+(\.[0-9]+)?
-searchPriority 50
-
-searchName tRNA-name
-searchTable tRNAs
-searchType bed
-searchMethod fuzzy
-query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
-searchDescription tRNAscan-SE tRNA Name
-searchPriority 63
+searchName knownGeneAcc
+searchTable knownGene
+searchMethod exact
+searchType knownGene
+#shortCircuit 1
+#semiShortCircuit 1
+termRegex (uc[0-9]{3}[a-z]{3}(\.[0-9]+)?|N(M|R)_[0-9]{6}[0-9]*|[a-z][a-z0-9][0-9]{4}[0-9]*)
+searchPriority 9
 
 searchName snp125Short
 searchTable snp125
@@ -169,3 +215,10 @@ termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+)
 searchPriority 16
 padding 250
+
+searchTable ctgPos
+searchMethod exact
+shortCircuit 1
+termRegex (NW_|AC_)[0-9]+(.[0-9])?
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5

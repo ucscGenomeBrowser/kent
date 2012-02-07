@@ -7,7 +7,6 @@
 #include "fa.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: reviewSanity.c,v 1.3 2006/08/17 15:45:51 angie Exp $";
 
 FILE *missLog;
 

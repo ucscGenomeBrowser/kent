@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ecAttribute.h"
 
-static char const rcsid[] = "$Id: ecAttribute.c,v 1.1 2005/10/17 00:12:09 baertsch Exp $";
 
 void ecAttributeStaticLoad(char **row, struct ecAttribute *ret)
 /* Load a row from ecAttribute table into ret.  The contents of ret will

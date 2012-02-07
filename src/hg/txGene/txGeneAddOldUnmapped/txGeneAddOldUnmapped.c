@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: txGeneAddOldUnmapped.c,v 1.1 2009/10/03 01:28:43 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

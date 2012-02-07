@@ -13,7 +13,6 @@ int chromEnd = 74589245;
 int minVal = 0;
 int maxVal = 40;
 
-static char const rcsid[] = "$Id: rgbaGfxTest.c,v 1.3 2010/05/07 05:37:08 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

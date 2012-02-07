@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "arCOGs.h"
 
-static char const rcsid[] = "$Id: arCOGs.c,v 1.1 2009/10/14 20:27:50 holmes Exp $";
 
 void arCOGsStaticLoad(char **row, struct arCOGs *ret)
 /* Load a row from arCOGs table into ret.  The contents of ret will

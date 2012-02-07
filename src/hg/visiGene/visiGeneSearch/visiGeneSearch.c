@@ -9,7 +9,6 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.10 2005/10/10 16:37:12 kent Exp $";
 
 char *database = "visiGene";
 

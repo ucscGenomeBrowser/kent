@@ -6,7 +6,6 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: pslUniq.c,v 1.4 2005/08/17 20:56:24 hiram Exp $";
 
 int numAllow = 1;
 

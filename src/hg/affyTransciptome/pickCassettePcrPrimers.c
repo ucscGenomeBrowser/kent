@@ -8,7 +8,6 @@
 #include "dnautil.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: pickCassettePcrPrimers.c,v 1.2 2003/05/06 07:22:13 kate Exp $";
 
 struct cassetteSeq 
 /* Info necessary to make pcr primers for a cassette exon. */

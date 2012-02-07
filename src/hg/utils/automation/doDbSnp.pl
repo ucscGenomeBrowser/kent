@@ -1126,7 +1126,7 @@ sub loadTables {
     ln -s $runDir $HgAutomate::clusterData/$db/bed/$snpBase
 
     # Look at the breakdown of exception categories:
-    zcat ${snpBase}.bed.gz | cut -f 18 | sed -re 's/,/\\n/g' | sort | uniq -c | sort -nr
+    zcat ${snpBase}ExceptionDesc.tab.gz | sort -k 2n,2n
 _EOF_
     );
 

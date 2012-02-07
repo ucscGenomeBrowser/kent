@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "softPromoter.h"
 
-static char const rcsid[] = "$Id: hgSoftPromoter.c,v 1.1 2006/07/26 03:59:56 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

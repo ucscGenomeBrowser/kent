@@ -29,14 +29,14 @@
 #               - Dimension X - Treatment
 #                       - treatment Order: Ordering is based on length of treatment. 
 #       - View default settings:
-#           - Peaks: dense
+#           - Peaks: pack
 #           - Signal: full
 
 
 track wgEncodeCaltechHist
 compositeTrack on
 shortLabel Caltech Histone
-longLabel Histone Modifications by ChIP-seq by ChIP-seq from ENCODE/Caltech
+longLabel Histone Modifications by ChIP-seq from ENCODE/Caltech
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line C2C12=C2C12
@@ -46,15 +46,14 @@ subGroup5 control Control CNTRL32B=Control_32bp CNTRL36B=Control_36bp CNTRL50B=C
 subGroup6 treatment Treatment NONE=None E2P24H=EqS_2.0pct_24h E2P60H=EqS_2.0pct_60h E2P5D=EqS_2.0pct_5d E2P7D=EqS_2.0pct_7d
 subGroup7 protocol Protocol PCR1X=PCR1x PCR2X=PCR2x
 subGroup8 rep Rep rep1=1 rep2=2
-dimensions dimensionX=treatment dimensionY=factor dimensionA=control dimensionB=rep
+dimensions dimensionX=treatment dimensionY=factor dimensionA=control
 dimensionAchecked CNTRL32B,CNTRL50B,CNTRL36B
-dimensionBchecked rep1
-filterComposite dimensionA=multi dimensionB=multi
-sortOrder cellType=+ factor=+ control=+ treatment=+ protocol=+ rep=+ view=+
+filterComposite dimensionA=multi
+sortOrder cellType=+ factor=+ control=+ treatment=+ protocol=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control treatment=Treatment protocol=Protocol replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-controlledVocabulary encode/cv.ra cellType factor sex control treatment protocol
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex control=control treatment=treatment protocol=protocol
 dragAndDrop subTracks
-visibilityViewDefaults  Peaks=dense Signal=full
+visibilityViewDefaults  Peaks=pack Signal=full
 priority 0
 type bed 3
 wgEncode 1
@@ -64,7 +63,7 @@ noInherit on
 	track wgEncodeCaltechHistViewPeaks
 	shortLabel Peaks
 	view Peaks
-	visibility dense
+	visibility pack
 	#viewUi on
 	subTrack wgEncodeCaltechHist
 	signalFilter 0

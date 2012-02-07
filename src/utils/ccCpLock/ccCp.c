@@ -5,7 +5,6 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: ccCp.c,v 1.3 2005/03/04 20:05:37 galt Exp $";
 
 boolean amFirst = FALSE; /* Is this the copy that launched the copies? */
 

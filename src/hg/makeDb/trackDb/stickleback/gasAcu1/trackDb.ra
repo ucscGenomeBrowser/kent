@@ -51,6 +51,6 @@ informant Stickleback N-SCAN uses zebrafish (danRer4) as the informant.
 
 searchTable nscanGene
 searchType genePred
-termRegex chr[IXV]\.[0-9]+\.[0-9]+
+termRegex chr[IXV]+\.[0-9]+\.[0-9]+
 searchPriority 50
 

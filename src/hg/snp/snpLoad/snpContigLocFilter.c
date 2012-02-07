@@ -9,7 +9,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.36 2006/12/05 17:59:27 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;

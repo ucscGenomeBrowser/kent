@@ -204,3 +204,36 @@ dragAndDrop subTracks
          group regulation
          priority 3
          html uwFootprints
+
+searchTable ensGene
+searchType genePred
+semiShortCircuit 1
+termRegex [a-z0-9]+[_a-z0-9()-]+
+searchPriority 50
+
+searchName ensGeneGtpGene
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+semiShortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+termRegex [a-z0-9]+[_a-z0-9()-]+
+searchPriority 50
+
+searchName ensDotPrefix
+searchTable ensGene
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+semiShortCircuit 1
+termRegex [a-z0-9]+[_a-z0-9()-]+
+dontCheck [a-z0-9]+[_a-z0-9()-]+\.[0-9]+
+searchPriority 50
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+semiShortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex [YQ][a-z0-9-]+

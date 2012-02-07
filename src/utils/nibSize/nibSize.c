@@ -3,7 +3,6 @@
 #include "nib.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: nibSize.c,v 1.1 2004/02/10 22:21:49 markd Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {NULL, 0}

@@ -2,7 +2,6 @@
 #include "math.h"
 #include "heap.h"
 
-static char const rcsid[] = "$Id: heap.c,v 1.3 2007/01/08 19:23:36 sugnet Exp $";
 
 int _heapParent(int i)
 /* Return the parent index of node at heap index i. */

@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraphFromBin.c,v 1.3 2006/06/28 19:27:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

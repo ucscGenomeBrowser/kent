@@ -15,7 +15,6 @@
 #include "dystring.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslRecalcMatch.c,v 1.3 2008/05/04 05:44:48 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

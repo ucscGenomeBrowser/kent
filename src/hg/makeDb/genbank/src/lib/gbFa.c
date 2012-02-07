@@ -4,7 +4,6 @@
 #include "gbFileOps.h"
 #include "gbFa.h"
 
-static char const rcsid[] = "$Id: gbFa.c,v 1.4 2006/01/25 08:34:57 markd Exp $";
 
 /* 16kb seems like a good size by experiment */
 #define FA_STDIO_BUFSIZ (16*1024)

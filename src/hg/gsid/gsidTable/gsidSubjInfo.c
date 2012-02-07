@@ -6,7 +6,6 @@
 
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: gsidSubjInfo.c,v 1.2 2007/03/21 21:31:19 galt Exp $";
 
 struct subjInfo *readAllSubjInfo(struct sqlConnection *conn, struct column *columns)
 /* Get all main table gsidSubjInfo columns in use. */

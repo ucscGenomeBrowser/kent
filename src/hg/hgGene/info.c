@@ -9,7 +9,6 @@
 #include "txInfo.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: info.c,v 1.5 2010/02/23 23:03:37 kent Exp $";
 
 void doTxInfoDescription()
 /* Put up info on fields in txInfo table. */
@@ -87,18 +86,18 @@ printf("%s",
 "strongly suggestive of a retained intron. End bleed measures how far the end of a transcript extends into an intron defined by another overlapping transcript. Note\n"
 "however that alternative promoters and alternative polyadenylation sites can\n"
 "create end bleeds in fully mature transcripts.</LI>\n"
-"<LI><B>RNA accession</B> - The RefSeq or Genbank/EMBL/DJJ accession on which\n"
-"this transcript is most closely based. Note that the splice sites when possible\n"
-"are taken from a consensus of RNA alignments rather than just from a single RNA.\n"
-"For non-RefSeq genes the bases are taken from the genome rather than the RNA.\n"
-"However the transcript does define which introns and exons are used to build\n"
-"the transcript.</LI>\n"
+"<LI><B>RNA accession</B> - The RefSeq, Genbank/EMBL/DJJ, Rfam, or tRNA accession\n"
+"accession on which this transcript is most closely based. Note that the splice\n"
+"sites when possible are taken from a consensus of RNA alignments rather than\n"
+"just from a single RNA. For non-RefSeq genes the bases are taken from the genome\n"
+"rather than the RNA.  However the transcript does define which introns and exons\n"
+"are used to build the transcript.</LI>\n"
 "<LI><B>RNA size</B> - The size of the RNA on which this transcript is most\n"
-"closely based, including the poly-A tail.</LI>\n"
+"closely based, including the poly-A tail (if any).</LI>\n"
 "<LI><B>Alignment % ID</B> - Percentage identity within of alignment of RNA\n"
 "to genome.</LI>\n"
 "<LI><B>% Coverage</B> - The percentage of the RNA covered by the alignment to\n"
-"genome. This excludes the poly-A tail.</LI>\n"
+"genome. This excludes the poly-A tail, if the RNA has one.</LI>\n"
 "<LI><B># of Alignments:</B> - The number of times this RNA aligns to the genome\n"
 "at very high stringency.  More care must be taken in interpreting genes based\n"
 "on transcripts with multiple alignments. We do substantial filtering to avoid\n"

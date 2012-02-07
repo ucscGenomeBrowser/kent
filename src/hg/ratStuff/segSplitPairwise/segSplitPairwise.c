@@ -6,7 +6,6 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segSplitPairwise.c,v 1.2 2008/04/25 17:26:31 rico Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -3,7 +3,6 @@
 #include "common.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.9 2009/01/12 18:42:47 ann Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */

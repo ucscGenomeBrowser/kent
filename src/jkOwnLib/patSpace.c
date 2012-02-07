@@ -7,7 +7,6 @@
 #include "ooc.h"
 #include "patSpace.h"
 
-static char const rcsid[] = "$Id: patSpace.c,v 1.3 2006/03/15 18:36:16 angie Exp $";
 
 #define blockSize (256)
 

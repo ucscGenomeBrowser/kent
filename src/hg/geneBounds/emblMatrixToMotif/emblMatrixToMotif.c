@@ -8,7 +8,6 @@
 #include "dnaMotifSql.h"
 #include "emblParse.h"
 
-static char const rcsid[] = "$Id: emblMatrixToMotif.c,v 1.6 2006/04/07 14:31:22 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

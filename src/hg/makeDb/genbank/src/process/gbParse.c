@@ -10,7 +10,6 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.21 2008/10/14 17:35:16 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */

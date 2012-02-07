@@ -8,7 +8,6 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.9 2008/09/03 19:18:49 markd Exp $";
 
 static boolean goExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)

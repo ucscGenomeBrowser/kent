@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "mouseSynWhd.h"
 
-static char const rcsid[] = "$Id: mouseSynWhd.c,v 1.3 2005/04/13 06:25:55 markd Exp $";
 
 void mouseSynWhdStaticLoad(char **row, struct mouseSynWhd *ret)
 /* Load a row from mouseSynWhd table into ret.  The contents of ret will

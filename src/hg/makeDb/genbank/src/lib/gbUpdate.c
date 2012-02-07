@@ -6,7 +6,6 @@
 #include "gbEntry.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbUpdate.c,v 1.3 2007/06/16 19:01:50 markd Exp $";
 
 void gbUpdateNameFromFile(char* updateName, char* fileName)
 /* Get an update name from a file name in the dir */

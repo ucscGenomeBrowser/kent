@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "blastzNet.h"
 
-static char const rcsid[] = "$Id: blastzNet.c,v 1.3 2005/04/13 06:25:50 markd Exp $";
 
 void blastzNetStaticLoad(char **row, struct blastzNet *ret)
 /* Load a row from blastzNet table into ret.  The contents of ret will

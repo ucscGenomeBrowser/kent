@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: checkEnds.c,v 1.2 2003/05/06 07:22:26 kate Exp $";
 
 boolean anyProblem = FALSE;
 

@@ -10,7 +10,6 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTestRead.c,v 1.5 2009/01/27 22:15:36 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

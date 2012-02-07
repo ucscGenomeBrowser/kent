@@ -3,7 +3,6 @@
 #include "axt.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFromAxt.c,v 1.4 2003/05/17 23:47:15 kent Exp $";
 
 void mafFromAxtTemp(struct axt *axt, int tSize, int qSize,
 	struct mafAli *temp)

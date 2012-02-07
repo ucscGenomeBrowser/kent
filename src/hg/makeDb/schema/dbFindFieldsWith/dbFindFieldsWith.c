@@ -6,7 +6,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: dbFindFieldsWith.c,v 1.2 2008/08/27 19:06:12 kent Exp $";
 
 int maxRows = 100;
 

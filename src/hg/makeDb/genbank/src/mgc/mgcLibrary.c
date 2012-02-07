@@ -10,7 +10,6 @@
 #include "mgcLibrary.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcLibrary.c,v 1.2 2004/02/16 19:30:06 markd Exp $";
 
 void mgcLibraryStaticLoad(char **row, struct mgcLibrary *ret)
 /* Load a row from mgcLibrary table into ret.  The contents of ret will

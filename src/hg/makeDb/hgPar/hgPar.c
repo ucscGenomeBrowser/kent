@@ -8,7 +8,6 @@
 #include "hgRelate.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgPar.c,v 1.2 2010/02/18 06:03:07 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "pslWScore.h"
 
-static char const rcsid[] = "$Id: pslWScore.c,v 1.3 2005/04/13 06:25:55 markd Exp $";
 
 struct pslWScore *pslWScoreLoad(char **row)
 /* Load a pslWScore from row fetched with select * from pslWScore

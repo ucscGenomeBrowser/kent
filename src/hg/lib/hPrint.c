@@ -4,7 +4,6 @@
 #include "hPrint.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hPrint.c,v 1.11 2010/05/07 03:38:32 galt Exp $";
 
 static boolean suppressHtml = FALSE;
 /* If doing PostScript output we'll suppress most of HTML output. */

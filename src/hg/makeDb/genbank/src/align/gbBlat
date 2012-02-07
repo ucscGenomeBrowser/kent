@@ -248,7 +248,7 @@ proc determineBlatParams {specsVar} {
     switch $orgCat {
         native {
             switch $cdnaType {
-                mrna {lappend blatParams -q=rna -fine}
+                mrna {lappend blatParams -q=rna -fine -minScore=20 -stepSize=5}
                 est {}
             }
             if {[info exists specs(ooc)]} {

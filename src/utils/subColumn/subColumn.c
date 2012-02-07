@@ -6,7 +6,6 @@
 #include "dystring.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: subColumn.c,v 1.3 2007/03/30 16:10:16 kent Exp $";
 
 boolean isList = FALSE;
 FILE *fMiss = NULL;

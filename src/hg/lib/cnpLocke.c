@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cnpLocke.h"
 
-static char const rcsid[] = "$Id: cnpLocke.c,v 1.1 2007/04/23 22:58:00 heather Exp $";
 
 void cnpLockeStaticLoad(char **row, struct cnpLocke *ret)
 /* Load a row from cnpLocke table into ret.  The contents of ret will

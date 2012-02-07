@@ -10,7 +10,6 @@
 #include "chainBlock.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadChain.c,v 1.16 2006/04/26 18:53:38 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

@@ -6,7 +6,6 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gensatFtpList.c,v 1.5 2007/03/05 02:27:56 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -9,7 +9,6 @@
 #include "udc.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: bigBedSummary.c,v 1.7 2009/09/08 19:50:24 kent Exp $";
 
 char *summaryType = "coverage";
 

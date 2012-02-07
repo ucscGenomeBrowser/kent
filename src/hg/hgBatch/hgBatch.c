@@ -10,7 +10,6 @@
 #include "hCommon.h"
 
 
-static char const rcsid[] = "$Id: hgBatch.c,v 1.13 2003/11/27 00:18:33 angie Exp $";
 
 static struct cart *cart = NULL;
 

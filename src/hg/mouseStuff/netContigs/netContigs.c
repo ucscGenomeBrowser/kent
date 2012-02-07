@@ -7,7 +7,6 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: netContigs.c,v 1.1 2003/11/25 07:17:57 kate Exp $";
 
 struct hash *chromHash; 
 struct hash *contigNames;

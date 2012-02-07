@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ccdsLocationsJoin.h"
 
-static char const rcsid[] = "$Id: ccdsLocationsJoin.c,v 1.3 2006/08/15 21:03:01 markd Exp $";
 
 void ccdsLocationsJoinStaticLoad(char **row, struct ccdsLocationsJoin *ret)
 /* Load a row from ccdsLocationsJoin table into ret.  The contents of ret will

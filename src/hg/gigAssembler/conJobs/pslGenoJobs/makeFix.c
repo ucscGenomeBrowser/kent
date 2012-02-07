@@ -2,7 +2,6 @@
 #include "common.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: makeFix.c,v 1.2 2003/05/06 07:22:15 kate Exp $";
 
 int main(int argc, char *argv[])
 {

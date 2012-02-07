@@ -5,7 +5,6 @@
 #include "linefile.h"
 #include "qaSeq.h"
 
-static char const rcsid[] = "$Id: checkQa.c,v 1.3 2009/07/07 18:44:58 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */

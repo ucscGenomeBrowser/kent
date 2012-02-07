@@ -15,7 +15,6 @@
 #include "obscure.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.13 2008/09/03 19:18:59 markd Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */

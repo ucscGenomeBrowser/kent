@@ -1,5 +1,8 @@
 # for emacs: -*- mode: sh; -*-
 
+# http://www.hgsc.bcm.tmc.edu/project-species-p-Rhesus%20Macaque.hgsc?pageLocation=Rhesus%20Macaque
+
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AANU00
 
 # Macaca Mulatta  (rheMac2)
 # Venter Institute final split merge assembly using washU and baylor
@@ -1719,7 +1722,7 @@ TMPDIR=/scratch/tmp
       trackDb/rhesus/refSeqAnno.html
 
 ############################################################################
-# LASTZ Gorilla GorGor3 (DONE - 2011-10-21 - Hiram)
+# LASTZ Gorilla GorGor3 (DONE - 2011-10-21,23 - Hiram)
     mkdir /hive/data/genomes/rheMac2/bed/lastzGorGor3.2011-10-21
     cd /hive/data/genomes/rheMac2/bed/lastzGorGor3.2011-10-21
 
@@ -1762,10 +1765,9 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running - Fri Oct 21 14:27:56 PDT 2011
-    #	real    159m46.598s
+    #	1729m35s
     cat fb.rheMac2.chainGorGor3Link.txt  
-    #	2603997992 bases of 2897316137 (89.876%) in intersection
+    #	2175264883 bases of 2646704109 (82.188%) in intersection
 
     cd /hive/data/genomes/rheMac2/bed
     ln -s lastzGorGor3.2011-10-21 lastz.gorGor3
@@ -1779,8 +1781,12 @@ XXX - running - Fri Oct 21 14:27:56 PDT 2011
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
-    #	real    69m39.685s
-    cat fb.rheMac2.chainGorGor3Link.txt 
-    #	2571797450 bases of 2822760080 (91.109%) in intersection
+    #	real    85m16.618s
+    cat fb.gorGor3.chainRheMac2Link.txt
+    #	2236867094 bases of 2822760080 (79.244%) in intersection
+
+#########################################################################
+# POLYA-SEQ TRACK (from Adnan Derti, Merck) (DONE, Andy 2012-02-06)
+# (see hg19.txt for multi-species build notes)
 
 ############################################################################

@@ -15,7 +15,6 @@
 #include "mafTrack.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.65 2010/05/11 01:43:27 kent Exp $";
 
 struct mafItem
 /* A maf track item. */

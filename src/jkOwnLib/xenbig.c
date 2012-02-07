@@ -13,7 +13,6 @@
 #include "wormdna.h"
 #include "xenalign.h"
 
-static char const rcsid[] = "$Id: xenbig.c,v 1.3 2006/03/15 18:36:16 angie Exp $";
 
 struct contig
 /* A contiguously aligned sequence pair. */

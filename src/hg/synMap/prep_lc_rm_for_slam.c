@@ -3,7 +3,6 @@
 #include <ctype.h>
 #include <string.h>
 
-static char const rcsid[] = "$Id: prep_lc_rm_for_slam.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
 
 #define REPCHAR 'N'
 #define REPHEADER "   SW  perc perc perc  query     position in query    matching repeat       position in  repeat\nscore  div. del. ins.  sequence  begin  end (left)   repeat   class/family begin  end (left)  ID\n\n"

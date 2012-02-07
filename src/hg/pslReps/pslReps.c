@@ -10,7 +10,6 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslReps.c,v 1.19 2007/02/24 12:32:08 kent Exp $";
 
 /* command line */
 static struct optionSpec optionSpecs[] = {

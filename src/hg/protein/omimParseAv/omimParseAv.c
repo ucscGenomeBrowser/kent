@@ -10,7 +10,6 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: omimParseAv.c,v 1.2 2006/10/23 21:06:12 fanhsu Exp $";
 
 boolean avDebug = FALSE;
 

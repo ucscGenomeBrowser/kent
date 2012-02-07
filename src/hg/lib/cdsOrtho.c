@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cdsOrtho.h"
 
-static char const rcsid[] = "$Id: cdsOrtho.c,v 1.1 2007/03/12 06:09:19 kent Exp $";
 
 void cdsOrthoStaticLoad(char **row, struct cdsOrtho *ret)
 /* Load a row from cdsOrtho table into ret.  The contents of ret will

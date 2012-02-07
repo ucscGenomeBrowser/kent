@@ -16,7 +16,7 @@ CREATE TABLE gwasCatalog (
     journal varchar(255) not null,	# Journal of publication
     title varchar(255) not null,	# Title of publication
     trait varchar(255) not null,	# Disease or trait assessed in study
-    initSample varchar(255) not null,	# Initial sample size
+    initSample longblob not null,	# Initial sample size
     replSample longblob not null,	# Replication sample size
     region varchar(255) not null,	# Chromosome band / region of SNP
     genes varchar(255) not null,	# Reported Gene(s)

@@ -4,7 +4,6 @@
 #include "cheapcgi.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 /* table to use for counting in hgcentral */
 static char useCount[] = "useCount";

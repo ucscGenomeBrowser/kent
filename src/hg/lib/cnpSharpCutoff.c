@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cnpSharpCutoff.h"
 
-static char const rcsid[] = "$Id: cnpSharpCutoff.c,v 1.1 2005/07/10 02:02:55 daryl Exp $";
 
 void cnpSharpCutoffStaticLoad(char **row, struct cnpSharpCutoff *ret)
 /* Load a row from cnpSharpCutoff table into ret.  The contents of ret will

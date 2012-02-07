@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bactigPos.h"
 
-static char const rcsid[] = "$Id: bactigPos.c,v 1.3 2005/04/11 08:13:43 markd Exp $";
 
 void bactigPosStaticLoad(char **row, struct bactigPos *ret)
 /* Load a row from bactigPos table into ret.  The contents of ret will

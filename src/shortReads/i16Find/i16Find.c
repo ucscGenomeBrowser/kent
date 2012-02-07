@@ -11,7 +11,6 @@
 #include "verbose.h"
 #include "i16.h"
 
-static char const rcsid[] = "$Id: i16Find.c,v 1.3 2010/04/01 17:31:10 markd Exp $";
 
 boolean mmap;
 boolean noOverflow;

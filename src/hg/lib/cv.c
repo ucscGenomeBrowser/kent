@@ -108,25 +108,16 @@ const struct hash *cvTermHash(const char *term)
 // returns a hash of hashes of a term which should be defined in cv.ra
 // NOTE: in static memory: DO NOT FREE
 {
-static struct hash *cvHashOfHashOfHashes = NULL;
+static struct hash *cvHashOfHashesOfHashes = NULL;
+if (cvHashOfHashesOfHashes == NULL) // gets them all at once.
+    cvHashOfHashesOfHashes = raReadThreeLevels((char *)cvFile(), CV_TERM,CV_TYPE);
+
 if (sameString(term,CV_TERM_CELL))
     term = CV_UGLY_TERM_CELL_LINE;
 else if (sameString(term,CV_TERM_ANTIBODY))
     term = CV_UGLY_TERM_ANTIBODY;
 
-if (cvHashOfHashOfHashes == NULL)
-    cvHashOfHashOfHashes = hashNew(9);
-
-struct hash *cvHashForTerm = hashFindVal(cvHashOfHashOfHashes,(char *)term);
-// Establish cv hash of Term Types if it doesn't already exist
-if (cvHashForTerm == NULL)
-    {
-    cvHashForTerm = raReadWithFilter((char *)cvFile(), CV_TERM,CV_TYPE,(char *)term);
-    if (cvHashForTerm != NULL)
-        hashAdd(cvHashOfHashOfHashes,(char *)term,cvHashForTerm);
-    }
-
-return cvHashForTerm;
+return hashFindVal(cvHashOfHashesOfHashes,(char *)term);
 }
 
 const struct hash *cvOneTermHash(const char *type,const char *term)
@@ -149,7 +140,7 @@ static struct hash *cvHashOfTermTypes = NULL;
 // Establish cv hash of Term Types if it doesn't already exist
 if (cvHashOfTermTypes == NULL)
     {
-    cvHashOfTermTypes = raReadWithFilter((char *)cvFile(), CV_TERM,CV_TYPE,CV_TOT);
+    cvHashOfTermTypes = (struct hash *)cvTermHash(CV_TOT);
     // Patch up an ugly inconsistency with 'cell'
     struct hash *cellHash = hashRemove(cvHashOfTermTypes,CV_UGLY_TOT_CELLTYPE);
     if (cellHash)
@@ -397,20 +388,17 @@ return FALSE;
 boolean cvTermIsEmpty(const char *term,const char *val)
 // returns TRUE if term has validation of "cv or None" and the val is None
 {
-if (val == NULL)
+if (isEmpty(val))
     return TRUE; // Empty whether it is supposed to be or not
 
-struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
-struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
-if (termHash != NULL)
-    {
-    char *validationRule = hashFindVal(termHash,CV_VALIDATE);
-    if (validationRule != NULL)
-        {           // Currently only supporting special case for "None"
-        if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE)
-        && sameString(val,MDB_VAL_ENCODE_EDV_NONE))
-            return TRUE;
-        }
+if (differentString(val,MDB_VAL_ENCODE_EDV_NONE)) // Don't even bother if not None
+    return FALSE;
+char *validationRule = (char *)cvValidationRule(term);
+if (validationRule != NULL)
+    {           // Currently only supporting special case for "None"
+    if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE)
+    && sameString(val,MDB_VAL_ENCODE_EDV_NONE))
+        return TRUE;
     }
 return FALSE;
 }

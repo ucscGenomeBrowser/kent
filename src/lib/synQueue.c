@@ -6,7 +6,6 @@
 #include "pthreadWrap.h"
 #include "synQueue.h"
 
-static char const rcsid[] = "$Id: synQueue.c,v 1.6 2006/03/11 23:07:02 kent Exp $";
 
 struct synQueue
 /* A synchronized queue for messages between threads. */

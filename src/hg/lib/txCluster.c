@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "txCluster.h"
 
-static char const rcsid[] = "$Id: txCluster.c,v 1.1 2007/02/26 10:29:00 kent Exp $";
 
 struct txCluster *txClusterLoad(char **row)
 /* Load a txCluster from row fetched with select * from txCluster

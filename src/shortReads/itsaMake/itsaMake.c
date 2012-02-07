@@ -12,7 +12,6 @@
 #include "itsa.h"
 
 
-static char const rcsid[] = "$Id: itsaMake.c,v 1.6 2010/04/01 17:31:10 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

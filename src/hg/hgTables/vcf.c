@@ -19,30 +19,12 @@
 
 #define VCFDATALINE_NUM_COLS 10
 
-char *vcfDataLineAutoSqlString =
-"table vcfDataLine"
-"\"The fields of a Variant Call Format data line\""
-"    ("
-"    string chrom;	\"An identifier from the reference genome\""
-"    uint pos;		\"The reference position, with the 1st base having position 1\""
-"    string id;		\"Semi-colon separated list of unique identifiers where available\""
-"    string ref;		\"Reference base(s)\""
-"    string alt;		\"Comma separated list of alternate non-reference alleles called on at least one of the samples\""
-"    string qual;	\"Phred-scaled quality score for the assertion made in ALT. i.e. give -10log_10 prob(call in ALT is wrong)\""
-"    string filter;	\"PASS if this position has passed all filters. Otherwise, a semicolon-separated list of codes for filters that fail\""
-"    string info;	\"Additional information encoded as a semicolon-separated series of short keys with optional comma-separated values\""
-"    string format;	\"If genotype columns are specified in header, a semicolon-separated list of of short keys starting with GT\""
-"    string genotypes;	\"If genotype columns are specified in header, a tab-separated set of genotype column values; each value is a colon-separated list of values corresponding to keys in the format column\""
-"    )";
-
 boolean isVcfTable(char *table)
 /* Return TRUE if table corresponds to a VCF file. */
 {
-if (isHubTrack(table))
-    {
-    struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
-    return startsWithWord("vcfTabix", tdb->type);
-    }
+struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+if (tdb)
+    return tdbIsVcf(tdb);
 else
     return trackIsType(database, table, curTrack, "vcfTabix", ctLookupName);
 }
@@ -55,12 +37,6 @@ char *fileName = bigFileNameFromCtOrHub(table, conn);
 if (fileName == NULL)
     fileName = bamFileNameFromTable(conn, table, seqName);
 return fileName;
-}
-
-struct asObject *vcfAsObj()
-/* Return asObject describing fields of VCF */
-{
-return asParseText(vcfDataLineAutoSqlString);
 }
 
 struct hTableInfo *vcfToHti(char *table)
@@ -128,6 +104,11 @@ for (i = 0;  i < rec->infoCount;  i++)
 	{
 	if (j > 0)
 	    dyStringAppendC(dy, ',');
+	if (el->missingData[j])
+	    {
+	    dyStringAppend(dy, ".");
+	    continue;
+	    }
 	union vcfDatum dat = el->values[j];
 	switch (type)
 	    {
@@ -239,17 +220,10 @@ for (i=0; i<fieldCount; ++i)
     columnArray[i] = hashIntVal(fieldHash, fieldArray[i]);
     }
 
-/* Output row of labels if we are outputting only selected columns.
- * We will include original VCF header below, and adding a comment line
- * at the top invalidates the VCF. */
+// If we are outputting a subset of fields, invalidate the VCF header.
 boolean allFields = (fieldCount == VCFDATALINE_NUM_COLS);
 if (!allFields)
-    {
-    fprintf(f, "#%s", fieldArray[0]);
-    for (i=1; i<fieldCount; ++i)
-	fprintf(f, "\t%s", fieldArray[i]);
-    fprintf(f, "\n");
-    }
+    fprintf(f, "# Only selected columns are included below; output is not valid VCF.\n");
 
 struct asObject *as = vcfAsObj();
 struct asFilter *filter = NULL;
@@ -271,7 +245,9 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
     char *fileName = vcfFileName(table, conn, region->chrom);
     struct vcfFile *vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
-					       100);
+					       100, maxOut);
+    if (vcff == NULL)
+	noWarnAbort();
     // If we are outputting all fields, but this VCF has no genotype info, omit the
     // genotype columns from output:
     if (allFields && vcff->genotypeCount == 0)
@@ -281,6 +257,13 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
 	fprintf(f, "%s", vcff->headerString);
 	if (filter)
 	    fprintf(f, "# Filtering on %d columns\n", slCount(filter->columnList));
+	if (!allFields)
+	    {
+	    fprintf(f, "#%s", fieldArray[0]);
+	    for (i=1; i<fieldCount; ++i)
+		fprintf(f, "\t%s", fieldArray[i]);
+	    fprintf(f, "\n");
+	    }
 	printedHeader = TRUE;
 	}
     char *row[VCFDATALINE_NUM_COLS];
@@ -321,11 +304,13 @@ freeMem(columnArray);
 
 static void addFilteredBedsOnRegion(char *fileName, struct region *region, char *table,
 				    struct asFilter *filter, struct lm *bedLm,
-				    struct bed **pBedList, struct hash *idHash)
+				    struct bed **pBedList, struct hash *idHash, int *pMaxOut)
 /* Add relevant beds in reverse order to pBedList */
 {
 struct vcfFile *vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
-					   100);
+					   100, *pMaxOut);
+if (vcff == NULL)
+    noWarnAbort();
 struct lm *lm = lmInit(0);
 char *row[VCFDATALINE_NUM_COLS];
 char numBuf[VCF_NUM_BUF_SIZE];
@@ -350,6 +335,9 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
 	bed->name = lmCloneString(bedLm, rec->name);
 	slAddHead(pBedList, bed);
 	}
+    (*pMaxOut)--;
+    if (*pMaxOut <= 0)
+	break;
     }
 dyStringFree(&dyAlt);  dyStringFree(&dyFilter);  dyStringFree(&dyInfo);  dyStringFree(&dyGt);
 lmCleanup(&lm);
@@ -361,6 +349,7 @@ struct bed *vcfGetFilteredBedsOnRegions(struct sqlConnection *conn,
 	int *retFieldCount)
 /* Get list of beds from VCF, in all regions, that pass filtering. */
 {
+int maxOut = bigFileMaxOutput();
 /* Figure out vcf file name get column info and filter. */
 struct asObject *as = vcfAsObj();
 struct asFilter *filter = asFilterFromCart(cart, db, table, as);
@@ -372,8 +361,14 @@ struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
     char *fileName = vcfFileName(table, conn, region->chrom);
-    addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash);
+    addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash, &maxOut);
     freeMem(fileName);
+    if (maxOut <= 0)
+	{
+	warn("Reached output limit of %d data values, please make region smaller,\n"
+	     "\tor set a higher output line limit with the filter settings.", bigFileMaxOutput());
+	break;
+	}
     }
 slReverse(&bedList);
 return bedList;
@@ -386,7 +381,7 @@ struct slName *randomVcfIds(char *table, struct sqlConnection *conn, int count)
 char *fileName = vcfFileName(table, conn, NULL);
 struct lineFile *lf = lineFileTabixMayOpen(fileName, TRUE);
 if (lf == NULL)
-    errAbort("%s", "");
+    noWarnAbort();
 int orderedCount = count * 4;
 if (orderedCount < 10000)
     orderedCount = 10000;
@@ -450,7 +445,7 @@ hTableStart();
 /* Fetch sample rows. */
 struct lineFile *lf = lineFileTabixMayOpen(fileName, TRUE);
 if (lf == NULL)
-    errAbort("%s", "");
+    noWarnAbort();
 char *row[VCF_MAX_SCHEMA_COLS];
 int i;
 for (i = 0;  i < 10;  i++)

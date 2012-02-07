@@ -5,7 +5,6 @@
 #include "linefile.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: liftOverMerge.c,v 1.1 2004/09/30 00:10:34 kate Exp $";
 
 struct bedList 
     {

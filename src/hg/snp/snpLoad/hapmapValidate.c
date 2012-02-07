@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmapValidate.c,v 1.1 2007/01/23 01:11:43 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 FILE *complexFileHandle = NULL;

@@ -10,7 +10,6 @@
 #include "hgConfig.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: dbLinkTest.c,v 1.3 2006/07/17 19:35:31 markd Exp $";
 
 char *testTableName = "autoTest"; /* table name that newTest.as will produce. */
 int numPassed = 0;  /* How many tests we have passed. */

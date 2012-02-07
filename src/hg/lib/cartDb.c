@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cartDb.h"
 
-static char const rcsid[] = "$Id: cartDb.c,v 1.4 2005/04/13 06:25:50 markd Exp $";
 
 void cartDbStaticLoad(char **row, struct cartDb *ret)
 /* Load a row from cartDb table into ret.  The contents of ret will

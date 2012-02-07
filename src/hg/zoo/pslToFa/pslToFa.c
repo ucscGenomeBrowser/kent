@@ -3,7 +3,6 @@
 #include <string.h>
 #include <math.h>
 
-static char const rcsid[] = "$Id: pslToFa.c,v 1.3 2003/05/06 07:22:36 kate Exp $";
 
 
 #include "common.h"

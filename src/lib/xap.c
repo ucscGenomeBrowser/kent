@@ -10,7 +10,6 @@
 #include "errabort.h"
 #include "xp.h"
 
-static char const rcsid[] = "$Id: xap.c,v 1.11 2005/12/19 05:18:26 kent Exp $";
 
 void xapError(struct xap *xap, char *format, ...)
 /* Issue an error message and abort*/

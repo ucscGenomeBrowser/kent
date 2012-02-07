@@ -12,7 +12,6 @@
 #include "psl.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: getFeatDna.c,v 1.10 2008/09/03 19:18:40 markd Exp $";
 
 /* Variables set explicitly or optionally from command line. */
 char *database = NULL;		/* Which database? */

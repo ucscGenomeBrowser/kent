@@ -5,7 +5,6 @@
 #include "obscure.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: apacheLog.c,v 1.5 2009/09/10 01:50:01 kent Exp $";
 
 void apacheAccessLogFree(struct apacheAccessLog **pLl)
 /* Free up apacheAccessLog. */

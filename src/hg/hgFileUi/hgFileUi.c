@@ -134,7 +134,7 @@ printf("<BR>\n");
 webEnd();
 }
 
-char *excludeVars[] = { "submit", "Submit", "g", NULL, "ajax", NULL,};  // HOW IS 'ajax" going to be supported?
+char *excludeVars[] = { "submit", "Submit", "g", "clearCache", "ajax", NULL,};  // HOW IS 'ajax" going to be supported?
 
 int main(int argc, char *argv[])
 /* Process command line. */

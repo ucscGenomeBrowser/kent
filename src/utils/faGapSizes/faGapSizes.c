@@ -5,7 +5,6 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: faGapSizes.c,v 1.1 2003/10/03 19:38:36 angie Exp $";
 
 /* parameters */
 int histWidth = 45;

@@ -7,7 +7,6 @@
 #include "hdb.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customTrackTester.c,v 1.5 2010/05/11 01:43:30 kent Exp $";
 
 void usage()
 /* explain usage and exit */

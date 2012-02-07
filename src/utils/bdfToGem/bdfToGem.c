@@ -7,7 +7,6 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.15 2010/03/27 01:42:56 kent Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 static boolean noHeader = FALSE;  /* do not output the C header, data only */
@@ -389,8 +388,6 @@ if ((char *)NULL == name)
 /*	And now to start the output of the C source code	*/
 
 fprintf(f, "\n/* %s.c - compiled data for font %s */\n", name,font->facename);
-if (! noHeader)
-    fprintf(f, "static char const rcsid[] = \"$Id: bdfToGem.c,v 1.15 2010/03/27 01:42:56 kent Exp $\";\n");
 
 fprintf(f, "/* generated source code by utils/bdfToGem, do not edit */\n");
 fprintf(f, "/* BDF data file input: %s */\n\n", inputFileName);

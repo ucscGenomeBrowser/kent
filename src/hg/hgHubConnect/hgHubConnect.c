@@ -50,43 +50,101 @@ puts("</TD>");
 static void ourPrintCell(char *str)
 {
 ourCellStart();
-puts(str);
+if (str != NULL)
+    puts(str);
 ourCellEnd();
 }
 
-static void hgHubConnectUnlisted(struct hubConnectStatus *hubList)
+static char *removeLastComma(char *string)
+{
+if (string != NULL)
+    {
+    int len = strlen(string);
+
+    if ( string[len - 1] == ',')
+	string[len - 1]  = 0;
+    }
+return string;
+}
+
+static void addGenomesToHash(struct hubConnectStatus *hub, struct hash *hash)
+/* add supported assembly names from trackHub to hash */
+{
+if (hub == NULL)
+    return;
+
+struct trackHub *thub = hub->trackHub;
+if (thub != NULL)
+    {
+    /* List of associated genomes. */
+    struct trackHubGenome *genomes = thub->genomeList;	
+
+    for(; genomes; genomes = genomes->next)
+	hashStore(hash, genomes->name);
+    }
+}
+
+static void hgHubConnectUnlisted(struct hubConnectStatus *hubList, 
+    struct hash *publicHash)
 /* Put up the list of unlisted hubs and other controls for the page. */
+/* uses publicHash to distingusih public hubs from unlisted ones */
+/* NOTE: Destroys hubList */
 {
 // put out the top of our page
 printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
     "<table id=\"unlistedHubsTable\"> "
     "<thead><tr> "
-	"<th colspan=\"5\" id=\"addHubBar\"><label>URL:</label> "
+	"<th colspan=\"6\" id=\"addHubBar\"><label for=\"hubUrl\">URL:</label> "
 	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\""
 	    "type=\"text\" size=\"65\"> "
 	"<input name=\"hubAddButton\""
-	    "onClick=\"document.addHubForm.elements['hubUrl'].value=hubText.value;"
-		"document.addHubForm.submit();return true;\" "
+	    "onClick=\"if(validateUrl($('#hubUrl').val())) { document.addHubForm.elements['hubUrl'].value=hubText.value;"
+		"document.addHubForm.submit();return true;} else { return false;}\" "
 		"class=\"hubField\" type=\"button\" value=\"Add Hub\">"
 	"</th> "
     "</tr> ");
 
 // count up the number of unlisted hubs we currently have
-int count = 0;
-struct hubConnectStatus *hub;
-for(hub = hubList; hub; hub = hub->next)
+int unlistedHubCount = 0;
+struct hubConnectStatus *unlistedHubList = NULL;
+struct hubConnectStatus *hub, *nextHub;
+struct hash *assHash = newHash(5);
+
+for(hub = hubList; hub; hub = nextHub)
     {
-    if (isHubUnlisted(hub) && ((hub->trackHub == NULL) || trackHubHasDatabase(hub->trackHub, database) ))
-	count++;
+    nextHub = hub->next;
+    // if url is not in publicHash, it's unlisted */
+    if (!((publicHash != NULL) && hashLookup(publicHash, hub->hubUrl)))
+	{
+	addGenomesToHash(hub, assHash);
+	unlistedHubCount++;
+	slAddHead(&unlistedHubList, hub);
+	}
     }
 
-if (count == 0)
+hubList = NULL;  // hubList no longer valid
+
+struct hashCookie cookie = hashFirst(assHash);
+struct dyString *dy = newDyString(100);
+struct hashEl *hel;
+int numAssemblies = 0;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    dyStringPrintf(dy,"%s,", hel->name);
+    numAssemblies++;
+    }
+
+char *dbList = NULL;
+if (numAssemblies)   
+    dbList = dyStringCannibalize(&dy);
+
+if (unlistedHubCount == 0)
     {
     // nothing to see here
     printf(
-	"<tr><td>No Track Hubs for this genome assembly</td></tr>"
-	"</td></table>");
-    printf("</thead></div>");
+	"<tr><td>No Unlisted Track Hubs</td></tr>"
+	"</td>");
+    printf("</table></thead></div>");
     return;
     }
 
@@ -96,6 +154,7 @@ printf(
 	"<th>Display</th> "
 	"<th>Hub Name</th> "
 	"<th>Description</th> "
+	"<th>Assemblies</th> "
 	"<th>URL</th> "
 	"<th>Disconnect</th> "
     "</tr></thead>\n");
@@ -103,13 +162,9 @@ printf(
 // start first row
 printf("<tbody><tr>");
 
-count = 0;
-for(hub = hubList; hub; hub = hub->next)
+int count = 0;
+for(hub = unlistedHubList; hub; hub = hub->next)
     {
-    /* if the hub is public, then don't list it here */
-    if (!(isHubUnlisted(hub) && ((hub->trackHub == NULL) || trackHubHasDatabase(hub->trackHub, database) )))
-	continue;
-
     if (count)
 	webPrintLinkTableNewRow();  // ends last row and starts a new one
     count++;
@@ -131,7 +186,7 @@ for(hub = hubList; hub; hub = hub->next)
 	"<input name=\"hubClearButton\""
 	    "onClick=\"document.resetHubForm.elements['hubUrl'].value='%s';"
 		"document.resetHubForm.submit();return true;\" "
-		"class=\"hubField\" type=\"button\" value=\"clear error\">"
+		"class=\"hubField\" type=\"button\" value=\"check hub\">"
 		, hub->hubUrl);
 	ourCellEnd();
 	}
@@ -149,6 +204,7 @@ for(hub = hubList; hub; hub = hub->next)
     else
 	ourPrintCell("");
 
+    ourPrintCell(removeLastComma(dbList));
     ourPrintCell(hub->hubUrl);
 
     ourCellStart();
@@ -165,24 +221,13 @@ printf("</TR></tbody></TABLE>\n");
 printf("</div>");
 }
 
-static void makeGenomePrint()
-/* print out the name of the current database etc. */
-{
-getDbAndGenome(cart, &database, &organism, oldVars);
-printf("<div id=\"assemblyInfo\"> \n");
-printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s  ",
-	organism, hFreezeDate(database));
-printf("</div>\n");
-}
-
-
-void hgHubConnectPublic()
+static struct hash *outputPublicTable(struct sqlConnection *conn, char *publicTable)
 /* Put up the list of public hubs and other controls for the page. */
 {
-struct sqlConnection *conn = hConnectCentral();
+struct hash *publicHash = NULL;
 char query[512];
 safef(query, sizeof(query), "select hubUrl,shortLabel,longLabel,dbList from %s", 
-	hubPublicTableName); 
+	publicTable); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 
@@ -191,81 +236,97 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     char *url = row[0], *shortLabel = row[1], *longLabel = row[2], 
     	  *dbList = row[3];
-    if (nameInCommaList(database, dbList))
+    if (gotAnyRows)
+	webPrintLinkTableNewRow();
+    else
 	{
-	if (gotAnyRows)
-	    webPrintLinkTableNewRow();
-	else
-	    {
-	    /* output header */
-	    printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
-	    printf("<table id=\"publicHubsTable\"> "
-		"<thead><tr> "
-		    "<th>Display</th> "
-		    "<th>Hub Name</th> "
-		    "<th>Description</th> "
-		    "<th>URL</th> "
-		"</tr></thead>\n");
+	/* output header */
+	printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
+	printf("<table id=\"publicHubsTable\"> "
+	    "<thead><tr> "
+		"<th>Display</th> "
+		"<th>Hub Name</th> "
+		"<th>Description</th> "
+		"<th>Assemblies</th> "
+		"<th>URL</th> "
+	    "</tr></thead>\n");
 
-	    // start first row
-	    printf("<tbody> <tr>");
-	    gotAnyRows = TRUE;
-	    }
+	// start first row
+	printf("<tbody> <tr>");
+	gotAnyRows = TRUE;
 
-	char *errorMessage = NULL;
-	// get an id for this hub
-	unsigned id = hubFindOrAddUrlInStatusTable(database, cart, 
-	    url, &errorMessage);
-
-	if ((id != 0) && isEmpty(errorMessage)) 
-	    {
-	    ourCellStart();
-	    char hubName[32];
-	    safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
-	    cartMakeCheckBox(cart, hubName, FALSE);
-	    ourCellEnd();
-	    }
-	else if (!isEmpty(errorMessage))
-	    {
-	    // give user a chance to clear the error
-	    ourCellStart();
-	    printf(
-	    "<input name=\"hubClearButton\""
-		"onClick=\"document.resetHubForm.elements['hubUrl'].value='%s';"
-		    "document.resetHubForm.submit();return true;\" "
-		    "class=\"hubField\" type=\"button\" value=\"clear error\">"
-		    , url);
-	    ourCellEnd();
-	    }
-	else
-	    errAbort("cannot get id for hub with url %s\n", url);
-
-	ourPrintCell(shortLabel);
-	if (isEmpty(errorMessage))
-	    ourPrintCell(longLabel);
-	else
-	    printf("<TD><span class=\"hubError\">ERROR: %s </span>"
-		"<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
-		errorMessage);
-
-	ourPrintCell(url);
+	// allocate the hash to store hubUrl's
+	publicHash = newHash(5);
 	}
+
+    char *errorMessage = NULL;
+    // get an id for this hub
+    unsigned id = hubFindOrAddUrlInStatusTable(database, cart, 
+	url, &errorMessage);
+
+    if ((id != 0) && isEmpty(errorMessage)) 
+	{
+	ourCellStart();
+	char hubName[32];
+	safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
+	cartMakeCheckBox(cart, hubName, FALSE);
+	ourCellEnd();
+	}
+    else if (!isEmpty(errorMessage))
+	{
+	// give user a chance to clear the error
+	ourCellStart();
+	printf(
+	"<input name=\"hubClearButton\""
+	    "onClick=\"document.resetHubForm.elements['hubUrl'].value='%s';"
+		"document.resetHubForm.submit();return true;\" "
+		"class=\"hubField\" type=\"button\" value=\"check hub\">"
+		, url);
+	ourCellEnd();
+	}
+    else
+	errAbort("cannot get id for hub with url %s\n", url);
+
+    ourPrintCell(shortLabel);
+    if (isEmpty(errorMessage))
+	ourPrintCell(longLabel);
+    else
+	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
+	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
+	    errorMessage);
+
+    ourPrintCell(removeLastComma(dbList));
+    ourPrintCell(url);
+    hashStore(publicHash, url);
     }
 sqlFreeResult(&sr);
 
 if (gotAnyRows)
     {
     printf("</TR></tbody></TABLE>\n");
+    printf("</div>");
     }
-else
+return publicHash;
+}
+
+
+struct hash *hgHubConnectPublic()
+/* Put up the list of public hubs and other controls for the page. */
+{
+struct hash *retHash = NULL;
+struct sqlConnection *conn = hConnectCentral();
+char *publicTable = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE", 
+	hubPublicTableConfVariable, defaultHubPublicTableName);
+if (!(sqlTableExists(conn, publicTable) && 
+	(retHash = outputPublicTable(conn, publicTable)) != NULL ))
     {
     printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
     printf("No Public Track Hubs for this genome assembly<BR>");
+    printf("</div>");
     }
-
-printf("</div>");
-
 hDisconnectCentral(&conn);
+
+return retHash;
 }
 
 static void tryHubOpen(unsigned id)
@@ -369,6 +430,10 @@ if (cartVarExists(cart, hgHubDoDisconnect))
     {
     gotDisconnect = TRUE;
     doDisconnectHub(cart);
+
+    // now rebuild the cart variable ("trackHubs") that has which lists which
+    // hubs are on.
+    hubConnectHubsInCart(cart);
     }
 
 if (cartVarExists(cart, hgHubDoReset))
@@ -386,7 +451,6 @@ webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hgHubConnect.js", NULL);
 jsIncludeFile("jquery.cookie.js", NULL);
-webIncludeResourceFile("hgHubConnect.css");
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
 printf(
@@ -403,8 +467,14 @@ printf(
    );
 printf("</div>\n");
 
-// figure out and print out genome name
-makeGenomePrint();
+getDbAndGenome(cart, &database, &organism, oldVars);
+
+char *survey = cfgOptionEnv("HGDB_HUB_SURVEY", "hubSurvey");
+char *surveyLabel = cfgOptionEnv("HGDB_HUB_SURVEY_LABEL", "hubSurveyLabel");
+
+if (survey && differentWord(survey, "off"))
+    hPrintf("<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
+hPutc('\n');
 
 // check to see if we have any new hubs
 hubCheckForNew(database, cart);
@@ -447,8 +517,8 @@ printf("<div id=\"tabs\">"
        "<li><a href=\"#unlistedHubs\">My Hubs</a></li> "
        "</ul> ");
 
-hgHubConnectPublic();
-hgHubConnectUnlisted(hubList);
+struct hash *publicHash = hgHubConnectPublic();
+hgHubConnectUnlisted(hubList, publicHash);
 printf("</div>");
 
 printf("<div class=\"tabFooter\">");

@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "wabAli.h"
 
-static char const rcsid[] = "$Id: wabAli.c,v 1.4 2005/04/13 06:25:58 markd Exp $";
 
 void wabAliStaticLoad(char **row, struct wabAli *ret)
 /* Load a row from wabAli table into ret.  The contents of ret will

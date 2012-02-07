@@ -22,7 +22,6 @@
 #include "rbTree.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.13 2008/09/03 19:20:51 markd Exp $";
 static struct rbTree *gpTree = NULL;
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -62,15 +61,7 @@ void usage()
 /** Print usage and quit. */
 {
 int i=0;
-char *version = cloneString((char*)rcsid);
-char *tmp = strstr(version, "orthoEvaluate.c,v ");
-if(tmp != NULL)
-    version = tmp + 13;
-tmp = strrchr(version, 'E');
-if(tmp != NULL)
-    (*tmp) = '\0';
-warn("orthoEvaluate - Evaluate the coding potential of a bed.\n"
-     "   (version: %s)", version );
+warn("orthoEvaluate - Evaluate the coding potential of a bed.\n");
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n"

@@ -5,7 +5,6 @@
 #include "options.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslCrudeCmp.c,v 1.8 2004/02/23 18:10:34 kent Exp $";
 
 /* output files */
 FILE *only1Fh = NULL;

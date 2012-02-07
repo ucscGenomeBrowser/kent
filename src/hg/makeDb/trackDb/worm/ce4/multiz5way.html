@@ -19,7 +19,7 @@ track:
 In full and pack display modes, conservation scores are displayed as
 a &quot;wiggle&quot; (histogram), where the height reflects the
 size of the score. Pairwise alignments of each
-species to the $organism genome are displayed below as
+species to the <em>$organism</em> genome are displayed below as
 a grayscale density plot (in pack mode) or as a &quot;wiggle&quot;
 (in full mode) that indicates alignment quality.
 In dense display mode, conservation is shown in grayscale using
@@ -46,15 +46,15 @@ enables display of gaps between alignment blocks in the pairwise alignments in
 a manner similar to the Chain track display.  The following
 conventions are used:
 <UL>
-<LI><B>Single line:</B> no bases in the aligned species. Possibly due to a
-lineage-specific insertion between the aligned blocks in the $organism genome
+<LI><B>Single line:</B> No bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the <em>$organism</em> genome
 or a lineage-specific deletion between the aligned blocks in the aligning
 species.
-<LI><B>Double line:</B> aligning species has one or more unalignable bases in
+<LI><B>Double line:</B> Aligning species has one or more unalignable bases in
 the gap region. Possibly due to excessive evolutionary distance between
 species or independent indels in the region between the aligned blocks in both
 species.
-<LI><B>Pale yellow coloring:</B> aligning species has Ns in the gap region.
+<LI><B>Pale yellow coloring:</B> Aligning species has Ns in the gap region.
 Reflects uncertainty in the relationship between the DNA of both species, due
 to lack of sequence in relevant portions of the aligning species.
 </UL></P>
@@ -65,16 +65,16 @@ Discontinuities in the genomic context (chromosome, scaffold or region) of the
 aligned DNA in the aligning species are shown as follows:
 <UL>
 <LI>
-<B>Vertical blue bar:</B> represents a discontinuity that persists indefinitely
+<B>Vertical blue bar:</B> Represents a discontinuity that persists indefinitely
 on either side, <em>e.g.</em> a large region of DNA on either side of the bar
 comes from a different chromosome in the aligned species due to a large scale
 rearrangement.
 <LI>
-<B>Green square brackets:</B> enclose shorter alignments consisting of DNA from
+<B>Green square brackets:</B> Enclose shorter alignments consisting of DNA from
 one genomic context in the aligned species nested inside a larger chain of
 alignments from a different genomic context. The alignment within the
 brackets may represent a short misalignment, a lineage-specific insertion of a
-transposon in the $organism genome that aligns to a paralogous copy somewhere
+transposon in the <em>$organism</em> genome that aligns to a paralogous copy somewhere
 else in the aligned species, or other similar occurrence.
 </UL></P>
 
@@ -83,8 +83,8 @@ else in the aligned species, or other similar occurrence.
 When zoomed-in to the base-level display, the track shows the base
 composition of each alignment, with bases in annotated repetitive
 elements displayed in lower case. The numbers and symbols on the Gaps
-line indicate the lengths of gaps in the $organism sequence at those
-alignment positions relative to the longest non-$organism sequence.
+line indicate the lengths of gaps in the <em>$organism</em> sequence at those
+alignment positions relative to the longest non-<em>$organism</em> sequence.
 If there is sufficient space in the display, the size of the gap is shown;
 if not, and if the gap size is a multiple of 3, a &quot;*&quot; is displayed,
 otherwise &quot;+&quot; is shown.</P>
@@ -96,19 +96,19 @@ Translation configuration section at the top of the page. Then, select one of
 the following modes:
 <UL>
 <LI>
-<B>No codon translation:</B> the gene annotation is not used; the bases are
+<B>No codon translation:</B> The gene annotation is not used; the bases are
 displayed without translation.
 <LI>
-<B>Use default species reading frames for translation:</B> the annotations from the genome
+<B>Use default species reading frames for translation:</B> The annotations from the genome
 displayed
-in the &quot;Default species for translation&quot; pull-down menu are used to
+in the <em>Default species to establish reading frame</em> pull-down menu are used to
 translate all the aligned species present in the alignment.
 <LI>
-<B>Use reading frames for species if available, otherwise no translation:</B> codon
+<B>Use reading frames for species if available, otherwise no translation:</B> Codon
 translation is performed only for those species where the region is
 annotated as protein coding.
 <LI><B>Use reading frames for species if available, otherwise use default species:</B>
-codon translation is done on those species that are annotated as being protein
+Codon translation is done on those species that are annotated as being protein
 coding over the aligned region using species-specific annotation; the remaining
 species are translated using the default species annotation.
 </UL></P>
@@ -173,6 +173,8 @@ by Jim Kent at UCSC.
 </UL>
 </P>
 
+<P>The phylogenetic tree is based on Kiontke and Fitch (2005).
+
 <H2>References</H2>
 
 <H3>Phylo-HMM:</H3>
@@ -232,3 +234,10 @@ TARGET=_blank>Human-mouse alignments with BLASTZ</A>.
 <EM>Genome Res</EM>. 2003 Jan;13(1):103-7.
 </P>
 
+<H3>Phylogenetic Tree:</H3>
+<P>
+Kiontke K, Fitch DHA.
+<A HREF="http://www.wormbook.org/chapters/www_phylogrhabditids/phylorhab.html"
+TARGET=_blank>The phylogenetic relationships of <em>Caenorhabditis</em> and other rhabditids</A>.
+<EM>WormBook</EM>, ed. The <EM>C. elegans</EM> Research Community 2005 Aug 11.
+</P>

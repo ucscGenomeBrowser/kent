@@ -2,598 +2,538 @@ track wgEncodeHaibMethyl450
 compositeTrack on
 superTrack wgEncodeDnaMethylSuper dense
 shortLabel HAIB Methyl450
-longLabel CpG Methylation by Illumina Methyl450 Bead Arrays from ENCODE/HAIB
+longLabel CpG Methylation by Methyl 450K  Bead Arrays from ENCODE/HAIB
 group regulation
-subGroup1 view Views Sites=Sites
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2)  A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC BE2C=BE2C BJ=BJ CACO2=Caco-2 CMK=CMK ECC1=ECC-1 Fibrobl=Fibrobl GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube HTB11=HTB-11 HEPATO=Hepatocytes HTR8=HTR-8 IMR90=IMR90  JURKAT=Jurkat LNCAP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 Osteobl=Osteoblast OVCAR3=ovcar-3 PANC1=PANC-1 PanIslets=PanIslets PFSK1=PFSK-1 PrEC=PrEC PROGFIB=ProgFib RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCAdiposeUHN00001=BC_Adipose_UHN00001 BCAdrenalGlandH12803N=BC_Adrenal_Gland_H12803N BCBladder0111002=BC_Bladder_01-11002 BCBrainH11058N=BC_Brain_H11058N BCBreast0203015=BC_Breast_02-03015 BCColon0111002=BC_Colon_01-11002 BCColonH12817N=BC_Colon_H12817N BCEsophagus0111002=BC_Esophagus_01-11002 BCEsophagusH12817N=BC_Esophagus_H12817N BCJejunumH12817N=BC_Jejunum_H12817N BCKidney0111002=BC_Kidney_01-11002 BCKidneyH12817N=BC_Kidney_H12817N BCLeftVentricleN41=BC_Left_Ventricle_N41 BCLeukocyteUHN00204=BC_Leukocyte_UHN00204 BCLiver0111002=BC_Liver_01-11002 BCLung0111002=BC_Lung_01-11002 BCLungH12817N=BC_Lung_H12817N BCPancreasH12817N=BC_Pancreas_H12817N BCPenisH12817N=BC_Penis_H12817N BCPericardiumH12529N=BC_Pericardium_H12529N BCPlacentaUHN00189=BC_Placenta_UHN00189 BCProstateGlandH12817N=BC_Prostate_Gland_H12817N BCRectumN29=BC_Rectum_N29 BCSkeletalMuscle0111002=BC_Skeletal_Muscle_01-11002 BCSkeletalMuscleH12817N=BC_Skeletal_Muscle_H12817N BCSkin0111002=BC_Skin_01-11002 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 
-subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
-subGroup4 treatment Treatment NONE=None ETOH02=ETOH02 DM002P24H=DM002P24H TAM=4OHTAM_1uM_36hr
-dimensions dimY=cellType dimX=treatment dimZ=rep
-dimensionZchecked rep1
-fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep obtainedBy=Obtained_By dccAccession=UCSC_Accession geoSampleAccession=GEO_Accesion fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
-sortOrder cellType=+ treatment=+ rep=+ 
-controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
+subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2)  A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC BE2C=BE2C BJ=BJ CACO2=Caco-2 CMK=CMK ECC1=ECC-1 Fibrobl=Fibrobl GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116H=HCT-116_<i>HAIB</i> HCT116S=HCT-116_<i>Stanford</i> HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube HTB11=HTB-11 HEPATO=Hepatocytes HTR8=HTR-8 IMR90=IMR90  JURKAT=Jurkat LNCAP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 Osteobl=Osteoblast OVCAR3=ovcar-3 PANC1=PANC-1 PanIslets=PanIslets PFSK1=PFSK-1 PrEC=PrEC PROGFIB=ProgFib RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCAdiposeUHN00001=BC_Adipose_UHN00001 BCAdrenalGlandH12803N=BC_Adrenal_Gland_H12803N BCBladder0111002=BC_Bladder_01-11002 BCBrainH11058N=BC_Brain_H11058N BCBreast0203015=BC_Breast_02-03015 BCColon0111002=BC_Colon_01-11002 BCColonH12817N=BC_Colon_H12817N BCEsophagus0111002=BC_Esophagus_01-11002 BCEsophagusH12817N=BC_Esophagus_H12817N BCJejunumH12817N=BC_Jejunum_H12817N BCKidney0111002=BC_Kidney_01-11002 BCKidneyH12817N=BC_Kidney_H12817N BCLeftVentricleN41=BC_Left_Ventricle_N41 BCLeukocyteUHN00204=BC_Leukocyte_UHN00204 BCLiver0111002=BC_Liver_01-11002 BCLung0111002=BC_Lung_01-11002 BCLungH12817N=BC_Lung_H12817N BCPancreasH12817N=BC_Pancreas_H12817N BCPenisH12817N=BC_Penis_H12817N BCPericardiumH12529N=BC_Pericardium_H12529N BCPlacentaUHN00189=BC_Placenta_UHN00189 BCProstateGlandH12817N=BC_Prostate_Gland_H12817N BCRectumN29=BC_Rectum_N29 BCSkeletalMuscle0111002=BC_Skeletal_Muscle_01-11002 BCSkeletalMuscleH12817N=BC_Skeletal_Muscle_H12817N BCSkin0111002=BC_Skin_01-11002 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 
+subGroup2 treatment Treatment zNONE=None DM002P24H=DMSO_.02%_24h ETOH02=EtOH_.02%_1h TAM=Tamoxifen_1uM_36h
+subGroup3 obtainedBy Obtained_by UW=UW HAIB=Hudson_Alpha Stanford=Stanford DUKE=Duke
+dimensions dimY=cellType dimX=treatment
+fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
+sortOrder cellType=+ treatment=+ obtainedBy=+
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment obtainedBy=lab
 dragAndDrop subTracks
+#canPack On
 priority 0
-type bed 9
 wgEncode 1
+type bed 9 +
 itemRgb on
 visibility dense
-#canPack On
+boxedCfg on
 scoreFilter 0
 scoreFilterLimits 0:1000
-#maxWindowToQuery 10000000
 
         track wgEncodeHaibMethyl450Mcf7SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel MCF-7 1
-        longLabel MCF-7 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=MCF7 treatment=NONE rep=rep1
+        shortLabel MCF-7
+        longLabel MCF-7 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=MCF7 obtainedBy=DUKE treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450A549Etoh02SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel A549 1
-        longLabel A549 ETOH02 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB #81
-        subGroups view=Sites cellType=A549 treatment=ETOH02 rep=rep1
+        shortLabel A549 ETOH
+        longLabel A549 EtOH Methylation 450K Bead Array from ENCODE/HAIB 
+        subGroups cellType=A549 obtainedBy=HAIB treatment=ETOH02
         type bed 9
-        origAssembly hg19
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450Ecc1SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel ECC-1 1
-        longLabel ECC-1 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=ECC1 treatment=NONE rep=rep1
+        shortLabel ECC-1
+        longLabel ECC-1 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=ECC1 obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450HuvecSitesRep1
         parent wgEncodeHaibMethyl450 on
-        shortLabel 2HUVEC 1
-        longLabel HUVEC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=2HUVEC treatment=NONE rep=rep1
+        shortLabel HUVEC
+        longLabel HUVEC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=2HUVEC obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
-        color 224,75,0
+        # color 224,75,0
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450Pfsk1SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel PFSK-1 1
-        longLabel PFSK-1 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=PFSK1 treatment=NONE rep=rep1
+        shortLabel PFSK-1
+        longLabel PFSK-1 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=PFSK1 obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450SknmcSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel SK-N-MC 1
-        longLabel SK-N-MC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=SKNMC treatment=NONE rep=rep1
+        shortLabel SK-N-MC
+        longLabel SK-N-MC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=SKNMC obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450T47dDm002p24hSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel T-47D 1
-        longLabel T-47D DM002P24H Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB #85
-        subGroups view=Sites cellType=T47D treatment=DM002P24H rep=rep1
+        shortLabel T-47D DMSO
+        longLabel T-47D DMSO Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=T47D obtainedBy=HAIB treatment=DM002P24H
         type bed 9
-        origAssembly hg19
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450Hek293SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HEK293 1
-        longLabel HEK293 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HEK293 treatment=NONE rep=rep1
+        shortLabel HEK293
+        longLabel HEK293 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HEK293 obtainedBy=Stanford treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450Nt2d1SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel NT2-D1 1
-        longLabel NT2-D1 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=NT2D1 treatment=NONE rep=rep1
+        shortLabel NT2-D1
+        longLabel NT2-D1 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=NT2D1 obtainedBy=Stanford treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450JurkatSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel Jurkat 1
-        longLabel Jurkat Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=JURKAT treatment=NONE rep=rep1
+        shortLabel Jurkat
+        longLabel Jurkat Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=JURKAT obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450LncapSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel LNCaP 1
-        longLabel LNCaP Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=LNCAP treatment=NONE rep=rep1
+        shortLabel LNCaP
+        longLabel LNCaP Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=LNCAP obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
-        color 0,119,158
+        # color 0,119,158
         # subId=4444 dateSubmitted=2011-06-29
 
         track wgEncodeHaibMethyl450Gm12878SitesRep1
         parent wgEncodeHaibMethyl450 on
-        shortLabel GM12878 1
-        longLabel GM12878 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=1GM12878 treatment=NONE rep=rep1
+        shortLabel GM12878
+        longLabel GM12878 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=1GM12878 obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
-        color 153,38,0
+        # color 153,38,0
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450Gm12891SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel GM12891 1
-        longLabel GM12891 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=GM12891 treatment=NONE rep=rep1
+        shortLabel GM12891
+        longLabel GM12891 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=GM12891 obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450Gm12892SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel GM12892 1
-        longLabel GM12892 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=GM12892 treatment=NONE rep=rep1
+        shortLabel GM12892
+        longLabel GM12892 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=GM12892 obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450H1hescSitesRep1
         parent wgEncodeHaibMethyl450 on
-        shortLabel H1-hESC 1
-        longLabel H1-hESC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=1H1HESC treatment=NONE rep=rep1
+        shortLabel H1-hESC
+        longLabel H1-hESC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=1H1HESC obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
-        color 0,107,27
+        # color 0,107,27
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450ProgfibSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel ProgFib 1
-        longLabel ProgFib Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=PROGFIB treatment=NONE rep=rep1
+        shortLabel ProgFib
+        longLabel ProgFib Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=PROGFIB obtainedBy=DUKE treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450HepatoSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel Hepatocytes 1
-        longLabel Hepatocytes Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB #81
-        subGroups view=Sites cellType=HEPATO treatment=NONE rep=rep1
+        shortLabel Hepatocyte
+        longLabel Hepatocyte Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HEPATO obtainedBy=DUKE treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450RptecSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel RPTEC 1
-        longLabel RPTEC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=RPTEC treatment=NONE rep=rep1
+        shortLabel RPTEC
+        longLabel RPTEC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=RPTEC obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450HipeSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HIPEpiC 1
-        longLabel HIPEpiC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HIPE treatment=NONE rep=rep1
+        shortLabel HIPEpiC
+        longLabel HIPEpiC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HIPE obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450Imr90SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel IMR90 1
-        longLabel IMR90 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=IMR90 treatment=NONE rep=rep1
+        shortLabel IMR90
+        longLabel IMR90 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=IMR90 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450HeeSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HEEpiC 1
-        longLabel HEEpiC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HEE treatment=NONE rep=rep1
+        shortLabel HEEpiC
+        longLabel HEEpiC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HEE obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450Helas3SitesRep1
         parent wgEncodeHaibMethyl450 on
-        shortLabel HeLa-S3 1
-        longLabel HeLa-S3 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=2HELAS3 treatment=NONE rep=rep1
+        shortLabel HeLa-S3
+        longLabel HeLa-S3 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=2HELAS3 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
-        color 0,119,158
+        # color 0,119,158
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450K562SitesRep1
         parent wgEncodeHaibMethyl450 on
-        shortLabel K562 1
-        longLabel K562 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=1K562 treatment=NONE rep=rep1
+        shortLabel K562
+        longLabel K562 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=1K562 obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
-        color 46,0,184
+        # color 46,0,184
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450Hepg2SitesRep1
         parent wgEncodeHaibMethyl450 on
-        shortLabel HepG2 1
-        longLabel HepG2 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=2HEPG2 treatment=NONE rep=rep1
+        shortLabel HepG2
+        longLabel HepG2 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=2HEPG2 obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
-        color 189,0,157
+        # color 189,0,157
         # subId=4802 dateSubmitted=2011-08-29
 
         track wgEncodeHaibMethyl450Ag04449SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel AG04449 1
-        longLabel AG04449 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=AG04449 treatment=NONE rep=rep1
+        shortLabel AG04449
+        longLabel AG04449 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=AG04449 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450Ag04450SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel AG04450 1
-        longLabel AG04450 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=AG04450 treatment=NONE rep=rep1
+        shortLabel AG04450
+        longLabel AG04450 Methylation  450K Bead Array from ENCODE/HAIB
+        subGroups cellType=AG04450 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450Ag09309SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel AG09309 1
-        longLabel AG09309 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=AG09309 treatment=NONE rep=rep1
+        shortLabel AG09309
+        longLabel AG09309 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=AG09309 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450Ag09319SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel AG09319 1
-        longLabel AG09319 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=AG09319 treatment=NONE rep=rep1
+        shortLabel AG09319
+        longLabel AG09319 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=AG09319 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450Ag10803SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel AG10803 1
-        longLabel AG10803 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=AG10803 treatment=NONE rep=rep1
+        shortLabel AG10803
+        longLabel AG10803 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=AG10803 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450BjSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel BJ 1
-        longLabel BJ Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=BJ treatment=NONE rep=rep1
+        shortLabel BJ
+        longLabel BJ Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=BJ obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450Caco2SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel Caco-2 1
-        longLabel Caco-2 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=CACO2 treatment=NONE rep=rep1
+        shortLabel Caco-2
+        longLabel Caco-2 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=CACO2 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450CmkSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel CMK 1
-        longLabel CMK Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=CMK treatment=NONE rep=rep1
+        shortLabel CMK
+        longLabel CMK Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=CMK obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450Gm06990SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel GM06990 1
-        longLabel GM06990 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=GM06990 treatment=NONE rep=rep1
+        shortLabel GM06990
+        longLabel GM06990 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=GM06990 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450Gm19239SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel GM19239 1
-        longLabel GM19239 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=GM19239 treatment=NONE rep=rep1
+        shortLabel GM19239
+        longLabel GM19239 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=GM19239 obtainedBy=DUKE treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450HaeSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HAEpiC 1
-        longLabel HAEpiC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HAE treatment=NONE rep=rep1
+        shortLabel HAEpiC
+        longLabel HAEpiC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HAE obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4933 dateSubmitted=2011-09-29
 
         track wgEncodeHaibMethyl450AosmcSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel AoSMC 1
-        longLabel AoSMC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=AOSMC treatment=NONE rep=rep1
+        shortLabel AoSMC
+        longLabel AoSMC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=AOSMC obtainedBy=DUKE treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450Be2cSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel BE2_C 1
-        longLabel BE2_C Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=BE2C treatment=NONE rep=rep1
+        shortLabel BE2_C
+        longLabel BE2_C Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=BE2C obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450HcfSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HCF 1
-        longLabel HCF Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HCF treatment=NONE rep=rep1
+        shortLabel HCF
+        longLabel HCF Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HCF obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450HcmSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HCM 1
-        longLabel HCM Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HCM treatment=NONE rep=rep1
+        shortLabel HCM
+        longLabel HCM Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HCM obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450HcpeSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HCPEpiC 1
-        longLabel HCPEpiC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HCPE treatment=NONE rep=rep1
+        shortLabel HCPEpiC
+        longLabel HCPEpiC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HCPE obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
-        track wgEncodeHaibMethyl450Hct116SitesRep1
+        track wgEncodeHaibMethyl450Hct116StanfordSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HCT-116 1
-        longLabel HCT-116 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HCT116 treatment=NONE rep=rep1
+        shortLabel HCT-116 Stanford
+        longLabel HCT-116 Stanford Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HCT116S obtainedBy=Stanford treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
+        # was wgEncodeHaibMethyl450Hct116SitesRep1 cricket Fri Nov  4 15:15:55 2011
+        # was wgEncodeHaibMethyl450Hct116HaibSitesRep1 cricket Tue Nov  8 16:20:16 2011
+        # was wgEncodeHaibMethyl450Hct116StanfordSitesRep cricket Tue Nov 22 09:24:05 2011
 
-        track wgEncodeHaibMethyl450Hct116SitesRep2
+        track wgEncodeHaibMethyl450Hct116HaibSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HCT-116 2
-        longLabel HCT-116 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HCT116 treatment=NONE rep=rep2
+        shortLabel HCT-116 HAIB
+        longLabel HCT-116 HAIB Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HCT116H obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
+        # was wgEncodeHaibMethyl450Hct116SitesRep2 cricket Fri Nov  4 15:24:12 2011
+        # was wgEncodeHaibMethyl450Hct116StanfordSitesRep1 cricket Tue Nov  8 16:20:56 2011
 
         track wgEncodeHaibMethyl450Hl60SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HL-60 1
-        longLabel HL-60 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HL60 treatment=NONE rep=rep1
+        shortLabel HL-60
+        longLabel HL-60 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HL60 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450HmecSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HMEC 1
-        longLabel HMEC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HMEC treatment=NONE rep=rep1
+        shortLabel HMEC
+        longLabel HMEC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HMEC obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450HnpceSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HNPCEpiC 1
-        longLabel HNPCEpiC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HNPCE treatment=NONE rep=rep1
+        shortLabel HNPCEpiC
+        longLabel HNPCEpiC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HNPCE obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450HpaeSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HPAEpiC 1
-        longLabel HPAEpiC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HPAE treatment=NONE rep=rep1
+        shortLabel HPAEpiC
+        longLabel HPAEpiC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HPAE obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450HrceSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HRCEpiC 1
-        longLabel HRCEpiC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HRCE treatment=NONE rep=rep1
+        shortLabel HRCEpiC
+        longLabel HRCEpiC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HRCE obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450HreSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HRE 1
-        longLabel HRE Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HRE treatment=NONE rep=rep1
+        shortLabel HRE
+        longLabel HRE Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HRE obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450HrpeSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HRPEpiC 1
-        longLabel HRPEpiC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=HRPE treatment=NONE rep=rep1
+        shortLabel HRPEpiC
+        longLabel HRPEpiC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HRPE obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450Mcf10aesTamSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel MCF10A-Er-Src 1
-        longLabel MCF10A-Er-Src TAM Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB #87
-        subGroups view=Sites cellType=MCF10AES treatment=TAM rep=rep1
+        shortLabel MCF10A TAM
+        longLabel MCF10A TAM Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=MCF10AES obtainedBy=Stanford treatment=TAM
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450Mcf10aesSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel MCF10A-Er-Src 1
-        longLabel MCF10A-Er-Src Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB #83
-        subGroups view=Sites cellType=MCF10AES treatment=NONE rep=rep1
+        shortLabel MCF10A
+        longLabel MCF10A Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=MCF10AES obtainedBy=Stanford treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450Nb4SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel NB4 1
-        longLabel NB4 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=NB4 treatment=NONE rep=rep1
+        shortLabel NB4
+        longLabel NB4 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=NB4 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450NhaSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel NH-A 1
-        longLabel NH-A Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=NHA treatment=NONE rep=rep1
+        shortLabel NH-A
+        longLabel NH-A Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=NHA obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450NhbeSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel NHBE 1
-        longLabel NHBE Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=NHBE treatment=NONE rep=rep1
+        shortLabel NHBE
+        longLabel NHBE Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=NHBE obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450NhdfneoSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel NHDF-neo 1
-        longLabel NHDF-neo Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=NHDF-neo treatment=NONE rep=rep1
+        shortLabel NHDF-neo
+        longLabel NHDF-neo Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=NHDF-neo obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450Ovcar3SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel ovcar-3 1
-        longLabel ovcar-3 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=OVCAR3 treatment=NONE rep=rep1
+        shortLabel ovcar-3
+        longLabel ovcar-3 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=OVCAR3 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450Panc1SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel PANC-1 1
-        longLabel PANC-1 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=PANC1 treatment=NONE rep=rep1
+        shortLabel PANC-1
+        longLabel PANC-1 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=PANC1 obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450PrecSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel PrEC 1
-        longLabel PrEC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=PrEC treatment=NONE rep=rep1
+        shortLabel PrEC
+        longLabel PrEC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=PrEC obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450SaecSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel SAEC 1
-        longLabel SAEC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=SAEC treatment=NONE rep=rep1
+        shortLabel SAEC
+        longLabel SAEC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=SAEC obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450SknshraSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel SK-N-SH_RA 1
-        longLabel SK-N-SH_RA Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=SKNSHRA treatment=NONE rep=rep1
+        shortLabel SK-N-SH_RA
+        longLabel SK-N-SH_RA Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=SKNSHRA obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450SknshSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel SK-N-SH 1
-        longLabel SK-N-SH Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=SKNSH treatment=NONE rep=rep1
+        shortLabel SK-N-SH
+        longLabel SK-N-SH Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=SKNSH obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450SkmcSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel SKMC 1
-        longLabel SKMC Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=SKMC treatment=NONE rep=rep1
+        shortLabel SKMC
+        longLabel SKMC Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=SKMC obtainedBy=UW treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450U87SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel U87 1
-        longLabel U87 Methylation 450K Illumina Bead Array Rep 1 from ENCODE/HAIB
-        subGroups view=Sites cellType=U87 treatment=NONE rep=rep1
+        shortLabel U87
+        longLabel U87 Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=U87  obtainedBy=HAIB treatment=zNONE
         type bed 9
-        origAssembly hg19
         # subId=4942 dateSubmitted=2011-10-01

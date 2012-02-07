@@ -7,7 +7,6 @@
 #include "cirTree.h"
 #include "crTree.h"
 
-static char const rcsid[] = "$Id: rt1dTest.c,v 1.11 2009/01/21 19:43:15 kent Exp $";
 
 int blockSize = 64;
 int itemsPerSlot = 32;	/* Set in main. */

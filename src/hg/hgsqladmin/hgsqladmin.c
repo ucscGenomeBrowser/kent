@@ -3,7 +3,6 @@
 #include "options.h"
 #include "sqlProg.h"
 
-static char const rcsid[] = "$Id: hgsqladmin.c,v 1.2 2005/10/27 23:36:52 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

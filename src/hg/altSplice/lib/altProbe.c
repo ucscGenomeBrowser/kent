@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "altProbe.h"
 
-static char const rcsid[] = "$Id: altProbe.c,v 1.2 2007/01/08 19:23:36 sugnet Exp $";
 
 struct altProbe *altProbeLoad(char **row)
 /* Load a altProbe from row fetched with select * from altProbe

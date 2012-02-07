@@ -5,7 +5,6 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: bwtReverse.c,v 1.2 2008/11/07 23:55:21 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

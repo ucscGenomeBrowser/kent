@@ -11,6 +11,8 @@ wgEncodeDukeAffyExon.ra \
 wgEncodeGencodeV3.ra \
 wgEncodeGencodeV4.ra \
 wgEncodeGencodeV7.ra \
+wgEncodeGencodeV9.ra \
+wgEncodeGencodeV10.ra \
 wgEncodeGisChiaPet.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaPet.ra \
@@ -46,6 +48,7 @@ wgEncodeUwAffyExonArray.ra \
 wgEncodeUwDgf.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwHistone.ra \
+wgEncodeUwRepliSeq.ra \
 wgEncodeUwTfbs.ra 
 
 include ../../../../makefile.metaDb

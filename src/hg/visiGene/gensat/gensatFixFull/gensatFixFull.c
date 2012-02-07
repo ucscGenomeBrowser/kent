@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: gensatFixFull.c,v 1.3 2005/11/26 22:01:35 kent Exp $";
 
 char *database = "visiGene";
 char *thumbDir = "/cluster/store11/visiGene/gbdb/200/inSitu/Mouse/gensat";

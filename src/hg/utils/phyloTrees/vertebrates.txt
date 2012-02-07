@@ -2,31 +2,68 @@
 #	$Id: vertebrates.txt,v 1.1 2010/04/05 19:09:43 hiram Exp $
 
 #  Common to all:	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata;
+#  Common to all:	Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Coelomata; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi;
 
-macEug	Euteleostomi; Mammalia; Metatheria; Diprotodontia; Macropodidae; Macropus
+# Tasmanian devil Sarcophilus harrisii
+sarHar	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Metatheria; Dasyuromorphia; Dasyuridae; Sarcophilus
 
-monDom	Euteleostomi; Mammalia; Metatheria; Didelphimorphia; Didelphidae; Monodelphis
+# Wallaby Macropus eugenii
+macEug	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Metatheria; Diprotodontia; Macropodidae; Macropus
 
-ornAna	Euteleostomi; Mammalia; Monotremata; Ornithorhynchidae; Ornithorhynchus
+# Opossum Monodelphis domestica
+monDom	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Metatheria; Didelphimorphia; Didelphidae; Didelphinae; Monodelphis
 
-melGal	Euteleostomi; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Meleagridinae; Meleagris;
+# Platypus Ornithorhynchus anatinus
+ornAna	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Prototheria; Monotremata; Ornithorhynchidae; Ornithorhynchus
 
-galGal	Euteleostomi; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Phasianinae; Gallus
+# Turkey Meleagris gallopavo
+melGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Meleagridinae; Meleagris
 
-taeGut	Euteleostomi; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Estrildidae; Estrildinae; Taeniopygia
+# Chicken Gallus gallus
+galGal	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Galliformes; Phasianidae; Phasianinae; Gallus
 
-anoCar	Euteleostomi; Lepidosauria; Squamata; Iguania; Iguanidae; Polychrotinae; Anolis
+# Zebra finch Taeniopygia guttata
+taeGut	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Passeroidea; Estrildidae; Estrildinae; Taeniopygia
 
-xenTro	Euteleostomi; Amphibia; Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae; Xenopodinae; Xenopus; Silurana
+# Australian Saltwater crocodile Crocodylus porosus
+croPor	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Crocodylidae; Crocodylinae; Crocodylus
 
-gasAcu	Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei; Acanthomorpha; Acanthopterygii; Percomorpha; Gasterosteiformes; Gasterosteidae; Gasterosteus
+# American Alligator Alligator mississippiensis
+allMis	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Crocodylidae; Alligatorinae; Alligator
 
-fr	Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei; Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes; Tetradontoidea; Tetraodontidae; Takifugu
+# Lizard Anolis carolinensis
+anoCar	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Lepidosauria; Squamata; Iguania; Iguanidae; Polychrotinae; Anolis
 
-danRer	Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Ostariophysi; Cypriniformes; Cyprinidae; Danio
+# Western painted turtle Chrysemys picta bellii
+chrPic	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Testudines; Cryptodira; Testudinoidea; Emydidae; Chrysemys; Chrysemys picta
 
-tetNig	Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei; Acanthomorpha; Acanthopterygii; Percomorpha; Tetraodontiformes; Tetradontoidea; Tetraodontidae; Tetraodon
+# Western Clawed Frog Xenopus (Silurana) tropicalis
+xenTro	Euteleostomi; Sarcopterygii; Tetrapoda; Amphibia; Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae; Xenopodinae; Xenopus; Silurana
 
-oryLat	Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Euteleostei; Neoteleostei; Acanthomorpha; Acanthopterygii; Percomorpha; Atherinomorpha; Beloniformes; Adrianichthyidae; Oryziinae; Oryzias
+# Coelacanth Latimeria chalumnae
+latCha	Euteleostomi; Sarcopterygii; Coelacanthimorpha; Coelacanthiformes; Coelacanthidae; Latimeria
 
-petMar	Hyperoartia; Petromyzontiformes; Petromyzontidae; Petromyzon
+# Atlantic cod - Gadus morhua
+gadMor	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Paracanthopterygii; Gadiformes; Gadidae; Gadus
+
+# three-spined stickleback Gasterosteus aculeatus
+gasAcu	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Smegmamorpha; Gasterosteiformes/Syngnathiformes group; Gasterosteiformes; Gasterosteidae; Gasterosteus
+
+# Nile tilapia Oreochromis niloticus
+oreNil1	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Perciformes; Labroidei; Cichlidae; African cichlids; Pseudocrenilabrinae; Tilapiini; Oreochromis
+
+# tiger puffer Fugu Takifugu rubripes
+fr	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Takifugu
+
+# spotted green pufferfish Tetraodon nigroviridis
+tetNig	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Tetraodon
+
+# zebrafish Danio rerio
+danRer	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Otocephala; Ostariophysi; Otophysi; Cypriniphysi; Cypriniformes; Cyprinoidea; Cyprinidae; Danio
+
+# medaka Oryzias latipes
+oryLat	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Elopocephala; Clupeocephala; Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Smegmamorpha; Atherinomorpha; Beloniformes; Adrianichthyoidei; Adrianichthyidae; Oryziinae; Oryzias
+
+# sea lamprey Petromyzon marinus
+#	several levels up different from all above
+pepMar	Vertebrata; Hyperoartia; Petromyzontiformes; Petromyzontidae; Petromyzon

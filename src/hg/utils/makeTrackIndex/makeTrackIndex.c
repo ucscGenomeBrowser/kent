@@ -8,7 +8,6 @@
 #include "ra.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: makeTrackIndex.c,v 1.2 2010/06/09 22:26:24 larrym Exp $";
 
 void usage()
 /* Explain usage and exit. */

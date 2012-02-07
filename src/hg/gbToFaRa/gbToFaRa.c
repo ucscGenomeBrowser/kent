@@ -24,7 +24,6 @@
 #include "keys.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbToFaRa.c,v 1.25 2010/02/06 05:53:35 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

@@ -2,6 +2,8 @@
 
 # This file describes browser build for the panTro3 chimp genome: October 2010
 
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AACZ03
+
 #############################################################################
 # Fetch sequence from genbank (DONE - 2011-02-15 - Hiram)
 
@@ -3013,15 +3015,21 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running - Fri Oct 21 13:50:22 PDT 2011
-    #	real    159m46.598s
+    # after a manual recover following hive filesystem problems
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> cat.log 2>&1 &
+    #	131m34s
     cat fb.panTro3.chainGorGor3Link.txt  
-    #	2603997992 bases of 2897316137 (89.876%) in intersection
+    #	2553716156 bases of 2900529764 (88.043%) in intersection
 
     cd /hive/data/genomes/panTro3/bed
     ln -s lastzGorGor3.2011-10-21 lastz.gorGor3
 
-    #	running the swap - DONE - 2011-09-21
+    #	running the swap
     mkdir /hive/data/genomes/gorGor3/bed/blastz.panTro3.swap
     cd /hive/data/genomes/gorGor3/bed/blastz.panTro3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -3030,8 +3038,26 @@ XXX - running - Fri Oct 21 13:50:22 PDT 2011
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
-    #	real    69m39.685s
+    #	about 48 minutes
+    # an odd error:
+# netClass -verbose=0 -noAr noClass.net gorGor3 panTro3 gorGor3.panTro3.net
+# hashMustFindVal: 'chr2' not found
+    #	I can't find any chr2 in any of these files ...
+    #	This was due to a bogus simpleRepeat table in panTro3, mistakenly
+    #	loaded 09 May 2011, backpushed from the RR 27 October 2011
     cat fb.gorGor3.chainPanTro3Link.txt 
-    #	2571797450 bases of 2822760080 (91.109%) in intersection
+    #	2513463838 bases of 2822760080 (89.043%) in intersection
+    # after replacing the simpleRepeat table, finish off the
+    # axtChain/loadUp.csh script and 
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzGorGor3.2011-10-21/DEF \
+	-continue=download -swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> download.log 2>&1 &
+    #	real    25m50.173s
+
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s blastz.panTro3.swap lastz.panTro3
 
 ############################################################################

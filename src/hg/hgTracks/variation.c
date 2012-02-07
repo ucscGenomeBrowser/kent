@@ -4,7 +4,6 @@
 #include "variation.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.148 2010/06/07 16:54:21 angie Exp $";
 
 static double snp125AvHetCutoff = SNP125_DEFAULT_MIN_AVHET;
 static int snp125WeightCutoff = SNP125_DEFAULT_MAX_WEIGHT;

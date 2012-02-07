@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: atomDb.c,v 1.2 2007/09/20 17:38:10 braney Exp $";
 
 void atomStaticLoad(char **row, struct atom *ret)
 /* Load a row from atom table into ret.  The contents of ret will

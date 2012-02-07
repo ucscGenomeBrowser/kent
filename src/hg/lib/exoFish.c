@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "exoFish.h"
 
-static char const rcsid[] = "$Id: exoFish.c,v 1.4 2005/04/13 06:25:52 markd Exp $";
 
 void exoFishStaticLoad(char **row, struct exoFish *ret)
 /* Load a row from exoFish table into ret.  The contents of ret will

@@ -5,7 +5,6 @@
 #include "cheapcgi.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: calc.c,v 1.4 2003/05/06 07:41:04 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

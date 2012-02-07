@@ -7,7 +7,6 @@
 #include "utime.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgsqlTableDate.c,v 1.1 2010/06/03 23:18:41 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */

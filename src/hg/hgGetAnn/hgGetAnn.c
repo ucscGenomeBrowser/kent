@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgGetAnn.c,v 1.7 2010/02/12 17:56:12 angie Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */

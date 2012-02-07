@@ -9,7 +9,6 @@
 #include "pgPolyphenPred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pgPolyphenPred.c,v 1.1 2010/03/08 17:45:40 giardine Exp $";
 
 void pgPolyphenPredStaticLoadWithNull(char **row, struct pgPolyphenPred *ret)
 /* Load a row from pgPolyphenPred table into ret.  The contents of ret will

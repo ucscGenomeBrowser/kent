@@ -22,7 +22,6 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.2 2008/09/03 19:18:55 markd Exp $";
 
 
 boolean isWiggle(char *db, char *table)

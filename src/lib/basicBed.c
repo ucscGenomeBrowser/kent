@@ -18,7 +18,6 @@
 #include "binRange.h"
 #include "basicBed.h"
 
-static char const rcsid[] = "$Id: basicBed.c,v 1.3 2010/03/03 07:52:22 markd Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will

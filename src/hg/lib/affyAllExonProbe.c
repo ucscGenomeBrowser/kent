@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "affyAllExonProbe.h"
 
-static char const rcsid[] = "$Id: affyAllExonProbe.c,v 1.1 2006/03/14 01:35:59 aamp Exp $";
 
 void affyAllExonProbeStaticLoad(char **row, struct affyAllExonProbe *ret)
 /* Load a row from affyAllExonProbe table into ret.  The contents of ret will

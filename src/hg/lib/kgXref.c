@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "kgXref.h"
 
-static char const rcsid[] = "$Id:$";
 
 void kgXrefStaticLoad(char **row, struct kgXref *ret)
 /* Load a row from kgXref table into ret.  The contents of ret will

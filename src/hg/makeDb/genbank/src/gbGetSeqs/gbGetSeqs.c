@@ -19,7 +19,6 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.17 2007/11/05 18:49:06 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

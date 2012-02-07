@@ -8,7 +8,6 @@
 #include "bits.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pslToPileup.c,v 1.1 2004/03/09 22:54:34 angie Exp $";
 
 int minHits = 50;
 int maxGap = 20;

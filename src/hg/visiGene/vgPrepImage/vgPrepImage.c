@@ -10,7 +10,6 @@
 #include "jpgDec.h"
 #include "jp2Dec.h"
 
-static char const rcsid[] = "$Id: vgPrepImage.c,v 1.5 2010/01/28 00:24:48 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */

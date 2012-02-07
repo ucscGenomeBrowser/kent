@@ -13,7 +13,6 @@
 
 struct dnaSeq *qFaList;
 struct dnaSeq *tFaList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.21 2006/06/20 16:44:17 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

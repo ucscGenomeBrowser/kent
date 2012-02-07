@@ -12,7 +12,6 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: borf.c,v 1.7 2008/09/03 19:19:19 markd Exp $";
 static char *_bestOrfExe = "/projects/compbio/bin/bestorf.linux/bestorf";
 static char *_bestOrfParam = "/projects/compbio/bin/bestorf.linux/hume.dat";
 

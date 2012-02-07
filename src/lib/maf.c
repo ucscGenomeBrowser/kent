@@ -9,7 +9,6 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.44 2010/05/06 02:59:41 markd Exp $";
 
 char *mafRegDefTxUpstream = "txupstream";  // transcription start size upstream region
 
@@ -139,7 +138,7 @@ for (;;)
 	for (;;)
 	    {
 	    if (!nextLine(lf, &line))
-		errAbort("Unexpected end of file %s", lf->fileName);
+		break;
 	    word = nextWord(&line);
 	    if (word == NULL)
 		break;

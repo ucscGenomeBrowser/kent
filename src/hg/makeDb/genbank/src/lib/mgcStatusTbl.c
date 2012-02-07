@@ -6,7 +6,6 @@
 #include "dystring.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.17 2007/12/20 01:23:53 markd Exp $";
 
 /* 
  * Clone detailed status values.

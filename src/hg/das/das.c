@@ -19,7 +19,6 @@
 #include "trackTable.h"
 
 
-static char const rcsid[] = "$Id: das.c,v 1.46 2010/01/03 07:42:33 markd Exp $";
 
 /* Including the count in the types response can be very slow for large
  * regions and is optional.  Inclusion of count if controlled by this compile-
@@ -214,6 +213,20 @@ freeMem(dupe);
 return ok;
 }
 
+static boolean disabledViaSettings(char *settings)
+// Return TRUE if this table is disabled via "tableBrowser off" in trackDb settings string.
+// We modify settings string (pass in a copy if you don't want it modified).
+{
+char *line;
+boolean disabled = FALSE;
+struct lineFile *lf = lineFileOnString("settings", TRUE, settings);
+
+while (!disabled && lineFileNext(lf, &line, NULL))
+    disabled = startsWith("tableBrowser off", line);
+lineFileClose(&lf);
+return disabled;
+}
+
 static struct hash *mkTrackTypeHash()
 /* build a hash of track name to type */
 {
@@ -225,12 +238,12 @@ for (trackDb = trackDbs; trackDb != NULL; trackDb = trackDb->next)
     if (sqlTableExists(conn, trackDb->name))
         {
         char query[128];
-        safef(query, sizeof(query), "select tableName,type from %s", trackDb->name);
+        safef(query, sizeof(query), "select tableName,type,settings from %s", trackDb->name);
         struct sqlResult *sr = sqlGetResult(conn, query);
         char **row;
         while ((row = sqlNextRow(sr)) != NULL)
             {
-            if (dasableType(row[1]) && (hashLookup(hash, row[0]) == NULL))
+            if (dasableType(row[1]) && !disabledViaSettings(row[2]) && (hashLookup(hash, row[0]) == NULL))
                 hashAdd(hash, row[0], NULL);
             }
         sqlFreeResult(&sr);

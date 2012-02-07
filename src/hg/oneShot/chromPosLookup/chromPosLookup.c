@@ -8,7 +8,6 @@
 #include "sqlNum.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: chromPosLookup.c,v 1.1 2009/01/08 00:28:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

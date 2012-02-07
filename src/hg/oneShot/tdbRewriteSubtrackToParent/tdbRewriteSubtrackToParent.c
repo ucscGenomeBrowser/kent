@@ -12,7 +12,6 @@
 #include "rql.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteSubtrackToParent.c,v 1.2 2010/02/17 20:16:44 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 

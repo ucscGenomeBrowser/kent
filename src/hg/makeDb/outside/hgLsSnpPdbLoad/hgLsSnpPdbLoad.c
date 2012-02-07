@@ -6,7 +6,6 @@
 #include "linefile.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLsSnpPdbLoad.c,v 1.4 2009/09/15 06:50:30 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */

@@ -30,7 +30,7 @@ boolean bigBedFileCheckSigs(char *fileName)
 return bbiFileCheckSigs(fileName, bigBedSig, "big bed");
 }
 
-struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom, 
+struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom,
 	bits32 start, bits32 end, int maxItems, struct lm *lm)
 /* Get data for interval.  Return list allocated out of lm.  Set maxItems to maximum
  * number of items to return, or to 0 for all items. */
@@ -39,7 +39,7 @@ struct bigBedInterval *el, *list = NULL;
 int itemCount = 0;
 bbiAttachUnzoomedCir(bbi);
 bits32 chromId;
-struct fileOffsetSize *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir, 
+struct fileOffsetSize *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir,
 	chrom, start, end, &chromId);
 struct fileOffsetSize *block, *beforeGap, *afterGap;
 struct udcFile *udc = bbi->udc;
@@ -128,7 +128,7 @@ int bigBedIntervalToRow(struct bigBedInterval *interval, char *chrom, char *star
 	char **row, int rowSize)
 /* Convert bigBedInterval into an array of chars equivalent to what you'd get by
  * parsing the bed file. The startBuf and endBuf are used to hold the ascii representation of
- * start and end.  Note that the interval->rest string will have zeroes inserted as a side effect. 
+ * start and end.  Note that the interval->rest string will have zeroes inserted as a side effect.
  */
 {
 int fieldCount = 3;
@@ -145,7 +145,7 @@ if (!isEmpty(interval->rest))
 return fieldCount;
 }
 
-static struct bbiInterval *bigBedCoverageIntervals(struct bbiFile *bbi, 
+static struct bbiInterval *bigBedCoverageIntervals(struct bbiFile *bbi,
 	char *chrom, bits32 start, bits32 end, struct lm *lm)
 /* Return intervals where the val is the depth of coverage. */
 {
@@ -221,6 +221,28 @@ char *asText = bigBedAutoSqlText(bbi);
 struct asObject *as = asParseText(asText);
 freeMem(asText);
 return as;
+}
+
+struct asObject *bigBedAsOrDefault(struct bbiFile *bbi)
+// Get asObject associated with bigBed - if none exists in file make it up from field counts.
+{
+struct asObject *as = bigBedAs(bbi);
+if (as == NULL)
+    as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
+return as;
+}
+
+struct asObject *bigBedFileAsObjOrDefault(char *fileName)
+// Get asObject associated with bigBed file, or the default.
+{
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+if (bbi)
+    {
+    struct asObject *as = bigBedAsOrDefault(bbi);
+    bbiFileClose(&bbi);
+    return as;
+    }
+return NULL;
 }
 
 bits64 bigBedItemCount(struct bbiFile *bbi)

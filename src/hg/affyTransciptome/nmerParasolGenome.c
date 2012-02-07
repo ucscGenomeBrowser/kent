@@ -2,7 +2,6 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: nmerParasolGenome.c,v 1.2 2003/05/06 07:22:13 kate Exp $";
 
 struct slName *chromNames = NULL;
 char *dirName = NULL;

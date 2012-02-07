@@ -10,7 +10,6 @@
 #include "hapmapAllelesSummary.h"
 #include "hapmapPhaseIIISummary.h"
 
-static char const rcsid[] = "$Id: hapmapTrack.c,v 1.48 2010/05/11 01:43:27 kent Exp $";
 
 // These values are all overwritten in loadFilters() below.
 char *mixedFilter = HAP_FILTER_DEFAULT;

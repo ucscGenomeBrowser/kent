@@ -16,7 +16,6 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.109 2010/01/12 18:48:12 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "mouseOrtho.h"
 
-static char const rcsid[] = "$Id: mouseOrtho.c,v 1.4 2005/04/13 06:25:55 markd Exp $";
 
 void mouseOrthoStaticLoad(char **row, struct mouseOrtho *ret)
 /* Load a row from mouseOrtho table into ret.  The contents of ret will

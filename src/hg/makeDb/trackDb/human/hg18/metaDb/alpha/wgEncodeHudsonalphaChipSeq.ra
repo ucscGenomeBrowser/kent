@@ -13750,29 +13750,6 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Nrsf
 treatment None
 view RawSignal
 
-metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
-objType table
-antibody RevXlinkChromatin
-cell PFSK-1
-composite wgEncodeHudsonalphaChipSeq
-controlId SL412
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-07-17
-dateUnrestricted 2010-04-17
-fragLength 225
-grant Myers
-lab HudsonAlpha
-labExpId SL412
-project wgEncode
-protocol PCR2x
-replicate 2
-setType input
-subId 436
-tableName wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
-treatment None
-view RawSignal
-
 metaObject wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2
 objType table
 antibody FOXP2
@@ -13962,4 +13939,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: 181705549
+# MAGIC: 1029057127

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "pairedTagAlign.h"
 
-static char const rcsid[] = "$Id: pairedTagAlign.c,v 1.1 2008/08/29 19:35:20 larrym Exp $";
 
 void pairedTagAlignStaticLoad(char **row, struct pairedTagAlign *ret)
 /* Load a row from pairedTagAlign table into ret.  The contents of ret will

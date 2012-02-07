@@ -8,7 +8,6 @@
 #include "psl.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: seqFromPsl.c,v 1.1 2005/05/04 17:34:43 kent Exp $";
 
 boolean hardMask = FALSE;
 

@@ -9,7 +9,6 @@
 #include "localmem.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: estOrientInfo.c,v 1.6 2005/07/03 23:22:36 markd Exp $";
 
 static char *createString = 
     "CREATE TABLE %s (\n"

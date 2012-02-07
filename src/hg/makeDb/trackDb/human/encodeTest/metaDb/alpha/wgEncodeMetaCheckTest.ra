@@ -1,0 +1,1051 @@
+metaObject wgEncodeMetaCheckTestA549RegionsRep1
+objType table
+cell A549
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestA549RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestA549RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestAg04449RegionsRep1
+objType table
+cell AG04449
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestAg04449RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestAg04449RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestAg04450RegionsRep2
+objType table
+cell AG04450
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestAg04450RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestAg04450RegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestAg09309RegionsRep1
+objType table
+cell AG09309
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestAg09309RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestAg09309RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestAg09319RegionsRep2
+objType table
+cell AG09319
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestAg09319RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestAg09319RegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestAg10803RegionsRep1
+objType table
+cell AG10803
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestAg10803RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestAg10803RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestAosmcRegionsRep1
+objType table
+cell AoSMC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestAosmcRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestAosmcRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestBcjejunumRegionsRep1
+objType table
+cell BC_Jejunum_H12817N
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestBcjejunumRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestBcjejunumRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestBcsmintestineRegionsRep1
+objType table
+cell BC_Small_Intestine_01-11002
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestBcsmintestineRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestBcsmintestineRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestBjRegionsRep1
+objType table
+cell BJ
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestBjRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestBjRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestCaco2RegionsRep1
+objType table
+cell Caco-2
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestCaco2RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestCaco2RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestChorionRegionsRep1
+objType table
+cell Chorion
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestChorionRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestChorionRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestCmkRegionsRep2
+objType table
+cell CMK
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestCmkRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestCmkRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestGm06990RegionsRep1
+objType table
+cell GM06990
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestGm06990RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestGm06990RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestGm12891RegionsRep2
+objType table
+cell GM12891
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestGm12891RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestGm12891RegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestGm12892RegionsRep2
+objType table
+cell GM12892
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestGm12892RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestGm12892RegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestGm19239RegionsRep1
+objType table
+cell GM19239
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestGm19239RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestGm19239RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestH1hescRegionsRep2
+objType table
+cell H1-hESC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestH1hescRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestH1hescRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHaeRegionsRep1
+objType table
+cell HAEpiC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHaeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestHaeRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHaeRegionsRep2
+objType table
+cell HAEpiC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHaeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHaeRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHcfRegionsRep1
+objType table
+cell HCF
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHcfRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestHcfRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHcfRegionsRep2
+objType table
+cell HCF
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHcfRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHcfRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHcmRegionsRep1
+objType table
+cell HCM
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHcmRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestHcmRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHcmRegionsRep2
+objType table
+cell HCM
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHcmRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHcmRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHcpeRegionsRep1
+objType table
+cell HCPEpiC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHcpeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestHcpeRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHcpeRegionsRep2
+objType table
+cell HCPEpiC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHcpeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHcpeRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHeeRegionsRep2
+objType table
+cell HEEpiC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHeeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHeeRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHek293RegionsRep2
+objType table
+cell HEK293
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHek293RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHek293RegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHelas3RegionsRep2
+objType table
+cell HeLa-S3
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHelas3RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHelas3RegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHipeRegionsRep1
+objType table
+cell HIPEpiC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHipeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestHipeRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHipeRegionsRep2
+objType table
+cell HIPEpiC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHipeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHipeRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHl60RegionsRep1
+objType table
+cell HL-60
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHl60RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestHl60RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHmecRegionsRep2
+objType table
+cell HMEC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHmecRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHmecRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHnpceRegionsRep1
+objType table
+cell HNPCEpiC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHnpceRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestHnpceRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHpaeRegionsRep1
+objType table
+cell HPAEpiC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHpaeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestHpaeRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHpaeRegionsRep2
+objType table
+cell HPAEpiC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHpaeRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHpaeRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHsmmRegionsRep3
+objType table
+cell HSMM
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHsmmRegionsRep3.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 3
+subId 284
+tableName wgEncodeMetaCheckTestHsmmRegionsRep3
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHsmmRegionsRep6
+objType table
+cell HSMM
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHsmmRegionsRep6.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 6
+subId 284
+tableName wgEncodeMetaCheckTestHsmmRegionsRep6
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHsmmtRegionsRep2
+objType table
+cell HSMMtube
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHsmmtRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHsmmtRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHtr8RegionsRep1
+objType table
+cell HTR8svn
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHtr8RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestHtr8RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestHuvecRegionsRep2
+objType table
+cell HUVEC
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestHuvecRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestHuvecRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestMelanoRegionsRep1
+objType table
+cell Melano
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestMelanoRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestMelanoRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestMelanoRegionsRep2
+objType table
+cell Melano
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestMelanoRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestMelanoRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestMyometrRegionsRep1
+objType table
+cell Myometr
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestMyometrRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestMyometrRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestNhaRegionsRep1
+objType table
+cell NH-A
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestNhaRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestNhaRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestOvcar3RegionsRep1
+objType table
+cell ovcar-3
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestOvcar3RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestOvcar3RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestPanc1RegionsRep2
+objType table
+cell PANC-1
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestPanc1RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestPanc1RegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestPfsk1RegionsRep1
+objType table
+cell PFSK-1
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestPfsk1RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestPfsk1RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestT47dRegionsRep2
+objType table
+cell T-47D
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestT47dRegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 284
+tableName wgEncodeMetaCheckTestT47dRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeMetaCheckTestU87RegionsRep1
+objType table
+cell U87
+composite wgEncodeMetaCheckTest
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeMetaCheckTestU87RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 284
+tableName wgEncodeMetaCheckTestU87RegionsRep1
+treatment None
+view Regions
+
+# MAGIC: -410626410

@@ -94,6 +94,7 @@ sortOrder sample=+
 dragAndDrop subTracks
 allButtonPair on
 dimensions dimensionX=sample
+noInherit on
 
     track bamMMS4
     parent ntModernHumans

@@ -11,7 +11,6 @@
 #include "verbose.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spLoadRankProp.c,v 1.7 2005/08/21 04:27:22 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

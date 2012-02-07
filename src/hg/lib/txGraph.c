@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "txGraph.h"
 
-static char const rcsid[] = "$Id: txGraph.c,v 1.7 2007/02/24 07:23:04 kent Exp $";
 
 struct txGraph *txGraphLoad(char **row)
 /* Load a txGraph from row fetched with select * from txGraph

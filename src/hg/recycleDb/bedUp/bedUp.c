@@ -5,7 +5,6 @@
 #include "psl.h"
 #include "clonePos.h"
 
-static char const rcsid[] = "$Id: bedUp.c,v 1.3 2006/08/16 22:42:30 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

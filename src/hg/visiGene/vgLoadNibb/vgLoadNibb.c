@@ -10,7 +10,6 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: vgLoadNibb.c,v 1.9 2008/04/04 22:57:02 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */

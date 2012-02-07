@@ -5,7 +5,6 @@
 #include "options.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: ticksToWig.c,v 1.1 2009/09/09 19:11:27 kent Exp $";
 
 int tickCol = 0;
 int valCol = 1;

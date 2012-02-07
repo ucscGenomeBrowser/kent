@@ -10,7 +10,6 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: txCdsGoodBed.c,v 1.4 2007/03/14 02:21:26 kent Exp $";
 
 double frag = 0.15;
 

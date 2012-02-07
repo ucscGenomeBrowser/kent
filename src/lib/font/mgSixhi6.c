@@ -5,7 +5,6 @@
 #include "../gemfont.h"
 
 /*	formerly known as sixhi.c mgTinyFont() now mgTinyFont()	*/
-static char const rcsid[] = "$Id: mgSixhi6.c,v 1.4 2010/04/06 19:56:20 kent Exp $";
 
 static UBYTE sixhi_data[] = {
 0x0,0x82,0x4,0x21,0xcf,0xb6,0xd,0xe3,

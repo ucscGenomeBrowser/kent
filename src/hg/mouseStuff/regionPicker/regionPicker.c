@@ -12,7 +12,6 @@
 #include "axt.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: regionPicker.c,v 1.11 2008/09/03 19:20:39 markd Exp $";
 
 /* Command line overridable variables. */
 char *clRegion = "genome";

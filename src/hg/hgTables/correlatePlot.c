@@ -16,7 +16,6 @@
 #include "histogram.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.18 2010/06/05 19:29:41 braney Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 

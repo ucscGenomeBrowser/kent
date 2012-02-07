@@ -1,0 +1,195 @@
+# for emacs: -*- mode: sh; -*-
+
+#	 Papio hamadryas - Baboon
+# ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Phamadryas/fasta/Pham_1.0/bin0/*
+# ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Phamadryas/fasta/Pham_1.0/linearScaffolds/*
+# ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Phamadryas/fasta/Pham_1.0/contigs/*
+
+#  http://www.hgsc.bcm.tmc.edu/project-species-p-Papio%20hamadryas.hgsc?pageLocation=Papio%20hamadryas
+
+##########################################################################
+# download sequence (DONE - 2009-05-06 - Hiram)
+    mkdir -p /hive/data/genomes/papHam1/download
+    cd /hive/data/genomes/papHam1/download
+
+wget --timestamping \
+'ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Phamadryas/fasta/Pham_1.0/contigs/*'
+wget --timestamping \
+'ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Phamadryas/fasta/Pham_1.0/linearScaffolds/*'
+wget --timestamping \
+'ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Phamadryas/fasta/Pham_1.0/bin0/*'
+
+    cat << '_EOF_' > renameScaffold.sh
+#!/bin/sh
+
+scaf=1
+export scaf
+# zcat Pham.20081120.linear.fa.gz | faCount stdin > faCount.linear.txt
+egrep -v "^#seq|^total" faCount.linear.txt \
+        | awk '{printf "%s\t%d\n", $1,$2}' \
+        | sed -e "s/^Contig//" \
+        | sort -k2,2nr -k1,1n | sed -e "s/^/Contig/" | awk '{print $1}'
+\
+| while read C
+do
+    echo "${C} scaffold${scaf}"
+    scaf=`echo $scaf | awk '{print $1+1}'`
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x renameScaffold.sh
+    ./renameScaffold.sh > ctg2scaf.txt
+
+    cat << '_EOF_' > ucscAgp.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my %scafName;
+my $scafCount = 0;
+
+open (FH, "<ctg2scaf.txt") or die "can not read ctg2scaf.txt";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($ctg, $scaf) = split('\s+',$line);
+    $scafName{$ctg} = $scaf;
+    ++$scafCount;
+}
+close (FH);
+
+printf STDERR "read in $scafCount ctg to scaffold name translations\n";
+
+open (FH, "<Pham.20081120.contigs.agp") or
+	die "can not read Pham.20081120.contigs.agp";
+while (my $line = <FH>) {
+    my ($ctg, $rest) = split('\s+',$line,2);
+    if ($ctg =~ m/_/) {
+	printf "%s\t%s", $scafName{$ctg}, $rest;
+    } else {
+	printf "%s\t%s", $ctg, $rest;
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ucscAgp.pl
+    ./ucscAgp.pl > ucsc.agp
+
+    cat << '_EOF_' > rename.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my %scafName;
+my $scafCount = 0;
+
+open (FH, "<ctg2scaf.txt") or die "can not read ctg2scaf.txt";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($ctg, $scaf) = split('\s+',$line);
+    $scafName{$ctg} = $scaf;
+    ++$scafCount;
+}
+close (FH);
+
+printf STDERR "read in $scafCount ctg to scaffold name translations\n";
+
+open (QL,">linear.qual.fa") or die "can not write to linear.qual.fa";
+open (FH, "zcat Pham.20081120.linear.fa.qual.gz|") or
+	die "can not zcat Pham.20081120.linear.fa.qual.gz|";
+while (my $line = <FH>) {
+    if ($line =~m/^>/) {
+	chomp $line;
+	my $ctg = $line;
+	$ctg =~ s/^>//;
+	if ($ctg =~ m/_/) {
+	    printf QL ">%s\n", $scafName{$ctg};
+	} else {
+	    printf QL ">%s\n", $ctg;
+	}
+    } else {
+	printf QL "%s", $line;
+    }
+}
+close (FH);
+close (QL);
+'_EOF_'
+    # << happy emacs
+    chmod +x rename.pl
+    ./rename.pl
+
+##########################################################################
+# initial browser construction (DONE - 2009-05-12 - Hiram)
+    cd /hive/data/genomes/papHam1
+
+    cat << '_EOF_' > papHam1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db papHam1
+scientificName Papio hamadryas
+commonName Baboon
+assemblyDate Nov. 2008
+assemblyLabel Baylor BCM HGSC Pham_1.0
+orderKey 39
+mitoAcc NC_001992
+fastaFiles /hive/data/genomes/papHam1/download/Pham.20081120.contigs.fa.gz
+agpFiles /hive/data/genomes/papHam1/download/ucsc.agp
+qualFiles /hive/data/genomes/papHam1/download/linear.qual.qac
+dbDbSpeciesDir baboon
+clade mammal
+genomeCladePriority 16
+taxId   9562
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl -fileServer=hgwdev \
+	-workhorse=hgwdev papHam1.config.ra > makeGenomeDb.out 2>&1
+
+##########################################################################
+# repeatMasking (DONE - 2009-05-13 - Hiram)
+    mkdir /hive/data/genomes/papHam1/bed/repeatMasker
+    cd /hive/data/genomes/papHam1/bed/repeatMasker
+
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=memk papHam1 > do.log 2>&1 &
+    # about 15 hours
+
+    cat faSize.rmsk.txt 
+    # 2867564654 bases (125715603 N's 2741849051 real 1407767294 upper
+    #	1334081757 lower) in 387374 sequences in 1 files
+    #	%46.52 masked total, %48.66 masked real
+
+    grep -i versi do.log
+    #	RepeatMasker version development-$Id: RepeatMasker,v 1.23 2009/02/02 21:10:05 angie Exp $
+    #    Jan 29 2009 (open-3-2-7) version of RepeatMasker
+
+##########################################################################
+# running simple repeat (DONE - 2009-05-14 - Hiram)
+    mkdir /hive/data/genomes/papHam1/bed/simpleRepeat
+    cd /hive/data/genomes/papHam1/bed/simpleRepeat
+
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	papHam1 > do.log 2>&1 &
+    # about 38 hours
+
+    featureBits papHam1 simpleRepeat
+    #	64502452 bases of 2741867288 (2.353%) in intersection
+
+    twoBitMask papHam1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed papHam1.2bit
+    twoBitToFa papHam1.2bit stdout | faSize stdin > papHam1.2bit.faSize.txt
+    #	2867564654 bases (125715603 N's 2741849051 real 1406524634 upper
+    #	1335324417 lower) in 387374 sequences in 1 files
+    #	%46.57 masked total, %48.70 masked real
+
+    twoBitToFa papHam1.rmsk.2bit stdout | faSize stdin > papHam1.rmsk.faSize.txt
+    #	2867564654 bases (125715603 N's 2741849051 real 1407767294 upper
+    #	1334081757 lower) in 387374 sequences in 1 files
+    #	%46.52 masked total, %48.66 masked real
+
+    rm /gbdb/papHam1/papHam1.2bit
+    ln -s /hive/data/genomes/papHam1/papHam1.2bit /gbdb/papHam1/papHam1.2bit
+
+##########################################################################

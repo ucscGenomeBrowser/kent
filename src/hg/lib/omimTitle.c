@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: omimTitle.c,v 1.1 2005/08/09 05:23:48 heather Exp $";
 
 void omimTitleStaticLoad(char **row, struct omimTitle *ret)
 /* Load a row from omimTitle table into ret.  The contents of ret will

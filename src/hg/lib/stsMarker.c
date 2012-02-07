@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "stsMarker.h"
 
-static char const rcsid[] = "$Id: stsMarker.c,v 1.4 2005/04/13 06:25:58 markd Exp $";
 
 void stsMarkerStaticLoad(char **row, struct stsMarker *ret)
 /* Load a row from stsMarker table into ret.  The contents of ret will

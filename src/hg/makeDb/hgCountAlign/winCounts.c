@@ -19,7 +19,6 @@
 #include "jksql.h"
 #include "winCounts.h"
 
-static char const rcsid[] = "$Id: winCounts.c,v 1.3 2003/06/26 18:20:07 weber Exp $";
 
 /*
  * Table used to translate (A, C, G, T) to (0, 1, 2, 3), and invalid letters

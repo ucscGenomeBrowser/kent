@@ -9,7 +9,6 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: embossToPsl.c,v 1.3 2004/01/17 09:01:13 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -10,7 +10,6 @@
 #include "jksql.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.5 2005/04/13 06:25:54 markd Exp $";
 
 void geneFinderStaticLoad(char **row, struct geneFinder *ret)
 /* Load a row from geneFinder table into ret.  The contents of ret will

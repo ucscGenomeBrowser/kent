@@ -7,7 +7,6 @@
 #include "hgTracks.h"
 #include "oneTrack.h"
 
-static char const rcsid[] = "$Id: gbrowseTest.c,v 1.2 2008/05/23 22:08:33 angie Exp $";
 
 int main(int argc, char **argv)
 /* Test harness -- dump gif to

@@ -13,7 +13,6 @@
 #include "trashDir.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: virusClick.c,v 1.9 2010/05/24 20:19:22 kent Exp $";
 
 static void h1n1DownloadPdb(char *item, char *pdbUrl, struct tempName *tmpPdb)
 /* uncompress PDB to trash */

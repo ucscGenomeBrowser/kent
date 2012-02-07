@@ -3,7 +3,6 @@
 #include "common.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: trimHeader.c,v 1.1 2006/10/03 21:36:30 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */

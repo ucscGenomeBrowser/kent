@@ -6,7 +6,6 @@
 // for clock1000()
 #include "portable.h"
 
-static char const rcsid[] = "";
 
 /* Command line switches. */
 int iterations = 1;        /* Number of iterations. */

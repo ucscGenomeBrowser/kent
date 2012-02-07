@@ -2,7 +2,6 @@
 #include "common.h"
 #include "chkCommon.h"
 
-static char const rcsid[] = "$Id: chkCommon.c,v 1.1 2006/01/22 08:09:59 markd Exp $";
 
 int errorCnt = 0;  /* count of errors */
 boolean testMode = FALSE; /* Ignore errors that occure in test db */

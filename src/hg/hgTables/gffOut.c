@@ -12,7 +12,6 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.22 2010/04/15 04:57:53 markd Exp $";
 
 static void addGffLineFromBed(struct bed *bed, char *source, char *feature,
 			      int start, int end, char frame, char *txName)

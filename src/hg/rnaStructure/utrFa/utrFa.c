@@ -10,7 +10,6 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: utrFa.c,v 1.2 2008/09/03 19:21:18 markd Exp $";
 
 int minSize = 16;
 char *nibPath = NULL;

@@ -1207,6 +1207,9 @@ _EOF_
 ###########################################################################
 # MULTIZ15WAY (DONE 12/11/06 angie)
 # (((((((((dm3,(droSim1,droSec1)),(droYak2,droEre2)),droAna3),(dp4,droPer1)),droWil1),((droVir3,droMoj3),droGri2)),anoGam1),apiMel3),triCas2)
+# Based on the tree from Teri Markow, it appears that the relationship between
+# D. yakuba and D. erecta is not correct. The tree should be the following:
+# ((((((((((dm3,(droSim1,droSec1)),droYak2),droEre2),droAna3),(dp4,droPer1)),droWil1),((droVir3,droMoj3),droGri2)),anoGam1),apiMel3),triCas2)
     ssh kkstore04
     mkdir /cluster/data/dm3/bed/multiz15way.2006-12-11
     cd /cluster/data/dm3/bed/multiz15way.2006-12-11

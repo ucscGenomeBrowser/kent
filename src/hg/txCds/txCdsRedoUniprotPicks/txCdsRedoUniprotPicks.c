@@ -7,7 +7,6 @@
 #include "cdsPick.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: txCdsRedoUniprotPicks.c,v 1.1 2009/11/12 19:30:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,14 +39,15 @@ if (tCoverage < 0.5)
 double qCoverage = aliCount/psl->qSize;
 if (qCoverage < 0.5)
     return 0;
-double score = (psl->match + psl->repMatch/2) - 20 * 
-	psl->misMatch - 40 * psl->qNumInsert - 40 * psl->tNumInsert;
-score *= 10;	/* Make the actual score the most important thing */
+double score = ((double) psl->match + ((double) psl->repMatch)/2.0) 
+    - 20.0 * (double) psl->misMatch - 40.0 * (double) psl->qNumInsert
+    - 40.0 * (double) psl->tNumInsert;
+score *= 10.0;	/* Make the actual score the most important thing */
 if (isCurated)  /* Add in curation factor. */
-    score += 1;
-score *= 10;	/* Make the coverage of UCSC the next most important */
+    score += 1.0;
+score *= 10.0;	/* Make the coverage of UCSC the next most important */
 score += tCoverage;
-score *= 10;	/* Make the coverage of UniProt the next most important */
+score *= 10.0;	/* Make the coverage of UniProt the next most important */
 score += qCoverage;
 return score;
 }

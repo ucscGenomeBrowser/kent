@@ -2,15 +2,18 @@
 
 include ../../../inc/common.mk
 
-LIB_FILES = \
+PIPE_LIB = \
 	Encode.pm \
-	EnsGeneAutomate.pm \
 	HgAutomate.pm \
 	HgDb.pm \
-	HgRemoteScript.pm \
-	HgStepManager.pm \
 	RAFile.pm \
 	SafePipe.pm
+
+LIB_FILES = \
+	${PIPE_LIB} \
+	EnsGeneAutomate.pm \
+	HgRemoteScript.pm \
+	HgStepManager.pm \
 
 SCRIPT_FILES = \
 	blastz-make-joblist \
@@ -59,6 +62,21 @@ libFiles: mkDir $(LIB_FILES:%=%.libFile)
 	chmod 664 ${SCRIPTS}/$*
 
 alpha: all
+ 
+development:
+	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_${USER}/bin/scripts pipelibs
 
+beta:
+	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_beta/bin/scripts pipelibs 
+
+prod:
+	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_prod/bin/scripts pipelibs 
+
+pipelibs: ${PIPE_LIB:%=${SCRIPTS}/%}
+
+${SCRIPTS}/% : %
+	perl -c $< 2>&1
+	cp -p $< $@.tmp
+	mv -f $@.tmp $@
 clean:
 	@echo nothing to clean in src/hg/utils/automation/

@@ -12,7 +12,6 @@
 #include "dnaLoad.h"
 #include "splix.h"
 
-static char const rcsid[] = "$Id: shortRepeatFind.c,v 1.2 2008/10/28 23:34:50 kent Exp $";
 
 int readSize = 25;
 int minCount = 5;

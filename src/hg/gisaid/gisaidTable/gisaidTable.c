@@ -21,7 +21,6 @@
 #include "gisaidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gisaidTable.c,v 1.8 2009/06/29 17:14:37 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL };
 /* The excludeVars are not saved to the cart. (We also exclude

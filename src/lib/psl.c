@@ -19,7 +19,6 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.83 2010/04/19 23:18:40 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"

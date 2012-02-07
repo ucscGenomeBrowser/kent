@@ -8,9 +8,40 @@ Use """ doc strings to embed comments for automated documentation generator:
 Naming Conventions
 
 Packages and Modules
+    In Python, a package is represented as a directory with an __init__.py
+file in it, and contains some number of modules, which are represented as
+files with a .py extension. A module may in turn contain any number of related
+classes and methods. This differs from Java, where one file correlates to one
+class: in Python it is correct to treat one module similar to a whole
+namespace in Java.
+    Packages and modules should have short names in lowercase, with no spaces or
+underscores. An good example of this style is the ucscgenomics package:
+
+    ucscgenomics/
+        __init__.py
+        ra.py
+        cv.py
+        ...
+
+    For more information:
+        http://docs.python.org/tutorial/modules.html
+
+Imports
+    The most correct way to import something in Python is so that must be
+identified by its containing module:
+        import os
+        from ucscgenomics import ra
+
+    Then, the qualified name can be used:
+        somera = ra.RaFile()
+
+    For more information, see the "Imports" section:
+        http://www.python.org/dev/peps/pep-0008/
+
     All lowercase names, no spaces. Underscores if it would improve
-readability in modules, but not for use in packages. Need to discuss how
-classes are organized in packages and files and where programs are stored.
+readability in modules, but not for use in packages. A package
+contains many modules. All classes for a module exist within 1
+file. Structure follows python package and module standards.  
 
 Classes
     CapitalCase names. Note the leading captial letter to distinguish between a
@@ -25,7 +56,7 @@ internal methods, where the name is preceded by double underscores which
 Python recognizes as private.
 
 Variables
-    mixedCase names. Underscores are not used, except for private
+    lowercase names. Underscores are not used, except for private
 internal variables, where the name is preceded by double underscores which
 Python recognizes as private.
 

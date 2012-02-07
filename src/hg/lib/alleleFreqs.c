@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "alleleFreqs.h"
 
-static char const rcsid[] = "$Id: alleleFreqs.c,v 1.1 2004/04/09 02:27:12 daryl Exp $";
 
 void alleleFreqsStaticLoad(char **row, struct alleleFreqs *ret)
 /* Load a row from alleleFreqs table into ret.  The contents of ret will

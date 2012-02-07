@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "rankPropProt.h"
 
-static char const rcsid[] = "$Id: rankPropProt.c,v 1.1 2004/10/05 08:04:27 markd Exp $";
 
 void rankPropProtStaticLoad(char **row, struct rankPropProt *ret)
 /* Load a row from rankPropProt table into ret.  The contents of ret will

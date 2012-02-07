@@ -14,7 +14,6 @@
 #include "cdsEvidence.h"
 
 
-static char const rcsid[] = "$Id: txCdsSuspect.c,v 1.3 2007/03/04 06:54:40 kent Exp $";
 
 /* Globals set from command line. */
 FILE *fNiceProt = NULL;

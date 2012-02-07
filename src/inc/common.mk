@@ -57,7 +57,7 @@ endif
 
 # autodetect local installation of samtools:
 ifeq (${SAMDIR},)
-  SAMDIR = /hive/data/outside/samtools/svn_${MACHTYPE}/samtools
+  SAMDIR = /hive/data/outside/samtools/samtools-0.1.18/${MACHTYPE}
   ifneq ($(wildcard ${SAMDIR}),)
      KNETFILE_HOOKS=1
   endif
@@ -86,7 +86,7 @@ endif
 
 # As we do for bam/samtools, so do for tabix.  autodetect local installation:
 ifeq (${TABIXDIR},)
-  TABIXDIR = /hive/data/outside/tabix/tabix-0.2.3/${MACHTYPE}
+  TABIXDIR = /hive/data/outside/tabix/tabix-0.2.5/${MACHTYPE}
   ifneq ($(wildcard ${TABIXDIR}),)
      KNETFILE_HOOKS=1
   endif
@@ -114,6 +114,7 @@ ifeq (${USE_TABIX},1)
 endif
 
 SYS = $(shell uname -s)
+FULLWARN = $(shell uname -n)
 
 ifeq (${HG_WARN},)
   ifeq (${SYS},Darwin)
@@ -124,9 +125,13 @@ ifeq (${HG_WARN},)
       HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
       HG_WARN_UNINIT=-Wuninitialized
     else
-      HG_WARN = -Wall -Werror -Wformat -Wimplicit -Wreturn-type
-      # HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
-      HG_WARN_UNINIT=-Wuninitialized
+      ifeq (${FULLWARN},hgwdev)
+        HG_WARN = -Wall -Werror -Wformat -Wimplicit -Wreturn-type
+        HG_WARN_UNINIT=-Wuninitialized
+      else
+        HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
+        HG_WARN_UNINIT=-Wuninitialized
+      endif
     endif
   endif
   # -Wuninitialized generates a warning without optimization
@@ -199,6 +204,16 @@ ifdef LOWELAB
         DOCUMENTROOT=/www/browser-docs
     endif
 endif
+
+#ENCODE COMMON VARIABLES
+CONFIG_FILES = \
+	fields.ra \
+	labs.ra
+CV = cv.ra
+CVDIR=${HOME}/kent/src/hg/makeDb/trackDb/cv/alpha
+PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
+CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
+ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<

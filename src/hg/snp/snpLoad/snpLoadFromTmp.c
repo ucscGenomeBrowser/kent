@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.18 2006/01/27 23:52:03 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;

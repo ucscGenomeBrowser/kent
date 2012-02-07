@@ -7,7 +7,6 @@
 #include <direct.h>
 #include "portable.h"
 
-static char const rcsid[] = "$Id: oswin9x.c,v 1.9 2008/06/27 18:46:53 markd Exp $";
 
 /* Return how long the named file is in bytes. 
  * Return -1 if no such file. */

@@ -7,7 +7,6 @@
 #include "sqlNum.h"
 #include "hmmstats.h"
 
-static char const rcsid[] = "$Id: regClusterMakeTableOfTables.c,v 1.4 2010/05/17 02:21:36 kent Exp $";
 
 int scoreColIx = 7;
 

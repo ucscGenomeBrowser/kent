@@ -9,7 +9,6 @@
 #include "polyASize.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: polyASize.c,v 1.1 2005/08/29 06:18:33 markd Exp $";
 
 void polyASizeStaticLoad(char **row, struct polyASize *ret)
 /* Load a row from polyASize table into ret.  The contents of ret will

@@ -8,7 +8,6 @@
 #include <fcntl.h>
 
 
-static char const rcsid[] = "$Id: seg.c,v 1.7 2008/04/25 17:38:39 rico Exp $";
 
 
 void segCompFree(struct segComp **pObj)

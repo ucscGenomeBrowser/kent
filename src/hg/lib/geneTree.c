@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "geneTree.h"
 
-static char const rcsid[] = "$Id: geneTree.c,v 1.1 2010/03/21 01:01:28 pchan Exp $";
 
 void geneTreeStaticLoad(char **row, struct geneTree *ret)
 /* Load a row from geneTree table into ret.  The contents of ret will

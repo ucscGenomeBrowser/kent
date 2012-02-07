@@ -10,7 +10,6 @@
 #include "chain.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: axtToChain.c,v 1.1 2004/07/27 23:11:24 angie Exp $";
 
 static boolean softMask = TRUE;
 

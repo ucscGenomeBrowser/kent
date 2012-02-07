@@ -10,7 +10,6 @@
 #include "hgRelate.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.8 2008/09/03 19:19:43 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -13,7 +13,6 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.25 2008/09/03 19:19:45 markd Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */

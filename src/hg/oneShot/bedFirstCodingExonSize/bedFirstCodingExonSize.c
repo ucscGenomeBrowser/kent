@@ -5,7 +5,6 @@
 #include "options.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: bedFirstCodingExonSize.c,v 1.1 2007/05/01 22:00:44 kent Exp $";
 
 int threshold = 100;
 void usage()

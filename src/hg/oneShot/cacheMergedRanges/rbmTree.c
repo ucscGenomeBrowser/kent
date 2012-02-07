@@ -10,7 +10,6 @@
 #include "localmem.h"
 #include "rbmTree.h"
 
-static char const rcsid[] = "$Id: rbmTree.c,v 1.1 2004/11/22 17:55:56 angie Exp $";
 
 /* The stack keeps us from having to keep explicit
  * parent, grandparent, greatgrandparent variables.

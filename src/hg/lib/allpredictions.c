@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "allpredictions.h"
 
-static char const rcsid[] = "$Id: allpredictions.c,v 1.1 2009/12/02 20:02:34 holmes Exp $";
 
 void allpredictionsStaticLoad(char **row, struct allpredictions *ret)
 /* Load a row from allpredictions table into ret.  The contents of ret will

@@ -12,7 +12,6 @@
 #include "hgConfig.h"
 #include "regexHelper.h"
 
-static char const rcsid[] = "$Id: imageV2.c,v 1.32 2010/05/24 19:53:42 hiram Exp $";
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
 //struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
@@ -26,7 +25,6 @@ struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge r
 // A simplistic way of flattening the track list before building the image
 // NOTE: Strategy is NOT to use imgBox->imgTracks, since this should be independednt of imageV2
 /////////////////////////
-#define IMGORD_CUSTOM_ONTOP
 void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart)
 // Adds one track into the flatTracks list
 {
@@ -36,26 +34,18 @@ flatTrack->track = track;
 char var[256];  // The whole reason to do this is to reorder tracks/subtracks in the image!
 safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
 flatTrack->order = cartUsualInt(cart, var,IMG_ANYORDER);
-#ifdef IMGORD_CUSTOM_ONTOP
 if(flatTrack->order >= IMG_ORDERTOP)
-#else///ifndef IMGORD_CUSTOM_ONTOP
-if(flatTrack->order >= IMG_ORDEREND)
-#endif///ndef IMGORD_CUSTOM_ONTOP
     {
     cartRemove(cart,var);
     flatTrack->order = IMG_ANYORDER;
     }
-#ifdef IMGORD_CUSTOM_ONTOP
 static int topOrder  = IMG_ORDERTOP; // keep track of the order added to top of image
-#endif///def IMGORD_CUSTOM_ONTOP
 static int lastOrder = IMG_ORDEREND; // keep track of the order added and beyond end
 if( flatTrack->order == IMG_ANYORDER)
     {
-#ifdef IMGORD_CUSTOM_ONTOP
     if (track->customTrack)
         flatTrack->order = ++topOrder; // Custom tracks go to top
     else
-#endif///def IMGORD_CUSTOM_ONTOP
         flatTrack->order = ++lastOrder;
     }
 
@@ -68,11 +58,10 @@ int flatTracksCmp(const void *va, const void *vb)
 const struct flatTracks *a = *((struct flatTracks **)va);
 const struct flatTracks *b = *((struct flatTracks **)vb);
 if (a->order == b->order)
-    return tgCmpPriority(a->track,b->track);
+    return tgCmpPriority(&(a->track),&(b->track));
 return (a->order - b->order);
 }
 
-#ifdef IMGORD_CUSTOM_ONTOP
 void flatTracksSort(struct flatTracks **flatTracks)
 // This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
 {
@@ -149,48 +138,6 @@ if (haveBeenOrderd > 0 && notYetOrdered > 0)
 if (flatTracks && *flatTracks)
     slSort(flatTracks, flatTracksCmp);
 }
-
-#else///ifndef IMGORD_CUSTOM_ONTOP
-
-void flatTracksSort(struct flatTracks **flatTracks)
-// This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
-{
-// flatTracks list has 2 sets of "order": those already dragReordered (below IMG_ORDEREND)
-// and those not yet reordered (above).  It has been decided that adding new tracks to an
-// existing order should always put the new tracks below existing and treat them as if they
-// were reordered there.  Thus all new tracks should get an imgOrd below IMG_ORDEREND.
-// The result is turning on a successive set of new tracks will have them appear below all others.
-int imgOrdSet = 0;
-boolean notYetOrdered = FALSE;
-struct flatTracks *oneTrack = *flatTracks;
-for(;oneTrack!=NULL;oneTrack = oneTrack->next)
-    {
-    if (oneTrack->order <= IMG_ORDEREND
-    &&  imgOrdSet < oneTrack->order )
-        imgOrdSet = oneTrack->order;
-    else
-        notYetOrdered = TRUE;
-    }
-if (imgOrdSet > 0 && notYetOrdered) // Image order has previously been set, so givem all imgOrds
-    {
-    imgOrdSet = (IMG_ORDEREND - imgOrdSet);  // This difference should be removed from any with imgOrdSet
-    for(oneTrack = *flatTracks;oneTrack!=NULL;oneTrack = oneTrack->next)
-        {
-        if (oneTrack->order >= imgOrdSet)
-            {
-            oneTrack->order -= imgOrdSet;
-            char var[256];
-            safef(var,sizeof(var),"%s_%s",oneTrack->track->track,IMG_ORDER_VAR);
-            cartSetInt(cart, var, oneTrack->order);
-            }
-        }
-    }
-
-if (flatTracks && *flatTracks)
-    slSort(flatTracks, flatTracksCmp);
-}
-#endif///ndef IMGORD_CUSTOM_ONTOP
-
 
 void flatTracksFree(struct flatTracks **flatTracks)
 // Frees all memory used to support flatTracks (underlying tracks are untouched)
@@ -285,7 +232,7 @@ if (kindOfChild != kocOrphan)
     if (kindOfChild != kocFolderContent && !track->canPack)
         {
         jsonHashAddNumber(ele, "shouldPack", 0); // default vis is full, but pack is an option
-        track->canPack = parentTdb->canPack;
+        track->canPack = rTdbTreeCanPack(parentTdb);
         }
     }
 
@@ -293,10 +240,12 @@ if (kindOfChild != kocOrphan)
 jsonHashAddNumber(ele, "hasChildren", slCount(track->tdb->subtracks));
 
 // Configuring?
-if (!configurable || track->hasUi == FALSE)
+int cfgByPopup = configurableByAjax(track->tdb,0);
+if (!configurable
+||  track->hasUi == FALSE
+||  cfgByPopup == cfgNone)
     jsonHashAddString(ele, "configureBy", "none");
-else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
-    regexMatch(track->track, "^snp[0-9]+") || regexMatch(track->track, "^cons[0-9]+way") || regexMatch(track->track, "^multiz") ? "off" : "on"), "off"))
+else if (cfgByPopup < 0)  // denied via ajax, but allowed via full normal hgTrackUi page
     jsonHashAddString(ele, "configureBy", "clickThrough");
 else
     jsonHashAddString(ele, "configureBy", "popup");
@@ -1046,7 +995,7 @@ int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topL
 struct imgSlice *slice;
 char *imgFile = NULL;               // name of file that hold the image
 char *neededId = NULL; // id is only added it it is NOT the trackId.
-if (imgTrack->tdb == NULL || differentString(id,imgTrack->tdb->track))
+if (imgTrack->tdb == NULL || differentStringNullOk(id, imgTrack->tdb->track))
     neededId = id;
 
 int count = 0;
@@ -1286,11 +1235,7 @@ boolean imgBoxPortalDefine(struct imgBox *imgBox,int *chromStart,int *chromEnd,i
    returns TRUE if successfully defined as having a portal */
 {
 if( (int)imageMultiple == 0)
-#ifdef IMAGEv2_DRAG_SCROLL_SZ
     imageMultiple = IMAGEv2_DRAG_SCROLL_SZ;
-#else//ifndef IMAGEv2_DRAG_SCROLL_SZ
-    imageMultiple = 1;
-#endif//ndef IMAGEv2_DRAG_SCROLL_SZ
 
 imgBox->portalStart = imgBox->chromStart;
 imgBox->portalEnd   = imgBox->chromEnd;
@@ -1668,30 +1613,37 @@ hPrintf("  <MAP name='map_%s'>", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
 for(;item!=NULL;item=item->next)
     {
-    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' class='area'",
+    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d'",
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
-    if(map->linkRoot != NULL)
+
+    if (sameString(TITLE_BUT_NO_LINK,item->linkVar))
+        { // map items could be for mouse-over titles only
+        hPrintf(" class='area %s'",TITLE_BUT_NO_LINK);
+        }
+    else if(map->linkRoot != NULL)
         {
         if(skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s%s",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
         else
             hPrintf(" HREF='%s%s'",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
+        hPrintf(" class='area'");
         }
     else if(item->linkVar != NULL)
         {
         if(skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s",item->linkVar);
-	else if(startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
-                 hPrintf(" HREF='..%s'",item->linkVar);
+        else if(startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
+                 hPrintf(" HREF='..%s'",item->linkVar);       // FIXME: Chin should get rid of this special case!
              else
                  hPrintf(" HREF='%s'",item->linkVar);
+        hPrintf(" class='area'");
         }
     else
         warn("map item has no url!");
 
     if(item->title != NULL && strlen(item->title) > 0)
-        hPrintf(" TITLE='%s'", htmlEncode(item->title) );
+        hPrintf(" TITLE='%s'", attributeEncode(item->title) );
     if(item->id != NULL)
         hPrintf(" id='%s'", item->id);
     hPrintf(">" );
@@ -1719,9 +1671,9 @@ if(slice->parentImg && slice->parentImg->file != NULL)
     else
         hPrintf("'");
     if(slice->title != NULL)
-        hPrintf(" title='%s'", htmlEncode(slice->title) );           // Adds slice wide title
+        hPrintf(" title='%s'", attributeEncode(slice->title) );           // Adds slice wide title
     else if(slice->parentImg->title != NULL)
-        hPrintf("' title='%s'", htmlEncode(slice->parentImg->title) );// Adds image wide title
+        hPrintf("' title='%s'", attributeEncode(slice->parentImg->title) );// Adds image wide title
     if(slice->type==stData || slice->type==stCenter)
         hPrintf(" ondrag='{return false;}'");
     hPrintf(">");
@@ -1800,10 +1752,8 @@ if(slice->parentImg)
         hPrintf(" display:none;");
     hPrintf("' class='sliceDiv %s",sliceTypeToClass(slice->type));
 
-    #ifdef IMAGEv2_DRAG_SCROLL
     if(imgBox->showPortal && (sliceType==stData || sliceType==stCenter))
         hPrintf(" panDiv%s",(scrollHandle?" scroller":""));
-    #endif //def IMAGEv2_DRAG_SCROLL
     hPrintf("'>\n");
     }
 struct mapSet *map = sliceGetMap(slice,FALSE); // Could be the image map or slice specific
@@ -1811,7 +1761,11 @@ if(map)
     useMap = imageMapDraw(map,name);
 else if(slice->link != NULL)
     {
-    if(skipToSpaces(slice->link) != NULL)
+    if (sameString(TITLE_BUT_NO_LINK,slice->link))
+        { // This fake link ensures a mouse-over title is seen but not heard
+        hPrintf("<A class='%s'",TITLE_BUT_NO_LINK);
+        }
+    else if(skipToSpaces(slice->link) != NULL)
         hPrintf("  <A HREF=%s",slice->link);
     else
         hPrintf("  <A HREF='%s'",slice->link);
@@ -1823,13 +1777,13 @@ else if(slice->link != NULL)
             char *newLine = NEWLINE_TO_USE(browser);
             char *ellipsis = ELLIPSIS_TO_USE(browser);
             if(imgTrack->reorderable)
-                hPrintf(" TITLE='%s%sclick or right click to configure%s%sdrag to reorder%s'",htmlEncode(slice->title), newLine,
+                hPrintf(" TITLE='%s%sclick or right click to configure%s%sdrag to reorder%s'",attributeEncode(slice->title), newLine,
                     ellipsis, newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtracks":"") );
             else
-                hPrintf(" TITLE='%s%sclick or right click to configure%s'",htmlEncode(slice->title), newLine, ellipsis);
+                hPrintf(" TITLE='%s%sclick or right click to configure%s'",attributeEncode(slice->title), newLine, ellipsis);
             }
         else
-            hPrintf(" TITLE='Click for: &#x0A;%s'", htmlEncode(slice->title) );
+            hPrintf(" TITLE='Click for: &#x0A;%s'", attributeEncode(slice->title) );
         }
     hPrintf(">\n" );
     }
@@ -1876,7 +1830,6 @@ if(imgBox->bgImg)
     hPrintf("</style>\n");
     }
 
-#ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal)
     {
     // Let js code know what's up
@@ -1893,7 +1846,6 @@ if(imgBox->showPortal)
     jsonHashAddDouble( jsonForClient,"imgBoxBasesPerPixel",imgBox->basesPerPixel);
     }
 else
-#endif//def IMAGEv2_DRAG_SCROLL
     jsonHashAddBoolean(jsonForClient,"imgBoxPortal",       FALSE);
 
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'",COLOR_WHITE);//COLOR_RED); // RED to help find bugs
@@ -1927,7 +1879,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
         if (imgTrack->reorderable)
-            hPrintf(" <TD id='td_%s' class='dragHandle tdLeft' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
+            hPrintf(" <TD id='td_%s' class='dragHandle tdLeft' title='%s%sdrag to reorder'>\n",name,attributeEncode(imgTrack->tdb->longLabel),newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdLeft'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
@@ -1935,11 +1887,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         }
 
     // Main/Data image region
-#ifdef IMAGEv2_DRAG_SCROLL
     hPrintf(" <TD id='td_data_%s' title='click & drag to scroll; shift+click & drag to zoom' width=%d class='tdData'>\n", trackName, imgBox->width);
-#else///ifndef IMAGEv2_DRAG_SCROLL
-    hPrintf(" <TD id='td_data_%s' width=%d class='tdData'>\n", trackName, imgBox->width);
-#endif//ndef IMAGEv2_DRAG_SCROLL
     // centerLabel
     if(imgTrack->hasCenterLabel)
         {
@@ -1957,7 +1905,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         // rightLabel
         safef(name, sizeof(name), "side_%s", trackName);
         if (imgTrack->reorderable)
-            hPrintf(" <TD id='td_%s' class='dragHandle tdRight' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
+            hPrintf(" <TD id='td_%s' class='dragHandle tdRight' title='%s%sdrag to reorder'>\n",name,attributeEncode(imgTrack->tdb->longLabel),newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdRight'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);

@@ -5,7 +5,6 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: wgetMd5.c,v 1.3 2005/11/18 16:37:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

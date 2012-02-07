@@ -5,7 +5,1103 @@
 #	Robert's experiments with an automated process.
 #
 ############################################################################
-# ensembl 64 update (WORKING - 2011-10-12 - Hiram)
+# ensembl 65 update (WORKING - 2011-12-15 - Hiram)
+#
+#  notable new items: assemblies gadMor1, otoGar3, panTro4, petMar2, sarHar1
+#  The fasta header in the peptide files changed its syntax, required a
+#  fix to the scripts.  Some assemblies now including chrM where they did
+#  not before, required additional nameTranslation rules for those.
+#  dm3 GTF file appears to be broken, ensembl-dev email list notified.
+#  Otherwise, remarkable very little problem with this update.
+
+    #	when complete, reset dateReferences, beware, verify these
+    # where clauses will only work on the 'ensGene' table:
+    # to verify:
+    hgsql -e "select db,name,dateReference from trackVersion where version=64;" hgFixed
+    hgsql -e "select db,name,dateReference from trackVersion where version=65;" hgFixed
+    # should only see name=ensGene in this output
+
+     hgsql -e \
+'update trackVersion set dateReference="sep2011" where version="64";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where version="65";' hgFixed
+
+#   Found to be updated from v64:
+ ailMel1 anoCar2 danRer7 gasAcu1 hg19 loxAfr3 melGal1 oryCun2
+
+#   Found to be identical to v64, tables not reloaded:
+ bosTau6 calJac3 canFam2 cavPor3 ce10 choHof1 ci2 cioSav2 dasNov2
+ dipOrd1 echTel1 equCab2 eriEur1 felCat3 fr2 galGal3 gorGor3 macEug1
+ micMur1 mm9 monDom5 myoLuc2 nomLeu1 ochPri2 ornAna1 oryLat2 ponAbe2
+ proCap1 pteVam1 rheMac2 rn4 sacCer3 sorAra1 speTri1 susScr1 taeGut1
+ tarSyr1 tetNig2 tupBel1 turTru1 vicPac1 xenTro3
+
+#   No corresponding assembly here:
+ gadMor1 otoGar3 panTro4 petMar2 sarHar1
+
+#   Broken until further notice:
+ dm3
+
+############################################################################
+#  ailMel1 - Panda - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/ailMel1
+    cat << '_EOF_' > ailMel1.ensGene.ra
+# required db variable
+db ailMel1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^MT/chrM/"
+# optionally update the knownToEnsembl table after ensGene updated
+# knownToEnsembl yes
+# optional haplotype lift-down from Ensembl full chrom coordinates
+#       to UCSC simple haplotype coordinates
+# haplotypeLift /hive/data/genomes/hg19/jkStuff/ensGene.haplotype.lift
+# changing names for the odd bits in Ensembl 57
+# liftUp /hive/data/genomes/hg19/jkStuff/ens.57.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 ailMel1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/ailMel1/bed/ensGene.65
+    featureBits ailMel1 ensGene
+    # 32006024 bases of 2245312831 (1.425%) in intersection
+
+############################################################################
+#  anoCar2 - Lizard - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2
+    cat << '_EOF_' > anoCar2.ensGene.ra
+# required db variable
+db anoCar2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation 's/^\([0-9L]\)/chr\1/; s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/; s/^A/chrUn_A/; s/^MT/chrM/'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 anoCar2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/anoCar2/bed/ensGene.65
+    featureBits anoCar2 ensGene
+    # 27920433 bases of 1701353770 (1.641%) in intersection
+
+############################################################################
+#  bosTau6 - Cow - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau6
+    cat << '_EOF_' > bosTau6.ensGene.ra
+# required db variable
+db bosTau6
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9X][0-9]*\)/chr\1/; s/^MT/chrM/; s/^GJ\([0-9]*\).1/chrUn_GJ\1/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 bosTau6.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau6/bed/ensGene.65
+    featureBits bosTau6 ensGene
+    # 42264149 bases of 2649682029 (1.595%) in intersection
+
+############################################################################
+#  calJac3 - Marmoset - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3
+    cat << '_EOF_' > calJac3.ensGene.ra
+# required db variable
+db calJac3
+# nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/;
+# s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/;"
+# name translation in Ensembl v62
+liftUp /hive/data/genomes/calJac3/jkStuff/ens.62.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 calJac3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/ensGene.65
+    featureBits calJac3 ensGene
+    # 51944550 bases of 2752505800 (1.887%) in intersection
+
+############################################################################
+#  canFam2 - Dog - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/canFam2
+    cat << '_EOF_' > canFam2.ensGene.ra
+# required db variable
+db canFam2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 canFam2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/canFam2/bed/ensGene.65
+    featureBits canFam2 ensGene
+    # 34693517 bases of 2384996543 (1.455%) in intersection
+
+############################################################################
+#  cavPor3 - Guinea pig - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/cavPor3
+    cat << '_EOF_' > cavPor3.ensGene.ra
+# required db variable
+db cavPor3
+# do we need to translate geneScaffold coordinates
+# geneScaffolds yes
+nameTranslation "s/^MT/chrM/;"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 cavPor3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/cavPor3/bed/ensGene.65
+    featureBits cavPor3 ensGene
+    # 30971317 bases of 2663369733 (1.163%) in intersection
+
+############################################################################
+#  ce10 - C. elegans - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/ce10
+    cat << '_EOF_' > ce10.ensGene.ra
+# required db variable
+db ce10
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([IVX]\)/chr\1/; s/^MtDNA/chrM/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 ce10.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/ce10/bed/ensGene.65
+    featureBits ce10 ensGene
+    # 31167360 bases of 100286070 (31.078%) in intersection
+
+############################################################################
+#  choHof1 - Sloth - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/choHof1
+    cat << '_EOF_' > choHof1.ensGene.ra
+# required db variable
+db choHof1
+# need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
+geneScaffolds yes
+#       during the loading of the gene pred, skip all invalid genes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 choHof1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/choHof1/bed/ensGene.65
+    featureBits choHof1 ensGene
+    # 18278941 bases of 2060419685 (0.887%) in intersection
+
+############################################################################
+#  ci2 - C. intestinalis - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/ci2
+    cat << '_EOF_' > ci2.ensGene.ra
+# required db variable
+db ci2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9][pq]\)/chr0\1/; s/^\([0-9][0-9][pq]\)/chr\1/; "
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 ci2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/ci2/bed/ensGene.65
+    featureBits ci2 ensGene
+    # 20114967 bases of 141233565 (14.242%) in intersection
+
+############################################################################
+#  cioSav2 - C. savignyi - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/cioSav2
+    cat << '_EOF_' > cioSav2.ensGene.ra
+# required db variable
+db cioSav2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+# nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+# optional haplotype lift-down from Ensembl full chrom coordinates
+#       to UCSC simple haplotype coordinates
+# haplotypeLift /cluster/data/hg18/jkStuff/ensGene.haplotype.lift
+
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 cioSav2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/cioSav2/bed/ensGene.65
+    featureBits cioSav2 ensGene
+    # 16572478 bases of 173749524 (9.538%) in intersection
+
+############################################################################
+#  danRer7 - Zebrafish - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/danRer7
+    cat << '_EOF_' > danRer7.ensGene.ra
+# required db variable
+db danRer7
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 danRer7.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/danRer7/bed/ensGene.65
+    featureBits danRer7 ensGene
+    # 63440909 bases of 1409770109 (4.500%) in intersection
+
+############################################################################
+#  dasNov2 - Armadillo - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/dasNov2
+    cat << '_EOF_' > dasNov2.ensGene.ra
+# required db variable
+db dasNov2
+# need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
+geneScaffolds yes
+#       during the loading of the gene pred, skip all invalid genes
+skipInvalid yes
+#       31903: ENSDNOT00000003424 no exonFrame on CDS exon 3
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 dasNov2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/dasNov2/bed/ensGene.65
+    featureBits dasNov2 ensGene
+    # 21968539 bases of 2371493872 (0.926%) in intersection
+
+############################################################################
+#  dipOrd1 - Kangaroo rat - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/dipOrd1
+    cat << '_EOF_' > dipOrd1.ensGene.ra
+# required db variable
+db dipOrd1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 dipOrd1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/dipOrd1/bed/ensGene.65
+    featureBits dipOrd1 ensGene
+    # 25324919 bases of 1844961421 (1.373%) in intersection
+
+############################################################################
+#  echTel1 - Tenrec - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/echTel1
+    cat << '_EOF_' > echTel1.ensGene.ra
+# required db variable
+db echTel1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the single gene that has invalid structures from Ensembl:
+# 47425: ENSETET00000018714 no exonFrame on CDS exon 1
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 echTel1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/echTel1/bed/ensGene.65
+    featureBits echTel1 ensGene
+    # 25771306 bases of 2111581369 (1.220%) in intersection
+
+############################################################################
+#  equCab2 - Horse - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/equCab2
+    cat << '_EOF_' > equCab2.ensGene.ra
+# required db variable
+db equCab2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+#       translate Ensembl chrUnNNNN names to chrUn coordinates
+liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 equCab2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/equCab2/bed/ensGene.65
+    featureBits equCab2 ensGene
+    # 39563318 bases of 2428790173 (1.629%) in intersection
+
+############################################################################
+#  eriEur1 - Hedgehog - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/eriEur1
+    cat << '_EOF_' > eriEur1.ensGene.ra
+# required db variable
+db eriEur1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 eriEur1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/eriEur1/bed/ensGene.65
+    featureBits eriEur1 ensGene
+    # 22556849 bases of 2133134836 (1.057%) in intersection
+
+############################################################################
+#  felCat3 - Cat - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/felCat3
+    cat << '_EOF_' > felCat3.ensGene.ra
+# required db variable
+db felCat3
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the two genes that have invalid structures from Ensembl:
+# 5705: ENSFCAT00000006929 no exonFrame on CDS exon 16
+# 28228: ENSFCAT00000009384 no exonFrame on CDS exon 0
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 felCat3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/felCat3/bed/ensGene.65
+    featureBits felCat3 ensGene
+    # 22300874 bases of 1642698377 (1.358%) in intersection
+
+############################################################################
+#  fr2 - Fugu - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/fr2
+    cat << '_EOF_' > fr2.ensGene.ra
+# required db variable
+db fr2
+nameTranslation "s/^MT/chrM/;"
+# lift Ensembl scaffolds to UCSC chrUn coordinates
+liftUp /cluster/data/fr2/jkStuff/liftAll.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 fr2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/fr2/bed/ensGene.65
+    featureBits fr2 ensGene
+    # 34568537 bases of 393312790 (8.789%) in intersection
+
+############################################################################
+#  galGal3 - Chicken - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/galGal3
+    cat << '_EOF_' > galGal3.ensGene.ra
+# required db variable
+db galGal3
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9EWXYZ][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 galGal3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/galGal3/bed/ensGene.65
+    featureBits galGal3 ensGene
+    # 30741650 bases of 1042591351 (2.949%) in intersection
+
+############################################################################
+#  gasAcu1 - Stickleback - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/gasAcu1
+    cat << '_EOF_' > gasAcu1.ensGene.ra
+# required db variable
+db gasAcu1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^group\([IUVX]\)/chr\1/; s/^MT/chrM/;"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 gasAcu1.ensGene.ra
+
+    # requires extra attention after the all database for loop attempt
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.65/process
+    mv gasAcu1.allGenes.gp.gz gasAcu1.allGenes.gp.beforeLift.gz
+    zcat gasAcu1.allGenes.gp.beforeLift.gz \
+	| liftUp -extGenePred -type=.gp gasAcu1.scaffolds.gp \
+	    ../../../jkStuff/contigsToScaffolds.lft carry stdin
+    liftUp -extGenePred gasAcu1.allGenes.gp \
+	../../../jkStuff/UCSC.chromToScaffoldSansGaps.lft carry \
+	    gasAcu1.scaffolds.gp
+    gzip gasAcu1.scaffolds.gp
+    gzip gasAcu1.allGenes.gp
+    #	verify OK
+    genePredCheck -db=gasAcu1 gasAcu1.allGenes.gp.gz
+    #	checked: 29245 failed: 0
+
+    #	then continue with the load
+    cd /hive/data/genomes/gasAcu1
+    doEnsGeneUpdate.pl -continue=load -ensVersion=65 gasAcu1.ensGene.ra \
+	> ens.65.load 2>&1
+
+    featureBits gasAcu1 ensGene
+    # 36792090 bases of 446627861 (8.238%) in intersection
+
+    # if you ever need to remove peptides that have no matching genes
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.65
+    # from the doLoad.csh:
+    zcat download/Gasterosteus_aculeatus.BROADS1.65.pep.all.fa.gz \
+        | sed -e 's/^>.* transcript:/>/; s/ CCDS.*$//; s/ .*$//' \
+	| gzip > ensPep.txt.gz
+    zcat ensPep.txt.gz \
+    | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+         | sed -e '/^$/d; s/*$//' | sort > ensPep.gasAcu1.fa.tab
+    hgsql -N -e "select name from ensPep;" gasAcu1 | sort > ensPep.name
+    hgsql -N -e "select name from ensGene;" gasAcu1 | sort > ensGene.name
+    comm -12 ensPep.name ensGene.name > pepAndGene.name
+    # select only the peptides with matching gene names
+    join pepAndGene.name ensPep.gasAcu1.fa.tab | tr '[ ]' '[\t]' \
+	> clean.ensPep.gasAcu1.fa.tab
+    wc -l *.tab
+    #	24437 clean.ensPep.gasAcu1.fa.tab
+    #	27576 ensPep.gasAcu1.fa.tab
+    hgPepPred gasAcu1 tab ensPep clean.ensPep.gasAcu1.fa.tab
+
+############################################################################
+#  gorGor3 - Gorilla - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/gorGor3
+    cat << '_EOF_' > gorGor3.ensGene.ra
+# required db variable
+db gorGor3
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+# delete commands take out genes that are only in patch sequence
+nameTranslation '/^cutchr/d; /^unplaced/d; s/^\([0-9X][0-9ab]*\)/chr\1/; s/^MT/chrM/;'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 gorGor3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/gorGor3/bed/ensGene.65
+    featureBits gorGor3 ensGene
+    # 50017329 bases of 2822760080 (1.772%) in intersection
+
+############################################################################
+#  hg19 - Human - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/hg19
+    cat << '_EOF_' > hg19.ensGene.ra
+# required db variable
+db hg19
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+# delete commands take out genes that are only in patch sequence
+nameTranslation 's/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; /^GL3.*/d; /^HSCHR[1-5]/d; /^HSCHR[7-9]/d; /^HG/d'
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+# optional haplotype lift-down from Ensembl full chrom coordinates
+#       to UCSC simple haplotype coordinates
+haplotypeLift /hive/data/genomes/hg19/jkStuff/ensGene.haplotype.lift
+# Ensembl 62 has new sequence names for some of the random bits
+liftUp /hive/data/genomes/hg19/jkStuff/ens.62.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 hg19.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/ensGene.65
+    featureBits hg19 ensGene
+    # 113703268 bases of 2897316137 (3.924%) in intersection
+
+############################################################################
+#  loxAfr3 - Elephant - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/loxAfr3
+    cat << '_EOF_' > loxAfr3.ensGene.ra
+# required db variable
+db loxAfr3
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^MT/chrM/;"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 loxAfr3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/loxAfr3/bed/ensGene.65
+    featureBits loxAfr3 ensGene
+    # 32166806 bases of 3118565340 (1.031%) in intersection
+
+############################################################################
+#  macEug1 - Wallaby - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/macEug1
+    cat << '_EOF_' > macEug1.ensGene.ra
+# required db variable
+db macEug1
+# need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
+geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 macEug1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/macEug1/bed/ensGene.65
+    featureBits macEug1 ensGene
+    # 23393650 bases of 2541767339 (0.920%) in intersection
+
+############################################################################
+#  melGal1 - Turkey - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/melGal1
+    cat << '_EOF_' > melGal1.ensGene.ra
+# required db variable
+db melGal1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to protect in perl:
+nameTranslation '/^718000.*/d; s/^\([0-9WZ][0-9]*\)/chr\1/; s/^GL\([0-9][0-9]*\).1/chrUn_GL\1/; s/^MT/chrM/;'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 melGal1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/melGal1/bed/ensGene.65
+    featureBits melGal1 ensGene
+    # 25095590 bases of 935922386 (2.681%) in intersection
+
+############################################################################
+#  micMur1 - Mouse lemur - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/micMur1
+    cat << '_EOF_' > micMur1.ensGene.ra
+# required db variable
+db micMur1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 micMur1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/micMur1/bed/ensGene.65
+    featureBits micMur1 ensGene
+    # 25688755 bases of 1852394361 (1.387%) in intersection
+
+############################################################################
+#  mm9 - Mouse - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/mm9
+    cat << '_EOF_' > mm9.ensGene.ra
+# required db variable
+db mm9
+# optional liftRandoms yes/no or absent
+liftRandoms yes
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 mm9.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/mm9/bed/ensGene.65
+    featureBits mm9 ensGene
+    # 87461430 bases of 2620346127 (3.338%) in intersection
+
+############################################################################
+#  monDom5 - Opossum - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/monDom5
+    cat << '_EOF_' > monDom5.ensGene.ra
+# required db variable
+db monDom5
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 monDom5.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/monDom5/bed/ensGene.65
+    featureBits monDom5 ensGene
+    # 32982595 bases of 3501660299 (0.942%) in intersection
+
+############################################################################
+#  myoLuc2 - Microbat - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/myoLuc2
+    cat << '_EOF_' > myoLuc2.ensGene.ra
+# required db variable
+db myoLuc2
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 myoLuc2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/myoLuc2/bed/ensGene.65
+    featureBits myoLuc2 ensGene
+    # 32782563 bases of 1966419868 (1.667%) in intersection
+
+############################################################################
+#  nomLeu1 - Gibbon - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/nomLeu1
+    cat << '_EOF_' > nomLeu1.ensGene.ra
+# required db variable
+db nomLeu1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With single quotes to protect
+#       everything in perl
+nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 nomLeu1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/nomLeu1/bed/ensGene.65
+    featureBits nomLeu1 ensGene
+    # 45293349 bases of 2756591777 (1.643%) in intersection
+
+############################################################################
+#  ochPri2 - Pika - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/ochPri2
+    cat << '_EOF_' > ochPri2.ensGene.ra
+# required db variable
+db ochPri2
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the single gene that has an invalid structure from Ensembl:
+# 13270: ENSOPRT00000002716 no exonFrame on CDS exon 2
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 ochPri2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/ochPri2/bed/ensGene.65
+    featureBits ochPri2 ensGene
+    # 25447459 bases of 1923624051 (1.323%) in intersection
+
+############################################################################
+#  ornAna1 - Platypus - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/ornAna1
+    cat << '_EOF_' > ornAna1.ensGene.ra
+# required db variable
+db ornAna1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^\(X[0-9]\)/chr\1/; s/^MT/chrM/"
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly, 824 items, 31,254 are OK
+skipInvalid yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 ornAna1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/ornAna1/bed/ensGene.65
+    featureBits ornAna1 ensGene
+    # 24466297 bases of 1842236818 (1.328%) in intersection
+
+############################################################################
+#  oryCun2 - Rabbit - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/oryCun2
+    cat << '_EOF_' > oryCun2.ensGene.ra
+# required db variable
+db oryCun2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^MT/chrM/;"
+# ensembl v62 has new naming scheme based on NCBI release:
+liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 oryCun2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/oryCun2/bed/ensGene.65
+    featureBits oryCun2 ensGene
+    # 31812581 bases of 2604023284 (1.222%) in intersection
+
+############################################################################
+#  oryLat2 - Medaka - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/oryLat2
+    cat << '_EOF_' > oryLat2.ensGene.ra
+# required db variable
+db oryLat2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
+# ignore 2,687 genes that haven't lifted properly yet
+# skipInvalid yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 oryLat2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/oryLat2/bed/ensGene.65
+    featureBits oryLat2 ensGene
+    # 32313511 bases of 700386597 (4.614%) in intersection
+
+############################################################################
+#  ponAbe2 - Orangutan - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/ponAbe2
+    cat << '_EOF_' > ponAbe2.ensGene.ra
+# required db variable
+db ponAbe2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+# optional haplotype lift-down from Ensembl full chrom coordinates
+#       to UCSC simple haplotype coordinates
+# haplotypeLift /cluster/data/hg18/jkStuff/ensGene.haplotype.lift
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 ponAbe2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/ponAbe2/bed/ensGene.65
+    featureBits ponAbe2 ensGene
+    # 38120849 bases of 3093572278 (1.232%) in intersection
+
+############################################################################
+#  proCap1 - Rock hyrax - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/proCap1
+    cat << '_EOF_' > proCap1.ensGene.ra
+# required db variable
+db proCap1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 proCap1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/proCap1/bed/ensGene.65
+    featureBits proCap1 ensGene
+    # 25344792 bases of 2407847681 (1.053%) in intersection
+
+############################################################################
+#  pteVam1 - Megabat - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/pteVam1
+    cat << '_EOF_' > pteVam1.ensGene.ra
+# required db variable
+db pteVam1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the single gene that has invalid structures from Ensembl:
+#       13027: ENSPVAT00000010661 no exonFrame on CDS exon 0
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 pteVam1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/pteVam1/bed/ensGene.65
+    featureBits pteVam1 ensGene
+    # 28967283 bases of 1839436660 (1.575%) in intersection
+
+############################################################################
+#  rheMac2 - Rhesus - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/rheMac2
+    cat << '_EOF_' > rheMac2.ensGene.ra
+# required db variable
+db rheMac2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "/^109[0-9]*/d; /^MT/d; s/^\([0-9XY][0-9]*\)/chr\1/;"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 rheMac2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/rheMac2/bed/ensGene.65
+    featureBits rheMac2 ensGene
+    # 44562701 bases of 2646704109 (1.684%) in intersection
+
+############################################################################
+#  rn4 - Rat - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/rn4
+    cat << '_EOF_' > rn4.ensGene.ra
+# required db variable
+db rn4
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 rn4.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/rn4/bed/ensGene.65
+    featureBits rn4 ensGene
+    # 46705616 bases of 2571531505 (1.816%) in intersection
+
+############################################################################
+#  sacCer3 - S. cerevisiae - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer3
+    cat << '_EOF_' > sacCer3.ensGene.ra
+# required db variable
+db sacCer3
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^VIII/chrVIII/; s/^VII/chrVII/; s/^VI/chrVI/; s/^V/chrV/; s/^XIII/chrXIII/; s/^XII/chrXII/; s/^XIV/chrXIV/; s/^XI/chrXI/; s/^XVI/chrXVI/; s/^XV/chrXV/; s/^X/chrX/; s/^III/chrIII/; s/^IV/chrIV/; s/^II/chrII/; s/^IX/chrIX/; s/^I/chrI/; s/^Mito/chrM/; /^2-micron/d"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 sacCer3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer3/bed/ensGene.65
+    featureBits sacCer3 ensGene
+    # 8912929 bases of 12157105 (73.315%) in intersection
+
+############################################################################
+#  sorAra1 - Shrew - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/sorAra1
+    cat << '_EOF_' > sorAra1.ensGene.ra
+# required db variable
+db sorAra1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 sorAra1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/sorAra1/bed/ensGene.65
+    featureBits sorAra1 ensGene
+    # 19690470 bases of 1832864697 (1.074%) in intersection
+
+############################################################################
+#  speTri1 - Squirrel - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/speTri1
+    cat << '_EOF_' > speTri1.ensGene.ra
+# required db variable
+db speTri1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 speTri1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/speTri1/bed/ensGene.65
+    featureBits speTri1 ensGene
+    # 21595750 bases of 1913367893 (1.129%) in intersection
+
+############################################################################
+#  susScr1 - Pig - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/susScr1
+    cat << '_EOF_' > susScr1.ensGene.ra
+# required db variable
+db susScr1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/;"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 susScr1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/susScr1/bed/ensGene.65
+    featureBits susScr1 ensGene
+    # 28758401 bases of 2231332019 (1.289%) in intersection
+
+############################################################################
+#  taeGut1 - Zebra finch - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/taeGut1
+    cat << '_EOF_' > taeGut1.ensGene.ra
+# required db variable
+db taeGut1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9LXYZ][0-9ABG]*\)/chr\1/; s/^Un/chrUn/"
+# need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
+# geneScaffolds yes
+#       during the loading of the gene pred, skip all invalid genes
+# skipInvalid yes
+#       13843: ENSDNOT00000025033 no exonFrame on CDS exon 5
+#       23044: ENSDNOT00000004471 no exonFrame on CDS exon 1
+#       30976: ENSDNOT00000003424 no exonFrame on CDS exon 3
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 taeGut1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/taeGut1/bed/ensGene.65
+    featureBits taeGut1 ensGene
+    # 25441417 bases of 1222864691 (2.080%) in intersection
+
+############################################################################
+#  tarSyr1 - Tarsier - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/tarSyr1
+    cat << '_EOF_' > tarSyr1.ensGene.ra
+# required db variable
+db tarSyr1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 tarSyr1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/tarSyr1/bed/ensGene.65
+    featureBits tarSyr1 ensGene
+    # 21327630 bases of 2768536343 (0.770%) in intersection
+
+############################################################################
+#  tetNig2 - Tetraodon - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/tetNig2
+    cat << '_EOF_' > tetNig2.ensGene.ra
+# required db variable
+db tetNig2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 tetNig2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/tetNig2/bed/ensGene.65
+    featureBits tetNig2 ensGene
+    # 31642974 bases of 302314788 (10.467%) in intersection
+
+############################################################################
+#  tupBel1 - Tree shrew - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/tupBel1
+    cat << '_EOF_' > tupBel1.ensGene.ra
+# required db variable
+db tupBel1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# after geneScaffold conversions, change Ensembl chrom names to UCSC names
+liftUp /cluster/data/tupBel1/jkStuff/ensGene.lft
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 tupBel1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/tupBel1/bed/ensGene.65
+    featureBits tupBel1 ensGene
+    # 22849040 bases of 2137225476 (1.069%) in intersection
+
+############################################################################
+#  turTru1 - Dolphin - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/turTru1
+    cat << '_EOF_' > turTru1.ensGene.ra
+# required db variable
+db turTru1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 turTru1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/turTru1/bed/ensGene.65
+    featureBits turTru1 ensGene
+    # 28614121 bases of 2298444090 (1.245%) in intersection
+
+############################################################################
+#  vicPac1 - Alpaca - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/vicPac1
+    cat << '_EOF_' > vicPac1.ensGene.ra
+# required db variable
+db vicPac1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the single gene that does not translate properly to UCSC coordinates
+#       5017: ENSVPAT00000009076 no exonFrame on CDS exon 0
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 vicPac1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/vicPac1/bed/ensGene.65
+    featureBits vicPac1 ensGene
+    # 17891814 bases of 1922910435 (0.930%) in intersection
+
+############################################################################
+#  xenTro3 - X. tropicalis - Ensembl Genes version 65  (DONE - 2011-12-15 -
+#  hiram) 
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro3
+    cat << '_EOF_' > xenTro3.ensGene.ra
+# required db variable
+db xenTro3
+nameTranslation "s/^GL1\([0-9][0-9][0-9][0-9][0-9]\)\.1/GL1\1/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=65 xenTro3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro3/bed/ensGene.65
+    featureBits xenTro3 ensGene
+    # 36906921 bases of 1358334882 (2.717%) in intersection
+    
+############################################################################
+############################################################################
+# ensembl 64 update (DONE - 2011-10-12 - Hiram)
 
      #### when complete, reset dateReferences:
      hgsql -e \

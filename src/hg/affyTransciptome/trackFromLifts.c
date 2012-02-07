@@ -1,7 +1,6 @@
 #include "common.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: trackFromLifts.c,v 1.3 2003/05/06 07:22:13 kate Exp $";
 
 
 /* # script to automate the long process of creating affymetrix's  */

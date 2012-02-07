@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cdsSpec.c,v 1.2 2008/05/19 18:16:08 markd Exp $";
 
 void cdsSpecStaticLoad(char **row, struct cdsSpec *ret)
 /* Load a row from cdsSpec table into ret.  The contents of ret will

@@ -9,7 +9,6 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBestNear.c,v 1.3 2005/02/24 18:53:29 braney Exp $";
 #define NEARSIZE 2  /* keep this many best hits */
 
 void usage()

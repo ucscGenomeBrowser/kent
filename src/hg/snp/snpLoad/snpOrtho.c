@@ -13,7 +13,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpOrtho.c,v 1.1 2007/02/22 01:04:13 heather Exp $";
 
 struct hash *orthoHash = NULL;
 

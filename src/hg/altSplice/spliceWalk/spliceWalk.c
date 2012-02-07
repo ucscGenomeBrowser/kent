@@ -9,7 +9,6 @@
 #include "cheapcgi.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: spliceWalk.c,v 1.7 2004/09/17 03:17:18 kent Exp $";
 
 void usage()
 {

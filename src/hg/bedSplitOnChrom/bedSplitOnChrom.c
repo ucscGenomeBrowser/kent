@@ -6,7 +6,6 @@
 #include "portable.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: bedSplitOnChrom.c,v 1.5 2009/10/11 00:27:06 braney Exp $";
 
 int maxChromCount = 256;
 boolean nfCheck;    /* check for number of fields consistency */

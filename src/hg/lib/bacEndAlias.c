@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bacEndAlias.h"
 
-static char const rcsid[] = "$Id: bacEndAlias.c,v 1.1 2004/07/22 19:59:27 hartera Exp $";
 
 void bacEndAliasStaticLoad(char **row, struct bacEndAlias *ret)
 /* Load a row from bacEndAlias table into ret.  The contents of ret will

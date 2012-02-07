@@ -1,7 +1,6 @@
 /* upper - strip numbers, spaces, and punctuation turn to upper case. */
 #include "common.h"
 
-static char const rcsid[] = "$Id: upper.c,v 1.2 2003/05/06 07:41:09 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: sessionDbCrawl.c,v 1.2 2006/10/15 19:01:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

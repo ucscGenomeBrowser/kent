@@ -6,7 +6,6 @@
 #include "axt.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: twinOrfStats2.c,v 1.5 2006/04/07 15:18:29 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

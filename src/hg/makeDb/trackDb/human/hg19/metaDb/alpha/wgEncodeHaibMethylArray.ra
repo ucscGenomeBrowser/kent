@@ -1,7 +1,7 @@
 metaObject wgEncodeHaibMethylArray
 objType composite
 composite wgEncodeHaibMethylArray
-expVars lab,dataType,cell,treatment
+expVars lab,dataType,cell,treatment,labVersion
 
 metaObject wgEncodeHaibMethylArrayAg04449UwSitesRep2
 objType table

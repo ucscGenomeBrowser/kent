@@ -9,7 +9,6 @@
 #include "gbSql.h"
 #include "mgcClone.h"
 
-static char const rcsid[] = "$Id: mgcClone.c,v 1.2 2004/02/16 19:30:06 markd Exp $";
 
 void mgcCloneStaticLoad(char **row, struct mgcClone *ret)
 /* Load a row from mgcClone table into ret.  The contents of ret will

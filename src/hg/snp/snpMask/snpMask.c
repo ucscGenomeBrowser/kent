@@ -6,7 +6,6 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMask.c,v 1.7 2005/08/25 23:53:02 heather Exp $";
 
 #define FLANKSIZE 20
 

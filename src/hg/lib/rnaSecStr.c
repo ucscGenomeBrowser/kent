@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "rnaSecStr.h"
 
-static char const rcsid[] = "$Id: rnaSecStr.c,v 1.2 2005/03/28 22:46:39 jsp Exp $";
 
 struct rnaSecStr *rnaSecStrLoad(char **row)
 /* Load a rnaSecStr from row fetched with select * from rnaSecStr

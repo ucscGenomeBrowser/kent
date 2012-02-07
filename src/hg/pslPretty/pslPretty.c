@@ -11,7 +11,6 @@
 #include "psl.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.34 2006/12/01 21:34:09 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

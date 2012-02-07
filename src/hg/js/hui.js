@@ -1,7 +1,6 @@
 // JavaScript Especially for hui.c
 // $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.59 2010/06/03 20:27:26 tdreszer Exp $
 
-var compositeName = "";
 //var browser;                // browser ("msie", "safari" etc.)
 //var now = new Date();
 //var start = now.getTime();
@@ -30,8 +29,7 @@ function _matSelectViewForSubTracks(obj,view)
         classesHidden = classesHidden.concat( matAbcCBclasses(false) );
     } else {
         // Make main display dropdown show full if currently hide
-        compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
-        exposeAll();
+        exposeAll();  // TODO: was removed for subCfg... is there a problem?
         matSubCBsEnable(true,view);
 
         // Needed for later
@@ -48,35 +46,34 @@ function _matSelectViewForSubTracks(obj,view)
                 var classesAbcChecked = new Array();
                 matCBs.filter(".abc").each( function (i) {
                     var classList = $( this ).attr("class").split(" ");
-                    classesAbcChecked.push( aryRemove(classList,"matCB","halfVis","abc") );
+                    classesAbcChecked.push( aryRemove(classList,["matCB","disabled","abc"]) );
                 });
 
                 // Walk through checked non-ABC matCBs and sheck related subCBs
                 var subCBs = $("input.subCB").filter("."+view).not(":checked");
                 matCBs.not(".abc").each( function (i) {
                     var classList = $( this ).attr("class").split(" ");
-                    classList = aryRemove(classList,"matCB","halfVis");
+                    classList = aryRemove(classList,["matCB","disabled"]);
                     var subCBsMatching = objsFilterByClasses(subCBs,"and",classList);
                     if (classesAbcChecked.length>0)
                         subCBsMatching = objsFilterByClasses(subCBsMatching,"or",classesAbcChecked);
                     // Check the subCBs that belong to this view and checked matCBs
                     subCBsMatching.each( function (i) {
                         this.checked = true;
-                        matSubCBsetShadow(this);
+                        matSubCBsetShadow(this,true);  // will update "subCfg" if needed
                         hideOrShowSubtrack(this);
                     });
                 });
             } // If no matrix, then enabling is all that was needed.
 
-            // fix 3-way which may need to go from unchecked to .halfVis
-            var matCBs = $("input.matCB").not(".abc").not(".halfVis").not(":checked");
+            // fix 3-way which may need to go from unchecked to .disabled
+            var matCBs = $("input.matCB").not(".abc").not(".disabled").not(":checked");
             if(matCBs.length > 0) {
                 $( matCBs ).each( function (i) { matChkBoxNormalize( this, classesHidden ); });
             }
         }
     }
-    // fix 3-way matCBs which may need to go from halfVis to checked or unchecked depending
-    var matCBs = $("input.matCB").not(":checked").not(".halfVis");
+    // fix 3-way matCBs which may need to go from disabled to checked or unchecked depending
     var matCBs = matCBsWhichAreComplete(false);
     if(matCBs.length > 0) {
         if($("select.viewDD").not("[selectedIndex=0]").length = 0) { // No views visible so nothing is inconsistent
@@ -97,9 +94,17 @@ function matSelectViewForSubTracks(obj,view)
 function exposeAll()
 {
     // Make main display dropdown show full if currently hide
-    var visDD = $("select.visDD"); // limit to hidden
-    if ($(visDD).length == 1 && $(visDD).attr('selectedIndex') == 0)   // limit to hidden
-        $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
+    var visDD = normed($("select.visDD")); // limit to hidden
+    if (visDD != undefined) {
+        if ($(visDD).attr('selectedIndex') == 0) {
+            $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
+	        $(visDD).change();// trigger on change code, which may trigger supertrack reshaping
+        }                         // and effecting inherited subtrack vis
+
+        // If superChild and hidden by supertrack, wierd things go on unless we trigger reshape
+        if ($(visDD).hasClass('superChild'))
+            visTriggersHiddenSelect(visDD);
+    }
 }
 
 function matSubCbClick(subCB)
@@ -107,7 +112,13 @@ function matSubCbClick(subCB)
 // subCB:onclick  When a subtrack checkbox is clicked, it may result in
 // Clicking/unclicking the corresponding matrix CB.  Also the
 // subtrack may be hidden as a result.
-    matSubCBsetShadow(subCB);
+
+    // NOTE: if "subCfg" then 'change' event will update it
+    if (isFauxDisabled(subCB,false)) { // disabled subCB is still clickable when "subCfg"
+        subCB.checked = true;
+        fauxDisable(subCB,false,""); // enable and get rid of message
+    }
+    matSubCBsetShadow(subCB,false);
     hideOrShowSubtrack(subCB);
     // When subCBs are clicked, 3-state matCBs may need to be set
     var classes = matViewClasses('hidden');
@@ -134,7 +145,7 @@ function matCbClick(matCB)
 
     var classList = $( matCB ).attr("class").split(" ");
     var isABC = (aryFind(classList,"abc") != -1);
-    classList = aryRemove(classList,"matCB","halfVis","abc");
+    classList = aryRemove(classList,["matCB","disabled","abc"]);
     if(classList.length == 0 )
        matSubCBsCheck(matCB.checked);
     else if(classList.length == 1 )
@@ -179,7 +190,7 @@ function _matSetMatrixCheckBoxes(state)
         this.checked = state;
         matCbComplete(this,true);
     });
-    subCbs = $("input.subCB");
+    var subCbs = $("input.subCB");
     for(var vIx=1;vIx<arguments.length;vIx++) {
         subCbs = $( subCbs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
@@ -188,8 +199,11 @@ function _matSetMatrixCheckBoxes(state)
         subCbs = objsFilterByClasses(subCbs,"not",classes);  // remove unchecked abcCB classes
     }
     $( subCbs ).each( function (i) {
-        this.checked = state;
-        matSubCBsetShadow(this);
+        if (this.checked != state) {
+            this.checked = state;
+            matSubCBsetShadow(this,false);
+            $(this).change();  // NOTE: if "subCfg" then 'change' event will update it
+        }
     });
     if(state)
         exposeAll();  // Unhide composite vis?
@@ -203,7 +217,7 @@ function _matSetMatrixCheckBoxes(state)
     return true;
 }
 function matSetMatrixCheckBoxes(state)
-{
+{ // Called exclusively by matrix [+][-] buttons on click
     var tbody = $( 'tbody.sortable');
     if (tbody != undefined)
          $(tbody).addClass('sorting');
@@ -245,7 +259,8 @@ function matSubCBsCheck(state)
 
     if(state) { // If checking subCBs, then make sure up to 3 dimensions of matCBs agree with each other on subCB verdict
         var classes = matAbcCBclasses(false);
-        subCBs = objsFilterByClasses(subCBs,"not",classes);  // remove unchecked abcCB classes
+        if (classes.length > 0)
+            subCBs = objsFilterByClasses(subCBs,"not",classes);  // remove unchecked abcCB classes
         if(arguments.length == 1 || arguments.length == 3) { // Requested dimX&Y: check dim ABC state
             $( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
         } else {//if(arguments.length == 2) { // Requested dim ABC (or only 1 dimension so this code is harmless)
@@ -253,7 +268,7 @@ function matSubCBsCheck(state)
             matXY = $( matXY ).filter(":checked");
             for(var mIx=0;mIx<matXY.length;mIx++) {
                 var classes = $(matXY[mIx]).attr("class").split(' ');
-                classes = aryRemove(classes,"matCB","halfVis");
+                classes = aryRemove(classes,["matCB","disabled"]);
                 $( subCBs ).filter('.'+classes.join(".")).each( function (i) { matSubCBcheckOne(this,state); });
             }
         }
@@ -273,14 +288,13 @@ function matSubCBsEnable(state)
     }
     subCBs.each( function (i) {
         if(state) {
-            $(this).parent().attr('title','');
-            $(this).parent().attr('cursor','pointer');
+            fauxDisable(this,false,'');
+            $(this).parent().attr('cursor','');
         } else {
-            $(this).parent().attr('title','view is hidden');
+            fauxDisable(this,true, 'view is hidden');
             $(this).parent().attr('cursor','pointer');
         }
-        this.disabled = !state;
-        matSubCBsetShadow(this);
+        matSubCBsetShadow(this,true);    // will update "subCfg" if needed
         hideOrShowSubtrack(this);
     });
 
@@ -290,20 +304,42 @@ function matSubCBsEnable(state)
 function matSubCBcheckOne(subCB,state)
 {
 // setting a single subCB may cause it to appear/disappear
-    subCB.checked = state;
-    matSubCBsetShadow(subCB);
-    hideOrShowSubtrack(subCB);
+    if (subCB.checked != state) {
+        subCB.checked = state;
+        matSubCBsetShadow(subCB,false);
+        $(subCB).change();  // NOTE: if "subCfg" then 'change' event will update it
+        hideOrShowSubtrack(subCB);
+    }
 }
 
-function matSubCBsetShadow(subCB)
+function matSubCBsetShadow(subCB,triggerChange)
 {
 // Since CBs only get into cart when enabled/checked, the shadow control enables cart to know other states
+//  will update "subCfg" if needed
     var shadowState = 0;
     if(subCB.checked)
         shadowState = 1;
-    if(subCB.disabled)
+    //if(subCB.disabled)
+    if (isFauxDisabled(subCB,true))
         shadowState -= 2;
-    $("#"+subCB.name+"_4way").val(shadowState);
+    var fourWay = normed($("input.cbShadow[name='boolshad\\."+subCB.name+"']"));
+    if (fourWay == undefined && subCB.name != undefined) {
+        fourWay = normed($("input.cbShadow#boolshad_-"+subCB.id));  // subCfg noname version specific
+        if (fourWay == undefined)
+            fourWay = normed($("#"+subCB.name+"_4way"));  // FIXME: obsolete as soon as subCfg is working
+    }
+    if (fourWay == undefined) {
+        warn("DEBUG: Failed to find fourWay shadow for '#"+subCB.id+"' ["+subCB.name+"]");
+        return;
+    }
+    if ($(fourWay).val() != shadowState.toString()) {
+        $(fourWay).val(shadowState);
+        if (typeof(subCfg) !== "undefined") {
+            subCfg.enableCfg(subCB,(shadowState == 1));
+            if (triggerChange)
+                $(subCB).change(); // 'change' event will update "subCfg"  // FIXME: Is this needed?  YES.  But not on direct cb click
+        }
+    }
 }
 
 function matChkBoxNormalize(matCB)
@@ -313,7 +349,7 @@ function matChkBoxNormalize(matCB)
     var isABC = (aryFind(classList,"abc") != -1);
     if(isABC)
         alert("ASSERT: matChkBoxNormalize() called for dim ABC!");
-    classList = aryRemove(classList,"matCB","halfVis");
+    classList = aryRemove(classList,["matCB","disabled"]);
 
     var classes = '.' + classList.join(".");// created string filter of classes converting "matCB K562 H3K4me1" as ".K562.H3K4me1"
     var subCBs = $("input.subCB").filter(classes); // All subtrack CBs that match matrix CB
@@ -323,7 +359,7 @@ function matChkBoxNormalize(matCB)
     }
 
     // Only look at visible views
-    subCBs = $(subCBs).not(":disabled");
+    subCBs = $(subCBs).not('.disabled').not(":disabled");
 
     if(subCBs.length > 0) {
         var CBsChecked = subCBs.filter(":checked");
@@ -347,20 +383,10 @@ function matChkBoxNormalize(matCB)
 function matCbComplete(matCB,complete)
 {
 // Makes or removes the 3rd (indeterminate) matCB state
-    // Too many options:
-    // 1) addClass()/removeClass() (which does not directly support title)
-    // 2) wrap div which could contain border, color, content.  content is not on one line: size is difficult
-    // 3) wrap font which could contain border, color, content.  content is on one line: size is difficult
-    // 4) *[ ]* ?[ ]?  *[ ]*  No text seems right;  borders? colors? opacity? Yes, minimum
     if(complete) {
-        $(matCB).css('opacity', '1');  // For some reason IE accepts direct change but isn't happy with simply adding class!
-        $(matCB).removeClass('halfVis');
-        $(matCB).attr("title","");
+        fauxDisable(matCB,false,"");
     } else {
-        $(matCB).css('opacity', '0.5');
-        $(matCB).addClass('halfVis');
-        $(matCB).attr("title","Not all associated subtracks have been selected");
-        $('.halfVis').css('opacity', '0.5');
+        fauxDisable(matCB,true, "Not all associated subtracks have been selected");
     }
 }
 
@@ -368,9 +394,9 @@ function matCBsWhichAreComplete(complete)
 {
 // Returns a list of currently indeterminate matCBs.  This is encapsulated to keep consistent with matCbComplete()
     if(complete)
-        return $("input.matCB").not(".halfVis");
+        return $("input.matCB").not(".disabled");
     else
-        return $("input.matCB.halfVis");
+        return $("input.matCB.disabled");
 }
 
 function matCbFindFromSubCb(subCB)
@@ -378,7 +404,7 @@ function matCbFindFromSubCb(subCB)
 // returns the one matCB associated with a subCB (or undefined)
     var classList =  $( subCB ).attr("class").split(" ");
     // we need one or 2 classes, depending upon how many dimensions in matrix (e.g. "subDB GM10847 NFKB aNone IGGrab Signal")
-    classList = aryRemove(classList,"subCB");
+    classList = aryRemove(classList,["subCB","changed","disabled"]);
     var classes = classList.slice(0,2).join('.');   // How to get only X and Y classes?  Assume they are the first 2
     var matCB = $("input.matCB."+classes); // Note, this works for filtering multiple classes because we want AND
     if(matCB.length == 1)
@@ -397,7 +423,7 @@ function matAbcCBfindFromSubCb(subCB)
     var abcCBs = $("input.matCB.abc");
     if( abcCBs.length > 0 ) {
         var classList =  $( subCB ).attr("class").split(" ");
-        classList = aryRemove(classList,"subCB");
+        classList = aryRemove(classList,["subCB","changed","disabled"]);
         classList.shift(); // Gets rid of X and Y associated classes (first 2 after subCB)
         classList.shift();
         classList.pop();   // gets rid of view associated class (at end)
@@ -439,7 +465,7 @@ function matViewClasses(limitTo)
     }
     $(viewDDs).each( function (i) {
         var classList = $( this ).attr("class").split(" ");
-        classList = aryRemove(classList,"viewDD","normalText");
+        classList = aryRemove(classList,["viewDD","normalText","changed"]);
         classes.push( classList[0] );
     });
     return classes;
@@ -457,7 +483,7 @@ function matAbcCBclasses(wantSelected)
         }
         $(abcCBs).each( function (i) {
             var classList = $( this ).attr("class").split(" ");
-            classList = aryRemove(classList,"matCB","abc");
+            classList = aryRemove(classList,["matCB","abc"]);
             classes.push( classList[0] );
         });
     } else { // No abcCBs so look for filterBox classes
@@ -471,8 +497,8 @@ function matSubCBsSelected()
 // Displays visible and checked track count
     var counter = $('.subCBcount');
     if(counter != undefined) {
-        var subCBs =  $("input.subCB");
-        $(counter).text($(subCBs).filter(":enabled:checked").length + " of " +$(subCBs).length+ " selected");
+        var subCBs =  $("input.subCB");                   // subCfg uses fauxDisabled
+        $(counter).text($(subCBs).filter(":enabled:checked").not('.disabled').length + " of " +$(subCBs).length+ " selected");
     }
 }
 
@@ -482,9 +508,9 @@ function compositeCfgUpdateSubtrackCfgs(inp)
 // Updates all subtrack configuration values when the composite cfg is changed
     // If view association then find it:
     var view = "";
-    var daddy = $(inp).parents(".blueBox");
-    if(daddy.length == 1) {
-        var classList = $(daddy[0]).attr("class").split(" ");
+    var daddy = normed($(inp).parents(".blueBox"));
+    if(daddy != undefined) {
+        var classList = $(daddy).attr("class").split(" ");
         if(classList.length == 2) {
             view = classList[1];
         }
@@ -498,7 +524,7 @@ function compositeCfgUpdateSubtrackCfgs(inp)
     }
     if(inp.type.indexOf("select") == 0) {
         var list = $("select[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
-        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
+        if(view != "") { list =  $(list).filter(function(index) { return normed($(this).parents(".blueBox." + view)) != undefined; });}
         if($(list).length>0) {
             if(inp.multiple != true)
                 $(list).attr('selectedIndex',inp.selectedIndex);
@@ -520,20 +546,20 @@ function compositeCfgUpdateSubtrackCfgs(inp)
     }
     else if(inp.type.indexOf("checkbox") == 0) {
         var list = $("checkbox[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
-        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
+        if(view != "") { list =  $(list).filter(function(index) { return normed($(this).parents(".blueBox." + view)) != undefined; });}
         if($(list).length>0)
             $(list).attr("checked",$(inp).attr("checked"));
     }
     else if(inp.type.indexOf("radio") == 0) {
         var list = $("input:radio[name$='"+suffix+"']").not("[name='"+inp.name+"']");
         list = $(list).filter("[value='"+inp.value+"']")
-        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
+        if(view != "") { list =  $(list).filter(function(index) { return normed($(this).parents(".blueBox." + view)) != undefined; });}
         if($(list).length>0)
             $(list).attr("checked",true);
     }
     else {  // Various types of inputs
         var list = $("input[name$='"+suffix+"']").not("[name='"+inp.name+"']");//.not("[name^='boolshad.']"); // Exclude self from list
-        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
+        if(view != "") { list =  $(list).filter(function(index) { return normed($(this).parents(".blueBox." + view)) != undefined; });}
         if($(list).length>0)
             $(list).val(inp.value);
         //else {
@@ -544,7 +570,7 @@ function compositeCfgUpdateSubtrackCfgs(inp)
     return true;
 }
 
-function compositeCfgRegisterOnchangeAction(prefix)
+function compositeCfgRegisterOnchangeAction(prefix)    // FIXME: OBSOLETE when subCfg is released
 {
 // After composite level cfg settings written to HTML it is necessary to go back and
 // make sure that each time they change, any matching subtrack level cfg setting are changed.
@@ -555,124 +581,16 @@ function compositeCfgRegisterOnchangeAction(prefix)
     $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
 }
 
-function registerViewOnchangeAction(viewTrackName)
-{
-// After composite level view settings are written to HTML it is necessary to go back and
-// make sure that each time they change, the change is ajaxed over
-    var list = $("input[name^='"+viewTrackName+"\.']");
-    $(list).each(function(){setIdRemoveName(this);});
-    $(list).change(function(){setCartVarFromObjId(this);});
-
-    list = $("select[name^='"+viewTrackName+"\.']"); // includes composite.view.vis
-    $(list).each(function(){setIdRemoveName(this);});
-    $(list).change(function(){setCartVarFromObjId(this);});
-
-    list = $("select[name='"+viewTrackName+"']"); // is 'composite' vis
-    $(list).each(function(){setIdRemoveName(this);});
-    $(list).change(function(){setCartVarFromObjId(this);});
-}
-
-function registerFormSubmit(formName)
-{
-    $('form[name="'+formName+'"]').each(function(i) { formSubmitWaitOnAjax(this)});
-}
-
-function visTriggersHiddenSelect(obj)
-{ // SuperTrack child changing vis should trigger superTrack reshaping.
-  // This is done by setting hidden input "_sel"
-    var trackName_Sel = $(obj).attr('name') + "_sel";
-    var theForm = $(obj).closest("form");
-    var visible = (obj.selectedIndex != 0);
-    if (visible) {
-        updateOrMakeNamedVariable(theForm,trackName_Sel,"1");
-    } else
-        disableNamedVariable(theForm,trackName_Sel);
-    return true;
-}
-
 function subtrackCfgHideAll(table)
 {
 // hide all the subtrack configuration stuff
-    $("div[id $= '_cfg']").each( function (i) {
+    $("div[id^='div_cfg_']").each( function (i) {
         $( this ).css('display','none');
         $( this ).children("input[name$='.childShowCfg']").val("off");
     });
     // Hide all "..." metadata displayed
     $("div[id $= '_meta']:visible").toggle();
     $("img[src$='../images/upBlue.png']").attr('src','../images/downBlue.png');
-}
-
-var popUpTrackName;
-var popUpTitle = "";
-var popSaveAllVars = null;
-function popUpCfgOk(popObj, trackName)
-{ // Kicks off a Modal Dialog for the provided content.
-    var allVars = getAllVars(popObj, trackName );   // always subtrack cfg
-    var changedVars = varHashChanges(allVars,popSaveAllVars);
-    //warn("cfgVars:"+varHashToQueryString(changedVars));
-    setVarsFromHash(changedVars);
-    var newVis = changedVars[trackName];
-    if(newVis != null) {
-        var sel = $('input[name="'+trackName+'_sel"]:checkbox');
-        var checked = (newVis != 'hide' && newVis != '[]');  // subtracks do not have "hide", thus '[]'
-        if( $(sel) != undefined ) {
-            $(sel).each( function (i) { matSubCBcheckOne(this,checked); });  // Though there is only one, the each works but the direct call does not!
-            matSubCBsSelected();
-        }
-    }
-}
-
-function popUpCfg(content, status)
-{ // Kicks off a Modal Dialog for the provided content.
-    // Set up the modal dialog
-    var popit = $('#popit');
-    $(popit).html("<div style='font-size:80%'>" + content + "</div>");
-    $(popit).dialog({
-        ajaxOptions: { cache: true }, // This doesn't work
-        resizable: false,
-        height: 'auto',
-        width: 'auto',
-        minHeight: 200,
-        minWidth: 700,
-        modal: true,
-        closeOnEscape: true,
-        autoOpen: false,
-        buttons: { "OK": function() {
-            popUpCfgOk(this,popUpTrackName);
-            $(this).dialog("close");
-        }},
-        open: function() { popSaveAllVars = getAllVars( this, popUpTrackName ); }, // always subtrack cfg
-        close: function() { $('#popit').empty(); }
-    });
-    // Apparently the options above to dialog take only once, so we set title explicitly.
-    if(popUpTitle != undefined && popUpTitle.length > 0)
-        $(popit).dialog('option' , 'title' , popUpTitle );
-    else
-        $(popit).dialog('option' , 'title' , "Please Respond");
-    $(popit).dialog('open');
-}
-
-function _popUpSubrackCfg(trackName,label)
-{ // popup cfg dialog
-    popUpTrackName = trackName;
-    popUpTitle = label;
-
-    $.ajax({
-        type: "GET",
-        url: "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb(),
-        dataType: "html",
-        trueSuccess: popUpCfg,
-        success: catchErrorOrDispatch,
-        error: errorHandler,
-        cmd: "cfg",
-        cache: false
-    });
-}
-
-function popUpSubtrackCfg(trackName,label)
-{
-    waitOnFunction( _popUpSubrackCfg, trackName, label );  // Launches the popup but shields the ajax with a waitOnFunction
-    return false;
 }
 
 function subtrackCfgShow(tableName)
@@ -693,24 +611,6 @@ function subtrackCfgShow(tableName)
     return false;
 }
 
-function enableViewCfgLink(enable,view)
-{
-// Enables or disables a single configuration link.
-    var link = $('#a_cfg_'+view);
-    if(enable)
-        $(link).attr('href','#'+$(link).attr('id'));
-    else
-        $(link).removeAttr('href');
-}
-
-function enableAllViewCfgLinks()
-{
-    $( ".viewDD").each( function (i) {
-        var view = this.name.substring(this.name.indexOf(".") + 1,lastIndexOf(".vis"));
-        enableViewCfgLink((this.selectedIndex > 0),view);
-    });
-}
-
 function hideConfigControls(view)
 {
 // Will hide the configuration controls associated with one name
@@ -728,6 +628,11 @@ function showConfigControls(name)
         if( this.id == 'tr_cfg_'+name && this.style.display == 'none') {
             $( this ).css('display','');
 	    $("input[name$='."+name+".showCfg']").val("on");
+            var cfgBox = this;
+            // Since filterBys amy have been hidden on page load, must reinit them now.
+            $(cfgBox).find('.filterBy').each( function(i) {
+                ddcl.reinit(this,false); // false means conditioned on failed initial setup.
+            });
         }
         else if( this.style.display == '') {
             $( this ).css('display','none');
@@ -739,6 +644,49 @@ function showConfigControls(name)
     return true;
 }
 
+function hideOrShowSubtrack(obj)
+{
+// This can show/hide a tablerow that contains a specific object
+// Containing <tr>'s must be id'd with 'tr_' + obj.id
+// Also, this relies upon the "displaySubtracks" radio button control
+    var tr = normed($(obj).parents('tr#tr_'+obj.id));
+    if (tr != undefined) {
+        if(!obj.checked || isFauxDisabled(obj,true))  {
+            var radio = $('input.allOrOnly');
+            for (var ix=0;ix<radio.length;ix++) {
+                if(radio[ix].checked && radio[ix].value == "selected") {
+                    $(tr).hide();
+                    return;
+                }
+            }
+        }
+        $(tr).show();
+    }
+}
+
+function showSubTrackCheckBoxes(onlySelected)
+{
+// If a Subtrack configuration page has show "only selected subtracks" option,
+// This can show/hide tablerows that contain the checkboxes
+// Containing <tr>'s must be id'd with 'tr_' + the checkbox id,
+// while checkbox id must have 'cb_' prefix (ie: 'tr_cb_checkThis' & 'cb_checkThis')
+    var trs = $('table.subtracks').children('tbody').children('tr');
+    if(!onlySelected)
+        $(trs).show();
+    else {
+        $(trs).each(function (ix) {
+            var subCB = normed($(this).find('input.subCB'));
+            if (subCB != undefined) {
+                if (subCB.checked && isFauxDisabled(subCB,true) == false)
+                    $(this).show();
+                else
+                    $(this).hide();
+            }
+            //else
+            //    warn('DEBUG: subtrack table row '+ix+' without subCB?');
+        });
+    }
+}
 function showOrHideSelectedSubtracks(inp)
 {
 // Show or Hide subtracks based upon radio toggle
@@ -746,7 +694,7 @@ function showOrHideSelectedSubtracks(inp)
     if(arguments.length > 0)
         showHide=inp;
     else {
-        var onlySelected = $("input[name='displaySubtracks']");
+        var onlySelected = $("input.allOrOnly'");
         if(onlySelected.length > 0)
             showHide = onlySelected[0].checked;
         else
@@ -756,7 +704,7 @@ function showOrHideSelectedSubtracks(inp)
 
     var tbody = $("tbody.sortable")
     $(tbody).each(function (i) {
-        sortedTableAlternateColors(this);
+        sortTable.alternateColors(this);
     });
 }
 
@@ -764,14 +712,12 @@ function showOrHideSelectedSubtracks(inp)
 function matInitializeMatrix()
 {
 // Called at Onload to coordinate all subtracks with the matrix of check boxes
-//var start = startTiming();
-jQuery('body').css('cursor', 'wait');
-    if (document.getElementsByTagName) {
-        matSubCBsSelected();
-        showOrHideSelectedSubtracks();
-    }
-jQuery('body').css('cursor', '');
-//showTiming(start,"matInitializeMatrix()");
+    //var start = startTiming();
+
+    matSubCBsSelected(); // counts
+    //showOrHideSelectedSubtracks();    // Don't need this because hui.c is doing it
+
+    //showTiming(start,"matInitializeMatrix()");
 }
 
 function multiSelectLoad(div,sizeWhenOpen)
@@ -853,7 +799,7 @@ function matCbFilterClasses(matCb,joinThem)
 { // returns the var associated with a filterComp
 
     var classes = $( matCb ).attr("class").split(" ");
-    classes = aryRemove(classes,"matCB","halfVis","abc");
+    classes = aryRemove(classes,["matCB","disabled","abc"]);
     if (joinThem)
         return '.' + classes.join('.');
     return classes;
@@ -1031,7 +977,7 @@ function filterCompositeExcludeOptions(multiSelect)
 
         var possibleClasses = $( this ).attr("class").split(" ");
         if( $(possibleClasses).length > 0)
-            possibleClasses = aryRemoveVals(possibleClasses,[ "subCB" ]);
+            possibleClasses = aryRemove(possibleClasses,[ "subCB","changed","disabled" ]);
         if( $(possibleClasses).length > 0)
             possibleSelections = possibleSelections.concat(possibleClasses);
     });
@@ -1141,29 +1087,250 @@ function tableSortAtButtonPress(anchor,tagId)
     var table = $( anchor ).parents("table.sortable");
     if (table) {
         subtrackCfgHideAll(table);
-        waitOnFunction( _tableSortOnButtonPressEncapsulated, anchor, tagId);
+        waitOnFunction( sortTable._sortOnButtonPress, anchor, tagId);
     }
     return false;  // called by link so return false means don't try to go anywhere
+}
+
+function fauxDisable(obj,disable,title)
+{// Makes an obj appear disabled, but it isn't
+ //  span.disabled & input.disabled is opacity 0.5
+ //   div.disabled is border-color: gray; color: gray;
+    if ($(obj).hasClass('subCB') == false || typeof(subCfg) !== "undefined") {
+        if(disable) {
+            if ($.browser.msie)
+                $(obj).css('opacity', '0.5');
+            $(obj).addClass('disabled');
+        } else {
+            if ($.browser.msie)
+                $(obj).css('opacity', '1');  // For some reason IE<9 accepts direct change but isn't happy with simply adding class!
+            $(obj).removeClass('disabled');
+        }
+    } else {
+        obj.disabled = disable;
+    }
+    if (arguments.length > 2)
+        $(obj).attr("title",title);
+}
+
+function isFauxDisabled(obj,orReallyDisabled)
+{// Is object [faux] disabled?
+    if (orReallyDisabled && obj.disabled)
+        return true;
+
+    return ($(obj).hasClass('disabled'));
+}
+
+  ////////////////////
+ //// superTrack ////
+////////////////////
+var superT = {
+
+    submitAndLink: function (obj)
+    {
+        var thisForm=$(obj).parents('form');
+        if(thisForm != undefined && $(thisForm).length == 1) {
+           thisForm = thisForm[0];
+           $(thisForm).attr('action',obj.href); // just attach the straight href
+           $(thisForm).submit();
+           return false;  // should not get here!
+        }
+        return true;
+    },
+
+    topVis: function (show)
+    {
+        var superSel = $('select.visDD');
+        if (superSel != undefined && superSel.length == 1) {
+            superSel = superSel[0];
+            if (show) {
+                $(superSel).addClass('normalText');
+                $(superSel).attr('selectedIndex',1);
+                $(superSel).removeClass('hiddenText');
+            } else {
+                $(superSel).attr('selectedIndex',0);
+                $(superSel).removeClass('normalText');
+                $(superSel).addClass('hiddenText');
+            }
+        }
+    },
+
+    plusMinus: function (check)
+    {
+        $("input:checkbox").each(function (i) {
+            $(this).attr("checked",check);
+            superT.childChecked(this,1);
+            if (!check) // all are unchecked so we can hide this whole thing.
+                superT.topVis(check);
+        });
+    },
+
+    childChecked: function (cb,defaultVis)
+    {
+        var sel = $('select[name="' + cb.id + '"]');
+        if (sel != undefined && sel.length == 1) {
+            sel = sel[0];
+            var selIx = $(sel).attr('selectedIndex');
+            if (cb.checked && selIx.toString() == "0") {
+                // What can be done to more intelligently default this?
+                // All to dense?  Probably the best idea
+                // When first rendering page?  Then how to save?
+                // Logic is: from [+][-] then dense;  from cb, then full
+                if (defaultVis == undefined)
+                    defaultVis = (sel.options.length - 1); // full
+                superT.selChanged(sel,defaultVis);
+            } else if (!(cb.checked) && selIx.toString() != "0") {
+                superT.selChanged(sel,0);
+            }
+        }
+    },
+
+    selChanged: function(sel,val)
+    {
+        var selIx = val;
+        if (val == undefined) // onchange event
+            selIx = $(sel).attr('selectedIndex');
+        else // called from childChecked() so set value
+            $(sel).attr('selectedIndex',val);
+
+        if (selIx == 0) {
+            $(sel).removeClass('normalText');
+            $(sel).addClass('hiddenText');
+        } else {
+            $(sel).removeClass('hiddenText');
+            $(sel).addClass('normalText');
+            superT.topVis(true);
+        }
+        if (val == undefined) { // onchange event only
+            var cb = $('input#'+sel.name);
+            if (cb != undefined && cb.length == 1) {
+                cb = cb[0];
+                $(cb).attr('checked',(selIx > 0));
+            }
+        }
+    }
+}
+
+var mat = { // Beginings of matrix object
+
+    matrix: undefined,
+    dimensions: 0,
+    cellInFocus: undefined,
+
+    cellHover: function (cell,on)
+    {
+        if (on) {
+            if (mat.cellInFocus != undefined)
+                mat.clearGhostHilites();  // Necessary to clear ghosts
+            mat.cellInFocus = cell;
+        } else
+            mat.cellInFocus = undefined;
+
+        var classList = $( cell ).attr("class").split(" ");
+        classList = aryRemove(classList,["matCell"]);
+        var color = (on ? "#FEF3CC" : "");// "#FFF9D2");  setting to "" removes the hilite   ("#FCECC0" is LEVEL3)
+        for (var ix=0;ix < classList.length;ix++) {
+            if (classList[ix] == 'all')
+                continue;
+            if (ix == 0) {
+                $(".matCell."+classList[ix]).css({backgroundColor: color });
+            } else {
+                $(cell).closest('tr').css({backgroundColor: color }) // faster?
+            }
+        }
+        if (on && cell.title.length == 0) {
+            for (var ix=0;ix < classList.length;ix++) {
+                if (classList[ix] == 'all') { // on a label already
+                    cell.title = "";
+                    break;
+                }
+                if (cell.title.length > 0)
+                    cell.title += " and ";
+                cell.title += $("th."+classList[ix]).first().text();
+            }
+        }
+    },
+
+    clearGhostHilites: function ()
+    {
+        $('.matCell').css({backgroundColor:""});
+        $(mat.matrix).find('tr').css({backgroundColor:""});
+    },
+
+    resizeAngleLabels: function ()
+    {   // Sets the height on the angled matrix labels
+        var longest = "";
+        var up45 = $('div.up45');
+        $(up45).each(function (i) {
+            if (longest.length < $(this).text().length)
+                longest = $(this).text();
+        });
+        if (longest.length > 5) {
+            $(mat.matrix).append("<span id='noShow' style='color:#FFF9D2;'>"+longest+"</span>");
+            var noShow = $('span#noShow');
+            var newHeight = ($(noShow).width() * 0.9) + 10;
+            if (newHeight < 20)
+                newHeight = longest.length * 7;
+            $(up45).first().parent('th').css('height',newHeight + 'px');
+            $(up45).show();
+            var dn45 = $('div.dn45');
+            if (dn45 != undefined && dn45.length > 0) {
+                $(dn45).first().parent('th').css('height',newHeight + 'px');
+                $(dn45).show();
+            }
+            $(noShow).remove();
+        }
+    },
+
+    init: function ()
+    {
+        mat.matrix = $('table.matrix');
+        if (mat.matrix != undefined && mat.matrix.length == 1) {
+            mat.resizeAngleLabels();
+            if (!$.browser.msie) { // IE can't handle the hover!
+                var cells = $('td.matCell');
+                if (cells != undefined && cells.length > 0) {
+                    var classList = $( cells[0] ).attr("class").split(" ");
+                    classList = aryRemove(classList,["matCell"]);
+                    mat.dimensions = classList.length;
+                    if (mat.dimensions > 1) { // No need unless this is a 2D matrix
+                        $('.matCell').hover(
+                            function (e) {mat.cellHover(this,true)},
+                            function (e) {mat.cellHover(this,false)}
+                        );
+                        $(mat.matrix).blur(mat.clearGhostHilites());
+                        $(window).bind('focus',function (e) {mat.clearGhostHilites();}); // blur doesn't work because the screen isn't repainted
+                    }
+                }
+            }
+        }
+    }
 }
 
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
+    mat.init();
+
+    if (normed($('table.subtracks')) != undefined) {
+        matInitializeMatrix();
+
+        // If divs with class 'subCfg' then initialize the subtrack cfg code
+        // NOTE: must be before any ddcl setup
+        if (typeof(subCfg) !== "undefined"
+        && (normed($("div.subCfg")) != undefined || normed($("div.subVisDD")))) {
+            subCfg.initialize();
+        }
+    }
+
     // Initialize sortable tables
     $('table.sortable').each(function (ix) {
-        sortTableInitialize(this,true,true);
+        sortTable.initialize(this,true,true);
     });
 
     // Register tables with drag and drop
     $("table.tableWithDragAndDrop").each(function (ix) {
         tableDragAndDropRegister(this);
-    });
-
-    $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
-
-    $('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
-        if (newJQuery == false)
-            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
     });
 
     // Put navigation links in top corner

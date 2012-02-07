@@ -15,8 +15,8 @@
 #include "obscure.h"
 #include "hgMaf.h"
 #include "customTrack.h"
+#include "regexHelper.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.90 2010/05/18 22:37:36 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -685,6 +685,8 @@ eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary)
 {
 eCfgType cType = cfgNone;
 char *type = tdb->type;
+assert(type != NULL);
+
 if(startsWith("wigMaf", type))
     cType = cfgWigMaf;
 else if(startsWith("wig", type))
@@ -693,38 +695,56 @@ else if(startsWith("bigWig", type))
     cType = cfgWig;
 else if(startsWith("bedGraph", type))
     cType = cfgWig;
-else if(startsWith("netAlign", type))
-    {
+else if(startsWith("netAlign", type)
+     || startsWith("net", tdb->track)) // SPECIAL CASE from hgTrackUi which might not be needed
     cType = cfgNetAlign;
-    warnIfNecessary = FALSE;
-    }
 else if(sameWord("bed5FloatScore",       type)
      || sameWord("bed5FloatScoreWithFdr",type))
-    cType = cfgBedScore;
-else if(sameWord("narrowPeak",type)
-     || sameWord("broadPeak", type)
-     || sameWord("encodePeak",type)
-     || sameWord("gappedPeak",type))
-    cType = cfgPeak;
-else if(sameWord("genePred",type))
-        cType = cfgGenePred;
-else if(sameWord("bedLogR",type) || sameWord("peptideMapping", type))
-    cType = cfgBedScore;
-else if(startsWith("bed ", type))
     {
-    char *words[3];
-    chopLine(cloneString( type), words);
-    if (trackDbSetting(tdb, "bedFilter") != NULL)
-	   cType = cfgBedFilt;
-    else if (atoi(words[1]) >= 5 && trackDbSettingClosestToHome(tdb, "noScoreFilter") == NULL)
+    if (bedScoreHasCfgUi(tdb))
         cType = cfgBedScore;
+    }
+else if(encodePeakHasCfgUi(tdb))
+    cType = cfgPeak;
+else if(startsWithWord("genePred",type)
+     && !startsWith("encodeGencodeRaceFrags", tdb->track))  // SPECIAL CASE should be handled in trackDb!
+    cType = cfgGenePred;
+else if(sameWord("bedLogR",type)
+     || sameWord("peptideMapping", type))
+    cType = cfgBedScore;
+else if(startsWith("bed ", type) || startsWith("bigBed", type))
+    {
+    if (trackDbSetting(tdb, "bedFilter") != NULL)
+           cType = cfgBedFilt;
+    else
+        {
+       char *words[3];
+        int wordCount = chopLine(cloneString( type), words);
+        if ((atoi(words[1]) >= 5 || trackDbSetting(tdb, "scoreMin") != NULL)
+        && ( wordCount >= 3                                                      // Historically needed 'bed n .'
+            || (!tdbIsTrackUiTopLevel(tdb) && trackDbSettingClosestToHome(tdb, "wgEncode")))) // but encode didn't follow bed n .
+            {
+            cType = cfgBedScore;
+
+            if (!bedScoreHasCfgUi(tdb))
+                cType = cfgNone;
+
+            // FIXME: UGLY SPECIAL CASE should be handled in trackDb!
+            else if (startsWith("encodeGencodeIntron", tdb->track))
+                cType = cfgNone;
+            }
+        }
     }
 else if(startsWith("chain",type))
     cType = cfgChain;
+else if (startsWith("bamWig", type))
+    cType = cfgWig;
 else if (startsWith("bam", type))
     cType = cfgBam;
 else if (startsWith("psl", type))
     cType = cfgPsl;
+else if (sameWord("vcfTabix",type))
+    cType = cfgVcf;
 // TODO: Only these are configurable so far
 
 if(cType == cfgNone && warnIfNecessary)
@@ -734,6 +754,30 @@ if(cType == cfgNone && warnIfNecessary)
         warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",type,tdb->track);
     }
 return cType;
+}
+
+int configurableByAjax(struct trackDb *tdb, eCfgType cfgTypeIfKnown)
+// Is this track configurable by right-click popup, or in hgTrackUi subCfg?
+// returns 0 = no; <0=explicitly blocked;  >0=allowed and will be cfgType if determined
+{
+if (tdbIsMultiTrackSubtrack(tdb))
+    return cfgNone; // multitrack subtracks are never allowed to be separately configured.
+int ctPopup = (int)cfgTypeIfKnown;
+if (ctPopup <= cfgNone)
+    ctPopup = (int)cfgTypeFromTdb(tdb,FALSE);
+if (ctPopup <= cfgNone && !tdbIsSubtrack(tdb)) // subtracks must receive CfgType!
+    ctPopup = cfgUndetermined; // cfgTypeFromTdb() does not work for every case.
+
+if (ctPopup > cfgNone)
+{
+    if (regexMatch(tdb->track, "^snp[0-9]+")     // Special cases to be removed
+    ||  regexMatch(tdb->track, "^cons[0-9]+way") // (matches logic in json setup in imageV2.c)
+    ||  startsWith("hapmapSnps", tdb->track)
+    ||  startsWith("hapmapAlleles", tdb->track)
+    ||  trackDbSettingBlocksConfiguration(tdb,TRUE))
+        ctPopup *= -1;
+}
+return ctPopup;
 }
 
 char *trackDbSetting(struct trackDb *tdb, char *name)
@@ -1266,5 +1310,82 @@ void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership)
 // Sets the subtrack membership for later retrieval.
 {
 tdbExtrasGet(tdb)->membership = membership;
+}
+
+char *tdbBigFileName(struct sqlConnection *conn, struct trackDb *tdb)
+// Return file name associated with bigWig.  Do a freeMem on returned string when done.
+{
+char *fileName = trackDbSetting(tdb, "bigDataUrl"); // always takes precedence
+if (fileName != NULL)
+    return cloneString(fileName);
+
+char query[256];
+safef(query, sizeof(query), "select fileName from %s", tdb->table);
+return sqlQuickString(conn, query);
+}
+
+static void rTdbTreeAllowPack(struct trackDb *tdb)
+// Force this tdb and all children to allow pack/squish
+{
+tdb->canPack = TRUE;
+struct trackDb *childTdb = tdb->subtracks;
+for ( ;childTdb!=NULL;childTdb=childTdb->next)
+    rTdbTreeAllowPack(childTdb);
+}
+
+boolean rTdbTreeCanPack(struct trackDb *tdb)
+// Trees can pack as all or none, since they can share vis.
+{
+if (tdb->canPack == FALSE)
+    {
+    // If a single child of a composite can pack, then the entire composite can
+    if (tdbIsComposite(tdb) || tdbIsCompositeView(tdb))
+        {
+        struct trackDb *childTdb = tdb->subtracks;
+        for ( ;childTdb!=NULL;childTdb=childTdb->next)
+            {
+            if (rTdbTreeCanPack(childTdb))
+                {
+                tdb->canPack = TRUE;
+                break;
+                }
+            }
+        }
+    // At the composite level if one was found then set the whole tree.
+    if (tdb->canPack && tdbIsComposite(tdb))
+        rTdbTreeAllowPack(tdb);
+    }
+return tdb->canPack;
+}
+
+void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis)
+{
+// Set visibility in the cart. Handles all the complications necessary for subtracks.
+char buf[512];
+cartSetString(cart, tdb->track, vis);
+if (tdbIsSubtrack(tdb))
+    {
+    safef(buf,sizeof buf, "%s_sel", tdb->track);
+    cartSetString(cart, buf, "1");   // Will reshape composite
+    struct trackDb *composite = tdbGetComposite(tdb);
+    if (composite && tdbIsSuperTrackChild(composite))
+        {
+        safef(buf,sizeof buf, "%s_sel", composite->track);
+        cartSetString(cart, buf, "1");   // Will reshape supertrack
+        }
+    }
+else if (tdbIsSuperTrackChild(tdb)) // solo track
+    {
+    safef(buf,sizeof buf, "%s_sel", tdb->track);
+    cartSetString(cart, buf, "1");   // Will reshape supertrack
+    }
+}
+
+boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb, boolean onlyAjax)
+// Configuration dialogs may be explicitly blocked in tracDb settings
+{
+if (SETTING_IS_OFF(trackDbSettingClosestToHome(tdb, "configurable")))
+     return TRUE; // never configurable
+return (onlyAjax && SETTING_IS_OFF(trackDbSettingClosestToHome(tdb,"configureByPopup")));
 }
 

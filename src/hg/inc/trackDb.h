@@ -5,6 +5,8 @@
 #ifndef TRACKDB_H
 #define TRACKDB_H
 
+struct trackDb;         // forward definition for use in cart.h
+
 #include "common.h"
 
 #ifndef JKSQL_H
@@ -13,6 +15,10 @@
 
 #ifndef LINEFILE_H
 #include "linefile.h"
+#endif
+
+#ifndef CART_H
+#include "cart.h"
 #endif
 
 #define TRACKDB_NUM_COLS 21
@@ -88,7 +94,8 @@ struct trackDb
 #define COMPOSITE_VIEW_NODE(nodeType)    ((nodeType) & COMPOSITE_VIEW_MASK)
 #define MULTI_TRACK_CHILD_NODE(nodeType) ((nodeType) & MULTI_TRACK_CHILD_MASK)
 #define CONTAINER_CHILD_NODE(nodeType)   ((nodeType) & (MULTI_TRACK_CHILD_MASK | COMPOSITE_CHILD_MASK))
-#define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK ) == 0 )
+#define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK) == 0 )
+#define SOLO_NODE(nodeType)             (((nodeType) & TREETYPE_MASK) <= FOLDER_CHILD_MASK)
 //#define tdbIsParent(tdb)              ((tdb)->subtracks)
 //#define tdbIsChild(tdb)               ((tdb)->parent   )
 //#define tdbIsTreeLeaf(tdb)            ( CHILD_NODE((tdb)->treeNodeType) && !tdbIsParent(tdb))
@@ -246,13 +253,25 @@ for ( ; parent != NULL && !tdbIsContainer(parent); parent = parent->parent)
 return parent;
 }
 
+// Solo (or stand alone) tracks are non-containers which may only be contained by folders
+INLINE boolean tdbIsSoloTrack(struct trackDb *tdb)
+// Is this trackDb struct marked as a solo so it should have data
+{
+return tdb && SOLO_NODE(tdb->treeNodeType);
+}
+#define tdbIsStandAlone(tdb) tdbIsSoloTrack(tdb)
+#define tdbIsDataTrack(tdb) (tdbIsSoloTrack(tdb) || tdbIsSubtrack(tdb))
+
+// TrackUi Top level means composite, multitrack or solo
+// These are not folders, views or subtracks.
+#define tdbIsTrackUiTopLevel(tdb) (tdbIsContainer(tdb) || tdbIsSoloTrack(tdb))
+
 #define DOWNLOADS_ONLY_TYPE  "downloadsOnly"
 INLINE boolean tdbIsDownloadsOnly(struct trackDb *tdb)
 // Is this a downloadsOnly tdb
 {
 return (tdb && sameWord(tdb->type,DOWNLOADS_ONLY_TYPE));
 }
-
 
 
 struct trackDb *trackDbLoad(char **row);
@@ -386,17 +405,22 @@ typedef enum _eCfgType
     cfgWigMaf   =3,
     cfgPeak     =4,
     cfgGenePred =5,
-    cfgChain =6,
+    cfgChain    =6,
     cfgNetAlign =7,
     cfgBedFilt  =8,
     cfgBam      =9,
     cfgPsl      =10,
     cfgVcf      =11,
+    cfgUndetermined // Not specifically denied, but not determinable in lib code
 } eCfgType;
 
 eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);
 /* determine what kind of track specific configuration is needed,
    warn if not multi-view compatible */
+
+int configurableByAjax(struct trackDb *tdb, eCfgType cfgTypeIfKnown);
+// Is this track configurable by right-click popup, or in hgTrackUi subCfg?
+// returns 0 = nothing to cfg; <0=blocked via ajax; >0=allowed and will be cfgType if determinable
 
 void trackDbOverride(struct trackDb *td, struct trackDb *overTd);
 /* apply an trackOverride trackDb entry to a trackDb entry */
@@ -556,6 +580,43 @@ struct _membership *tdbExtrasMembership(struct trackDb *tdb);
 
 void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership);
 // Sets the subtrack membership for later retrieval.
+
+char *tdbBigFileName(struct sqlConnection *conn, struct trackDb *tdb);
+// Return file name associated with bigWig.  Do a freeMem on returned string when done.
+
+boolean rTdbTreeCanPack(struct trackDb *tdb);
+// Trees can pack as all or none, since they can share vis.
+
+void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis);
+// Set visibility in the cart. Handles all the complications necessary for subtracks.
+
+// More INLINES which depend on what the definition of "is" is
+INLINE boolean tdbIsBigBed(struct trackDb *tdb)
+// Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
+{
+return startsWithWord("bigBed", tdb->type);
+}
+
+INLINE boolean tdbIsBigWig(struct trackDb *tdb)
+// Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
+{
+return startsWithWord("bigWig", tdb->type);
+}
+
+INLINE boolean tdbIsBam(struct trackDb *tdb)
+// Return TRUE if tdb corresponds to a BAM file.
+{
+return startsWithWord("bam", tdb->type);
+}
+
+INLINE boolean tdbIsVcf(struct trackDb *tdb)
+// Return TRUE if tdb corresponds to a VCF file.
+{
+return startsWithWord("vcfTabix", tdb->type);
+}
+
+boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb, boolean onlyAjax);
+// Configuration dialogs may be explicitly blocked in tracDb settings
 
 #endif /* TRACKDB_H */
 

@@ -9,7 +9,6 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.19 2008/09/03 19:18:50 markd Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -38,7 +37,7 @@ struct sqlResult *sr;
 if (isRgdGene(conn))
 {
 safef(query, sizeof(query), 
-	"select k.locusID, k.mapID, keggMapDesc.description"
+	"select distinct k.locusID, k.mapID, keggMapDesc.description"
 	" from rgdGene2KeggPathway k, keggMapDesc, rgdGene2 x"
 	" where k.rgdId=x.name "
 	" and x.name='%s'"

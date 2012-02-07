@@ -8,7 +8,6 @@
 #include "web.h"
 #include "cart.h"
 
-static char const rcsid[] = "$Id: hgFreen.c,v 1.1 2006/11/29 17:18:22 kent Exp $";
 
 static void choiceMenu()
 /* Put up choice menu. */

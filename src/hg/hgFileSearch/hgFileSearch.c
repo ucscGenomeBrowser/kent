@@ -339,7 +339,7 @@ printf("</div>"); // Restricts to max-width:1000px;
 cgiDown(0.8);
 
 if (measureTiming)
-    uglyTime("Rendered tabs");
+    uglyTime("Generated search controls");
 
 
 #ifdef USE_TABS
@@ -390,7 +390,7 @@ if(doSearch)
             }
 
         if (doSearch && mdbSelects != NULL && isNotEmpty(fileTypeSearch))
-            fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
+            fileSearchResults(db, conn, cart, mdbSelects, fileTypeSearch);
         else
             printf("<DIV id='filesFound'><BR>No files found.<BR></DIV><BR>\n");
 
@@ -437,14 +437,8 @@ jsIncludeFile("ui.dropdownchecklist.js",NULL);
 jsIncludeFile("utils.js",NULL);
 
 // This line is needed to get the multi-selects initialized
-#ifdef NEW_JQUERY
 jsIncludeFile("ddcl.js",NULL);
-printf("<script type='text/javascript'>var newJQuery=true;</script>\n");
 printf("<script type='text/javascript'>$(document).ready(function() { findTracks.updateMdbHelp(0); });</script>\n");
-#else///ifndef NEW_JQUERY
-printf("<script type='text/javascript'>var newJQuery=false;</script>\n");
-printf("<script type='text/javascript'>$(document).ready(function() { findTracks.updateMdbHelp(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
-#endif///ndef NEW_JQUERY
 
 doFileSearch(db,organism,cart,tdbList);
 
@@ -453,7 +447,7 @@ printf("<BR>\n");
 webEnd();
 }
 
-char *excludeVars[] = { "submit", "Submit", "g", "ajax", FILE_SEARCH,TRACK_SEARCH_ADD_ROW,TRACK_SEARCH_DEL_ROW};  // HOW IS 'ajax" going to be supported?
+char *excludeVars[] = { "submit", "Submit", "g", "ajax", "clearCache", FILE_SEARCH,TRACK_SEARCH_ADD_ROW,TRACK_SEARCH_DEL_ROW};  // HOW IS 'ajax" going to be supported?
 
 int main(int argc, char *argv[])
 /* Process command line. */

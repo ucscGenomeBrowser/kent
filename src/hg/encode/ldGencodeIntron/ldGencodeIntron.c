@@ -8,7 +8,6 @@
 #include "gencodeIntron.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: ldGencodeIntron.c,v 1.2 2005/04/01 01:36:24 kate Exp $";
 
 void usage()
 {

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "tigrCmrGene.h"
 
-static char const rcsid[] = "$Id: tigrCmrGene.c,v 1.3 2005/04/13 06:25:58 markd Exp $";
 
 void tigrCmrGeneStaticLoad(char **row, struct tigrCmrGene *ret)
 /* Load a row from tigrCmrGene table into ret.  The contents of ret will

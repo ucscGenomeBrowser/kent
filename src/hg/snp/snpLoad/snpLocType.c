@@ -7,7 +7,6 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.32 2006/06/19 22:14:44 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;

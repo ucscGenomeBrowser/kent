@@ -9,7 +9,6 @@
 #include "dystring.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.20 2008/02/23 15:49:55 braney Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */

@@ -6,7 +6,6 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.28 2009/02/26 00:05:49 markd Exp $";
 
 struct axtRef
 /* A reference to an axt. */

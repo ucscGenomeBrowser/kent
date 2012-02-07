@@ -10,7 +10,6 @@
 #include "hmmstats.h"
 
 
-static char const rcsid[] = "$Id: bigWigInfo.c,v 1.8 2010/04/28 22:56:25 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */

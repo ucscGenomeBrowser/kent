@@ -11,7 +11,6 @@
 #include "rangeTree.h"
 
 
-static char const rcsid[] = "$Id: txGeneCdsMap.c,v 1.3 2007/04/03 03:17:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

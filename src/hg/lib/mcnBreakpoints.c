@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "mcnBreakpoints.h"
 
-static char const rcsid[] = "$Id: mcnBreakpoints.c,v 1.3 2005/04/13 06:25:55 markd Exp $";
 
 void mcnBreakpointsStaticLoad(char **row, struct mcnBreakpoints *ret)
 /* Load a row from mcnBreakpoints table into ret.  The contents of ret will

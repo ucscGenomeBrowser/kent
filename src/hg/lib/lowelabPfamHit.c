@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "lowelabPfamHit.h"
 
-static char const rcsid[] = "$Id: lowelabPfamHit.c,v 1.1 2007/06/02 20:50:32 lowe Exp $";
 
 void lowelabPfamHitsStaticLoad(char **row, struct lowelabPfamHits *ret)
 /* Load a row from lowelabPfamHits table into ret.  The contents of ret will

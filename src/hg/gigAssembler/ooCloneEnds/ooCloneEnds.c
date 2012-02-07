@@ -6,7 +6,6 @@
 #include "hCommon.h"
 #include "ooUtils.h"
 
-static char const rcsid[] = "$Id: ooCloneEnds.c,v 1.4 2003/05/06 07:22:31 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -13,7 +13,6 @@
 #include "snp.h"
 #include "snpExceptions.h"
 
-static char const rcsid[] = "$Id: snpException.c,v 1.5 2008/09/03 19:21:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

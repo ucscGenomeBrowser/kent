@@ -5,7 +5,6 @@
 #include "linefile.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslGlue.c,v 1.4 2006/07/24 17:40:50 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

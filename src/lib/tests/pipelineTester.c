@@ -4,7 +4,6 @@
 #include "linefile.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pipelineTester.c,v 1.5 2009/12/19 00:23:21 angie Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */

@@ -54,11 +54,6 @@
 #define MAXPIXELS 14000
 #endif
 
-// imageV2 dragReorder supercedes 'priority' based reordering which used to be allowed
-// on the cfg controls page.  While the priority order is still supported as default,
-// you can re-allow setting those priorities by defining PRIORITY_CHANGES_IN_CONFIG_UI
-//#define PRIORITY_CHANGES_IN_CONFIG_UI
-
 struct track
 /* Structure that displays of tracks. The central data structure
  * of the graphical genome browser. */
@@ -1254,8 +1249,9 @@ void createHgFindMatchHash();
 /* Read from the cart the string assocated with matches and
    put the matching items into a hash for highlighting later. */
 
-TrackHandler lookupTrackHandler(char *name);
-/* Lookup handler for track of give name.  Return NULL if none. */
+TrackHandler lookupTrackHandlerClosestToHome(struct trackDb *tdb);
+/* Lookup handler for track of give name.  Try parents if
+ * subtrack has a NULL handler.  Return NULL if none. */
 
 void registerTrackHandlers();
 /* Register tracks that include some non-standard methods. */

@@ -10,7 +10,6 @@
 #include "verbose.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgExpDistance_tm.c,v 1.1 2008/08/29 20:01:40 lslater Exp $";
 
 void usage()
 /* Explain usage and exit. */

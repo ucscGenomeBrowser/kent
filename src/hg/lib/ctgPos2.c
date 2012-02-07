@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ctgPos2.h"
 
-static char const rcsid[] = "$Id: ctgPos2.c,v 1.2 2005/04/13 06:25:51 markd Exp $";
 
 void ctgPos2StaticLoad(char **row, struct ctgPos2 *ret)
 /* Load a row from ctgPos2 table into ret.  The contents of ret will

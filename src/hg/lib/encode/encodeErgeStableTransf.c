@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/encodeErgeStableTransf.h"
 
-static char const rcsid[] = "$Id: encodeErgeStableTransf.c,v 1.1 2008/08/01 17:49:05 aamp Exp $";
 
 struct encodeErgeStableTransf *encodeErgeStableTransfLoad(char **row)
 /* Load a encodeErgeStableTransf from row fetched with select * from encodeErgeStableTransf

@@ -54,15 +54,15 @@ enables display of gaps between alignment blocks in the pairwise alignments in
 a manner similar to the Chain track display.  The following
 conventions are used:
 <UL>
-<LI><B>Single line:</B> no bases in the aligned species. Possibly due to a
+<LI><B>Single line:</B> No bases in the aligned species. Possibly due to a
 lineage-specific insertion between the aligned blocks in the <em>$organism</em> genome
 or a lineage-specific deletion between the aligned blocks in the aligning
 species.
-<LI><B>Double line:</B> aligning species has one or more unalignable bases in
+<LI><B>Double line:</B> Aligning species has one or more unalignable bases in
 the gap region. Possibly due to excessive evolutionary distance between 
 species or independent indels in the region between the aligned blocks in both
 species. 
-<LI><B>Pale yellow coloring:</B> aligning species has Ns in the gap region.
+<LI><B>Pale yellow coloring:</B> Aligning species has Ns in the gap region.
 Reflects uncertainty in the relationship between the DNA of both species, due
 to lack of sequence in relevant portions of the aligning species. 
 </UL></P>
@@ -93,19 +93,19 @@ Translation configuration section at the top of the page. Then, select one of
 the following modes:
 <UL>
 <LI> 
-<B>No codon translation:</B> the gene annotation is not used; the bases are
+<B>No codon translation:</B> The gene annotation is not used; the bases are
 displayed without translation. 
 <LI>
-<B>Use default species reading frames for translation:</B> the annotations from the genome
+<B>Use default species reading frames for translation:</B> The annotations from the genome
 displayed 
-in the <EM>Default species for translation</EM>; pull-down menu are used to
+in the <EM>Default species to establish reading frame</EM> pull-down menu are used to
 translate all the aligned species present in the alignment. 
 <LI>
-<B>Use reading frames for species if available, otherwise no translation:</B> codon
+<B>Use reading frames for species if available, otherwise no translation:</B> Codon
 translation is performed only for those species where the region is
 annotated as protein coding.
 <LI><B>Use reading frames for species if available, otherwise use default species:</B>
-codon translation is done on those species that are annotated as being protein
+Codon translation is done on those species that are annotated as being protein
 coding over the aligned region using species-specific annotation; the remaining
 species are translated using the default species annotation. 
 </UL></P>
@@ -171,6 +171,11 @@ by Jim Kent at UCSC.
 </UL>
 </P>
 
+<P>The phylogenetic tree is based on the
+<A HREF="http://www.genetics.wustl.edu/saccharomycesgenomes/yeast_phylogeny.html"
+TARGET=_blank><em>Saccharomyces</em> Phylogeny</A> page from the Department
+of Genetics at Washington University in St. Louis.
+
 <H2>References</H2>
 
 <H3>Phylo-HMMs and phastCons:</H3>
@@ -179,26 +184,26 @@ Felsenstein J, Churchill GA.
 <A HREF="http://mbe.oxfordjournals.org/cgi/content/abstract/13/1/93"
 TARGET=_blank>A Hidden Markov Model approach to
 variation among sites in rate of evolution</A>.
-<EM>Mol Biol Evol</EM>. 1996 Jan;13(1):93-104.  </P>
+<EM>Mol Biol Evol</EM>. 1996 Jan;13(1):93-104.</P>
 <P> 
 Siepel A, Haussler D.
 <A HREF="http://compgen.bscb.cornell.edu/~acs/phylohmm.pdf"
 TARGET=_blank>Phylogenetic Hidden Markov Models</A>.
 In R. Nielsen, ed., <em>Statistical Methods in Molecular Evolution</em>,
-pp. 325-351, Springer, New York (2005). </P>
+pp. 325-351, Springer, New York (2005).</P>
 <P>
 Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
 Clawson H, Spieth J, Hillier LW, Richards S, <EM>et al.</EM>
 <A HREF="http://www.genome.org/cgi/doi/10.1101/gr.3715005"
 TARGET=_blank>Evolutionarily conserved elements in vertebrate, insect, worm,
 and yeast genomes</A>.
-<EM>Genome Res</EM>. 2005 Aug;15(8):1034-50.  </P>
+<EM>Genome Res</EM>. 2005 Aug;15(8):1034-50.</P>
 <P>
 Yang Z.
 <A HREF="http://www.genetics.org/cgi/content/abstract/139/2/993"
 TARGET=_blank>A space-time process model for the evolution of DNA
 sequences</A>.
-<EM>Genetics</EM>. 1995 Feb;139(2):993-1005.  </P>
+<EM>Genetics</EM>. 1995 Feb;139(2):993-1005.</P>
 
 <H3>Chain/Net:</H3>
 <P>
@@ -206,7 +211,7 @@ Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
 <A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1"
 TARGET=_blank>Evolution's cauldron:
 duplication, deletion, and rearrangement in the mouse and human genomes</A>.
-<EM>Proc Natl Acad Sci U S A</EM>. 2003 Sep 30;100(20):11484-9.  </P>
+<EM>Proc Natl Acad Sci U S A</EM>. 2003 Sep 30;100(20):11484-9.</P>
 
 <H3>Multiz:</H3>
 <P>
@@ -214,11 +219,11 @@ Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
 Baertsch R, Rosenbloom K, Clawson H, Green ED, <EM>et al.</EM>
 <A HREF="http://www.genome.org/cgi/content/abstract/14/4/708"
 TARGET=_blank>Aligning multiple genomic sequences with the threaded blockset aligner</A>.
-<EM>Genome Res</EM>. 2004 Apr;14(4):708-15.  </P>
+<EM>Genome Res</EM>. 2004 Apr;14(4):708-15.</P>
 
 <H3>Blastz:</H3>
 <P>
 Chiaromonte F, Yap VB, Miller W.
 <A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11928468&dopt=Abstract"
 TARGET=_blank>Scoring pairwise genomic sequence alignments</A>.
-<EM>Pac Symp Biocomput</EM>. 2002:115-26.  </P>
+<EM>Pac Symp Biocomput</EM>. 2002:115-26.</P>

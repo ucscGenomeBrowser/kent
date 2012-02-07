@@ -6,7 +6,6 @@
 #include "hCommon.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ensFace.c,v 1.13 2009/09/17 21:43:03 hiram Exp $";
 
 struct stringPair
 /* A pair of strings. */
@@ -141,7 +140,7 @@ void ensGeneTrackVersion(char *database, char *ensVersionString,
 /* check for trackVersion table and find Ensembl version */
 {
 /* see if hgFixed.trackVersion exists */
-boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+boolean trackVersionExists = (hDbExists("hgFixed") && hTableExists("hgFixed", "trackVersion"));
 ensVersionString[0] = 0;
 ensDateReference[0] = 0;
 if (trackVersionExists)

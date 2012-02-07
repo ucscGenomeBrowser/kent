@@ -7,7 +7,6 @@
 #include "hmmstats.h"
 #include <float.h>
 
-static char const rcsid[] = "$Id: ave.c,v 1.10 2009/11/18 20:07:23 hiram Exp $";
 
 static int col = 1;
 static bool tableOut = FALSE;

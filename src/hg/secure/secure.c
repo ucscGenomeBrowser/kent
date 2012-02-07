@@ -14,7 +14,6 @@
 #include "hui.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: secure.c,v 1.7 2008/09/03 19:21:19 markd Exp $";
 
 
 /* GLOBAL DECLARATIONS */

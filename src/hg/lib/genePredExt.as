@@ -11,7 +11,7 @@ table genePredExt
     uint exonCount;     "Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
-    uint id;            "Unique identifier"
+    uint score;         "score"
     string name2;       "Alternate name (e.g. gene_id from GTF)"
     string cdsStartStat; "enum('none','unk','incmpl','cmpl')"
     string cdsEndStat;   "enum('none','unk','incmpl','cmpl')"

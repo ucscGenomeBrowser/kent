@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "gencodeGeneClass.h"
 
-static char const rcsid[] = "$Id:$";
 
 void gencodeGeneClassStaticLoad(char **row, struct gencodeGeneClass *ret)
 /* Load a row from gencodeGeneClass table into ret.  The contents of ret will

@@ -67,6 +67,13 @@ samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
 char *bamFileName = fileOrUrl;
 if (retBamFileName != NULL)
     *retBamFileName = bamFileName;
+
+#ifdef BAM_VERSION
+// suppress too verbose messages in samtools >= 0.1.18; see redmine #6491
+// This variable didn't exist in older versions of samtools (where BAM_VERSION wasn't defined).
+bam_verbose = 1;
+#endif
+
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
 if (fh == NULL)
     {
@@ -489,6 +496,27 @@ while (s < bam->data + bam->data_len)
     }
 }
 
+struct bamChromInfo *bamChromList(samfile_t *fh)
+{
+/* Return list of chromosomes from bam header. We make no attempty to normalize chromosome names to UCSC format,
+   so list may contain things like "1" for "chr1", "I" for "chrI", "MT" for "chrM" etc. */
+int i;
+struct bamChromInfo *list = NULL;
+bam_header_t *bamHeader = fh->header;
+if(bamHeader == NULL)
+    return NULL;
+for(i = 0; i < bamHeader->n_targets; i++)
+    {
+    struct bamChromInfo *info = NULL;
+    AllocVar(info);
+    info->name = cloneString(bamHeader->target_name[i]);
+    info->size = bamHeader->target_len[i];
+    slAddHead(&list, info);
+    }
+slReverse(&list);
+return list;
+}
+
 #else
 // If we're not compiling with samtools, make stub routines so compile won't fail:
 
@@ -605,4 +633,35 @@ errAbort(COMPILE_WITH_SAMTOOLS, "bamGetTagString");
 return NULL;
 }
 
+struct bamChromInfo *bamChromList(samfile_t *fh)
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamChromList");
+return NULL;
+}
+
 #endif//ndef USE_BAM
+
+static void bamChromInfoFree(struct bamChromInfo **pInfo)
+/* Free up one chromInfo */
+{
+struct bamChromInfo *info = *pInfo;
+if (info != NULL)
+    {
+    freeMem(info->name);
+    freez(pInfo);
+    }
+}
+
+void bamChromInfoFreeList(struct bamChromInfo **pList)
+/* Free a list of dynamically allocated bamChromInfo's */
+{
+struct bamChromInfo *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    bamChromInfoFree(&el);
+    }
+*pList = NULL;
+}
+

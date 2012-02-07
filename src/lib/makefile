@@ -2,8 +2,9 @@ include ../inc/common.mk
 
 
 O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o bamFile.o base64.o \
-    basicBed.o bbiRead.o bbiWrite.o bigBed.o binRange.o bits.o blastOut.o \
-    blastParse.o boxClump.o boxLump.o bPlusTree.o bwgCreate.o bwgQuery.o bwgValsOnChrom.o \
+    basicBed.o bbiRead.o bbiWrite.o bigBed.o binRange.o bits.o \
+    blastOut.o blastParse.o boxClump.o boxLump.o bPlusTree.o \
+    bwgCreate.o bwgQuery.o bwgValsOnChrom.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o chainToPsl.o \
     cheapcgi.o cirTree.o codebias.o colHash.o common.o correlate.o crTree.o \
     dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o dnaMotif.o dnaseq.o \
@@ -17,7 +18,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o bamFile.o base64.o \
     font/mgHelveticaBold14.o font/mgHelveticaBold18.o font/mgHelveticaBold24.o \
     font/mgHelveticaBold34.o font/mgHelveticaBold8.o font/mgSixhi6.o font/mgSail8.o \
     font/mgTimes10.o font/mgTimes12.o font/mgTimes14.o font/mgTimes18.o \
-    font/mgTimes24.o font/mgTimes34.o font/mgTimes8.o \
+    font/mgTimes24.o font/mgTimes34.o font/mgTimes8.o font/mgMenlo12.o \
     fuzzyShow.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \

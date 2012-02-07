@@ -44,9 +44,10 @@ static char *labelOpt = NULL;
 static char *organismOpt = NULL; // we default to human if nothing else is set
 static char *organismOptLower = NULL; //  version of above used for path names
 
-void documentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
+int documentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
 // Compare controlled vocab based on term value
 {
+boolean docsPrinted = 0;
 char *s;
 if(title == NULL)
     title = docTerm;
@@ -56,50 +57,65 @@ char docUrl[PATH_LEN];
 char docFile[PATH_LEN];
 // parse setting
 s = hashFindVal(ra,docTerm);
-if(s != NULL && differentWord(s,"missing"))
+if(s != NULL)
     {
-    char *docSetting = cloneString(s);
-    char *settings=docSetting;
-    int count=0;
-    while((s = nextWord(&settings)) != NULL)
+    if (sameWord(s,"missing"))
+        printf("&nbsp;<em>missing</em>\n");
+    else
         {
-        char *docTitle = NULL;
-        char *fileName = NULL;
-        if(strchr(s,':')) // lab Specific setting
+        char *docSetting = cloneString(s);
+        char *settings=docSetting;
+        int count=0;
+        while((s = nextWord(&settings)) != NULL)
             {
-            docTitle = strSwapChar(s,':',0);
-            fileName = docTitle + strlen(docTitle) + 1;
+            char *docTitle = NULL;
+            char *fileName = NULL;
+            if(strchr(s,':')) // lab Specific setting
+                {
+                docTitle = strSwapChar(s,':',0);
+                fileName = docTitle + strlen(docTitle) + 1;
+                }
+            else
+                {
+                docTitle = title;
+                fileName = s;
+                }
+            if (count>0)
+                printf("<BR>");
+            count++;
+            docTitle = htmlEncodeText(strSwapChar(docTitle,'_',' '),FALSE);
+            if (sameWord(fileName,"missing"))
+                printf("%s<em>missing</em>\n",docTitle);
+            else
+                {
+                safef(docUrl,  sizeof(docUrl),  "%s%s", dir, fileName);
+                safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
+                printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
+                docsPrinted++;
+                }
+            freeMem(docTitle);
             }
-        else
-            {
-            docTitle = title;
-            fileName = s;
-            }
-        safef(docUrl,  sizeof(docUrl),  "%s%s", dir, fileName);
-        safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
-        if (count>0)
-            printf("<BR>");
-        count++;
-        docTitle = htmlEncodeText(strSwapChar(docTitle,'_',' '),FALSE);
-        printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
-        freeMem(docTitle);
+        freeMem(docSetting);
         }
-    freeMem(docSetting);
     }
 else if(genericDoc)
     { // generate a standard name
     safef(docUrl,  sizeof(docUrl),  "%s%s_protocol.pdf", dir, term);
     safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
     if (fileExists(docFile))
+        {
         printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,title);
+        docsPrinted++;
+        }
     }
+return docsPrinted;
 }
 
 void printDocumentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
 // prints a document link
 {
 printf("  <TD>");
-documentLink(ra,term,docTerm,dir,title,genericDoc);
+(void)documentLink(ra,term,docTerm,dir,title,genericDoc);
 printf("  &nbsp;</TD>\n");
 }
 
@@ -479,8 +495,8 @@ char *s;
 
         printSetting(ra, "tier");
         printDescription(ra,NULL,-1);
-        printSetting(ra,"tissue");
         printSetting(ra,"lineage");
+        printSetting(ra,"tissue");
         printSetting(ra,"karyotype");
         printSetting(ra,"sex");
         printDocumentLink(ra,term,"protocol",pathBuffer,NULL,TRUE);
@@ -838,7 +854,7 @@ if (slCount(termList) > 0)
     }
 puts("</TBODY></TABLE><BR>");
 if (sortable)
-    puts("<script type='text/javascript'>{$(document).ready(function() {sortTableInitialize($('table.sortable')[0],true,true);});}</script>");
+    puts("<script type='text/javascript'>{$(document).ready(function() {sortTable.initialize($('table.sortable')[0],true,true);});}</script>");
 if (totalPrinted == 0)
     {
     if (!described)

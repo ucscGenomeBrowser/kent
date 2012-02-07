@@ -13,7 +13,6 @@
 #include "genePredReader.h"
 
 
-static char const rcsid[] = "$Id: mafOrtholog.c,v 1.1 2007/03/16 03:32:54 baertsch Exp $";
 
 char *nibDir;
 char *geneTable = "refGene";

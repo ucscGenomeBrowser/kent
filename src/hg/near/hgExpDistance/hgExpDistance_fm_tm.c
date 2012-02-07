@@ -25,7 +25,6 @@ pthread_mutex_t mutexfilehandle;
 int numThreads;
 int dotEvery = 0;
 
-static char const rcsid[] = "$Id: hgExpDistance_fm_tm.c,v 1.1 2008/08/29 20:01:40 lslater Exp $";
 
 void usage()
 /* Explain usage and exit. */

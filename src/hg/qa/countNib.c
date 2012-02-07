@@ -3,7 +3,6 @@
 #include "dnaseq.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: countNib.c,v 1.1 2005/06/30 08:00:16 heather Exp $";
 
 void countNib(char *nibFile)
 /* countNib - Count ACGT. */

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "geneCheck.h"
 
-static char const rcsid[] = "$Id: geneCheck.c,v 1.1 2006/06/17 08:14:21 markd Exp $";
 
 void geneCheckStaticLoad(char **row, struct geneCheck *ret)
 /* Load a row from geneCheck table into ret.  The contents of ret will

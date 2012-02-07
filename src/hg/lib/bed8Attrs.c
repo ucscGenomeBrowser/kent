@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bed8Attrs.h"
 
-static char const rcsid[] = "$Id:$";
 
 struct bed8Attrs *bed8AttrsLoad(char **row)
 /* Load a bed8Attrs from row fetched with select * from bed8Attrs

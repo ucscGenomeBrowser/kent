@@ -5,7 +5,6 @@
 #include "sqlNum.h"
 #include "sys/stat.h"
 
-static char const rcsid[] = "$Id: hgExtFileCheck.c,v 1.2 2005/03/04 20:09:43 galt Exp $";
 
 /* global count of errors */
 int errCount = 0;

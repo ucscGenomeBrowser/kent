@@ -856,6 +856,9 @@ char *stripEnclosingChar(char *inout,char encloser);
 void stripString(char *s, char *strip);
 /* Remove all occurences of strip from s. */
 
+int countCase(char *s,boolean upper);
+// Count letters with case (upper or lower)
+
 int countChars(char *s, char c);
 /* Return number of characters c in string s. */
 

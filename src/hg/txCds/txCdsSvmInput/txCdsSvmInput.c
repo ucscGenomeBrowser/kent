@@ -8,7 +8,6 @@
 #include "cdsOrtho.h"
 #include "txInfo.h"
 
-static char const rcsid[] = "$Id: txCdsSvmInput.c,v 1.2 2007/03/21 23:01:59 kent Exp $";
 
 boolean good = FALSE;
 boolean bad = FALSE;

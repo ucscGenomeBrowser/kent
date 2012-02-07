@@ -6,7 +6,6 @@
 #include "hash.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gbLoadedTbl.c,v 1.5 2006/03/11 00:07:59 markd Exp $";
 
 static char* GB_LOADED_TBL = "gbLoaded";
 static char* createSql =

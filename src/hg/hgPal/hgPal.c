@@ -7,7 +7,6 @@
 #include "hui.h"
 #include "pal.h"
 
-static char const rcsid[] = "$Id: hgPal.c,v 1.12 2008/10/07 17:02:13 ann Exp $";
 
 char *excludeVars[] = {"Submit", "submit", NULL,};
 

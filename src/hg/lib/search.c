@@ -183,8 +183,13 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
     char buf[256];
     char *dropDownHtml = NULL;
 
+#ifdef BUTTONS_BY_CSS
+    #define BUTTON_PM  "<span class='pmButton' id='%sButton%d' title='%s' onclick='findTracks.mdbSelectPlusMinus(this,%d)'>%c</span>"
+    #define ADD_PM_BUTTON(type,num,value) dyStringPrintf(output,BUTTON_PM, (type), (num), ((value) == '+' ? "add another row after":"delete"), (num), (value))
+#else///ifndef BUTTONS_BY_CSS
     #define PLUS_MINUS_BUTTON "<input type='button' id='%sButton%d' value='%c' style='font-size:.7em;' title='%s' onclick='findTracks.mdbSelectPlusMinus(this,%d)'>"
     #define ADD_PM_BUTTON(type,num,value) dyStringPrintf(output,PLUS_MINUS_BUTTON, (type), (num), (value), ((value) == '+' ? "add another row after":"delete"), (num))
+#endif///def BUTTONS_BY_CSS
 
     dyStringAppend(output,"<tr valign='top' class='mdbSelect'><td nowrap>\n");
     row++;

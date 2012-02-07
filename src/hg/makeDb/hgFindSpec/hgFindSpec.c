@@ -13,7 +13,6 @@
 #include "dystring.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.10 2009/05/19 04:42:27 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

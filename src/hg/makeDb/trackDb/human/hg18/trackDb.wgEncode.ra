@@ -50,9 +50,9 @@ include wgEncodeHudsonalphaCnv.ra
 include wgEncodeHudsonalphaMethylSeq.ra
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
-include wgEncodeHudsonalphaChipSeq.ra beta,public
-include wgEncodeHudsonalphaChipSeq.new.ra alpha
-
+#include wgEncodeHudsonalphaChipSeq.ra beta,public
+#include wgEncodeHudsonalphaChipSeq.new.ra alpha
+#We are pulling these rather than maintaining them.  
 # Riken CAGE (wrangler: braney)
 include wgEncodeRikenCage.ra
 
@@ -72,8 +72,8 @@ include wgEncodeUwDnaseSeq.ra
 # include wgEncodeYaleRnaSeq.ra
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)
-include wgEncodeYaleChIPseq.ra
-
+include wgEncodeYaleChIPseq.ra beta,public
+include wgEncodeYaleChIPseq.patch.ra alpha
 
 # GIS RNA Pet (wrangler: braney)
 include wgEncodeGisPet.ra

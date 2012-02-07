@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "taxonGeneticCode.h"
 
-static char const rcsid[] = "$Id: taxonGeneticCode.c,v 1.1 2006/04/11 21:43:09 baertsch Exp $";
 
 void taxonGeneticCodeStaticLoad(char **row, struct taxonGeneticCode *ret)
 /* Load a row from taxonGeneticCode table into ret.  The contents of ret will

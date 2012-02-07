@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "tilingPath.h"
 
-static char const rcsid[] = "$Id: tilingPath.c,v 1.3 2005/04/13 06:25:58 markd Exp $";
 
 void tilingPathStaticLoad(char **row, struct tilingPath *ret)
 /* Load a row from tilingPath table into ret.  The contents of ret will

@@ -9,7 +9,6 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.51 2009/11/10 22:46:19 angie Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed

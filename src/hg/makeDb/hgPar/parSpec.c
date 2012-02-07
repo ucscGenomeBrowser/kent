@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "parSpec.h"
 
-static char const rcsid[] = "$Id: parSpec.c,v 1.1 2010/02/17 08:54:21 markd Exp $";
 
 struct parSpec *parSpecLoad(char **row)
 /* Load a parSpec from row fetched with select * from parSpec

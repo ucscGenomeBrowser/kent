@@ -8,7 +8,6 @@
 #include "gbIndex.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: gbIgnore.c,v 1.6 2007/11/16 18:19:50 markd Exp $";
 
 /* column indices in ignore.idx files */
 #define IGIDX_ACC_COL       0

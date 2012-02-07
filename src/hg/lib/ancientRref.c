@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "ancientRref.h"
 
-static char const rcsid[] = "$Id: ancientRref.c,v 1.4 2005/04/11 08:13:43 markd Exp $";
 
 void ancientRrefStaticLoad(char **row, struct ancientRref *ret)
 /* Load a row from ancientRref table into ret.  The contents of ret will

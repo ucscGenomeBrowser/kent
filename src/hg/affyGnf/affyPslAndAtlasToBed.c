@@ -9,7 +9,6 @@
 #include "dystring.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.11 2004/07/17 22:18:48 hartera Exp $";
 
 
 #define DEBUG 0

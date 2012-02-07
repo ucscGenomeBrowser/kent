@@ -186,8 +186,8 @@ the Add Hub button. If the track hub is imported successfully, it will
 be added to the list. It is also possible to add a track hub by directly adding
 the hub's URL to the browser URL. If you add hubUrl=[URL] to your hgTracks URL line,
 it will add the hub directly into the browser
-(e.g. <A HREF="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt">
-http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt</A>).
+(e.g. <A HREF="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt">
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt</A>).
 If the browser is unable to load the track hub, it will
 display an error message. Some common causes for an import to
 fail include typos in the URL, attempting to add a track hub from a different
@@ -322,8 +322,8 @@ The data tracks provided by a hub must be formatted in one of the
 compressed binary index formats supported by the Genome Browser: 
 <A HREF="bigWig.html">bigWig</A>, 
 <A HREF="bigBed.html">bigBed</A>,
-<A HREF="bam.html">BAM</A> or VCF.</p>
-<!-- <A HREF="vcf.html">VCF</A>.</p> -->
+<A HREF="bam.html">BAM</A> or
+<A HREF="vcf.html">VCF</A>.</p>
 
 <P><em>bigWig</em> - 
 The bigWig format is best for displaying continuous value plot data,
@@ -370,8 +370,8 @@ Unlike bigWig and bigBed formats, the
 tabix index is in a separate file, which the track hub
 expects to be in the same directory with the same root name as the VCF file
 with the addition of a <em>.tbi</em> suffix.
-<!-- See the <A HREF="vcf.html">VCF Track Format</A> help page for
-more information.</P> -->
+See the <A HREF="vcf.html">VCF Track Format</A> help page for
+more information.</P>
 
 <HR>
 

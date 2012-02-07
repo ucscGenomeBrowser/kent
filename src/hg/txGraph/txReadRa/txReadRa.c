@@ -6,7 +6,6 @@
 #include "portable.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: txReadRa.c,v 1.3 2007/03/16 09:19:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

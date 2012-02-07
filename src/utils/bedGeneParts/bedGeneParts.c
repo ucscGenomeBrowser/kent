@@ -6,7 +6,6 @@
 #include "basicBed.h"
 
 
-static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 int proStart = -100;
 int proEnd = 50;

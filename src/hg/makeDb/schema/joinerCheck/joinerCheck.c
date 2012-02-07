@@ -9,7 +9,6 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.41 2010/03/31 16:27:35 hiram Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;

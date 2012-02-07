@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: agpCloneList.c,v 1.4 2004/07/21 23:44:12 angie Exp $";
 
 boolean ver = FALSE;
 

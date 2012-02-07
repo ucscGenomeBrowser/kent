@@ -8,7 +8,6 @@
 #include "web.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: method.c,v 1.8 2007/04/13 03:19:31 kent Exp $";
 
 
 static void methodPrint(struct section *section, 

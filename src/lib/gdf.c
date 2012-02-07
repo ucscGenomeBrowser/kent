@@ -6,7 +6,6 @@
 #include "common.h"
 #include "gdf.h"
 
-static char const rcsid[] = "$Id: gdf.c,v 1.4 2003/05/06 07:33:42 kate Exp $";
 
 struct gdfGene *newGdfGene(char *name, int nameSize, int exonCount, char strand, UBYTE chromIx)
 /* Return a new gene. */

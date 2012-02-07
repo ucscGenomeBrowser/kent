@@ -2,81 +2,60 @@
 import sys, os, re, argparse, subprocess, math
 from ucscgenomics import ra, track
 
-def addChange(changelist, obj, change):
-	if obj not in changelist:
-		changelist[obj] = list()
-	changelist[obj].append(change)
-	return changelist
-	
-
 def main():
-	parser = argparse.ArgumentParser(
-		prog='qaUpdateMetadata',
-		description='Update a metaDb fix',
-		epilog='example: qaUpdateMetadata hg19 wgEncodeUwDnaseSeq --list "md5sum objType cell treatment"'
-		)
-	parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
-	parser.add_argument('database', help='The database, typically hg19 or mm9')
-	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
-	parser.add_argument('vars', metavar='VARS', type=str, nargs='+', help='The list of metadata variables to update from alpha to beta')
-	
-	args = parser.parse_args(sys.argv[1:])
-	vars = args.vars
+    parser = argparse.ArgumentParser(
+        prog='qaUpdateMetadata',
+        description='Update the beta metaDb with selected items from the corresponding alpha metaDb object',
+        epilog='example: qaUpdateMetadata hg19 wgEncodeUwDnaseSeq md5sum objType cell treatment'
+        )
+    parser.add_argument('database', help='The database, typically hg19 or mm9')
+    parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
+    parser.add_argument('vars', metavar='VARS', type=str, nargs='+', help='The list of metadata variables to update from alpha to beta')
+
+    if len(sys.argv) <= 1:
+        parser.print_help()
+    args = parser.parse_args(sys.argv[1:])
+    vars = args.vars
+
+    c = track.CompositeTrack(args.database, args.composite)
+    newMdb = c.alphaMetaDb
+    oldMdb = c.publicMetaDb
+    temp = track.CompositeTrack(args.database, args.composite).publicMetaDb
+
+    for i in vars:
+        oldMdb = oldMdb.updateDiffFilter(i, newMdb)
+
+    changeList, addlist, droplist = oldMdb.changeSummary(temp)
+    print "Changes:"
+    for key in changeList.keys():
+        print key
+        for line in changeList[key]:
+            print "     %s" %(line)
+
+    tmpFile = "%s.tmp" % c._betaMdbPath
+
+    f = open(tmpFile, 'w')
+    f.write("%s" % oldMdb)
+    f.close()
+
+    tmpTable = "%sQaUpdateMetaDataTemp" % args.composite
+
+    cmd = "mdbUpdate %s -table=%s -recreate %s" % (args.database, tmpTable, tmpFile)
+    p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+    cmdoutput = p.stdout.read()
+
+    cmd = "mdbPrint %s -table=%s -all >%s " % (args.database, tmpTable, c._betaMdbPath)
+    p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+    cmdoutput = p.stdout.read()
+
+    cmd = "hgsql %s -e 'drop table %s' " % (args.database, tmpTable)
+    p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+    cmdoutput = p.stdout.read()
+
+    cmd = "rm %s" % tmpFile
+    p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+    cmdoutput = p.stdout.read()
 
 
-	
-	c = track.CompositeTrack(args.database, args.composite)
-	newMdb = c.alphaMetaDb
-	oldMdb = c.betaMetaDb
-	
-	
-	commonStanzas = set(newMdb.filter(lambda s: 1, lambda s: s['metaObject'])) & set(oldMdb.filter(lambda s: 1, lambda s: s['metaObject']))
-	
-	changelist = dict()
-	
-	for i in sorted(commonStanzas):
-		#print oldMdb[i]
-		for j in vars:
-			if j not in newMdb[i]:
-				if j in oldMdb[i]:
-					changelist = addChange(changelist, i, "deleted %s" % j)
-					del oldMdb[i][j]
-					continue
-				else:
-					continue
-			if j not in oldMdb[i]:
-				changelist = addChange(changelist, i, "added %s = %s" % (j, newMdb[i][j]))
-				oldMdb[i][j] = newMdb[i][j]
-				continue
-			elif oldMdb[i][j] != newMdb[i][j]:
-				changelist = addChange(changelist, i, "changed %s from %s to %s" % (j, oldMdb[i][j], newMdb[i][j]))
-				oldMdb[i][j] = newMdb[i][j]
-
-	
-	for i in sorted(changelist):
-		print i
-		for j in changelist[i]:
-			pass
-			print j
-		print ""
-		
-
-	f = open(c._betaMdbPath, 'w')
-	magic = ""
-	for i in sorted(oldMdb):
-		if re.search('MAGIC', i):
-			magic = i
-			continue
-		f.write("metaObject " + str(oldMdb[i]['metaObject'] + "\n"))
-		del oldMdb[i]['metaObject']
-		f.write("objType " + str(oldMdb[i]['objType'] + "\n"))
-		del oldMdb[i]['objType']
-		for j in sorted(oldMdb[i]):
-			f.write(("%s %s" % (j, oldMdb[i][j])) + "\n")
-		f.write("\n")
-	magic = magic + "\n"	
-	f.write(magic)
-	f.close
-	
 if __name__ == '__main__':
-	main()
+    main()

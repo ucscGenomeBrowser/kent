@@ -7,7 +7,6 @@
 #include "rangeTree.h"
 #include "peakCluster.h"
 
-static char const rcsid[] = "$Id: regCluster.c,v 1.4 2010/05/16 21:41:42 kent Exp $";
 
 int clDims = 1;
 double clScoreScale = 1.0;

@@ -11,7 +11,6 @@
 #include "netCart.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.27 2010/05/11 01:43:28 kent Exp $";
 
 struct cartOptions
     {
@@ -105,8 +104,8 @@ if (netCart->netColor == netColorGrayScale)
 static Color color;
 if (!sameString(chrom, netColorLastChrom))
     color = getSeqColor(chrom, rHvg);
-if (0 == color)
-    color = 1;	/*	don't display in white	*/
+if (0 == color)		/* color 0 is actually an error condition, see */
+    color = MG_BLACK;	/* makeChromosomeShades() in simpleTracks.c	*/
 netColorLastChrom = chrom;
 return color;
 }
@@ -198,6 +197,7 @@ int orientation;
 
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
+
     color = netColor(tg, fill->qName, level);
     invColor = hvGfxContrastingColor(rHvg, color);
     orientation = orientFromChar(fill->qStrand);
@@ -267,10 +267,6 @@ if (net != NULL)
     rNetDraw(tg, hvg, net->fillList, 1, yOff);
     chainNetFree(&net);
     }
-#ifndef IMAGEv2_DRAG_SCROLL
-if (vis == tvDense)
-    mapBoxToggleVis(hvg, xOff, yOff, width, tg->heightPer, tg);
-#endif///ndef IMAGEv2_DRAG_SCROLL
 }
 
 static int netTotalHeight(struct track *tg, enum trackVisibility vis)

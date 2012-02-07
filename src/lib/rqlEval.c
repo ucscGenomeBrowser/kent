@@ -10,7 +10,6 @@
 #include "sqlNum.h"
 #include "rql.h"
 
-static char const rcsid[] = "$Id: rqlEval.c,v 1.4 2009/12/03 20:05:23 kent Exp $";
 
 static struct rqlEval rqlLocalEval(struct rqlParse *p, void *record, RqlEvalLookup lookup, 
 	struct lm *lm);

@@ -7,7 +7,6 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: bedClip.c,v 1.1 2009/09/10 02:22:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

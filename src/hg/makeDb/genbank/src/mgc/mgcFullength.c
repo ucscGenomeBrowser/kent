@@ -9,7 +9,6 @@
 #include "gbSql.h"
 #include "mgcFullength.h"
 
-static char const rcsid[] = "$Id: mgcFullength.c,v 1.2 2004/02/16 19:30:06 markd Exp $";
 
 void mgcFullengthStaticLoad(char **row, struct mgcFullength *ret)
 /* Load a row from mgcFullength table into ret.  The contents of ret will

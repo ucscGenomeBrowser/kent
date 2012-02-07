@@ -19,7 +19,6 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.146 2010/05/11 01:43:28 kent Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -165,11 +164,13 @@ int i;
 int speciesCt = 0, groupCt = 1;
 int speciesOffCt = 0;
 struct hash *speciesOffHash = newHash(0);
-char buffer[128];
+#define BRANEY_SAYS_USETARG_IS_OBSOLETE
+#ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
 char *speciesTarget = trackDbSetting(track->tdb, SPECIES_TARGET_VAR);
 char *speciesTree = trackDbSetting(track->tdb, SPECIES_TREE_VAR);
 bool useTarg;	/* use phyloTree to find shortest path */
 struct phyloTree *tree = NULL;
+#endif///ndef BRANEY_SAYS_USETARG_IS_OBSOLETE
 char *speciesUseFile = trackDbSetting(track->tdb, SPECIES_USE_FILE);
 char *msaTable = NULL;
 
@@ -187,8 +188,9 @@ if (firstCase != NULL)
     if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
     }
 
-char *cfgPrefix = compositeViewControlNameFromTdb(track->tdb);
-safef(buffer, sizeof(buffer), "%s.vis",/*cfgPrefix*/track->track);
+#ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
+char buffer[128];
+safef(buffer, sizeof(buffer), "%s.vis",track->track); // According to Tim, this makes no sense as "vis"
 if (!cartVarExists(cart, buffer) && (speciesTarget != NULL))
     useTarg = TRUE;
 else
@@ -201,6 +203,7 @@ else
 
 if (useTarg && (tree = phyloParseString(speciesTree)) == NULL)
     useTarg = FALSE;
+#endif///ndef BRANEY_SAYS_USETARG_IS_OBSOLETE
 
 if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
     return getSpeciesFromMaf(track, height);
@@ -239,6 +242,10 @@ if (speciesOff)
         hashAdd(speciesOffHash, defaultOff[i], NULL);
     }
 
+char *prefix = track->track; // use when setting things to the cart
+if (tdbIsContainerChild(track->tdb))
+    prefix = tdbGetContainer(track->tdb)->track;
+
 /* Make up items for other organisms by scanning through group & species
    track settings */
 for (group = 0; group < groupCt; group++)
@@ -249,8 +256,10 @@ for (group = 0; group < groupCt; group++)
                                 SPECIES_GROUP_PREFIX, groups[group]);
         speciesOrder = trackDbRequiredSetting(track->tdb, sGroup);
         }
+#ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
     if (useTarg)
 	{
+        warn("BRANEY_SAYS useTarg should never be TRUE!");
 	char *ptr, *path;
 	struct hash *orgHash = newHash(0);
 	int numNodes, ii;
@@ -279,21 +288,25 @@ for (group = 0; group < groupCt; group++)
 	if ((ptr = phyloFindPath(tree, database, species)) != NULL)
 	    speciesOrder = ptr;
 	}
+#endif///ndef BRANEY_SAYS_USETARG_IS_OBSOLETE
 
-
-    safef(option, sizeof(option), "%s.speciesOrder", /*cfgPrefix*/track->track);
     speciesCt = chopLine(cloneString(speciesOrder), species);
-
     for (i = 0; i < speciesCt; i++)
         {
+#ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
 	if (!useTarg)
+#endif///ndef BRANEY_SAYS_USETARG_IS_OBSOLETE
 	    {
 	    /* skip this species if UI checkbox was unchecked */
-	    safef(option, sizeof(option), "%s.%s", cfgPrefix, species[i]);
-	    if (!cartVarExists(cart, option))
+            if (!cartVarExistsAnyLevel(cart, track->tdb,FALSE,species[i]))
+                {
 		if (hashLookup(speciesOffHash, species[i]))
+                    {
+                    safef(option, sizeof(option), "%s.%s", prefix, species[i]);
 		    cartSetBoolean(cart, option, FALSE);
-	    if (!cartUsualBoolean(cart, option, TRUE))
+                    }
+                }
+            if (!cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, species[i],TRUE))
 		continue;
 	    }
         mi = newMafItem(species[i], group, lowerFirstChar);
@@ -307,9 +320,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
     mi->height = height;
     dyStringPrintf(order, "%s ",mi->db);
     }
-safef(option, sizeof(option), "%s.speciesOrder", /*cfgPrefix*/track->track);
+safef(option, sizeof(option), "%s.speciesOrder", prefix);
 cartSetString(cart, option, order->string);
-compositeViewControlNameFree(&cfgPrefix);
 slReverse(&miList);
 
 return miList;
@@ -1075,21 +1087,22 @@ char option[64];
 if (miList == NULL)
     return FALSE;
 
+char *prefix = track->track; // use when setting things to the cart
+if (tdbIsContainerChild(track->tdb))
+    prefix = tdbGetContainer(track->tdb)->track;
+
 /* get summary table name from trackDb */
 if ((summary = summarySetting(track)) == NULL)
     return FALSE;
 
-char *cfgPrefix = compositeViewControlNameFromTdb(track->tdb);
-
-safef(option, sizeof(option), "%s.%s", cfgPrefix, MAF_CHAIN_VAR);
-compositeViewControlNameFree(&cfgPrefix);
-if (cartVarExists(cart, option))
-    useIrowChains = cartCgiUsualBoolean(cart, option, TRUE);
+if (cartVarExistsAnyLevel(cart, track->tdb,FALSE,MAF_CHAIN_VAR))
+    useIrowChains = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, MAF_CHAIN_VAR,TRUE);
 else
     {
     char *irowString = trackDbSetting(track->tdb, "irows");
     if (irowString && sameString(irowString, "off"))
 	useIrowChains = FALSE;
+    safef(option, sizeof(option), "%s.%s", prefix, MAF_CHAIN_VAR);
     cartSetBoolean(cart, option, useIrowChains);
     }
 
@@ -1299,21 +1312,22 @@ Color pairColor = (vis == tvFull ? track->ixAltColor : color);
 boolean useIrowChains = TRUE;
 char option[64];
 
+char *prefix = track->track; // use when setting things to the cart
+if (tdbIsContainerChild(track->tdb))
+    prefix = track->tdb->parent->track;
+
 struct mafPriv *mp = getMafPriv(track);
 if (miList == NULL || mp->list == NULL)
     return FALSE;
 
-char *cfgPrefix = compositeViewControlNameFromTdb(track->tdb);
-
-safef(option, sizeof(option), "%s.%s", cfgPrefix, MAF_CHAIN_VAR);
-compositeViewControlNameFree(&cfgPrefix);
-if (cartVarExists(cart, option))
-    useIrowChains = cartCgiUsualBoolean(cart, option, TRUE);
+if (cartVarExistsAnyLevel(cart, track->tdb,FALSE,MAF_CHAIN_VAR))
+    useIrowChains = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, MAF_CHAIN_VAR,TRUE);
 else
     {
     char *irowString = trackDbSetting(track->tdb, "irows");
     if (irowString && sameString(irowString, "off"))
 	useIrowChains = FALSE;
+    safef(option, sizeof(option), "%s.%s", prefix, MAF_CHAIN_VAR);
     cartSetBoolean(cart, option, useIrowChains);
     }
 
@@ -1762,7 +1776,6 @@ struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
 struct hash *srcHash = newHash(0);
 char dbChrom[64];
-char buf[1024];
 char option[64];
 int alignLineLength = winBaseCount * 2;
         /* doubled to allow space for insert counts */
@@ -1785,6 +1798,10 @@ char *mafFile = NULL;
 struct sqlConnection *conn2 = NULL;
 struct sqlConnection *conn3 = NULL;
 char *tableName = NULL;
+
+char *prefix = track->track; // use when setting things to the cart
+if (tdbIsContainerChild(track->tdb))
+    prefix = tdbGetContainer(track->tdb)->track;
 
 if (mp->ct != NULL)
     {
@@ -1829,33 +1846,27 @@ seqEnd +=2;
 if (seqEnd > seqBaseCount)
     seqEnd = seqBaseCount;
 
-char *cfgPrefix = compositeViewControlNameFromTdb(track->tdb);
-
-safef(option, sizeof(option), "%s.%s", cfgPrefix, MAF_DOT_VAR);
-if (cartVarExists(cart, option))
-    {
-    dots = cartCgiUsualBoolean(cart, option, FALSE);
-    }
+if (cartVarExistsAnyLevel(cart, track->tdb,FALSE,MAF_DOT_VAR))
+    dots = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, MAF_DOT_VAR,TRUE);
 else
     {
     char *dotString = trackDbSetting(track->tdb, MAF_DOT_VAR);
     if (dotString && sameString(dotString, "on"))
 	{
 	dots = TRUE;
+        safef(option, sizeof(option), "%s.%s", prefix, MAF_DOT_VAR);
 	cartSetBoolean(cart, option, TRUE);
 	}
     }
 
-safef(buf, sizeof(buf), "%s.frames",/*cfgPrefix*/track->track);
-if (cartVarExists(cart, buf))
-    framesTable = cartUsualString(cart, buf, NULL);
+if (cartVarExistsAnyLevel(cart, track->tdb,FALSE,"frames"))
+    framesTable = cartOptionalStringClosestToHome(cart, track->tdb,FALSE,"frames");
 else
     framesTable = trackDbSetting(track->tdb, "frames");
 
 if (framesTable)
     {
-    safef(buf, sizeof(buf), "%s.codons",cfgPrefix);
-    codonTransMode = cartUsualString(cart, buf, "codonDefault");
+    codonTransMode = cartUsualStringClosestToHome(cart, track->tdb,FALSE,"codons", "codonDefault");
     if (sameString("codonNone", codonTransMode))
 	framesTable = NULL;
     }
@@ -1870,14 +1881,14 @@ for (i = 0; i < sizeof noAlignment - 1; i++)
     noAlignment[i] = UNALIGNED_SEQ;
 
 
-safef(option, sizeof(option), "%s.%s", cfgPrefix, MAF_CHAIN_VAR);
-if (cartVarExists(cart, option))
-    useIrowChains = cartCgiUsualBoolean(cart, option, TRUE);
+if (cartVarExistsAnyLevel(cart, track->tdb,FALSE,MAF_CHAIN_VAR))
+    useIrowChains = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, MAF_CHAIN_VAR,TRUE);
 else
     {
     char *irowString = trackDbSetting(track->tdb, "irows");
     if (irowString && sameString(irowString, "off"))
 	useIrowChains = FALSE;
+    safef(option, sizeof(option), "%s.%s", prefix, MAF_CHAIN_VAR);
     cartSetBoolean(cart, option, useIrowChains);
     }
 
@@ -2172,10 +2183,8 @@ y += mi->height;
 /* draw alternating colors behind base-level alignments */
     {
     int alternateColorBaseCount, alternateColorBaseOffset;
-    safef(buf, sizeof(buf), "%s.%s", cfgPrefix, BASE_COLORS_VAR);
-    alternateColorBaseCount = cartCgiUsualInt(cart, buf, 0);
-    safef(buf, sizeof(buf), "%s.%s", cfgPrefix, BASE_COLORS_OFFSET_VAR);
-    alternateColorBaseOffset = cartCgiUsualInt(cart, buf, 0);
+    alternateColorBaseCount = cartUsualIntClosestToHome(cart, track->tdb, FALSE, BASE_COLORS_VAR, 0);
+    alternateColorBaseOffset = cartUsualIntClosestToHome(cart, track->tdb, FALSE, BASE_COLORS_OFFSET_VAR, 0);
     if (alternateColorBaseCount != 0)
         {
         int baseWidth = spreadStringCharWidth(width, winBaseCount);
@@ -2185,7 +2194,6 @@ y += mi->height;
                 alternateColorBaseCount, shadesOfSea[0], MG_WHITE);
         }
     }
-compositeViewControlNameFree(&cfgPrefix);
 
 /* draw base-level alignments */
 for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
@@ -2488,8 +2496,9 @@ for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
     {
     if (differentString(consWig->leftLabel, DEFAULT_CONS_LABEL))
         {
-        char *wigVar = wigMafWiggleVar(tdb, consWig);
-        if (!cartCgiUsualBoolean(cart, wigVar, first))
+        char *wigVarSuffix = NULL;
+        (void)wigMafWiggleVar(tdb->track, consWig,&wigVarSuffix);
+        if (!cartUsualBooleanClosestToHome(cart, tdb, FALSE, wigVarSuffix, first))
             continue;
         }
     first = FALSE;

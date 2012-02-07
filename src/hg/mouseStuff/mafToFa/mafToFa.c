@@ -5,7 +5,6 @@
 #include "maf.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: mafToFa.c,v 1.2 2009/03/29 05:16:57 mikep Exp $";
 
 boolean stripDotsDashes;
 

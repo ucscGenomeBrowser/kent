@@ -10,7 +10,6 @@
 #include "hgExp.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.18 2009/03/03 23:29:06 aamp Exp $";
 
 static int expSubcellWidth = 21;
 

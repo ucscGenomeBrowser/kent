@@ -20,7 +20,6 @@
 #include "fa.h"
 #include "traceInfo.h"
 
-static char const rcsid[] = "$Id: hgTraceInfo.c,v 1.5 2006/05/26 16:14:35 angie Exp $";
 
 static char* TMP_TAB_FILE = "traceInfo.tab";
 static char* TRACE_ID_PREFIX = "gnl|";

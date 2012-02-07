@@ -14,7 +14,6 @@ errAbort("mergeAffyFiles - Combines an Affy 1lq file describing a chip layout, a
 	 "mergeAffyFiles <1lq file> <nmer file> <cel files....> <optional: output=affyTrans>\n");
 }
 
-static char const rcsid[] = "$Id: mergeAffyFiles.c,v 1.2 2003/05/06 07:22:13 kate Exp $";
 
 struct lqRecord 
 /* Row from an affymetrix 1lq file. */

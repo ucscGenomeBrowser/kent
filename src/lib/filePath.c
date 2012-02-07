@@ -2,7 +2,6 @@
 #include "common.h"
 #include "filePath.h"
 
-static char const rcsid[] = "$Id: filePath.c,v 1.3 2008/09/17 17:56:37 kent Exp $";
 
 void undosPath(char *path)
 /* Convert '\' to '/' in path. */

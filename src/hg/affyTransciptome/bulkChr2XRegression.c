@@ -3,7 +3,6 @@
 #include "linefile.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: bulkChr2XRegression.c,v 1.4 2003/05/06 07:22:13 kate Exp $";
 
 struct genomeBit
 /* Piece of the genome */

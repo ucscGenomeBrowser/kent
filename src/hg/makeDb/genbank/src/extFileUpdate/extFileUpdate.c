@@ -17,7 +17,6 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.13 2009/12/26 03:37:14 markd Exp $";
 
 /*
  * Algorithm:

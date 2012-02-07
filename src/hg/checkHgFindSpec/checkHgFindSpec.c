@@ -13,7 +13,6 @@
 #include "hgFindSpec.h"
 #include "regexHelper.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.12 2008/09/03 19:18:21 markd Exp $";
 
 char *database = NULL;
 /* Need to get a cart in order to use hgFind. */

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "arcogdesc.h"
 
-static char const rcsid[] = "$Id: arcogdesc.c,v 1.1 2009/10/14 20:28:04 holmes Exp $";
 
 void arcogdescStaticLoad(char **row, struct arcogdesc *ret)
 /* Load a row from arcogdesc table into ret.  The contents of ret will

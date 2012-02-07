@@ -10,7 +10,6 @@
 #include "localmem.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: refPepRepair.c,v 1.11 2006/01/26 00:40:32 genbank Exp $";
 
 /* N.B. 
  *  - The code for getting an ext file record is based on code in gbSanity/chkSeqTbl.c.

@@ -12,6 +12,8 @@
 #    assembly] sequence: 
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu1.0/
 
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ADFV00
+
 
 ##########################################################################
 # Download sequence (DONE 2010-10-22 - Chin)
@@ -112,6 +114,24 @@ taxId 61853
     # 1399907521 lower) in 17968 sequences in 1 files
     # %47.68 masked total, %50.78 masked real
 
+    #bug 5557 fixed up (2011-11-16 Chin)
+    cd /hive/data/genomes/nomLeu1/bed/repeatMasker
+    head -3 nomLeu1.fa.out > nomLeu1.sorted.fa.out
+    tail -n +4 nomLeu1.fa.out | sort -k5,5 -k6,6n >> nomLeu1.sorted.fa.out
+    hgLoadOut -table=rmsk -nosplit nomLeu1 nomLeu1.sorted.fa.out
+    # Loading up table rmsk
+    # note: 2 records dropped due to repStart > repEnd
+    #   run with -verbose=2 for details
+
+    hgLoadOut -table=rmsk -nosplit -verbose=2 nomLeu1 nomLeu1.sorted.fa.out
+    #	hgLoadOut: connected to database: nomLeu1
+    # bad rep range [5563, 5562] line 2793949 of nomLeu1.sorted.fa.out 
+    # bad rep range [3599, 3598] line 3970033 of nomLeu1.sorted.fa.out 
+    # Loading up table rmsk
+    # note: 2 records dropped due to repStart > repEnd
+
+
+
 #########################################################################
 # simpleRepeats ( DONE 2010-10-31 - Chin)
     mkdir /hive/data/genomes/nomLeu1/bed/simpleRepeat
@@ -131,6 +151,9 @@ taxId 61853
     # 2936035333 bases (179443556 N's 2756591777 real 1355629718 upper 
     # 1400962059 lower) in 17968 sequences in 1 files
     # %47.72 masked total, %50.82 masked real
+
+    rm /gbdb/nomLeu1/nomLeu1.2bit
+    ln -s `pwd`/nomLeu1.2bit /gbdb/nomLeu1/nomLeu1.2bit
 
 #########################################################################
 # Marking *all* gaps - they are all in the AGP file
@@ -274,7 +297,7 @@ nomLeu1.genbank.est.native.loadDesc = no
 
 
 ############################################################################
-#  nomLeu1 - Gibbon - Ensembl Genes version 62  (DONE - 2011-04-19 - hiram)
+#  nomLeu1 - Gibbon - Ensembl Genes version 62  (DONE - 2011-04-19 - Hiram)
     ssh hgwdev
     cd /hive/data/genomes/nomLeu1
     cat << '_EOF_' > nomLeu1.ensGene.ra
@@ -295,5 +318,122 @@ nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;
 
     hgsql -e \
 'update trackVersion set dateReference="current" where db="nomLeu1";' hgFixed
+
+############################################################################
+# lastz swap from Gorilla gorGor3 (DONE - 2011-10-27 - Hiram)
+    # original alignment on gorilla
+    cd /hive/data/genomes/gorGor3/bed/lastzNomLeu1.2011-10-21
+    cat fb.gorGor3.chainNomLeu1Link.txt
+    #	2356321697 bases of 2822760080 (83.476%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/nomLeu1/bed/blastz.gorGor3.swap
+    cd /hive/data/genomes/nomLeu1/bed/blastz.gorGor3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/gorGor3/bed/lastzNomLeu1.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    74m9.554s
+    cat fb.nomLeu1.chainGorGor3Link.txt 
+    #	2318822567 bases of 2756591777 (84.119%) in intersection
+
+    cd /hive/data/genomes/nomLeu1/bed
+    ln -s blastz.gorGor3.swap lastz.gorGor3
+
+###########################################################################
+# lastz swap Human hg19 (DONE - 2011-11-08 - Chin)
+
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzNomLeu1.2011-11-04
+    cat fb.hg19.chainNomLeu1Link.txt
+    #   2543943556 bases of 2897316137 (87.803%) in intersection
+
+
+    #   running the swap
+    mkdir /hive/data/genomes/nomLeu1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/nomLeu1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzNomLeu1.2011-11-04/DEF \
+        -swap -syntenicNet \
+        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        > swap.log 2>&1 &
+    #   real    69m39.685s
+    cat fb.nomLeu1.chainHg19Link.txt
+    #   2480558770 bases of 2756591777 (89.986%) in intersection
+
+    cd /hive/data/genomes/nomLeu1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################
+# set gibbon/trackDb.chainNet.ra after last lastz run (DONE 2011-11-17 - Chin)
+# put the output from chainNet.pl and findScore.pl result in the ra file
+    chainNet.pl nomLeu1
+    # track chainNetGorGor3 override
+    # priority 210.3
+
+    # track chainNetHg19 override
+    # priority 230.3
+
+    findScores.pl hg19 nomLeu1
+    # looking in file:
+    #   /hive/data/genomes/hg19/bed/lastz.nomLeu1/axtChain/run/chain.csh
+    # -scoreScheme=/scratch/data/blastz/human_chimp.v2.q
+    # matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+    # -minScore=5000
+    # -linearGap=medium
+
+
+#########################################################################
+# all.joiner update, downloads and in pushQ (DONE 2011-11-10 - Chin)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=nomLeu1 -all all.joiner
+
+    mkdir /hive/data/genomes/nomLeu1/goldenPath
+    cd /hive/data/genomes/nomLeu1/goldenPath
+    makeDownloads.pl nomLeu1 > do.log 2>&1
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/nomLeu1/pushQ
+    cd /hive/data/genomes/nomLeu1/pushQ
+    makePushQSql.pl nomLeu1 > nomLeu1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/nomLeu1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/nomLeu1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/nomLeu1/bbi/quality.bw
+    # WARNING: nomLeu1 does not have seq
+    # WARNING: nomLeu1 does not have extFile
+    # 
+    # WARNING: Could not tell (from trackDb, all.joiner and hardcoded
+    # lists of
+    # supporting and genbank tables) which tracks to assign these tables
+    # to:
+    #   tableList
+
+    #   copy it to hgwbeta
+    scp -p nomLeu1.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < nomLeu1.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2011-11-17 - Chin)
+#  this has been requested through Steve H. A blat has been started for
+#  nomLeu1 on the host blat1 on ports 17812 (trans) and 17813 (untrans).
+#       After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("nomLeu1", "blat1", "17812", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("nomLeu1", "blat1", "17813", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
 
 ############################################################################

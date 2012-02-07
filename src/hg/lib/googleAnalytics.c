@@ -3,7 +3,6 @@
 #include "hPrint.h"
 #include "googleAnalytics.h"
 
-static char const rcsid[] = "$Id: googleAnalytics.c,v 1.5 2010/04/01 05:53:37 markd Exp $";
 
 void googleAnalytics()
 /* check for analytics configuration item and output google hooks if OK */

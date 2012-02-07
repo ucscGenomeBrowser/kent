@@ -5,7 +5,6 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: twinOrf3.c,v 1.6 2007/03/15 00:57:53 kent Exp $";
 
 double utrPenalty = 0.15;
 double firstBonus = 15.0;

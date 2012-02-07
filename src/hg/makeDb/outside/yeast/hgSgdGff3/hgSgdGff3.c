@@ -5,7 +5,6 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.2 2006/07/26 04:59:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

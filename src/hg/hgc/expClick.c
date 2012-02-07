@@ -12,7 +12,6 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.25 2010/05/11 01:43:28 kent Exp $";
 
 /* global flag to indicate if the track is a cancer genomics track */
 boolean isCancerGenomicsTrack = FALSE;

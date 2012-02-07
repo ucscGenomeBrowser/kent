@@ -7,7 +7,6 @@
 #include "linefile.h"
 #include "ocp.h"
 
-static char const rcsid[] = "$Id: ocp.c,v 1.2 2003/05/06 07:22:30 kate Exp $";
 
 void ocpStaticLoad(char **row, struct ocp *ret)
 /* Load a row from ocp table into ret.  The contents of ret will

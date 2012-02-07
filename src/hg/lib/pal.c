@@ -11,18 +11,17 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.14 2009/07/06 17:43:08 braney Exp $";
 
-#define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
-#define hgtaJSGeneMafTable  "mafGeneMafTable" 
-#define hgtaCGIGeneExons "hgta_mafGeneExons" 
-#define hgtaJSGeneExons  "mafGeneExons" 
-#define hgtaCGIGeneNoTrans "hgta_mafGeneNoTrans" 
-#define hgtaJSGeneNoTrans  "mafGeneNoTrans" 
-#define hgtaCGIGeneOutBlank "hgta_mafGeneOutBlank" 
-#define hgtaJSGeneOutBlank  "mafGeneOutBlank" 
-#define hgtaCGIOutTable "hgta_mafOutTable" 
-#define hgtaJSOutTable  "mafOutTable" 
+#define hgtaCGIGeneMafTable "hgta_mafGeneMafTable"
+#define hgtaJSGeneMafTable  "mafGeneMafTable"
+#define hgtaCGIGeneExons "hgta_mafGeneExons"
+#define hgtaJSGeneExons  "mafGeneExons"
+#define hgtaCGIGeneNoTrans "hgta_mafGeneNoTrans"
+#define hgtaJSGeneNoTrans  "mafGeneNoTrans"
+#define hgtaCGIGeneOutBlank "hgta_mafGeneOutBlank"
+#define hgtaJSGeneOutBlank  "mafGeneOutBlank"
+#define hgtaCGIOutTable "hgta_mafOutTable"
+#define hgtaJSOutTable  "mafOutTable"
 #define hgtaCGINumColumns "hgta_mafNumColumns"
 #define hgtaJSNumColumns  "mafNumColumns"
 #define hgtaCGITruncHeader "hgta_mafTruncHeader"
@@ -42,7 +41,7 @@ int palOutPredList(struct sqlConnection *conn, struct cart *cart,
 if (list == NULL)
     return 0;
 
-char *mafTable = cartString(cart, hgtaCGIGeneMafTable); 
+char *mafTable = cartString(cart, hgtaCGIGeneMafTable);
 char *database = sqlGetDatabase(conn);
 struct trackDb *maftdb = hTrackDbForTrack(database, mafTable);
 struct wigMafSpecies *wmSpecies;
@@ -52,7 +51,7 @@ int groupCnt;
 maftdb->parent = hCompositeTrackDbForSubtrack(database,maftdb);
 
 /* this queries the state of the getSpecies dialog */
-wigMafGetSpecies(cart, maftdb, database, &wmSpecies, &groupCnt);
+wigMafGetSpecies(cart, maftdb, maftdb->track, database, &wmSpecies, &groupCnt);
 
 /* since the species selection dialog doesn't list
  * the reference species, we just automatically include
@@ -70,11 +69,11 @@ for(; wmSpecies; wmSpecies = wmSpecies->next)
     }
 slReverse(&includeList);
 
-boolean inExons = cartUsualBoolean(cart, hgtaCGIGeneExons , FALSE); 
-boolean noTrans = cartUsualBoolean(cart, hgtaCGIGeneNoTrans, FALSE); 
-boolean outBlank = cartUsualBoolean(cart, hgtaCGIGeneOutBlank, FALSE); 
-boolean outTable = cartUsualBoolean(cart, hgtaCGIOutTable, FALSE); 
-boolean truncHeader = cartUsualBoolean(cart, hgtaCGITruncHeader, FALSE); 
+boolean inExons = cartUsualBoolean(cart, hgtaCGIGeneExons , FALSE);
+boolean noTrans = cartUsualBoolean(cart, hgtaCGIGeneNoTrans, FALSE);
+boolean outBlank = cartUsualBoolean(cart, hgtaCGIGeneOutBlank, FALSE);
+boolean outTable = cartUsualBoolean(cart, hgtaCGIOutTable, FALSE);
+boolean truncHeader = cartUsualBoolean(cart, hgtaCGITruncHeader, FALSE);
 int numCols = cartUsualInt(cart, hgtaCGINumColumns, 20);
 unsigned options = 0;
 
@@ -93,7 +92,7 @@ for( ; list ; list = list->next)
     if (list->cdsStart != list->cdsEnd)
 	{
 	outCount++;
-	mafGeneOutPred(stdout, list, database, mafTable, 
+	mafGeneOutPred(stdout, list, database, mafTable,
 	    includeList, options, numCols);
 	}
     }
@@ -112,7 +111,7 @@ for(; beds; beds = beds->next)
     {
     char where[10 * 1024];
 
-    safef(where, sizeof where, 
+    safef(where, sizeof where,
 	"name = '%s' and chrom='%s' and txEnd > %d and txStart <= %d",
 	beds->name, beds->chrom, beds->chromStart, beds->chromEnd);
 
@@ -148,11 +147,11 @@ static struct dyString *onChangeStart()
 struct dyString *dy = dyStringNew(1024);
 dyStringAppend(dy, "onChange=\"");
 jsDropDownCarryOver(dy, hgtaCGIGeneMafTable);
-jsTrackedVarCarryOver(dy, hgtaCGIGeneExons, hgtaJSGeneExons); 
-jsTrackedVarCarryOver(dy, hgtaCGIGeneNoTrans, hgtaJSGeneNoTrans); 
-jsTrackedVarCarryOver(dy, hgtaCGIGeneOutBlank, hgtaJSGeneOutBlank); 
-jsTrackedVarCarryOver(dy, hgtaCGIOutTable, hgtaJSOutTable); 
-jsTrackedVarCarryOver(dy, hgtaCGITruncHeader, hgtaJSTruncHeader); 
+jsTrackedVarCarryOver(dy, hgtaCGIGeneExons, hgtaJSGeneExons);
+jsTrackedVarCarryOver(dy, hgtaCGIGeneNoTrans, hgtaJSGeneNoTrans);
+jsTrackedVarCarryOver(dy, hgtaCGIGeneOutBlank, hgtaJSGeneOutBlank);
+jsTrackedVarCarryOver(dy, hgtaCGIOutTable, hgtaJSOutTable);
+jsTrackedVarCarryOver(dy, hgtaCGITruncHeader, hgtaJSTruncHeader);
 jsTextCarryOver(dy, hgtaCGINumColumns);
 return dy;
 }
@@ -173,7 +172,7 @@ char *ret = NULL;
 for(; dbl; dbl = dbl->next)
     {
     char query[512];
-    safef(query, sizeof query, 
+    safef(query, sizeof query,
 	"select tableName from %s where shortLabel='Conservation'", dbl->name);
 
     struct sqlResult *sr = sqlGetResult(conn, query);
@@ -238,14 +237,14 @@ for(; list; list = list->next)
     *tb++ = list->name;
 
 printf("<B>MAF table: </B>\n");
-cgiMakeDropListFull(hgtaCGIGeneMafTable, tables, tables, 
+cgiMakeDropListFull(hgtaCGIGeneMafTable, tables, tables,
     count , mafTable, onChangeGenome());
 
 return mafTable;
 }
 
-void palOptions(struct cart *cart, 
-	struct sqlConnection *conn, void (*addButtons)(), 
+void palOptions(struct cart *cart,
+	struct sqlConnection *conn, void (*addButtons)(),
 	char *extraVar)
 /* output the options dialog (select MAF file, output options */
 {

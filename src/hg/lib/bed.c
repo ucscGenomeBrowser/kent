@@ -8,7 +8,6 @@
 #include "minChromSize.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.65 2009/04/17 22:02:51 kent Exp $";
 
 struct genePred *bedToGenePred(struct bed *bed)
 /* Convert a single bed to a genePred structure. */

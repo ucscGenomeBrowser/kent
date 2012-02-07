@@ -13,7 +13,6 @@
 #include "xp.h"
 #include "xmlEscape.h"
 
-static char const rcsid[] = "$Id: xp.c,v 1.15 2005/12/19 17:51:14 kent Exp $";
 
 
 char xpNextBuf(struct xp *xp)

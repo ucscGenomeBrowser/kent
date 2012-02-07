@@ -17,7 +17,6 @@
 #include "hCommon.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: ooGreedy.39.c,v 1.2 2003/05/06 07:22:32 kate Exp $";
 
 int version = 39;       /* Current version number. */
 int maxTailSize = 2000;	/* Maximum non-aligning end. */

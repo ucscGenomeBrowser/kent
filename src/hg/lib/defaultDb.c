@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "defaultDb.h"
 
-static char const rcsid[] = "$Id: defaultDb.c,v 1.4 2005/04/13 06:25:52 markd Exp $";
 
 void defaultDbStaticLoad(char **row, struct defaultDb *ret)
 /* Load a row from defaultDb table into ret.  The contents of ret will

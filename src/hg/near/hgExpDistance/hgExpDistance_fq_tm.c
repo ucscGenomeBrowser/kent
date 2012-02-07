@@ -26,7 +26,6 @@ pthread_mutex_t mutexDotOut;
 int numThreads;
 int dotEvery = 0;
 
-static char const rcsid[] = "$Id: hgExpDistance_fq_tm.c,v 1.1 2008/08/29 20:01:40 lslater Exp $";
 
 void usage()
 /* Explain usage and exit. */

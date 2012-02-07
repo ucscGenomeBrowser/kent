@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/wgEncodeGencodeExonSupport.h"
 
-static char const rcsid[] = "$Id:$";
 
 void wgEncodeGencodeExonSupportStaticLoad(char **row, struct wgEncodeGencodeExonSupport *ret)
 /* Load a row from wgEncodeGencodeExonSupport table into ret.  The contents of ret will

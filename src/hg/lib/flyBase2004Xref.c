@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "flyBase2004Xref.h"
 
-static char const rcsid[] = "$Id: flyBase2004Xref.c,v 1.1 2005/01/13 00:59:48 angie Exp $";
 
 void flyBase2004XrefStaticLoad(char **row, struct flyBase2004Xref *ret)
 /* Load a row from flyBase2004Xref table into ret.  The contents of ret will

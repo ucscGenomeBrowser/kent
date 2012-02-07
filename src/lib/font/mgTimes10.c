@@ -1,6 +1,5 @@
 
 /* Times10.c - compiled data for font -Adobe-Times-M-R-N--10-100-75-7 */
-static char const rcsid[] = "$Id: mgTimes10.c,v 1.4 2010/04/06 19:56:20 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/timR10.bdf */
 

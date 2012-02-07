@@ -7,7 +7,6 @@
 #include "fa.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: randomEst.c,v 1.3 2003/05/06 07:22:31 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -11,7 +11,6 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbAligned.c,v 1.3 2007/11/17 22:33:36 markd Exp $";
 
 /* column indices in alidx files */
 #define ALIDX_ACC_COL         0

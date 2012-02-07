@@ -16,6 +16,10 @@ char *cfgOptionEnv(char *envName, char* name);
 /* get a configuration optional value, from either the environment or the cfg
  * file, with the env take precedence.  Return NULL if not found */
 
+char *cfgOptionEnvDefault(char *envName, char* name, char *def);
+/* get a configuration optional value, from either the environment or the cfg
+ * file, with the env take precedence.  Return default if not found */
+
 char *cfgOption2(char *prefix, char *suffix);
 /* Return the option with the given two-part name, formed from prefix.suffix.
  * Return NULL if it doesn't exist. */

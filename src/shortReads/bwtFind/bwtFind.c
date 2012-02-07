@@ -5,7 +5,6 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: bwtFind.c,v 1.1 2008/11/08 10:46:05 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

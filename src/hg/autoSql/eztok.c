@@ -9,7 +9,6 @@
 #include "common.h"
 #include "eztok.h"
 
-static char const rcsid[] = "$Id: eztok.c,v 1.3 2003/05/06 07:22:14 kate Exp $";
 
 struct ezTok *ezNewTok(char *string, int stringSize)
 /* Allocate and initialize a new token. */

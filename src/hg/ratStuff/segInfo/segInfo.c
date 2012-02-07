@@ -5,7 +5,6 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segInfo.c,v 1.7 2008/04/25 17:26:09 rico Exp $";
 
 static struct optionSpec options[] = {
 	{"merge", OPTION_BOOLEAN},

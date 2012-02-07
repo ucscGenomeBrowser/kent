@@ -6,7 +6,6 @@
 #include "fuzzyFind.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: ffAliHelp.c,v 1.10 2005/11/20 19:24:57 kent Exp $";
 
 void ffCat(struct ffAli **pA, struct ffAli **pB)
 /* Concatenate B to the end of A. Eat up second list

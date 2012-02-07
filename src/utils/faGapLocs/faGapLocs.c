@@ -5,7 +5,6 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: faGapLocs.c,v 1.1 2007/08/17 01:15:44 markd Exp $";
 
 /* command line options */
 static struct optionSpec optionSpecs[] =

@@ -10,7 +10,6 @@
 #include "bits.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 double threshold = 10;
 int boxWidth = 1200;

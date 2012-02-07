@@ -7,7 +7,6 @@
 #include "hdb.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binTest.c,v 1.4 2006/02/10 19:27:21 hiram Exp $";
 
 static boolean newStyle = FALSE; /* check new style range*/
 static boolean oldStyle = FALSE; /* check old style range*/

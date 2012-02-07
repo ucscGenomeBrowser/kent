@@ -38,7 +38,6 @@
 #include "hdb.h"
 #include "hapmapSnpsCombined.h"
 
-static char const rcsid[] = "$Id: hapmapSummary.c,v 1.9 2007/03/14 21:20:09 heather Exp $";
 
 struct orthoAllele
     {

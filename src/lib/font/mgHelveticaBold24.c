@@ -1,6 +1,5 @@
 
 /* HelveticaBold24.c - compiled data for font AdobeHelv-B-R-N--24-240-75-75-P */
-static char const rcsid[] = "$Id: mgHelveticaBold24.c,v 1.3 2010/04/06 19:56:20 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/helvB24.bdf */
 

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "rnaGroup.h"
 
-static char const rcsid[] = "$Id: rnaGroup.c,v 1.3 2005/04/13 06:25:56 markd Exp $";
 
 struct rnaGroup *rnaGroupLoad(char **row)
 /* Load a rnaGroup from row fetched with select * from rnaGroup

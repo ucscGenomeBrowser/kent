@@ -16,7 +16,6 @@
 #include <sys/types.h>
 #include <regex.h>
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.23 2009/02/17 20:10:28 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

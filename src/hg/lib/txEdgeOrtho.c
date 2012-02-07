@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "txEdgeOrtho.h"
 
-static char const rcsid[] = "$Id: txEdgeOrtho.c,v 1.2 2007/02/16 03:16:59 kent Exp $";
 
 /* definitions for type column */
 static char *values_type[] = {"exon", "intron", NULL};

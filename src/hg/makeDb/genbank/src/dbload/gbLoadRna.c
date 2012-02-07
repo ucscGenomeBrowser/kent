@@ -32,7 +32,6 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.40 2008/10/12 07:33:02 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -560,6 +559,12 @@ if (gReload && (gOptions.flags & DBLOAD_DRY_RUN))
 gbVerbEnter(1, "gbLoadRna");
 conn = hAllocConn(gDatabase);
 gbLockDb(conn, NULL);
+
+char query[4096];
+int waitTimeout = 24*60*60;  // 24 hours
+safef(query, sizeof query, "set wait_timeout=%d",waitTimeout);
+sqlUpdate(conn, query);
+fprintf(stderr,"%s\n",query);
 
 if (gOptions.flags & DBLOAD_INITIAL)
     checkInitialLoad(conn);

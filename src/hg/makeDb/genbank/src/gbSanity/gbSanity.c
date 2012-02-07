@@ -39,7 +39,6 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.17 2008/09/03 19:19:35 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

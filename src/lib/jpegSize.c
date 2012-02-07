@@ -3,7 +3,6 @@
 #include "common.h"
 #include "jpegSize.h"
 
-static char const rcsid[] = "$Id: jpegSize.c,v 1.3 2008/09/17 17:56:37 kent Exp $";
 
 /* sections containing width and height     */
 #define M_SOF0  0xC0            /* Start Of Frame N                        */

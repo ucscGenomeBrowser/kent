@@ -49,11 +49,10 @@ The available tracks are:
   <li><em>GENCODE Pseudogenes</em> - all pseudogene annotations except polymorphic pseudogenes
 
   <li><em>GENCODE 2-way Pseudogenes</em> - Pseudogenes predicted by the Yale
-    Pseudopipe and UCSC Retrofinder pipelines, but not annotated by the HAVANA
-    manual annotation process.  The set was derived by looking for a 50 base pairs
-    of overlap between pseudogenes derived from both sets based on their genomic
-    locations i.e. chromosomal coordinates.  When multiple Pseudopipe
-    predictions map to a single Retrofinder prediction, only one match is kept
+    Pseudopipe and UCSC Retrofinder pipelines. The set was derived by looking
+    for a 50 base pairs of overlap between pseudogenes derived from both sets
+    based on their genomic locations i.e. chromosomal coordinates.  When multiple
+    Pseudopipe predictions map to a single Retrofinder prediction, only one match is kept
     for the 2-way consensus set.
   <li><em>GENCODE PolyA</em> - This track contains polyA signals and sites manually annotated on
     the genome based on transcribed evidence (ESTs and cDNAs) of 3' end of
@@ -90,7 +89,7 @@ each locus.
     </ul>
 </ul>
 
-<h4>Non-coding transcript categories</h4>
+<h5>Non-coding transcript categories</h5>
 <p>Non-coding transcripts are categorized using
 their <a href="http://www.gencodegenes.org/gencode_biotypes.html">BioType</a>
 and the following criteria:
@@ -173,16 +172,26 @@ Harrow <em>et al</em> (2006).
 <p> See Harrow <em>et al.</em> (2006) for information on verification
 techniques.
 </p>
+<P>
+Selected transcript models are verified experimentally by RT-PCR amplification followed by sequencing.
+Those experiments can be found at GEO:
+<ul>
+ <!-- <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30619" target="_blank"><b>GSE30619:[E-MTAB-612]</b></a> - Batch I is based on annotation from July 2008 (without pseudogenes).</li>
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE25711" target="_blank"><b>GSE25711:[E-MTAB-407]</b></a> - Batch II is based on annotation from April 2009. </li>
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30612" target="_blank"><b>GSE30612:[E-MTAB-533]</b></a> - Batch III is verifying RGASP models for c.elegans and human.</li> -->
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34797" target="_blank"><b>GSE34797:[E-MTAB-684]</b></a> - Batch IV is based on chromosome 3, 4 and 5 annotations from GENCODE 4 (January 2010).</li>
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34820" target="_blank"><b>GSE34820:[E-MTAB-737]</b></a> - Batch V is based on annotations from GENCODE 6 (November 2010).</li>
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34821" target="_blank"><b>GSE34821:[E-MTAB-831]</b></a> - Batch VI is based on annotations from GENCODE 6 (November 2010) as well as transcript models predicted by the Ensembl Genebuild group based on the Illumina Human BodyMap 2.0 data. </li>
+</ul>
+</P>
 
 <h2>Credits</h2>
 
 <p> This GENCODE release is the result of a collaborative effort among
-the following laboratories: (contact: <A HREF="mailto:&#103;&#101;n&#99;o&#100;&#101;&#64;&#115;an&#103;&#101;&#114;.
-&#97;&#99;.
-u&#107;">GENCODE at the Sanger Institute</A>.
+the following laboratories: (contact: <A HREF="mailto:&#103;&#101;n&#99;o&#100;&#101;&#64;&#115;an&#103;&#101;&#114;.&#97;&#99;.u&#107;">
+GENCODE at the Sanger Institute</A>.
 <!-- above address is gencode at sanger.ac.uk -->)
 </p>
-
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
@@ -196,13 +205,13 @@ u&#107;">GENCODE at the Sanger Institute</A>.
     <tr>
       <td style="vertical-align: top; text-align: left;"><a href="http://www.sanger.ac.uk/HGP/havana/havana.shtml" target="_blank">HAVANA manual annotation group</a>,
           Wellcome Trust Sanger Insitute (WTSI), Hinxton, UK</td>
-      <td style="vertical-align: top;">Adam Frankish, Jose Manuel Gonzales, Mike Kay, Alexandra Bignell, 
+      <td style="vertical-align: top;">Adam Frankish, Jose Manuel Gonzalez, Mike Kay, Alexandra Bignell, 
         Gloria Despacio-Reyes, Garaub Mukherjee, Gary Sanders, Veronika Boychenko, Jennifer Harrow</td>
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: left;"><a href="http://genome.imim.es/" target="_blank">Genome Bioinformatics Lab (CRG)</a>,
           Barcelona, Spain</td>
-      <td style="vertical-align: top;">Thomas Derrien, Tyler Alioto, Roderic Guig&oacute;</td>
+      <td style="vertical-align: top;">Thomas Derrien, Tyler Alioto, Andrea Tanzer, Roderic Guig&oacute;</td>
     </tr>
     <tr>
       <td><a href="http://genome.ucsc.edu/" target="_blank">Genome Bioinformatics, University of California Santa Cruz</a> (UCSC), USA</td>
@@ -219,7 +228,7 @@ u&#107;">GENCODE at the Sanger Institute</A>.
     </tr>
     <tr>
       <td><a href="http://medicine.yale.edu/bbs/computational/index.aspx" target="_blank">Computational Biology and Bioinformatics, Yale University</a> (Yale), USA</td>
-      <td>Philip Cayting, Mark Gerstein</td>
+      <td>Philip Cayting, Suganthi Balasubramanian, Baikang Pei, Cristina Sisu, Mark Gerstein</td>
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: left;"><a href="http://www.unil.ch/cig" target="_blank">Center for Integrative Genomics</a>,

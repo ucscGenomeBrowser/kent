@@ -286,13 +286,10 @@ if (oldVars == NULL)
     return;
 struct hashEl *hel = hashLookup(cart->hash, var);
 
-#define CART_DIFFS_INCLUDE_EMPTIES
-#ifdef CART_DIFFS_INCLUDE_EMPTIES
 // NOTE: New cgi vars not in old cart cannot be distinguished from vars not newly set by cgi.
 //       Solution: Add 'empty' var to old vars for cgi vars not already in cart
 if (hel == NULL)
     hashAdd(oldVars, var, cloneString(CART_VAR_EMPTY));
-#endif///def CART_DIFFS_INCLUDE_EMPTIES
 
 while (hel != NULL)
     {
@@ -920,6 +917,27 @@ boolean cartListVarExists(struct cart *cart, char *var)
 return cartVarExists(cart, cartMultShadowVar(cart, var));
 }
 
+boolean cartListVarExistsAnyLevel(struct cart *cart, struct trackDb *tdb,
+				  boolean parentLevel, char *suffix)
+/* Return TRUE if a list variable for tdb->track (or tdb->parent->track,
+ * or tdb->parent->parent->track, etc.) is in cart (list itself may be NULL). */
+{
+if (parentLevel)
+    tdb = tdb->parent;
+for ( ; tdb != NULL; tdb = tdb->parent)
+    {
+    char var[PATH_LEN];
+    if (suffix[0] == '.' || suffix[0] == '_')
+        safef(var, sizeof var, "%s%s%s", cgiMultListShadowPrefix(), tdb->track, suffix);
+    else
+        safef(var, sizeof var, "%s%s.%s", cgiMultListShadowPrefix(), tdb->track, suffix);
+    char *cartSetting = hashFindVal(cart->hash, var);
+    if (cartSetting != NULL)
+	return TRUE;
+    }
+return FALSE;
+}
+
 char *cartString(struct cart *cart, char *var)
 /* Return string valued cart variable. */
 {
@@ -1084,7 +1102,7 @@ boolean cartBoolean(struct cart *cart, char *var)
 /* Retrieve cart boolean. */
 {
 char *s = cartString(cart, var);
-if (sameString(s, "on") || atoi(s) > 0)
+if (sameWord(s, "on") || atoi(s) > 0)
     return TRUE;
 else
     return FALSE;
@@ -1096,7 +1114,7 @@ boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual)
 char *s = cartOptionalString(cart, var);
 if (s == NULL)
     return usual;
-return (sameString(s, "on") || atoi(s) > 0);
+return (sameWord(s, "on") || atoi(s) > 0);
 }
 
 boolean cartCgiUsualBoolean(struct cart *cart, char *var, boolean usual)
@@ -1328,6 +1346,18 @@ void cartWriteCookie(struct cart *cart, char *cookieName)
 {
 printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\r\n",
 	cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
+#ifdef SUPPORT_EURONODE
+char *redirect = cgiOptionalString("redirect");
+char *source = cgiOptionalString("source");
+if (redirect && !source)
+    {
+    printf("Set-Cookie: redirect=mirror; path=/; domain=%s; expires=%s\r\n", cgiServerName(), cookieDate());
+    // DEBUG REMOVE:
+    fprintf(stderr, "GALT Set-Cookie: redirect=mirror; path=/; domain=%s; expires=%s\r\n",
+	cfgVal("central.domain"), cookieDate());
+    fflush(stderr);
+    }
+#endif
 }
 
 struct cart *cartForSession(char *cookieName, char **exclude,
@@ -1769,11 +1799,11 @@ return dyStringCannibalize(&orderDY);
 }
 
 char *cartLookUpVariableClosestToHome(struct cart *cart, struct trackDb *tdb,
-	boolean compositeLevel, char *suffix,char **pVariable)
+	boolean parentLevel, char *suffix,char **pVariable)
 /* Returns value or NULL for a cart variable from lowest level on up. Optionally
  * fills the non NULL pVariable with the actual name of the variable in the cart */
 {
-if (compositeLevel)
+if (parentLevel)
     tdb = tdb->parent;
 for ( ; tdb != NULL; tdb = tdb->parent)
     {
@@ -1795,12 +1825,12 @@ if (pVariable != NULL)
 return NULL;
 }
 
-void cartRemoveVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix)
+void cartRemoveVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix)
 /* Looks for then removes a cart variable from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
 char *var = NULL;
-(void)cartLookUpVariableClosestToHome(cart,tdb,compositeLevel,suffix,&var);
+(void)cartLookUpVariableClosestToHome(cart,tdb,parentLevel,suffix,&var);
 if(var != NULL)
     {
     cartRemove(cart,var);
@@ -1808,79 +1838,79 @@ if(var != NULL)
     }
 }
 
-char *cartStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix)
+char *cartStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix)
 /* Returns value or Aborts for a cart string from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
-char *setting = cartOptionalStringClosestToHome(cart,tdb,compositeLevel,suffix);
+char *setting = cartOptionalStringClosestToHome(cart,tdb,parentLevel,suffix);
 if(setting == NULL)
     errAbort("cartStringClosestToHome: '%s' not found", suffix);
 return setting;
 }
 
-boolean cartVarExistsAnyLevel(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix)
+boolean cartVarExistsAnyLevel(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix)
 /* Returns TRUE if variable exists anywhere, looking from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
-return (NULL != cartOptionalStringClosestToHome(cart,tdb,compositeLevel,suffix));
+return (NULL != cartOptionalStringClosestToHome(cart,tdb,parentLevel,suffix));
 }
 
 
-char *cartUsualStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, char *usual)
+char *cartUsualStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix, char *usual)
 /* Returns value or {usual} for a cart string from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
-char *setting = cartOptionalStringClosestToHome(cart,tdb,compositeLevel,suffix);
+char *setting = cartOptionalStringClosestToHome(cart,tdb,parentLevel,suffix);
 if(setting == NULL)
     setting = usual;
 return setting;
 }
 
-boolean cartBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix)
+boolean cartBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix)
 /* Returns value or Aborts for a cart boolean ('on' or != 0) from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
-char *setting = cartStringClosestToHome(cart,tdb,compositeLevel,suffix);
+char *setting = cartStringClosestToHome(cart,tdb,parentLevel,suffix);
 return (sameString(setting, "on") || atoi(setting) > 0);
 }
 
-boolean cartUsualBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix,boolean usual)
+boolean cartUsualBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix,boolean usual)
 /* Returns value or {usual} for a cart boolean ('on' or != 0) from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
-char *setting = cartOptionalStringClosestToHome(cart,tdb,compositeLevel,suffix);
+char *setting = cartOptionalStringClosestToHome(cart,tdb,parentLevel,suffix);
 if(setting == NULL)
     return usual;
 return (sameString(setting, "on") || atoi(setting) > 0);
 }
 
 
-int cartUsualIntClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, int usual)
+int cartUsualIntClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix, int usual)
 /* Returns value or {usual} for a cart int from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
-char *setting = cartOptionalStringClosestToHome(cart,tdb,compositeLevel,suffix);
+char *setting = cartOptionalStringClosestToHome(cart,tdb,parentLevel,suffix);
 if (setting == NULL)
     return usual;
 return atoi(setting);
 }
 
-double cartUsualDoubleClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, double usual)
+double cartUsualDoubleClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix, double usual)
 /* Returns value or {usual} for a cart fp double from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
-char *setting = cartOptionalStringClosestToHome(cart,tdb,compositeLevel,suffix);
+char *setting = cartOptionalStringClosestToHome(cart,tdb,parentLevel,suffix);
 if (setting == NULL)
     return usual;
 return atof(setting);
 }
 
-struct slName *cartOptionalSlNameListClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix)
+struct slName *cartOptionalSlNameListClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix)
 /* Return slName list (possibly with multiple values for the same var) from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 {
 char *var = NULL;
-cartLookUpVariableClosestToHome(cart,tdb,compositeLevel,suffix,&var);
+cartLookUpVariableClosestToHome(cart,tdb,parentLevel,suffix,&var);
 if(var == NULL)
     return NULL;
 
@@ -1915,8 +1945,8 @@ char *cartOrTdbString(struct cart *cart, struct trackDb *tdb, char *var, char *d
 /* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
 {
 char *tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, var, defaultVal);
-boolean compositeLevel = isNameAtCompositeLevel(tdb, var);
-return cartUsualStringClosestToHome(cart, tdb, compositeLevel, var, tdbDefault);
+boolean parentLevel = isNameAtParentLevel(tdb, var);
+return cartUsualStringClosestToHome(cart, tdb, parentLevel, var, tdbDefault);
 }
 
 int cartOrTdbInt(struct cart *cart, struct trackDb *tdb, char *var, int defaultVal)
@@ -1956,17 +1986,12 @@ boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *sett
 {
 char *oldValue = hashFindVal(oldVars,setting);
 if (oldValue == NULL)
-#ifdef CART_DIFFS_INCLUDE_EMPTIES
     return FALSE;  // All vars changed by cgi will be found in old vars
-#else///ifndef CART_DIFFS_INCLUDE_EMPTIES
-    return (!ignoreCreated);
-#endif///ndef CART_DIFFS_INCLUDE_EMPTIES
 
 char *newValue = cartOptionalString(newCart,setting);
 if (newValue == NULL)
     return (!ignoreRemoved);
 
-#ifdef CART_DIFFS_INCLUDE_EMPTIES
 if (sameString(oldValue,CART_VAR_EMPTY))
     {
     if (sameString(newValue,"hide")
@@ -1974,7 +1999,6 @@ if (sameString(oldValue,CART_VAR_EMPTY))
     ||  sameString(newValue,"0"))   // Special cases DANGER!
         return FALSE;
     }
-#endif///def CART_DIFFS_INCLUDE_EMPTIES
 
 return (differentString(newValue,oldValue));
 }
@@ -2013,12 +2037,12 @@ struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(skipParent?t
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *descendentTdb = tdbRef->val;
-    char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
+    char setting[512];
     if (vis)
-        safef(settingName,sizeof(settingName),"%s",descendentTdb->track);
+        safef(setting,sizeof(setting),"%s",descendentTdb->track);
     else
-        safef(settingName,sizeof(settingName),"%s.%s",descendentTdb->track,suffix);
-    removed += cartRemoveAndCount(cart,settingName);
+        safef(setting,sizeof(setting),"%s.%s",descendentTdb->track,suffix);
+    removed += cartRemoveAndCount(cart,setting);
     }
 return removed;
 }
@@ -2033,16 +2057,16 @@ struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(skipParent?t
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *descendentTdb = tdbRef->val;
-    char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
+    char setting[512];
     if (vis)
-        safef(settingName,sizeof(settingName),"%s",descendentTdb->track);
+        safef(setting,sizeof(setting),"%s",descendentTdb->track);
     else
-        safef(settingName,sizeof(settingName),"%s.%s",descendentTdb->track,suffix);
-    char *newVal = cartOptionalString(newCart,settingName);
+        safef(setting,sizeof(setting),"%s.%s",descendentTdb->track,suffix);
+    char *newVal = cartOptionalString(newCart,setting);
     if (    newVal    != NULL
     && (   (parentVal != NULL && sameString(newVal,parentVal))
-        || (FALSE == cartValueHasChanged(newCart,oldVars,settingName,TRUE,FALSE))))
-        removed += cartRemoveAndCount(newCart,settingName);
+        || (FALSE == cartValueHasChanged(newCart,oldVars,setting,TRUE,FALSE))))
+        removed += cartRemoveAndCount(newCart,setting);
     }
 return removed;
 }
@@ -2113,9 +2137,11 @@ static int cartTdbParentShapeVis(struct cart *cart,struct trackDb *parent,char *
 ASSERT(view || (tdbIsContainer(parent) && tdbIsContainerChild(parent->subtracks)));
 struct trackDb *subtrack = NULL;
 char setting[512];
+#ifndef SUBTRACK_CFG
 if (view != NULL)
     safef(setting,sizeof(setting),"%s.%s.vis",parent->parent->track,view);
 else
+#endif///def SUBTRACK_CFG
     safef(setting,sizeof(setting),"%s",parent->track);
 
 enum trackVisibility visMax  = tvHide;
@@ -2331,8 +2357,19 @@ for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
     if (!tdbIsView(tdbView,&view))
         break;
     hasViews = TRUE;
-    safef(setting,sizeof(setting),"%s.",tdbView->track);          // unfortunatly setting name could be viewTrackName.???
-    //safef(setting,   sizeof(setting),"%s.%s.",tdb->track,view); // or containerName.Sig.???   HOWEVER: this are picked up by containerName prefix
+#ifdef SUBTRACK_CFG
+    char *cartVis = cartOptionalString(newCart,tdbView->track);
+    if (cartVis != NULL)  // special to get viewVis in the list
+        {
+        lmAllocVar(lm, oneName);
+        oneName->name = lmCloneString(lm, tdbView->track);
+        oneName->val = lmCloneString(lm, cartVis);
+        slAddHead(&changedSettings,oneName);
+        }
+#endif///ndef SUBTRACK_CFG
+
+    // Now the non-vis settings
+    safef(setting,sizeof(setting),"%s.",tdbView->track);
     struct slPair *changeViewSettings = cartVarsWithPrefixLm(newCart, setting, lm);
     changedSettings = slCat(changedSettings, changeViewSettings);
     }
@@ -2352,41 +2389,62 @@ if (hasViews)
     {
     for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
         {
+        char *cartVis = NULL;
         boolean viewVisChanged = FALSE;
         if (!tdbIsView(tdbView,&view))
             break;
 
+    #ifndef SUBTRACK_CFG
         safef(setting,   sizeof(setting),"%s.%s.",tdb->track,view); // unfortunatly setting name could be containerName.View.???
-        char settingAlt[512];
-        safef(settingAlt,sizeof(settingAlt),"%s.",tdbView->track);  // or viewTrackName.???
+    #endif///ndef SUBTRACK_CFG
         struct slPair *leftOvers = NULL;
         // Walk through settings that match this view
         while ((oneName = slPopHead(&changedSettings)) != NULL)
             {
-            if(startsWith(setting,oneName->name))
+            suffix = NULL;
+            if(startsWith(tdbView->track,oneName->name))
+                {
+                suffix = oneName->name + strlen(tdbView->track);
+                if (*suffix == '.') // NOTE: standardize on '.' since its is so pervasive
+                    suffix++;
+                else if (isalnum(*suffix)) // viewTrackName is subset of another track!
+                    suffix = NULL;         // add back to list for next round
+                }
+        #ifndef SUBTRACK_CFG
+            else if(startsWith(setting,oneName->name))
                 suffix = oneName->name + strlen(setting);
-            else if(startsWith(settingAlt,oneName->name))
-                suffix = oneName->name + strlen(settingAlt);
-            else
+        #endif///ndef SUBTRACK_CFG
+
+            if (suffix == NULL)
                 {
                 slAddHead(&leftOvers,oneName);
                 continue;
                 }
 
-            if (sameString(suffix,"vis"))
+        #ifdef SUBTRACK_CFG
+            if (*suffix == '\0')
+        #else///ifndef SUBTRACK_CFG
+            if (*suffix == '\0' || sameString(suffix,"vis"))
+        #endif///ndef SUBTRACK_CFG
                 {
                 viewVisChanged = TRUE;
+                cartVis = oneName->val;
                 }
-            else if (cartRemoveOldFromTdbTree(newCart,oldVars,tdbView,suffix,oneName->val,TRUE) > 0)
-                    clensed++;
+            else  // be certain to exclude vis settings here
+            if (cartRemoveOldFromTdbTree(newCart,oldVars,tdbView,suffix,oneName->val,TRUE) > 0)
+                clensed++;
 
+            //slPairFree(&oneName); // lm memory so free not needed
             }
         if (viewVisChanged)
             {
             // If just created and if vis is the same as tdb default then vis has not changed
+        #ifdef SUBTRACK_CFG
+            char *oldValue = hashFindVal(oldVars,tdbView->track);
+        #else///ifndef SUBTRACK_CFG
             safef(setting,sizeof(setting),"%s.%s.vis",tdb->track,view);
-            char *cartVis = cartOptionalString(newCart,setting);
             char *oldValue = hashFindVal(oldVars,setting);
+        #endif///ndef SUBTRACK_CFG
             if (cartVis && oldValue == NULL && hTvFromString(cartVis) != tdbView->visibility)
                 viewVisChanged = FALSE;
             }

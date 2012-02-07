@@ -39,14 +39,18 @@ Click <A HREF="vcf.html" TARGET=_BLANK>here</A> for more information
 on VCF custom track creation.
 </P>
 <P>
-The following configuration options appear only if the VCF file contains
-genotype columns for at least two samples (four haplotypes):
+If the VCF file contains genotype columns for at least two samples (four
+haplotypes), then a haplotype sorting display can be configured:
 <UL>
 <LI><B>Enable Haplotype sorting display:</B>
     If checked, then each sample's phased and/or homozygous genotypes are split
     into haplotypes, clustered by similarity around a central variant, and sorted
     for display by their position in the clustering tree.  The tree (or as much of
     the tree as space allows) is drawn in the label area next to the track image.
+    Leaf clusters, in which all haplotypes are identical (at least for the span
+    of variants used in clustering), are colored purple.
+    Each variant is drawn as a vertical column, using color to distinguish between
+    reference alleles and alternate alleles of the horizontally running haplotypes.
     If unchecked, then the display is the same as for VCF without genotypes:
     a stacked bar graph of the top two alleles, showing the proportion of alleles
     if allele counts are available.
@@ -59,28 +63,61 @@ genotype columns for at least two samples (four haplotypes):
       each successive variant away from the central variant.  By default, the median
       variant in the window is used.  By clicking on a variant in the display, you
       will get the option to always use that variant when it is in the current view.</LI>
-    <LI><B>Color sorted haplotypes by:</B>
-      By default, the reference allele is colored blue and the alternate allele is colored red.
-      This can be changed to the same color scheme used when there are no genotypes:
-      A is red, C is blue, G is green and T is magenta.</LI>
+    <LI><B>Haplotype coloring scheme:</B>
+      There are three ways that reference and alternate alleles can be colored:
+      <UL>
+      <LI>By default, the reference allele is invisible and the alternate allele is black.
+          When multiple haplotypes must be combined into the same pixel row, grayscale is
+	  used to shade according to the proportions of reference and alternate alleles.
+	  The central variant has a thin purple outline.
+	  Extra pixel rows at the top and bottom show the locations of variants in case
+	  they are hard to see due when the invisible reference allele is the major allele.
+	  Variants used in clustering have purple marks in these rows; variants outside the
+	  clustered regions have black marks.</LI>
+      <LI>The reference allele is blue and the alternate allele is red.
+          Purple indicates a mix of reference and alternate alleles.
+	  The central variant has a thick black outline.</LI>
+      <LI>Both alleles are colored using the same color scheme as when there are no genotypes:
+          A is red, C is blue, G is green and T is magenta.
+	  Gray indicates a mix of reference and alternate alleles.
+	  The central variant has a thick black outline.</LI>
+      </UL>
+      In all coloring modes, if some alleles in a haplotype are undefined,
+      a pale yellowish color is used for those alleles.
+    </LI>
+    <LI><B>Haplotype clustering leaf shape:</B>
+      Leaf clusters are collections of identical haplotypes.  By default, they are
+      drawn as open triangles &lt; .  They can also be displayed as open rectangles [.</LI>
     <LI><B>Haplotype sorting display height:</B>Height in pixels of the haplotype sorting
       display.  If this is fewer than the number of haplotypes (2 * the number of genotype
-      columns), multiple haplotypes may be compressed into a single horizontal pixel row.
-      When the default red/blue coloring is in effect, pixels may be colored purple
-      where the haplotypes differ.</LI>
+      columns), some horizontal pixel rows must represent multiple haplotypes; differing
+      haplotypes' colors will be combined according to the selected coloring scheme.
+      </LI>
     </UL>
 </UL>
 </P>
-<P><B>Exclude items with QUAL score less than <em>N</em>:</B>
-If the checkbox is checked, then all records whose QUAL column has a
+<P>
+Variants can be filtered out of the display according to several properties:
+<UL>
+<LI><B>Exclude items with QUAL score less than <em>N</em>:</B>
+If the checkbox is checked, then all variants whose QUAL column has a
 non-numeric value (e.g. &quot;.&quot;) or a value less than <em>N</em>
 are excluded from display. By default, the checkbox is not checked
-and <em>N</em> is 0.</P>
-<P><B>Exclude items with these FILTER values:</B>
-If the VCF header defines any FILTER codes, then there is a checkbox
-for each code. If checked, then all records with that code in the FILTER
+and <em>N</em> is 0.</LI>
+<LI><B>Exclude items with these FILTER values:</B>
+This option appears only if the VCF header defines at least one FILTER code.
+There is a checkbox for each code defined in the header.
+If checked, then all variants with that code in the FILTER
 column are excluded from display. By default, no checkboxes are
-checked, so all records are displayed regardless of FILTER column values.</P>
+checked, so all variants are displayed regardless of FILTER column values.</LI>
+<LI><B>Minimum minor allele frequency (if INFO column includes AF or AC+AN):</B>
+If a variant's INFO field includes AF (alternate allele frequency) or both AC and AN
+(alternate allele count and total number of alleles), then its minor allele
+frequency can be compared against this threshold.  If the minor allele frequency
+is less than the threshold, the variant will not be displayed.
+</LI>
+</UL>
+</P>
 <P>
 When you have finished making your configuration changes, click the
 <em>Submit</em> button to return to the annotation track display

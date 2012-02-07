@@ -5,7 +5,6 @@
 #include "options.h"
 #include "vegaInfo.h"
 
-static char const rcsid[] = "$Id: vegaBuildInfo.c,v 1.1 2006/07/26 04:00:15 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

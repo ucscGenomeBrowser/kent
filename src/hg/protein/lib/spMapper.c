@@ -13,7 +13,6 @@
 #include "verbose.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spMapper.c,v 1.2 2005/08/21 04:27:22 markd Exp $";
 
 /* values for noMapTbl */
 char noUnirefMapping = 'R';           /* indicates no uniref mapping */

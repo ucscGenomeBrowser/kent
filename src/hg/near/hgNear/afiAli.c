@@ -6,7 +6,6 @@
 #include "axt.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: afiAli.c,v 1.3 2004/11/22 20:36:54 kent Exp $";
 
 static bioSeq *getSeq(struct sqlConnection *conn, char *geneId, 
 	struct column *nameCol, char *tableId)

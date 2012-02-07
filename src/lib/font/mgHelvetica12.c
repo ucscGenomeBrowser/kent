@@ -1,6 +1,5 @@
 
 /* Helvetica12.c - compiled data for font AdobeHelv-M-R-N--12-120-75-75-P */
-static char const rcsid[] = "$Id: mgHelvetica12.c,v 1.4 2010/04/06 19:56:19 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/helvR12.bdf */
 

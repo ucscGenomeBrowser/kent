@@ -6,7 +6,6 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.4 2004/07/02 06:23:16 kent Exp $";
 
 void usage()
 /* Print usage and exit. */

@@ -21,7 +21,6 @@
 #include "bigWarn.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.32 2010/05/27 21:13:24 angie Exp $";
 
 struct bamTrackData
     {
@@ -716,7 +715,7 @@ while(numRows--)
     {
     char buffer[1024];
 
-    safef(buffer, sizeof buffer, 
+    safef(buffer, sizeof buffer,
 	"Too many items in display.  Zoom in to click on items. (%d)",numRows);
     mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, fontHeight,
 	tg->track, itemBuffer,
@@ -763,12 +762,11 @@ knetUdcInstall();
 #endif//def USE_BAM && KNETFILE_HOOKS
 
 track->canPack = TRUE;
-boolean compositeLevel = isNameAtCompositeLevel(track->tdb, BAM_PAIR_ENDS_BY_NAME);
-boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, compositeLevel,
+boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE,
 			 BAM_PAIR_ENDS_BY_NAME,
 			 (trackDbSettingClosestToHome(track->tdb, BAM_PAIR_ENDS_BY_NAME) != NULL));
 char *tdbShowNames = trackDbSetting(track->tdb, BAM_SHOW_NAMES);
-boolean showNames = cartUsualBooleanClosestToHome(cart, track->tdb, compositeLevel,
+boolean showNames = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE,
 						  BAM_SHOW_NAMES, !sameOk(tdbShowNames, "off"));
 char *colorMode = cartOrTdbString(cart, track->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
 char *userTag = cartOrTdbString(cart, track->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
@@ -778,8 +776,7 @@ if (sameString(colorMode, BAM_COLOR_MODE_TAG) && userTag != NULL)
 	{
 	warn("%s: BAM tag '%s' is not valid -- must be a letter followed by a letter or number.",
 	     track->tdb->shortLabel, htmlEncode(userTag));
-	compositeLevel = isNameAtCompositeLevel(track->tdb, BAM_COLOR_TAG);
-	cartRemoveVariableClosestToHome(cart, track->tdb, compositeLevel, BAM_COLOR_TAG);
+	cartRemoveVariableClosestToHome(cart, track->tdb, FALSE, BAM_COLOR_TAG);
 	}
     }
 
@@ -793,7 +790,7 @@ if (isPaired)
 else
     {
     linkedFeaturesMethods(track);
-    track->loadItems = bamLoadItems; 
+    track->loadItems = bamLoadItems;
     track->drawItems = bamLinkedFeaturesDraw;
     track->drawItemAt = bamDrawAt;
     }
@@ -877,7 +874,7 @@ if (tg->parallelLoading)
 else
     {
     struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-    /* this should call bamFileNameFromTable with logic from bamLoadItemsCore to 
+    /* this should call bamFileNameFromTable with logic from bamLoadItemsCore to
      * check the bigDataUrl setting.  Fix this if bamWigs end up being
      * a supported type.   It may be that this code gets rolled into
      * normal BAM display... since that's the plan ;-).
@@ -926,7 +923,7 @@ wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
 
 }
 
-void bamWigMethods(struct track *track, struct trackDb *tdb, 
+void bamWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[])
 /* Set up bamWig methods. */
 {
@@ -961,7 +958,7 @@ messageLineMethods(track);
 track->drawItems = drawUseBamWarning;
 }
 
-void bamWigMethods(struct track *track, struct trackDb *tdb, 
+void bamWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[])
 /* Same stub when compiled without USE_BAM. */
 {

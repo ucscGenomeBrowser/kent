@@ -1,56 +1,77 @@
 <H2>Description</H2>
 <P>
 This track indicates the location of sequences in publications
-mapped back to the genome. It is based on data from more than 22.000 articles
-with DNA sequences from the <A HREF="http://www.pubmedcentral.com/"
-TARGET=_blank>Pubmed Central</A>
-<A HREF="http://www.ncbi.nlm.nih.gov/pmc/about/openftlist.html"
-TARGET=_blank>Open-Access archive</A>, which consists of ~130.000 free
-research articles (Feb 2010)</P>
+mapped back to the genome, annotated with the first author and the year of the
+publication.  Article titles are shown when you move the mouse cursor over the
+features.  Thicker parts of the features (exons) represent matching sequences,
+connected by thin lines to matches from the same article within 30 kbp.
+<P>
+The track is based on the fulltext of biomedical research articles.  The
+current data consists of about 600,000 files
+(main text and supplementary files) from <A
+HREF="http://www.pubmedcentral.com/" TARGET=_blank>Pubmed Central</A>
+(Open-Access set) and around 6 million text files (main text) from the
+publisher <A HREF="http://elsevier.com" TARGET=_blank>Elsevier</A> (as part of
+the <A HREF="http://www.applications.sciverse.com/action/userhome"
+TARGET=_blank>Sciverse Apps</A> program). 
+
+Note that due to the 90% identity filter, some sequences do not match
+anywhere in the genome.  Examples include primers with added restriction sites,
+mutation primers or nay other sequence that mixes two pieces of genomic
+DNA not part of RefSeq.<P>
 
 <H2>Methods</H2>
 <P>
-Articles were downloaded from PubMed Central. Depending on availability, XML,
-raw ASCII or text extracted from PDFs was used.  The results were then
-processed by the <A HREF="http://sourceforge.net/projects/text2genome/"
-TARGET=_blank>text2genome.org</A> software.  It searches for stretches of
-separated nucleotide-like letters that are longer than 19bp or words that
-contain more than 40% nucleotide-like letters. The DNA resulting sequences
-were mapped with BLAST to all genomes that are part of
-Ensembl/EnsemblGenomes version 56 and filtered with the text2genome pipeline: 
+Any filetype was converted to text, including XML, raw ASCII, PDFs and various
+office formats (Excel, Word, Powerpoint).  The results were processed with
+programs to find groups of words that look like DNA/RNA sequences or
+words that look like protein sequences. These are then mapped with BLAT to the
+human genome and these model organisms: mouse (mm9), rat (rn4), zebrafish
+(danRer6), Drosophila melanogaster (dm3), X. tropicalis (xenTro2), Medaka
+(oryLat2), C. intestinalis (ci2), C. elegans (ce6) and yeast (sacCer2).
 
 <UL>
-<LI>Hits to NCBI Univec are completely removed</LI>
-<LI>Only matches on the most plausible genome are kept. This is the
-genome with the most matching sequences which either is mentioned in the
-text and recognized by <A HREF="http://www.sf.net/projects/linnaeus/"
-TARGET=_blank>LINNAEUS</A> or a well-known model organism.</LI>
-<LI>Hits from the same paper that are closer than 50kbp are
-chained (shown as exon-blocks on the browser)</LI>
-<LI>Non-unique hits are only kept in the chain with the most members</LI>
+<LI>The best match across all genomes is used, if it is longer than 17bp and matches at 90% identity. 
+Two sets of BLAT parameters are tried, the default ones for sequences longer than 25 bp, very sensitive ones (stepSize=5) for shorter sequences.</LI>
+<LI>Sequences are mapped to genomic DNA, those that do not match are mapped to RefSeq cDNAs</LI>
+<LI>Hits from the same article that are closer than 30 kbp are</LI>
+joined into one feature (shown as exon-blocks on the browser)</LI>
+<LI>All parts of a joined feature have to match at least 25 bp</LI>
+<LI>Non-unique hits are kept in the joined feature with the most members</LI>
+<LI>Joined features with identical members in two different genomes are kept in both</LI>
 </UL>
+
+The software is available from <A HREF="http://code.google.com/p/pubtools/">Google Code</A>.
 
 </P>
 	
 <H2>Credits</H2>
 <P>
-Data was processed by Maximilian Haussler, Martin Gerner and Casey Bergman.
-Import into UCSC by Hiram Clawson. For questions or feedback on this data
-track, please send an email to
-<A HREF="mailto:&#116;&#101;x&#116;&#50;g&#101;&#110;o&#109;&#101;&#64;&#109;&#97;&#110;c&#104;&#101;&#115;te&#114;.
-&#97;&#99;.
-&#117;&#107;">
-&#116;&#101;x&#116;&#50;g&#101;&#110;o&#109;&#101;&#64;&#109;&#97;&#110;c&#104;&#101;&#115;te&#114;.
-&#97;&#99;.
-&#117;&#107;</A>.
+Software and processing by Maximilian Haeussler. UCSC Track visualisation by
+Larry Meyer and Hiram Clawson. Elsevier support by Max Berenstein, Raphael
+Sidi, Scott Robbins and colleagues. Original version written at the <A
+HREF="http://bergmanlab.smith.man.ac.uk/">Bergman Lab</A>, University of
+Manchester, UK. Testing by Mary Mangan, Openhelix Inc.
+
+<H2>Feedback</H2>
+Please send ideas, comments or feedback on this track to
+<A HREF="mailto:&#109;a&#120;&#64;&#115;&#111;&#101;.
+uc&#115;&#99;.
+e&#100;&#117;">
+&#109;a&#120;&#64;&#115;&#111;&#101;.
+uc&#115;&#99;.
+<!-- above address is max at soe.ucsc.edu -->
+e&#100;&#117;</A>. We are also very interested in getting access to more 
+articles from publishers for this dataset.
 </P>
 
 <H2>References</H2>
 
 <P> 
-Haeussler M, Bergman CM. Annotating genes and genomes with sequences
-extracted from biomedical articles, <em>in prep.</em>, see also
-<A HREF="http://text2genome.org/" TARGET=_blank>www.text2genome.org</A>
+Haeussler M, Gerner M, Bergman CM. <A
+HREF="http://www.ncbi.nlm.nih.gov/pubmed/21325301" TARGET=_blank>Annotating genes and genomes
+with sequences extracted from biomedical articles</A>, Bioinformatics 2011 27(7):980-6, see also <A
+HREF="http://text2genome.org/" TARGET=_blank>www.text2genome.org</A>
 </P>
 
 <P> 

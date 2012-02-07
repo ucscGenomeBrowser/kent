@@ -333,7 +333,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000184
@@ -351,7 +351,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4589
 view ExonsGencV7
 
@@ -387,7 +387,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000184
@@ -405,7 +405,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4589
 view GeneGencV7
 
@@ -443,7 +443,7 @@ bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000184
@@ -463,7 +463,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4258
 view Spikeins
 
@@ -474,7 +474,7 @@ bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000184
@@ -494,7 +494,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4213
 view Spikeins
 
@@ -530,7 +530,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000184
@@ -548,7 +548,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4589
 tableName wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -619,7 +619,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000143
@@ -646,7 +646,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000143
@@ -663,7 +663,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4549
 view ExonsGencV7
 
@@ -789,7 +789,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000143
@@ -815,7 +815,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000143
@@ -832,7 +832,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4549
 view GeneGencV7
 
@@ -842,7 +842,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000143
@@ -989,7 +989,7 @@ bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000143
@@ -1016,7 +1016,7 @@ bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000143
@@ -1044,7 +1044,7 @@ bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000143
@@ -1064,7 +1064,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4191
 view Spikeins
 
@@ -1075,7 +1075,7 @@ bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000143
@@ -1095,7 +1095,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4188
 view Spikeins
 
@@ -1105,7 +1105,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000143
@@ -1131,7 +1131,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000143
@@ -1148,7 +1148,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4549
 tableName wgEncodeCshlLongRnaSeqA549CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -1482,7 +1482,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000179
@@ -1500,7 +1500,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4558
 view ExonsGencV7
 
@@ -1536,7 +1536,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000179
@@ -1554,7 +1554,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4558
 view GeneGencV7
 
@@ -1592,7 +1592,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000179
@@ -1612,7 +1612,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4208
 view Spikeins
 
@@ -1623,7 +1623,7 @@ bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000179
@@ -1643,7 +1643,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4205
 view Spikeins
 
@@ -1679,7 +1679,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000179
@@ -1697,7 +1697,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4558
 tableName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -1795,7 +1795,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000144
@@ -1812,7 +1812,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4554
 view ExonsGencV7
 
@@ -1964,7 +1964,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000144
@@ -1981,7 +1981,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4554
 view GeneGencV7
 
@@ -2138,7 +2138,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000144
@@ -2165,7 +2165,7 @@ bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000144
@@ -2193,7 +2193,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000144
@@ -2213,7 +2213,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4253
 view Spikeins
 
@@ -2224,7 +2224,7 @@ bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000144
@@ -2244,7 +2244,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4250
 view Spikeins
 
@@ -2280,7 +2280,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000144
@@ -2297,7 +2297,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4554
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -2631,7 +2631,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000185
@@ -2649,7 +2649,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4581
 view ExonsGencV7
 
@@ -2685,7 +2685,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000185
@@ -2703,7 +2703,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4581
 view GeneGencV7
 
@@ -2741,7 +2741,7 @@ bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000185
@@ -2761,7 +2761,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4190
 view Spikeins
 
@@ -2772,7 +2772,7 @@ bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000185
@@ -2792,7 +2792,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4254
 view Spikeins
 
@@ -2828,7 +2828,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000185
@@ -2846,7 +2846,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4581
 tableName wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -2944,7 +2944,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000145
@@ -2961,7 +2961,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4576
 view ExonsGencV7
 
@@ -3113,7 +3113,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000145
@@ -3130,7 +3130,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4576
 view GeneGencV7
 
@@ -3287,7 +3287,7 @@ bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000145
@@ -3314,7 +3314,7 @@ bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000145
@@ -3342,7 +3342,7 @@ bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000145
@@ -3362,7 +3362,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4251
 view Spikeins
 
@@ -3373,7 +3373,7 @@ bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000145
@@ -3393,7 +3393,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4212
 view Spikeins
 
@@ -3429,7 +3429,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000145
@@ -3446,7 +3446,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4576
 tableName wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -3780,7 +3780,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000148
@@ -3797,7 +3797,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4586
 view ExonsGencV7
 
@@ -3833,7 +3833,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000148
@@ -3850,7 +3850,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4586
 view GeneGencV7
 
@@ -3887,7 +3887,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000148
@@ -3914,7 +3914,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000148
@@ -3942,7 +3942,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000148
@@ -3962,7 +3962,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4298
 view Spikeins
 
@@ -3973,7 +3973,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000148
@@ -3993,7 +3993,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4288
 view Spikeins
 
@@ -4029,7 +4029,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000148
@@ -4046,7 +4046,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4586
 tableName wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -4117,7 +4117,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000146
@@ -4144,7 +4144,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000146
@@ -4161,7 +4161,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4571
 view ExonsGencV7
 
@@ -4287,7 +4287,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000146
@@ -4313,7 +4313,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000146
@@ -4330,7 +4330,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4571
 view GeneGencV7
 
@@ -4340,7 +4340,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000146
@@ -4487,7 +4487,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000146
@@ -4514,7 +4514,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000146
@@ -4542,7 +4542,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000146
@@ -4562,7 +4562,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4260
 view Spikeins
 
@@ -4573,7 +4573,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000146
@@ -4593,7 +4593,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4201
 view Spikeins
 
@@ -4603,7 +4603,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000146
@@ -4629,7 +4629,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000146
@@ -4646,7 +4646,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4571
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -5200,7 +5200,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000186
@@ -5218,7 +5218,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4559
 view ExonsGencV7
 
@@ -5254,7 +5254,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000186
@@ -5272,7 +5272,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4559
 view GeneGencV7
 
@@ -5309,7 +5309,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000186
@@ -5336,7 +5336,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000186
@@ -5364,7 +5364,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000186
@@ -5384,7 +5384,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4195
 view Spikeins
 
@@ -5395,7 +5395,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000186
@@ -5415,7 +5415,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4292
 view Spikeins
 
@@ -5451,7 +5451,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000186
@@ -5469,7 +5469,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4559
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -5567,7 +5567,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000147
@@ -5584,7 +5584,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4553
 view ExonsGencV7
 
@@ -5736,7 +5736,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000147
@@ -5753,7 +5753,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4553
 view GeneGencV7
 
@@ -5910,7 +5910,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000147
@@ -5937,7 +5937,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000147
@@ -5965,7 +5965,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000147
@@ -5985,7 +5985,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4276
 view Spikeins
 
@@ -5996,7 +5996,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000147
@@ -6016,7 +6016,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4231
 view Spikeins
 
@@ -6052,7 +6052,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000147
@@ -6069,7 +6069,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4553
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -6403,7 +6403,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000187
@@ -6421,7 +6421,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4548
 view ExonsGencV7
 
@@ -6457,7 +6457,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000187
@@ -6475,7 +6475,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4548
 view GeneGencV7
 
@@ -6512,7 +6512,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000187
@@ -6539,7 +6539,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000187
@@ -6567,7 +6567,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000187
@@ -6587,7 +6587,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4215
 view Spikeins
 
@@ -6598,7 +6598,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000187
@@ -6618,7 +6618,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4209
 view Spikeins
 
@@ -6654,7 +6654,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000187
@@ -6672,7 +6672,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4548
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -6770,7 +6770,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000170
@@ -6788,7 +6788,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4601
 view ExonsGencV7
 
@@ -6940,7 +6940,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000170
@@ -6958,7 +6958,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4601
 view GeneGencV7
 
@@ -7115,7 +7115,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000170
@@ -7142,7 +7142,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000170
@@ -7170,7 +7170,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000170
@@ -7190,7 +7190,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4290
 view Spikeins
 
@@ -7201,7 +7201,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000170
@@ -7221,7 +7221,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4235
 view Spikeins
 
@@ -7257,7 +7257,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000170
@@ -7275,7 +7275,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4601
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -7609,7 +7609,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000149
@@ -7626,7 +7626,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4593
 view ExonsGencV7
 
@@ -7662,7 +7662,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000149
@@ -7679,7 +7679,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4593
 view GeneGencV7
 
@@ -7716,7 +7716,7 @@ bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000149
@@ -7743,7 +7743,7 @@ bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000149
@@ -7771,7 +7771,7 @@ bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000149
@@ -7791,7 +7791,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4226
 view Spikeins
 
@@ -7802,7 +7802,7 @@ bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000149
@@ -7822,7 +7822,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4239
 view Spikeins
 
@@ -7858,7 +7858,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000149
@@ -7875,7 +7875,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4593
 tableName wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -7973,7 +7973,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000150
@@ -7990,7 +7990,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4592
 view ExonsGencV7
 
@@ -8142,7 +8142,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000150
@@ -8159,7 +8159,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4592
 view GeneGencV7
 
@@ -8316,7 +8316,7 @@ bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000150
@@ -8343,7 +8343,7 @@ bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000150
@@ -8371,7 +8371,7 @@ bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000150
@@ -8391,7 +8391,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4223
 view Spikeins
 
@@ -8402,7 +8402,7 @@ bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000150
@@ -8422,7 +8422,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4265
 view Spikeins
 
@@ -8458,7 +8458,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000150
@@ -8475,7 +8475,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4592
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -8663,7 +8663,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000198
@@ -8681,7 +8681,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4542
 view ExonsGencV7
 
@@ -8719,7 +8719,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000198
@@ -8737,7 +8737,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4542
 view GeneGencV7
 
@@ -8776,7 +8776,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000198
@@ -8804,7 +8804,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000198
@@ -8824,7 +8824,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4185
 view Spikeins
 
@@ -8862,7 +8862,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000198
@@ -8880,7 +8880,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4542
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -8950,7 +8950,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000151
@@ -8967,7 +8967,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4582
 view ExonsGencV7
 
@@ -9063,7 +9063,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000151
@@ -9080,7 +9080,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4582
 view GeneGencV7
 
@@ -9179,7 +9179,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000151
@@ -9207,7 +9207,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000151
@@ -9227,7 +9227,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4280
 view Spikeins
 
@@ -9265,7 +9265,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000151
@@ -9282,7 +9282,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4582
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -9470,7 +9470,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000199
@@ -9488,7 +9488,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4590
 view ExonsGencV7
 
@@ -9526,7 +9526,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000199
@@ -9544,7 +9544,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4590
 view GeneGencV7
 
@@ -9583,7 +9583,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000199
@@ -9611,7 +9611,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000199
@@ -9631,7 +9631,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4287
 view Spikeins
 
@@ -9669,7 +9669,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000199
@@ -9687,7 +9687,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4590
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -9757,7 +9757,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000152
@@ -9774,7 +9774,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4570
 view ExonsGencV7
 
@@ -9870,7 +9870,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000152
@@ -9887,7 +9887,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4570
 view GeneGencV7
 
@@ -9986,7 +9986,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000152
@@ -10014,7 +10014,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000152
@@ -10034,7 +10034,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4270
 view Spikeins
 
@@ -10072,7 +10072,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000152
@@ -10089,7 +10089,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4570
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -10423,7 +10423,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000191
@@ -10441,7 +10441,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4599
 view ExonsGencV7
 
@@ -10477,7 +10477,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000191
@@ -10495,7 +10495,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4599
 view GeneGencV7
 
@@ -10532,7 +10532,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000191
@@ -10559,7 +10559,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000191
@@ -10587,7 +10587,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000191
@@ -10607,7 +10607,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4229
 view Spikeins
 
@@ -10618,7 +10618,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000191
@@ -10638,7 +10638,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4256
 view Spikeins
 
@@ -10674,7 +10674,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000191
@@ -10692,7 +10692,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4599
 tableName wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -10790,7 +10790,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000173
@@ -10808,7 +10808,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4583
 view ExonsGencV7
 
@@ -10960,7 +10960,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000173
@@ -10978,7 +10978,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4583
 view GeneGencV7
 
@@ -11135,7 +11135,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000173
@@ -11162,7 +11162,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000173
@@ -11190,7 +11190,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000173
@@ -11210,7 +11210,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4193
 view Spikeins
 
@@ -11221,7 +11221,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000173
@@ -11241,7 +11241,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4271
 view Spikeins
 
@@ -11277,7 +11277,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000173
@@ -11295,7 +11295,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4583
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -11483,7 +11483,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000201
@@ -11501,7 +11501,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4577
 view ExonsGencV7
 
@@ -11539,7 +11539,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000201
@@ -11557,7 +11557,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4577
 view GeneGencV7
 
@@ -11596,7 +11596,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000201
@@ -11624,7 +11624,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000201
@@ -11644,7 +11644,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4222
 view Spikeins
 
@@ -11682,7 +11682,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000201
@@ -11700,7 +11700,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4577
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -11798,7 +11798,7 @@ bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000171
@@ -11816,7 +11816,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4544
 view ExonsGencV7
 
@@ -11968,7 +11968,7 @@ bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000171
@@ -11986,7 +11986,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4544
 view GeneGencV7
 
@@ -12143,7 +12143,7 @@ bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000171
@@ -12170,7 +12170,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000171
@@ -12198,7 +12198,7 @@ bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000171
@@ -12218,7 +12218,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4211
 view Spikeins
 
@@ -12229,7 +12229,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000171
@@ -12249,7 +12249,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4225
 view Spikeins
 
@@ -12285,7 +12285,7 @@ bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000171
@@ -12303,7 +12303,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4544
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -12637,7 +12637,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000190
@@ -12655,7 +12655,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4568
 view ExonsGencV7
 
@@ -12691,7 +12691,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000190
@@ -12709,7 +12709,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4568
 view GeneGencV7
 
@@ -12746,7 +12746,7 @@ bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000190
@@ -12773,7 +12773,7 @@ bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000190
@@ -12801,7 +12801,7 @@ bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000190
@@ -12821,7 +12821,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4262
 view Spikeins
 
@@ -12832,7 +12832,7 @@ bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000190
@@ -12852,7 +12852,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4268
 view Spikeins
 
@@ -12888,7 +12888,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000190
@@ -12906,7 +12906,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4568
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -13004,7 +13004,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000172
@@ -13022,7 +13022,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4550
 view ExonsGencV7
 
@@ -13174,7 +13174,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000172
@@ -13192,7 +13192,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4550
 view GeneGencV7
 
@@ -13349,7 +13349,7 @@ bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000172
@@ -13376,7 +13376,7 @@ bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000172
@@ -13404,7 +13404,7 @@ bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000172
@@ -13424,7 +13424,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4264
 view Spikeins
 
@@ -13435,7 +13435,7 @@ bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000172
@@ -13455,7 +13455,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4272
 view Spikeins
 
@@ -13491,7 +13491,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000172
@@ -13509,7 +13509,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4550
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -13843,7 +13843,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000159
@@ -13860,7 +13860,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4580
 view ExonsGencV7
 
@@ -13896,7 +13896,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000159
@@ -13913,7 +13913,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4580
 view GeneGencV7
 
@@ -13950,7 +13950,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000159
@@ -13977,7 +13977,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000159
@@ -14005,7 +14005,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000159
@@ -14025,7 +14025,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4242
 view Spikeins
 
@@ -14036,7 +14036,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000159
@@ -14056,7 +14056,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4243
 view Spikeins
 
@@ -14092,7 +14092,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000159
@@ -14109,7 +14109,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4580
 tableName wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -14207,7 +14207,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000160
@@ -14224,7 +14224,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4596
 view ExonsGencV7
 
@@ -14376,7 +14376,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000160
@@ -14393,7 +14393,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4596
 view GeneGencV7
 
@@ -14550,7 +14550,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000160
@@ -14577,7 +14577,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000160
@@ -14605,7 +14605,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000160
@@ -14625,7 +14625,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4296
 view Spikeins
 
@@ -14636,7 +14636,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000160
@@ -14656,7 +14656,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4277
 view Spikeins
 
@@ -14692,7 +14692,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000160
@@ -14709,7 +14709,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4596
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -15016,7 +15016,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000202
@@ -15043,7 +15043,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000202
@@ -15061,7 +15061,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4575
 view ExonsGencV7
 
@@ -15071,7 +15071,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000202
@@ -15097,7 +15097,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000202
@@ -15115,7 +15115,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4575
 view GeneGencV7
 
@@ -15125,7 +15125,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000202
@@ -15152,7 +15152,7 @@ bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000202
@@ -15179,7 +15179,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000202
@@ -15207,7 +15207,7 @@ bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000202
@@ -15227,7 +15227,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4238
 view Spikeins
 
@@ -15238,7 +15238,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000202
@@ -15258,7 +15258,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4224
 view Spikeins
 
@@ -15268,7 +15268,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000202
@@ -15294,7 +15294,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000202
@@ -15312,7 +15312,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4575
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -15410,7 +15410,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000161
@@ -15427,7 +15427,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4603
 view ExonsGencV7
 
@@ -15579,7 +15579,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000161
@@ -15596,7 +15596,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4603
 view GeneGencV7
 
@@ -15753,7 +15753,7 @@ bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000161
@@ -15780,7 +15780,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000161
@@ -15808,7 +15808,7 @@ bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000161
@@ -15828,7 +15828,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4207
 view Spikeins
 
@@ -15839,7 +15839,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000161
@@ -15859,7 +15859,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4263
 view Spikeins
 
@@ -15895,7 +15895,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000161
@@ -15912,7 +15912,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4603
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -16246,7 +16246,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000192
@@ -16264,7 +16264,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4562
 view ExonsGencV7
 
@@ -16300,7 +16300,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000192
@@ -16318,7 +16318,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4562
 view GeneGencV7
 
@@ -16355,7 +16355,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000192
@@ -16382,7 +16382,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000192
@@ -16410,7 +16410,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000192
@@ -16430,7 +16430,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4217
 view Spikeins
 
@@ -16441,7 +16441,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000192
@@ -16461,7 +16461,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4244
 view Spikeins
 
@@ -16497,7 +16497,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000192
@@ -16515,7 +16515,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4562
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -16613,7 +16613,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000158
@@ -16630,7 +16630,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4584
 view ExonsGencV7
 
@@ -16782,7 +16782,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000158
@@ -16799,7 +16799,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4584
 view GeneGencV7
 
@@ -16956,7 +16956,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000158
@@ -16983,7 +16983,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000158
@@ -17011,7 +17011,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000158
@@ -17031,7 +17031,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4283
 view Spikeins
 
@@ -17042,7 +17042,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000158
@@ -17062,7 +17062,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4221
 view Spikeins
 
@@ -17098,7 +17098,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000158
@@ -17115,7 +17115,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4584
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -17303,7 +17303,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000176
@@ -17321,7 +17321,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4547
 view ExonsGencV7
 
@@ -17359,7 +17359,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000176
@@ -17377,7 +17377,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4547
 view GeneGencV7
 
@@ -17416,7 +17416,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000176
@@ -17444,7 +17444,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000176
@@ -17464,7 +17464,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4196
 view Spikeins
 
@@ -17502,7 +17502,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000176
@@ -17520,7 +17520,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4547
 tableName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -17590,7 +17590,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000153
@@ -17607,7 +17607,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4556
 view ExonsGencV7
 
@@ -17703,7 +17703,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000153
@@ -17720,7 +17720,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4556
 view GeneGencV7
 
@@ -17819,7 +17819,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000153
@@ -17847,7 +17847,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000153
@@ -17867,7 +17867,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4200
 view Spikeins
 
@@ -17905,7 +17905,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000153
@@ -17922,7 +17922,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4556
 tableName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -18256,7 +18256,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000177
@@ -18274,7 +18274,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4605
 view ExonsGencV7
 
@@ -18310,7 +18310,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000177
@@ -18328,7 +18328,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4605
 view GeneGencV7
 
@@ -18365,7 +18365,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000177
@@ -18392,7 +18392,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000177
@@ -18420,7 +18420,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000177
@@ -18440,7 +18440,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4198
 view Spikeins
 
@@ -18451,7 +18451,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000177
@@ -18471,7 +18471,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4249
 view Spikeins
 
@@ -18507,7 +18507,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000177
@@ -18525,7 +18525,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4605
 tableName wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -18566,7 +18566,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEH000154
@@ -18586,7 +18586,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4051
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep2
 view Alignments
@@ -18624,7 +18624,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000154
@@ -18641,7 +18641,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4587
 view ExonsGencV7
 
@@ -18793,7 +18793,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000154
@@ -18810,7 +18810,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4587
 view GeneGencV7
 
@@ -18967,7 +18967,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000154
@@ -18994,7 +18994,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000154
@@ -19022,7 +19022,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000154
@@ -19042,7 +19042,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4261
 view Spikeins
 
@@ -19053,7 +19053,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000154
@@ -19073,7 +19073,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4246
 view Spikeins
 
@@ -19109,7 +19109,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000154
@@ -19126,7 +19126,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4587
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -19460,7 +19460,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000188
@@ -19478,7 +19478,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4565
 view ExonsGencV7
 
@@ -19514,7 +19514,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000188
@@ -19532,7 +19532,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4565
 view GeneGencV7
 
@@ -19569,7 +19569,7 @@ bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000188
@@ -19596,7 +19596,7 @@ bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000188
@@ -19624,7 +19624,7 @@ bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000188
@@ -19644,7 +19644,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4255
 view Spikeins
 
@@ -19655,7 +19655,7 @@ bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000188
@@ -19675,7 +19675,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4269
 view Spikeins
 
@@ -19711,7 +19711,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000188
@@ -19729,7 +19729,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4565
 tableName wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -19827,7 +19827,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000155
@@ -19844,7 +19844,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4564
 view ExonsGencV7
 
@@ -19996,7 +19996,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000155
@@ -20013,7 +20013,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4564
 view GeneGencV7
 
@@ -20170,7 +20170,7 @@ bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000155
@@ -20197,7 +20197,7 @@ bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000155
@@ -20225,7 +20225,7 @@ bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000155
@@ -20245,7 +20245,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4286
 view Spikeins
 
@@ -20256,7 +20256,7 @@ bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000155
@@ -20276,7 +20276,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4204
 view Spikeins
 
@@ -20312,7 +20312,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000155
@@ -20329,7 +20329,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4564
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -20517,7 +20517,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000200
@@ -20535,7 +20535,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4552
 view ExonsGencV7
 
@@ -20573,7 +20573,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000200
@@ -20591,7 +20591,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4552
 view GeneGencV7
 
@@ -20630,7 +20630,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000200
@@ -20658,7 +20658,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000200
@@ -20678,7 +20678,7 @@ readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4199
 view Spikeins
 
@@ -20716,7 +20716,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000200
@@ -20734,7 +20734,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4552
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -20832,7 +20832,7 @@ bioRep 029C,030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000156
@@ -20849,7 +20849,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4595
 view ExonsGencV7
 
@@ -21001,7 +21001,7 @@ bioRep 029C,030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000156
@@ -21018,7 +21018,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4595
 view GeneGencV7
 
@@ -21175,7 +21175,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000156
@@ -21202,7 +21202,7 @@ bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000156
@@ -21230,7 +21230,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000156
@@ -21250,7 +21250,7 @@ readType 2x76D
 replicate 3
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4257
 view Spikeins
 
@@ -21261,7 +21261,7 @@ bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000156
@@ -21281,7 +21281,7 @@ readType 2x76D
 replicate 4
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4187
 view Spikeins
 
@@ -21317,7 +21317,7 @@ bioRep 029C,030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000156
@@ -21334,7 +21334,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4595
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -21668,7 +21668,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000189
@@ -21686,7 +21686,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4563
 view ExonsGencV7
 
@@ -21722,7 +21722,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000189
@@ -21740,7 +21740,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4563
 view GeneGencV7
 
@@ -21777,7 +21777,7 @@ bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000189
@@ -21804,7 +21804,7 @@ bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000189
@@ -21832,7 +21832,7 @@ bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000189
@@ -21852,7 +21852,7 @@ readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4284
 view Spikeins
 
@@ -21863,7 +21863,7 @@ bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000189
@@ -21883,7 +21883,7 @@ readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4206
 view Spikeins
 
@@ -21919,7 +21919,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000189
@@ -21937,7 +21937,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4563
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -22035,7 +22035,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000157
@@ -22052,7 +22052,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4602
 view ExonsGencV7
 
@@ -22204,7 +22204,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000157
@@ -22221,7 +22221,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4602
 view GeneGencV7
 
@@ -22378,7 +22378,7 @@ bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000157
@@ -22405,7 +22405,7 @@ bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000157
@@ -22433,7 +22433,7 @@ bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000157
@@ -22453,7 +22453,7 @@ readType 2x76D
 replicate 3
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4293
 view Spikeins
 
@@ -22464,7 +22464,7 @@ bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000157
@@ -22484,7 +22484,7 @@ readType 2x76D
 replicate 4
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4210
 view Spikeins
 
@@ -22520,7 +22520,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000157
@@ -22537,10 +22537,133 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4602
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV7
 view TranscriptGencV7
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1
+objType table
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool NIST14
+subId 5120
+tableName wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd1Rep1
+objType file
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool NIST14
+subId 5120
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd2Rep1
+objType file
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool NIST14
+subId 5120
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1
+objType table
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool NIST14
+subId 5120
+tableName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1
+objType table
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool NIST14
+subId 5120
+tableName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1
+view PlusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1
 objType table
@@ -22871,7 +22994,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000162
@@ -22888,7 +23011,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4588
 view ExonsGencV7
 
@@ -22924,7 +23047,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000162
@@ -22941,7 +23064,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4588
 view GeneGencV7
 
@@ -22978,7 +23101,7 @@ bioRep 001WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000162
@@ -23005,7 +23128,7 @@ bioRep 002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000162
@@ -23033,7 +23156,7 @@ bioRep 001WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000162
@@ -23053,7 +23176,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4227
 view Spikeins
 
@@ -23064,7 +23187,7 @@ bioRep 002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000162
@@ -23084,7 +23207,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4294
 view Spikeins
 
@@ -23120,7 +23243,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000162
@@ -23137,7 +23260,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4588
 tableName wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -23208,7 +23331,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
@@ -23235,7 +23358,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000163
@@ -23253,7 +23376,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4585
 view ExonsGencV7
 
@@ -23379,7 +23502,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
@@ -23405,7 +23528,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000163
@@ -23423,7 +23546,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4585
 view GeneGencV7
 
@@ -23433,7 +23556,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
@@ -23580,7 +23703,7 @@ bioRep 001WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000163
@@ -23607,7 +23730,7 @@ bioRep 002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000163
@@ -23635,7 +23758,7 @@ bioRep 001WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000163
@@ -23655,7 +23778,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4273
 view Spikeins
 
@@ -23666,7 +23789,7 @@ bioRep 002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000163
@@ -23686,7 +23809,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4230
 view Spikeins
 
@@ -23696,7 +23819,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
@@ -23722,7 +23845,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000163
@@ -23740,7 +23863,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4585
 tableName wgEncodeCshlLongRnaSeqK562CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -24058,7 +24181,7 @@ bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000180
@@ -24076,7 +24199,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4551
 view ExonsGencV7
 
@@ -24228,7 +24351,7 @@ bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000180
@@ -24246,7 +24369,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4551
 view GeneGencV7
 
@@ -24404,7 +24527,7 @@ bioRep 025CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000180
@@ -24424,7 +24547,7 @@ readType 2x76D
 replicate 3
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4189
 view Spikeins
 
@@ -24435,7 +24558,7 @@ bioRep 026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000180
@@ -24455,7 +24578,7 @@ readType 2x76D
 replicate 4
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4236
 view Spikeins
 
@@ -24491,7 +24614,7 @@ bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000180
@@ -24509,7 +24632,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4551
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV7
 view TranscriptGencV7
@@ -24816,7 +24939,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000193
@@ -24843,7 +24966,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000193
@@ -24861,7 +24984,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4579
 view ExonsGencV7
 
@@ -24871,7 +24994,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000193
@@ -24897,7 +25020,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000193
@@ -24915,7 +25038,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4579
 view GeneGencV7
 
@@ -24925,7 +25048,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000193
@@ -24952,7 +25075,7 @@ bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000193
@@ -24979,7 +25102,7 @@ bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000193
@@ -25007,7 +25130,7 @@ bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000193
@@ -25027,7 +25150,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4197
 view Spikeins
 
@@ -25038,7 +25161,7 @@ bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000193
@@ -25058,7 +25181,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4279
 view Spikeins
 
@@ -25068,7 +25191,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000193
@@ -25094,7 +25217,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000193
@@ -25112,7 +25235,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4579
 tableName wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -25207,7 +25330,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000140
@@ -25224,7 +25347,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4572
 view ExonsGencV7
 
@@ -25371,7 +25494,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000140
@@ -25388,7 +25511,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4572
 view GeneGencV7
 
@@ -25540,7 +25663,7 @@ bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000140
@@ -25566,7 +25689,7 @@ bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000140
@@ -25593,7 +25716,7 @@ bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000140
@@ -25612,7 +25735,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4295
 view Spikeins
 
@@ -25623,7 +25746,7 @@ bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000140
@@ -25642,7 +25765,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4192
 view Spikeins
 
@@ -25677,7 +25800,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000140
@@ -25694,7 +25817,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4572
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -25792,7 +25915,7 @@ bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000181
@@ -25810,7 +25933,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4546
 view ExonsGencV7
 
@@ -25962,7 +26085,7 @@ bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000181
@@ -25980,7 +26103,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4546
 view GeneGencV7
 
@@ -26138,7 +26261,7 @@ bioRep 025NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000181
@@ -26158,7 +26281,7 @@ readType 2x76D
 replicate 3
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4285
 view Spikeins
 
@@ -26169,7 +26292,7 @@ bioRep 026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000181
@@ -26189,7 +26312,7 @@ readType 2x76D
 replicate 4
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4228
 view Spikeins
 
@@ -26225,7 +26348,7 @@ bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000181
@@ -26243,7 +26366,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4546
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV7
 view TranscriptGencV7
@@ -26341,7 +26464,7 @@ bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000182
@@ -26359,7 +26482,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4545
 view ExonsGencV7
 
@@ -26511,7 +26634,7 @@ bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000182
@@ -26529,7 +26652,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4545
 view GeneGencV7
 
@@ -26687,7 +26810,7 @@ bioRep 025NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000182
@@ -26707,7 +26830,7 @@ readType 2x76D
 replicate 3
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4291
 view Spikeins
 
@@ -26718,7 +26841,7 @@ bioRep 026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000182
@@ -26738,7 +26861,7 @@ readType 2x76D
 replicate 4
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4297
 view Spikeins
 
@@ -26774,7 +26897,7 @@ bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000182
@@ -26792,7 +26915,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4545
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV7
 view TranscriptGencV7
@@ -27126,7 +27249,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000194
@@ -27144,7 +27267,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4541
 view ExonsGencV7
 
@@ -27180,7 +27303,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000194
@@ -27198,7 +27321,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4541
 view GeneGencV7
 
@@ -27235,7 +27358,7 @@ bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000194
@@ -27262,7 +27385,7 @@ bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000194
@@ -27290,7 +27413,7 @@ bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000194
@@ -27310,7 +27433,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4259
 view Spikeins
 
@@ -27321,7 +27444,7 @@ bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000194
@@ -27341,7 +27464,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4233
 view Spikeins
 
@@ -27377,7 +27500,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000194
@@ -27395,7 +27518,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4541
 tableName wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -27493,7 +27616,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000174
@@ -27511,7 +27634,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4555
 view ExonsGencV7
 
@@ -27663,7 +27786,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000174
@@ -27681,7 +27804,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4555
 view GeneGencV7
 
@@ -27838,7 +27961,7 @@ bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000174
@@ -27865,7 +27988,7 @@ bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000174
@@ -27893,7 +28016,7 @@ bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000174
@@ -27913,7 +28036,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4203
 view Spikeins
 
@@ -27924,7 +28047,7 @@ bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000174
@@ -27944,7 +28067,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4220
 view Spikeins
 
@@ -27980,7 +28103,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000174
@@ -27998,7 +28121,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4555
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -28332,7 +28455,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000183
@@ -28350,7 +28473,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4578
 view ExonsGencV7
 
@@ -28386,7 +28509,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000183
@@ -28404,7 +28527,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4578
 view GeneGencV7
 
@@ -28441,7 +28564,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000183
@@ -28468,7 +28591,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000183
@@ -28496,7 +28619,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-07
 dateUnrestricted 2012-02-07
 dccAccession wgEncodeEH000183
@@ -28516,7 +28639,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4056
 view Spikeins
 
@@ -28527,7 +28650,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000183
@@ -28547,7 +28670,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4241
 view Spikeins
 
@@ -28583,7 +28706,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000183
@@ -28601,7 +28724,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4578
 tableName wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -28699,7 +28822,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000175
@@ -28717,7 +28840,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4600
 view ExonsGencV7
 
@@ -28869,7 +28992,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000175
@@ -28887,7 +29010,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4600
 view GeneGencV7
 
@@ -29044,7 +29167,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000175
@@ -29071,7 +29194,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000175
@@ -29099,7 +29222,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000175
@@ -29119,7 +29242,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4248
 view Spikeins
 
@@ -29130,7 +29253,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000175
@@ -29150,7 +29273,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4234
 view Spikeins
 
@@ -29186,7 +29309,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000175
@@ -29204,7 +29327,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4600
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -29693,7 +29816,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000164
@@ -29711,7 +29834,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4567
 view ExonsGencV7
 
@@ -29722,7 +29845,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000164
@@ -29741,7 +29864,7 @@ project wgEncode
 replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4594
 view ExonsGencV7
 
@@ -29779,7 +29902,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000164
@@ -29797,7 +29920,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4567
 view GeneGencV7
 
@@ -29807,7 +29930,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000164
@@ -29825,7 +29948,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4594
 view GeneGencV7
 
@@ -29864,7 +29987,7 @@ bioRep 007WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000164
@@ -29891,7 +30014,7 @@ bioRep 008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000164
@@ -29919,7 +30042,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000164
@@ -29946,7 +30069,7 @@ bioRep 007WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000164
@@ -29966,7 +30089,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4216
 view Spikeins
 
@@ -29977,7 +30100,7 @@ bioRep 008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000164
@@ -29997,7 +30120,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4289
 view Spikeins
 
@@ -30008,7 +30131,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000164
@@ -30027,7 +30150,7 @@ readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4240
 view Spikeins
 
@@ -30065,7 +30188,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000164
@@ -30083,7 +30206,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4567
 tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -30094,7 +30217,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000164
@@ -30112,7 +30235,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4594
 tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7Rep5
 view TranscriptGencV7
@@ -30184,7 +30307,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000167
@@ -30205,7 +30328,7 @@ replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 sex U
-spikeInPool 14
+spikeInPool NIST14
 subId 4055
 tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
 view Alignments
@@ -30245,7 +30368,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -30263,7 +30386,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4591
 view ExonsGencV7
 
@@ -30274,7 +30397,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -30293,7 +30416,7 @@ project wgEncode
 replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4574
 view ExonsGencV7
 
@@ -30507,7 +30630,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -30525,7 +30648,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4591
 view GeneGencV7
 
@@ -30535,7 +30658,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -30553,7 +30676,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4574
 view GeneGencV7
 
@@ -30774,7 +30897,7 @@ bioRep 007WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000167
@@ -30801,7 +30924,7 @@ bioRep 008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000167
@@ -30829,7 +30952,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000167
@@ -30856,7 +30979,7 @@ bioRep 007WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000167
@@ -30876,7 +30999,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4186
 view Spikeins
 
@@ -30887,7 +31010,7 @@ bioRep 008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000167
@@ -30907,7 +31030,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4194
 view Spikeins
 
@@ -30918,7 +31041,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000167
@@ -30937,7 +31060,7 @@ readType 2x76D
 replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4219
 view Spikeins
 
@@ -30975,7 +31098,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -30993,7 +31116,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4591
 tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -31004,7 +31127,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -31022,7 +31145,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4574
 tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7Rep5
 view TranscriptGencV7
@@ -31210,7 +31333,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000195
@@ -31228,7 +31351,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4598
 view ExonsGencV7
 
@@ -31266,7 +31389,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000195
@@ -31284,7 +31407,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4598
 view GeneGencV7
 
@@ -31324,7 +31447,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000195
@@ -31344,7 +31467,7 @@ readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4245
 view Spikeins
 
@@ -31382,7 +31505,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000195
@@ -31400,7 +31523,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4598
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -31498,7 +31621,7 @@ bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000166
@@ -31516,7 +31639,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4597
 view ExonsGencV7
 
@@ -31668,7 +31791,7 @@ bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000166
@@ -31686,7 +31809,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4597
 view GeneGencV7
 
@@ -31843,7 +31966,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000166
@@ -31870,7 +31993,7 @@ bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000166
@@ -31898,7 +32021,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000166
@@ -31918,7 +32041,7 @@ readType 2x76D
 replicate 3
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4214
 view Spikeins
 
@@ -31929,7 +32052,7 @@ bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000166
@@ -31949,7 +32072,7 @@ readType 2x76D
 replicate 4
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4247
 view Spikeins
 
@@ -31985,7 +32108,7 @@ bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000166
@@ -32003,7 +32126,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4597
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -32337,7 +32460,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000196
@@ -32355,7 +32478,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4566
 view ExonsGencV7
 
@@ -32391,7 +32514,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000196
@@ -32409,7 +32532,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4566
 view GeneGencV7
 
@@ -32446,7 +32569,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000196
@@ -32473,7 +32596,7 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000196
@@ -32501,7 +32624,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000196
@@ -32521,7 +32644,7 @@ readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4274
 view Spikeins
 
@@ -32532,7 +32655,7 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000196
@@ -32552,7 +32675,7 @@ readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4267
 view Spikeins
 
@@ -32588,7 +32711,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000196
@@ -32606,7 +32729,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4566
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -32647,7 +32770,7 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000165
@@ -32668,7 +32791,7 @@ replicate 4
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 sex U
-spikeInPool 14
+spikeInPool NIST14
 subId 4053
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4
 view Alignments
@@ -32706,7 +32829,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000165
@@ -32724,7 +32847,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4569
 view ExonsGencV7
 
@@ -32876,7 +32999,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000165
@@ -32894,7 +33017,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4569
 view GeneGencV7
 
@@ -33051,7 +33174,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000165
@@ -33078,7 +33201,7 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000165
@@ -33106,7 +33229,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000165
@@ -33126,7 +33249,7 @@ readType 2x76D
 replicate 3
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4237
 view Spikeins
 
@@ -33137,7 +33260,7 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000165
@@ -33157,7 +33280,7 @@ readType 2x76D
 replicate 4
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4218
 view Spikeins
 
@@ -33193,7 +33316,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000165
@@ -33211,7 +33334,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4569
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -33545,7 +33668,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000178
@@ -33563,7 +33686,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4573
 view ExonsGencV7
 
@@ -33599,7 +33722,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000178
@@ -33617,7 +33740,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4573
 view GeneGencV7
 
@@ -33654,7 +33777,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000178
@@ -33681,7 +33804,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000178
@@ -33709,7 +33832,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000178
@@ -33729,7 +33852,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4281
 view Spikeins
 
@@ -33740,7 +33863,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000178
@@ -33760,7 +33883,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4275
 view Spikeins
 
@@ -33796,7 +33919,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000178
@@ -33814,7 +33937,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4573
 tableName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -33825,7 +33948,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEH000168
@@ -33845,7 +33968,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4052
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1
 view Alignments
@@ -33856,7 +33979,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEH000168
@@ -33876,7 +33999,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4054
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2
 view Alignments
@@ -33914,7 +34037,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000168
@@ -33932,7 +34055,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4543
 view ExonsGencV7
 
@@ -34084,7 +34207,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000168
@@ -34102,7 +34225,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4543
 view GeneGencV7
 
@@ -34259,7 +34382,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000168
@@ -34286,7 +34409,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000168
@@ -34314,7 +34437,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000168
@@ -34334,7 +34457,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4278
 view Spikeins
 
@@ -34345,7 +34468,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000168
@@ -34365,7 +34488,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4266
 view Spikeins
 
@@ -34401,7 +34524,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000168
@@ -34419,7 +34542,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4543
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -34753,7 +34876,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000197
@@ -34771,7 +34894,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4561
 view ExonsGencV7
 
@@ -34807,7 +34930,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000197
@@ -34825,7 +34948,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4561
 view GeneGencV7
 
@@ -34863,7 +34986,7 @@ bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000197
@@ -34883,7 +35006,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4252
 view Spikeins
 
@@ -34894,7 +35017,7 @@ bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000197
@@ -34914,7 +35037,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4202
 view Spikeins
 
@@ -34950,7 +35073,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000197
@@ -34968,7 +35091,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4561
 tableName wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -35066,7 +35189,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000169
@@ -35084,7 +35207,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4560
 view ExonsGencV7
 
@@ -35236,7 +35359,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000169
@@ -35254,7 +35377,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4560
 view GeneGencV7
 
@@ -35411,7 +35534,7 @@ bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000169
@@ -35438,7 +35561,7 @@ bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000169
@@ -35466,7 +35589,7 @@ bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000169
@@ -35486,7 +35609,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4282
 view Spikeins
 
@@ -35497,7 +35620,7 @@ bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000169
@@ -35517,7 +35640,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4232
 view Spikeins
 
@@ -35553,7 +35676,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000169
@@ -35571,9 +35694,9 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1215657903
+# MAGIC: -629253436

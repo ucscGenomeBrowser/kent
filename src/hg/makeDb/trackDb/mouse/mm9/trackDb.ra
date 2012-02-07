@@ -2,6 +2,7 @@
 
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
+include trackDb.merckPolyA.all.ra
 
 track jaxQTLLift
 shortLabel MGI QTL LiftO
@@ -167,17 +168,6 @@ dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo1
 xrefQuery select ucscRetroInfo1.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
-
-track tRNAs
-shortLabel tRNA Genes
-longLabel Transfer RNA genes identified with tRNAscan-SE
-group genes
-priority 53.5
-visibility hide
-color 0,20,150
-type bed 6 +
-nextItemButton on
-noScoreFilter .
 
 track NIAGene
 shortLabel NIA Gene Index
@@ -545,11 +535,117 @@ group genes
 priority 66
 color 56,108,56
 type genePred
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromer_quick_search.pl?db=mm9&query_str=$$
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search.pl?db=mm9&query_str=$$
 urlLabel TROMER database detail:
 
 track sibTxGraph override
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm9&species=M.+musculus&tromer=$$
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm9&species=M.+musculus&tromer=$$
+
+track polyASeqSites
+compositeTrack on
+shortLabel PolyA-Seq
+longLabel Poly(A)-sequencing from Merck Research Laboratories
+group rna
+subGroup1 view Views Signal=Signal 
+subGroup2 tissType Tissue_Type Brain=Brain Kidney=Kidney Liver=Liver Muscle=Muscle Testis=Testis
+subGroup3 strand Strand fwd=Forward rev=Reverse
+dimensions dimensionY=tissType dimensionX=strand
+sortOrder tissType=+ strand=+ view=+
+priority 79.2
+type bed 
+dragAndDrop subTracks
+visibility hide
+noInherit on
+
+    track polyASeqSitesSignalView
+    shortLabel Signal
+    view Signal
+    visibility full
+    subTrack polyASeqSites
+    maxHeightPixels 50:50:5
+    autoScale on
+    yLineOnOff on
+    type bigWig -1 2 
+
+        track polyASeqSitesBrainFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Brain strand=fwd
+        shortLabel PolyA-Seq Brain
+        longLabel Poly(A)-tail sequencing of Brain from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.840000 79444.007812
+
+        track polyASeqSitesBrainRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Brain strand=rev
+        shortLabel PolyA-Seq Brain
+        longLabel Poly(A)-tail sequencing of Brain from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.840000 6263.609863
+
+        track polyASeqSitesKidneyFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Kidney strand=fwd
+        shortLabel PolyA-Seq Kidney
+        longLabel Poly(A)-tail sequencing of Kidney from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.260000 81890.773438
+
+        track polyASeqSitesKidneyRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Kidney strand=rev
+        shortLabel PolyA-Seq Kidney
+        longLabel Poly(A)-tail sequencing of Kidney from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.260000 51424.628906
+
+        track polyASeqSitesLiverFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Liver strand=fwd
+        shortLabel PolyA-Seq Liver
+        longLabel Poly(A)-tail sequencing of Liver from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.240000 53756.269531
+
+        track polyASeqSitesLiverRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Liver strand=rev
+        shortLabel PolyA-Seq Liver
+        longLabel Poly(A)-tail sequencing of Liver from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.240000 49296.449219
+
+        track polyASeqSitesMuscleFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Muscle strand=fwd
+        shortLabel PolyA-Seq Muscle
+        longLabel Poly(A)-tail sequencing of Muscle from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.180000 142298.031250
+
+        track polyASeqSitesMuscleRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Muscle strand=rev
+        shortLabel PolyA-Seq Muscle
+        longLabel Poly(A)-tail sequencing of Muscle from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.180000 21245.890625
+
+        track polyASeqSitesTestisFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Testis strand=fwd
+        shortLabel PolyA-Seq Testis
+        longLabel Poly(A)-tail sequencing of Testis from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.420000 18935.230469
+
+        track polyASeqSitesTestisRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Testis strand=rev
+        shortLabel PolyA-Seq Testis
+        longLabel Poly(A)-tail sequencing of Testis from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.420000 12337.280273
 
 track rest
 shortLabel REST
@@ -785,14 +881,6 @@ searchTable NIAGene
 searchMethod fuzzy
 searchType psl
 searchPriority 50
-
-searchName tRNA-name
-searchTable tRNAs
-searchType bed
-searchMethod fuzzy
-query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
-searchDescription tRNAscan-SE tRNA Name
-searchPriority 63
 
 searchName REST
 searchTable REST

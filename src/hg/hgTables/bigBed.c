@@ -22,30 +22,19 @@
 #include "asFilter.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigBed.c,v 1.11 2010/05/21 23:45:38 braney Exp $";
 
-boolean isBigBed(char *database, char *table, struct trackDb *parent, 
+boolean isBigBed(char *database, char *table, struct trackDb *parent,
 	struct customTrack *(*ctLookupName)(char *table))
 /* Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed. */
 {
-if (isHubTrack(table))
-    {
-    struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
-    return startsWithWord("bigBed", tdb->type);
-    }
+struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+if (tdb)
+    return tdbIsBigBed(tdb);
 else
     return hIsBigBed(database, table, parent, ctLookupName);
 }
 
-char *bigBedFileName(char *table, struct sqlConnection *conn)
-/* Return file name associated with bigBed.  This handles differences whether it's
- * a custom or built-in track.  Do a freeMem on returned string when done. */
-{
-/* Implementation is same as bigWig. */
-return bigWigFileName(table, conn);
-}
-
-struct hash *asColumnHash(struct asObject *as)
+static struct hash *asColumnHash(struct asObject *as)
 /* Return a hash full of the object's columns, keyed by colum name */
 {
 struct hash *hash = hashNew(6);
@@ -60,26 +49,6 @@ static void fillField(struct hash *colHash, char *key, char output[HDB_MAX_FIELD
 {
 if (hashLookup(colHash, key))
     strncpy(output, key, HDB_MAX_FIELD_STRING-1);
-}
-
-static struct asObject *bigBedAsOrDefault(struct bbiFile *bbi)
-/* Get asObject associated with bigBed - if none exists in file make it up from field counts. */
-{
-struct asObject *as = bigBedAs(bbi);
-if (as == NULL) 
-    as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
-return as;
-}
-
-struct asObject *bigBedAsForTable(char *table, struct sqlConnection *conn)
-/* Get asObject associated with bigBed table. */
-{
-char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
-struct asObject *as = bigBedAsOrDefault(bbi);
-bbiFileClose(&bbi);
-freeMem(fileName);
-return as;
 }
 
 struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn)
@@ -145,7 +114,7 @@ return list;
 }
 
 
-static void addFilteredBedsOnRegion(struct bbiFile *bbi, struct region *region, 
+static void addFilteredBedsOnRegion(struct bbiFile *bbi, struct region *region,
 	char *table, struct asFilter *filter, struct lm *bedLm, struct bed **pBedList)
 /* Add relevant beds in reverse order to pBedList */
 {
@@ -169,8 +138,8 @@ for (iv = ivList; iv != NULL; iv = iv->next)
 lmCleanup(&bbLm);
 }
 
-struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn, 
-	char *db, char *table, struct region *regionList, struct lm *lm, 
+struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,
+	char *db, char *table, struct region *regionList, struct lm *lm,
 	int *retFieldCount)
 /* Get list of beds from bigBed, in all regions, that pass filtering. */
 {
@@ -188,7 +157,7 @@ for (region = regionList; region != NULL; region = region->next)
 slReverse(&bedList);
 
 /* Clean up and return. */
-if (retFieldCount != NULL) 
+if (retFieldCount != NULL)
 	*retFieldCount = bbi->definedFieldCount;
 bbiFileClose(&bbi);
 freeMem(fileName);
@@ -284,13 +253,11 @@ char *fileName = bigBedFileName(table, conn);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct bbiChromInfo *chromList = bbiChromList(bbi);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *ivList = bigBedIntervalQuery(bbi, chromList->name, 0, 
+struct bigBedInterval *ivList = bigBedIntervalQuery(bbi, chromList->name, 0,
 					 	    chromList->size, 10, lm);
 
 /* Get description of columns, making it up from BED records if need be. */
-struct asObject *as = bigBedAs(bbi);
-if (as == NULL)
-    as = asParseText(bedAsDef(bbi->definedFieldCount, bbi->fieldCount));
+struct asObject *as = bigBedAsOrDefault(bbi);
 
 hPrintf("<B>Database:</B> %s", database);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s<br>", table);

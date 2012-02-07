@@ -12,7 +12,6 @@
 #include "portable.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.69 2009/04/24 22:14:48 larrym Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -353,7 +352,7 @@ if (numFields != bedSize)
     int i;
     int start = 0;
     if (!trimSqlTable || (bedSize > numFields))
-	errAbort(".sql table has wrong number of columns in the definition. Try -trimSqlTable");
+	errAbort(".sql table has wrong number of columns (input: %d, table: %d) in the definition. Try -trimSqlTable", bedSize, numFields);
     slReverse(&fieldNames);
     if (bedDetail) 
         {
@@ -593,7 +592,7 @@ for (i=0; i<bedCount; ++i)
     lineFileClose(&lf);
     }
 loadedElementCount = slCount(bedList);
-verbose(1, "Loaded %d elements of size %d\n", loadedElementCount, bedSize);
+verbose(1, "Read %d elements of size %d from %s\n", loadedElementCount, bedSize, bedFiles[0]);
 if (!noSort)
     {
     slSort(&bedList, bedStubCmp);

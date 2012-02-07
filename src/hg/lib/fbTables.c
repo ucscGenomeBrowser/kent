@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "fbTables.h"
 
-static char const rcsid[] = "$Id: fbTables.c,v 1.5 2005/04/13 06:25:52 markd Exp $";
 
 void fbGeneStaticLoad(char **row, struct fbGene *ret)
 /* Load a row from fbGene table into ret.  The contents of ret will

@@ -2,7 +2,6 @@
 #include "sample.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: avgTranscriptomeExps.c,v 1.5 2008/09/03 19:18:12 markd Exp $";
 
 boolean doAll = FALSE;
 char *suffix = NULL;

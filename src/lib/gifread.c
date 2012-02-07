@@ -5,7 +5,6 @@
 #include "gifcodes.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: gifread.c,v 1.4 2005/04/10 14:41:23 markd Exp $";
 
 static struct gif_header gif;
 static struct gif_image gim;

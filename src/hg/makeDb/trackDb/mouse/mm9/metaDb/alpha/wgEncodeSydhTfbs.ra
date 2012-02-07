@@ -12,12 +12,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001979
 expId 1979
-fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum c57929ee0a29efb08f47443a1899579d,d4be7bf45f6af330ccb23812068f0180
@@ -39,12 +39,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001979
 expId 1979
-fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 0762f2993b0e5c794499aa9ff616865d,76c195df46d9f46fdf2477f266f30860
@@ -66,7 +66,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001979
@@ -94,7 +94,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001979
@@ -121,7 +121,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001979
@@ -148,7 +148,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001979
@@ -176,12 +176,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001975
 expId 1975
-fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum c13aa544c39a290dfbbd1523aaaec444,7cc6c8ad0fcfda4497f2230846ee1a22
@@ -203,12 +203,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001975
 expId 1975
-fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Chd2ab68301IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum f7bf914e461d8319fedc01b7d821f312,a132e6247de4415eb27749e7067adb86
@@ -230,7 +230,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001975
@@ -258,7 +258,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001975
@@ -285,7 +285,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001975
@@ -312,7 +312,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001975
@@ -340,13 +340,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001943
 expId 1943
-fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep1.bam,wgEncodeSydhTfbsCh12CjunIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum c3652e94e499928ce5ef2cad8c9532a0,5832edbf9059031f8f3f46c390790ed6
@@ -368,13 +368,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001943
 expId 1943
-fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep2.bam,wgEncodeSydhTfbsCh12CjunIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum e72d68ea279da76e60b68c95c8ed4b76,f028881e541fb010bcb6388ebd47a11b
@@ -396,7 +396,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001943
@@ -424,7 +424,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001943
@@ -451,7 +451,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001943
@@ -478,7 +478,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001943
@@ -506,13 +506,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001944
 expId 1944
-fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep1.bam,wgEncodeSydhTfbsCh12CmycIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum a6cfc568cea8c4224f858e0981a89fd3,576808787d4e6d3c617ba3013d9a74b1
@@ -534,13 +534,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001944
 expId 1944
-fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep2.bam,wgEncodeSydhTfbsCh12CmycIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum dfa62ad0d5a1fc72acd71c1116dfda47,6914669c3dd6b573a630434ae1be6e22
@@ -562,7 +562,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001944
@@ -590,7 +590,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001944
@@ -617,7 +617,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001944
@@ -644,7 +644,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001944
@@ -672,13 +672,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001954
 expId 1954
-fileName wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep1.bam,wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 011f2fc5cef25e4d3f41d5e9a1973e2d,d89353d390360140db64b40e4c014649
@@ -700,13 +700,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001954
 expId 1954
-fileName wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep2.bam,wgEncodeSydhTfbsCh12CtcfbIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 82a6a5667f1f4aebce1a248dcf935b52,d6c62d9cdf54c0167ac4891d116e0ab3
@@ -728,7 +728,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
@@ -757,7 +757,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
@@ -785,7 +785,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
@@ -813,7 +813,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-29
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
@@ -842,13 +842,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001937
 expId 1937
-fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 87927857c063c3f752e9a2ea90a638df,ad31dcc3e78cf6d1d47acbe0c1ed0120
@@ -870,13 +870,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001937
 expId 1937
-fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 07cde03ffd439e15cd565067660eba73,68b01da862336e8dc3962813da289c6f
@@ -898,7 +898,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001937
@@ -926,7 +926,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001937
@@ -953,7 +953,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001937
@@ -980,7 +980,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001937
@@ -1008,12 +1008,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
-fileName wgEncodeSydhTfbsCh12Ets1IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12Ets1IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Ets1IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 0d3eb7e86f44f099bc017dd29105c7df,0bb261e9b513e925b805c454fecd74a6
 project wgEncode
 replicate 1
 setType exp
@@ -1032,12 +1033,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
-fileName wgEncodeSydhTfbsCh12Ets1IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12Ets1IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Ets1IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum e4076da58385fd97120878e210e00279,4c4cea8d146d1aa88a5b830295588a1a
 project wgEncode
 replicate 2
 setType exp
@@ -1056,13 +1058,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsCh12Ets1IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 18cd0bc77df48bc6a7dd46e7e7a096e8
 project wgEncode
 setType exp
 sex F
@@ -1081,12 +1084,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsCh12Ets1IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 204811321d484883ce2ff58cbc05f258
 project wgEncode
 replicate 1
 setType exp
@@ -1105,12 +1109,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsCh12Ets1IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum acbc9fbfe6a530d46acf4fc61dcb20aa
 project wgEncode
 replicate 2
 setType exp
@@ -1129,13 +1134,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsCh12Ets1IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 5da91dfc539da8bf16ec51968c860200
 project wgEncode
 setType exp
 sex F
@@ -1154,13 +1160,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001938
 expId 1938
-fileName wgEncodeSydhTfbsCh12InputIggmusAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12InputIggmusAlnRep1.bam,wgEncodeSydhTfbsCh12InputIggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 16d1c780f3355705526f60b42b4d7bbe,a1c9ec2f54b79d7301dafc962c293fdb
@@ -1182,7 +1188,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001938
@@ -1208,7 +1214,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001938
@@ -1236,13 +1242,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-13
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001939
 expId 1939
-fileName wgEncodeSydhTfbsCh12InputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12InputIggrabAlnRep1.bam,wgEncodeSydhTfbsCh12InputIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum d97cdbc486e220ba95773984a84dd784,94c1750b336bf43540391f8e69cad439
@@ -1264,7 +1270,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001939
@@ -1290,7 +1296,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001939
@@ -1318,13 +1324,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-10
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001940
 expId 1940
-fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep1.bam,wgEncodeSydhTfbsCh12JundIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 7ee01e873c26270a1a44ebe5a2ddc122,5a8ef67a94d040d0a37911384b532d8b
@@ -1346,13 +1352,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-10
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001940
 expId 1940
-fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep2.bam,wgEncodeSydhTfbsCh12JundIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum cef2a5311c1dd450306a627fa6035bd4,f08e610df72a70d16218eafcfb6d5e3b
@@ -1374,7 +1380,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001940
@@ -1402,7 +1408,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001940
@@ -1429,7 +1435,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001940
@@ -1456,7 +1462,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001940
@@ -1484,12 +1490,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001980
 expId 1980
-fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Mafkab50322IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum f31c0d4472d4bee1390fe31670f0701c,131ca4b78d1db8fb96f99ea30f9d5670
@@ -1511,12 +1517,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001980
 expId 1980
-fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12Mafkab50322IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Mafkab50322IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum e8a318fb57a9d18e199f6548e70f9c7c,1a44dffeefcd3724259864644bb34dc6
@@ -1538,7 +1544,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001980
@@ -1566,7 +1572,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001980
@@ -1593,7 +1599,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001980
@@ -1620,7 +1626,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001980
@@ -1648,12 +1654,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001955
 expId 1955
-fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam,wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum f9ede47d9acda6f5c896d398e10163cd,c8bfe9a5117bb0a62fdbe3a131f89c23
@@ -1675,12 +1681,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001955
 expId 1955
-fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam,wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum e39e45cff731d17df82ac700932bdeac,6e0bcadfbcd15c97cae3f44b05e99fa7
@@ -1702,7 +1708,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001955
@@ -1730,7 +1736,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001955
@@ -1757,7 +1763,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001955
@@ -1784,7 +1790,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001955
@@ -1812,12 +1818,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001976
 expId 1976
-fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Mxi1af4185IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 65af3b7c77f755acb12a588bdfe6c657,5ba818803c7fda9b22f87b6370f97b60
@@ -1839,12 +1845,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001976
 expId 1976
-fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12Mxi1af4185IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Mxi1af4185IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum db9c466ebc0d956a32ebe5b862d3bf18,f7656b3c52704f560200e77f5c76fe2c
@@ -1866,7 +1872,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001976
@@ -1894,7 +1900,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001976
@@ -1921,7 +1927,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001976
@@ -1948,7 +1954,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-15
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEM001976
@@ -1976,12 +1982,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001977
 expId 1977
-fileName wgEncodeSydhTfbsCh12NelfeIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12NelfeIggrabAlnRep1.bam,wgEncodeSydhTfbsCh12NelfeIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum d76e76640164a22f4aeec1e76e1c815b,5e90edb43ade004e2bd19186b1d2ee9d
@@ -2003,12 +2009,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001977
 expId 1977
-fileName wgEncodeSydhTfbsCh12NelfeIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12NelfeIggrabAlnRep2.bam,wgEncodeSydhTfbsCh12NelfeIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 5eba895f635ab04d96e75ecb671edd58,89002b8c0e69aad387597e5327788e2f
@@ -2030,7 +2036,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001977
@@ -2058,7 +2064,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001977
@@ -2085,7 +2091,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001977
@@ -2112,7 +2118,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001977
@@ -2140,12 +2146,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001958
 expId 1958
-fileName wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 933af9f32e41b3af676918dc543a771d,d6e4a9b8293110692845eae8b519c806
@@ -2167,12 +2173,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001958
 expId 1958
-fileName wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12P300sc584IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 3f6e58e2391c8af0bf7bac7ca6940e17,e6c04b5069af04ecd7d941be2475432c
@@ -2194,7 +2200,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001958
@@ -2222,7 +2228,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001958
@@ -2249,7 +2255,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001958
@@ -2276,7 +2282,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001958
@@ -2304,13 +2310,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001941
 expId 1941
-fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1.bam,wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 2325cfbbb721ea5b87568c5a40540828,c0d90d9bc538df4d3de1f99ca2c92296
@@ -2332,13 +2338,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001941
 expId 1941
-fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2.bam,wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum d1df49e9a00f7e2239265c2e9145fbd2,007c57e2729a32a9855f57ebbf98a792
@@ -2360,7 +2366,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001941
@@ -2388,7 +2394,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001941
@@ -2415,7 +2421,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001941
@@ -2442,7 +2448,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001941
@@ -2470,12 +2476,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001970
 expId 1970
-fileName wgEncodeSydhTfbsCh12Pol2s2IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12Pol2s2IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Pol2s2IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 007116fc48bb16a8268a4bf2a5445957,99d184897ec2705e733f611d54cdeb80
@@ -2497,12 +2503,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001970
 expId 1970
-fileName wgEncodeSydhTfbsCh12Pol2s2IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12Pol2s2IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Pol2s2IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 725cac95edccd80ae6d254d6374ab002,bfa92a5378476a5c78339ddb92548ab3
@@ -2524,7 +2530,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001970
@@ -2552,7 +2558,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001970
@@ -2579,7 +2585,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001970
@@ -2606,7 +2612,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001970
@@ -2634,12 +2640,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001956
 expId 1956
-fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 573571939fd54e0cd61f9211684cf5de,f37e463b348069cfc8201b6ca7402e80
@@ -2661,12 +2667,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001956
 expId 1956
-fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum afbadf233155b5a64904bc05efbf1c33,e847c82c15af2415a93e7d50663db22b
@@ -2688,7 +2694,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001956
@@ -2716,7 +2722,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001956
@@ -2743,7 +2749,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001956
@@ -2770,7 +2776,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001956
@@ -2798,12 +2804,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001971
 expId 1971
-fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Smc3ab9263IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum a089c70bf66eae5f55bd3b5aa1aabf32,60363e754a9924ba62b2ac4d328729d8
@@ -2825,12 +2831,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001971
 expId 1971
-fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12Smc3ab9263IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Smc3ab9263IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 7cfa24900b88159602ad28e202fa1b9e,74ead892b9a69d97c0738854c2fa8239
@@ -2852,7 +2858,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001971
@@ -2880,7 +2886,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001971
@@ -2907,7 +2913,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001971
@@ -2934,7 +2940,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001971
@@ -2962,13 +2968,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001942
 expId 1942
-fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep1.bam,wgEncodeSydhTfbsCh12TbpIggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 1f33102573e9032c9ab6c17457e25463,0ccc54a42ab303b5d7ac9846d6d99d0a
@@ -2990,13 +2996,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001942
 expId 1942
-fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep2.bam,wgEncodeSydhTfbsCh12TbpIggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 593d0a0c1be47abb5cabf3ca122b857a,b6ce76a071e51f8a4e54131e71fcf0bc
@@ -3018,7 +3024,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
@@ -3047,7 +3053,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001942
@@ -3074,7 +3080,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001942
@@ -3101,7 +3107,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001942
@@ -3129,12 +3135,12 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001957
 expId 1957
-fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam
+fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam,wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 1500d12ebc543a1777f56a85af43441e,a2220fc77a048359e260cf8e2481864a
@@ -3156,12 +3162,12 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001957
 expId 1957
-fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam
+fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam,wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 3b9e1e515ed39d4ccdc0739975b4d78c,30b4b5ff2adf6b54bb47a2253c5934ec
@@ -3183,7 +3189,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001957
@@ -3211,7 +3217,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001957
@@ -3238,7 +3244,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001957
@@ -3265,7 +3271,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001957
@@ -3293,12 +3299,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001972
 expId 1972
-fileName wgEncodeSydhTfbsMelChd2ab68301IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelChd2ab68301IggrabAlnRep1.bam,wgEncodeSydhTfbsMelChd2ab68301IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum aec0416b263b554b45c7414970a243af,b803dc92caf461d044bbdf157a599b66
@@ -3320,12 +3326,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001972
 expId 1972
-fileName wgEncodeSydhTfbsMelChd2ab68301IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelChd2ab68301IggrabAlnRep2.bam,wgEncodeSydhTfbsMelChd2ab68301IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 3f2f927f51b4f2010e667d3ba4dab449,d7d62038b58b60fe6be0b32c23257341
@@ -3347,7 +3353,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001972
@@ -3375,7 +3381,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001972
@@ -3402,7 +3408,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001972
@@ -3429,7 +3435,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001972
@@ -3457,13 +3463,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1.bam,wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
-objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep1.bam
+md5sum cec02462d29c06d5160267338df28852,5a83c78c60d00bbe99d4ed14a549ec51
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep1.bam,renamed.bai
 project wgEncode
 replicate 1
 setType exp
@@ -3482,13 +3489,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2.bam,wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
-objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep2.bam
+md5sum c3a899de1d8fbac48b8e2512f1c0b533,9dc485ed241688ac968639134d28a2d6
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep2.bam,renamed.bai
 project wgEncode
 replicate 2
 setType exp
@@ -3507,13 +3515,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMelCmybh141IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum a72483bf362751017e68218b43f78c59
 objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabPk.narrowPeak.gz
 project wgEncode
 setType exp
@@ -3533,12 +3542,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 64976867f5b72a18ed1c682f95d2f190
 objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabRawDataRep1.fastq.gz
 project wgEncode
 replicate 1
@@ -3558,12 +3568,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 69f482d3dcce968145159c3aeaf8440e
 objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabRawDataRep2.fastq.gz
 project wgEncode
 replicate 2
@@ -3583,13 +3594,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMelCmybh141IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 536aa065f5a4549235e2d810e36a043c
 objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelCmybsc7874IggrabSig.bigWig
 project wgEncode
 setType exp
@@ -3609,12 +3621,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEM001967
 expId 1967
-fileName wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep1.bam,wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum cec02462d29c06d5160267338df28852,5a83c78c60d00bbe99d4ed14a549ec51
@@ -3636,12 +3648,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEM001967
 expId 1967
-fileName wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep2.bam,wgEncodeSydhTfbsMelCmybsc7874IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum c3a899de1d8fbac48b8e2512f1c0b533,9dc485ed241688ac968639134d28a2d6
@@ -3663,7 +3675,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEM001967
@@ -3691,7 +3703,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEM001967
@@ -3718,7 +3730,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEM001967
@@ -3745,7 +3757,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEM001967
@@ -3773,13 +3785,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001951
 expId 1951
-fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep1.bam,wgEncodeSydhTfbsMelCmycIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 5a0ddb376a99c9fc72c054adb25268b0,281601130513a31e204c5021ad00ea32
@@ -3801,13 +3813,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001951
 expId 1951
-fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep2.bam,wgEncodeSydhTfbsMelCmycIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 63bdae29367f9c40ae8c48300aab94d5,98500d9c9ceeec5e7e1818b7999f71e3
@@ -3829,7 +3841,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
@@ -3858,7 +3870,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001951
@@ -3885,7 +3897,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001951
@@ -3912,7 +3924,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001951
@@ -3940,13 +3952,14 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1.bam
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1.bam,wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
-objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep1.bam
+md5sum 51ad9018735826652a01cbd9a672cb12,9751e3baa0bb432022c93197c43ac64e
+objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep1.bam,renamed.bai
 project wgEncode
 replicate 1
 setType exp
@@ -3965,13 +3978,14 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2.bam
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2.bam,wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
-objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep2.bam
+md5sum 5d9477681b74ce084cdc988bd9bf285d,571e7467a2fa8db0069f522173079b37
+objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep2.bam,renamed.bai
 project wgEncode
 replicate 2
 setType exp
@@ -3990,13 +4004,14 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20IggyalePk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum b7dd0d00ac1544d8e544efab311a9b23
 objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyalePk.narrowPeak.gz
 project wgEncode
 setType exp
@@ -4016,12 +4031,13 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum d252e261caeb8f30071e10a99c846eee
 objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleRawDataRep1.fastq.gz
 project wgEncode
 replicate 1
@@ -4041,12 +4057,13 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 79e9f85d895dd27c4e8d442d53153324
 objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleRawDataRep2.fastq.gz
 project wgEncode
 replicate 2
@@ -4066,13 +4083,14 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 7ca7e8b2432436ffdbd393adf63239e0
 objStatus renamed - Antibody renaming and changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleSig.bigWig
 project wgEncode
 setType exp
@@ -4092,12 +4110,13 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeSydhTfbsMelCtcfbDm2p5dStdAlnRep1.bam
+fileName wgEncodeSydhTfbsMelCtcfbDm2p5dStdAlnRep1.bam,wgEncodeSydhTfbsMelCtcfbDm2p5dStdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 41b4fa8c6605822a8a7b5fbf5120edce,de6f5611d7744412fa82a163badee5ce
 project wgEncode
 replicate 1
 setType exp
@@ -4116,12 +4135,13 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeSydhTfbsMelCtcfbDm2p5dStdAlnRep2.bam
+fileName wgEncodeSydhTfbsMelCtcfbDm2p5dStdAlnRep2.bam,wgEncodeSydhTfbsMelCtcfbDm2p5dStdAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 593f048d56fec79b4af7d8af33b2b776,37414fd77ca77f3752a8b463e217507a
 project wgEncode
 replicate 2
 setType exp
@@ -4140,13 +4160,14 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsMelCtcfbDm2p5dStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 75671555a6b2b7ee0cc80b27f8232696
 project wgEncode
 setType exp
 sex M
@@ -4165,12 +4186,13 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsMelCtcfbDm2p5dStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 7b78bbf41d254ad21010a7c7d1f47330
 project wgEncode
 replicate 1
 setType exp
@@ -4189,12 +4211,13 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsMelCtcfbDm2p5dStdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 4d24842f065341f33cf4e428444b9624
 project wgEncode
 replicate 2
 setType exp
@@ -4213,13 +4236,14 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsMelCtcfbDm2p5dStdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum e3e9d292327e90ab442ed7261e63f707
 project wgEncode
 setType exp
 sex M
@@ -4238,7 +4262,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-07-19
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
@@ -4266,12 +4290,12 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001962
 expId 1962
-fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep1.bam
+fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep1.bam,wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep1.bam.bai
 grant Snyder
 lab Yale-m
 md5sum 51ad9018735826652a01cbd9a672cb12,9751e3baa0bb432022c93197c43ac64e
@@ -4293,12 +4317,12 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001962
 expId 1962
-fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep2.bam
+fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep2.bam,wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep2.bam.bai
 grant Snyder
 lab Yale-m
 md5sum 5d9477681b74ce084cdc988bd9bf285d,571e7467a2fa8db0069f522173079b37
@@ -4320,7 +4344,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-03
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
@@ -4349,7 +4373,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001962
@@ -4376,7 +4400,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001962
@@ -4403,7 +4427,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001962
@@ -4431,12 +4455,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001968
 expId 1968
-fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabAlnRep1.bam,wgEncodeSydhTfbsMelCtcfsc15914IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 23d17c5a47e085aaf9c1f7c62860c523,6efc20918784449542367a2c31b8aa8d
@@ -4458,12 +4482,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001968
 expId 1968
-fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelCtcfsc15914IggrabAlnRep2.bam,wgEncodeSydhTfbsMelCtcfsc15914IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 639a6df2764f6fc852f73757b17977db,dce6b50e1fb433d66b2743f83b57e498
@@ -4485,7 +4509,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001968
@@ -4512,7 +4536,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001968
@@ -4539,7 +4563,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001968
@@ -4567,13 +4591,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM001953
 expId 1953
-fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam,wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum afc707cb16c55ddff7496e0d675584df,f7b7dbf8cb9b3731f62f88088e883944
@@ -4595,13 +4619,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM001953
 expId 1953
-fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam,wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum df61bff0cefc1c86a170b3eda061559c,4b04432bb4e42b90737adeebc1998781
@@ -4623,7 +4647,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM001953
@@ -4651,7 +4675,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM001953
@@ -4678,7 +4702,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM001953
@@ -4705,7 +4729,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM001953
@@ -4733,13 +4757,13 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001945
 expId 1945
-fileName wgEncodeSydhTfbsMelGata1IggratAlnRep1.bam
+fileName wgEncodeSydhTfbsMelGata1IggratAlnRep1.bam,wgEncodeSydhTfbsMelGata1IggratAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 7f25f6a76d0829d139b6199df0c68488,48a0da4078f5f24d3df78f0fae50bbbf
@@ -4761,13 +4785,13 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001945
 expId 1945
-fileName wgEncodeSydhTfbsMelGata1IggratAlnRep2.bam
+fileName wgEncodeSydhTfbsMelGata1IggratAlnRep2.bam,wgEncodeSydhTfbsMelGata1IggratAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 441690b75d7bd006c655d013f6848426,8c436fddb0223021a2c8e194f42faceb
@@ -4789,7 +4813,7 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
@@ -4818,7 +4842,7 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001945
@@ -4845,7 +4869,7 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001945
@@ -4872,7 +4896,7 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001945
@@ -4900,12 +4924,13 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/DMSO_2.0pct/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeSydhTfbsMelInputDm2p5dIggratAlnRep1.bam
+fileName wgEncodeSydhTfbsMelInputDm2p5dIggratAlnRep1.bam,wgEncodeSydhTfbsMelInputDm2p5dIggratAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 4af93b1ea955dc2d53ec96ace5572a67,53d8738d34e5357c43eabc0a550cbac3
 project wgEncode
 replicate 1
 setType input
@@ -4924,12 +4949,13 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/DMSO_2.0pct/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsMelInputDm2p5dIggratRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 276d5055a4772f068671cffaa9cee30b
 project wgEncode
 replicate 1
 setType input
@@ -4948,13 +4974,14 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/DMSO_2.0pct/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsMelInputDm2p5dIggratSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum a170de9cfac5db38214005379042dd8b
 project wgEncode
 setType input
 sex M
@@ -4973,13 +5000,13 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-16
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001963
 expId 1963
-fileName wgEncodeSydhTfbsMelInputDm2p5dIggyaleAln.bam
+fileName wgEncodeSydhTfbsMelInputDm2p5dIggyaleAln.bam,wgEncodeSydhTfbsMelInputDm2p5dIggyaleAln.bam.bai
 grant Snyder
 lab Yale-m
 md5sum 4c0ba84d31fb920838ab84c95777d219,3798b0275eeea3c04d0ec420cd2ffe05
@@ -5000,7 +5027,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001963
@@ -5026,7 +5053,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001963
@@ -5054,12 +5081,12 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEM001983
 expId 1983
-fileName wgEncodeSydhTfbsMelInputDm2p5dStdAlnRep1.bam
+fileName wgEncodeSydhTfbsMelInputDm2p5dStdAlnRep1.bam,wgEncodeSydhTfbsMelInputDm2p5dStdAlnRep1.bam.bai
 grant Snyder
 lab Yale-m
 md5sum 5c4733267c2290e645aa99e4efc0b437,22273a41077471d31d6e20fe0a55b62d
@@ -5081,7 +5108,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEM001983
@@ -5108,7 +5135,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEM001983
@@ -5136,13 +5163,14 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam
+fileName wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam,wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam.bai
 grant Snyder
 lab Stanford-m
-objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelInputDm2p5dIggyaleAln.bam
+md5sum 111f7ceaf3af8b23cb5a3603b49cb4ba,7412dcb92d2b341eae7d71b50038d584
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelInputDm2p5dIggyaleAln.bam,renamed.bai
 project wgEncode
 setType input
 sex M
@@ -5160,12 +5188,13 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelInputDmso20IggyaleRawData.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 5b9e3ce2865b2fc2420b5e2cdccc6618
 objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelInputDm2p5dIggyaleRawData.fastq.gz
 project wgEncode
 setType input
@@ -5184,13 +5213,14 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelInputDmso20IggyaleSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum da7d64b04904456bee5a3160db11f14b
 objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelInputDm2p5dIggyaleSig.bigWig
 project wgEncode
 setType input
@@ -5210,13 +5240,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001946
 expId 1946
-fileName wgEncodeSydhTfbsMelInputIggmusAlnRep1.bam
+fileName wgEncodeSydhTfbsMelInputIggmusAlnRep1.bam,wgEncodeSydhTfbsMelInputIggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 2211e6172e7d69dcae0dee5e46081028,d39e224329c0f82a97932dafc7603253
@@ -5238,7 +5268,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001946
@@ -5264,7 +5294,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001946
@@ -5292,13 +5322,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001947
 expId 1947
-fileName wgEncodeSydhTfbsMelInputIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelInputIggrabAlnRep1.bam,wgEncodeSydhTfbsMelInputIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 36ebfe93d477cea2001713f91427e815,85a9e415990ec6783c7b8fd4dff1d253
@@ -5320,7 +5350,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001947
@@ -5346,7 +5376,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001947
@@ -5374,13 +5404,13 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001948
 expId 1948
-fileName wgEncodeSydhTfbsMelInputIggratAlnRep1.bam
+fileName wgEncodeSydhTfbsMelInputIggratAlnRep1.bam,wgEncodeSydhTfbsMelInputIggratAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 49ac3e23b160d34d59e165d09df48294,441851252e3d630b65adb70e2d444962
@@ -5402,7 +5432,7 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001948
@@ -5428,7 +5458,7 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001948
@@ -5456,12 +5486,12 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001982
 expId 1982
-fileName wgEncodeSydhTfbsMelInputStdAlnRep1.bam
+fileName wgEncodeSydhTfbsMelInputStdAlnRep1.bam,wgEncodeSydhTfbsMelInputStdAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum bfe20db607504aad5df8f4ced189dc57,a35826031327e38ff4d21f5274acbab1
@@ -5483,7 +5513,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001982
@@ -5510,7 +5540,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MEL/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001982
@@ -5538,13 +5568,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 dccAccession wgEncodeEM001952
 expId 1952
-fileName wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam,wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 3e1217d8fa60fca5133c761368016b6c,797f2b4247842c74e4b2da9dbd529858
@@ -5566,13 +5596,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 dccAccession wgEncodeEM001952
 expId 1952
-fileName wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam,wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 7fb5dc62fa91aa1aa7e93a2290e483b9,f2a448f6860ce8dd759c9ceed42b1c61
@@ -5594,7 +5624,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 dccAccession wgEncodeEM001952
@@ -5622,7 +5652,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 dccAccession wgEncodeEM001952
@@ -5649,7 +5679,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 dccAccession wgEncodeEM001952
@@ -5676,7 +5706,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 dccAccession wgEncodeEM001952
@@ -5704,12 +5734,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001981
 expId 1981
-fileName wgEncodeSydhTfbsMelMafkab50322IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelMafkab50322IggrabAlnRep1.bam,wgEncodeSydhTfbsMelMafkab50322IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum ef0f2855cabb4134046abc43155c67cb,40f537a5081f00d668165c6406b22533
@@ -5731,12 +5761,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001981
 expId 1981
-fileName wgEncodeSydhTfbsMelMafkab50322IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelMafkab50322IggrabAlnRep2.bam,wgEncodeSydhTfbsMelMafkab50322IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 3726ace3bf98c2ad89f94474377eeac5,26e80e30e7b639ef581f0fe2b27dfe94
@@ -5758,7 +5788,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001981
@@ -5786,7 +5816,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001981
@@ -5813,7 +5843,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001981
@@ -5840,7 +5870,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001981
@@ -5868,12 +5898,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam,wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
+md5sum d1250be8dbbbabb00a9fc98270ea13f5,18e710ed068a983f791ccc699a66864d
 objStatus replaced
 project wgEncode
 replicate 1
@@ -5893,13 +5924,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001959
 expId 1959
-fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep1V2.bam
+fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep1V2.bam,wgEncodeSydhTfbsMelMaxIggrabAlnRep1V2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum fb1ca3fd709f6ff804e52ab438bad7bf,dd4a4d0bd80f20520d3192748d3e008b
@@ -5922,12 +5953,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam,wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
+md5sum 7eaa91ab29638b13f137497d16b7de7f,77351ca8871a4992760d458da6daf642
 objStatus replaced
 project wgEncode
 replicate 2
@@ -5947,13 +5979,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001959
 expId 1959
-fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep2V2.bam
+fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep2V2.bam,wgEncodeSydhTfbsMelMaxIggrabAlnRep2V2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 79b6b450a990bd8c0a2c11b968efe4bb,bbb0dab111d2efa07fd21365ddb647b0
@@ -5976,7 +6008,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001959
@@ -6004,7 +6036,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001959
@@ -6031,7 +6063,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001959
@@ -6058,7 +6090,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001959
@@ -6086,12 +6118,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001973
 expId 1973
-fileName wgEncodeSydhTfbsMelMxi1af4185IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelMxi1af4185IggrabAlnRep1.bam,wgEncodeSydhTfbsMelMxi1af4185IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum fde7a1efd99595b96e82d01eb4ce8ae4,a27794f95062d13c7c360255059de87b
@@ -6113,12 +6145,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001973
 expId 1973
-fileName wgEncodeSydhTfbsMelMxi1af4185IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelMxi1af4185IggrabAlnRep2.bam,wgEncodeSydhTfbsMelMxi1af4185IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum f34585fc7453624ef461928600123652,25add3d05271e3eda379a3d9f004dfa0
@@ -6140,7 +6172,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001973
@@ -6168,7 +6200,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001973
@@ -6195,7 +6227,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001973
@@ -6222,7 +6254,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001973
@@ -6250,12 +6282,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001964
 expId 1964
-fileName wgEncodeSydhTfbsMelNelfeIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelNelfeIggrabAlnRep1.bam,wgEncodeSydhTfbsMelNelfeIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum b2522631eee5acfa72755666b569edb5,2dfa95aa04719531c15634e0e9faf770
@@ -6277,12 +6309,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001964
 expId 1964
-fileName wgEncodeSydhTfbsMelNelfeIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelNelfeIggrabAlnRep2.bam,wgEncodeSydhTfbsMelNelfeIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum ccb8f5062879b755694dd04da89ab849,fd9825a2f2c7abf665ca68febe1ad791
@@ -6304,7 +6336,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001964
@@ -6332,7 +6364,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001964
@@ -6359,7 +6391,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001964
@@ -6386,7 +6418,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001964
@@ -6414,13 +6446,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam,wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
-objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabAlnRep1.bam
+md5sum 95ad1e6ba491ec0ee72628fdd1992101,b09a807df0043b74cf2470139144781b
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabAlnRep1.bam,renamed.bai
 project wgEncode
 replicate 1
 setType exp
@@ -6439,12 +6472,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
-fileName wgEncodeSydhTfbsMelP300IggrabAlnRep1V2.bam
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep1V2.bam,wgEncodeSydhTfbsMelP300IggrabAlnRep1V2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 808ed36eb0c7be2f3ecf9ec6895f9e65,2c1bfb8cdbd1d08e564b864b56fb4d99
@@ -6467,13 +6500,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam,wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
-objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabAlnRep2.bam
+md5sum 51d32fa33a7f37d4e180d3dc20715f84,983b509af72b6a6367fe412a4eaccd77
+objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabAlnRep2.bam,renamed.bai
 project wgEncode
 replicate 2
 setType exp
@@ -6492,12 +6526,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
 expId 1969
-fileName wgEncodeSydhTfbsMelP300IggrabAlnRep2V2.bam
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep2V2.bam,wgEncodeSydhTfbsMelP300IggrabAlnRep2V2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum cb7bcb9294a20c8f7ddce95d79cce434,9d5a667a59274df2c4cb75d5d360e82a
@@ -6520,13 +6554,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelP300IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 002ca226a5651af28ffb541d12426175
 objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabPk.narrowPeak.gz
 project wgEncode
 setType exp
@@ -6546,7 +6581,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
@@ -6575,12 +6610,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum e0b40aba30f2ac2010d4aa9ceaae744b
 objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabRawDataRep1.fastq.gz
 project wgEncode
 replicate 1
@@ -6600,7 +6636,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
@@ -6628,12 +6664,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 7840bcc97bc1c553da07d0d5d58daf59
 objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabRawDataRep2.fastq.gz
 project wgEncode
 replicate 2
@@ -6653,7 +6690,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
@@ -6681,13 +6718,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelP300IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 46e9dc00c5351985523fbf3b1df0503d
 objStatus renamed - Antibody renaming caused file to be renamed to wgEncodeSydhTfbsMelP300sc584IggrabSig.bigWig
 project wgEncode
 setType exp
@@ -6707,7 +6745,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEM001969
@@ -6736,12 +6774,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001961
 expId 1961
-fileName wgEncodeSydhTfbsMelP300sc584IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelP300sc584IggrabAlnRep1.bam,wgEncodeSydhTfbsMelP300sc584IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 95ad1e6ba491ec0ee72628fdd1992101,b09a807df0043b74cf2470139144781b
@@ -6763,12 +6801,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001961
 expId 1961
-fileName wgEncodeSydhTfbsMelP300sc584IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelP300sc584IggrabAlnRep2.bam,wgEncodeSydhTfbsMelP300sc584IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 51d32fa33a7f37d4e180d3dc20715f84,983b509af72b6a6367fe412a4eaccd77
@@ -6790,7 +6828,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001961
@@ -6818,7 +6856,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001961
@@ -6845,7 +6883,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001961
@@ -6872,7 +6910,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001961
@@ -6900,12 +6938,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/DMSO_2.0pct/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
-fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggrabAlnRep1.bam,wgEncodeSydhTfbsMelPol2Dm2p5dIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 1ceed07debeeda5670fa64cb0648d01d,5c4c3369bce105641718b1ddb7c43cc2
 project wgEncode
 replicate 1
 setType exp
@@ -6924,12 +6963,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/DMSO_2.0pct/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
-fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggrabAlnRep2.bam,wgEncodeSydhTfbsMelPol2Dm2p5dIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 19db2477e1e83950f2a31f2f22c41522,52c6b791511f45cc89bc6e5784f9380b
 project wgEncode
 replicate 2
 setType exp
@@ -6948,13 +6988,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/DMSO_2.0pct/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum dd9ca816223656e4d318efa6fbba2873
 project wgEncode
 setType exp
 sex M
@@ -6973,12 +7014,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/DMSO_2.0pct/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 043413617c2b6b0cff613f3cda09809e
 project wgEncode
 replicate 1
 setType exp
@@ -6997,12 +7039,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/DMSO_2.0pct/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 5ecee4dd05da9ba1b1dccd60f8a5c7d5
 project wgEncode
 replicate 2
 setType exp
@@ -7021,13 +7064,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/DMSO_2.0pct/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 3f95e8d510ce43582eb2ccbd66a7b455
 project wgEncode
 setType exp
 sex M
@@ -7046,12 +7090,13 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/DMSO_2.0pct/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggratAlnRep1.bam
+fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggratAlnRep1.bam,wgEncodeSydhTfbsMelPol2Dm2p5dIggratAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 1ceed07debeeda5670fa64cb0648d01d,5c4c3369bce105641718b1ddb7c43cc2
 project wgEncode
 replicate 1
 setType exp
@@ -7070,12 +7115,13 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/DMSO_2.0pct/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggratAlnRep2.bam
+fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggratAlnRep2.bam,wgEncodeSydhTfbsMelPol2Dm2p5dIggratAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 19db2477e1e83950f2a31f2f22c41522,52c6b791511f45cc89bc6e5784f9380b
 project wgEncode
 replicate 2
 setType exp
@@ -7094,13 +7140,14 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/DMSO_2.0pct/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggratPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum ab551fba7991e9bd414cd4bf580d2168
 project wgEncode
 setType exp
 sex M
@@ -7119,12 +7166,13 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/DMSO_2.0pct/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggratRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 16e4439ccf9421f7c827064959d6d4cb
 project wgEncode
 replicate 1
 setType exp
@@ -7143,12 +7191,13 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/DMSO_2.0pct/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggratRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum cd3906efcd4de5b0e0593fddc690d48b
 project wgEncode
 replicate 2
 setType exp
@@ -7167,13 +7216,14 @@ composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/DMSO_2.0pct/Input/IgG-rat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsMelPol2Dm2p5dIggratSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 3f95e8d510ce43582eb2ccbd66a7b455
 project wgEncode
 setType exp
 sex M
@@ -7192,13 +7242,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001949
 expId 1949
-fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep1.bam
+fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep1.bam,wgEncodeSydhTfbsMelPol2IggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum d01a42790e6514391cfbf3cf5f349156,196aa18881821512364ded07b8acdecc
@@ -7220,13 +7270,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001949
 expId 1949
-fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep2.bam
+fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep2.bam,wgEncodeSydhTfbsMelPol2IggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 5f87f46254ae0f00036e2f50499b2191,64b373fa6db55bbdc8f1811f232f75dd
@@ -7248,7 +7298,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001949
@@ -7276,7 +7326,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001949
@@ -7303,7 +7353,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001949
@@ -7330,7 +7380,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001949
@@ -7358,12 +7408,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001974
 expId 1974
-fileName wgEncodeSydhTfbsMelPol2s2IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelPol2s2IggrabAlnRep1.bam,wgEncodeSydhTfbsMelPol2s2IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 77761fb4390780d01bae3e7fe30eb80a,2659413fb2e99909d8bfe4d382049dbc
@@ -7385,12 +7435,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001974
 expId 1974
-fileName wgEncodeSydhTfbsMelPol2s2IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelPol2s2IggrabAlnRep2.bam,wgEncodeSydhTfbsMelPol2s2IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum aae0c46c9d2da70689935a98b778365d,a3dab2a076309df85d740edb8bfa485e
@@ -7412,7 +7462,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001974
@@ -7440,7 +7490,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001974
@@ -7467,7 +7517,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001974
@@ -7494,7 +7544,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEM001974
@@ -7522,12 +7572,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001965
 expId 1965
-fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep1.bam,wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum f2f2a7364d90f9d8843403afe8efb344,2995f2f0b43ee13c5bd1c0e1cf419ade
@@ -7549,12 +7599,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001965
 expId 1965
-fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep2.bam,wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 295164f0822a843a2a595ffa6becea3c,c86f39d335c13a207a374955c4931286
@@ -7576,7 +7626,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-03
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -7605,7 +7655,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001965
@@ -7632,7 +7682,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001965
@@ -7659,7 +7709,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001965
@@ -7687,13 +7737,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1.bam,wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
-objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep1.bam
+md5sum f2f2a7364d90f9d8843403afe8efb344,2995f2f0b43ee13c5bd1c0e1cf419ade
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep1.bam,renamed.bai
 project wgEncode
 replicate 1
 setType exp
@@ -7712,13 +7763,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2.bam,wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
-objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep2.bam
+md5sum 295164f0822a843a2a595ffa6becea3c,c86f39d335c13a207a374955c4931286
+objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabAlnRep2.bam,renamed.bai
 project wgEncode
 replicate 2
 setType exp
@@ -7737,13 +7789,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 4c2f0c43503b0af66de1740694a3a557
 objStatus replaced - Changing treatment abbreviation caused Version 2 of file to not have V2 but replaces file wgEncodeSydhTfbsMelRad21Dm2p5dIggrabPk.narrowPeak.gz
 project wgEncode
 setType exp
@@ -7763,12 +7816,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum beffb9ed76538b0974ec0b40613fd892
 objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabRawDataRep1.fastq.gz
 project wgEncode
 replicate 1
@@ -7788,12 +7842,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
+md5sum 070f886a7b00767cf0c772c410c987e2
 objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabRawDataRep2.fastq.gz
 project wgEncode
 replicate 2
@@ -7813,13 +7868,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
+md5sum 373fd396628e29e6db2feda1035627a7
 objStatus renamed - Changing treatment abbreviation caused file to be renamed to wgEncodeSydhTfbsMelRad21Dm2p5dIggrabSig.bigWig
 project wgEncode
 setType exp
@@ -7839,12 +7895,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001966
 expId 1966
-fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep1.bam,wgEncodeSydhTfbsMelRad21IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum bbc6aefbe859e2dcfd586662c2c94c4c,5fd670458811435c4676fd9ce383b3e5
@@ -7866,12 +7922,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001966
 expId 1966
-fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep2.bam,wgEncodeSydhTfbsMelRad21IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum eee68c1be782a21c903a65a4b79dc4c3,08bb2aea2f349943b239b1ff5da1360a
@@ -7893,7 +7949,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001966
@@ -7921,7 +7977,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001966
@@ -7948,7 +8004,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001966
@@ -7975,7 +8031,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 dccAccession wgEncodeEM001966
@@ -8003,12 +8059,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001978
 expId 1978
-fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep1.bam,wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 185f587bdaf041a3e6d665ff507ab911,fe69221696d2ab7bf730a84d3a65991f
@@ -8030,12 +8086,12 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001978
 expId 1978
-fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep2.bam,wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 7e90855e98114645c240ed6b64b8fe75,bd26ff0f9d0438f37781c2d0dcdb9d03
@@ -8057,7 +8113,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001978
@@ -8085,7 +8141,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001978
@@ -8112,7 +8168,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001978
@@ -8139,7 +8195,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM001978
@@ -8167,13 +8223,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001950
 expId 1950
-fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep1.bam
+fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep1.bam,wgEncodeSydhTfbsMelTbpIggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 305d4dab9ed9fdc98f805ab3dacc3780,9d5948b0f60fd1df8a00741a478d8d29
@@ -8195,13 +8251,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001950
 expId 1950
-fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep2.bam
+fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep2.bam,wgEncodeSydhTfbsMelTbpIggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 1db31aabefb63522aad5511f917057b3,8e2fdbcb0b843b3a9a611e73bcc5fe10
@@ -8223,7 +8279,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
@@ -8252,7 +8308,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001950
@@ -8279,7 +8335,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001950
@@ -8306,7 +8362,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM001950
@@ -8334,12 +8390,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam,wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
+md5sum d1250be8dbbbabb00a9fc98270ea13f5,18e710ed068a983f791ccc699a66864d
 objStatus replaced
 project wgEncode
 replicate 1
@@ -8359,13 +8416,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001960
 expId 1960
-fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1V2.bam
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1V2.bam,wgEncodeSydhTfbsMelUsf2IggmusAlnRep1V2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum d1250be8dbbbabb00a9fc98270ea13f5,24f3e79fabd773c7a1a47a4fca0be198
@@ -8388,12 +8445,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam,wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam.bai
 grant Snyder
 lab Stanford-m
+md5sum 7eaa91ab29638b13f137497d16b7de7f,77351ca8871a4992760d458da6daf642
 objStatus replaced
 project wgEncode
 replicate 2
@@ -8413,13 +8471,13 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-17
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001960
 expId 1960
-fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2V2.bam
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2V2.bam,wgEncodeSydhTfbsMelUsf2IggmusAlnRep2V2.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 7eaa91ab29638b13f137497d16b7de7f,dfcdbe1d189adaad8a830e2ab61a4d4d
@@ -8442,7 +8500,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001960
@@ -8470,7 +8528,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001960
@@ -8497,7 +8555,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001960
@@ -8524,7 +8582,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 dccAccession wgEncodeEM001960
@@ -8552,12 +8610,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
-fileName wgEncodeSydhTfbsMelUsf2IggrabAlnRep1.bam
+fileName wgEncodeSydhTfbsMelUsf2IggrabAlnRep1.bam,wgEncodeSydhTfbsMelUsf2IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 66fa12e585f4ff16143b8c08d3eafbd8,e48beceedac1230ce1094392a47f2be4
 project wgEncode
 replicate 1
 setType exp
@@ -8576,12 +8635,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
-fileName wgEncodeSydhTfbsMelUsf2IggrabAlnRep2.bam
+fileName wgEncodeSydhTfbsMelUsf2IggrabAlnRep2.bam,wgEncodeSydhTfbsMelUsf2IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 4e60be3e4dd24549558cc8fcfc5f672f,583a476716cf67e30825a65e446fb254
 project wgEncode
 replicate 2
 setType exp
@@ -8600,13 +8660,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsMelUsf2IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum b2dcafb7a7bdb7de8f10f7f7d9e891fb
 project wgEncode
 setType exp
 sex M
@@ -8625,12 +8686,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsMelUsf2IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum f089444cb913b39af8d770795b793701
 project wgEncode
 replicate 1
 setType exp
@@ -8649,12 +8711,13 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsMelUsf2IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum e18e92d3a39cb4b83954717ed0f47fec
 project wgEncode
 replicate 2
 setType exp
@@ -8673,13 +8736,14 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-22
 dateUnrestricted 2012-06-21
 fileName wgEncodeSydhTfbsMelUsf2IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum dc38d9b4abef33b03609fb1020871956
 project wgEncode
 setType exp
 sex M
@@ -8689,4 +8753,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggrabSig
 treatment None
 view Signal
 
-# MAGIC: -2079386819
+# MAGIC: -1491653952

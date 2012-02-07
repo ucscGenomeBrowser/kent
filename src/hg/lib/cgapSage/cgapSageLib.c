@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cgapSage/cgapSageLib.h"
 
-static char const rcsid[] = "$Id: cgapSageLib.c,v 1.3 2007/06/06 19:45:44 aamp Exp $";
 
 /* definitions for sex column */
 static char *values_sex[] = {"male", "female", NULL};

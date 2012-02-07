@@ -9,7 +9,6 @@
 #include "nibTwo.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id";
 
 /* command line options */
 static struct optionSpec optionSpecs[] = {

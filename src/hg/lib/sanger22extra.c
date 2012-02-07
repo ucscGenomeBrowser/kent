@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "sanger22extra.h"
 
-static char const rcsid[] = "$Id: sanger22extra.c,v 1.4 2005/04/13 06:25:56 markd Exp $";
 
 void sanger22extraStaticLoad(char **row, struct sanger22extra *ret)
 /* Load a row from sanger22extra table into ret.  The contents of ret will

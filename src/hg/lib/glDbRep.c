@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "glDbRep.h"
 
-static char const rcsid[] = "$Id: glDbRep.c,v 1.4 2005/04/13 06:25:53 markd Exp $";
 
 void glStaticLoad(char **row, struct gl *ret)
 /* Load a row from gl table into ret.  The contents of ret will

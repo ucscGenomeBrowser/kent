@@ -6,7 +6,6 @@
 #include "common.h"
 #include "subText.h"
 
-static char const rcsid[] = "$Id: subText.c,v 1.11 2005/04/10 14:41:26 markd Exp $";
 
 struct subText *subTextNew(char *in, char *out)
 /* Make new substitution structure. */

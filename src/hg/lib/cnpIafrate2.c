@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cnpIafrate2.h"
 
-static char const rcsid[] = "$Id: cnpIafrate2.c,v 1.1 2007/04/03 05:28:02 heather Exp $";
 
 void cnpIafrate2StaticLoad(char **row, struct cnpIafrate2 *ret)
 /* Load a row from cnpIafrate2 table into ret.  The contents of ret will

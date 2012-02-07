@@ -17,7 +17,6 @@
 #include "bdgpGeneInfo.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgGeneRing.c,v 1.8 2009/08/19 23:25:19 angie Exp $";
 
 char *errMsg = NULL;
 

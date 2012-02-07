@@ -8,7 +8,6 @@
 #include "xap.h"
 #include "../lib/gs.h"
 
-static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.11 2007/03/05 02:27:56 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

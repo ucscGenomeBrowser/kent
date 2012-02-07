@@ -11,7 +11,6 @@
 #include "hui.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: cgiTaxon.c,v 1.2 2008/09/03 19:21:23 markd Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */

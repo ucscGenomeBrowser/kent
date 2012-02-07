@@ -7,7 +7,6 @@
 #include "axt.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: chainToAxt.c,v 1.4 2005/04/10 14:41:21 markd Exp $";
 
 static struct axt *axtFromBlocks(
 	struct chain *chain,

@@ -12,7 +12,6 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadGap.c,v 1.5 2007/05/14 21:34:45 angie Exp $";
 
 
 /* Command line switches. */

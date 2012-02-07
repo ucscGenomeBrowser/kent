@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "alignInfo.h"
 
-static char const rcsid[] = "$Id: alignInfo.c,v 1.1 2009/09/09 00:28:27 holmes Exp $";
 
 void alignInfoStaticLoad(char **row, struct alignInfo *ret)
 /* Load a row from alignInfo table into ret.  The contents of ret will

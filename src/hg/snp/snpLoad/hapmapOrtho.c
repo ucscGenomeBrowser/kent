@@ -7,7 +7,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hapmapOrtho.c,v 1.3 2007/03/28 17:33:13 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */

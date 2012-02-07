@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/encodeRegionInfo.h"
 
-static char const rcsid[] = "$Id: encodeRegionInfo.c,v 1.1 2008/08/01 17:49:07 aamp Exp $";
 
 void encodeRegionInfoStaticLoad(char **row, struct encodeRegionInfo *ret)
 /* Load a row from encodeRegionInfo table into ret.  The contents of ret will

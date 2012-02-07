@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "dvXref2.h"
 
-static char const rcsid[] = "$Id: dvXref2.c,v 1.1 2005/08/09 05:02:58 heather Exp $";
 
 void dvXref2StaticLoad(char **row, struct dvXref2 *ret)
 /* Load a row from dvXref2 table into ret.  The contents of ret will

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "snoRNAs.h"
 
-static char const rcsid[] = "$Id: snoRNAs.c,v 1.2 2007/03/18 21:53:56 lowe Exp $";
 
 void snoRNAsStaticLoad(char **row, struct snoRNAs *ret)
 /* Load a row from snoRNAs table into ret.  The contents of ret will

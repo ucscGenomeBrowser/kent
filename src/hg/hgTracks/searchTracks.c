@@ -32,8 +32,6 @@
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
 
-#define SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
-
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
 {
@@ -298,14 +296,10 @@ for (group = groupList; group != NULL; group = group->next)
                     if ((matchingTracks == NULL || hashLookup(matchingTracks, subTrack->track) != NULL)
                     && (isEmpty(typeSearch) || sameWord(typeSearch, trackType))
                     && (isEmpty(nameSearch) || searchNameMatches(subTrack->tdb, nameList))
-                #ifdef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
-                    && (isEmpty(descSearch)
+                    && (isEmpty(descSearch) // subtracks inherit description
                         || searchDescriptionMatches(subTrack->tdb, descList)
                         || (tdbIsCompositeChild(subTrack->tdb) && subTrack->parent
                             && searchDescriptionMatches(subTrack->parent->tdb, descList))))
-                #else///ifndef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
-                    && (isEmpty(descSearch) || searchDescriptionMatches(subTrack->tdb, descList)))
-                #endif///ndef SUPPORT_SUBTRACKS_INHERIT_DESCRIPTION
                         {
                         if (track != NULL)
                             {
@@ -429,10 +423,16 @@ else
     //hPrintf("<table id='foundTracks'><tr><td colspan='2'>\n");
     hPrintf("<tr><td colspan='2'>\n");
     hPrintf("</td><td align='right'>\n");
-    #define PM_BUTTON "<IMG height=18 width=18 onclick=\"return findTracks.checkAllWithWait(%s);\" id='btn_%s' src='../images/%s' title='%s all found tracks'>"
     hPrintf("</td></tr><tr bgcolor='#%s'><td>",HG_COL_HEADER);
+#ifdef BUTTONS_BY_CSS
+    #define BUTTON_PM  "<span class='pmButton' onclick='findTracks.checkAllWithWait(%s)' title='%s all found tracks'>%c</span>"
+    hPrintf(BUTTON_PM,"true",   "Select",'+');
+    hPrintf(BUTTON_PM,"false","Unselect",'-');
+#else///ifndef BUTTONS_BY_CSS
+    #define PM_BUTTON "<IMG height=18 width=18 onclick=\"return findTracks.checkAllWithWait(%s);\" id='btn_%s' src='../images/%s' title='%s all found tracks'>"
     hPrintf(PM_BUTTON,"true",  "plus_all",   "add_sm.gif",  "Select");
     hPrintf(PM_BUTTON,"false","minus_all","remove_sm.gif","Unselect");
+#endif///ndef BUTTONS_BY_CSS
     hPrintf("</td><td><b>Visibility</b></td><td colspan=2>&nbsp;&nbsp;<b>Track Name</b>\n");
 
     // Sort options?
@@ -556,13 +556,7 @@ void doSearchTracks(struct group *groupList)
 webIncludeResourceFile("ui.dropdownchecklist.css");
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 // This line is needed to get the multi-selects initialized
-#ifdef NEW_JQUERY
 jsIncludeFile("ddcl.js",NULL);
-hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
-#else///ifndef NEW_JQUERY
-hPrintf("<script type='text/javascript'>var newJQuery=false;</script>\n");
-hPrintf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
-#endif///ndef NEW_JQUERY
 
 struct group *group;
 char *groups[128];
@@ -575,7 +569,7 @@ char *typeSearch  = cartUsualString(   cart, TRACK_SEARCH_ON_TYPE,ANYLABEL);
 char *simpleEntry = cartOptionalString(cart, TRACK_SEARCH_SIMPLE);
 char *descSearch  = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 char *groupSearch = cartUsualString(  cart, TRACK_SEARCH_ON_GROUP,ANYLABEL);
-boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
+boolean doSearch = sameWord(cartString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 int tracksFound = 0;
@@ -588,27 +582,6 @@ enum searchTab selectedTab = (sameString(currentTab, "advancedTab") ? advancedTa
 
 if(selectedTab == simpleTab && !isEmpty(simpleEntry)) // NOTE: could support quotes in simple tab by detecting quotes and choosing to use doesNameMatch() || doesDescriptionMatch()
     stripChar(simpleEntry, '"');
-trackList = getTrackList(&groupList, -2); // global
-makeGlobalTrackHash(trackList);
-
-// NOTE: This is necessary when container cfg by '*' results in vis changes
-// This will handle composite/view override when subtrack specific vis exists, AND superTrack reshaping.
-parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
-
-slSort(&groupList, gCmpGroup);
-for (group = groupList; group != NULL; group = group->next)
-    {
-    groupTrackListAddSuper(cart, group);
-    if (group->trackList != NULL)
-        {
-        groups[numGroups] = cloneString(group->name);
-        labels[numGroups] = cloneString(group->label);
-        numGroups++;
-        if (numGroups >= ArraySize(groups))
-            internalErr();
-        }
-    }
-
 safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly", organism, hFreezeFromDb(database));
 webStartWrapperDetailedNoArgs(cart, database, "", buf, FALSE, FALSE, FALSE, FALSE);
 
@@ -727,6 +700,27 @@ if(doSearch)
     {
     // Now search
     struct slRef *tracks = NULL;
+    trackList = getTrackList(&groupList, -2); // global
+    makeGlobalTrackHash(trackList);
+
+    // NOTE: This is necessary when container cfg by '*' results in vis changes
+    // This will handle composite/view override when subtrack specific vis exists, AND superTrack reshaping.
+    parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+
+    slSort(&groupList, gCmpGroup);
+    for (group = groupList; group != NULL; group = group->next)
+        {
+        groupTrackListAddSuper(cart, group);
+        if (group->trackList != NULL)
+            {
+            groups[numGroups] = cloneString(group->name);
+            labels[numGroups] = cloneString(group->label);
+            numGroups++;
+            if (numGroups >= ArraySize(groups))
+                internalErr();
+            }
+        }
+
     if(selectedTab==simpleTab && !isEmpty(simpleEntry))
         tracks = simpleSearchForTracksstruct(simpleEntry);
     else if(selectedTab==advancedTab)

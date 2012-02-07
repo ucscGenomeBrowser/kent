@@ -10,7 +10,6 @@
 #include "obscure.h"
 #include "intValTree.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.19 2008/02/11 17:08:48 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

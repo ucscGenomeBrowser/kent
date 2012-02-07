@@ -5,7 +5,6 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: lavToPsl.c,v 1.11 2009/04/19 05:44:11 markd Exp $";
 
 /* strand to us for target */
 char* targetStrand = "+";

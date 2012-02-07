@@ -9,7 +9,6 @@
 #include "twoBit.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.17 2006/06/14 16:58:10 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

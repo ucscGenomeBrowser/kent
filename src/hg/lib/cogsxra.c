@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cogsxra.h"
 
-static char const rcsid[] = "$Id: cogsxra.c,v 1.1 2004/09/29 21:41:18 kschneid Exp $";
 
 void COGXraStaticLoad(char **row, struct COGXra *ret)
 /* Load a row from COGXra table into ret.  The contents of ret will

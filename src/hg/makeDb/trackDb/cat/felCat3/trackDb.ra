@@ -61,3 +61,7 @@ searchMethod prefix
 termRegex scaffold_[0-9]+_[0-9]+(\.[0-9]+)?
 searchPriority 50
 
+searchTable sgpGene
+searchType genePred
+termRegex scaffold_[0-9]+_[0-9]+(.[0-9])*
+searchPriority 50

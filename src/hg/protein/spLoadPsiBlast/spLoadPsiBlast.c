@@ -15,7 +15,6 @@
  * is not used due to a different in-memory representation.
  */
 
-static char const rcsid[] = "$Id: spLoadPsiBlast.c,v 1.4 2005/08/21 04:27:22 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

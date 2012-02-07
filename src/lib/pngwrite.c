@@ -8,7 +8,6 @@
 #include "common.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: pngwrite.c,v 1.4 2010/06/05 19:29:53 braney Exp $";
 
 static void pngAbort(png_structp png, png_const_charp errorMessage)
 /* type png_error wrapper around errAbort */

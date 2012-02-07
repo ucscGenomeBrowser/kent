@@ -4,7 +4,6 @@
 #include "cart.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: gvUi.c,v 1.18 2009/01/30 23:34:59 fanhsu Exp $";
 
 /***************Filters**************/
 

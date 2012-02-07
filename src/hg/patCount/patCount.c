@@ -7,7 +7,6 @@
 #include "fa.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: patCount.c,v 1.5 2006/06/30 15:29:28 angie Exp $";
 
 void usage()
 {

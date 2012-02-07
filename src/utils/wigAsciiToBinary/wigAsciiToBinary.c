@@ -41,7 +41,6 @@
 #define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.27 2005/03/04 20:49:31 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

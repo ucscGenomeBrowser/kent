@@ -15,7 +15,6 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.57 2009/12/05 00:00:22 hiram Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */

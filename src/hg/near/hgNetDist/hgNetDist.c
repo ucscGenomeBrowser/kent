@@ -12,7 +12,6 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.11 2007/04/05 19:08:09 galt Exp $";
 
 boolean skipFirst=FALSE;
 boolean weighted=FALSE;

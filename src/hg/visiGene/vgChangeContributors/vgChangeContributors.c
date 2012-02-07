@@ -7,7 +7,6 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: vgChangeContributors.c,v 1.2 2005/11/11 19:57:02 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

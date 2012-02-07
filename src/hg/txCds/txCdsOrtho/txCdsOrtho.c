@@ -7,7 +7,6 @@
 #include "sqlNum.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.9 2007/08/17 17:58:53 kent Exp $";
 
 FILE *fRa = NULL;
 

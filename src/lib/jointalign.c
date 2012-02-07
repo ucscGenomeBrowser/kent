@@ -7,7 +7,6 @@
 #include "errabort.h"
 #include "jointalign.h"
 
-static char const rcsid[] = "$Id: jointalign.c,v 1.11 2003/05/06 07:33:43 kate Exp $";
 
 
 void htmlPrintJointAlignment( char *seq1, char *seq2, int columnNum, 

@@ -6,7 +6,6 @@
 #include "twoBit.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafStats.c,v 1.1 2007/04/28 08:33:30 kent Exp $";
 
 boolean meFirst = FALSE;
 

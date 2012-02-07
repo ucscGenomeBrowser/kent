@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.23 2010/02/20 07:12:50 markd Exp $";
 
 #include "common.h"
 #include "hgConfig.h"
@@ -284,6 +283,15 @@ char *val = getenv(envName);
 if (val == NULL || (strlen(val) == 0))
     val = cfgOption(name);
 return val;
+}
+
+char *cfgOptionEnvDefault(char *envName, char* name, char *def)
+/* get a configuration optional value, from either the environment or the cfg
+ * file, with the env take precedence.  Return default if not found */
+{
+char *val = cfgOptionEnv(envName, name);
+
+return (val == NULL) ? def : val;
 }
 
 char *cfgVal(char *name)

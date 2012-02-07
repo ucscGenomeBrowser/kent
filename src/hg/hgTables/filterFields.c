@@ -25,7 +25,6 @@
 #include "pgSnp.h"
 #include "samAlignment.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.82 2010/06/03 18:53:59 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -369,44 +368,22 @@ struct customTrack *ct = ctLookupName(table);
 char *type = ct->dbTrackType;
 if (type == NULL)
     type = ct->tdb->type;
-if (startsWithWord("makeItems", type))
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+struct asObject *asObj = asForTdb(conn, ct->tdb);
+if (asObj)
     {
-    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    struct slName *fieldList = sqlListFields(conn, ct->dbTableName);
-    struct asObject *asObj = asParseText(makeItemsItemAutoSqlString);
+    struct slName *fieldList = NULL;
+    if (ct->dbTableName != NULL)
+        fieldList = sqlListFields(conn, ct->dbTableName);
+    if (fieldList == NULL)
+        fieldList = asColNames(asObj);
     showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
-    hFreeConn(&conn);
-    }
-else if (sameWord("bedDetail", type))
-    {
-    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    struct slName *fieldList = sqlListFields(conn, ct->dbTableName);
-    struct asObject *asObj = asParseText(bedDetailAutoSqlString);
-    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
-    hFreeConn(&conn);
-    }
-else if (sameWord("pgSnp", type))
-    {
-    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    struct slName *fieldList = sqlListFields(conn, ct->dbTableName);
-    struct asObject *asObj = asParseText(pgSnpAutoSqlString);
-    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
-    hFreeConn(&conn);
-    }
-else if (sameWord("bam", type))
-    {
-    struct slName *fieldList = bamGetFields(table);
-    struct asObject *asObj = asParseText(samAlignmentAutoSqlString);
-    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
-    }
-else if (sameWord("vcfTabix", type))
-    {
-    struct slName *fieldList = vcfGetFields(table);
-    struct asObject *asObj = asParseText(vcfDataLineAutoSqlString);
-    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
+    asObjectFree(&asObj);
+    slNameFreeList(&fieldList);
     }
 else
     showBedTableFields(db, table, ct->fieldCount, withGetButton);
+hFreeConn(&conn);
 }
 
 static void showTableFields(char *db, char *rootTable, boolean withGetButton)
@@ -1114,7 +1091,7 @@ else
 
 puts("</TABLE>");
 
-if (ct->wiggle)
+if (ct->wiggle || isBamTable(table) || isVcfTable(table))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");

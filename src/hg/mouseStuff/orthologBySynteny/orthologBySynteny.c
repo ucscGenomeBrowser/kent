@@ -13,7 +13,6 @@
 #include "gff.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.10 2008/09/03 19:20:39 markd Exp $";
 
 #define INTRON 10 
 #define CODINGA 11 

@@ -4,7 +4,7 @@ include ../../../inc/common.mk
 L += -lm  $(MYSQLLIBS)
 
 MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS = ../lib/${MACHTYPE}/encode.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = metaCheck
 O = metaCheck.o

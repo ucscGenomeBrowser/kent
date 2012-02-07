@@ -6,7 +6,6 @@
 #include "localmem.h"
 #include "boxClump.h"
 
-static char const rcsid[] = "$Id: boxClump.c,v 1.5 2005/01/10 00:11:34 kent Exp $";
 
 /** Some simple utility function on globally declared 
  ** data structures. **/

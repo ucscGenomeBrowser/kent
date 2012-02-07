@@ -7,7 +7,6 @@
 #include "cheapcgi.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.12 2007/01/11 21:56:17 kuhn Exp $";
 
 FILE *errLog = NULL;
 int errCode = 0;

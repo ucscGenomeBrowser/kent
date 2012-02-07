@@ -3,6 +3,8 @@ Filtering algorithm:
   The filters are applied in the following order to each set of
 alignments for a given cDNA sequence.
 
+  o PSLs with accessions on an optional black list are dropped
+
   o PSLs that are not internally consistent, such has having
     overlapping blocks, are dropped.  Use pslCheck program to
     get the details.
@@ -14,7 +16,11 @@ alignments for a given cDNA sequence.
   o Filter by minimum identity to the target sequence.
 
   o Filter by minimum coverage, if polyA sizes are supplied, the
-    poly-A tail is not included in coverage calculation.
+    poly-A tail is not included in coverage calculation. 
+    If decayMinCover is specified, the minimum coverage is calculated
+    per alignment from the query size using the formula:
+       minCoverage = 1.0 - qSize / 250.0
+    and minCoverage is bounded between 0.25 and 0.9.
 
   o Keep only best overlapping alignment. This is the one with
     the highest score. However, don't dropping weird overlaps.

@@ -18,7 +18,6 @@
 #include "rbTree.h"
 #include "rbIntTree.h"
 
-static char const rcsid[] = "$Id: rbIntTest.c,v 1.1 2004/12/22 09:14:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

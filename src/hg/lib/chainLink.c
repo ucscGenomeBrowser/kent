@@ -9,7 +9,6 @@
 #include "chain.h"
 #include "chainLink.h"
 
-static char const rcsid[] = "$Id: chainLink.c,v 1.4 2005/04/13 06:25:51 markd Exp $";
 
 void chainLinkStaticLoad(char **row, struct chainLink *ret)
 /* Load a row from chainLink table into ret.  The contents of ret will

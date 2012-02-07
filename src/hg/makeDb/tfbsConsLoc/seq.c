@@ -4,8 +4,6 @@
 #include "seq.h"
 #include <errno.h>
 
-static const char rcsid[]=
-"$Id: seq.c,v 1.1 2004/03/18 22:35:45 braney Exp $";
 
 /* This implementation uses a "growable array" abstraction */
 

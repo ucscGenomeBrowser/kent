@@ -9,10 +9,7 @@
 #include "bigBed.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.11 2010/05/11 01:43:28 kent Exp $";
-
-
-static void bigBedClick(char *fileName, struct trackDb *tdb, 
+static void bigBedClick(char *fileName, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
 /* Handle click in generic bigBed track. */
 {
@@ -67,10 +64,10 @@ if (bbMatch != NULL)
     char startBuf[16], endBuf[16];
     char *rest = cloneString(bbMatch->rest);
     int bbFieldCount = bigBedIntervalToRow(bbMatch, chrom, startBuf, endBuf, fields,
-					   bedSize+seq1Seq2Fields); 
+					   bedSize+seq1Seq2Fields);
     if (bbFieldCount != bedSize+seq1Seq2Fields)
         {
-	errAbort("Disagreement between trackDb field count (%d) and %s fieldCount (%d)", 
+	errAbort("Disagreement between trackDb field count (%d) and %s fieldCount (%d)",
 		bedSize, fileName, bbFieldCount);
 	}
     struct bed *bed = bedLoadN(fields, bedSize);
@@ -78,7 +75,7 @@ if (bbMatch != NULL)
 	printCustomUrl(tdb, item, TRUE);
     bedPrintPos(bed, bedSize, tdb);
 
-    // display seq1 and seq2 
+    // display seq1 and seq2
     if (seq1Seq2 && bedSize+seq1Seq2Fields == 8)
         printf("<table><tr><th>Sequence 1</th><th>Sequence 2</th></tr>"
 	       "<tr><td> %s </td><td> %s </td></tr></table>", fields[6], fields[7]);
@@ -89,14 +86,17 @@ if (bbMatch != NULL)
 	int restBedFields = bedSize - 3;
 	if (restCount > restBedFields)
 	    {
-	    int i;
-	    char label[20];
-	    safef(label, sizeof(label), "nonBedFieldsLabel");
-	    printf("<B>%s&nbsp;</B>",
-               trackDbSettingOrDefault(tdb, label, "Non-BED fields:"));
-	    for (i = restBedFields;  i < restCount;  i++)
-		printf("%s%s", (i > 0 ? "\t" : ""), restFields[i]);
-	    printf("<BR>\n");
+            if (0 == extraFieldsPrint(tdb,NULL,restFields + restBedFields,restCount - restBedFields))
+                {
+                int i;
+                char label[20];
+                safef(label, sizeof(label), "nonBedFieldsLabel");
+                printf("<B>%s&nbsp;</B>",
+                trackDbSettingOrDefault(tdb, label, "Non-BED fields:"));
+                for (i = restBedFields;  i < restCount;  i++)
+                    printf("%s%s", (i > 0 ? "\t" : ""), restFields[i]);
+                printf("<BR>\n");
+                }
 	    }
 	}
     if (isCustomTrack(tdb->track))
@@ -114,7 +114,7 @@ lmCleanup(&lm);
 bbiFileClose(&bbi);
 }
 
-void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
+void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
 /* Handle click in generic bigBed track. */
 {

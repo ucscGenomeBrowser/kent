@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "refSeqStatus.h"
 
-static char const rcsid[] = "$Id: refSeqStatus.c,v 1.4 2009/07/04 07:14:20 markd Exp $";
 
 /* definitions for status column */
 static char *values_status[] = {"Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL};

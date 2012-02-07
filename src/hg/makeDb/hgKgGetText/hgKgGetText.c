@@ -7,7 +7,6 @@
 #include "kgXref.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: hgKgGetText.c,v 1.5 2007/03/17 23:12:08 kent Exp $";
 
 char *summaryTable = "refSeqSummary";
 

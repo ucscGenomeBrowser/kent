@@ -20,7 +20,6 @@
 #include "hdb.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joiner.c,v 1.28 2009/02/11 18:49:44 angie Exp $";
 
 static void joinerFieldFree(struct joinerField **pJf)
 /* Free up memory associated with joinerField. */

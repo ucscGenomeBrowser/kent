@@ -14,7 +14,6 @@
 #include "portable.h"
 #include "../../hg/inc/hdb.h"  /* Just for strict option. */
 
-static char const rcsid[] = "$Id: raSqlQuery.c,v 1.26 2009/12/03 20:05:39 kent Exp $";
 
 static char *clQueryFile = NULL;
 static char *clQuery = NULL;

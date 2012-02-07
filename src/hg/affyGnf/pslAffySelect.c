@@ -3,7 +3,6 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: pslAffySelect.c,v 1.2 2003/05/06 07:22:13 kate Exp $";
 
 #define TICS 100
 float seqIdent = -1.0;  /* minimum sequence identity allowed, -1 is a good error as nothing will pass */

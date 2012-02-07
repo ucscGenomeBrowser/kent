@@ -11,7 +11,6 @@
 #include "linefile.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredSingleCover.c,v 1.1 2005/10/07 05:14:25 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {

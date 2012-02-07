@@ -25,7 +25,6 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.36 2009/04/14 18:14:44 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL };
 /* The excludeVars are not saved to the cart. (We also exclude

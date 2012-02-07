@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: tableStatus.c,v 1.2 2005/11/05 16:42:53 kent Exp $";
 
 void tableStatusStaticLoad(char **row, struct tableStatus *ret)
 /* Load a row from tableStatus table into ret.  The contents of ret will

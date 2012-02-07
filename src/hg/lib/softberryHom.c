@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "softberryHom.h"
 
-static char const rcsid[] = "$Id: softberryHom.c,v 1.4 2005/04/13 06:25:57 markd Exp $";
 
 void softberryHomStaticLoad(char **row, struct softberryHom *ret)
 /* Load a row from softberryHom table into ret.  The contents of ret will

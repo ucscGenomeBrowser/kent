@@ -6,7 +6,6 @@
 #include "hash.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: gbGetEntries.c,v 1.5 2005/06/05 04:29:55 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

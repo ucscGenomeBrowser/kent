@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "gwasCatalog.h"
 
-static char const rcsid[] = "$Id: gwasCatalog.c,v 1.1 2010/01/19 22:57:12 angie Exp $";
 
 /* definitions for cnv column */
 static char *values_cnv[] = {"Y", "N", NULL};

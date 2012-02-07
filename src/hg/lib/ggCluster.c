@@ -13,7 +13,6 @@
 #include "geneGraph.h"
 #include "ggPrivate.h"
 
-static char const rcsid[] = "$Id: ggCluster.c,v 1.13 2007/02/12 01:58:13 kent Exp $";
 
 
 

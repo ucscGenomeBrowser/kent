@@ -5,7 +5,6 @@
 #include "mdb.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: mdbUpdate.c,v 1.3 2010/04/27 22:40:12 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 

@@ -112,7 +112,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
@@ -140,7 +140,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -168,7 +168,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
@@ -196,7 +196,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -446,7 +446,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -473,7 +473,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -539,12 +539,40 @@ lab Caltech
 labExpId 10515
 localization cell
 md5sum 5f1378912a890da956db7de0d6d4cc78
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1856
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2V2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000122
+expId 122
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10515
+localization cell
+md5sum b11a0a209e53451f0d87d1d20452f5d2
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5121
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep1
@@ -591,6 +619,7 @@ lab Caltech
 labExpId 10515
 localization cell
 md5sum 96d6aadb16da66a198aa50c5deca69a3
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -599,12 +628,39 @@ rnaExtract longPolyA
 subId 1856
 view FastqRd2
 
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2V2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000122
+expId 122
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10515
+localization cell
+md5sum 05d64cdda6e6eb64a903850ec3d0f947
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5136
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
+view FastqRd2
+
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep1V3
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -631,7 +687,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -658,7 +714,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -685,7 +741,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -712,25 +768,26 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10565
 localization cell
 mapAlgorithm TH1014
-md5sum d7ea38f0edb3836eec679986728d73ad
+md5sum 2a180edda48905e95310ea9851f65610
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3572
+subId 5279
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -739,25 +796,26 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10515
 localization cell
 mapAlgorithm TH1014
-md5sum 03aa6a0b3f599a3ef164bcdc27399d98
+md5sum d4a6ca943cfdaaf36a2cc03c6f27255a
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3575
+subId 5234
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -882,7 +940,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -909,7 +967,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -936,7 +994,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -963,7 +1021,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -990,7 +1048,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -1017,7 +1075,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -1073,7 +1131,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1113,12 +1171,40 @@ lab Caltech
 labExpId 10516
 localization cell
 md5sum f58d510cac0f14b185e8cd860777e0de
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1672
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2V2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2V2.fastq.tgz
+grant Myers
+insertLength 400
+lab Caltech
+labExpId 10516
+localization cell
+md5sum d9924f66294e141bfd8a4e24ba8f5812
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5137
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2
@@ -1139,6 +1225,7 @@ lab Caltech
 labExpId 10516
 localization cell
 md5sum b1386c9919a18fe8738caa9facd7e342
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1147,12 +1234,39 @@ rnaExtract longPolyA
 subId 1672
 view FastqRd2
 
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2V2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2V2.fastq.tgz
+grant Myers
+insertLength 400
+lab Caltech
+labExpId 10516
+localization cell
+md5sum 9b03b3105b8ddf21a183a231c099f86c
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5138
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
+view FastqRd2
+
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneDeNovoRep2V3
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1179,7 +1293,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1206,25 +1320,26 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
 expId 137
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400JunctionsRep2V3.bigBed
 grant Myers
 insertLength 400
 lab Caltech
 labExpId 10516
 localization cell
 mapAlgorithm TH1014
-md5sum c3e1dc7ee52b9aa843676ca4c9156a2a
+md5sum b52b17e9aa4fc6634c694931a4a73870
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3532
+subId 5278
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -1291,7 +1406,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1318,7 +1433,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1345,7 +1460,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1484,7 +1599,7 @@ objType table
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
@@ -1512,7 +1627,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -1539,7 +1654,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -1591,7 +1706,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
@@ -1642,7 +1757,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
@@ -1668,7 +1783,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -1695,7 +1810,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -1722,7 +1837,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -1749,7 +1864,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -1776,25 +1891,26 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11038
 localization cell
 mapAlgorithm TH1014
-md5sum be254f0939d4fc3d7509f74fa13884e8
+md5sum e3647a3f628e18ccfb79db6a94bbb38f
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3576
+subId 5281
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -1803,25 +1919,26 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId SL2971
 localization cell
 mapAlgorithm TH1014
-md5sum 052503d142b3513e8345ebdfa6534786
+md5sum b9b99d291907f4cc40d887a9f3577c34
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3665
+subId 5280
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -1858,7 +1975,7 @@ objType table
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
@@ -1914,7 +2031,7 @@ objType table
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
@@ -1942,7 +2059,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -1969,7 +2086,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -1996,7 +2113,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -2023,7 +2140,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -2050,7 +2167,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -2077,7 +2194,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -2188,7 +2305,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2215,7 +2332,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -2242,7 +2359,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2294,7 +2411,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
@@ -2320,7 +2437,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
@@ -2371,7 +2488,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
@@ -2397,7 +2514,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
@@ -2423,7 +2540,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2450,7 +2567,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -2477,7 +2594,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2504,7 +2621,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2531,7 +2648,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -2558,7 +2675,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2585,25 +2702,26 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11039
 localization cell
 mapAlgorithm TH1014
-md5sum c7cec7be729e2f47ba38b63973adb0fa
+md5sum ece996243adc23bc7ed5b9e849ddd406
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3577
+subId 5284
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -2612,25 +2730,26 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId SL2970
 localization cell
 mapAlgorithm TH1014
-md5sum 1ee3c32b7ba1de19ccad5f537aaeb39a
+md5sum 32822e771a2f1f6cc654ee67d81fdd5f
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3666
+subId 5282
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -2639,25 +2758,26 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId SL2973
 localization cell
 mapAlgorithm TH1014
-md5sum 421d265ceb7e4a98f896166d6e97c471
+md5sum 0868d79025e6cd8879fa42cd760bc316
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
-subId 3744
+subId 5283
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -2834,7 +2954,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2861,7 +2981,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -2888,7 +3008,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2915,7 +3035,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2942,7 +3062,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -2969,7 +3089,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2996,7 +3116,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -3023,7 +3143,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -3050,7 +3170,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -3182,7 +3302,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -3210,7 +3330,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -3238,7 +3358,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -3266,7 +3386,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -3574,7 +3694,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3601,7 +3721,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3628,7 +3748,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3655,7 +3775,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3890,7 +4010,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3917,7 +4037,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3944,7 +4064,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3971,7 +4091,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3998,7 +4118,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4025,7 +4145,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4052,7 +4172,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4079,7 +4199,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4106,25 +4226,26 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11286
 localization cell
 mapAlgorithm TH1014
-md5sum bd5eb97320c3039ba2c3e085938d1ebd
+md5sum c7f639ebcc758267d8b9715ca735001c
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3578
+subId 5287
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -4133,25 +4254,26 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11288
 localization cell
 mapAlgorithm TH1014
-md5sum 29981f71e290b87aaaf1a17a12604b9a
+md5sum 708422662919413bc6eb3c96d46cb948
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3579
+subId 5288
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -4160,25 +4282,26 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep3V3.bed.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep3V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11289
 localization cell
 mapAlgorithm TH1014
-md5sum f8de9fce6cf00481983188c3519cb3a3
+md5sum 4e9b0ec625c97977ab13ca59b716930c
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
-subId 3580
+subId 5289
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -4187,25 +4310,26 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep4V3.bed.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep4V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10874
 localization cell
 mapAlgorithm TH1014
-md5sum 22c197364264abf74864625d1c8bbbf3
+md5sum fef6bda7c28bf0cd7b96c8088f1ff4b3
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
 rnaExtract longPolyA
-subId 3581
+subId 5285
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -4446,7 +4570,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4473,7 +4597,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4500,7 +4624,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4527,7 +4651,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4554,7 +4678,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4581,7 +4705,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4608,7 +4732,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4635,7 +4759,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4662,7 +4786,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4689,7 +4813,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4716,7 +4840,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4743,7 +4867,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4770,7 +4894,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -4799,7 +4923,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -4878,7 +5002,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -4905,7 +5029,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -4932,25 +5056,26 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
 expId 138
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400JunctionsRep1V3.bigBed
 grant Myers
 insertLength 400
 lab Caltech
 labExpId 10876
 localization cell
 mapAlgorithm TH1014
-md5sum 319f3480f0d353d937ed3ebb31997ee3
+md5sum 420514f14d4c47dc00c75832d348f446
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3571
+subId 5286
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -4959,7 +5084,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -4988,7 +5113,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -5017,7 +5142,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -5044,7 +5169,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -5071,7 +5196,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -5266,7 +5391,7 @@ objType table
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
@@ -5294,7 +5419,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5321,7 +5446,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5373,7 +5498,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
@@ -5423,7 +5548,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
@@ -5448,7 +5573,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5475,7 +5600,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5502,7 +5627,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5529,7 +5654,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5556,25 +5681,26 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 12096
 localization cell
 mapAlgorithm TH1014
-md5sum 2e0a504cdc9fe65e52701809da06ca45
+md5sum ef081675a442b1c18580858672069fd5
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3582
+subId 5290
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -5583,25 +5709,26 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 12097
 localization cell
 mapAlgorithm TH1014
-md5sum ac9dd47b0f645c14e89921e2c424ec12
+md5sum 0a1bd930f6423e5f800e308a2bee937a
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3583
+subId 5291
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -5610,7 +5737,7 @@ objType table
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-12-16
 dccAccession wgEncodeEH001425
@@ -5638,7 +5765,7 @@ objType table
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
@@ -5694,7 +5821,7 @@ objType table
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
@@ -5722,7 +5849,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5749,7 +5876,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5776,7 +5903,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5803,7 +5930,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5830,7 +5957,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5857,7 +5984,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5990,7 +6117,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -6018,7 +6145,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -6046,7 +6173,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -6074,7 +6201,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -6324,7 +6451,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6351,7 +6478,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6482,7 +6609,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6509,7 +6636,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6536,7 +6663,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6563,7 +6690,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6590,25 +6717,26 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10881
 localization cell
 mapAlgorithm TH1014
-md5sum 7927edfd881c30483ef04c2c42e8b5aa
+md5sum 46635f52b56ee3e113009afa5bb881b9
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3588
+subId 5296
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -6617,25 +6745,26 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10882
 localization cell
 mapAlgorithm TH1014
-md5sum fd9eb5152fbc43e43a5f5a6485726a7a
+md5sum be38198756c8f9294e2bd38fe461e206
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3589
+subId 5297
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -6760,7 +6889,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6787,7 +6916,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6814,7 +6943,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6841,7 +6970,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6868,7 +6997,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6895,7 +7024,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6973,35 +7102,6 @@ subId 1662
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
 view Signal
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
-objType table
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2011-01-22
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
-expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam.bai
-grant Myers
-lab Caltech
-labExpId 11210
-localization cell
-mapAlgorithm TH1014
-md5sum b49542b9c2a6bce74fb049f8873d9022,eb2e128cc7b5ce4bd4bb5a2770631930
-objStatus replaced
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 1
-rnaExtract longPolyA
-subId 3454
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3
 objType table
 cell HepG2
@@ -7028,35 +7128,6 @@ rnaExtract longPolyA
 subId 4798
 submittedDataVersion V3 - Replace conflicting md5sums
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2
-objType table
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2011-01-21
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
-expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam.bai
-grant Myers
-lab Caltech
-labExpId 11209
-localization cell
-mapAlgorithm TH1014
-md5sum 65443cd0793f3879ebb377cb92a0fac0,531d57f7154d1227f307fba536dfda99
-objStatus replaced
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 2
-rnaExtract longPolyA
-subId 3455
-submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3
@@ -7142,7 +7213,7 @@ objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -7159,7 +7230,7 @@ project wgEncode
 readType 1x75D
 replicate 1
 rnaExtract longPolyA
-subId 3521
+subId 4798
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
 view MinusRawSignal
@@ -7169,7 +7240,7 @@ objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -7186,7 +7257,7 @@ project wgEncode
 readType 1x75D
 replicate 2
 rnaExtract longPolyA
-subId 3522
+subId 4797
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3
 view MinusRawSignal
@@ -7196,7 +7267,7 @@ objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -7224,7 +7295,7 @@ objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -7474,7 +7545,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7501,7 +7572,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7632,7 +7703,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7659,7 +7730,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7686,7 +7757,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7713,7 +7784,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7740,25 +7811,26 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10878
 localization cell
 mapAlgorithm TH1014
-md5sum 177db254d4cfb29af3c65d39c9f5ed36
+md5sum 675a65b6ff090bf54b91b9340ad89b64
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3590
+subId 5298
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -7767,25 +7839,26 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10879
 localization cell
 mapAlgorithm TH1014
-md5sum ac98954ca1e10557c96c713de00e6add
+md5sum bb25f5a4aaebe2731d9ee43a2d4acff5
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3591
+subId 5299
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -7910,7 +7983,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7937,7 +8010,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7964,7 +8037,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7991,7 +8064,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -8018,7 +8091,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -8045,7 +8118,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -8141,6 +8214,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 76c6099c1ce24acc59335f6e31354698,9bcae5aa5cb93d3a6ea95e2e5d312478
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8168,6 +8242,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 536fc38bd41cd24fba14271a2b9aea57,8da33db226f90653a9c371e246bab4c8
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8182,7 +8257,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8195,6 +8270,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 45c27016c9041f6398211257a331fd90
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8208,7 +8284,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8221,6 +8297,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 84c1b509651697c309858aff394ed582
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8334,7 +8411,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8347,6 +8424,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 128b6966045b3703ab4361afa98f81ad
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8360,7 +8438,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8373,6 +8451,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 9f78fe778c0b5d6e4c1e17d00abdb1d4
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8386,7 +8465,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8399,6 +8478,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 29ed5785f0de73eb60bdc8b9b0b2faf9
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8412,7 +8492,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8425,6 +8505,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 47ff0fe86774603a76324509aef0ed5d
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8438,24 +8519,26 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11584
 localization cell
 mapAlgorithm TH1014
-md5sum 558f889dbcb14c4a0633c40d302f9844
+md5sum 4a09c2dd8c9f93cffce7a04a87c93562
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3584
+subId 5292
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -8464,24 +8547,26 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11585
 localization cell
 mapAlgorithm TH1014
-md5sum 39e2a9032a81717a6a4b6c79fe85edef
+md5sum 1d9b9bec86c99583b0f57ae381c401f5
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3585
+subId 5293
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -8503,6 +8588,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 585d42e0bd089c9871cb41113d82ebed
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8530,6 +8616,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum d658dbe83ca0589d0c5dc533dcd2f860
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8557,6 +8644,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 21f7b4a09370c7732939c476ebb1a871,659639e302916e6a7c58e7036f592089
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8584,6 +8672,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 33934ac8aa13e7b38da48a1602328948,792ca88a3ced81e942c6fd24d4e28cbf
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8598,7 +8687,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8611,6 +8700,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum e1789f8df3101eaeeffd83c390e0d732
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8624,7 +8714,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8637,6 +8727,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 0fa074b40317b33111329ee860f45806
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8650,7 +8741,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8663,6 +8754,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum bffa02002543426efc1784028793d2f2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8676,7 +8768,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8689,6 +8781,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum e8bd486aa37683f133732e34b3c314bd
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8702,7 +8795,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8715,6 +8808,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum dfc8a56eadec71f012c1ac8dd782d856
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8728,7 +8822,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8741,6 +8835,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 1147472b2e7bce92102e9b2b2c8d6f10
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8914,7 +9009,7 @@ objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -8942,7 +9037,7 @@ objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -8970,7 +9065,7 @@ objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -8998,7 +9093,7 @@ objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -9248,7 +9343,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9275,7 +9370,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9406,7 +9501,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9433,7 +9528,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9460,7 +9555,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9487,7 +9582,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9514,25 +9609,26 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10883
 localization cell
 mapAlgorithm TH1014
-md5sum 18bbfa1947926eef1f7b93eb3fbe7b50
+md5sum 28bcbc4c4602a24eca0207c92e41933f
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3586
+subId 5294
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -9541,25 +9637,26 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10885
 localization cell
 mapAlgorithm TH1014
-md5sum 8e105876a5bdb7b3dcf1f44ca85d363a
+md5sum ba22607c402be8c94de1bd3bbeffc4bf
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3587
+subId 5295
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -9684,7 +9781,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9711,7 +9808,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9738,7 +9835,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9765,7 +9862,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9792,7 +9889,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9819,7 +9916,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -10007,7 +10104,7 @@ objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -10035,7 +10132,7 @@ objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -10063,7 +10160,7 @@ objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -10091,7 +10188,7 @@ objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -10341,7 +10438,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10368,7 +10465,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10408,12 +10505,40 @@ lab Caltech
 labExpId 10517
 localization cell
 md5sum e875c01724900f877e56d1ae1d3adddb
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1659
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1V2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000124
+expId 124
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10517
+localization cell
+md5sum 20cccfb09a7812a639eec2373caf8ebb
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 5139
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2
@@ -10433,12 +10558,40 @@ lab Caltech
 labExpId 10567
 localization cell
 md5sum ca0d6ac115e44f60e8724c78a73b17f1
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1658
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2V2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000124
+expId 124
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10567
+localization cell
+md5sum 9f3c1e8dcd37526ca5fd5ee4ab0400ee
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5140
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1
@@ -10459,12 +10612,40 @@ lab Caltech
 labExpId 10517
 localization cell
 md5sum a11eea94649481abf7bb2d1b33fdb3f5
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1659
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1V2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000124
+expId 124
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10517
+localization cell
+md5sum e7dd0e01e1629109531f632f212bf368
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 5141
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2
@@ -10484,6 +10665,7 @@ lab Caltech
 labExpId 10567
 localization cell
 md5sum 7489e112f69e3f5d9a2477b2cd0f3877
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10492,12 +10674,39 @@ rnaExtract longPolyA
 subId 1658
 view FastqRd2
 
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2V2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000124
+expId 124
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10567
+localization cell
+md5sum 424e8c066108ca9e5c76f30dbeec8090
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5142
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
+view FastqRd2
+
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep1V3
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10524,7 +10733,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10551,7 +10760,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10578,7 +10787,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10605,25 +10814,26 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10517
 localization cell
 mapAlgorithm TH1014
-md5sum c951e0c947093b24310474ce08b3b577
+md5sum 32f5439476fc6aa72051f07efa51f382
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3592
+subId 5300
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -10632,25 +10842,26 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10567
 localization cell
 mapAlgorithm TH1014
-md5sum 9d3258dc90ab54fa5e95deb11fc4ae6a
+md5sum 133430d8219a7764da0b30815da1f5fc
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3593
+subId 5301
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -10775,7 +10986,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10802,7 +11013,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10829,7 +11040,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10856,7 +11067,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10883,7 +11094,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10910,7 +11121,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10993,7 +11204,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11022,7 +11233,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11050,7 +11261,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11076,7 +11287,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11102,7 +11313,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11130,7 +11341,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11158,12 +11369,13 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
 expId 1669
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
@@ -11171,13 +11383,13 @@ labExpId 11621
 labVersion myoblast
 localization cell
 mapAlgorithm TH1014
-md5sum 52b5a280954b2500af6699105aac897b
+md5sum 33d0e97c21e1cf0fbf084f365dce1f62
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3594
+subId 5302
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -11186,7 +11398,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
@@ -11215,7 +11427,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11244,7 +11456,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
@@ -11271,7 +11483,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
@@ -11298,7 +11510,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11327,7 +11539,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11356,12 +11568,13 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dJunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dJunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
@@ -11369,13 +11582,13 @@ labExpId 11622
 labVersion myocyte
 localization cell
 mapAlgorithm TH1014
-md5sum e2365edb5167c3b4713dcd7e350fd02c
+md5sum 13f6754d928fcdb1f659a70bbc72bd0a
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3595
+subId 5303
 submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
 view Junctions
@@ -11385,7 +11598,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11414,7 +11627,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
@@ -11443,7 +11656,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11472,7 +11685,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11501,7 +11714,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11530,7 +11743,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001669
@@ -11558,7 +11771,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11587,7 +11800,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11615,7 +11828,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11643,7 +11856,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11671,7 +11884,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
@@ -11684,6 +11897,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum bf90494743bc9877cc6bc565154485ca,98fd1fd0664b5bdafcd5dada78ec33d3
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -11711,6 +11925,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 51a067ff282b9061fc39f1a3b98727cd,e60c5c8cb7a63612abe04a6b559657fc
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -11725,7 +11940,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001421
@@ -11738,6 +11953,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum d30e635c48943bd85ad061bd5eb7294b,f3eba71c2153f484ca6ad2fa17cdbdd3
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -11752,7 +11968,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -11765,6 +11981,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum f2d6219c0d86ddf1612a63bd7de51324
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -11778,7 +11995,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -11791,6 +12008,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum bc56498d676d9b01a42a1685bde969ca
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -11804,7 +12022,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -11817,6 +12035,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 786ae20b8d997c3f4637f98395c6b9bf
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -11843,6 +12062,7 @@ lab Caltech
 labExpId 11581
 localization cell
 md5sum b144ccab25a4ae10596a9b6d95352eb7
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -11880,7 +12100,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
@@ -11918,6 +12138,7 @@ lab Caltech
 labExpId 11581
 localization cell
 md5sum bdf0179ed4ecd7c98b4b51da897b0f13
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -11955,7 +12176,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
@@ -11980,7 +12201,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -11993,6 +12214,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum ebeb0ce2c4f99718e20059f11ca7b791
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12006,7 +12228,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12019,6 +12241,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum c86fdfaeb2ef85999cc298a6c0724dbc
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12032,7 +12255,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12045,6 +12268,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 87f2b40bf221d6fbfe081a40e0c61cc7
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12058,7 +12282,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12071,6 +12295,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum dbe0c9d911222cc4f8e928c8b0227cf2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12084,7 +12309,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12097,6 +12322,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum afcc36725a0769f8d58acfb31ae630f2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12110,7 +12336,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12123,6 +12349,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum ad6b6f82c2f47dfb3517aaab79085c47
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12136,24 +12363,26 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11581
 localization cell
 mapAlgorithm TH1014
-md5sum 18381cc2452c0193f1ad2ac0121d52fe
+md5sum d33b46f5840cb2d2d6878ffc0662773e
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3596
+subId 5304
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -12162,24 +12391,26 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11582
 localization cell
 mapAlgorithm TH1014
-md5sum 7d38a1e20a05f678c72daf23bdd18bc3
+md5sum 743c6c5f06a65b0a0cddb6b1ec9058ff
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3597
+subId 5305
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -12188,24 +12419,26 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep3V3.bed.gz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep3V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 12098
 localization cell
 mapAlgorithm TH1014
-md5sum 52dc523ccda1fea00a686f8f0ebeb497
+md5sum 589a5a97f52aca270a29d1fb21f122b4
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
-subId 3598
+subId 5306
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -12214,7 +12447,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
@@ -12227,6 +12460,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum e107a0fa82bce0044c13a7a8ff1cab31
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12254,6 +12488,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 0669978e2325c8ccb73da658fd2cb72b
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12268,7 +12503,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
@@ -12281,6 +12516,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 3c5c7b34f0d917a331a60da7ac1f16d6
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12295,7 +12531,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
@@ -12308,6 +12544,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum de0a84aca83f09e93205822f615cf108,7af9380bedc52b57b29fc33a1c16174d
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12335,6 +12572,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 3b111346ba963eb5b3958e1f7161268b,ae0ad7c3fc1bdffb01a8663c3baf72ef
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12349,7 +12587,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
@@ -12362,6 +12600,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum e4454727fe54f4872d50e011278a744f,c20c3a35b5f1f285af2190fcf189ac92
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12376,7 +12615,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12389,6 +12628,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum 075e9986692317fbc3aa4724de9645f8
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12402,7 +12642,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12415,6 +12655,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 7b9eef2c333c49b9939012f183a2af97
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12428,7 +12669,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12441,6 +12682,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum eb72137bc641f3bd682335840a0fe53b
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12454,7 +12696,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12467,6 +12709,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum f755da2fee8d800221587b17410e747d
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12480,7 +12723,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12493,6 +12736,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 50fb1553a8644f2dbe0861885dcbc618
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12506,7 +12750,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12519,6 +12763,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum added3851f237dc2abaabb68dfe617b6
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12532,7 +12777,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12545,6 +12790,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum aac13a83da476a5b1c6858abc0e6fa2e
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12558,7 +12804,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12571,6 +12817,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum a84de012446172b5e33892a5a9191f83
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12584,7 +12831,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12597,6 +12844,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum dff4e802de5b80bbeec6ee4f3492c9c7
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12624,6 +12872,7 @@ labExpId 11581
 mapAlgorithm TH1014
 md5sum 380b66e8b589c3a29b88a61fda477994
 objStatus replaced
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12718,7 +12967,7 @@ objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-15
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -12746,7 +12995,7 @@ objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-15
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -12913,7 +13162,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -12940,7 +13189,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13069,7 +13318,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13096,7 +13345,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13123,7 +13372,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13150,7 +13399,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13177,25 +13426,26 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10884
 localization cell
 mapAlgorithm TH1014
-md5sum 9b3c9c2bb63aa1cbe64c5298e267961c
+md5sum 802aa5292721eabbea4ca9546809aeab
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3599
+subId 5307
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -13204,25 +13454,26 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11586
 localization cell
 mapAlgorithm TH1014
-md5sum 83b38b160a8514b27e37771bdb908e72
+md5sum 02403bb5416a0dfe63316e135eb1cb3d
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3600
+subId 5308
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -13345,7 +13596,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13372,7 +13623,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13399,7 +13650,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13426,7 +13677,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13453,7 +13704,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13480,7 +13731,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13575,6 +13826,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 562c779768d207625984bf7fb72d149a,fbd5d973c6c8606a71948628431a22a5
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13602,6 +13854,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 698eb744de450f19a5859a4b0b31c20e,3a4011ed4bce8f730871979e82e1e6f9
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13616,7 +13869,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -13629,6 +13882,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 0cebca8f15c7d6aed56ad9033e7ab28f
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13642,7 +13896,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -13655,6 +13909,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum f3da2830e35162d5ca9a311c40dfbca5
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13768,7 +14023,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -13781,6 +14036,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 3174b2bf67e53030b6b962b5b37252d4
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13794,7 +14050,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -13807,6 +14063,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 47edf03671d311a7ffab28d84417c02a
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13820,7 +14077,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -13833,6 +14090,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 935e30c092cdb0f5ed48d76ff530f7d3
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13846,7 +14104,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -13859,6 +14117,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 3c6f8d34d1be105456407328e39751a7
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13872,24 +14131,26 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11587
 localization cell
 mapAlgorithm TH1014
-md5sum a909aaa63ead3dae77a3fda9a677af36
+md5sum 8a8dfa5a844d17c8539cf42c10e4a5e2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3573
+subId 5309
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -13898,24 +14159,26 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11588
 localization cell
 mapAlgorithm TH1014
-md5sum 7497570de03e63c902e21293885398e6
+md5sum ffbd43fb174e9481ed382d9f1923843e
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3574
+subId 5310
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -13937,6 +14200,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 33a394274d02da08fdf7e8b6f09b6bf2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13964,6 +14228,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 1b981f54d2b5c0343e1df4f9f18f42d4
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13991,6 +14256,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 0819108916df1d413755b208fe988811,fa2fad06ba5c4ff5e93788adfafd0283
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14018,6 +14284,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 65903ccbdb793fb385541a44782d12d0,623034a1e60a2b5864eebb44a7a0b3bf
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -14032,7 +14299,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14045,6 +14312,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 287901b7da02a94b705c6d536abd1581
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14058,7 +14326,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14071,6 +14339,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 0206d58bc1036fa8a4cb7ac76bed1864
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -14084,7 +14353,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14097,6 +14366,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum e21f3d9751d46fd577edec296b7e04ec
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14110,7 +14380,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14123,6 +14393,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 03038cc8ea8cbde2480d2073f0d34fde
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -14136,7 +14407,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14149,6 +14420,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 24e4b8522dca509c9dd5f55edc62212c
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14162,7 +14434,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14175,6 +14447,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum d7523997e302832a5dbb19aea0728537
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -14237,4 +14510,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 1368149414
+# MAGIC: 1387740363

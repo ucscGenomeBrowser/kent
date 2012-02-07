@@ -9,7 +9,6 @@
 #include "bed.h"
 #include "cdsEvidence.h"
 
-static char const rcsid[] = "$Id: cdsEvidence.c,v 1.3 2007/03/16 17:34:48 kent Exp $";
 
 struct cdsEvidence *cdsEvidenceLoad(char **row)
 /* Load a cdsEvidence from row fetched with select * from cdsEvidence

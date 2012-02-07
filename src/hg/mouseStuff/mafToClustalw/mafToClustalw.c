@@ -5,7 +5,6 @@
 #include "maf.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: mafToClustalw.c,v 1.1 2009/03/29 05:19:05 mikep Exp $";
 
 void usage()
 /* Explain usage and exit. */

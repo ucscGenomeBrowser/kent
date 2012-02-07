@@ -7,7 +7,6 @@
 #include "options.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: faCmp.c,v 1.8 2009/11/13 21:33:25 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

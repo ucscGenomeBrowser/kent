@@ -5,7 +5,6 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netToBed.c,v 1.4 2003/06/15 15:51:30 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

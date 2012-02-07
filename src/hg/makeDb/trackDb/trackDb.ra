@@ -479,17 +479,40 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 
-# track text2Genome
 track t2g
 shortLabel Publications
-longLabel Mapped sequences from publications
+longLabel Publications: Sequences found in scientific articles
 group map
-priority 800
+priority 12
 visibility hide
-color 20,50,100
-articleTable t2gArticle
-sequenceTable t2gSequence
-type bed 12
+color 100,0,0
+altColor 100,0,0
+type bed 12 .
+compositeTrack on
+release alpha
+nextExonText Next Match
+prevExonText Prev Match
+
+    track t2gPmc
+    shortLabel PubmedCentral
+    longLabel Publications from PubmedCentral (OA)
+    parent t2g
+    type bed 12 .
+    articleTable t2gPmcArticle
+    sequenceTable t2gPmcSequence
+    priority 1
+    release alpha
+
+    track t2gElsevier
+    shortLabel Elsevier (alpha)
+    longLabel Publications from Elsevier
+    parent t2g
+    priority 2
+    articleTable t2gElsevierArticle
+    sequenceTable t2gElsevierSequence
+    type bed 12 .
+    release alpha
+    maxItems 300
 
 searchTable mgcFullMrna
 searchType psl
@@ -705,7 +728,7 @@ priority 41.4
 visibility hide
 color 195,90,0
 type genePred
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromer_quick_search.pl?query_str=$$
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?query_str=$$
 urlLabel SIB link:
 
 track ECgene
@@ -1128,7 +1151,7 @@ group rna
 priority 74.5
 visibility hide
 type altGraphX
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?species=H.+sapiens&tromer=$$
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?species=H.+sapiens&tromer=$$
 urlLabel SIB link:
 idInUrlSql select name from sibTxGraph where id=%s
 
@@ -1554,6 +1577,62 @@ spectrum on
 useScore 1
 exonArrows on
 type bed 6 .
+
+
+track snp135Common
+shortLabel Common SNPs(135)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 135) Found in >= 1% of Samples
+group varRep
+priority 99.0911
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp135Seq
+snpExceptionDesc snp135ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+
+track snp135Flagged
+shortLabel Flagged SNPs(135)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 135) Flagged by dbSNP as Clinically Assoc
+group varRep
+priority 99.0912
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp135Seq
+snpExceptionDesc snp135ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+
+track snp135Mult
+shortLabel Mult. SNPs(135)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 135) That Map to Multiple Genomic Loci
+group varRep
+priority 99.0913
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp135Seq
+snpExceptionDesc snp135ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+
+track snp135
+shortLabel All SNPs(135)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 135)
+group varRep
+priority 99.0914
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+
 
 track snp134Common
 shortLabel Common SNPs(134)
@@ -2717,6 +2796,38 @@ termRegex rs[0-9]+
 searchPriority 12.9894
 padding 250
 
+searchTable snp135Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9891
+padding 250
+
+searchTable snp135Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9892
+padding 250
+
+searchTable snp135Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9893
+padding 250
+
+searchTable snp135
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9894
+padding 250
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1
@@ -3174,13 +3285,44 @@ url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id
 urlLabel NCBI Incident:
 nonBedFieldsLabel Summary information from incident database:
 
-track nextNcbiIncidentDb
-shortLabel TBD NCBIIncident
-longLabel In Progress NCBI Incident database
+track grcIncidentDb
+shortLabel GRC Incident
+longLabel GRC Incident database
 group map
 priority 27
 visibility hide
 type bigBed 4 +
 url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
-urlLabel NCBI Incident:
+urlLabel GRC Incident:
 nonBedFieldsLabel Summary information from incident database:
+
+track nextNcbiIncidentDb
+shortLabel TBD NCBIIncident
+longLabel In Progress GRC Incident database
+group map
+priority 27
+visibility hide
+type bigBed 4 +
+url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
+urlLabel GRC Incident:
+nonBedFieldsLabel Summary information from incident database:
+
+track tRNAs
+shortLabel tRNA Genes
+longLabel Transfer RNA genes identified with tRNAscan-SE
+group genes
+priority 53.5
+visibility hide
+color 0,20,150
+type bed 6 +
+nextItemButton on
+noScoreFilter .
+
+searchName tRNA-name
+searchTable tRNAs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
+searchDescription tRNAscan-SE tRNA Name
+searchPriority 63
+

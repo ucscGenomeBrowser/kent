@@ -10,7 +10,6 @@
 #include "htmshell.h"
 #include "qa.h"
 
-static char const rcsid[] = "$Id: qa.c,v 1.7 2008/09/17 17:56:38 kent Exp $";
 
 char *qaStringBetween(char *text, char *startPattern, char *endPattern)
 /* Return text that occurs between startPattern and endPattern,

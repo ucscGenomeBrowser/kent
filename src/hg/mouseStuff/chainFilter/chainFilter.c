@@ -5,7 +5,6 @@
 #include "options.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainFilter.c,v 1.14 2007/12/18 23:44:21 lowec Exp $";
 
 void usage()
 /* Explain usage and exit. */

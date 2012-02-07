@@ -2,9 +2,9 @@
  * for genbank pipeline.  It puts the sequence in a .fa file and annotations
  * to a .ra (rna annotation) file.
  *
- * Note: This program started out life as gbToFaRa.  It was significant
+ * Note: This program started out life as gbToFaRa.  It was significantly
  * modified to support incremental genbank update and renamed to
- * gbProcess.  While it maintains many of the original functionality
+ * gbProcess.  While it maintains much of the original functionality
  * not directly used by the incremental update, a lot of this has
  * not been tested.
  *
@@ -41,8 +41,8 @@
 #include "gbDefs.h"
 #include "gbFileOps.h"
 #include "gbProcessed.h"
+#include "genbankBlackList.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.24 2009/08/19 03:21:23 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -51,6 +51,7 @@ static struct optionSpec optionSpecs[] = {
     {"gbidx", OPTION_STRING},
     {"pepFa", OPTION_STRING},
     {"inclXMs", OPTION_BOOLEAN},
+    {"blackList", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -101,6 +102,8 @@ struct authorExample
     char accession[32];         /* Accession of one of their ESTs */
     };
 struct authorExample *estAuthorList = NULL;
+
+struct blackListRange *blackListRanges = NULL;
 
 static boolean isNcbiDate(char *date)
 /* Check if date string is plausibly something like 28-OCT-1999 */
@@ -517,7 +520,9 @@ static boolean keepGbEntry(boolean isEst)
 {
 char *acc = gbAccessionField->val->string;
 char *cat = kvtGet(kvt, "cat")->val;
-if (gbGuessSrcDb(acc) == GB_REFSEQ)
+if (genbankBlackListFail(acc, blackListRanges))
+    return FALSE;
+else if (gbGuessSrcDb(acc) == GB_REFSEQ)
     {
     return (startsWith("NM_", acc) || startsWith("NR_", acc)
             || ((startsWith("XM_", acc) && inclXMs)));
@@ -772,6 +777,10 @@ errAbort("gbProcess - Convert GenBank flat format file to an fa file containing\
          "     -pepFa=fa - write peptide products to this fasta\n"
          "      file, massaging the ids and recording the offsets in the\n"
          "      ra file\n"
+         "     -blackList=list.txt - read in list of accession ranges\n"
+         "      to ignore.  File is two columned with the first column being\n"
+         "      the beginning of the range, and the second, the end of the\n"
+         "      range, inclusive\n"
          "This will read compressed input, but does not write compressed\n"
          "output due to need to append with byAccPrefix.\n");
 }
@@ -809,6 +818,10 @@ gbfInit();
 
 if (pepFa != NULL)
     gPepFa = gbFaOpen(pepFa,"w");
+
+char *blackList = optionVal("blackList", NULL);
+if (blackList != NULL)
+    blackListRanges = genbankBlackListParse(blackList);
 
 while (argi < argc)
     {

@@ -7,7 +7,6 @@
 #include "common.h"
 #include "md5.h"
 
-static char const rcsid[] = "$Id: md5.c,v 1.4 2003/05/06 07:33:43 kate Exp $";
 
 #define GET_UINT32(n,b,i)					\
 {								\

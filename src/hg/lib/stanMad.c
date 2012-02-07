@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "stanMad.h"
 
-static char const rcsid[] = "$Id: stanMad.c,v 1.4 2005/04/13 06:25:57 markd Exp $";
 
 void stanMadStaticLoad(char **row, struct stanMad *ret)
 /* Load a row from stanMad table into ret.  The contents of ret will

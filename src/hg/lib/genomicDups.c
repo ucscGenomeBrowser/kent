@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "genomicDups.h"
 
-static char const rcsid[] = "$Id: genomicDups.c,v 1.4 2005/04/13 06:25:53 markd Exp $";
 
 void genomicDupsStaticLoad(char **row, struct genomicDups *ret)
 /* Load a row from genomicDups table into ret.  The contents of ret will

@@ -6,7 +6,6 @@
 #include "xmlEscape.h"
 #include "xp.h"
 
-static char const rcsid[] = "$Id: xmlCat.c,v 1.1 2005/12/02 22:09:56 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -14,7 +14,6 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doStamps.c,v 1.8 2009/07/28 15:54:21 fanhsu Exp $";
 
 Color boundaryColor;
 
@@ -407,7 +406,7 @@ int i;
 
 conn2= hAllocConn(database);
 safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
-    	
+
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 pbStampPtr = pbStampLoad(row2);

@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: ooCloneSpan.c,v 1.3 2003/05/06 07:22:32 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

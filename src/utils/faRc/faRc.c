@@ -5,7 +5,6 @@
 #include "cheapcgi.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: faRc.c,v 1.7 2005/01/10 00:46:30 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

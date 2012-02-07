@@ -6,7 +6,6 @@
 #include "bed.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: bedOrBlocks.c,v 1.1 2007/04/11 22:43:12 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

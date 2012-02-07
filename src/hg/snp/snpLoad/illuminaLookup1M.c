@@ -7,7 +7,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup1M.c,v 1.2 2009/12/05 00:22:49 fanhsu Exp $";
 
 char *snpDb = NULL;
 struct snpSubset 

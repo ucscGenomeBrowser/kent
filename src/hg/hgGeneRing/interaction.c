@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "interaction.h"
 
-static char const rcsid[] = "$Id: interaction.c,v 1.1 2005/02/13 10:46:42 galt Exp $";
 
 void interactionStaticLoad(char **row, struct interaction *ret)
 /* Load a row from interaction table into ret.  The contents of ret will

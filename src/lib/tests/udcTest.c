@@ -11,7 +11,6 @@
 #include "portable.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udcTest.c,v 1.2 2009/12/19 01:06:27 angie Exp $";
 
 static struct optionSpec options[] = {
     {"raBuf",    OPTION_BOOLEAN},

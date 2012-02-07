@@ -8,7 +8,6 @@
 #include "linefile.h"
 #include "tokenizer.h"
 
-static char const rcsid[] = "$Id: tokenizer.c,v 1.4 2009/11/20 08:08:53 kent Exp $";
 
 struct tokenizer *tokenizerOnLineFile(struct lineFile *lf)
 /* Create a new tokenizer on open lineFile. */

@@ -10,7 +10,6 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.19 2008/10/27 17:54:53 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;

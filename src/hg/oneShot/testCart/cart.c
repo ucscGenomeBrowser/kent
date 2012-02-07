@@ -8,7 +8,6 @@
 #include "errabort.h"
 #include "cart.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.5 2003/05/06 07:22:31 kate Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *selfVar = "hgself";	/* Name of cgi variable script name is stored in. */

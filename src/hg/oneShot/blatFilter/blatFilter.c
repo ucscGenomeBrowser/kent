@@ -5,7 +5,6 @@
 #include "cheapcgi.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: blatFilter.c,v 1.3 2003/05/06 07:22:29 kate Exp $";
 
 int dotEvery = 1000;
 

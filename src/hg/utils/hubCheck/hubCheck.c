@@ -19,12 +19,14 @@ errAbort(
   "                           Will create this directory if not existing\n"
   "   -verbose=2            - output verbosely\n"
   "   -clear=browserMachine - clear hub status, no checking\n"
+  "   -noTracks             - don't check each track, just trackDb\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"udcDir", OPTION_STRING},
    {"clear", OPTION_STRING},
+   {"noTracks", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -85,10 +87,12 @@ browserMachine = optionVal("clear", browserMachine) ;
 if (browserMachine != NULL)
     return clearHub(argv[1], browserMachine);
 
+boolean checkTracks = !optionExists("noTracks");
+
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 struct dyString *errors = newDyString(1024);
 
-if ( trackHubCheck(argv[1], errors))
+if ( trackHubCheck(argv[1], errors, checkTracks))
     {
     printf("Errors with hub at '%s'\n", argv[1]);
     printf("%s\n",errors->string);

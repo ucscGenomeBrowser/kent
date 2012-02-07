@@ -8,7 +8,6 @@
 #include "bed.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgPhMouse.c,v 1.1 2006/07/26 03:59:52 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

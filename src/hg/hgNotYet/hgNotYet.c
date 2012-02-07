@@ -14,7 +14,6 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgNotYet.c,v 1.7 2009/06/25 08:43:09 markd Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;

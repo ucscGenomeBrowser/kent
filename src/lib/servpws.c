@@ -8,7 +8,6 @@
 #include "portimpl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: servpws.c,v 1.6 2006/06/19 22:02:57 hiram Exp $";
 
 static char *__trashDir = "..\\trash";
 

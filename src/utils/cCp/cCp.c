@@ -3,7 +3,6 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: cCp.c,v 1.2 2003/05/06 07:41:04 kate Exp $";
 
 void cpFile(char *source, char *destHost, char *destFile)
 /* Execute scp command to copy source file to host. */

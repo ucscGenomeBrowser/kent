@@ -11,7 +11,6 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.13 2009/09/23 18:42:23 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

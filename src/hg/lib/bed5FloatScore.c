@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bed5FloatScore.h"
 
-static char const rcsid[] = "$Id: bed5FloatScore.c,v 1.1 2005/06/22 21:49:48 angie Exp $";
 
 void bed5FloatScoreStaticLoad(char **row, struct bed5FloatScore *ret)
 /* Load a row from bed5FloatScore table into ret.  The contents of ret will

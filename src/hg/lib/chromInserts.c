@@ -6,7 +6,6 @@
 #include "linefile.h"
 #include "chromInserts.h"
 
-static char const rcsid[] = "$Id: chromInserts.c,v 1.5 2003/05/06 07:22:21 kate Exp $";
 
 static char *dashIsNull(char *s)
 /* Return cloned copy of string, or NULL if it's just a dash. */

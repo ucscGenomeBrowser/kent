@@ -5,7 +5,6 @@
 #include "hdb.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgGetNrOmimGene.c,v 1.1 2009/02/20 23:38:02 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */

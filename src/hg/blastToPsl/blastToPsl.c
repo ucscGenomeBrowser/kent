@@ -6,7 +6,6 @@
 #include "blastParse.h"
 #include "pslBuild.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.24 2010/02/08 03:04:22 markd Exp $";
 
 double eVal = -1; /* default Expect value signifying no filtering */
 boolean pslxFmt = FALSE; /* output in pslx format */

@@ -24,8 +24,8 @@
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "hubConnect.h"
+#include "errCatch.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.66 2010/06/07 16:53:10 angie Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -456,7 +456,7 @@ static void showSchemaCtMaf(char *table, struct customTrack *ct)
 {
 hPrintf("<B>MAF Custom Track ID:</B> %s<BR>\n", table);
 hPrintf("For formatting information see: ");
-hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#MAF\">MAF</A> ");
+hPrintf("<A HREF=\"../FAQ/FAQformat.html#format5\">MAF</A> ");
 hPrintf("format.");
 
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -481,7 +481,7 @@ showItemRgb=bedItemRgb(ct->tdb);	/* should we expect itemRgb */
 hPrintf("<B>Custom Track ID:</B> %s ", table);
 hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
 hPrintf("For formatting information see: ");
-hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#BED\">BED</A> ");
+hPrintf("<A HREF=\"../FAQ/FAQformat.html#format1\">BED</A> ");
 hPrintf("format.");
 
 if (ct->dbTrack)
@@ -519,7 +519,7 @@ int count = 0;
 hPrintf("<B>Custom Track ID:</B> %s ", table);
 hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
 hPrintf("For formatting information see: ");
-hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#microarray\">Microarray</A> ");
+hPrintf("<A HREF=\"../FAQ/FAQformat.html#format6.5\">Microarray</A> ");
 hPrintf("format.");
 
 if (ct->dbTrack)
@@ -540,10 +540,9 @@ else
     }
 }
 
-static void showSchemaWithAutoSqlString(char *db, char *trackId, struct customTrack *ct, char *autoSqlString)
+static void showSchemaWithAsObj(char *db, char *trackId, struct customTrack *ct, struct asObject *asObj)
 /* Show schema on custom track using autoSqlString defined for this track type. */
 {
-struct asObject *asObj = asParseText(autoSqlString);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 char *table = ct->dbTableName;
 
@@ -579,11 +578,23 @@ else if (startsWithWord("maf", type))
 else if (startsWithWord("array", type))
     showSchemaCtArray(table, ct);
 else if (startsWithWord("makeItems", type))
-    showSchemaWithAutoSqlString(db, table, ct, makeItemsItemAutoSqlString);
+    {
+    struct asObject *asObj = makeItemsItemAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
 else if (sameWord("bedDetail", type))
-    showSchemaWithAutoSqlString(db, table, ct, bedDetailAutoSqlString);
+    {
+    struct asObject *asObj = bedDetailAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
 else if (sameWord("pgSnp", type))
-    showSchemaWithAutoSqlString(db, table, ct, pgSnpAutoSqlString);
+    {
+    struct asObject *asObj = pgSnpAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
 else
     errAbort("Unrecognized customTrack type %s", type);
 }
@@ -674,9 +685,10 @@ void doSchema(struct sqlConnection *conn)
 {
 if (curTrackDescribesCurTable())
     {
-    struct trackDb *track = curTrack;
     char *table = connectingTableForTrack(curTable);
-    htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
+    if (!isCustomTrack(table) && !hashFindVal(fullTrackAndSubtrackHash, table))
+        hashAdd(fullTrackAndSubtrackHash, table, curTrack);
+    htmlOpen("Schema for %s - %s", curTrack->shortLabel, curTrack->longLabel);
     showSchema(database, curTrack, table);
     htmlClose();
     }
@@ -684,3 +696,67 @@ else
     doTableSchema(database, curTable, conn);
 }
 
+struct asObject *asForTable(struct sqlConnection *conn, char *table)
+/* Get autoSQL description if any associated with table. */
+/* Wrap some error catching around asForTable. */
+{
+struct trackDb *tdb = NULL;
+if (isCustomTrack(table))  // Why isn't custom track in fullTrackAndSubtrackHash?
+    {
+    struct customTrack *ct = ctLookupName(table);
+    tdb = ct->tdb;
+    }
+else
+    tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+if (tdb != NULL)
+    return asForTdb(conn,tdb);
+
+// Some cases are for tables with no tdb!
+struct asObject *asObj = NULL;
+if (sqlTableExists(conn, "tableDescriptions"))
+    {
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        char query[256];
+
+        safef(query, sizeof(query),
+            "select autoSqlDef from tableDescriptions where tableName='%s'",
+            table);
+        char *asText = asText = sqlQuickString(conn, query);
+
+        // If no result try split table. (not likely)
+        if (asText == NULL)
+            {
+            safef(query, sizeof(query),
+                "select autoSqlDef from tableDescriptions where tableName='chrN_%s'",
+                table);
+            asText = sqlQuickString(conn, query);
+            }
+        if (asText != NULL && asText[0] != 0)
+            {
+            asObj = asParseText(asText);
+            }
+        freez(&asText);
+        }
+    errCatchEnd(errCatch);
+    errCatchFree(&errCatch);
+    }
+return asObj;
+}
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
+/* Convert asObject to list of sqlFieldTypes */
+{
+struct sqlFieldType *ft, *list = NULL;
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    struct dyString *type = asColumnToSqlType(col);
+    ft = sqlFieldTypeNew(col->name, type->string);
+    slAddHead(&list, ft);
+    dyStringFree(&type);
+    }
+slReverse(&list);
+return list;
+}

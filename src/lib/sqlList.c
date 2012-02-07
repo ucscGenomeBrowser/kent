@@ -11,7 +11,6 @@
 #include "dystring.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: sqlList.c,v 1.19 2006/07/17 19:35:30 markd Exp $";
 
 int sqlByteArray(char *s, signed char *array, int arraySize)
 /* Convert comma separated list of numbers to an array.  Pass in 

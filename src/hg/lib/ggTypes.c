@@ -3,7 +3,6 @@
 #include "common.h"
 #include "ggTypes.h"
 
-static char const rcsid[] = "$Id: ggTypes.c,v 1.1 2007/02/13 19:42:55 kent Exp $";
 
 char *ggVertexTypeAsString(enum ggVertexType type)
 /* Return string corresponding to vertex type. */

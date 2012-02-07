@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGene.c,v 1.1 2006/02/08 15:43:08 kent Exp $";
 
 void fileLocationStaticLoad(char **row, struct fileLocation *ret)
 /* Load a row from fileLocation table into ret.  The contents of ret will

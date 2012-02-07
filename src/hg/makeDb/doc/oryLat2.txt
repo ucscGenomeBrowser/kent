@@ -6,6 +6,8 @@
 #	but re-worked to fix our chrUn so we can make it correspond
 #	to the Ensembl sequence.  
 
+#	http://www.ncbi.nlm.nih.gov/nuccore/144600648
+
 # This file describes browser build for the Medaka
 # genome, Oryzias latipes, October 2005, MEDAKA1 from
 #	Institute of Genetics (NIG) and the University of Tokyo

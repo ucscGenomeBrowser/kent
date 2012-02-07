@@ -8,7 +8,6 @@
 #include "linefile.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSortAcc.c,v 1.5 2006/08/07 17:04:56 angie Exp $";
 
 
 void usage()

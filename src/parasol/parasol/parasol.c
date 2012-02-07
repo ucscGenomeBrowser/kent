@@ -9,7 +9,6 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.51 2010/06/11 01:12:40 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 

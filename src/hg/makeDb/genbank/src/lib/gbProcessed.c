@@ -11,7 +11,6 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbProcessed.c,v 1.9 2009/06/24 05:32:59 genbank Exp $";
 
 /* column indices in gbidx files */
 #define GBIDX_ACC_COL       0

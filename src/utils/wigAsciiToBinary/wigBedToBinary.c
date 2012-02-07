@@ -1,7 +1,6 @@
 /* wigBedToBinary - Convert a BED file, formatted <chrom><start><end><value> to
  *                      wiggle binary format */
 
-static char const rcsid[] = "$Id: wigBedToBinary.c,v 1.4 2005/08/02 16:36:07 hiram Exp $";
 
 #include "common.h"
 #include	"options.h"

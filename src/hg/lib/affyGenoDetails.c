@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "affyGenoDetails.h"
 
-static char const rcsid[] = "$Id: affyGenoDetails.c,v 1.2 2003/10/09 10:20:31 daryl Exp $";
 
 
 void affyGenoDetailsStaticLoad(char **row, struct affyGenoDetails *ret)

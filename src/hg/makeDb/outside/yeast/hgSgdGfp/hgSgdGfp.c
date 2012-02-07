@@ -5,7 +5,6 @@
 #include "options.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgSgdGfp.c,v 1.2 2006/07/26 04:59:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

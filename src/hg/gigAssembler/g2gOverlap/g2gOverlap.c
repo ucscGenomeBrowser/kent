@@ -5,7 +5,6 @@
 #include "hCommon.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: g2gOverlap.c,v 1.4 2003/09/05 21:30:42 kent Exp $";
 
 int maxTail = 200;	/* Maximum length of tail. */
 float maxBad = 0.01;	/* Maximum bad ratio. */

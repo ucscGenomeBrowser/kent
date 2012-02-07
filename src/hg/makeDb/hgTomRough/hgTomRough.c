@@ -7,7 +7,6 @@
 #include "tomRough.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hgTomRough.c,v 1.2 2003/05/06 07:22:25 kate Exp $";
 
 struct chromInfo *chromList = NULL;
 struct cytoBand *bandList = NULL;

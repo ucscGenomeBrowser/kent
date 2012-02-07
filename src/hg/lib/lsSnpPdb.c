@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "lsSnpPdb.h"
 
-static char const rcsid[] = "$Id: lsSnpPdb.c,v 1.1 2008/12/02 01:37:01 markd Exp $";
 
 /* definitions for structType column */
 static char *values_structType[] = {"XRay", "NMR", NULL};

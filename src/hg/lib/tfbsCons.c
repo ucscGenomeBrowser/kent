@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: tfbsCons.c,v 1.4 2005/04/13 06:25:58 markd Exp $";
 
 void tfbsConsStaticLoad(char **row, struct tfbsCons *ret)
 /* Load a row from tfbsCons table into ret.  The contents of ret will

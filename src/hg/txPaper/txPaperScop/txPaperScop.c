@@ -9,7 +9,6 @@
 #include "protFeat.h"
 
 
-static char const rcsid[] = "$Id: txPaperScop.c,v 1.1 2007/03/30 16:09:39 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -7,7 +7,6 @@
 #include "wikiTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2010/05/11 01:43:25 kent Exp $";
 
 void wikiTrackDb(struct trackDb **list)
 /* create a trackDb entry for the wiki track */

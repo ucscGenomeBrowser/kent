@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "gbExtFile.h"
 
-static char const rcsid[] = "$Id: gbExtFile.c,v 1.1 2006/03/28 18:03:13 heather Exp $";
 
 void gbExtFileStaticLoad(char **row, struct gbExtFile *ret)
 /* Load a row from gbExtFile table into ret.  The contents of ret will

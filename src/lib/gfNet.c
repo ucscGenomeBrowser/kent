@@ -5,7 +5,6 @@
 #include "genoFind.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: gfNet.c,v 1.8 2004/06/01 16:49:03 kent Exp $";
 
 int gfConnect(char *hostName, char *portName)
 /* Start connection with server. */

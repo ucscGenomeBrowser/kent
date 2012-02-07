@@ -8,7 +8,6 @@
 #include "bigWig.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.13 2009/11/20 17:12:17 kent Exp $";
 
 char *summaryType = "mean";
 

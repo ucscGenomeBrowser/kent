@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cddDesc.h"
 
-static char const rcsid[] = "$Id: cddDesc.c,v 1.1 2009/09/24 20:56:38 holmes Exp $";
 
 void cddDescStaticLoad(char **row, struct cddDesc *ret)
 /* Load a row from cddDesc table into ret.  The contents of ret will

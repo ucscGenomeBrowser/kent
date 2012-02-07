@@ -4,7 +4,6 @@
 #include "psl.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: pslDropOverlap.c,v 1.4 2006/07/20 15:10:51 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

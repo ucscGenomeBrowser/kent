@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bToBeCfg.h"
 
-static char const rcsid[] = "$Id: bToBeCfg.c,v 1.2 2010/03/08 23:35:38 kent Exp $";
 
 void bToBeCfgStaticLoad(char **row, struct bToBeCfg *ret)
 /* Load a row from bToBeCfg table into ret.  The contents of ret will

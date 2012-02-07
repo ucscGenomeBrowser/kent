@@ -2,7 +2,6 @@
 #include "retroGene.h"
 #include "transMapStuff.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.19 2010/05/11 01:43:28 kent Exp $";
 
 static void addToLabel(struct dyString *label, char *val)
 /* append a label to the label, separating with a space, do nothing if val is

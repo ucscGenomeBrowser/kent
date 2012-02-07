@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "llaInfo.h"
 
-static char const rcsid[] = "$Id: llaInfo.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 struct llaInfo *llaInfoLoad(char **row)
 /* Load a llaInfo from row fetched with select * from llaInfo

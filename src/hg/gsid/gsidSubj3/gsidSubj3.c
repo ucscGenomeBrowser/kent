@@ -19,7 +19,6 @@
 #include "gsid.h"
 #include "gsidSubj3.h"
 
-static char const rcsid[] = "$Id: gsidSubj3.c,v 1.2 2009/07/10 16:09:39 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */

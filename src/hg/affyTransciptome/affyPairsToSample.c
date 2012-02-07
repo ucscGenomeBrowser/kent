@@ -5,7 +5,6 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: affyPairsToSample.c,v 1.4 2008/09/03 19:18:11 markd Exp $";
 
 void usage()
 /* Give the user a hint about how to use this program. */

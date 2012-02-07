@@ -6,7 +6,6 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: txGeneAltProt.c,v 1.1 2007/03/08 05:31:25 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.17 2009/01/15 20:29:01 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */

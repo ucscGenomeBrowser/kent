@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "rgi.h"
 
-static char const rcsid[] = "$Id: rgi.c,v 1.2 2003/05/06 07:22:31 kate Exp $";
 
 void rgiStaticLoad(char **row, struct rgi *ret)
 /* Load a row from rgi table into ret.  The contents of ret will

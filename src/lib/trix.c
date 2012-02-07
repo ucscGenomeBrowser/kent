@@ -7,7 +7,6 @@
 #include "trix.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: trix.c,v 1.6 2008/09/17 17:56:38 kent Exp $";
 
 /* Some local structures for the search. */
 struct trixHitPos 

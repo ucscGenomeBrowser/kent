@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "ntContig.h"
 
-static char const rcsid[] = "$Id: ntContig.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
 
 static int cmpNtClonePos(const void *va, const void *vb)
 /* Compare to sort ntClonePos. */

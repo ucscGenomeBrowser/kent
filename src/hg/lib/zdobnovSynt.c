@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: zdobnovSynt.c,v 1.2 2005/04/13 06:25:59 markd Exp $";
 
 struct zdobnovSynt *zdobnovSyntLoad(char **row)
 /* Load a zdobnovSynt from row fetched with select * from zdobnovSynt

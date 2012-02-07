@@ -3162,6 +3162,64 @@ TMPDIR=/scratch/tmp
     ln -s blastz.canFam2.swap lastz.canFam2
 
 
+#########################################################################
+# LASTZ Cow BosTau7 (DONE - 2012-01-24 - Chin)
+    screen
+    mkdir /hive/data/genomes/canFam2/bed/lastzBosTau7.2012-01-24
+    cd /hive/data/genomes/canFam2/bed/lastzBosTau7.2012-01-24
+
+    cat << '_EOF_' > DEF
+# dog vs cow 
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Dog canFam2
+SEQ1_DIR=/scratch/data/canFam2/nib
+SEQ1_LEN=/scratch/data/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+    
+# QUERY: Cow bosTau7 
+SEQ2_DIR=/scratch/data/bosTau7/bosTau7.2bit
+SEQ2_LEN=/scratch/data/bosTau7/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+
+BASE=/hive/data/genomes/canFam2/bed/lastzBosTau7.2012-01-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    # real     229m55.587
+    cat fb.canFam2.chainBosTau7Link.txt
+    # 1381869475 bases of 2384996543 (57.940%) in intersection
+    # Create link
+    cd /hive/data/genomes/canFam2/bed
+    ln -s  lastzBosTau7.2012-01-24 lastz.bosTau7
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau7/bed/blastz.canFam2.swap
+    cd /hive/data/genomes/bosTau7/bed/blastz.canFam2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/canFam2/bed/lastzBosTau7.2012-01-24/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real      86m11.258s
+    cat fb.bosTau7.chainCanFam2Link.txt
+    # 1458512906 bases of 2804673174 (52.003%) in intersection
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s blastz.canFam2.swap lastz.canFam2
 
 #####################################################################
+# POLYA-SEQ TRACK (from Adnan Derti, Merck) (DONE, Andy 2012-02-06)
+# (see hg19.txt for multi-species build notes)
 
+############################################################################

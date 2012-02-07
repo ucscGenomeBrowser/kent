@@ -6,7 +6,6 @@
 #include "memgfx.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: colorConv.c,v 1.1 2009/06/19 19:14:42 mikep Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -7,7 +7,6 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: spacedColumn.c,v 1.1 2007/03/23 06:29:51 kent Exp $";
 
 struct spacedColumn *spacedColumnFromSample(char *sample)
 /* Return spaced column list from a sampleline , which is assumed to

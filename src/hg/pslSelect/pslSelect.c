@@ -7,7 +7,6 @@
 #include "localmem.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSelect.c,v 1.6 2005/04/16 20:25:36 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

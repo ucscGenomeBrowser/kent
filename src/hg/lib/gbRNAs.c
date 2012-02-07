@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "gbRNAs.h"
 
-static char const rcsid[] = "$Id: gbRNAs.c,v 1.1 2005/12/01 01:30:48 lowe Exp $";
 
 void gbRNAsStaticLoad(char **row, struct gbRNAs *ret)
 /* Load a row from gbRNAs table into ret.  The contents of ret will

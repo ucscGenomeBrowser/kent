@@ -21,16 +21,12 @@
 #include "hubConnect.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigWig.c,v 1.7 2010/06/03 18:53:59 kent Exp $";
-
 boolean isBigWigTable(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
 {
-if (isHubTrack(table))
-    {
-    struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
-    return startsWithWord("bigWig", tdb->type);
-    }
+struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+if (tdb)
+    return tdbIsBigWig(tdb);
 else
     return trackIsType(database, table, curTrack, "bigWig", ctLookupName);
 }
@@ -60,17 +56,18 @@ char *bigWigFileName(char *table, struct sqlConnection *conn)
 /* Return file name associated with bigWig.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
 {
-char *fileName = bigFileNameFromCtOrHub(table, conn);
-if (fileName == NULL)
+struct trackDb *tdb = NULL;
+if (isCustomTrack(table))  // Why isn't custom track in fullTrackAndSubtrackHash?
     {
-    char query[256];
-    safef(query, sizeof(query), "select fileName from %s", table);
-    fileName = sqlQuickString(conn, query);
+    struct customTrack *ct = ctLookupName(table);
+    tdb = ct->tdb;
     }
-return fileName;
+else
+    tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+return tdbBigFileName(conn, tdb);
 }
 
-struct bbiInterval *intersectedFilteredBbiIntervalsOnRegion(struct sqlConnection *conn, 
+struct bbiInterval *intersectedFilteredBbiIntervalsOnRegion(struct sqlConnection *conn,
 	struct bbiFile *bwf, struct region *region, enum wigCompare filterCmp, double filterLl,
 	double filterUl, struct lm *lm)
 /* Get list of bbiIntervals (more-or-less bedGraph things from bigWig) out of bigWig file
@@ -185,7 +182,7 @@ if (wigFileName)
 	{
 	/* Easy case, just dump out data. */
 	if (!anyFilter() && !anyIntersection() && !isMerged && wigOutType == wigOutData)
-	    resultCount = bigWigIntervalDump(bwf, region->chrom, region->start, region->end, 
+	    resultCount = bigWigIntervalDump(bwf, region->chrom, region->start, region->end,
 		    maxOut, stdout);
 	/* Pretty easy case, still do it ourselves. */
 	else if (!isMerged && wigOutType == wigOutData)
@@ -242,7 +239,7 @@ if (!anyFilter() && !anyIntersection())
     for (region = regionList; region != NULL; region = region->next)
 	{
 	struct bbiSummaryElement sum;
-	if (bbiSummaryArrayExtended(bwf, region->chrom, region->start, region->end, 
+	if (bbiSummaryArrayExtended(bwf, region->chrom, region->start, region->end,
 		bigWigIntervalQuery, 1, &sum))
 	    {
 	    if (validCount == 0)
@@ -322,7 +319,7 @@ slReverse(&bedList);
 return bedList;
 }
 
-void bigWigFillDataVector(char *table, struct region *region, 
+void bigWigFillDataVector(char *table, struct region *region,
 	struct sqlConnection *conn, struct dataVector *vector)
 /* Fill in data vector with bigWig info on region.  Handles filters and intersections. */
 {
@@ -359,7 +356,7 @@ lmCleanup(&lm);
 
 struct dataVector *bigWigDataVector(char *table,
 	struct sqlConnection *conn, struct region *region)
-/* Read in bigWig as dataVector and return it.  Filtering, subtrack merge 
+/* Read in bigWig as dataVector and return it.  Filtering, subtrack merge
  * and intersection are handled. */
 {
 if (anySubtrackMerge(database, table))

@@ -10,7 +10,6 @@
 #include "cart.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.5 2008/09/03 19:18:27 markd Exp $";
 
 /* Global variables */
 struct cart *cart;

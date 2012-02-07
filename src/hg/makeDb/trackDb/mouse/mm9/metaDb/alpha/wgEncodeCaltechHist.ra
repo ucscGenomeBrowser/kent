@@ -12,9 +12,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002147
+expId 2147
 fileName wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xAlnRep1.bam,wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -40,9 +42,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002147
+expId 2147
 fileName wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -69,9 +73,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002147
+expId 2147
 fileName wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -97,9 +103,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002147
+expId 2147
 fileName wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -126,9 +134,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002144
+expId 2144
 fileName wgEncodeCaltechHistC2c12Ab32356FCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechHistC2c12Ab32356FCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -154,9 +164,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002144
+expId 2144
 fileName wgEncodeCaltechHistC2c12Ab32356FCntrl50bE2p60hPcr1xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -183,9 +195,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002144
+expId 2144
 fileName wgEncodeCaltechHistC2c12Ab32356FCntrl50bE2p60hPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -211,9 +225,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002144
+expId 2144
 fileName wgEncodeCaltechHistC2c12Ab32356FCntrl50bE2p60hPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -240,9 +256,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002145
+expId 2145
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechHistC2c12Ab3594FCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -268,9 +286,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002145
+expId 2145
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bE2p60hPcr1xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -297,9 +317,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002145
+expId 2145
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bE2p60hPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -325,9 +347,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002145
+expId 2145
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bE2p60hPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -354,9 +378,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002146
+expId 2146
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bPcr1xAlnRep1.bam,wgEncodeCaltechHistC2c12Ab3594FCntrl50bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -382,9 +408,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002146
+expId 2146
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bPcr1xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -411,9 +439,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002146
+expId 2146
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -439,9 +469,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002146
+expId 2146
 fileName wgEncodeCaltechHistC2c12Ab3594FCntrl50bPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -468,9 +500,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002148
+expId 2148
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bE2p24hPcr2xAlnRep1.bam,wgEncodeCaltechHistC2c12H3ac06599FCntrl32bE2p24hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -496,9 +530,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002148
+expId 2148
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bE2p24hPcr2xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -525,9 +561,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002148
+expId 2148
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bE2p24hPcr2xRawDataRep1.fastq.tgz
 grant Hardison
 lab Caltech-m
@@ -553,9 +591,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002148
+expId 2148
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bE2p24hPcr2xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -582,9 +622,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002149
+expId 2149
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bPcr2xAlnRep1.bam,wgEncodeCaltechHistC2c12H3ac06599FCntrl32bPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -610,9 +652,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002149
+expId 2149
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bPcr2xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -639,9 +683,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002149
+expId 2149
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bPcr2xRawDataRep1.fastq.tgz
 grant Hardison
 lab Caltech-m
@@ -667,9 +713,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccAccession wgEncodeEM002149
+expId 2149
 fileName wgEncodeCaltechHistC2c12H3ac06599FCntrl32bPcr2xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -696,9 +744,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002141
+expId 2141
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechHistC2c12H3k04me3FCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -724,9 +774,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002141
+expId 2141
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bE2p60hPcr1xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -753,9 +805,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002141
+expId 2141
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bE2p60hPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -781,9 +835,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002141
+expId 2141
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bE2p60hPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -810,9 +866,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002142
+expId 2142
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xAlnRep1.bam,wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -838,9 +896,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002142
+expId 2142
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -867,9 +927,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002142
+expId 2142
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -895,9 +957,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002142
+expId 2142
 fileName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -924,9 +988,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002143
+expId 2143
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xAlnRep1.bam,wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -952,9 +1018,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002143
+expId 2143
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -981,9 +1049,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002143
+expId 2143
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xRawDataRep1.fastq.tgz
 grant Hardison
 lab Caltech-m
@@ -1009,9 +1079,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002143
+expId 2143
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -1038,9 +1110,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002138
+expId 2138
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xAlnRep1.bam,wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -1066,9 +1140,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002138
+expId 2138
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -1095,9 +1171,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002138
+expId 2138
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xRawDataRep1.fastq.tgz
 grant Hardison
 lab Caltech-m
@@ -1123,9 +1201,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002138
+expId 2138
 fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -1152,9 +1232,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002139
+expId 2139
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechHistC2c12H3k36me3FCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -1180,9 +1262,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002139
+expId 2139
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bE2p60hPcr1xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -1209,9 +1293,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002139
+expId 2139
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bE2p60hPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -1237,9 +1323,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002139
+expId 2139
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bE2p60hPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -1266,9 +1354,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002140
+expId 2140
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bPcr1xAlnRep1.bam,wgEncodeCaltechHistC2c12H3k36me3FCntrl50bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -1294,9 +1384,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002140
+expId 2140
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bPcr1xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
@@ -1323,9 +1415,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002140
+expId 2140
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -1351,9 +1445,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
+dccAccession wgEncodeEM002140
+expId 2140
 fileName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -1380,9 +1476,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002110
+expId 2110
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bE2p24hPcr2xAlnRep1.bam,wgEncodeCaltechHistC2c12InputFCntrl32bE2p24hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -1408,9 +1506,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002110
+expId 2110
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bE2p24hPcr2xRawDataRep1.fastq.tgz
 grant Hardison
 lab Caltech-m
@@ -1436,9 +1536,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002110
+expId 2110
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bE2p24hPcr2xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -1465,9 +1567,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002112
+expId 2112
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bE2p60hPcr2xAlnRep1.bam,wgEncodeCaltechHistC2c12InputFCntrl32bE2p60hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -1493,9 +1597,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002112
+expId 2112
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bE2p60hPcr2xRawDataRep1.fastq.tgz
 grant Hardison
 lab Caltech-m
@@ -1521,9 +1627,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002112
+expId 2112
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bE2p60hPcr2xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -1550,9 +1658,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002111
+expId 2111
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bPcr2xAlnRep1.bam,wgEncodeCaltechHistC2c12InputFCntrl32bPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -1578,9 +1688,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002111
+expId 2111
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bPcr2xRawDataRep1.fastq.tgz
 grant Hardison
 lab Caltech-m
@@ -1606,9 +1718,11 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002111
+expId 2111
 fileName wgEncodeCaltechHistC2c12InputFCntrl32bPcr2xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -1635,9 +1749,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002126
+expId 2126
 fileName wgEncodeCaltechHistC2c12InputFCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechHistC2c12InputFCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -1663,9 +1779,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002126
+expId 2126
 fileName wgEncodeCaltechHistC2c12InputFCntrl50bE2p60hPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -1691,9 +1809,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002126
+expId 2126
 fileName wgEncodeCaltechHistC2c12InputFCntrl50bE2p60hPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -1720,9 +1840,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002113
+expId 2113
 fileName wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xAlnRep1.bam,wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
@@ -1748,9 +1870,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002113
+expId 2113
 fileName wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -1776,9 +1900,11 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002113
+expId 2113
 fileName wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -1796,4 +1922,4 @@ tableName wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-# MAGIC: 144535572
+# MAGIC: 377965028

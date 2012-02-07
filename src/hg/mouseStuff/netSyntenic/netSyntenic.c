@@ -7,7 +7,6 @@
 #include "chainNet.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: netSyntenic.c,v 1.10 2006/10/10 23:00:17 angie Exp $";
 
 struct lm *lm;
 struct rbTreeNode **rbStack;

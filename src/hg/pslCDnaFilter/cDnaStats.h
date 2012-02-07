@@ -31,6 +31,7 @@ struct cDnaStats
     struct cDnaCnts globalBestDropCnts;    /* number dropped due to global near best */
     struct cDnaCnts minSpanDropCnts;       /* number dropped due to under minSpan */
     struct cDnaCnts nonUniqueMap;          /* number dropped due to non-unique mappings */
+    struct cDnaCnts blackListCnts;         /* number dropped due to black list*/
 };
 
 void cDnaStatsUpdate(struct cDnaStats *stats);

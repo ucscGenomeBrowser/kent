@@ -7,7 +7,6 @@
 #include "snp126.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: fakeSeqDiffs.c,v 1.1 2006/12/01 03:17:10 kent Exp $";
 
 char *database = "hg18";
 char *chrom = "chr11";

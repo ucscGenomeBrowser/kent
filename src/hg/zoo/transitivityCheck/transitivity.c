@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include "misc.h"
 
-static char const rcsid[] = "$Id: transitivity.c,v 1.4 2003/06/14 17:24:18 kent Exp $";
 
 #define MARKER -77
 

@@ -5,7 +5,6 @@
 #include "hash.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkOut.c,v 1.3 2009/07/07 18:44:57 hiram Exp $";
 
 void checkOut(char *dir)
 /* Check out - check directory to make sure it has

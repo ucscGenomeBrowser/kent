@@ -7,7 +7,6 @@ struct sqlConnection;
 #include "psl.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: selectWithPsl.c,v 1.3 2005/08/22 19:55:36 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

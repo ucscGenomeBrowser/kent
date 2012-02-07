@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "pepPred.h"
 
-static char const rcsid[] = "$Id: pepPred.c,v 1.4 2005/04/13 06:25:55 markd Exp $";
 
 void pepPredStaticLoad(char **row, struct pepPred *ret)
 /* Load a row from pepPred table into ret.  The contents of ret will

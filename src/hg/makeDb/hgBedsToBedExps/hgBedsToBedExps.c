@@ -9,7 +9,6 @@
 #include "rangeTree.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.6 2010/05/06 18:02:38 kent Exp $";
 
 boolean dupeLetterOk = FALSE;
 boolean addId = FALSE;

@@ -11,7 +11,6 @@
 #include "verbose.h"
 #include "itsa.h"
 
-static char const rcsid[] = "$Id: itsaFind.c,v 1.6 2010/04/01 17:31:10 markd Exp $";
 
 boolean mmap;
 int maxMismatch = 0;

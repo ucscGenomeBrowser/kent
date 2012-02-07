@@ -5,7 +5,6 @@
 #include "genePred.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: bedToGenePred.c,v 1.4 2006/08/22 16:14:18 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

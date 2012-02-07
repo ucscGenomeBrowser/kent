@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: flyreg.c,v 1.1 2004/11/23 02:40:22 angie Exp $";
 
 void flyregStaticLoad(char **row, struct flyreg *ret)
 /* Load a row from flyreg table into ret.  The contents of ret will

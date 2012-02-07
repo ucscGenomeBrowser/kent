@@ -5,7 +5,6 @@
 #include "options.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: accessLogFilter.c,v 1.1 2009/09/12 02:44:31 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -11,7 +11,6 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: ultraPcrRegions.c,v 1.2 2004/11/18 16:43:12 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

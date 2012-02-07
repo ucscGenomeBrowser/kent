@@ -6,7 +6,6 @@
 #include "bed12wSeq.h"
 #include "tagAlign.h"
 
-static char const rcsid[] = "$Id: tagToBed12.c,v 1.2 2009/09/30 03:26:42 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */

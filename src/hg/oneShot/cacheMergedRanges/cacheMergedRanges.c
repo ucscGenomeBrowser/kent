@@ -10,7 +10,6 @@
 #include "rbTree.h"
 #include "rbmTree.h"
 
-static char const rcsid[] = "$Id: cacheMergedRanges.c,v 1.1 2004/11/22 18:01:27 angie Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;

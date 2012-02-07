@@ -13,7 +13,6 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks1.c,v 1.2 2010/05/09 17:22:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

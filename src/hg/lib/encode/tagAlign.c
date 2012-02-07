@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "tagAlign.h"
 
-static char const rcsid[] = "$Id: tagAlign.c,v 1.1 2008/09/08 18:36:29 larrym Exp $";
 
 void tagAlignStaticLoad(char **row, struct tagAlign *ret)
 /* Load a row from tagAlign table into ret.  The contents of ret will

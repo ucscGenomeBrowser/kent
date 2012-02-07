@@ -8,7 +8,6 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: liftAgp.c,v 1.3 2003/10/14 01:25:20 angie Exp $";
 
 struct bedStub
 /* A line in a bed file with chromosome, start, end position parsed out. */

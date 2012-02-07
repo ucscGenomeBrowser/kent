@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "easyGene.h"
 
-static char const rcsid[] = "$Id: easyGene.c,v 1.1 2004/10/12 13:21:08 aamp Exp $";
 
 void easyGeneStaticLoad(char **row, struct easyGene *ret)
 /* Load a row from easyGene table into ret.  The contents of ret will

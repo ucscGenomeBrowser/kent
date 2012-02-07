@@ -9,7 +9,6 @@
 #include "localmem.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: rbTree.c,v 1.12 2008/10/16 02:39:51 kent Exp $";
 
 
 static struct rbTreeNode *restructure(struct rbTree *t, int tos, 

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "lowelabArkinOperonScore.h"
 
-static char const rcsid[] = "$Id: lowelabArkinOperonScore.c,v 1.1 2007/06/25 09:11:49 pchan Exp $";
 
 void lowelabArkinOperonScoreStaticLoad(char **row, struct lowelabArkinOperonScore *ret)
 /* Load a row from lowelabArkinOperonScore table into ret.  The contents of ret will

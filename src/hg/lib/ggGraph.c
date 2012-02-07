@@ -15,7 +15,6 @@
 #include "hdb.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.27 2009/01/22 23:10:37 hiram Exp $";
 
 static int maxEvidence = 500;
 

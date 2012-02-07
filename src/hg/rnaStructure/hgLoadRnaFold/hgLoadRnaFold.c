@@ -7,7 +7,6 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadRnaFold.c,v 1.3 2007/03/04 20:56:34 kent Exp $";
 
 char *tabDir = ".";
 boolean doLoad;

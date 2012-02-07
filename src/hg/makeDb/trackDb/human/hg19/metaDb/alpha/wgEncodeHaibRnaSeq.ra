@@ -3,7 +3,7 @@ objType composite
 composite wgEncodeHaibRnaSeq
 expVars lab,dataType,cell,treatment,rnaExtract
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1
+metaObject wgEncodeHaibRnaSeqA549Dex100nmAlnRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -13,7 +13,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqA549Dex100nmAlnRep1.bam,wgEncodeHaibRnaSeqA549Dex100nmAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL330
@@ -26,11 +26,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 1849
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1
+tableName wgEncodeHaibRnaSeqA549Dex100nmAlnRep1
 treatment DEX_100nM
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2
+metaObject wgEncodeHaibRnaSeqA549Dex100nmAlnRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -40,7 +40,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqA549Dex100nmAlnRep2.bam,wgEncodeHaibRnaSeqA549Dex100nmAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL332
@@ -53,11 +53,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 1849
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2
+tableName wgEncodeHaibRnaSeqA549Dex100nmAlnRep2
 treatment DEX_100nM
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawDataRep1
+metaObject wgEncodeHaibRnaSeqA549Dex100nmRawDataRep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -67,7 +67,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Dex100nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL330
@@ -83,7 +83,7 @@ subId 1849
 treatment DEX_100nM
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawDataRep2
+metaObject wgEncodeHaibRnaSeqA549Dex100nmRawDataRep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -93,7 +93,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Dex100nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL332
@@ -109,7 +109,7 @@ subId 1849
 treatment DEX_100nM
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep1
+metaObject wgEncodeHaibRnaSeqA549Dex100nmRawRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -119,7 +119,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqA549Dex100nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL330
@@ -132,11 +132,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 1849
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep1
+tableName wgEncodeHaibRnaSeqA549Dex100nmRawRep1
 treatment DEX_100nM
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep2
+metaObject wgEncodeHaibRnaSeqA549Dex100nmRawRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -146,7 +146,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqA549Dex100nmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL332
@@ -159,63 +159,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 1849
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep2
+tableName wgEncodeHaibRnaSeqA549Dex100nmRawRep2
 treatment DEX_100nM
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqA549Dex100nmTranscriptGencV7Rep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000313
 expId 313
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Dex100nmTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL330
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum f17d6db856fb441db58f39e9a090a542
+md5sum 95a85b3eca046c780aafaa933ffb85be
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 1849
+subId 4811
 treatment DEX_100nM
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqA549Dex100nmTranscriptGencV7Rep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000313
 expId 313
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Dex100nmTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL332
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 221ec0237a4ae41cd81ece143808df44
+md5sum ed64354515c4e8fccaf17522d9919949
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 1849
+subId 4811
 treatment DEX_100nM
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1
+metaObject wgEncodeHaibRnaSeqA549Dex100pmAlnRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -225,7 +225,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqA549Dex100pmAlnRep1.bam,wgEncodeHaibRnaSeqA549Dex100pmAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1256
@@ -238,11 +238,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1
+tableName wgEncodeHaibRnaSeqA549Dex100pmAlnRep1
 treatment DEX_100pM
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2
+metaObject wgEncodeHaibRnaSeqA549Dex100pmAlnRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -252,7 +252,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqA549Dex100pmAlnRep2.bam,wgEncodeHaibRnaSeqA549Dex100pmAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1261
@@ -265,11 +265,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2
+tableName wgEncodeHaibRnaSeqA549Dex100pmAlnRep2
 treatment DEX_100pM
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawDataRep1
+metaObject wgEncodeHaibRnaSeqA549Dex100pmRawDataRep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -279,7 +279,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Dex100pmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1256
@@ -295,7 +295,7 @@ subId 2974
 treatment DEX_100pM
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawDataRep2
+metaObject wgEncodeHaibRnaSeqA549Dex100pmRawDataRep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -305,7 +305,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Dex100pmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1261
@@ -321,7 +321,7 @@ subId 2974
 treatment DEX_100pM
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep1
+metaObject wgEncodeHaibRnaSeqA549Dex100pmRawRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -331,7 +331,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqA549Dex100pmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1256
@@ -344,11 +344,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep1
+tableName wgEncodeHaibRnaSeqA549Dex100pmRawRep1
 treatment DEX_100pM
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep2
+metaObject wgEncodeHaibRnaSeqA549Dex100pmRawRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -358,7 +358,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqA549Dex100pmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1261
@@ -371,63 +371,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep2
+tableName wgEncodeHaibRnaSeqA549Dex100pmRawRep2
 treatment DEX_100pM
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqA549Dex100pmTranscriptGencV7Rep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001237
 expId 1237
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Dex100pmTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1256
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum a97fa83c2def177e52b096c531e49ed9
+md5sum e8419db3dcc6a61677ad99a61b1dd022
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 3274
+subId 4811
 treatment DEX_100pM
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqA549Dex100pmTranscriptGencV7Rep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001237
 expId 1237
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Dex100pmTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1261
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 6f4b443e91d7e610646fd9236d1e882e
+md5sum 4b7ddb362ee5c9a9de685a563a8fea0f
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 2974
+subId 4811
 treatment DEX_100pM
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1
+metaObject wgEncodeHaibRnaSeqA549Dex1nmAlnRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -437,7 +437,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqA549Dex1nmAlnRep1.bam,wgEncodeHaibRnaSeqA549Dex1nmAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1258
@@ -450,11 +450,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1
+tableName wgEncodeHaibRnaSeqA549Dex1nmAlnRep1
 treatment DEX_1nM
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2
+metaObject wgEncodeHaibRnaSeqA549Dex1nmAlnRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -464,7 +464,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqA549Dex1nmAlnRep2.bam,wgEncodeHaibRnaSeqA549Dex1nmAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1263
@@ -477,11 +477,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2
+tableName wgEncodeHaibRnaSeqA549Dex1nmAlnRep2
 treatment DEX_1nM
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawDataRep1
+metaObject wgEncodeHaibRnaSeqA549Dex1nmRawDataRep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -491,7 +491,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Dex1nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1258
@@ -507,7 +507,7 @@ subId 2974
 treatment DEX_1nM
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawDataRep2
+metaObject wgEncodeHaibRnaSeqA549Dex1nmRawDataRep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -517,7 +517,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Dex1nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1263
@@ -533,7 +533,7 @@ subId 2974
 treatment DEX_1nM
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep1
+metaObject wgEncodeHaibRnaSeqA549Dex1nmRawRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -543,7 +543,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqA549Dex1nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1258
@@ -556,11 +556,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep1
+tableName wgEncodeHaibRnaSeqA549Dex1nmRawRep1
 treatment DEX_1nM
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep2
+metaObject wgEncodeHaibRnaSeqA549Dex1nmRawRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -570,7 +570,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqA549Dex1nmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1263
@@ -583,63 +583,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep2
+tableName wgEncodeHaibRnaSeqA549Dex1nmRawRep2
 treatment DEX_1nM
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqA549Dex1nmTranscriptGencV7Rep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001246
 expId 1246
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Dex1nmTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1258
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 528c42560ea437a83b68dc3e024ec73f
+md5sum ac1aa0c421269f77d50278a88f0b1ff6
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 2974
+subId 4811
 treatment DEX_1nM
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqA549Dex1nmTranscriptGencV7Rep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001246
 expId 1246
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Dex1nmTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1263
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 9a1b33408f2a588a7d76c2e5607c8d56
+md5sum 2dc895158dfd6aa2e0b66332ef481df1
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 2974
+subId 4811
 treatment DEX_1nM
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1
+metaObject wgEncodeHaibRnaSeqA549Dex500pmAlnRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -649,7 +649,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqA549Dex500pmAlnRep1.bam,wgEncodeHaibRnaSeqA549Dex500pmAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1257
@@ -662,11 +662,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1
+tableName wgEncodeHaibRnaSeqA549Dex500pmAlnRep1
 treatment DEX_500pM
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2
+metaObject wgEncodeHaibRnaSeqA549Dex500pmAlnRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -676,7 +676,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqA549Dex500pmAlnRep2.bam,wgEncodeHaibRnaSeqA549Dex500pmAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1262
@@ -689,11 +689,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2
+tableName wgEncodeHaibRnaSeqA549Dex500pmAlnRep2
 treatment DEX_500pM
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawDataRep1
+metaObject wgEncodeHaibRnaSeqA549Dex500pmRawDataRep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -703,7 +703,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Dex500pmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1257
@@ -719,7 +719,7 @@ subId 2974
 treatment DEX_500pM
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawDataRep2
+metaObject wgEncodeHaibRnaSeqA549Dex500pmRawDataRep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -729,7 +729,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Dex500pmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1262
@@ -745,7 +745,7 @@ subId 2974
 treatment DEX_500pM
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep1
+metaObject wgEncodeHaibRnaSeqA549Dex500pmRawRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -755,7 +755,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqA549Dex500pmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1257
@@ -768,11 +768,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep1
+tableName wgEncodeHaibRnaSeqA549Dex500pmRawRep1
 treatment DEX_500pM
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep2
+metaObject wgEncodeHaibRnaSeqA549Dex500pmRawRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -782,7 +782,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqA549Dex500pmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1262
@@ -795,63 +795,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep2
+tableName wgEncodeHaibRnaSeqA549Dex500pmRawRep2
 treatment DEX_500pM
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqA549Dex500pmTranscriptGencV7Rep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001247
 expId 1247
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Dex500pmTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1257
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 97f3ca611d2b0029ffe8d60ea8b85e6a
+md5sum 7c0f56a1f045f1f5920a0df10dff2491
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 2974
+subId 4811
 treatment DEX_500pM
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqA549Dex500pmTranscriptGencV7Rep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001247
 expId 1247
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Dex500pmTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1262
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 3190ee82114f9cb59ee9e393823038b5
+md5sum d798ebe50af53c81dd56605f30af8e98
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 2974
+subId 4811
 treatment DEX_500pM
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1
+metaObject wgEncodeHaibRnaSeqA549Dex5nmAlnRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -861,7 +861,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqA549Dex5nmAlnRep1.bam,wgEncodeHaibRnaSeqA549Dex5nmAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1259
@@ -874,11 +874,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1
+tableName wgEncodeHaibRnaSeqA549Dex5nmAlnRep1
 treatment DEX_5nM
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2
+metaObject wgEncodeHaibRnaSeqA549Dex5nmAlnRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -888,7 +888,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqA549Dex5nmAlnRep2.bam,wgEncodeHaibRnaSeqA549Dex5nmAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1264
@@ -901,11 +901,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2
+tableName wgEncodeHaibRnaSeqA549Dex5nmAlnRep2
 treatment DEX_5nM
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawDataRep1
+metaObject wgEncodeHaibRnaSeqA549Dex5nmRawDataRep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -915,7 +915,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Dex5nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1259
@@ -931,7 +931,7 @@ subId 2974
 treatment DEX_5nM
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawDataRep2
+metaObject wgEncodeHaibRnaSeqA549Dex5nmRawDataRep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -941,7 +941,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Dex5nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1264
@@ -957,7 +957,7 @@ subId 2974
 treatment DEX_5nM
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep1
+metaObject wgEncodeHaibRnaSeqA549Dex5nmRawRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -967,7 +967,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqA549Dex5nmRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1259
@@ -980,11 +980,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep1
+tableName wgEncodeHaibRnaSeqA549Dex5nmRawRep1
 treatment DEX_5nM
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep2
+metaObject wgEncodeHaibRnaSeqA549Dex5nmRawRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -994,7 +994,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqA549Dex5nmRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1264
@@ -1007,63 +1007,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep2
+tableName wgEncodeHaibRnaSeqA549Dex5nmRawRep2
 treatment DEX_5nM
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqA549Dex5nmTranscriptGencV7Rep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001248
 expId 1248
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Dex5nmTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1259
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum f00fe059eb2b0c12dece1afcc3457498
+md5sum c024b435146f0c2fc793e1c311b66b62
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 2974
+subId 4811
 treatment DEX_5nM
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqA549Dex5nmTranscriptGencV7Rep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001248
 expId 1248
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Dex5nmTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1264
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 583fad5907fa2c49aeeb1a7d64c68481
+md5sum fad04dab488dc717810b2ff7c076200f
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 2974
+subId 4811
 treatment DEX_5nM
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1
+metaObject wgEncodeHaibRnaSeqA549Etoh02AlnRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1073,7 +1073,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqA549Etoh02AlnRep1.bam,wgEncodeHaibRnaSeqA549Etoh02AlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL331
@@ -1086,11 +1086,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 1849
-tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1
+tableName wgEncodeHaibRnaSeqA549Etoh02AlnRep1
 treatment EtOH_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2
+metaObject wgEncodeHaibRnaSeqA549Etoh02AlnRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1100,7 +1100,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqA549Etoh02AlnRep2.bam,wgEncodeHaibRnaSeqA549Etoh02AlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL333
@@ -1113,11 +1113,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 1849
-tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2
+tableName wgEncodeHaibRnaSeqA549Etoh02AlnRep2
 treatment EtOH_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3
+metaObject wgEncodeHaibRnaSeqA549Etoh02AlnRep3
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1127,7 +1127,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3.bam,wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3.bam.bai
+fileName wgEncodeHaibRnaSeqA549Etoh02AlnRep3.bam,wgEncodeHaibRnaSeqA549Etoh02AlnRep3.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1255
@@ -1140,11 +1140,11 @@ readType 1x36
 replicate 3
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3
+tableName wgEncodeHaibRnaSeqA549Etoh02AlnRep3
 treatment EtOH_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4
+metaObject wgEncodeHaibRnaSeqA549Etoh02AlnRep4
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1154,7 +1154,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4.bam,wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4.bam.bai
+fileName wgEncodeHaibRnaSeqA549Etoh02AlnRep4.bam,wgEncodeHaibRnaSeqA549Etoh02AlnRep4.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1260
@@ -1167,11 +1167,11 @@ readType 1x36
 replicate 4
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4
+tableName wgEncodeHaibRnaSeqA549Etoh02AlnRep4
 treatment EtOH_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep1
+metaObject wgEncodeHaibRnaSeqA549Etoh02RawDataRep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1181,7 +1181,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Etoh02RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL331
@@ -1197,7 +1197,7 @@ subId 1849
 treatment EtOH_0.02pct
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep2
+metaObject wgEncodeHaibRnaSeqA549Etoh02RawDataRep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1207,7 +1207,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Etoh02RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL333
@@ -1223,7 +1223,7 @@ subId 1849
 treatment EtOH_0.02pct
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep3
+metaObject wgEncodeHaibRnaSeqA549Etoh02RawDataRep3
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1233,7 +1233,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep3.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Etoh02RawDataRep3.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1255
@@ -1249,7 +1249,7 @@ subId 2974
 treatment EtOH_0.02pct
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep4
+metaObject wgEncodeHaibRnaSeqA549Etoh02RawDataRep4
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1259,7 +1259,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawDataRep4.fastq.gz
+fileName wgEncodeHaibRnaSeqA549Etoh02RawDataRep4.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1260
@@ -1275,7 +1275,7 @@ subId 2974
 treatment EtOH_0.02pct
 view RawData
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep1
+metaObject wgEncodeHaibRnaSeqA549Etoh02RawRep1
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1285,7 +1285,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep1.bigWig
+fileName wgEncodeHaibRnaSeqA549Etoh02RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL331
@@ -1298,11 +1298,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 1849
-tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep1
+tableName wgEncodeHaibRnaSeqA549Etoh02RawRep1
 treatment EtOH_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep2
+metaObject wgEncodeHaibRnaSeqA549Etoh02RawRep2
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1312,7 +1312,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep2.bigWig
+fileName wgEncodeHaibRnaSeqA549Etoh02RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL333
@@ -1325,11 +1325,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 1849
-tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep2
+tableName wgEncodeHaibRnaSeqA549Etoh02RawRep2
 treatment EtOH_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep3
+metaObject wgEncodeHaibRnaSeqA549Etoh02RawRep3
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1339,7 +1339,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep3.bigWig
+fileName wgEncodeHaibRnaSeqA549Etoh02RawRep3.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1255
@@ -1352,11 +1352,11 @@ readType 1x36
 replicate 3
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep3
+tableName wgEncodeHaibRnaSeqA549Etoh02RawRep3
 treatment EtOH_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep4
+metaObject wgEncodeHaibRnaSeqA549Etoh02RawRep4
 objType table
 cell A549
 composite wgEncodeHaibRnaSeq
@@ -1366,7 +1366,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep4.bigWig
+fileName wgEncodeHaibRnaSeqA549Etoh02RawRep4.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1260
@@ -1379,115 +1379,115 @@ readType 1x36
 replicate 4
 rnaExtract longPolyA
 subId 2974
-tableName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep4
+tableName wgEncodeHaibRnaSeqA549Etoh02RawRep4
 treatment EtOH_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep1
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL331
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 67a3f6544a6994a5fceb57978f620eae
+md5sum 531cb0057ee3114e142964e283636ddf
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 1849
+subId 4811
 treatment EtOH_0.02pct
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep2
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL333
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum d4b21b6dbad7343cb1c1486acd4881a3
+md5sum 6dcc2f2d30475a92f95dc32d22786bdd
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 1849
+subId 4811
 treatment EtOH_0.02pct
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep3
+metaObject wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep3
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep3.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep3.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1255
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 9c96553073705fe7e676a668c0161bd3
+md5sum b33f159e2489154c0e5d95f99e32eb21
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 3
 rnaExtract longPolyA
-subId 2974
+subId 4811
 treatment EtOH_0.02pct
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep4
+metaObject wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep4
 objType file
 cell A549
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-22
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep4.gtf.gz
+fileName wgEncodeHaibRnaSeqA549Etoh02TranscriptGencV7Rep4.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1260
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 41417d9289111dc213796e4f09928204
+md5sum 64066ebabc090a6ef471003d5fafe4ca
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 4
 rnaExtract longPolyA
-subId 2974
+subId 4811
 treatment EtOH_0.02pct
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1
+metaObject wgEncodeHaibRnaSeqBe2cAlnRep1
 objType table
 cell BE2_C
 composite wgEncodeHaibRnaSeq
@@ -1497,7 +1497,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqBe2cAlnRep1.bam,wgEncodeHaibRnaSeqBe2cAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL524
@@ -1510,11 +1510,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1
+tableName wgEncodeHaibRnaSeqBe2cAlnRep1
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2
+metaObject wgEncodeHaibRnaSeqBe2cAlnRep2
 objType table
 cell BE2_C
 composite wgEncodeHaibRnaSeq
@@ -1524,7 +1524,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqBe2cAlnRep2.bam,wgEncodeHaibRnaSeqBe2cAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL525
@@ -1537,11 +1537,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2
+tableName wgEncodeHaibRnaSeqBe2cAlnRep2
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaRawDataRep1
+metaObject wgEncodeHaibRnaSeqBe2cRawDataRep1
 objType file
 cell BE2_C
 composite wgEncodeHaibRnaSeq
@@ -1551,7 +1551,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqBe2cRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL524
@@ -1567,7 +1567,7 @@ subId 3838
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaRawDataRep2
+metaObject wgEncodeHaibRnaSeqBe2cRawDataRep2
 objType file
 cell BE2_C
 composite wgEncodeHaibRnaSeq
@@ -1577,7 +1577,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqBe2cRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL525
@@ -1593,7 +1593,7 @@ subId 3838
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaRawRep1
+metaObject wgEncodeHaibRnaSeqBe2cRawRep1
 objType table
 cell BE2_C
 composite wgEncodeHaibRnaSeq
@@ -1603,7 +1603,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqBe2cRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL524
@@ -1616,11 +1616,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqBe2cShortpolyaRawRep1
+tableName wgEncodeHaibRnaSeqBe2cRawRep1
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaRawRep2
+metaObject wgEncodeHaibRnaSeqBe2cRawRep2
 objType table
 cell BE2_C
 composite wgEncodeHaibRnaSeq
@@ -1630,7 +1630,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqBe2cRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL525
@@ -1643,65 +1643,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqBe2cShortpolyaRawRep2
+tableName wgEncodeHaibRnaSeqBe2cRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1
-objType table
+metaObject wgEncodeHaibRnaSeqBe2cTranscriptGencV7Rep1
+objType file
 cell BE2_C
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001249
 expId 1249
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1.gtf.gz
+fileName wgEncodeHaibRnaSeqBe2cTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL524
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 7730f3b979cec4eb2f0bb00ca091a395
+md5sum 46cdbfd15e1320fd38c3a1c5dad3a788
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2
-objType table
+metaObject wgEncodeHaibRnaSeqBe2cTranscriptGencV7Rep2
+objType file
 cell BE2_C
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001249
 expId 1249
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2.gtf.gz
+fileName wgEncodeHaibRnaSeqBe2cTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL525
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum f26bdb848768194e316573fe95ea97a1
+md5sum 380fd2ab227f737a0db6ef9e2e2456bf
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1
+metaObject wgEncodeHaibRnaSeqEcc1Bpa14hAlnRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1711,7 +1709,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqEcc1Bpa14hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1Bpa14hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1552
@@ -1724,11 +1722,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1
+tableName wgEncodeHaibRnaSeqEcc1Bpa14hAlnRep1
 treatment BPA_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2
+metaObject wgEncodeHaibRnaSeqEcc1Bpa14hAlnRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1738,7 +1736,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqEcc1Bpa14hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1Bpa14hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL2859
@@ -1751,11 +1749,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2
+tableName wgEncodeHaibRnaSeqEcc1Bpa14hAlnRep2
 treatment BPA_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawDataRep1
+metaObject wgEncodeHaibRnaSeqEcc1Bpa14hRawDataRep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1765,7 +1763,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqEcc1Bpa14hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1552
@@ -1781,7 +1779,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawDataRep2
+metaObject wgEncodeHaibRnaSeqEcc1Bpa14hRawDataRep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1791,7 +1789,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqEcc1Bpa14hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2859
@@ -1807,7 +1805,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep1
+metaObject wgEncodeHaibRnaSeqEcc1Bpa14hRawRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1817,7 +1815,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqEcc1Bpa14hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1552
@@ -1830,11 +1828,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep1
+tableName wgEncodeHaibRnaSeqEcc1Bpa14hRawRep1
 treatment BPA_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep2
+metaObject wgEncodeHaibRnaSeqEcc1Bpa14hRawRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1844,7 +1842,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqEcc1Bpa14hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2859
@@ -1857,63 +1855,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep2
+tableName wgEncodeHaibRnaSeqEcc1Bpa14hRawRep2
 treatment BPA_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqEcc1Bpa14hTranscriptGencV7Rep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001238
 expId 1238
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqEcc1Bpa14hTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1552
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum bd06258f215ac5cf0fa8a39119151156
+md5sum ab27355fba50d9580d8937f8cf62ab9e
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 2976
+subId 4811
 treatment BPA_100nM_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqEcc1Bpa14hTranscriptGencV7Rep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001238
 expId 1238
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqEcc1Bpa14hTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2859
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 37f882590677bacb314f9fed3672587c
+md5sum 8d3e9a4835e99684cad6c8a4269ccd32
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 2976
+subId 4811
 treatment BPA_100nM_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep1
+metaObject wgEncodeHaibRnaSeqEcc1Dm002p4hAlnRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1923,7 +1921,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqEcc1Dm002p4hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1Dm002p4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL989
@@ -1936,11 +1934,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep1
+tableName wgEncodeHaibRnaSeqEcc1Dm002p4hAlnRep1
 treatment DMSO_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep2
+metaObject wgEncodeHaibRnaSeqEcc1Dm002p4hAlnRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1950,7 +1948,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqEcc1Dm002p4hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1Dm002p4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL2861
@@ -1963,11 +1961,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep2
+tableName wgEncodeHaibRnaSeqEcc1Dm002p4hAlnRep2
 treatment DMSO_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawDataRep1
+metaObject wgEncodeHaibRnaSeqEcc1Dm002p4hRawDataRep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1977,7 +1975,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqEcc1Dm002p4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL989
@@ -1993,7 +1991,7 @@ subId 2976
 treatment DMSO_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawDataRep2
+metaObject wgEncodeHaibRnaSeqEcc1Dm002p4hRawDataRep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2003,7 +2001,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqEcc1Dm002p4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2861
@@ -2019,7 +2017,7 @@ subId 2976
 treatment DMSO_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawRep1
+metaObject wgEncodeHaibRnaSeqEcc1Dm002p4hRawRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2029,7 +2027,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqEcc1Dm002p4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL989
@@ -2042,11 +2040,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawRep1
+tableName wgEncodeHaibRnaSeqEcc1Dm002p4hRawRep1
 treatment DMSO_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawRep2
+metaObject wgEncodeHaibRnaSeqEcc1Dm002p4hRawRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2056,7 +2054,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqEcc1Dm002p4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2861
@@ -2069,63 +2067,115 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hRawRep2
+tableName wgEncodeHaibRnaSeqEcc1Dm002p4hRawRep2
 treatment DMSO_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqEcc1Dm002p4hTranscriptGencV7Rep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001239
 expId 1239
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqEcc1Dm002p4hTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL989
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 0fca8e76a7a25387c8723542857cb97d
+md5sum 2d1fd74e1e0fb209dff0050f9ed358e6
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 2976
+subId 4811
 treatment DMSO_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqEcc1Dm002p4hTranscriptGencV7Rep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001239
 expId 1239
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqEcc1Dm002p4hTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2861
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 95fcca7b3a25900ae7cc27de00d0debc
+md5sum 76ff39b4500c6ee37992d9861fae27ff
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 2976
+subId 4811
 treatment DMSO_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1
+metaObject wgEncodeHaibRnaSeqEcc1Est10nm4hTranscriptGencV7Rep1
+objType file
+cell ECC-1
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH001240
+expId 1240
+fileName wgEncodeHaibRnaSeqEcc1Est10nm4hTranscriptGencV7Rep1.gtf.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL990
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 54082c8ad67ce2686ece0431269b673f
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 4811
+treatment Estradiol_10nM_4hr
+view TranscriptGencV7
+
+metaObject wgEncodeHaibRnaSeqEcc1Est10nm4hTranscriptGencV7Rep2
+objType file
+cell ECC-1
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH001240
+expId 1240
+fileName wgEncodeHaibRnaSeqEcc1Est10nm4hTranscriptGencV7Rep2.gtf.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL2932
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 03b91a5c3b76bfefb588cd63c02e3ce3
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 2
+rnaExtract longPolyA
+subId 4811
+treatment Estradiol_10nM_4hr
+view TranscriptGencV7
+
+metaObject wgEncodeHaibRnaSeqEcc1Estradia4hAlnRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2135,7 +2185,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqEcc1Estradia4hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1Estradia4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL990
@@ -2148,11 +2198,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1
+tableName wgEncodeHaibRnaSeqEcc1Estradia4hAlnRep1
 treatment Estradiol_10nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2
+metaObject wgEncodeHaibRnaSeqEcc1Estradia4hAlnRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2162,7 +2212,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqEcc1Estradia4hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1Estradia4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL2932
@@ -2175,11 +2225,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2
+tableName wgEncodeHaibRnaSeqEcc1Estradia4hAlnRep2
 treatment Estradiol_10nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawDataRep1
+metaObject wgEncodeHaibRnaSeqEcc1Estradia4hRawDataRep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2189,7 +2239,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqEcc1Estradia4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL990
@@ -2205,7 +2255,7 @@ subId 2975
 treatment Estradiol_10nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawDataRep2
+metaObject wgEncodeHaibRnaSeqEcc1Estradia4hRawDataRep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2215,7 +2265,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqEcc1Estradia4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2932
@@ -2231,7 +2281,7 @@ subId 2975
 treatment Estradiol_10nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep1
+metaObject wgEncodeHaibRnaSeqEcc1Estradia4hRawRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2241,7 +2291,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqEcc1Estradia4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL990
@@ -2254,11 +2304,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep1
+tableName wgEncodeHaibRnaSeqEcc1Estradia4hRawRep1
 treatment Estradiol_10nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep2
+metaObject wgEncodeHaibRnaSeqEcc1Estradia4hRawRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2268,7 +2318,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqEcc1Estradia4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2932
@@ -2281,63 +2331,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep2
+tableName wgEncodeHaibRnaSeqEcc1Estradia4hRawRep2
 treatment Estradiol_10nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep1
-objType file
-cell ECC-1
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-dccAccession wgEncodeEH001240
-expId 1240
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep1.gtf.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL990
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-md5sum 0feaf0506a5cb311c2195abb7ab6c6e6
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 1
-rnaExtract longPolyA
-subId 2975
-treatment Estradiol_10nM_4hr
-view TranscriptGencV3c
-
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep2
-objType file
-cell ECC-1
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-dccAccession wgEncodeEH001240
-expId 1240
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep2.gtf.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL2932
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-md5sum 0d0c8667f85075d27f3ee681b02acfc2
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 2
-rnaExtract longPolyA
-subId 2975
-treatment Estradiol_10nM_4hr
-view TranscriptGencV3c
-
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1
+metaObject wgEncodeHaibRnaSeqEcc1Gen4hAlnRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2347,7 +2345,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqEcc1Gen4hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1Gen4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL991
@@ -2360,11 +2358,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1
+tableName wgEncodeHaibRnaSeqEcc1Gen4hAlnRep1
 treatment Genistein_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2
+metaObject wgEncodeHaibRnaSeqEcc1Gen4hAlnRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2374,7 +2372,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqEcc1Gen4hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1Gen4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL2860
@@ -2387,11 +2385,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2
+tableName wgEncodeHaibRnaSeqEcc1Gen4hAlnRep2
 treatment Genistein_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawDataRep1
+metaObject wgEncodeHaibRnaSeqEcc1Gen4hRawDataRep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2401,7 +2399,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqEcc1Gen4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL991
@@ -2417,7 +2415,7 @@ subId 2975
 treatment Genistein_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawDataRep2
+metaObject wgEncodeHaibRnaSeqEcc1Gen4hRawDataRep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2427,7 +2425,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqEcc1Gen4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2860
@@ -2443,7 +2441,7 @@ subId 2975
 treatment Genistein_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep1
+metaObject wgEncodeHaibRnaSeqEcc1Gen4hRawRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2453,7 +2451,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqEcc1Gen4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL991
@@ -2466,11 +2464,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep1
+tableName wgEncodeHaibRnaSeqEcc1Gen4hRawRep1
 treatment Genistein_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep2
+metaObject wgEncodeHaibRnaSeqEcc1Gen4hRawRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2480,7 +2478,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqEcc1Gen4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2860
@@ -2493,63 +2491,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep2
+tableName wgEncodeHaibRnaSeqEcc1Gen4hRawRep2
 treatment Genistein_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqEcc1Gen4hTranscriptGencV7Rep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001241
 expId 1241
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqEcc1Gen4hTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL991
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 1e72e47f4c61b02f1cdaeb98c332a221
+md5sum 52abc7015690861d745d635e5e54febc
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 2975
+subId 4811
 treatment Genistein_100nM_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqEcc1Gen4hTranscriptGencV7Rep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001241
 expId 1241
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqEcc1Gen4hTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2860
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 0969372ed92582d9da515c5216453bf3
+md5sum 00b5ab645529a1e56ca6d3ea79ad94dc
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 2975
+subId 4811
 treatment Genistein_100nM_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1
+metaObject wgEncodeHaibRnaSeqJurkatAlnRep1
 objType table
 cell Jurkat
 composite wgEncodeHaibRnaSeq
@@ -2559,7 +2557,7 @@ dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
 dccAccession wgEncodeEH000315
 expId 315
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqJurkatAlnRep1.bam,wgEncodeHaibRnaSeqJurkatAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL316
@@ -2572,11 +2570,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3868
-tableName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1
+tableName wgEncodeHaibRnaSeqJurkatAlnRep1
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2
+metaObject wgEncodeHaibRnaSeqJurkatAlnRep2
 objType table
 cell Jurkat
 composite wgEncodeHaibRnaSeq
@@ -2586,7 +2584,7 @@ dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
 dccAccession wgEncodeEH000315
 expId 315
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqJurkatAlnRep2.bam,wgEncodeHaibRnaSeqJurkatAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL317
@@ -2599,11 +2597,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3868
-tableName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2
+tableName wgEncodeHaibRnaSeqJurkatAlnRep2
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaRawDataRep1
+metaObject wgEncodeHaibRnaSeqJurkatRawDataRep1
 objType file
 cell Jurkat
 composite wgEncodeHaibRnaSeq
@@ -2613,7 +2611,7 @@ dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
 dccAccession wgEncodeEH000315
 expId 315
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqJurkatRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL316
@@ -2629,7 +2627,7 @@ subId 3868
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaRawDataRep2
+metaObject wgEncodeHaibRnaSeqJurkatRawDataRep2
 objType file
 cell Jurkat
 composite wgEncodeHaibRnaSeq
@@ -2639,7 +2637,7 @@ dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
 dccAccession wgEncodeEH000315
 expId 315
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqJurkatRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL317
@@ -2655,7 +2653,7 @@ subId 3868
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaRawRep2
+metaObject wgEncodeHaibRnaSeqJurkatRawRep2
 objType table
 cell Jurkat
 composite wgEncodeHaibRnaSeq
@@ -2665,7 +2663,7 @@ dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
 dccAccession wgEncodeEH000315
 expId 315
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqJurkatRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL317
@@ -2678,65 +2676,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3868
-tableName wgEncodeHaibRnaSeqJurkatShortpolyaRawRep2
+tableName wgEncodeHaibRnaSeqJurkatRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1
-objType table
+metaObject wgEncodeHaibRnaSeqJurkatTranscriptGencV7Rep1
+objType file
 cell Jurkat
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-05
-dateUnrestricted 2012-01-04
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000315
 expId 315
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1.gtf.gz
+fileName wgEncodeHaibRnaSeqJurkatTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL316
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 5322d5b76f5747f1c5b614c50dd6a797
+md5sum c7fac8cd55a46c168ce2c83495570a3a
 origAssembly hg18
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 3868
-tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2
-objType table
+metaObject wgEncodeHaibRnaSeqJurkatTranscriptGencV7Rep2
+objType file
 cell Jurkat
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-04-05
-dateUnrestricted 2012-01-04
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH000315
 expId 315
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2.gtf.gz
+fileName wgEncodeHaibRnaSeqJurkatTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL317
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 2da478f98e8904a2325ea6eb45e8762e
+md5sum 4a4662cf35bfe9a6d9e35b9d75285f71
 origAssembly hg18
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 3868
-tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1
+metaObject wgEncodeHaibRnaSeqPanc1AlnRep1
 objType table
 cell PANC-1
 composite wgEncodeHaibRnaSeq
@@ -2746,7 +2742,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqPanc1AlnRep1.bam,wgEncodeHaibRnaSeqPanc1AlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL528
@@ -2759,11 +2755,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1
+tableName wgEncodeHaibRnaSeqPanc1AlnRep1
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2
+metaObject wgEncodeHaibRnaSeqPanc1AlnRep2
 objType table
 cell PANC-1
 composite wgEncodeHaibRnaSeq
@@ -2773,7 +2769,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqPanc1AlnRep2.bam,wgEncodeHaibRnaSeqPanc1AlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL529
@@ -2786,11 +2782,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2
+tableName wgEncodeHaibRnaSeqPanc1AlnRep2
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaRawDataRep1
+metaObject wgEncodeHaibRnaSeqPanc1RawDataRep1
 objType file
 cell PANC-1
 composite wgEncodeHaibRnaSeq
@@ -2800,7 +2796,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqPanc1RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL528
@@ -2816,7 +2812,7 @@ subId 3838
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaRawDataRep2
+metaObject wgEncodeHaibRnaSeqPanc1RawDataRep2
 objType file
 cell PANC-1
 composite wgEncodeHaibRnaSeq
@@ -2826,7 +2822,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqPanc1RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL529
@@ -2842,7 +2838,7 @@ subId 3838
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep1
+metaObject wgEncodeHaibRnaSeqPanc1RawRep1
 objType table
 cell PANC-1
 composite wgEncodeHaibRnaSeq
@@ -2852,7 +2848,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqPanc1RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL528
@@ -2865,11 +2861,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep1
+tableName wgEncodeHaibRnaSeqPanc1RawRep1
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep2
+metaObject wgEncodeHaibRnaSeqPanc1RawRep2
 objType table
 cell PANC-1
 composite wgEncodeHaibRnaSeq
@@ -2879,7 +2875,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqPanc1RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL529
@@ -2892,65 +2888,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep2
+tableName wgEncodeHaibRnaSeqPanc1RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1
-objType table
+metaObject wgEncodeHaibRnaSeqPanc1TranscriptGencV7Rep1
+objType file
 cell PANC-1
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001251
 expId 1251
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1.gtf.gz
+fileName wgEncodeHaibRnaSeqPanc1TranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL528
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum fa6e5f8bed24030909373f3f9f3f0b3a
+md5sum 61272387a9b6842f1ed0d654de995414
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2
-objType table
+metaObject wgEncodeHaibRnaSeqPanc1TranscriptGencV7Rep2
+objType file
 cell PANC-1
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001251
 expId 1251
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2.gtf.gz
+fileName wgEncodeHaibRnaSeqPanc1TranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL529
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 2d0ebe6947a886719614358007116d90
+md5sum c224bfe7b2e7ff935a2fd1dc0921c84e
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1
+metaObject wgEncodeHaibRnaSeqPfsk1AlnRep1
 objType table
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
@@ -2960,7 +2954,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqPfsk1AlnRep1.bam,wgEncodeHaibRnaSeqPfsk1AlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL530
@@ -2973,11 +2967,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1
+tableName wgEncodeHaibRnaSeqPfsk1AlnRep1
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2
+metaObject wgEncodeHaibRnaSeqPfsk1AlnRep2
 objType table
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
@@ -2987,7 +2981,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqPfsk1AlnRep2.bam,wgEncodeHaibRnaSeqPfsk1AlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL531
@@ -3000,11 +2994,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2
+tableName wgEncodeHaibRnaSeqPfsk1AlnRep2
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaRawDataRep1
+metaObject wgEncodeHaibRnaSeqPfsk1RawDataRep1
 objType file
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
@@ -3014,7 +3008,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqPfsk1RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL530
@@ -3030,7 +3024,7 @@ subId 3838
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaRawDataRep2
+metaObject wgEncodeHaibRnaSeqPfsk1RawDataRep2
 objType file
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
@@ -3040,7 +3034,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqPfsk1RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL531
@@ -3056,7 +3050,7 @@ subId 3838
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep1
+metaObject wgEncodeHaibRnaSeqPfsk1RawRep1
 objType table
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
@@ -3066,7 +3060,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqPfsk1RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL530
@@ -3079,11 +3073,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep1
+tableName wgEncodeHaibRnaSeqPfsk1RawRep1
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep2
+metaObject wgEncodeHaibRnaSeqPfsk1RawRep2
 objType table
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
@@ -3093,7 +3087,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqPfsk1RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL531
@@ -3106,65 +3100,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep2
+tableName wgEncodeHaibRnaSeqPfsk1RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1
-objType table
+metaObject wgEncodeHaibRnaSeqPfsk1TranscriptGencV7Rep1
+objType file
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001252
 expId 1252
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1.gtf.gz
+fileName wgEncodeHaibRnaSeqPfsk1TranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL530
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum b97547abbddbc183add27104e7770ea5
+md5sum 8796c4a2525da91f5ceabc7ab5f876b2
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2
-objType table
+metaObject wgEncodeHaibRnaSeqPfsk1TranscriptGencV7Rep2
+objType file
 cell PFSK-1
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001252
 expId 1252
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2.gtf.gz
+fileName wgEncodeHaibRnaSeqPfsk1TranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL531
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 4974f535328c89d0e261d552bebde912
+md5sum ab656e76c85fa535f30ec9796c343a7b
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1
+metaObject wgEncodeHaibRnaSeqSknshAlnRep1
 objType table
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
@@ -3174,7 +3166,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
-fileName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqSknshAlnRep1.bam,wgEncodeHaibRnaSeqSknshAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL526
@@ -3187,11 +3179,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1
+tableName wgEncodeHaibRnaSeqSknshAlnRep1
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2
+metaObject wgEncodeHaibRnaSeqSknshAlnRep2
 objType table
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
@@ -3201,7 +3193,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
-fileName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqSknshAlnRep2.bam,wgEncodeHaibRnaSeqSknshAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL527
@@ -3214,11 +3206,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2
+tableName wgEncodeHaibRnaSeqSknshAlnRep2
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaRawDataRep1
+metaObject wgEncodeHaibRnaSeqSknshRawDataRep1
 objType file
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
@@ -3228,7 +3220,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
-fileName wgEncodeHaibRnaSeqSknshShortpolyaRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqSknshRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL526
@@ -3244,7 +3236,7 @@ subId 3838
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaRawDataRep2
+metaObject wgEncodeHaibRnaSeqSknshRawDataRep2
 objType file
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
@@ -3254,7 +3246,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
-fileName wgEncodeHaibRnaSeqSknshShortpolyaRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqSknshRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL527
@@ -3270,7 +3262,7 @@ subId 3838
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaRawRep1
+metaObject wgEncodeHaibRnaSeqSknshRawRep1
 objType table
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
@@ -3280,7 +3272,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
-fileName wgEncodeHaibRnaSeqSknshShortpolyaRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqSknshRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL526
@@ -3293,11 +3285,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqSknshShortpolyaRawRep1
+tableName wgEncodeHaibRnaSeqSknshRawRep1
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaRawRep2
+metaObject wgEncodeHaibRnaSeqSknshRawRep2
 objType table
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
@@ -3307,7 +3299,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
-fileName wgEncodeHaibRnaSeqSknshShortpolyaRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqSknshRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL527
@@ -3320,65 +3312,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 3838
-tableName wgEncodeHaibRnaSeqSknshShortpolyaRawRep2
+tableName wgEncodeHaibRnaSeqSknshRawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1
-objType table
+metaObject wgEncodeHaibRnaSeqSknshTranscriptGencV7Rep1
+objType file
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001250
 expId 1250
-fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1.gtf.gz
+fileName wgEncodeHaibRnaSeqSknshTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL526
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 724d09e3de3b7f98cc03f3cf74adc44b
+md5sum 8f66a70454b46ff0ec9f164beac8e26f
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2
-objType table
+metaObject wgEncodeHaibRnaSeqSknshTranscriptGencV7Rep2
+objType file
 cell SK-N-SH
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001250
 expId 1250
-fileName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2.gtf.gz
+fileName wgEncodeHaibRnaSeqSknshTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL527
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum db31a990b8f18ff0d11bb284f9681edd
+md5sum 9da88bf94d6706ff3285b16167c41b53
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1
+metaObject wgEncodeHaibRnaSeqT47dBpa14hAlnRep1
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3388,7 +3378,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
-fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1.bam,wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqT47dBpa14hAlnRep1.bam,wgEncodeHaibRnaSeqT47dBpa14hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1550
@@ -3401,11 +3391,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1
+tableName wgEncodeHaibRnaSeqT47dBpa14hAlnRep1
 treatment BPA_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2
+metaObject wgEncodeHaibRnaSeqT47dBpa14hAlnRep2
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3415,7 +3405,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
-fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2.bam,wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqT47dBpa14hAlnRep2.bam,wgEncodeHaibRnaSeqT47dBpa14hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1911
@@ -3428,11 +3418,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2
+tableName wgEncodeHaibRnaSeqT47dBpa14hAlnRep2
 treatment BPA_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawDataRep1
+metaObject wgEncodeHaibRnaSeqT47dBpa14hRawDataRep1
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3442,7 +3432,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
-fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqT47dBpa14hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1550
@@ -3458,7 +3448,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawDataRep2
+metaObject wgEncodeHaibRnaSeqT47dBpa14hRawDataRep2
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3468,7 +3458,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
-fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqT47dBpa14hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1911
@@ -3484,7 +3474,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep1
+metaObject wgEncodeHaibRnaSeqT47dBpa14hRawRep1
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3494,7 +3484,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
-fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqT47dBpa14hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1550
@@ -3507,11 +3497,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep1
+tableName wgEncodeHaibRnaSeqT47dBpa14hRawRep1
 treatment BPA_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep2
+metaObject wgEncodeHaibRnaSeqT47dBpa14hRawRep2
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3521,7 +3511,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
-fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqT47dBpa14hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1911
@@ -3534,63 +3524,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2976
-tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep2
+tableName wgEncodeHaibRnaSeqT47dBpa14hRawRep2
 treatment BPA_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqT47dBpa14hTranscriptGencV7Rep1
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001242
 expId 1242
-fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqT47dBpa14hTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1550
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 4750cf6939c4a979c35f6ec2fecc7d1b
+md5sum 180e1d3ced518284e9ee48c60fb3c61e
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 2976
+subId 4811
 treatment BPA_100nM_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqT47dBpa14hTranscriptGencV7Rep2
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001242
 expId 1242
-fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqT47dBpa14hTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1911
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 2a5aad1c6f30032aa8ceebd19f88e3a1
+md5sum 2d12b8c5dd160d6156b2a0498be9acfa
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 2976
+subId 4811
 treatment BPA_100nM_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep1
+metaObject wgEncodeHaibRnaSeqT47dDm002p4hAlnRep1
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3600,7 +3590,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
-fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep1.bam,wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqT47dDm002p4hAlnRep1.bam,wgEncodeHaibRnaSeqT47dDm002p4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1244
@@ -3613,11 +3603,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep1
+tableName wgEncodeHaibRnaSeqT47dDm002p4hAlnRep1
 treatment DMSO_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep2
+metaObject wgEncodeHaibRnaSeqT47dDm002p4hAlnRep2
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3627,7 +3617,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
-fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep2.bam,wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqT47dDm002p4hAlnRep2.bam,wgEncodeHaibRnaSeqT47dDm002p4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1547
@@ -3640,11 +3630,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep2
+tableName wgEncodeHaibRnaSeqT47dDm002p4hAlnRep2
 treatment DMSO_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawDataRep1
+metaObject wgEncodeHaibRnaSeqT47dDm002p4hRawDataRep1
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3654,7 +3644,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
-fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqT47dDm002p4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1244
@@ -3670,7 +3660,7 @@ subId 2975
 treatment DMSO_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawDataRep2
+metaObject wgEncodeHaibRnaSeqT47dDm002p4hRawDataRep2
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3680,7 +3670,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
-fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqT47dDm002p4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1547
@@ -3696,7 +3686,7 @@ subId 2975
 treatment DMSO_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawRep1
+metaObject wgEncodeHaibRnaSeqT47dDm002p4hRawRep1
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3706,7 +3696,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
-fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqT47dDm002p4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1244
@@ -3719,11 +3709,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawRep1
+tableName wgEncodeHaibRnaSeqT47dDm002p4hRawRep1
 treatment DMSO_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawRep2
+metaObject wgEncodeHaibRnaSeqT47dDm002p4hRawRep2
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3733,7 +3723,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
-fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqT47dDm002p4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1547
@@ -3746,63 +3736,115 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hRawRep2
+tableName wgEncodeHaibRnaSeqT47dDm002p4hRawRep2
 treatment DMSO_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqT47dDm002p4hTranscriptGencV7Rep1
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001243
 expId 1243
-fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqT47dDm002p4hTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1244
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 099143d1817324850adacdc526f06aec
+md5sum d621f682b0ca39aec500b9705acde966
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 2975
+subId 4811
 treatment DMSO_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqT47dDm002p4hTranscriptGencV7Rep2
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001243
 expId 1243
-fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqT47dDm002p4hTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1547
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 84750348de0939f5cf6cacf9aa1b10b0
+md5sum ea00ec5b5c7c0feb66a9159acc26a8dd
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 2975
+subId 4811
 treatment DMSO_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1
+metaObject wgEncodeHaibRnaSeqT47dEst10nm4hTranscriptGencV7Rep1
+objType file
+cell T-47D
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH001244
+expId 1244
+fileName wgEncodeHaibRnaSeqT47dEst10nm4hTranscriptGencV7Rep1.gtf.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1245
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum aa8a6c9bb5120c8e9d7e7f7ece1cb03d
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 4811
+treatment Estradiol_10nM_4hr
+view TranscriptGencV7
+
+metaObject wgEncodeHaibRnaSeqT47dEst10nm4hTranscriptGencV7Rep2
+objType file
+cell T-47D
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH001244
+expId 1244
+fileName wgEncodeHaibRnaSeqT47dEst10nm4hTranscriptGencV7Rep2.gtf.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1548
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 3c08320f2d09e46e630310c7df426c30
+origAssembly hg19
+project wgEncode
+readType 1x36
+replicate 2
+rnaExtract longPolyA
+subId 4811
+treatment Estradiol_10nM_4hr
+view TranscriptGencV7
+
+metaObject wgEncodeHaibRnaSeqT47dEstradia4hAlnRep1
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3812,7 +3854,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
-fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1.bam,wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqT47dEstradia4hAlnRep1.bam,wgEncodeHaibRnaSeqT47dEstradia4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1245
@@ -3825,11 +3867,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1
+tableName wgEncodeHaibRnaSeqT47dEstradia4hAlnRep1
 treatment Estradiol_10nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2
+metaObject wgEncodeHaibRnaSeqT47dEstradia4hAlnRep2
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3839,7 +3881,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
-fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2.bam,wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqT47dEstradia4hAlnRep2.bam,wgEncodeHaibRnaSeqT47dEstradia4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1548
@@ -3852,11 +3894,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2
+tableName wgEncodeHaibRnaSeqT47dEstradia4hAlnRep2
 treatment Estradiol_10nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawDataRep1
+metaObject wgEncodeHaibRnaSeqT47dEstradia4hRawDataRep1
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3866,7 +3908,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
-fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqT47dEstradia4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1245
@@ -3882,7 +3924,7 @@ subId 2975
 treatment Estradiol_10nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawDataRep2
+metaObject wgEncodeHaibRnaSeqT47dEstradia4hRawDataRep2
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3892,7 +3934,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
-fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqT47dEstradia4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1548
@@ -3908,7 +3950,7 @@ subId 2975
 treatment Estradiol_10nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep1
+metaObject wgEncodeHaibRnaSeqT47dEstradia4hRawRep1
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3918,7 +3960,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
-fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqT47dEstradia4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1245
@@ -3931,11 +3973,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep1
+tableName wgEncodeHaibRnaSeqT47dEstradia4hRawRep1
 treatment Estradiol_10nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep2
+metaObject wgEncodeHaibRnaSeqT47dEstradia4hRawRep2
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -3945,7 +3987,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
-fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqT47dEstradia4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1548
@@ -3958,63 +4000,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep2
+tableName wgEncodeHaibRnaSeqT47dEstradia4hRawRep2
 treatment Estradiol_10nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep1
-objType file
-cell T-47D
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-dccAccession wgEncodeEH001244
-expId 1244
-fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep1.gtf.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL1245
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-md5sum cffed63ec8a594374a7ee8ee743b3252
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 1
-rnaExtract longPolyA
-subId 2975
-treatment Estradiol_10nM_4hr
-view TranscriptGencV3c
-
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep2
-objType file
-cell T-47D
-composite wgEncodeHaibRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
-dccAccession wgEncodeEH001244
-expId 1244
-fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep2.gtf.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL1548
-labVersion cufflinks_v_0.9
-mapAlgorithm bow125
-md5sum 601bc8f3b4cfff2538f93a409336e8cc
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 2
-rnaExtract longPolyA
-subId 2975
-treatment Estradiol_10nM_4hr
-view TranscriptGencV3c
-
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1
+metaObject wgEncodeHaibRnaSeqT47dGen4hAlnRep1
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -4024,7 +4014,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
-fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1.bam,wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqT47dGen4hAlnRep1.bam,wgEncodeHaibRnaSeqT47dGen4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1246
@@ -4037,11 +4027,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1
+tableName wgEncodeHaibRnaSeqT47dGen4hAlnRep1
 treatment Genistein_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2
+metaObject wgEncodeHaibRnaSeqT47dGen4hAlnRep2
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -4051,7 +4041,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
-fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2.bam,wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqT47dGen4hAlnRep2.bam,wgEncodeHaibRnaSeqT47dGen4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1549
@@ -4064,11 +4054,11 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2
+tableName wgEncodeHaibRnaSeqT47dGen4hAlnRep2
 treatment Genistein_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawDataRep1
+metaObject wgEncodeHaibRnaSeqT47dGen4hRawDataRep1
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -4078,7 +4068,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
-fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqT47dGen4hRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1246
@@ -4094,7 +4084,7 @@ subId 2975
 treatment Genistein_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawDataRep2
+metaObject wgEncodeHaibRnaSeqT47dGen4hRawDataRep2
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -4104,7 +4094,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
-fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqT47dGen4hRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1549
@@ -4120,7 +4110,7 @@ subId 2975
 treatment Genistein_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep1
+metaObject wgEncodeHaibRnaSeqT47dGen4hRawRep1
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -4130,7 +4120,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
-fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqT47dGen4hRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1246
@@ -4143,11 +4133,11 @@ readType 1x36
 replicate 1
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep1
+tableName wgEncodeHaibRnaSeqT47dGen4hRawRep1
 treatment Genistein_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep2
+metaObject wgEncodeHaibRnaSeqT47dGen4hRawRep2
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -4157,7 +4147,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
-fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqT47dGen4hRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1549
@@ -4170,63 +4160,63 @@ readType 1x36
 replicate 2
 rnaExtract longPolyA
 subId 2975
-tableName wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep2
+tableName wgEncodeHaibRnaSeqT47dGen4hRawRep2
 treatment Genistein_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqT47dGen4hTranscriptGencV7Rep1
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001245
 expId 1245
-fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep1.gtf.gz
+fileName wgEncodeHaibRnaSeqT47dGen4hTranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1246
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 0535b3d5447c4c4a323c261bda2a1d05
+md5sum 39c0f67ac540a729a499a7c7f77f1d89
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 2975
+subId 4811
 treatment Genistein_100nM_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqT47dGen4hTranscriptGencV7Rep2
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-21
-dateUnrestricted 2011-10-21
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001245
 expId 1245
-fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep2.gtf.gz
+fileName wgEncodeHaibRnaSeqT47dGen4hTranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1549
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 4128c69eaba29c024b1e4388b7412cb5
+md5sum aaec8c0ce1fbb91cfe880a0ea5534805
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 2975
+subId 4811
 treatment Genistein_100nM_4hr
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1
+metaObject wgEncodeHaibRnaSeqU87AlnRep1
 objType table
 cell U87
 composite wgEncodeHaibRnaSeq
@@ -4236,7 +4226,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001253
 expId 1253
-fileName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1.bam.bai
+fileName wgEncodeHaibRnaSeqU87AlnRep1.bam,wgEncodeHaibRnaSeqU87AlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL532
@@ -4248,12 +4238,13 @@ project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
+sex F
 subId 3838
-tableName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1
+tableName wgEncodeHaibRnaSeqU87AlnRep1
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2
+metaObject wgEncodeHaibRnaSeqU87AlnRep2
 objType table
 cell U87
 composite wgEncodeHaibRnaSeq
@@ -4263,7 +4254,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001253
 expId 1253
-fileName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2.bam.bai
+fileName wgEncodeHaibRnaSeqU87AlnRep2.bam,wgEncodeHaibRnaSeqU87AlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL533
@@ -4275,12 +4266,13 @@ project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
+sex F
 subId 3838
-tableName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2
+tableName wgEncodeHaibRnaSeqU87AlnRep2
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaRawDataRep1
+metaObject wgEncodeHaibRnaSeqU87RawDataRep1
 objType file
 cell U87
 composite wgEncodeHaibRnaSeq
@@ -4290,7 +4282,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001253
 expId 1253
-fileName wgEncodeHaibRnaSeqU87ShortpolyaRawDataRep1.fastq.gz
+fileName wgEncodeHaibRnaSeqU87RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL532
@@ -4302,11 +4294,12 @@ project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
+sex F
 subId 3838
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaRawDataRep2
+metaObject wgEncodeHaibRnaSeqU87RawDataRep2
 objType file
 cell U87
 composite wgEncodeHaibRnaSeq
@@ -4316,7 +4309,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001253
 expId 1253
-fileName wgEncodeHaibRnaSeqU87ShortpolyaRawDataRep2.fastq.gz
+fileName wgEncodeHaibRnaSeqU87RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL533
@@ -4328,11 +4321,12 @@ project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
+sex F
 subId 3838
 treatment None
 view RawData
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaRawRep1
+metaObject wgEncodeHaibRnaSeqU87RawRep1
 objType table
 cell U87
 composite wgEncodeHaibRnaSeq
@@ -4342,7 +4336,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001253
 expId 1253
-fileName wgEncodeHaibRnaSeqU87ShortpolyaRawRep1.bigWig
+fileName wgEncodeHaibRnaSeqU87RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL532
@@ -4354,12 +4348,13 @@ project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
+sex F
 subId 3838
-tableName wgEncodeHaibRnaSeqU87ShortpolyaRawRep1
+tableName wgEncodeHaibRnaSeqU87RawRep1
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaRawRep2
+metaObject wgEncodeHaibRnaSeqU87RawRep2
 objType table
 cell U87
 composite wgEncodeHaibRnaSeq
@@ -4369,7 +4364,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001253
 expId 1253
-fileName wgEncodeHaibRnaSeqU87ShortpolyaRawRep2.bigWig
+fileName wgEncodeHaibRnaSeqU87RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL533
@@ -4381,63 +4376,64 @@ project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
+sex F
 subId 3838
-tableName wgEncodeHaibRnaSeqU87ShortpolyaRawRep2
+tableName wgEncodeHaibRnaSeqU87RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1
-objType table
+metaObject wgEncodeHaibRnaSeqU87TranscriptGencV7Rep1
+objType file
 cell U87
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001253
 expId 1253
-fileName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1.gtf.gz
+fileName wgEncodeHaibRnaSeqU87TranscriptGencV7Rep1.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum a40beb1651796926cb46d54d9325b05d
+md5sum 415e0e6b92c240731d06b785b1784139
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1
+sex F
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2
-objType table
+metaObject wgEncodeHaibRnaSeqU87TranscriptGencV7Rep2
+objType file
 cell U87
 composite wgEncodeHaibRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-03-31
-dateUnrestricted 2011-12-31
+dateSubmitted 2011-08-30
+dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH001253
 expId 1253
-fileName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2.gtf.gz
+fileName wgEncodeHaibRnaSeqU87TranscriptGencV7Rep2.gtf.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
-md5sum 3bff9469750f53be5348d38abd6dc161
+md5sum b9ac0eca8b538d48cb6bda228218311e
 origAssembly hg19
 project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
-subId 3838
-tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2
+sex F
+subId 4811
 treatment None
-view TranscriptGencV3c
+view TranscriptGencV7
 
-# MAGIC: 1747581588
+# MAGIC: 219342526

@@ -8,7 +8,6 @@
 #include "localmem.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbEntry.c,v 1.5 2007/11/17 22:33:36 markd Exp $";
 
 struct gbEntry* gbEntryNew(struct gbRelease* release, char* acc, unsigned type)
 /* allocate a new gbEntry object and add it to the release*/

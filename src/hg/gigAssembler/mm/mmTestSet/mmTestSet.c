@@ -1,7 +1,6 @@
 /* mmTestSet - Make test set for map-mender.. */
 #include "common.h"
 
-static char const rcsid[] = "$Id: mmTestSet.c,v 1.2 2003/05/06 07:22:26 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

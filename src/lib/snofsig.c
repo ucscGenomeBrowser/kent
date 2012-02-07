@@ -6,7 +6,6 @@
 #include "common.h"
 #include "snofmake.h"
 
-static char const rcsid[] = "$Id: snofsig.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
 
 static int ixSig[4] = {0x693F8ED1, 0x7EDA1C32, 0x4BA58983, 0x277CB89C,};
 

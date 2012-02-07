@@ -6,7 +6,6 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: vgRemoveSubmission.c,v 1.4 2007/03/05 02:27:56 kent Exp $";
 
 boolean testOnly = FALSE;
 

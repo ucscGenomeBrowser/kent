@@ -9,7 +9,7 @@ antibody Pol2
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001427
@@ -29,7 +29,7 @@ antibody Pol2
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001427
@@ -49,7 +49,7 @@ antibody Pol2
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001427
@@ -69,7 +69,7 @@ antibody Pol2
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001427
@@ -90,7 +90,7 @@ antibody Pol2
 cell HCT-116
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001427
@@ -111,7 +111,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001426
@@ -131,7 +131,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001426
@@ -151,7 +151,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001426
@@ -171,7 +171,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001426
@@ -192,7 +192,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001426
@@ -213,7 +213,7 @@ antibody CTCF
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002075
@@ -233,7 +233,7 @@ antibody CTCF
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002075
@@ -252,7 +252,7 @@ antibody CTCF
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002075
@@ -271,7 +271,7 @@ antibody CTCF
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002075
@@ -292,7 +292,7 @@ antibody CTCF
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002075
@@ -313,7 +313,7 @@ antibody Pol2
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
@@ -334,7 +334,7 @@ antibody Pol2
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
@@ -355,7 +355,7 @@ antibody Pol2
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
@@ -376,7 +376,7 @@ antibody Pol2
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
@@ -397,7 +397,7 @@ antibody Pol2
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
@@ -418,7 +418,7 @@ antibody Pol2
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
@@ -439,7 +439,7 @@ antibody Pol2
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
@@ -461,7 +461,7 @@ antibody Pol2
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
@@ -483,7 +483,7 @@ antibody Pol2
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
@@ -505,7 +505,7 @@ antibody Pol2
 cell K562
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
@@ -527,7 +527,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
@@ -547,7 +547,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
@@ -567,7 +567,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
@@ -587,7 +587,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
@@ -607,7 +607,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
@@ -627,7 +627,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
@@ -647,7 +647,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
@@ -668,7 +668,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
@@ -689,7 +689,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
@@ -710,7 +710,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
@@ -731,7 +731,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
 dccAccession wgEncodeEH001429
@@ -751,7 +751,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH001429
@@ -771,7 +771,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001429
@@ -791,7 +791,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
 dccAccession wgEncodeEH001429
@@ -811,7 +811,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH001429
@@ -831,7 +831,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001429
@@ -851,7 +851,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
 dccAccession wgEncodeEH001429
@@ -871,7 +871,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH001429
@@ -891,7 +891,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001429
@@ -911,7 +911,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
 dccAccession wgEncodeEH001429
@@ -932,7 +932,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH001429
@@ -953,7 +953,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001429
@@ -974,7 +974,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
 dccAccession wgEncodeEH001429
@@ -995,7 +995,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH001429
@@ -1016,7 +1016,7 @@ antibody ERalpha_a
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001429
@@ -1037,7 +1037,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH001430
@@ -1057,7 +1057,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001430
@@ -1077,7 +1077,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
@@ -1097,7 +1097,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
@@ -1117,7 +1117,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH001430
@@ -1137,7 +1137,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001430
@@ -1157,7 +1157,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
@@ -1177,7 +1177,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
@@ -1197,7 +1197,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH001430
@@ -1217,7 +1217,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001430
@@ -1237,7 +1237,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
@@ -1257,7 +1257,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
@@ -1271,55 +1271,13 @@ replicate 4
 subId 4304
 view FastqRd2
 
-metaObject wgEncodeGisChiaPetMcf7Pol2InteractionsRep1
-objType table
-antibody Pol2
-cell MCF-7
-composite wgEncodeGisChiaPet
-dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
-dccAccession wgEncodeEH001430
-expId 1430
-fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep1.bed.gz
-grant Ruan
-lab GIS-Ruan
-labVersion CHM040M_hg19
-project wgEncode
-replicate 1
-subId 4841
-tableName wgEncodeGisChiaPetMcf7Pol2InteractionsRep1
-view Interactions
-
-metaObject wgEncodeGisChiaPetMcf7Pol2InteractionsRep2
-objType table
-antibody Pol2
-cell MCF-7
-composite wgEncodeGisChiaPet
-dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
-dccAccession wgEncodeEH001430
-expId 1430
-fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep2.bed.gz
-grant Ruan
-lab GIS-Ruan
-labVersion CHM053T_hg19
-project wgEncode
-replicate 2
-subId 4842
-tableName wgEncodeGisChiaPetMcf7Pol2InteractionsRep2
-view Interactions
-
 metaObject wgEncodeGisChiaPetMcf7Pol2InteractionsRep3
 objType table
 antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
@@ -1340,7 +1298,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
@@ -1361,7 +1319,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH001430
@@ -1382,7 +1340,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001430
@@ -1403,7 +1361,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
@@ -1424,7 +1382,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
@@ -1445,7 +1403,7 @@ antibody Pol2
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001431
@@ -1465,7 +1423,7 @@ antibody Pol2
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001431
@@ -1485,7 +1443,7 @@ antibody Pol2
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001431
@@ -1505,7 +1463,7 @@ antibody Pol2
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001431
@@ -1526,7 +1484,7 @@ antibody Pol2
 cell NB4
 composite wgEncodeGisChiaPet
 dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001431
@@ -1541,4 +1499,4 @@ subId 4873
 tableName wgEncodeGisChiaPetNb4Pol2SigRep1
 view Signal
 
-# MAGIC: 2104900369
+# MAGIC: -1133070421

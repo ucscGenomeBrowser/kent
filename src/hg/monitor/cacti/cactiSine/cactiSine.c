@@ -5,7 +5,6 @@
 #include "options.h"
 #include <math.h>
 
-static char const rcsid[] = "$Id: cactiSine.c,v 1.1 2005/11/04 19:38:13 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

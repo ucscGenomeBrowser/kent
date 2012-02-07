@@ -7,7 +7,6 @@
 #include "psl.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: gsidPosSelect.c,v 1.2 2009/01/12 19:13:31 fanhsu Exp $";
 void usage()
 /* Explain usage and exit. */
 {

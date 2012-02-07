@@ -5,7 +5,6 @@
 #include "options.h"
 #include "tokenizer.h"
 
-static char const rcsid[] = "$Id: wordLine.c,v 1.4 2004/04/09 05:20:56 kent Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"csym", OPTION_BOOLEAN},

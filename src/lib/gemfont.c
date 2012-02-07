@@ -6,7 +6,6 @@
 #include "memgfx.h"
 #include "gemfont.h"
 
-static char const rcsid[] = "$Id: gemfont.c,v 1.11 2010/04/06 00:58:56 kent Exp $";
 
 typedef union
     {

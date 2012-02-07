@@ -330,4 +330,27 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
+#########################################################################
+# lastz swap from Opossum MonDom5 (DONE - 2011-11-10 - Chin)
+    # original alignment
+    cd /hive/data/genomes/monDom5/bed/lastzLoxAfr3.2011-11-10
+    cat fb.monDom5.chainLoxAfr3Link.txt
+    #   228949705 bases of 3501660299 (6.538%) in intersection
+
+    mkdir /hive/data/genomes/loxAfr3/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/loxAfr3/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzLoxAfr3.2011-11-10/DEF \
+        -swap -noLoadChainSplit -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -syntenicNet > swap.log 2>&1 &
+    #   real    123m9.342s
+
+    cat fb.loxAfr3.chainMonDom5Link.txt
+    #   230673812 bases of 3118565340 (7.397%) in intersection
+
+    cd /hive/data/genomes/loxAfr3/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
 ############################################################################

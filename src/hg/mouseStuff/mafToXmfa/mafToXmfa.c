@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: mafToXmfa.c,v 1.1 2003/08/20 21:03:37 krish Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -2,7 +2,6 @@
 #include "common.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: sortFa.c,v 1.1 2005/07/21 10:57:25 galt Exp $";
 
 int dnaSeqNameCmp(const void *va, const void *vb)
 /* Compare two slNames. */

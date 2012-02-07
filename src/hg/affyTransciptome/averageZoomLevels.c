@@ -5,7 +5,6 @@
 #include "options.h"
 #include <string.h>
 
-static char const rcsid[] = "$Id: averageZoomLevels.c,v 1.6 2008/09/03 19:18:12 markd Exp $";
 
 
 #define MAX_WINDOW_SIZE  2000

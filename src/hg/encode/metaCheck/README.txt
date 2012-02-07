@@ -27,7 +27,7 @@ The checks are divided into four passes:
 
 ---------------------------------------------------------------------------------------
 
-The arguments now have defualts so teh usage is changed.
+The arguments now have defaults so the usage is changed.
 metaCheck - a program to validate that tables, files, and trackDb entries
 exist
 usage:

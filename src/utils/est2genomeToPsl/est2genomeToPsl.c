@@ -11,7 +11,6 @@
 #include "fa.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: est2genomeToPsl.c,v 1.4 2008/02/21 02:13:26 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

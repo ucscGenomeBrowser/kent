@@ -4,7 +4,6 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: fixedDiffs.c,v 1.1 2006/11/23 05:25:22 heather Exp $";
 
 char *database = NULL;
 char *snpTable = NULL;

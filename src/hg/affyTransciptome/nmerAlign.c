@@ -7,7 +7,6 @@
 #include "fa.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: nmerAlign.c,v 1.2 2003/05/06 07:22:13 kate Exp $";
 
 struct genomePos 
 {

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "coloredExon.h"
 
-static char const rcsid[] = "$Id: coloredExon.c,v 1.1 2007/04/24 21:58:13 aamp Exp $";
 
 struct coloredExon *coloredExonLoad(char **row)
 /* Load a coloredExon from row fetched with select * from coloredExon

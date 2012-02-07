@@ -3,7 +3,6 @@
 #include "util.h"
 #include "read_malign.h"
 
-static char const rcsid[] = "$Id: read_malign.c,v 1.2 2003/05/06 07:22:36 kate Exp $";
 
 int *position_in_seq1(char **A, int ncol)
 {

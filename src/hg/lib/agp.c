@@ -7,7 +7,6 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: agp.c,v 1.3 2005/05/03 02:19:42 aamp Exp $";
 
 void agpAddAll(char *agpFile, struct hash *agpHash)
 /* add AGP entries from a file into a hash of AGP lists */

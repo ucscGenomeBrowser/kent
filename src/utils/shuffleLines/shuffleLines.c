@@ -5,7 +5,6 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: shuffleLines.c,v 1.1 2006/04/30 16:05:57 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

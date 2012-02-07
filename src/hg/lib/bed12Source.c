@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: bed12Source.c,v 1.1 2006/01/26 17:00:41 angie Exp $";
 
 struct bed12Source *bed12SourceLoad(char **row)
 /* Load a bed12Source from row fetched with select * from bed12Source

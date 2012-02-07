@@ -6,7 +6,6 @@
 #include "portable.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtSplitByTarget.c,v 1.7 2006/06/20 15:41:54 angie Exp $";
 
 int tStartSize = 0;
 double tSS = 0.0;

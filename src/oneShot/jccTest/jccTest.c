@@ -10,7 +10,6 @@
 #include "hash.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: jccTest.c,v 1.2 2004/12/19 05:13:18 kent Exp $";
 
 #define MAXWORDSIZE 256
 

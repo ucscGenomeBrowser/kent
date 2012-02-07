@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "acemblyClass.h"
 
-static char const rcsid[] = "$Id: acemblyClass.c,v 1.1 2005/01/13 21:46:31 hartera Exp $";
 
 void acemblyClassStaticLoad(char **row, struct acemblyClass *ret)
 /* Load a row from acemblyClass table into ret.  The contents of ret will

@@ -6,7 +6,6 @@
 #include "genomeRangeTreeFile.h"
 #include "baseMaskCommon.h"
 
-static char const rcsid[] = "$Id: baseMaskCommon.c,v 1.8 2009/03/24 15:51:04 mikep Exp $";
 
 
 static char *chromTable(char *db, char *table, char *chromDb)

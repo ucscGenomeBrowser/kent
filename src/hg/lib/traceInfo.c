@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "traceInfo.h"
 
-static char const rcsid[] = "$Id: traceInfo.c,v 1.3 2005/04/13 06:25:58 markd Exp $";
 
 void traceInfoStaticLoad(char **row, struct traceInfo *ret)
 /* Load a row from traceInfo table into ret.  The contents of ret will

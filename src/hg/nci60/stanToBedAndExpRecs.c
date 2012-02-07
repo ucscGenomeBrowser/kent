@@ -6,7 +6,6 @@
 #include "bed.h"
 #include "stanMad.h"
 
-static char const rcsid[] = "$Id: stanToBedAndExpRecs.c,v 1.3 2003/05/06 07:22:29 kate Exp $";
 
 
 char *url = "http://genome-www.stanford.edu/nci60/";

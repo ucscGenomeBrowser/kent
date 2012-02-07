@@ -19,7 +19,6 @@
 #include "xa.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.47 2008/09/07 18:12:46 braney Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */

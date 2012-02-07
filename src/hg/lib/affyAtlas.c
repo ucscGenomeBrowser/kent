@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "affyAtlas.h"
 
-static char const rcsid[] = "$Id: affyAtlas.c,v 1.3 2005/04/11 08:13:42 markd Exp $";
 
 void affyAtlasStaticLoad(char **row, struct affyAtlas *ret)
 /* Load a row from affyAtlas table into ret.  The contents of ret will

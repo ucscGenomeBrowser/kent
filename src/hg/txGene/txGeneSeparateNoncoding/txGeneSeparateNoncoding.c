@@ -8,7 +8,6 @@
 #include "txInfo.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: txGeneSeparateNoncoding.c,v 1.6 2007/11/25 17:20:35 kent Exp $";
 
 int minNearOverlap=20;
 

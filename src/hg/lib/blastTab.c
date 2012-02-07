@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: blastTab.c,v 1.4 2008/09/17 18:10:13 kent Exp $";
 
 void blastTabStaticLoad(char **row, struct blastTab *ret)
 /* Load a row from blastTab table into ret.  The contents of ret will

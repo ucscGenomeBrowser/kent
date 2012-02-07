@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: wigSetSpanOrStep.c,v 1.2 2010/05/25 17:11:49 kent Exp $";
 
 boolean gotStep = FALSE;
 boolean gotSpan = FALSE;

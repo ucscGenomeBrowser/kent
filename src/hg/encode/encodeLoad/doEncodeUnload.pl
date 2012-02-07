@@ -19,11 +19,13 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
+use FindBin qw($Bin);
+use lib "$Bin";
 use Encode;
-use RAFile;
-use HgDb;
 use HgAutomate;
+use HgDb;
+use RAFile;
+
 
 use vars qw/$opt_verbose $opt_configDir/;
 my $PROG = basename $0;
@@ -31,10 +33,21 @@ my $PROG = basename $0;
 sub usage
 {
     print STDERR <<END;
-    usage: doEncodeUnload.pl submission_type project_submission_dir
-           submission_type is currently ignored
-           project_submission_dir needs a full path
-           OPTIONS: -verbose=i -configDir=s
+usage: doEncodeUnload.pl pipeline-instance project_submission_dir
+
+The pipeline instance variable is a switch that changes the behavior of doEncodeUnload.
+The changes if the instance is:
+
+standard
+    allows use of hg19 and mm9 databases only
+
+anything else
+    allows use of the encodeTest database only
+
+	project_submission_dir needs a full path
+	OPTIONS:
+		-verbose=i	Verbosity level
+		-configDir=s	Config directory location
 END
     exit(1);
 }
@@ -106,6 +119,29 @@ sub unloadBigWig
     #}
 }
 
+sub unloadBigBed
+{
+    my ($assembly, $db, $tableName) = @_;
+    $db->dropTableIfExist($tableName);
+    
+    # remove symlink
+    my $file = "/gbdb/$assembly/bbi/$tableName.bigBed";
+    if(-e $file) {
+        HgAutomate::verbose(3, "removing bigBed '$file'\n");
+        if(system("rm -f $file")) { 
+            die "unexpected error removing symlink $file";
+        }
+    }
+    # FIXME: Souldn't we remove files from downloads dir (and gbdb subdir) as well??
+    #my $file = "/usr/local/apache/htdocs/goldenPath/$assembly/encodeDCC/encSydhTfbsStanf/gbdb/$tableName.bw";
+    #if(-e $file) {
+    #    HgAutomate::verbose(3, "removing wib '$file'\n");
+    #    if(system("rm -f $file")) {
+    #        die "unexpected error removing symlink $file";
+    #    }
+    #}
+}
+
 ############################################################################
 # Main
 
@@ -119,7 +155,7 @@ if(@ARGV != 2) {
     usage();
 }
 
-my $submitType = $ARGV[0];	# currently not used
+my $pipelineInstance = $ARGV[0];	# currently not used
 my $submitDir = $ARGV[1];	# directory where data files are
 my $configPath;
 if (defined $opt_configDir) {
@@ -132,21 +168,9 @@ if (defined $opt_configDir) {
     $configPath = "$submitDir/../config"
 }
 
-# Add a suffix for non-production loads (to avoid loading over existing tables).
 
-my $tableSuffix = "";
-if(dirname($submitDir) =~ /_(.*)/) {
-    if($1 ne 'prod') {
-	# yank out "beta" from encinstance_beta
-        $tableSuffix = "_$1_" . basename($submitDir);;
-    }
-} else {
-    $tableSuffix = "_" . basename($submitDir);;
-}
-
-my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $grants, $fields);
+my $daf = Encode::getDaf($submitDir, $fields, $pipelineInstance);
 my $downloadDir = Encode::downloadDir($daf);
 
 chdir($submitDir) || die "Couldn't chdir to '$submitDir'";
@@ -164,7 +188,7 @@ my %ra = RAFile::readRaFile($unloadRa, 'tablename');
 my $db;
 for my $key (keys %ra) {
     my $h = $ra{$key};
-    my $tablename = $h->{tablename} . $tableSuffix;
+    my $tablename = $h->{tablename};
     my $files = $h->{files};
     my @files = split(/\s+/, $files);
 
@@ -201,6 +225,9 @@ for my $key (keys %ra) {
         unloadBigWig($assembly, $db, $tablename);
 #        unlink "$downloadDir/gbdb/$tablename.bw";
         unlink "$downloadDir/$tablename.bigWig";
+    } elsif ($type eq "bigBed") {
+        unloadBigBed($assembly, $db, $tablename);
+        unlink "$downloadDir/$tablename.bigBed";
     } else {
         die "ERROR: unknown type: $h->{type} in load.ra ($PROG)\n";
     }

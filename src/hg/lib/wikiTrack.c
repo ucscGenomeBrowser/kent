@@ -9,7 +9,6 @@
 #include "wikiTrack.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.29 2010/05/25 23:53:59 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will

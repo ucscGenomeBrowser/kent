@@ -9,7 +9,6 @@
 #include "hdb.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: chromInfo.c,v 1.7 2009/03/24 15:51:04 mikep Exp $";
 
 void chromInfoStaticLoad(char **row, struct chromInfo *ret)
 /* Load a row from chromInfo table into ret.  The contents of ret will

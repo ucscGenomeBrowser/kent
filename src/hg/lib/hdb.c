@@ -38,7 +38,6 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.433 2010/05/21 16:39:57 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -99,6 +98,8 @@ struct hash *infoHash = NULL;
 struct hashEl *dHel = NULL;
 struct chromInfo *ci = NULL;
 char upcName[HDB_MAX_CHROM_STRING];
+if (strlen(chrom) >= HDB_MAX_CHROM_STRING)
+    return NULL;
 safef(upcName, sizeof(upcName), "%s", chrom);
 touppers(upcName);
 
@@ -3832,11 +3833,8 @@ struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
 {
-#define HGAPI_NEEDS_THIS
-#ifdef HGAPI_NEEDS_THIS
-if (isHubTrack(track))
+if (isHubTrack(track))    // hgApi needs this
     return tdbForTrack(db, track,NULL);
-#endif///def HGAPI_NEEDS_THIS
 
 struct sqlConnection *conn = hAllocConn(db);
 struct trackDb *tdb = loadTrackDbForTrack(conn, track);
@@ -4022,7 +4020,7 @@ struct trackDb *tdb = hMaybeTrackInfo(conn, subtrackName);
 char *ret = NULL;
 if (tdb != NULL)
     {
-    ret = trackDbLocalSetting(tdb, "parent");
+    ret = firstWordInLine( trackDbLocalSetting(tdb, "parent"));
     trackDbFree(&tdb);
     }
 hFreeConn(&conn);
@@ -4953,7 +4951,7 @@ safef(lowerCaseName, sizeof(lowerCaseName), "%s", domainDb);
 lowerCaseName[0] = tolower(lowerCaseName[0]);
 
 safef(query, sizeof(query),
-    "select acc from ucsc%s u, %sDesc p"
+    "select distinct acc from ucsc%s u, %sDesc p"
     " where ucscId  = '%s' and u.domainName=p.name "
     , domainDb, lowerCaseName, ucscGeneId);
 return sqlQuickList(conn, query);
@@ -4971,7 +4969,7 @@ safef(lowerCaseName, sizeof(lowerCaseName), "pfam");
 lowerCaseName[0] = tolower(lowerCaseName[0]);
 
 safef(query, sizeof(query),
-    "select value from knownToPfam k, %sDesc p"
+    "select distinct value from knownToPfam k, %sDesc p"
     " where name = '%s' and value=p.pfamAC "
     , lowerCaseName, ucscGeneId);
 return sqlQuickList(conn, query);

@@ -7,8 +7,8 @@ DIRS = \
 	mkEncodeFrameset \
 	hgEncodeVocab \
 	validateFiles \
-    encodeMkChangeNotes \
-    paraMd5sum \
+	encodeMkChangeNotes \
+	paraMd5sum \
 	encodeStatus
 
 # broken
@@ -18,11 +18,13 @@ DIRS = \
 # List of pipeline dirs
 PIPELINE_DIRS = \
         encodeLoad \
-        encodeValidate
+        encodeValidate \
+	../utils/automation
 
 USE_DIRS = $(DIRS)
 
 all:
+	@${MAKE} development
 	@for D in $(USE_DIRS) x; do \
 	  if test "$$D" != "x" ; then \
 	    ( cd $$D && echo $$D && $(MAKE) ) ;\
@@ -37,7 +39,7 @@ development:
 
 beta:
 	@for D in ${PIPELINE_DIRS}; do \
-		(cd $${D} && ${MAKE} beta;) \
+		(cd $${D} && ${MAKE} beta;)\
 	done
 
 prod: 

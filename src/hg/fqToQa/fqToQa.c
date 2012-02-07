@@ -8,7 +8,6 @@
 #include "linefile.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: fqToQa.c,v 1.5 2006/04/02 21:45:29 angie Exp $";
 
 FILE *errLog;
 

@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "liftSpec.h"
 
-static char const rcsid[] = "$Id: liftSpec.c,v 1.4 2004/06/08 22:00:40 hiram Exp $";
 
 void liftSpecStaticLoad(char **row, struct liftSpec *ret)
 /* Load a row from liftSpec table into ret.  The contents of ret will

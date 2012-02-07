@@ -9,7 +9,6 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.6 2008/09/03 19:19:46 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

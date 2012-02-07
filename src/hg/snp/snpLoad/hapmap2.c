@@ -15,7 +15,6 @@
 #include "linefile.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hapmap2.c,v 1.7 2007/03/14 18:49:19 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 

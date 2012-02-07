@@ -7,7 +7,6 @@
 #include "pairHmm.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtAffine.c,v 1.7 2005/04/10 14:41:20 markd Exp $";
 
 
 boolean axtAffineSmallEnough(double querySize, double targetSize)

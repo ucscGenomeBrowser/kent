@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "isochores.h"
 
-static char const rcsid[] = "$Id: isochores.c,v 1.4 2005/04/13 06:25:54 markd Exp $";
 
 void isochoresStaticLoad(char **row, struct isochores *ret)
 /* Load a row from isochores table into ret.  The contents of ret will

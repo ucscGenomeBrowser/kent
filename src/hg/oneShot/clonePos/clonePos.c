@@ -8,7 +8,6 @@
 #include "psl.h"
 #include "glDbRep.h"
 
-static char const rcsid[] = "$Id: clonePos.c,v 1.2 2003/05/06 07:22:30 kate Exp $";
 
 char *mapFile = "/projects/compbio/experiments/hg/clonemap.wu/jun15a.wu";
 char *infFile = "/projects/cc/hg/gs.2/ffa/sequence.inf";

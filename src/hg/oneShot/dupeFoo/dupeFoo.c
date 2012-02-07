@@ -6,7 +6,6 @@
 #include "psl.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: dupeFoo.c,v 1.4 2003/05/06 07:22:30 kate Exp $";
 
 char *chromPrefix = "piece";
 

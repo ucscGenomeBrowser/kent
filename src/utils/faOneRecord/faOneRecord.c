@@ -2,7 +2,6 @@
 #include "common.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: faOneRecord.c,v 1.4 2006/03/18 01:58:35 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

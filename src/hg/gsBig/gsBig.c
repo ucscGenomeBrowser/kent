@@ -10,7 +10,6 @@
 #include "bits.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: gsBig.c,v 1.16 2009/09/23 18:42:16 angie Exp $";
 
 char *exePath = "/projects/compbio/bin/genscan-linux/genscan";
 char *parPath = "/projects/compbio/bin/genscan-linux/HumanIso.smat";

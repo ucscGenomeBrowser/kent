@@ -10,7 +10,6 @@
 #include "psl.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: axtToPsl.c,v 1.11 2005/04/10 17:41:30 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */

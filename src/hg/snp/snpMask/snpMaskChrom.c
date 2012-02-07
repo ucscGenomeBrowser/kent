@@ -6,7 +6,6 @@
 #include "hdb.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.6 2006/08/25 21:30:45 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;

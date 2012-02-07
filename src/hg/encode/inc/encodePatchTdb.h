@@ -49,10 +49,10 @@ boolean renameTrack(struct raFile *tdbFile, char *oldTrack, char *newTrack, int 
 /* Rename track, or just check if it is found 
  * pass 0 is checking, pass 1 is renaming*/
 
-char *findCompositeInIncluder(struct raFile *includer, char *composite, int *numTagsFound, boolean removeAlpha, char **warnMsg);
+char *findCompositeInIncluder(struct raFile *includer, char *composite, char *releaseTag, int *numTagsFound, boolean removeAlpha, char **warnMsg);
 /* Find <composite>{.other}.ra in includer file trackDb.wgEncode.ra
  * Return compositeName (no path) or NULL if error, give warnings.
- * Must have tag alpha or no tags. 
+ * Must have tag releaseTag (usually "alpha") or no tags. 
  * If removeAlpha is true, then the alpha tag is removed, 
  * or if no tags then adds tags beta,pubic */
 

@@ -13,6 +13,7 @@ wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaPet.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeHaibGenotype.ra \
+wgEncodeHaibMethyl450.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeMapability.ra \
@@ -29,6 +30,7 @@ wgEncodeSunySwitchgear.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeSydhNsome.ra \
 wgEncodeSydhRnaSeq.ra \
+wgEncodeSydhTfbs.ra \
 wgEncodeUchicagoTfbs.ra \
 wgEncodeUncBsuProt.ra \
 wgEncodeUw5C.ra \
@@ -36,7 +38,7 @@ wgEncodeUwAffyExonArray.ra \
 wgEncodeUwDgf.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwHistone.ra \
-wgEncodeUwTfbs.ra 
+wgEncodeUwTfbs.ra \
 
 include ../../../../makefile.metaDb
 

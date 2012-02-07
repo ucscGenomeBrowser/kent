@@ -10,7 +10,6 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.151 2010/06/02 19:06:41 tdreszer Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1681,6 +1680,18 @@ while ((c = *in) != 0)
 *out = 0;
 }
 
+int countCase(char *s,boolean upper)
+// Count letters with case (upper or lower)
+{
+char a;
+int count = 0;
+while ((a = *s++) != 0)
+    if (( upper && isupper(a))
+    ||  (!upper && islower(a)))
+        ++count;
+return count;
+}
+
 int countChars(char *s, char c)
 /* Return number of characters c in string s. */
 {
@@ -2517,7 +2528,7 @@ void mustReadFd(int fd, void *buf, size_t size)
 ssize_t actualSize;
 char *cbuf = buf;
 // using a loop because linux was not returning all data in a single request when request size exceeded 2GB.
-while (size > 0) 
+while (size > 0)
     {
     actualSize = read(fd, cbuf, size);
     if (actualSize < 0)
@@ -3146,9 +3157,11 @@ void safencpy(char *buf, size_t bufSize, const char *src, size_t n)
 {
 if (n > bufSize-1)
     errAbort("buffer overflow, size %lld, substring size: %lld", (long long)bufSize, (long long)n);
-size_t slen = strlen(src);
-if (slen > n)
-    slen = n;
+// strlen(src) can take a long time when src is for example a pointer into a chromosome sequence.
+// Instead of setting slen to max(strlen(src), n), just stop counting length at n.
+size_t slen = 0;
+while (src[slen] != '\0' && slen < n)
+    slen++;
 strncpy(buf, src, n);
 buf[slen] = '\0';
 }

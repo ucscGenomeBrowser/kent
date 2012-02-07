@@ -12,7 +12,6 @@
 #include "sqlNum.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mafSplitPos.c,v 1.7 2009/08/02 20:54:39 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

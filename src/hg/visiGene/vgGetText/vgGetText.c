@@ -11,7 +11,6 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.14 2008/08/27 23:00:40 kent Exp $";
 
 char *db = "visiGene";
 

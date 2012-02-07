@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: rnaHybridization.c,v 1.2 2007/08/01 00:29:21 mhoechsm Exp $";
 
 void rnaHybridizationStaticLoad(char **row, struct rnaHybridization *ret)
 /* Load a row from rnaHybridization table into ret.  The contents of ret will

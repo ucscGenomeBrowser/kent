@@ -10,7 +10,6 @@
 #include "nib.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: gfInternal.c,v 1.3 2006/06/22 16:24:44 kent Exp $";
 
 
 static int extendRespect(int oldX, int newX)

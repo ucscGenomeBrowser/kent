@@ -7,7 +7,6 @@
 #include "portable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.7 2008/10/10 06:06:58 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

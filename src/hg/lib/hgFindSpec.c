@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.2 2005/04/13 06:25:54 markd Exp $";
 
 void hgFindSpecStaticLoad(char **row, struct hgFindSpec *ret)
 /* Load a row from hgFindSpec table into ret.  The contents of ret will

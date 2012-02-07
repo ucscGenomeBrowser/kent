@@ -9,7 +9,6 @@
 #include "sqlList.h"
 #include "xAli.h"
 
-static char const rcsid[] = "$Id: xAli.c,v 1.6 2005/04/10 14:41:26 markd Exp $";
 
 struct xAli *xAliLoad(char **row)
 /* Load a xAli from row fetched with select * from xAli

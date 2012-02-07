@@ -1,4 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -8,6 +7,8 @@
     <link rel="stylesheet" href="dataMatrix.css" type="text/css">
     <link rel="stylesheet" href="chipMatrix.css" type="text/css">
     <script src="/js/jquery.js" type="text/javascript"></script>
+    <script src="/js/jquery.floatheader.js" type="text/javascript"></script>
+    <script src="/js/utils.js" type="text/javascript"></script>
     <script src="/js/encodeProject.js" type="text/javascript"></script>
 </head>
 
@@ -18,11 +19,31 @@
     <!-- Standard ENCODE page header -->
     <div class="encodeHeader">
         <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
-        <span id="pageHeader" class="txt">Data Matrix</span>
+        <span id="pageHeader" class="txt"></span>
+        <span id="assemblyLabel"></span>
+        <span id="spinner"></span>
     </div>
 
-    <!-- Main content:  grid
-        Script populates, based on data from the server -->
+    <table id="matrixTable">
+        <thead>
+        <tr id="headerLabelRow"><td></td>
+            <td id="elementHeaderLabel" class="axisType" colspan=100 title="Click to view information about all antibodies">
+                <a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=antibody"> Antibody Targets</a></td></tr>
+
+        <tr id="columnHeaders">
+            <!-- Radiobuttons to select Files or Tracks, created from lib -->
+            <td>
+            <div id="searchTypePanel" class="panel"></div>
+            <div align='bottom' id="cellHeaderLabel" class="axisType" title="Click to view information about all cell types">
+                <!-- TODO: configurable for mouse -->
+                <a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=Cell+Line&organism=human">Cell Types</div>
+            </td>
+        </tr>
+        </thead>
+
+        <!-- Main content:  grid.  Script populates, based on data from the server -->
+        <tbody></tbody>
+    </table>
 
 </body>
 </html>

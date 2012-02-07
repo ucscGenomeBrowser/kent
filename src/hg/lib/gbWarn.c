@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "gbWarn.h"
 
-static char const rcsid[] = "$Id: gbWarn.c,v 1.1 2008/04/26 07:09:21 markd Exp $";
 
 /* definitions for reason column */
 static char *values_reason[] = {"invitroNorm", "athRage", "orestes", NULL};

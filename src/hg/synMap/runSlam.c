@@ -20,7 +20,6 @@ boolean runAvidFirst = TRUE; /* if true run avid first to order and orient fasta
 char *slamOpts = NULL; /* Options to pass to slam.pl */
 int bpLimit = 400000; /* maximum nubmer of base pairs to allow in a fasta file. */
 
-static char const rcsid[] = "$Id: runSlam.c,v 1.5 2003/05/06 07:22:35 kate Exp $";
 
 struct genomeBit
 /* Piece of the genome */

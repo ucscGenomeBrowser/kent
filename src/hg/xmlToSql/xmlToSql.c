@@ -14,7 +14,6 @@
 #include "rename.h"
 #include "tables.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.28 2006/09/14 16:44:29 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

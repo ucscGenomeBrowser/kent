@@ -11,7 +11,6 @@
 #include "rangeTree.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 double minR = 0.7071;
 double minExp = 10;

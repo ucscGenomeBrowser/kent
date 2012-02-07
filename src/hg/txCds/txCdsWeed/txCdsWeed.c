@@ -8,7 +8,6 @@
 #include "cdsEvidence.h"
 #include "cdsOrtho.h"
 
-static char const rcsid[] = "$Id: txCdsWeed.c,v 1.5 2007/03/17 04:14:08 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

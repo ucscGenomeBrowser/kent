@@ -6,7 +6,6 @@
 #include "hash.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: faFilter.c,v 1.6 2008/10/20 02:45:35 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

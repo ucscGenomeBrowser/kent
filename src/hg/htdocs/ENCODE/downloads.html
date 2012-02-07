@@ -19,6 +19,8 @@
         .buttonLink { width:100px; }
         .right { position:absolute; right:0px; }
     </style>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/staticDoc.js"></script>
   </HEAD>
 
   <BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF">
@@ -38,7 +40,9 @@
         <TR><TD class="content">
             <P>This page contains links to directories containing raw and processed
             data for ENCODE data released as part of the ENCODE production phase
-            (September 2007-present).  For bulk download, retrieval by
+            (September 2007-present). Formats are described on the UCSC Browser
+            <A HREF="/FAQ/FAQformat.html" TARGET=_blank>File Format FAQ</A>.
+            For bulk download, retrieval by
             <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/" TARGET=_blank>FTP</A>
             is recommended. All files here are covered by the
             <A HREF="/ENCODE/terms.html" TARGET=_BLANK>ENCODE data release policy</A>.
@@ -57,9 +61,9 @@
             </div>
             <TABLE class="itemTbl" BORDER=1 CELLSPACING=0>
                 <TR>
-                    <td class="ltBlue hd2" colspan=2><A style="text-decoration:none" 
-                    HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeExonArraySuper" 
-                    TARGET=_blank>All-Exon Arrays</A></TR>
+                    <td class="ltBlue hd2" colspan=2><a style="text-decoration:none" class="euro"
+                    href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeExonArraySuper" 
+                    target=_blank>All-Exon Arrays</a></TR>
                 <TR>
 		<TR>
                     <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDukeAffyExon" TARGET=_blank> 
@@ -73,8 +77,9 @@
                 </TR>
                 <TR>
                     <td class="ltBlue hd2" colspan=2>
-                    <A style="text-decoration:none" HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeDNAseSuper"
-                    TARGET=_blank>Chromatin Accessibility</A></td>
+                    <a style="text-decoration:none" class="euro"
+                    href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeDNAseSuper"
+                    target=_blank>Chromatin Accessibility</a></td>
                 </TR>
                 <TR>
                     <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/"
@@ -111,13 +116,19 @@
                 </TR>
                 <TR>
                     <td class="ltBlue hd2" colspan=2>
-                    <A style="text-decoration:none" HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeDnaMethylSuper"
-                        TARGET=_blank>DNA Methylation</A></td>
+                    <a style="text-decoration:none" class="euro"
+                    href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeDnaMethylSuper"
+                    target=_blank>DNA Methylation</a></td>
                 </TR>
                 <TR>
                     <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/"
                         TARGET=_BLANK>HAIB Methyl RRBS</A></TD>
                     <TD>DNA Methylation by Reduced Representation Bisulfite Seq from ENCODE/HudsonAlpha</TD>
+                </TR>
+                <TR>
+                    <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethyl450/"
+                        TARGET=_BLANK>HAIB Methyl450</A></TD>
+                    <TD>CpG Methylation by Methyl 450K Bead Arrays from ENCODE/HAIB</TD>
                 </TR>
                 <TR>
                     <td class="ltBlue hd2" colspan=2>Genes</td>
@@ -134,8 +145,9 @@
                 </TR>
                 <TR>
                     <td class="ltBlue hd2" colspan=2>
-                    <A style="text-decoration:none" HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeHistoneSuper"
-                    TARGET=_blank>Histone Modification</A></td>
+                    <a style="text-decoration:none" class="euro"
+                    href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeHistoneSuper"
+                    target=_blank>Histone Modification</a></td>
                 </TR>
                 <TR>
                     <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/"
@@ -159,8 +171,9 @@
                 </TR>
                 <TR>
                     <td class="ltBlue hd2" colspan=2>
-                    <A style="text-decoration:none" HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeProtGenoSuper"
-                        TARGET=_blank>Proteogenomics</a></td>
+                    <a style="text-decoration:none" class="euro"
+                    href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeProtGenoSuper"
+                    target=_blank>Proteogenomics</a></td>
                 </TR>
                 <TR>
                     <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/"
@@ -169,8 +182,9 @@
                 </TR>
                 <TR>
                     <td class="ltBlue hd2" colspan=2>
-                    <A style="text-decoration:none" HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeReg"
-                        TARGET=_blank>Regulation Super-track</a></td>
+                    <a style="text-decoration:none" class="euro"
+                    href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeReg"
+                    target=_blank>Regulation Super-track</a></td>
 	        </TR>
 	        <TR>
                     <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRegDnaseClustered/"
@@ -204,8 +218,9 @@
                 </TR>
                 <TR>
                     <td class="ltBlue hd2" colspan=2>
-                    <A style="text-decoration:none" HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRbpSuper"
-                        TARGET=_blank>RNA Binding Proteins</a></td>
+                    <a style="text-decoration:none" class="euro"
+                    href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRbpSuper"
+                    target=_blank>RNA Binding Proteins</a></td>
                 </TR>
                 <TR>
                     <td><a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/"
@@ -224,8 +239,9 @@
                 </TR>
                 <TR>
                     <td class="ltBlue hd2" colspan=2>
-                    <A style="text-decoration:none" HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRnaSeqSuper"
-                        TARGET=_blank>RNA-seq</A></td>
+                    <a style="text-decoration:none" class="euro"
+                    href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRnaSeqSuper"
+                    target=_blank>RNA-seq</a></td>
                 </TR>
                 <TR>
                     <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/"
@@ -267,14 +283,20 @@
                 </TR>
                 <TR>
                     <td class="ltBlue hd2" colspan=2>
-                    <A style="text-decoration:none" HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeTfBindingSuper"
-                        TARGET=_blank>Transcription Factor Binding Sites</A></td>
+                    <a style="text-decoration:none" class="euro"
+                    href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeTfBindingSuper"
+                    target=_blank>Transcription Factor Binding Sites</a></td>
                 </TR>
                 <TR>
                     <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/"
                     
                         TARGET=_BLANK>HAIB TFBS</A></TD>
                     <TD>Transcription Factor Binding Sites by ChIP-seq from ENCODE/HAIB</TD>
+                </TR>
+                <TR>
+                    <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/"
+                        TARGET=_BLANK>SYDH TFBS</A></TD>
+                    <TD>Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale/USC/Harvard</TD>
                 </TR>
                 <TR>
                     <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUchicagoTfbs/"
@@ -490,11 +512,6 @@
                 </TR>
                 <TR>
                     <td class="ltBlue hd2" colspan=2>Transcription Factor Binding Sites</td>
-                </TR>
-                <TR>
-                    <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/"
-                        TARGET=_BLANK>HAIB TFBS</A></TD>
-                    <TD>Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute</TD>
                 </TR>
                 <TR>
                     <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/"

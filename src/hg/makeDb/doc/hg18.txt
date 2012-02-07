@@ -29796,9 +29796,8 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 10/3/11 angie)
-# NEXT TIME: squelch multiple-mappers?
-# Updated 9/2/11, 8/1/11, 6/9/11, 4/1/11, 3/1/11, 2/1/11
+# NHGRI GWAS CATALOG (DONE 2/6/12 angie)
+# Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11, 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10, 4/1/10, 3/1/10
 # Originally done 1/19/10
 # Area of possible future improvement: for SNPs that can't be mapped via our SNP track,
@@ -29885,21 +29884,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 6625 elements of size 22
-#Level Code Message
-#Warning 1366 Incorrect integer value: '' for column 'pubMedID' at row 467
-#Warning 1265 Data truncated for column 'initSample' at row 1897
-#load of gwasCatalog did not go as planned: 6625 record(s), 0 row(s) skipped, 1 warning(s) loading bed.tab
-    # Look at the items that had warnings, make sure to test in hgc:
-    tail -n +467 gwasCatalog.bed | head -1
-#chr1    194967673       194967674       rs380390                Klein RJ        2005-03-10 ...
-    # -- The missing pubMedId causes the pubMed link to say that no search terms were entered,
-    # but I can look up the article and manually add the pubMedId like this (I also emailed
-    # the GWAS Catalog team):
-    hgsql hg18 -e 'update gwasCatalog set pubmedId = 15761122 where name="rs380390" and pubmedId=0;'
-    tail -n +1897 gwasCatalog.bed | head -1
-#chr15   23828637        23828638        rs4906844       21810643        Bakken TE       2011-08-01      Arch Gen Psychiatry     Association of genetic variants on 15q12 with cortical thickness and cognition in schizophrenia.        Entorhinal cortical thickness       345 Norwegian ancestry schizophrenia spectrum disorder cases, 179 Norwegian ancestry bipolar spectrum disorder cases, 13 Norwegian ancestry major depressive disorder cases, 36 Norwegian ancestry other psychotic disorder cases, 481 Norwegian ancestry controls  NR      15q12   LOC100128714    rs4906844-?     NR      1E-8                .07 [NR] mm decrease        Affymetrix [597,198]    N
-    # -- the last 3 characters of the very long intial sample description are trunc'd, NBD.
+#Loaded 7702 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29913,7 +29898,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#371 ambigStrand.txt
+#490 ambigStrand.txt
 
 
 #############################################################################

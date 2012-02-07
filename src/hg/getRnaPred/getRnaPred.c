@@ -10,7 +10,6 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.22 2008/09/03 19:18:41 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

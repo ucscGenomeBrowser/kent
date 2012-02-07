@@ -5,7 +5,6 @@
 #include "obscure.h"
 #include "raRecord.h"
 
-static char const rcsid[] = "$Id: raRecord.c,v 1.10 2009/12/09 10:14:00 kent Exp $";
 
 struct raFilePos *raFilePosNew(struct lm *lm, char *fileName, int lineIx)
 /* Create new raFilePos record. */

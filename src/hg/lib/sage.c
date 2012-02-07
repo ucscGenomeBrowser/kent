@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "sage.h"
 
-static char const rcsid[] = "$Id: sage.c,v 1.3 2005/04/13 06:25:56 markd Exp $";
 
 struct sage *sageLoad(char **row)
 /* Load a sage from row fetched with select * from sage

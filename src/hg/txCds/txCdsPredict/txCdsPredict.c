@@ -13,7 +13,6 @@
 #include "rangeTree.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsPredict.c,v 1.9 2007/08/04 00:06:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

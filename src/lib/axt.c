@@ -20,7 +20,6 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.52 2008/03/18 21:55:47 angie Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */

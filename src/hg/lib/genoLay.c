@@ -9,7 +9,6 @@
 #include "hCytoBand.h"
 #include "genoLay.h"
 
-static char const rcsid[] = "$Id: genoLay.c,v 1.12 2009/04/06 05:40:29 galt Exp $";
 
 void genoLayDump(struct genoLay *gl)
 /* Print out info on genoLay */

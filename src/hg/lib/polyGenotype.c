@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "polyGenotype.h"
 
-static char const rcsid[] = "$Id: polyGenotype.c,v 1.2 2006/07/18 19:14:26 hiram Exp $";
 
 void polyGenotypeStaticLoad(char **row, struct polyGenotype *ret)
 /* Load a row from polyGenotype table into ret.  The contents of ret will

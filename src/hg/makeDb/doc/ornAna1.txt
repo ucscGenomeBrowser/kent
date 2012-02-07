@@ -1724,4 +1724,109 @@ done
     cd /cluster/data/ornAna1/bed
     ln -s blastz.bosTau6.swap lastz.bosTau6
 
+
+############################################################################
+# running cpgIsland business (DONE 2011-11-22 - Chin)
+    mkdir /hive/data/genomes/ornAna1/bed/cpgIsland
+    cd /hive/data/genomes/ornAna1/bed/cpgIsland
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    #   needed to fixup this source, adding include to readseq.c:
+#include "string.h"
+    #   and to cpg_lh.c:
+#include "unistd.h"
+#include "stdlib.h"
+    # and fixing a declaration in cpg_lh.c
+    sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
+    mv tmp.c cpg_lh.c
+    make
+    cd ../../
+    ln -s hg3rdParty/cpgIslands/cpglh.exe
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../ornAna1.2bit:$C stdout \
+        | maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/ornAna1/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check out exists results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #   the faCount business is to make sure there is enough sequence to
+    #   work with in the fasta.  cpglh.exe does not like files with too
+    #   many
+    #   N's - it gets stuck
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | grep -e ^chr -e ^Contig -e ^Ultra | awk '{print  $2 - $7}'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+
+
+    chmod 775 runOne
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+    para problems
+    para status
+    # then, kick it with para push
+    # check it with plb
+    # when all are done, para time shows:
+    # Checking finished jobs
+    # Completed: 201523 of 201523 jobs
+    # CPU time in finished jobs:   145s       2.42m     0.04h    0.00d  0.000 y
+    # IO & Wait Time:           526359s    8772.65m   146.21h    6.09d  0.017 y
+    # Average job time:                   3s       0.04m     0.00h    0.00d
+    # Longest finished job:              46s       0.77m     0.01h    0.00d
+    # Submission to last job:         21512s     358.53m     5.98h    0.25d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    ssh hgwdev
+    cd /hive/data/genomes/ornAna1/bed/cpgIsland
+    hgLoadBed ornAna1 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    # Loaded 82257 elements of size 10
+    # Sorted
+    # Creating table definition for cpgIslandExt
+    # Saving bed.tab
+    # Loading ornAna1
+
+    #   cleanup
+    rm -fr hardMaskedFa
+
+#########################################################################
+# SWAP BOSTAU7 CHAIN/NET (DONE 2012-01-18 - Chin)
+    cd /cluster/data/ornAna1/bed/blastz.bosTau7.swap
+    cat fb.ornAna1.chainBosTau7Link.txt
+    # 190094136 bases of 1842236818 (10.319%) in intersection
+
+    cd /cluster/data/ornAna1/bed
+    ln -s blastz.bosTau7.swap lastz.bosTau7
+
+
 ############################################################################

@@ -13,7 +13,6 @@
 #include "hPrint.h"
 #include "gisaidTable.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.1 2009/06/09 15:57:48 fanhsu Exp $";
 
 struct subjInfo *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)

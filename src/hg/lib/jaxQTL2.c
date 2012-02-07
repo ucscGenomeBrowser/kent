@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "jaxQTL2.h"
 
-static char const rcsid[] = "$Id: jaxQTL2.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
 
 void jaxQTL2StaticLoad(char **row, struct jaxQTL2 *ret)
 /* Load a row from jaxQTL2 table into ret.  The contents of ret will

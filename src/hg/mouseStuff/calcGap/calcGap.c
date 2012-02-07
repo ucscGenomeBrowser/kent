@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: calcGap.c,v 1.5 2006/06/20 15:49:00 angie Exp $";
 
 double scale = 200;
 int maxGap = 100;

@@ -7,7 +7,6 @@
 #include "common.h"
 #include "hmmstats.h"
 
-static char const rcsid[] = "$Id: hmmstats.c,v 1.5 2009/02/03 20:50:29 kent Exp $";
 
 int scaledLog(double val)
 /* Return scaled log of val. */

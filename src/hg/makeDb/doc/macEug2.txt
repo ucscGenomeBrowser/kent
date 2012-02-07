@@ -100,6 +100,7 @@ taxId 9315
 	> makeGenomeDb.log 2>&1 &
     # real  26m19.911s
     #	add the trackDb entries to the source tree, and the 2bit link:
+    # we will re-ln with masked one after we done the mask business later! ***
     ln -s `pwd`/macEug2.unmasked.2bit /gbdb/macEug2/macEug2.2bit
 
     #  Per instructions in makeGenomeDb.log:
@@ -150,9 +151,16 @@ taxId 9315
     # 1201805660 lower) in 277711 sequences in 1 files
     # %39.08 masked total, %47.39 masked real
 
+    # double check with featureBits
+    featureBits -countGaps macEug2 gap
+    # 539107067 bases of 3075184024 (17.531%) in intersection
+    
+    rm /gbdb/macEug2/macEug2.2bit
+    ln -s `pwd`/macEug2.2bit /gbdb/macEug2/macEug2.2bit
+
 #########################################################################
 # Marking *all* gaps - they are all in the AGP file
-#	(working - 2010-11-08 - Chin)
+#	(DONE - 2010-11-08 - Chin)
     mkdir /hive/data/genomes/macEug2/bed/allGaps
     cd /hive/data/genomes/macEug2/bed/allGaps
 
@@ -169,7 +177,7 @@ taxId 9315
 
 
 ########################################################################
-# Create kluster run files (????  - 201???  - Chin)
+# Create kluster run files (DONE 2010-11-04  - Chin)
     # numerator is macEug2 gapless bases "real" as reported by: 
     featureBits -noRandom -noHap macEug2 gap
     #     1600136831 bases of 1184628269 (135.075%) in intersection
@@ -205,7 +213,7 @@ taxId 9315
     #    /scratch/data/macEug2
 
 ########################################################################
-# GENBANK AUTO UPDATE (working - 2011-10-20 - Chin)
+# GENBANK AUTO UPDATE (DONE - 2011-10-20 - Chin)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -259,40 +267,134 @@ macEug2.genbank.est.native.loadDesc = yes
     git pull
     git push
 
-    ssh genbank
-    screen      #  control this business with a screen since it takes a while
-
-
-
-    ssh genbank
+    ssh hgwsev
     screen	#  control this business with a screen since it takes a while
-
-
     cd /cluster/data/genbank
      time nice -n +19 ./bin/gbAlignStep -initial macEug2 &
-    #  logFile: var/build/logs/2011.10.20-16:26:25.macEug2.initalign.log
-XXXX 2011-10-20 aligning, stop here see screen
-
-    #   real    ????
-    #   To re-do, rm the dir first:
+    #   logFile: var/build/logs/2011.10.23-21:57:16.macEug2.initalign.log
+    #   real    4810m43.818s
     #     /cluster/data/genbank/data/aligned/genbank.176.0/macEug2
-
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad macEug2 &
-    #    logFile: var/dbload/hgwdev/logs/2010.04.19-08:17:28.dbload.log
-    #   real    37m49.454s
+    #   logFile: var/dbload/hgwdev/logs/2011.10.27-08:35:00.dbload.log 
+    #   real    66m57.028s
 
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
-    cvsup
+    git pull
     # add macEug2 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    cvs ci -m "Added macEug2 - Sheep" etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs
+    git add etc/hgwdev.dbs
+    git commit  -m "Added macEug2 - Wallaby" etc/align.dbs etc/hgwdev.dbs
+    git push
     make etc-update
+
+    doGenbankTests macEug2 genbankTest.out
+    # no error
+
+##########################################################################
+## WINDOWMASKER (DONE - 2011-11-30 - Chin)
+    mkdir /hive/data/genomes/macEug2/bed/windowMasker
+    cd /hive/data/genomes/macEug2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev macEug2 > do.log 2>&1 &
+    #   real    262m19.608s
+
+    # Masking statistics
+    twoBitToFa macEug2.wmsk.2bit stdout | faSize stdin
+    # 3075184024 bases (539107070 N's 2536076954 real 1634442088 upper 
+    # 901634866 lower) in 277711 sequences in 1 files
+    # %29.32 masked total, %35.55 masked real
+    hgLoadBed macEug2 windowmaskerSdust windowmasker.sdust.bed.gz
+    # Loaded 18037550 elements of size 3
+
+    featureBits -countGaps macEug2 windowmaskerSdust
+    # 1457250153 bases of 3075184024 (47.387%) in intersection
+
+    #   eliminate the gaps from the masking
+    featureBits macEug2 -not gap -bed=notGap.bed
+    #   2536076957 bases of 2536076957 (100.000%) in intersection
+    time nice -n +19 featureBits macEug2 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   918147928 bases of 2536076957 (36.203%) in intersection
+    #   real    793m0.546s
+
+    #   reload track to get it clean
+    hgLoadBed macEug2 windowmaskerSdust cleanWMask.bed.gz
+    #   Loaded 17901097 elements of size 4
+    featureBits -countGaps macEug2 windowmaskerSdust
+    #   918147928 bases of 3075184024 (29.857%) in intersection
+    #   mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+        | twoBitMask ../../macEug2.unmasked.2bit stdin \
+            -type=.bed macEug2.cleanWMSdust.2bit
+
+    twoBitToFa macEug2.cleanWMSdust.2bit stdout | faSize stdin \
+        > macEug2.cleanWMSdust.faSize.txt
+    cat macEug2.cleanWMSdust.faSize.txt
+    #   3075184024 bases (539107070 N's 2536076954 real 1617929026 upper 
+    #   918147928 lower) in 277711 sequences in 1 files
+    #   %29.86 masked total, %36.20 masked real
+
+############################################################################
+# reset position to RHO location as found from blat of hg19 RHO gene
+    hgsql -e \
+'update dbDb set defaultPos="GL095587:25,998-40,635" where name="macEug2";' \
+        hgcentraltest
+    # set default Db to macEug2
+     hgsql -e "update defaultDb set name='macEug2' where genome = 'Wallaby';" \
+         hgcentraltest
+
+##########################################################################
+#  BLATSERVERS ENTRY (DONE 2011-12-07  - Chin)
+# After getting a blat server assigned by the Blat Server Gods,
+# Assembly macEug2 has been started on host blat2 on port 17784 (trans) and
+# port 17785 (untrans).
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("macEug2", "blat2", "17784", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("macEug2", "blat2", "17785", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2011-12-07 - Chin)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=macEug2 -all all.joiner
+    # Error: macEug2.tableList tables not in .joiner file ignored
+
+    mkdir /hive/data/genomes/macEug2/goldenPath
+    cd /hive/data/genomes/macEug2/goldenPath
+    makeDownloads.pl macEug2 > do.log 2>&1
+    # edit all htmls and READMEs per do.log instruction 
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/macEug2/pushQ
+    cd /hive/data/genomes/macEug2/pushQ
+    makePushQSql.pl macEug2 > macEug2.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+# WARNING: macEug2 does not have seq
+# WARNING: macEug2 does not have extFile
+
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#  bosTau4ChainPileUp
+
+    #   copy it to hgwbeta
+    scp -p macEug2.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < macEug2.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
 
 #########################################################################

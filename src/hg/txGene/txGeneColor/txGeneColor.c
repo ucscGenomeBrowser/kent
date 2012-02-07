@@ -10,7 +10,6 @@
 #include "txInfo.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: txGeneColor.c,v 1.2 2009/02/03 17:57:28 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */

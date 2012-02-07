@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "output/symTest.h"
 
-static char const rcsid[] = "$Id: testSymCols.c,v 1.1 2006/07/17 19:35:32 markd Exp $";
 
 void usage()
 {

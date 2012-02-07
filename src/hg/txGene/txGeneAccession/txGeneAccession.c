@@ -10,7 +10,6 @@
 #include "minChromSize.h"
 #include "txCommon.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.17 2008/08/02 21:40:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

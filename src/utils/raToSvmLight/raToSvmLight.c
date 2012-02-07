@@ -7,7 +7,6 @@
 #include "obscure.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: raToSvmLight.c,v 1.2 2007/03/13 21:31:05 kent Exp $";
 
 boolean good = FALSE;
 boolean bad = FALSE;

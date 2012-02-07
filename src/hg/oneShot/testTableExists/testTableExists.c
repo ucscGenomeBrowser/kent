@@ -10,7 +10,6 @@
 #include "obscure.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: testTableExists.c,v 1.1 2009/08/28 00:53:12 galt Exp $";
 
 char *database = NULL;
 char *host     = NULL;

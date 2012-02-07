@@ -14,7 +14,6 @@
 #include "dnaseq.h"
 #include "crudeali.h"
 
-static char const rcsid[] = "$Id: crudeali.c,v 1.5 2006/05/09 01:05:55 markd Exp $";
 
 #define maxTileSize 16
 

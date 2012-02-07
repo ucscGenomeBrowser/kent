@@ -20,7 +20,6 @@ int isinf(double x) { return !finite(x) && x==x; }
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.29 2010/06/05 19:29:53 braney Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again

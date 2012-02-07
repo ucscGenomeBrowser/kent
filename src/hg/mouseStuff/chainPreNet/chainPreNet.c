@@ -6,7 +6,6 @@
 #include "chainBlock.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: chainPreNet.c,v 1.10 2007/09/01 02:37:14 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

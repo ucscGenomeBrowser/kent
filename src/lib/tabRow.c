@@ -5,7 +5,6 @@
 #include "common.h"
 #include "tabRow.h"
 
-static char const rcsid[] = "$Id: tabRow.c,v 1.4 2008/09/17 17:56:38 kent Exp $";
 
 struct tabRow *tabRowNew(int colCount)
 /* Return new row. */

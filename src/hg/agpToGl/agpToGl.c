@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: agpToGl.c,v 1.5 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

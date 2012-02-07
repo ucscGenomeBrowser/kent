@@ -6,7 +6,6 @@
 #include "dystring.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: test1.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
 
 #define sqlQuery sqlGetResult
 

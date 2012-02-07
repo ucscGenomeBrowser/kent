@@ -5,7 +5,6 @@
 #include "obscure.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: ffScore.c,v 1.5 2003/10/21 22:06:32 kent Exp $";
 
 int ffIntronMax = ffIntronMaxDefault;
 

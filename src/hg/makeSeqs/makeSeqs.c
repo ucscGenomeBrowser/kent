@@ -3,7 +3,6 @@
 #include "memalloc.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: makeSeqs.c,v 1.3 2003/05/06 07:22:26 kate Exp $";
 
 /** Method prototypes */
 struct dyString *makeSeqList(char *seqdata, char *path);

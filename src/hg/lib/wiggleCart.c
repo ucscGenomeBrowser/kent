@@ -10,7 +10,6 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.39 2010/05/11 01:43:30 kent Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -102,7 +101,7 @@ static void viewLimitsCompositeOverride(struct trackDb *tdb,char *name,
                       double *retMin, double *retMax,double *absMin, double *absMax)
 /* If aquiring min/max for composite level wig cfg. Look in parents as well as self. */
 {
-if(isNameAtCompositeLevel(tdb,name))
+if(isNameAtParentLevel(tdb,name))
     {
     char *setting = NULL;
     if(absMin != NULL && absMax != NULL)
@@ -186,9 +185,9 @@ correctOrder(absMin, absMax);
 // Determine current minY,maxY.
 // Precedence:  1. cart;  2. defaultViewLimits;  3. viewLimits;
 //              4. absolute [which may need to default to #2 or #3!]
-boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
-char *cartMinStr = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MIN_Y);
-char *cartMaxStr = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, MAX_Y);
+boolean parentLevel = isNameAtParentLevel(tdb, name);
+char *cartMinStr = cartOptionalStringClosestToHome(theCart, tdb, parentLevel, MIN_Y);
+char *cartMaxStr = cartOptionalStringClosestToHome(theCart, tdb, parentLevel, MAX_Y);
 double cartMin = 0.0, cartMax = 0.0;
 
 if(cartMinStr)
@@ -271,7 +270,7 @@ void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, cha
  *		maxHeightPixels declaration from trackDb
  *****************************************************************************/
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *heightPer = NULL; /*	string from cart	*/
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int defaultHeightPixels = maxHeightPixels;
@@ -344,7 +343,7 @@ if (differentWord(DEFAULT_HEIGHT_PER,tdbDefault))
 	    break;
 	}
     }
-heightPer = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, HEIGHTPER);
+heightPer = cartOptionalStringClosestToHome(theCart, tdb, parentLevel, HEIGHTPER);
 /*      Clip the cart value to range [minHeightPixels:maxHeightPixels] */
 if (heightPer) defaultHeight = min( maxHeightPixels, atoi(heightPer));
 else defaultHeight = defaultHeightPixels;
@@ -412,12 +411,12 @@ enum wiggleGridOptEnum wigFetchTransformFuncWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name,char **optString)
 /*	transformFunc - none by default **********************************/
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *transformFunc;
 enum wiggleTransformFuncEnum ret = wiggleTransformFuncNone;
 char * tdbDefault = trackDbSettingClosestToHome(tdb, TRANSFORMFUNC);
 
-transformFunc = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, TRANSFORMFUNC));
+transformFunc = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, TRANSFORMFUNC));
 
 if ((transformFunc == NULL) && (tdbDefault != NULL))
     transformFunc = cloneString(tdbDefault);
@@ -437,12 +436,12 @@ enum wiggleGridOptEnum wigFetchAlwaysZeroWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name,char **optString)
 /*	alwaysZero - off by default **********************************/
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *alwaysZero;
 enum wiggleAlwaysZeroEnum ret = wiggleAlwaysZeroOff;
 char * tdbDefault = trackDbSettingClosestToHome(tdb, ALWAYSZERO);
 
-alwaysZero = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, ALWAYSZERO));
+alwaysZero = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, ALWAYSZERO));
 
 if ((alwaysZero == NULL) && (tdbDefault != NULL))
     alwaysZero = cloneString(tdbDefault);
@@ -464,11 +463,11 @@ enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *theCart,
 {
 char *Default = wiggleGridEnumToString(wiggleHorizontalGridOff);
 char *notDefault = wiggleGridEnumToString(wiggleHorizontalGridOn);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *horizontalGrid = NULL;
 enum wiggleGridOptEnum ret;
 
-horizontalGrid = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, HORIZGRID));
+horizontalGrid = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, HORIZGRID));
 
 if (!horizontalGrid)	/*	if it is NULL	*/
     horizontalGrid = wigCheckBinaryOption(tdb,Default,notDefault,GRIDDEFAULT,
@@ -490,12 +489,12 @@ char *autoString = wiggleScaleEnumToString(wiggleScaleAuto);
 char *manualString = wiggleScaleEnumToString(wiggleScaleManual);
 char *Default = manualString;
 char *notDefault = autoString;
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *autoScale = NULL;
 enum wiggleScaleOptEnum ret;
 
 
-autoScale = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, AUTOSCALE));
+autoScale = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, AUTOSCALE));
 
 if (!autoScale)	/*	if nothing from the Cart, check trackDb/settings */
     {
@@ -531,11 +530,11 @@ enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *theCart,
 {
 char *Default = wiggleGraphEnumToString(wiggleGraphBar);
 char *notDefault = wiggleGraphEnumToString(wiggleGraphPoints);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *graphType = NULL;
 enum wiggleGraphOptEnum ret;
 
-graphType = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, LINEBAR));
+graphType = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, LINEBAR));
 
 if (!graphType)	/*	if nothing from the Cart, check trackDb/settings */
     graphType = wigCheckBinaryOption(tdb,Default,notDefault,GRAPHTYPEDEFAULT,
@@ -554,11 +553,11 @@ enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *theCart,
 /******	windowingFunction - Whiskers by default **************************/
 {
 char *Default = wiggleWindowingEnumToString(wiggleWindowingWhiskers);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *windowingFunction = NULL;
 enum wiggleWindowingEnum ret;
 
-windowingFunction = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, WINDOWINGFUNCTION));
+windowingFunction = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, WINDOWINGFUNCTION));
 
 /*	If windowingFunction is a string, it came from the cart, otherwise
  *	see if it is specified in the trackDb option, finally
@@ -605,11 +604,11 @@ enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *theCart,
 /******	smoothingWindow - OFF by default **************************/
 {
 char * Default = wiggleSmoothingEnumToString(wiggleSmoothingOff);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 char * smoothingWindow = NULL;
 enum wiggleSmoothingEnum ret;
 
-smoothingWindow = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, SMOOTHINGWINDOW));
+smoothingWindow = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, SMOOTHINGWINDOW));
 
 if (!smoothingWindow) /* if nothing from the Cart, check trackDb/settings */
     {
@@ -653,11 +652,11 @@ enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart(struct cart *theCart,
 {
 char *Default = wiggleYLineMarkEnumToString(wiggleYLineMarkOff);
 char *notDefault = wiggleYLineMarkEnumToString(wiggleYLineMarkOn);
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *yLineMark = NULL;
 enum wiggleYLineMarkEnum ret;
 
-yLineMark = cloneString(cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, YLINEONOFF));
+yLineMark = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, YLINEONOFF));
 
 if (!yLineMark)	/*	if nothing from the Cart, check trackDb/settings */
     yLineMark = wigCheckBinaryOption(tdb,Default,notDefault,YLINEONOFF,
@@ -678,7 +677,7 @@ void wigFetchYLineMarkValueWithCart(struct cart *theCart,struct trackDb *tdb, ch
  *		yLineMark declaration from trackDb
  *****************************************************************************/
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *yLineMarkValue = NULL;  /*	string from cart	*/
 double yLineValue;   /*	value from cart or trackDb */
 char * tdbDefault = cloneString(
@@ -705,7 +704,7 @@ if (sameWord("NONE",tdbDefault))
 yLineValue = 0.0;
 
 /*	Let's see if a value is available in the cart */
-yLineMarkValue = cartOptionalStringClosestToHome(theCart, tdb, compositeLevel, YLINEMARK);
+yLineMarkValue = cartOptionalStringClosestToHome(theCart, tdb, parentLevel, YLINEMARK);
 
 /*	if yLineMarkValue is non-Null, it is the requested value 	*/
 if (yLineMarkValue)

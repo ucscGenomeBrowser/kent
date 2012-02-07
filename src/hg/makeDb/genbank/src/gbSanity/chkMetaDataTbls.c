@@ -17,7 +17,6 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.13 2009/04/23 00:35:41 markd Exp $";
 
 static char* validRefSeqStatus[] = {
     "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL
@@ -34,6 +33,7 @@ boolean gotError, isOk;
 
 /* columns: acc,id,moddate,version,moddate,type */
 acc = row[iRow++];
+verbose(3, "got %s in gbCdnaInfo table\n", acc);
 md = metaDataTblsGet(metaDataTbls, acc);
 if (md->inGbCdnaInfo)
     {
@@ -71,8 +71,8 @@ while (iRow < 20)
 if (numNonZero == 0)
     gbError("%s: none of gbCdnaInfo string ids have non-zero values", dir);
 else if (numNonZero < 4)
-    gbError("%s: only %d of gbCdnaInfo string ids have non-zero values",
-            dir, numNonZero);
+    gbError("%s: accession %s: only %d of gbCdnaInfo string ids have non-zero values",
+            acc,dir, numNonZero);
 }
 
 static void loadGbCdnaInfoData(struct metaDataTbls* metaDataTbls,

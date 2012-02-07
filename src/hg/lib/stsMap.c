@@ -8,7 +8,6 @@
 #include "stsMarker.h"
 #include "stsMap.h"
 
-static char const rcsid[] = "$Id: stsMap.c,v 1.4 2005/04/13 06:25:57 markd Exp $";
 
 void stsMapStaticLoad(char **row, struct stsMap *ret)
 /* Load a row from stsMap table into ret.  The contents of ret will

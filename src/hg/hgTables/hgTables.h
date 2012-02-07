@@ -5,22 +5,15 @@
 
 
 #include "jksql.h"
-
 #include "localmem.h"
-
 #include "dystring.h"
-
 #include "hdb.h"
-
 #include "hCommon.h"
-
 #include "customTrack.h"
-
 #include "grp.h"
-
 #include "joiner.h"
-
 #include "hPrint.h"
+#include "hui.h"
 
 struct region
 /* A part (or all) of a chromosome. */
@@ -162,12 +155,6 @@ struct trackDb *mustFindTrack(char *name, struct trackDb *trackList);
 
 struct asObject *asForTable(struct sqlConnection *conn, char *table);
 /* Get autoSQL description if any associated with table. */
-
-struct asColumn *asColumnFind(struct asObject *asObj, char *name);
-/* Return named column. */
-
-struct slName *asColNames(struct asObject *as);
-/* Get list of column names. */
 
 struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
 /* Convert asObject to list of sqlFieldTypes */
@@ -746,6 +733,7 @@ char *bigFileNameFromCtOrHub(char *table, struct sqlConnection *conn);
 char *bigWigFileName(char *table, struct sqlConnection *conn);
 /* Return file name associated with bigWig.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
+#define bigBedFileName(table, conn) bigWigFileName(table, conn)
 
 
 int bigWigOutRegion(char *table, struct sqlConnection *conn,
@@ -762,7 +750,7 @@ struct bed *bigWigIntervalsToBed(struct sqlConnection *conn, char *table, struct
  * secondary table in intersection). */
 
 /* ----------- BigBed business in bigBed.c -------------------- */
-boolean isBigBed(char *database, char *table, struct trackDb *parent, 
+boolean isBigBed(char *database, char *table, struct trackDb *parent,
 	struct customTrack *(*ctLookupName)(char *table));
 /* Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed. */
 
@@ -772,9 +760,6 @@ char *bigBedFileName(char *table, struct sqlConnection *conn);
 
 struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed into hti structure. */
-
-struct asObject *bigBedAsForTable(char *table, struct sqlConnection *conn);
-/* Get asObject associated with bigBed table. */
 
 struct slName *bigBedGetFields(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed as simple name list. */
@@ -795,16 +780,10 @@ void showSchemaBigBed(char *table);
 
 /* More stuff in bigBed.c that makes use of autoSql files. */
 
-struct slName *asColNames(struct asObject *as);
-/* Get list of column names. */
-
 struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
 /* Convert asObject to list of sqlFieldTypes */
 
 /* BAM stuff from bam.c */
-
-struct asObject *bamAsObj();
-/* Return asObject describing fields of BAM */
 
 boolean isBamTable(char *table);
 /* Return TRUE if table corresponds to a BAM file. */
@@ -824,8 +803,8 @@ void showSchemaBam(char *table);
 void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
 /* Print out selected fields from BAM.  If fields is NULL, then print out all fields. */
 
-struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn, 
-	char *db, char *table, struct region *regionList, struct lm *lm, 
+struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
+	char *db, char *table, struct region *regionList, struct lm *lm,
 	int *retFieldCount);
 /* Get list of beds from BAM, in all regions, that pass filtering. */
 
@@ -835,9 +814,6 @@ struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count);
 /* VCF (Variant Call Format) stuff from vcf.c */
 
 extern char *vcfDataLineAutoSqlString;
-
-struct asObject *vcfAsObj();
-/* Return asObject describing fields of VCF */
 
 boolean isVcfTable(char *table);
 /* Return TRUE if table corresponds to a VCF file. */
@@ -928,9 +904,9 @@ struct bed *getRegionAsMergedBed(
 /* Return a bed list of all items in the given range in subtrack-merged table.
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
 
-struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
+struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn,
 	char *db, char *dbVarName, char *table, char *tableVarName,
-	struct region *regionList, struct lm *lm, 
+	struct region *regionList, struct lm *lm,
 	int *retFieldCount);
 /* Get list of beds from database in region that pass filtering. */
 

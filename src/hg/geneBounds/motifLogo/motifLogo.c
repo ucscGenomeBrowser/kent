@@ -9,7 +9,6 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: motifLogo.c,v 1.7 2009/09/07 23:40:22 markd Exp $";
 
 char *tempDir = ".";
 char *gsExe = "gs";

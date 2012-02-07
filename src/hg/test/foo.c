@@ -5,7 +5,6 @@
 #include "jksql.h"
 #include "foo.h"
 
-static char const rcsid[] = "$Id: foo.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
 
 struct mrnaAli *mrnaAliLoad(char **row)
 /* Load a mrnaAli from row fetched with select * from mrnaAli

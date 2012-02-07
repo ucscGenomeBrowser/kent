@@ -105,7 +105,6 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.32 2010/04/01 17:31:11 markd Exp $";
 
 char *version = "31";	/* Program version number. */
 

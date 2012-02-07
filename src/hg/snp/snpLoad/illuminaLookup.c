@@ -11,7 +11,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup.c,v 1.8 2007/08/01 19:24:26 jzhu Exp $";
 
 struct snpSubset 
 /* This is just a list of some of the snps.  We're not wanting to drag in snp127, snp128, etc. 

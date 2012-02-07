@@ -121,7 +121,6 @@ the corresponding region of the chain alignment.
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.21 2008/09/03 19:20:52 markd Exp $";
 static boolean doHappyDots;            /* output activity dots? */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -171,18 +170,10 @@ void usage()
 /** Print usage and quit. */
 {
 int i=0;
-char *version = cloneString((char*)rcsid);
-char *tmp = strstr(version, "orthoMap.c,v ");
-if(tmp != NULL)
-    version = tmp + 13;
-tmp = strrchr(version, 'E');
-if(tmp != NULL)
-    (*tmp) = '\0';
 warn("orthoMap - Map items from one organism to another. Must\n"
      "specify one type of item using the -itemFile or -itemTable\n"
      "flags. OrthoMap simply maps over the genomic coordinates discarding\n"
-     "query inserts, mismatches, etc.\n"
-     "   (version: %s)", version );
+     "query inserts, mismatches, etc.\n");
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n"

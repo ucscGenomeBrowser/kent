@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "transRegCodeProbe.h"
 
-static char const rcsid[] = "$Id: transRegCodeProbe.c,v 1.2 2004/09/26 06:29:27 kent Exp $";
 
 struct transRegCodeProbe *transRegCodeProbeLoad(char **row)
 /* Load a transRegCodeProbe from row fetched with select * from transRegCodeProbe

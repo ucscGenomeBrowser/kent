@@ -12,7 +12,6 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.20 2009/09/23 18:42:22 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

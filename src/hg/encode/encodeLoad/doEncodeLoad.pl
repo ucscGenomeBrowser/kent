@@ -21,11 +21,13 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
+use FindBin qw($Bin);
+use lib "$Bin";
 use Encode;
+use HgAutomate;
+use HgDb;
 use RAFile;
 use SafePipe;
-use HgDb;
 
 use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug $opt_skipLoad $opt_skipDownload/;
 
@@ -34,7 +36,7 @@ my $unloadRa = "out/$Encode::unloadFile";
 my $trackDb = "out/trackDb.ra";
 my $submitDir = "";
 my $submitPath;			# full path of data submission directory
-my $submitType = "";		# currently ignored
+my $pipelineInstance = "";		# currently ignored
 my $tempDir = "/data/tmp";
 my $encInstance = "";
 
@@ -43,9 +45,16 @@ my $PROG = basename $0;
 sub usage
 {
     die <<END
-usage: doEncodeLoad.pl submission-type submission-dir
+usage: doEncodeLoad.pl pipeline-instance submission-dir
 
-submission-type is currently ignored.
+The pipeline instance variable is a switch that changes the behavior of doEncodeLoad.
+The changes if the instance is:
+
+standard
+    allows use of hg19 and mm9 databases only
+
+anything else
+    allows use of the encodeTest database only
 
 Requires file called: submission-dir/$loadRa
 
@@ -172,6 +181,7 @@ sub loadBedFromSchema
     HgAutomate::verbose(2, "loadBedFromSchema ($assembly, $tableName, $fileList, $sqlTable, $pushQ)\n");
 
     if(!$opt_skipLoad) {
+	print "$Encode::sqlCreate/${sqlTable}.sql\n";
         if(!(-e "$Encode::sqlCreate/${sqlTable}.sql")) {
             die "SQL schema '$Encode::sqlCreate/${sqlTable}.sql' does not exist\n";
         }
@@ -291,6 +301,50 @@ sub loadBigWig
     push(@{$pushQ->{TABLES}}, $tableName);
 }
 
+sub loadBigBed
+{
+# Load bigBed
+    my ($assembly, $tableName, $downloadDir, $fileList, $sqlTable, $pushQ, $configPath) = @_;
+    HgAutomate::verbose(2, "loadBigWig ($assembly, $tableName, $downloadDir, $fileList, $sqlTable, $pushQ)\n");
+
+    if(!$opt_skipLoad) {
+#        if(!(-e "$Encode::sqlCreate/${sqlTable}.as")) {
+#            die "AutoSql schema '$Encode::sqlCreate/${sqlTable}.as' does not exist\n";
+#        }
+        if ((() = split(" ", $fileList)) != 1) {
+            die "BigWig must be loaded with a single file but a list of files was supplied ($fileList)\n";
+        }
+        # link bigBed binary file to gbdbDir
+#        my @cmds = ( "mkdir -p ${gbdbDir}; ln  $fileList ${gbdbDir}/${tableName}.bw");
+#        HgAutomate::verbose(2, "loadBigWig cmds [".join(" ; ",@cmds)."]\n");
+#        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
+#        if(my $err = $safe->exec()) {
+#            die("ERROR: bad link of '$fileList' to ${gbdbDir}\n" . $safe->stderr() . "\n");
+#        } else {
+#            HgAutomate::verbose(2, "$fileList linked to ${gbdbDir}/${tableName}.bw\n");
+#        }
+        # symlink bigBed binary file into gbdb bbi directory
+        my @cmds = ( "ln -sf ${downloadDir}/${tableName}.bigBed /gbdb/${assembly}/bbi/");
+        HgAutomate::verbose(2, "loadBigWig cmds [".join(" ; ",@cmds)."]\n");
+        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
+        if(my $err = $safe->exec()) {
+            die("ERROR: File(s) '$fileList' failed symbolic link to /gbdb/${assembly}/bbi/\n" . $safe->stderr() . "\n");
+        } else {
+            HgAutomate::verbose(2, "${downloadDir}/${tableName}.bigBed linked to  /gbdb/${assembly}/bbi/\n");
+        }
+        # create BigWig link table from trackDb to gbdb bigBed binary file
+        @cmds = ( "/cluster/bin/x86_64/hgBbiDbLink $assembly $tableName /gbdb/${assembly}/bbi/${tableName}.bigBed");
+        HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
+        $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
+        if(my $err = $safe->exec()) {
+            die("ERROR: File(s) '$fileList' failed bigBed load:\n" . $safe->stderr() . "\n");
+        } else {
+            print "$fileList loaded into $tableName\n";
+        }
+    }
+    push(@{$pushQ->{TABLES}}, $tableName);
+}
+
 ############################################################################
 # Main
 
@@ -311,7 +365,7 @@ if($opt_outDir) {
 if(@ARGV != 2) {
     usage();
 }
-$submitType = $ARGV[0];	# currently not used
+$pipelineInstance = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
 if ($submitDir =~ /^\//) {
     $submitPath = $submitDir;
@@ -331,43 +385,26 @@ if (defined $opt_configDir) {
 }
 HgAutomate::verbose(1, "Using config path $configPath\n");
 
-my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $grants, $fields);
+my $daf = Encode::getDaf($submitDir, $fields, $pipelineInstance);
 my $db = HgDb->new(DB => $daf->{assembly});
-my $email;
 my %labels;
-
-if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
-    $email = $grants->{$daf->{grant}}{wranglerEmail};
-}
 
 # Add a suffix for non-production loads (to avoid loading over existing tables).
 
-my $tableSuffix = "";
-if ($submitDir eq ".") { # make sure command-line use specifies full path and directory
-    die "ERROR: please specify full path to directory\n";
-}
-if(dirname($submitDir) =~ /_(.*)/) {
-    if($1 ne 'prod') {
-        # yank out "beta" from encinstance_beta
-        $tableSuffix = "_$1_" . basename($submitDir);;
-    }
-} else {
-    $tableSuffix = "_" . basename($submitDir);;
-}
+my $loadRaTest = "$submitDir/$loadRa";
 
-chdir($submitDir);
 my $programDir = dirname($0);
 
-if(!(-e $loadRa)) {
+if(!(-e $loadRaTest)) {
     die "ERROR: load.ra not found ($PROG)\n";
 }
 
 if(!$opt_skipLoad) {
     # clean out any stuff from previous load
     # We assume unload program is in the same location as loader (fixes problem with misconfigured qateam environment).
-
+    my $localLoad = "$submitDir/$loadRa";
+    my $localUnload = "$submitDir/$unloadRa";
     my $unloader = "$programDir/doEncodeUnload.pl";
     if(!(-e $unloader)) {
         # let's us use this in cvs tree
@@ -378,9 +415,9 @@ if(!$opt_skipLoad) {
     }
     my $unloader_cmd;
     if (defined $opt_configDir) {
-        $unloader_cmd = "$unloader -configDir $opt_configDir $submitType $submitPath";
+        $unloader_cmd = "$unloader -configDir $opt_configDir $pipelineInstance $submitPath";
     } else {
-        $unloader_cmd = "$unloader $submitType $submitPath";
+        $unloader_cmd = "$unloader $pipelineInstance $submitPath";
     }
     if(system("$unloader_cmd")) {
         die "unload script failed\n";
@@ -388,11 +425,12 @@ if(!$opt_skipLoad) {
 
     #TODO change to : FileUtils.cp $loadRa, $unloadRa
     # XXXX shouldn't we do the cp AFTER we finish everything else successfully?
-    if(system("cp $loadRa $unloadRa")) {
-        die "Cannot: cp $loadRa $unloadRa\n";
+    if(system("cp $localLoad $localUnload")) {
+        die "Cannot: cp $localLoad $localUnload\n";
     }
 }
 
+chdir($submitDir);
 HgAutomate::verbose(1, "Loading project in directory $submitDir\n");
 
 # Load files listed in load.ra
@@ -413,13 +451,13 @@ my $downloadDir = Encode::downloadDir($daf);
 # make the download dir if it doesn't exist
 if(!$opt_skipDownload and !(-d $downloadDir)) {
     if(!(-d $downloadDir)) {
-        mkdir $downloadDir || die ("Can't create download directory (error: '$!'); please contact your wrangler at: $email\n");
+        mkdir $downloadDir || die ("Can't create download directory (error: '$!'); please contact the ENCODE staff at encode-staff\@soe.ucsc.edu\n");
     }
 }
 
 for my $key (keys %ra) {
     my $h = $ra{$key};
-    my $tablename = $h->{tablename} . $tableSuffix;
+    my $tablename = $h->{tablename};
     $labels{$h->{pushQDescription}} = 1;
 
     my $str = "\nkeyword: $key\n";
@@ -542,6 +580,8 @@ for my $key (keys %ra) {
         loadBam($assembly, $tablename, $downloadDir, $files, $type, $pushQ, $configPath);
     } elsif ($bigWigTypes{$type}) {
         loadBigWig($assembly, $tablename, $downloadDir, $files, $type, $pushQ, $configPath);
+    } elsif ($bigBedTypes{$type}) {
+        loadBigBed($assembly, $tablename, $downloadDir, $files, $type, $pushQ, $configPath);
     } elsif ($type =~ /^bed (3|4|5|6|8|9|12)$/) {
         loadBed($assembly, $tablename, $files, $pushQ);
     } elsif ($type =~ /^bedGraph (4)$/) {
@@ -584,26 +624,7 @@ unless (-e $readme){
 
 
 
-
-
-if(!$opt_skipDownload and !$opt_skipLoad) {
-    # Send "data is ready" email to email contact assigned to $daf{lab}
-    if($email) {
-        if(!$opt_noEmail) {
-            `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab is ready" $email`;
-        }
-    } else {
-        # XXXX Should this be fatal? Or s/d we send email to encode alias?
-        # die "No wrangler is configured for '$daf->{grant}'\n";
-    }
-}
-
-my $wranglerName;
-if($email && $email =~ /([^@]+)/) {
-    $wranglerName = $1;
-} else {
-    $wranglerName = 'encode';
-}
+my $wranglerName = 'encode';
 
 my $tables = join("\\n", @{$pushQ->{TABLES}});
 push(@{$pushQ->{FILES}}, "/usr/local/apache/cgi-bin/encode/cv.ra");

@@ -11,7 +11,6 @@
 #include "refLink.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: eisenInput.c,v 1.5 2008/09/03 19:18:35 markd Exp $";
 
 /* Some variables we should probably let people set from the
  * command line. */

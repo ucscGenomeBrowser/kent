@@ -19,6 +19,7 @@ var browser;              // browser ("msie", "safari" etc.) // move to utils.js
  * int imgBox*            // various drag-scroll values
  * boolean measureTiming  // true if measureTiming is on
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
+ * string err             // error message (present only when hgTracks has hit a fatal berror).
  */
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
@@ -74,13 +75,14 @@ var genomePos = {
     original: null,
     originalSize: 0,
 
-    linkFixup: function (pos, name, reg, endParamName)
+    linkFixup: function (pos, id, reg, endParamName)
     {   // fixup external links (e.g. ensembl)
-        if($('#' + name).length) {
-            var link = $('#' + name).attr('href');
+        var ele = $(document.getElementById(id));
+        if(ele.length) {
+            var link = ele.attr('href');
             var a = reg.exec(link);
             if(a && a[1]) {
-                $('#' + name).attr('href', a[1] + pos.start + "&" + endParamName + "=" + pos.end);
+                ele.attr('href', a[1] + pos.start + "&" + endParamName + "=" + pos.end);
             }
         }
     },
@@ -134,6 +136,9 @@ var genomePos = {
                 var ele = tags[i];
                 ele.value = position;
             }
+        }
+        if($('#positionDisplay').length) {
+            $('#positionDisplay').text(position);
         }
         if(size) {
             $('#size').text(size);
@@ -353,7 +358,44 @@ var posting = {
 
     mapClk: function ()
     {
-        return posting.saveSettings(this);
+        var done = false;
+        if(false && imageV2.inPlaceUpdate) {
+            // XXXX experimental and only turned on in larrym's tree.
+            // Use in-place update if the map item just modifies the current position (this is nice because it's faster
+            // and it preserves the users current relative position in the track image).
+            //
+            // First test handles next/prev item.
+            var str = "/cgi-bin/hgTracks\\?position=([^:]+):(.+)&hgsid=(\\d+)&(hgt\.(next|prev)Item=[^&]+)";
+            var reg = new RegExp(str);
+            var a = reg.exec(this.href);
+            if(a && a[1] && a[1] == hgTracks.chromName) {
+                imageV2.navigateInPlace("position=" + encodeURIComponent(a[1] + ":" + a[2]) + "&" + a[4], null, true);
+                done = true;
+            } else {
+                // handle next/prev exon
+                str = "/cgi-bin/hgTracks\\?position=([^:]+):(.+)&hgsid=(\\d+)$";
+                reg = new RegExp(str);
+                a = reg.exec(this.href);
+                if(a && a[1]) {
+                    imageV2.navigateInPlace("position=" + encodeURIComponent(a[1] + ":" + a[2]), null, true);
+                    done = true;
+                } else {
+                    // handle toggle visibility. Request may include a track set, so we cannot use requestImgUpdate.
+                    str = "/cgi-bin/hgTracks\\?(position=[^:]+:.+&hgsid=\\d+&([^=]+)=([^&]+))$";
+                    reg = new RegExp(str);
+                    a = reg.exec(this.href);
+                    if(a && a[1]) {
+                        imageV2.navigateInPlace(a[1], null, true);
+                        // imageV2.requestImgUpdate(a[1], a[1] + "=" + a[2], "", a[2]);
+                        done = true;
+                    }
+                }
+            }
+        }
+        if(done)
+            return false;
+        else
+            return posting.saveSettings(this);
     },
 
     saveSettings: function (obj)
@@ -363,6 +405,10 @@ var posting = {
         }
         if(obj == undefined || obj.href == undefined) // called directly with obj
             obj = this;                               // and from callback without obj
+
+        if ($(obj).hasClass('noLink'))  // TITLE_BUT_NO_LINK
+            return false;
+
         if (obj.href.match('#') || obj.target.length > 0) {
             //alert("Matched # ["+obj.href+"] or has target:"+obj.target);
             return true;
@@ -392,7 +438,7 @@ var vis = {
         // returns true if we modify at least one select in the group list
         var rec = hgTracks.trackDb[track];
         var selectUpdated = false;
-        $("select[name=" + track + "]").each(function(t) {
+        $("select[name=" + escapeJQuerySelectorChars(track) + "]").each(function(t) {
             $(this).attr('class', visibility == 'hide' ? 'hiddenText' : 'normalText');
             $(this).val(visibility);
             selectUpdated = true;
@@ -440,9 +486,8 @@ var vis = {
     {   // Set visibility of all track groups to newState (true means expanded).
         // This code also modifies the corresponding hidden fields and the gif's of the +/- img tag.
         imageV2.markAsDirtyPage();
-        $("img[id$='_button']").each( function (i) {
-            if(this.src.indexOf("/remove") > 0 || this.src.indexOf("/add") > 0)
-                vis.toggleForGroup(this,this.id.substring(0,this.id.length - 7),newState); // clip '_button' suffix
+        $(".toggleButton[id$='_button']").each( function (i) {  // works for old img type AND new BUTTONS_BY_CSS
+            vis.toggleForGroup(this,this.id.substring(0,this.id.length - 7),newState); // clip '_button' suffix
         });
         return false;
     }
@@ -517,7 +562,7 @@ var dragSelect = {
             }
         } else {  // what is this doing?
             genomePos.set(genomePos.original, genomePos.originalSize);
-            genomePos.original = genomePos.originalSize = null;
+            genomePos.original = genomePos.originalSize = null;         // <- XXXX I think this is unnecessary.
         }
         dragSelect.startTime = null;
         setTimeout('posting.allowMapClicks();',50); // Necessary incase the dragSelect.selectEnd was over a map item. select takes precedence.
@@ -1180,7 +1225,7 @@ var dragReorder = {
 //////////////////////////
 jQuery.fn.panImages = function(){
     // globals across all panImages
-    genomePos.original = genomePos.getOriginalPos();
+    genomePos.original = genomePos.getOriginalPos();              // XXXX what is this for? (this already happened in initVars).
     var leftLimit   = hgTracks.imgBoxLeftLabel * -1;
     var rightLimit  = (hgTracks.imgBoxPortalWidth - hgTracks.imgBoxWidth + leftLimit);
     var only1xScrolling = ((hgTracks.imgBoxWidth - hgTracks.imgBoxPortalWidth) == 0);//< hgTracks.imgBoxLeftLabel);
@@ -1545,7 +1590,6 @@ var rightClick = {
                 return rightClick.makeMapItem(id);
             }
         }
-        warn("ASSERT: findMapItem failed.");// Should not ever get to this point
         return null;
     },
 
@@ -1757,6 +1801,12 @@ var rightClick = {
         } else if (cmd == 'viewImg') {
             // Fetch a new copy of track img and show it to the user in another window. This code assume we have updated
             // remote cart with all relevant chages (e.g. drag-reorder).
+/* Here's how to do this more directly with hgRenderTracks:
+            if(window.open("../cgi-bin/hgRenderTracks?hgt.internal=1&hgsid=" + getHgsid()) == null) {
+                rightClick.windowOpenFailedMsg();
+            }
+            return;
+*/
             var data = "hgt.imageV1=1&hgt.trackImgOnly=1&hgsid=" + getHgsid();
             jQuery('body').css('cursor', 'wait');
             $.ajax({
@@ -1874,7 +1924,7 @@ var rightClick = {
                     setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // supertrack children need to have _sel set to trigger superttrack reshaping
                 else
                     setCartVar(id, 'hide' );
-                $('#tr_' + id).remove();
+                $(document.getElementById('tr_' + id)).remove();
                 dragReorder.init();
                 dragSelect.load(false);
                 imageV2.markAsDirtyPage();
@@ -1890,7 +1940,7 @@ var rightClick = {
                         document.TrackHeaderForm.submit();
                 }
             } else {
-                imageV2.requestImgUpdate(id, id+"="+cmd, "");
+                imageV2.requestImgUpdate(id, id + "=" + cmd, "", cmd);
             }
         }
     },
@@ -1924,6 +1974,8 @@ var rightClick = {
         rightClick.menu = img.contextMenu(
             function() {
                 popUp.cleanup();   // Popup box is not getting closed properly so must do it here
+                if (rightClick.selectedMenuItem == null)  // This is literally an edge case so ignore
+                    return;
 
                 var menu = [];
                 var selectedImg = rightClick.makeImgTag("greenChecksm.png");
@@ -1988,7 +2040,7 @@ var rightClick = {
 
                         // XXXX what if select is not available (b/c trackControlsOnMain is off)?
                         // Move functionality to a hidden variable?
-                        var select = $("select[name=" + id + "]");
+                        var select = $("select[name=" + escapeJQuerySelectorChars(id) + "]");
                         if (select.length > 1)  // Not really needed if $('#hgTrackUiDialog').html(""); has worked
                             select =  [ $(select)[0] ];
                         var cur = $(select).val();
@@ -2173,7 +2225,8 @@ var rightClick = {
                 if(rightClick.selectedMenuItem && rec && rec["configureBy"] != 'none') {
                     // Add cfg options at just shy of end...
                     var o = new Object();
-                    if(tdbIsLeaf(rec)) {
+                    if(tdbIsLeaf(rec) && (!tdbIsCompositeSubtrack(rec) || rec["configureBy"] != 'clickThrough')) {
+                        // Note that subtracks never do clickThrough because composite cfg is the desired clickThrough
                         o[rightClick.makeImgTag("wrench.png")+" Configure "+rec.shortLabel] = {
                             onclick: function(menuItemClicked, menuObject) {
                                 rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup");
@@ -2296,7 +2349,7 @@ var popUp = {
     {   // When hgTrackUi Cfg popup closes with ok, then update cart and refresh parts of page
         var rec = hgTracks.trackDb[trackName];
         var subtrack = tdbIsSubtrack(rec) ? trackName :undefined;  // If subtrack then vis rules differ
-        var allVars = getAllVars($('#pop'), subtrack );
+        var allVars = getAllVars($('#hgTrackUiDialog'), subtrack );// For unknown reasons IE8 fails to find $('#pop'), occasionally
         var changedVars = varHashChanges(allVars,popUp.saveAllVars);
         //warn("cfgVars:"+varHashToQueryString(changedVars));
         var newVis = changedVars[trackName];
@@ -2308,7 +2361,7 @@ var popUp = {
         else {  // On image page
             if(hide) {
                 setVarsFromHash(changedVars);
-                $('#tr_' + trackName).remove();
+                $(document.getElementById('tr_' + trackName)).remove();
                 dragReorder.init();
                 dragSelect.load(false);
             } else {
@@ -2336,20 +2389,10 @@ var popUp = {
         // make sure all links (e.g. help links) open up in a new window
         response = response.replace(/<a /ig, "<a target='_blank' ");
 
-        // TODO: Shlurp up any javascript files from the response and load them with $.getScript()
-        // example <script type='text/javascript' SRC='../js/tdreszer/jquery.contextmenu-1296177766.js'></script>
         var cleanHtml = response;
-        var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
-        var jsFiles = cleanHtml.match(shlurpPattern);
-        cleanHtml = cleanHtml.replace(shlurpPattern,"");
-        shlurpPattern=/\<script type=\'text\/javascript\'>.*\<\/script\>/gi;
-        var jsEmbeded = cleanHtml.match(shlurpPattern);
-        cleanHtml = cleanHtml.replace(shlurpPattern,"");
-        //<LINK rel='STYLESHEET' href='../style/ui.dropdownchecklist-1276528376.css' TYPE='text/css' />
-        shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
-        var cssFiles = cleanHtml.match(shlurpPattern);
-        cleanHtml = cleanHtml.replace(shlurpPattern,"");
-
+        cleanHtml = stripJsFiles(cleanHtml,true);   // DEBUG msg with true
+        cleanHtml = stripCssFiles(cleanHtml,true);  // DEBUG msg with true
+        cleanHtml = stripJsEmbedded(cleanHtml,true);// DEBUG msg with true
         $('#hgTrackUiDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
 
         // Strategy for poups with js:
@@ -2359,21 +2402,6 @@ var popUp = {
         // - embedded js should not be in the popup box.
         // - Somethings should be in a popup.ready() function, and this is emulated below, as soon as the cleanHtml is added
         //   Since there are many possible popup cfg dialogs, the ready should be all inclusive.
-
-        /* //in open ?  Will load of css work this way?
-        $(cssFiles).each(function (i) {
-            bix = "<LINK rel='STYLESHEET' href='".length;
-            eix = this.lastIndexOf("' TYPE='text/css' />");
-            file = this.substring(bix,eix);
-            $.getScript(file); // Should protect against already loaded files.
-        }); */
-        /* //in open ?  Loads fine, but then dialog gets confused
-        $(jsFiles).each(function (i) {
-            bix = "<script type='text/javascript' SRC='".length;
-            eix = this.lastIndexOf("'></script>");
-            file = this.substring(bix,eix);
-            //$.getScript(file,function(data) { warn(data.substring(0,20) + " loaded")});
-        });*/
 
         if ( ! popUp.trackDescriptionOnly ) {
             var subtrack = tdbIsSubtrack(hgTracks.trackDb[popUp.trackName]) ? popUp.trackName :"";  // If subtrack then vis rules differ
@@ -2525,7 +2553,7 @@ var imageV2 = {
         var reg = new RegExp(str);
         var a = reg.exec(html);
         if(a && a[1]) {
-            var tr = $('#tr_' + id);
+            var tr = $(document.getElementById("tr_" + id));
             if (tr.length > 0) {
                 $(tr).html(a[1]);
                 // NOTE: Want to examine the png? Uncomment:
@@ -2546,8 +2574,9 @@ var imageV2 = {
         return false;
     },
 
-    requestImgUpdate: function (trackName,extraData,loadingId)
+    requestImgUpdate: function (trackName,extraData,loadingId,newVisibility)
     {
+        // extraData, loadingId and newVisibility are optional
         var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
         if(extraData != undefined && extraData != "")
             data += "&" + extraData;
@@ -2567,6 +2596,7 @@ var imageV2 = {
                     cmd: 'refresh',
                     loadingId: loadingId,
                     id: trackName,
+                    newVisibility: newVisibility,
                     cache: false
                 });
     },
@@ -2580,8 +2610,11 @@ var imageV2 = {
         // update local hgTracks.trackDb to reflect possible side-effects of ajax request.
         var json = scrapeVariable(response, "hgTracks");
         var oldTrackDb = hgTracks.trackDb;
+        var valid = false;
         if(json == undefined) {
             showWarning("hgTracks object is missing from the response");
+        } else if (json.err) {
+            showWarning("Request failed; error: " + json.err);
         } else {
             if(this.id != null) {
                 if(json.trackDb[this.id]) {
@@ -2596,94 +2629,98 @@ var imageV2 = {
                     var rec = hgTracks.trackDb[this.id];
                     rec.limitedVis = json.trackDb[this.id].limitedVis;
                     vis.update(this.id, visibility);
+                    valid = true;
                 } else {
                     showWarning("Invalid hgTracks.trackDb received from the server");
                 }
             } else {
+                valid = true;
                 hgTracks.trackDb = json.trackDb;
             }
         }
-        if(imageV2.enabled
-        && this.id
-        && this.cmd
-        && this.cmd != 'wholeImage'
-        && this.cmd != 'selectWholeGene') {
-            // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
-            // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
-            var id = this.id;
-            if(imageV2.updateImgForId(response, id)) {
-                imageV2.afterReload();
-            } else {
-                showWarning("Couldn't parse out new image for id: " + id);
-                //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
-            }
-        } else {
-            if(imageV2.enabled) {
-                // Implement in-place updating of hgTracks image
-                genomePos.setByCoordinates(json.chromName, json.winStart + 1, json.winEnd);
-                $("input[name='c']").val(json.chromName);
-                $("input[name='l']").val(json.winStart);
-                $("input[name='r']").val(json.winEnd);
-                if(json.cgiVersion != hgTracks.cgiVersion) {
-                    // Must reload whole page because of a new version on the server; this should happen very rarely.
-                    // Note that we have already updated position based on the user's action.
-                    jQuery('body').css('cursor', 'wait');
-                    document.TrackHeaderForm.submit();
-                } else {
-                    // We update rows one at a time (b/c updating the whole imgTable at one time doesn't work in IE).
-                    for (var id in hgTracks.trackDb) {
-                    // handle case where invisible items may be in the trackDb list (see redmine #5670).
-                        if(hgTracks.trackDb[id].type != "remote"
-                        && hgTracks.trackDb[id].visibility > 0 // && $('#tr_' + id).length > 0
-                        && !imageV2.updateImgForId(response, id)) {
-                            showWarning("Couldn't parse out new image for id: " + id);
-                        }
-                    }
-                /* This (disabled) code handles dynamic addition of tracks:
-                    for (var id in hgTracks.trackDb) {
-                        if(oldTrackDb[id] == undefined) {
-                            // XXXX Tim, what s/d abbr attribute be?
-                            $('#imgTbl').append("<tr id='tr_" + id + "' class='imgOrd trDraggable'></tr>");
-                            imageV2.updateImgForId(response, id);
-                            vis.update(id, vis.enumOrder[hgTracks.trackDb[id].visibility]);
-                        }
-                    }
-                */
-                    hgTracks = json;
-                    genomePos.original = undefined;
-                    initVars();
+        if(valid) {
+            if(imageV2.enabled
+            && this.id
+            && this.cmd
+            && this.cmd != 'wholeImage'
+            && this.cmd != 'selectWholeGene') {
+                // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
+                // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
+                var id = this.id;
+                if(imageV2.updateImgForId(response, id)) {
                     imageV2.afterReload();
+                } else {
+                    showWarning("Couldn't parse out new image for id: " + id);
+                    //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                 }
             } else {
-                warn("ASSERT: Attempt to update track without advanced javascript features.");
+                if(imageV2.enabled) {
+                    // Implement in-place updating of hgTracks image
+                    genomePos.setByCoordinates(json.chromName, json.winStart + 1, json.winEnd);
+                    $("input[name='c']").val(json.chromName);
+                    $("input[name='l']").val(json.winStart);
+                    $("input[name='r']").val(json.winEnd);
+                    if(json.cgiVersion != hgTracks.cgiVersion) {
+                        // Must reload whole page because of a new version on the server; this should happen very rarely.
+                        // Note that we have already updated position based on the user's action.
+                        jQuery('body').css('cursor', 'wait');
+                        document.TrackHeaderForm.submit();
+                    } else {
+                        // We update rows one at a time (b/c updating the whole imgTable at one time doesn't work in IE).
+                        for (var id in hgTracks.trackDb) {
+                        // handle case where invisible items may be in the trackDb list (see redmine #5670).
+                            if(hgTracks.trackDb[id].type != "remote"
+                            && hgTracks.trackDb[id].visibility > 0 // && $('#tr_' + id).length > 0
+                            && !imageV2.updateImgForId(response, id)) {
+                                showWarning("Couldn't parse out new image for id: " + id);
+                            }
+                        }
+                    /* This (disabled) code handles dynamic addition of tracks:
+                        for (var id in hgTracks.trackDb) {
+                            if(oldTrackDb[id] == undefined) {
+                                // XXXX Tim, what s/d abbr attribute be?
+                                $('#imgTbl').append("<tr id='tr_" + id + "' class='imgOrd trDraggable'></tr>");
+                                imageV2.updateImgForId(response, id);
+                                vis.update(id, vis.enumOrder[hgTracks.trackDb[id].visibility]);
+                            }
+                        }
+                    */
+                        hgTracks = json;
+                        genomePos.original = undefined;
+                        initVars();
+                        imageV2.afterReload();
+                    }
+                } else {
+                    warn("ASSERT: Attempt to update track without advanced javascript features.");
+                }
+                // now pull out and parse the map.
+                //a = /<MAP id='map' Name=map>([\s\S]+)<\/MAP>/.exec(response);
+                //if(!a[1])
+                //    showWarning("Couldn't parse out map");
             }
-            // now pull out and parse the map.
-            //a = /<MAP id='map' Name=map>([\s\S]+)<\/MAP>/.exec(response);
-            //if(!a[1])
-            //    showWarning("Couldn't parse out map");
-        }
-        // Parse out new ideoGram url (if available)
-        // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
-        // We do this last b/c it's least important.
-        var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
-        if(a && a[1]) {
-            b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
-            if(b[1]) {
-                $('#chrom').attr('src', b[1]);
+            // Parse out new ideoGram url (if available)
+            // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
+            // We do this last b/c it's least important.
+            var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
+            if(a && a[1]) {
+                var b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
+                if(b && b[1]) {
+                    $('#chrom').attr('src', b[1]);
+                }
             }
-        }
-        if(hgTracks.measureTiming) {
-            imageV2.updateTiming(response);
+            if(hgTracks.measureTiming) {
+                imageV2.updateTiming(response);
+            }
         }
         if(this.disabledEle) {
-            this.disabledEle.attr('disabled', '');
+            this.disabledEle.removeAttr('disabled');
         }
         if(this.loadingId) {
             hideLoadingImage(this.loadingId);
         }
         jQuery('body').css('cursor', '');
-        if(this.currentId) {
-            var top = $("#tr_" + this.currentId).position().top;
+        if(valid && this.currentId) {
+            var top = $(document.getElementById("tr_" + this.currentId)).position().top;
             $(window).scrollTop(top - this.currentIdYOffset);
         }
     },
@@ -2805,10 +2842,14 @@ var imageV2 = {
         && gene.length > 0
         && gene != "gene"
         && db
+        && $('#positionDisplay').length == 0
         && (genomePos.getOriginalPos() == genomePos.get() || genomePos.get().length == 0)) {
-            pos = lookupGene(db, gene);
+            var pos = lookupGene(db, gene);
             if(pos) {
+                vis.makeTrackVisible($("#suggestTrack").val());
                 genomePos.set(pos, null);
+                // Following doesn't work b/c we get the hugo symbol from the suggest list, not the known gene id.
+                // $(document.TrackForm || document.TrackHeaderForm).append("<input type='hidden' name='hgFind.matches' " + "value='" + name + "'>");
             } else {
                 // turn this into a full text search.
                 genomePos.set(gene, null);
@@ -2827,7 +2868,7 @@ var imageV2 = {
         if(keepCurrentTrackVisible) {
             var item = rightClick.currentMapItem || imageV2.lastTrack;
             if(item) {
-                var top = $("#tr_" + item.id).position().top;
+                var top = $(document.getElementById("tr_" + item.id)).position().top;
                 if(top >= $(window).scrollTop()
                 || top < $(window).scrollTop() + $(window).height()) {
                     // don't bother if the item is not currently visible.
@@ -2859,14 +2900,25 @@ var imageV2 = {
  //// suggest  (aka gene search) ////
 ////////////////////////////////////
 var suggestBox = {
+    lastEntered: null,
 
     init: function (db)
     {
-        if(jQuery.fn.autocomplete && $('input#suggest') && db) {
+        var ele = $('#positionInput');
+        if(!ele.length) {
+            ele = $('input#suggest');
+        }
+        if(jQuery.fn.autocomplete && ele.length && db) {
             if(jQuery.fn.Watermark) {
-                $('#suggest').Watermark("gene");
+                var str;
+                if(hgTracks.assemblySupportsGeneSuggest) {
+                     str = "enter new position, gene symbol or annotation search terms";
+                } else {
+                     str = "enter new position or annotation search terms";
+                }
+                $('#positionInput').Watermark(str, '#686868');
             }
-            $('input#suggest').autocomplete({
+            ele.autocomplete({
                 delay: 500,
                 minLength: 2,
                 source: ajaxGet(function () {return getDb();}, new Object, true),
@@ -2885,6 +2937,7 @@ var suggestBox = {
                 select: function (event, ui) {
                         genomePos.set(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
                         vis.makeTrackVisible($("#suggestTrack").val());
+                        suggestBox.lastEntered = ui.item.value;
                         // jQuery('body').css('cursor', 'wait');
                         // document.TrackHeaderForm.submit();
                     }
@@ -3014,6 +3067,18 @@ $(document).ready(function()
                 return postTheForm($(thisForm).attr('name'),this.href);
             }
             return true;
+        });
+    }
+
+    if($("#positionInput").length) {
+        $("#positionInput").change(function(event) {
+            if(!suggestBox.lastEntered || suggestBox.lastEntered != $('#positionInput').val()) {
+                $('#position').val($('#positionInput').val());
+            }
+        });
+        $("#positionDisplay").click(function(event) {
+            genomePos.set($(this).text());
+            $('#positionInput').val($(this).text());
         });
     }
 

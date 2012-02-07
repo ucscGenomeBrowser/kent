@@ -47,5 +47,5 @@ boolean dbLoadNonCoding(char *db, struct gbSelect* select)
 /* determine if non-protein coding sequences should be loaded for this
  * partition */
 {
-return (select->release->srcDb == GB_REFSEQ);
+return TRUE;
 }

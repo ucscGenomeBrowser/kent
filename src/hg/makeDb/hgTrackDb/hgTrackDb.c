@@ -14,7 +14,6 @@
 #include "dystring.h"
 #include "regexHelper.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.71 2010/06/03 18:08:07 kent Exp $";
 
 
 void usage()
@@ -25,18 +24,32 @@ errAbort(
   "Note that the browser supports multiple trackDb tables, usually\n"
   "in the form: trackDb_YourUserName. Which particular trackDb\n"
   "table the browser uses is specified in the hg.conf file found\n"
-  "either in your home directory as '.hg.conf' or in the web \n"
-  "server's cgi-bin directory as 'hg.conf'.\n"
+  "either in your home directory file '.hg.conf' or in the web server's\n"
+  "cgi-bin/hg.conf configuration file with the setting: db.trackDb=trackDb\n"
+  "see also: src/product/ex.hg.conf discussion of this setting.\n"
   "usage:\n"
-  "   hgTrackDb [options] org database trackDb_$(USER) trackDb.sql hgRoot\n"
+  "   hgTrackDb [options] org database trackDb trackDb.sql hgRoot\n"
   "\n"
   "Options:\n"
+  "  org - a directory name with a hierarchy of trackDb.ra files to examine\n"
+  "      - in the case of a single directory with a single trackDb.ra file use .\n"
+  "  database - name of database to create the trackDb table in\n"
+  "  trackDb  - name of table to create, usually trackDb, or trackDb_${USER}\n"
+  "  trackDb.sql  - SQL definition of the table to create, typically from\n"
+  "               - the source tree file: src/hg/lib/trackDb.sql\n"
+  "               - the table name in the CREATE statement is replaced by the\n"
+  "               - table name specified on this command line.\n"
+  "  hgRoot - a directory name to prepend to org to locate the hierarchy:\n"
+  "           hgRoot/trackDb.ra - top level trackDb.ra file processed first\n"
+  "           hgRoot/org/trackDb.ra - second level file processed second\n"
+  "           hgRoot/org/database/trackDb.ra - third level file processed last\n"
+  "         - for no directory hierarchy use .\n"
   "  -strict - only include tables that exist (and complain about missing html files).\n"
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n"
   "  -release=alpha|beta|public - Include trackDb entries with this release tag only.\n"
   "  -settings - for trackDb scanning, output table name, type line,\n"
-  "            -  and settings hash to stderr while loading everything\n"
+  "            -  and settings hash to stderr while loading everything."
   );
 }
 

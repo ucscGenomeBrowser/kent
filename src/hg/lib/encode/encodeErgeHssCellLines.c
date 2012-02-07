@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/encodeErgeHssCellLines.h"
 
-static char const rcsid[] = "$Id: encodeErgeHssCellLines.c,v 1.1 2008/08/01 17:49:05 aamp Exp $";
 
 struct encodeErgeHssCellLines *encodeErgeHssCellLinesLoad(char **row)
 /* Load a encodeErgeHssCellLines from row fetched with select * from encodeErgeHssCellLines

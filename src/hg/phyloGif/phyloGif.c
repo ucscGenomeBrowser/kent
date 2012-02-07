@@ -67,7 +67,6 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.23 2009/09/23 18:42:23 angie Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -79,6 +78,7 @@ boolean lengthLegend = FALSE;   /* length ruler*/
 boolean branchLabels = FALSE;   /* labelled branch lengths */
 boolean htmlPageWrapper = FALSE;  /* wrap output in an html page */
 boolean preserveUnderscores = FALSE;   /* preserve underscores in input as spaces in output */
+boolean monospace = FALSE;      /* use monospace font */
 int branchDecimals = 2;         /* show branch label length to two decimals by default */
 int branchMultiplier = 1;         /* multiply branch length by factor */
 char *escapePattern = NULL;      /* use to escape dash '-' char in input */
@@ -117,6 +117,7 @@ errAbort(
     "  -phyloGif_branchMultiplier=N - multiply branch length by N default %d\n"
     "  -phyloGif_htmlPage - wrap the output in an html page (cgi only)\n"
     "  -phyloGif_underscores - preserve underscores in input as spaces in output\n"
+    "  -phyloGif_monospace - use a monospace proportional font\n"
     , msg, width, height, branchDecimals, branchMultiplier);
 }
 
@@ -364,7 +365,6 @@ else
 
 useCart = (!cgiOptionalString("phyloGif_tree") || cgiVarExists("phyloGif_restore"));
 
-MgFont *font = mgMediumBoldFont();
 htmlPageWrapper = cgiVarExists("phyloGif_htmlPage"); /* wrap output in a page */
 
 if (onWeb && sameString(getenv("REQUEST_METHOD"),"HEAD"))
@@ -388,6 +388,7 @@ if (useCart)
     branchDecimals = cartUsualInt(cart,"phyloGif_branchDecimals", branchDecimals);
     branchMultiplier = cartUsualInt(cart,"phyloGif_branchMultiplier", branchMultiplier);
     preserveUnderscores = cartVarExists(cart,"phyloGif_underscores");
+    monospace = cartVarExists(cart, "phyloGif_monospace");
     }
 else
     {
@@ -400,6 +401,7 @@ else
     branchDecimals = cgiUsualInt("phyloGif_branchDecimals", branchDecimals);
     branchMultiplier = cgiUsualInt("phyloGif_branchMultiplier", branchMultiplier);
     preserveUnderscores = cgiVarExists("phyloGif_underscores");
+    monospace = cgiVarExists("phyloGif_monospace");
     }
     
 if (useCart)
@@ -426,6 +428,7 @@ if (useCart)
 	puts("<tr><td>&nbsp; Multiply branch length by factor?</td><td>"); cartMakeIntVar(cart, "phyloGif_branchMultiplier", branchMultiplier,5); puts("</td></tr>");
 	puts("<tr><td>Preserve Underscores?</td><td>"); cartMakeCheckBox(cart, "phyloGif_underscores", preserveUnderscores); puts("</td></tr>");
 	puts("<tr><td>Wrap in html page?</td><td>"); cartMakeCheckBox(cart, "phyloGif_htmlPage", htmlPageWrapper); puts("</td></tr>");
+	puts("<tr><td>Monospace font?</td><td>"); cartMakeCheckBox(cart, "phyloGif_monospace", monospace); puts("</td></tr>");
 
         printf("<tr><td><big>TREE:</big>");
 	puts("<br><br><INPUT type=\"submit\" name=\"phyloGif_restore\" value=\"restore default\">");
@@ -541,6 +544,8 @@ if (htmlPageWrapper)
     printf("&phyloGif_branchMultipliers=%d",branchMultiplier);
     if (preserveUnderscores)
 	printf("&phyloGif_underscores=1");
+    if (monospace)
+	printf("&phyloGif_monospace=1");
     puts("\"></body></html>");
     freez(&phyloData);
     return 0;
@@ -636,6 +641,12 @@ if (errMsg)
 }
 
 
+
+MgFont *font = NULL;
+if (monospace)
+    font = mgMenloMediumFont();
+else
+    font = mgMediumBoldFont();
 
 
 if (phyloTree)

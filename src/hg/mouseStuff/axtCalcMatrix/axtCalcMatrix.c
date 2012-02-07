@@ -8,7 +8,6 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtCalcMatrix.c,v 1.10 2006/06/16 16:33:22 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "contigAcc.h"
 
-static char const rcsid[] = "$Id: contigAcc.c,v 1.1 2004/08/20 23:53:38 kate Exp $";
 
 void contigAccStaticLoad(char **row, struct contigAcc *ret)
 /* Load a row from contigAcc table into ret.  The contents of ret will

@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: pslReaderTester.c,v 1.4 2008/09/03 19:19:29 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */

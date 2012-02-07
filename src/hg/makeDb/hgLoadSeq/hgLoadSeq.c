@@ -8,7 +8,6 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.16 2009/10/16 00:07:04 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

@@ -853,8 +853,6 @@ popd > /dev/null
     featureBits ce10 multiz9waySummary
     #	52660337 bases of 100286070 (52.510%) in intersection
 
-    time doEnsGeneUpdate.pl -ensVersion=62 ce10.ensGene.ra > ensGene.62.log 2>&1
-
 ############################################################################
 #  ce10 - C. elegans - Ensembl Genes version 62  (DONE - 2011-06-09 - hiram)
     ssh hgwdev
@@ -1508,5 +1506,900 @@ done
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/phyloP9way
     cd /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/phyloP9way
     ln -s /hive/data/genomes/ce10/goldenPath/phyloP9way/* .
+
+############################################################################
+## 7-Way Multiz (DONE - 2011-12-16 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/ce10/bed/multiz7way
+    cd /hive/data/genomes/ce10/bed/multiz7way
+
+    # eliminate the broken assemblies from the 9-way tree
+    /cluster/bin/phast/tree_doctor --prune caeSp91,caeSp71 \
+	../multiz9way/4d/tree_4d.9way.nh > ce10.7way.nh
+
+    #	what that looks like:
+    cat ce10.9way.nh
+# (((ce10:0.953381,((cb4:0.498374,caeRem4:0.808914):0.001055,
+#	(caeSp111:0.432572,caePb3:0.416563):0.454643):0.001065):0.018543,
+#	caeJap4:0.886056):0.383281,caeAng1:0.383281);
+
+
+    # convert to species names
+    #	(tree doctor is confused by . in the names, use X and sed trick)
+    /cluster/bin/phast/tree_doctor --rename \
+"ce10->CX_elegans; cb4->CX_briggsae; caeRem4->CX_remanei; caeSp111->CX_spX_11; caePb3->CX_brenneri; caeJap4->CX_japonica; caeAng1->CX_angaria" ce10.7way.nh | sed -e "s/X/./g" > ce10.commonNames.7way.nh
+
+    cat ce10.commonNames.9way.nh
+# (((C._elegans:0.953381,((C._briggsae:0.498374,C._remanei:0.808914):0.001055,
+#	(C._sp._11:0.432572,C._brenneri:0.416563):0.454643):0.001065):0.018543,
+#	C._japonica:0.886056):0.383281,C._angaria:0.383281);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/ce10_7way.png
+
+    /cluster/bin/phast/all_dists ce10.7way.nh > 7way.distances.txt
+    #	Use this output to create the table below
+    grep -i ce10 7way.distances.txt | sort -k3,3n
+# ce10    cb4     1.453875
+# ce10    caeAng1 1.738486
+# ce10    caeRem4 1.764415
+# ce10    caePb3  1.825652
+# ce10    caeSp111        1.841661
+# ce10    caeJap4 1.857980
+
+# from the 4D prediction below:
+    /cluster/bin/phast/all_dists 4d/tree_4d.7way.nh | grep -i ce10 | sort -k3,3n
+# ce10    caeRem4 1.072781
+# ce10    caePb3  1.096183
+# ce10    cb4     1.126444
+# ce10    caeSp111        1.129586
+# ce10    caeJap4 1.241816
+# ce10    caeAng1 1.274358
+
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+
+#                         featureBits chainLink measures
+#                                 chainCe10Link          chain    linearGap
+#    distance                     on ce10   on other  minScore
+# 1  1.453875 cb4     briggsae   (% 39.39) (% 36.19)      1000    loose
+# 2  1.738486 caeAng1 angaria    (% 17.63) (% 23.40)      1000    loose
+# 2  1.764415 caeRem4 remanei    (% 41.72) (% 33.47)      1000    loose
+# 3  1.825652 caePb3  brenneri   (% 40.64) (% 32.34)      1000    loose
+# 6  1.841661 caeSp111 sp. 11    (% 37.88) (% 47.37)      1000    loose
+# 7  1.857980 caeJap4 japonica   (% 27.74) (% 19.56)      1000    loose
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    #	tree-commas.nh used below in 4D predictions
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	ce10.7way.nh > tree-commas.nh
+    cat tree-commas.nh | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    # construct links to all  synNet maf files
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/mafLinks
+    cd /hive/data/genomes/ce10/bed/multiz7way/mafLinks
+    for D in `sed -e "s/ce10 //" ../species.list`
+do
+    mkdir ${D}
+    cd ${D}
+    ln -s ../../../lastz.${D}/mafSynNet/*.gz .
+    cd ..
+done
+    
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . | grep maf.gz | xargs -L 1 basename | sort -u > ../maf.list
+    wc -l ../maf.list
+    # 7 maf.list
+
+    cd /hive/data/genomes/ce10/bed/multiz7way
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = ce10
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/ce10/bed/multiz7way/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../tree.nh ../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            /bin/echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        /bin/echo -e "##maf version=1 scoring=autoMZ\n\n##eof maf" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/ce10/bed/multiz7way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    find ../mafLinks -type l | sed -e "s/.*chr/chr/; s/.maf.gz//" \
+	| sort -u > chr.part.list
+    ssh encodek
+    cd /hive/data/genomes/ce10/bed/multiz7way/run
+    gensub2 chr.part.list single template jobList
+    para -ram=8g create jobList
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       3592s      59.86m     1.00h    0.04d  0.000 y
+# IO & Wait Time:                    33s       0.56m     0.01h    0.00d  0.000 y
+# Average job time:                 518s       8.63m     0.14h    0.01d
+# Longest finished job:             992s      16.53m     0.28h    0.01d
+# Submission to last job:          1446s      24.10m     0.40h    0.02d
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/ce10/multiz7way/maf
+    cd /hive/data/genomes/ce10/bed/multiz7way/maf
+    ln -s `pwd`/*.maf /gbdb/ce10/multiz7way/maf
+
+    # this generates an immense multiz7way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/ce10/multiz7way/maf ce10 multiz7way
+    #	Loaded 383246 mafs in 7 files from /gbdb/ce10/multiz7way/maf
+    #	real    0m15.560s
+
+    # load summary table
+    time nice -n +19 cat /gbdb/ce10/multiz7way/maf/*.maf \
+	| hgLoadMafSummary ce10 -minSize=10000 -verbose=2 \
+		-mergeGap=500 -maxSize=50000  multiz7waySummary stdin
+    #	Created 95385 summary blocks from 1012381 components
+    #	and 383246 mafs from stdin
+    #	real    0m11.740s
+
+    featureBits ce10 multiz7waySummary
+    #	51922335 bases of 100286070 (51.774%) in intersection
+
+    wc -l multiz7*.tab
+    #	383246 multiz7way.tab
+    #	95385 multiz7waySummary.tab
+
+    rm -f multiz7*.tab
+
+############################################################################
+# 7-way Gap annotation (DONE - 2011-12-16 - Hiram)
+    # Gap Annotation
+    # prepare bed files with gap info
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/anno
+    cd /hive/data/genomes/ce10/bed/multiz7way/anno
+    mkdir maf run
+
+    #	these may already exist from previous multiple alignments
+    #	remove the echo from in front of the twoBitInfo command to get them
+    #	to run if this loop appears to be correct
+    for DB in `cat ../species.list`
+do
+    CDIR="/hive/data/genomes/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `sed -e "s/ce10 //" ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    #	the annotation step requires large memory, run on memk nodes
+    ssh memk
+    cd /hive/data/genomes/ce10/bed/multiz7way/anno/run
+    ls ../../maf | sed -e "s/.maf//" > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./anno.csh $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > anno.csh
+#!/bin/csh -fe
+
+set inMaf = ../../maf/$1.maf
+set outMaf = ../maf/$1.maf
+rm -f $outMaf
+mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/ce10/ce10.2bit $outMaf
+'_EOF_'
+    # << happy emacs
+    chmod +x anno.csh
+
+    gensub2 chr.list single template jobList
+    para -ram=8g create jobList
+    para try
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:         40s       0.67m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                    38s       0.63m     0.01h    0.00d  0.000 y
+# Average job time:                  11s       0.19m     0.00h    0.00d
+# Longest finished job:              15s       0.25m     0.00h    0.00d
+# Submission to last job:            28s       0.47m     0.01h    0.00d
+
+    ssh hgwdev
+    cd /hive/data/genomes/ce10/bed/multiz7way/anno/maf
+    rm -fr /gbdb/ce10/multiz7way/maf
+    mkdir /gbdb/ce10/multiz7way/maf
+    ln -s `pwd`/*.maf /gbdb/ce10/multiz7way/maf/
+    #	by loading this into the table multiz7way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/ce10/multiz7way/maf ce10 multiz7way
+    #	Loaded 430061 mafs in 7 files from /gbdb/ce10/multiz7way/maf
+    #	real    0m14.687s
+
+    time nice -n +19 cat /gbdb/ce10/multiz7way/maf/*.maf \
+	| hgLoadMafSummary ce10 -minSize=10000 -verbose=2 \
+		-mergeGap=500 -maxSize=50000  multiz7waySummary stdin
+    #	Created 95385 summary blocks from 1012381 components
+    #	and 430061 mafs from stdin
+    #	real    0m10.627s
+
+##############################################################################
+# Phylogenetic tree from 7-way  (DONE - 2011-12-16 - Hiram)
+
+    # Extract 4-fold degenerate sites based on 
+    # of sangerGenes, coding
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/4d
+    cd /hive/data/genomes/ce10/bed/multiz7way/4d
+
+    #	Ensembl gene version today is v65
+    hgsql ce10 -Ne "select * from ensGene;" | cut -f2-11 > ensGene.tab.gp
+    wc -l ensGene.tab.gp
+    #	54959 ensGene.tab.gp
+    genePredSingleCover ensGene.tab.gp stdout | sort > ensGene.gp
+    wc -l ensGene.gp
+    #	20368 ensGene.gp
+
+    ssh memk
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/4d/run
+    cd /hive/data/genomes/ce10/bed/multiz7way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/ce10/bed/multiz7way"
+set c = $1
+set infile = $r/anno/maf/$2
+set outfile = $3:t
+cd /scratch/tmp
+# 'clean' maf
+# perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
+/bin/cp -p $infile $c.maf
+/bin/gawk -v C=$c '$2 == C' $r/4d/ensGene.gp | /bin/sed -e "s/\t$c\t/\tce10.$c\t/" > $c.gp
+if (-s $c.gp) then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/mfa/$outfile
+else
+    echo "" > $r/4d/mfa/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls /hive/data/genomes/ce10/bed/multiz7way/anno/maf > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template jobList
+    rm -fr /cluster/data/ce10/bed/multiz7way/4d/mfa
+    mkdir /cluster/data/ce10/bed/multiz7way/4d/mfa
+    para create jobList
+    para try
+    para check
+    para time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:         67s       1.11m     0.02h    0.00d  0.000 y
+# IO & Wait Time:                    18s       0.31m     0.01h    0.00d  0.000 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest finished job:              17s       0.28m     0.00h    0.00d
+# Submission to last job:            30s       0.50m     0.01h    0.00d
+
+    # combine mfa files
+    cd ..
+    sed -e "s/ /,/g" ../species.list > species.lst
+    /cluster/bin/phast/msa_view --aggregate `cat species.lst` mfa/*.mfa | \
+        sed s/"> "/">"/ > 4d.all.mfa
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	--EM --precision MED --msa-format FASTA \
+	--subst-mod REV --tree ../tree-commas.nh 4d.all.mfa
+    #	real    1m26.381s
+
+    grep TREE phyloFit.mod
+
+# TREE: (((ce10:0.528629,((cb4:0.462053,caeRem4:0.40839):0.0474158,(caeSp111:0.431868,caePb3:0.398465):0.0807427):0.0883464):0.203157,caeJap4:0.51003):0.271286,caeAng1:0.271286);
+
+    mv phyloFit.mod phyloFit.all.mod
+    grep TREE phyloFit.all.mod | sed 's/TREE\:\ //' > tree_4d.7way.nh
+
+#########################################################################
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS - 7-WAY
+#		(DONE - 2011-12-16 - Hiram)
+    #	We need the fasta sequence for this business
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/ce10Fasta
+    cd /hive/data/genomes/ce10/bed/multiz7way/ce10Fasta
+    for C in `cut -f1 ../../../chrom.sizes`
+do
+    echo "twoBitToFa -seq=${C} ../../../ce10.2bit ${C}.fa"
+    twoBitToFa -seq=${C} ../../../ce10.2bit ${C}.fa
+done
+    #	verify nothing lost, should be the same as previously:
+    faSize *.fa
+# 100286070 bases (0 N's 100286070 real 86863818 upper 13422252 lower)
+#	in 7 sequences in 7 files
+# Total size: mean 14326581.4 sd 6729058.4 min 13794 (chrM)
+#	max 20924149 (chrV) median 15279345
+# %13.38 masked total, %13.38 masked real
+
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/cons
+
+    # create 6,000,000 window sized SS files:
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/cons/ss1M
+    cd /hive/data/genomes/ce10/bed/multiz7way/cons/ss1M
+    time for C in `cut -f1 /hive/data/genomes/ce10/chrom.sizes`
+    do
+	mkdir ${C}
+	echo msa_split $C
+        /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+	    /hive/data/genomes/ce10/bed/multiz7way/anno/maf/${C}.maf \
+	    --refseq /hive/data/genomes/ce10/bed/multiz7way/ce10Fasta/${C}.fa \
+	    --in-format MAF --windows 6000000,0 --between-blocks 5000 \
+	    --out-format SS --out-root ${C}/${C}
+    done
+    #	real    0m45.085s
+
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/cons/msa.split
+    cd /hive/data/genomes/ce10/bed/multiz7way/cons/msa.split
+
+for C in I II III IV V X M
+do
+echo chr${C}
+mkdir chr${C}
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+	../../anno/maf/chr${C}.maf --in-format MAF --out-format SS \
+        --refseq ../../ce10Fasta/chr${C}.fa \
+        --out-root chr${C}/chr${C} --windows 1000000,0 \
+        --between-blocks 5000
+done
+
+    # Run phastCons
+    #   This job is I/O intensive in its output files, beware where this
+    #   takes place or do not run too many at once.
+    ssh memk
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/cons/run.cons
+    cd /hive/data/genomes/ce10/bed/multiz7way/cons/run.cons
+
+    #   this script is set for different phastCons runs, we only do one type
+    #	here: grp: 'all'
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3 
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/ce10/bed/multiz7way/cons
+set tmp = $cons/tmp/$f
+/bin/mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+if (-s $cons/$grp/$grp.non-inf) then
+  /bin/ln -s $cons/$grp/$grp.non-inf $tmp
+endif
+/bin/ln -s $cons/$grp/$grp.mod $tmp
+/bin/ln -s $ssSrc/msa.split/$cX/$f.ss $tmp
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+/bin/mkdir -p pp/$c bed/$c
+/bin/sleep 4
+/bin/touch pp/$c bed/$c
+/bin/rm -f pp/$c/$f.pp
+/bin/rm -f bed/$c/$f.bed
+/bin/mv $tmp/$f.pp pp/$c
+/bin/mv $tmp/$f.bed bed/$c
+/bin/rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    #   this template will serve for all runs
+    #   root1 == chrom name, file1 == ss file name without .ss suffix
+    #	--expected-length 15 --target-coverage 0.55 --rho = 0.3
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 15 0.55 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls ../msa.split/chr* | grep ".ss$" | sed -e "s/.ss$//" > ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/ce10/bed/multiz7way/cons
+    mkdir -p all
+    cd all
+    #   Using the .mod tree
+    cp -p ../../4d/phyloFit.all.mod all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    # do not let these run full blast, they run too fast, ram=8g limits one
+    #	to a node
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:        351s       5.85m     0.10h    0.00d  0.000 y
+# IO & Wait Time:                   680s      11.33m     0.19h    0.01d  0.000 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest finished job:              13s       0.22m     0.00h    0.00d
+# Submission to last job:           945s      15.75m     0.26h    0.01d
+
+    # create Most Conserved track
+    ssh hgwdev
+    cd /hive/data/genomes/ce10/bed/multiz7way/cons/all
+
+    cat bed/*/*.bed | sort -k1,1 -k2,2n \
+        | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+        > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    hgLoadBed ce10 phastConsElements7way mostConserved.bed
+    # Loaded 406483 elements of size 5
+
+    # all sequences at MAF net alignment type, 
+    featureBits ce10 -enrichment ensGene:cds mostConserved.bed
+    #	--expected-length 15 --target-coverage 0.55 --rho = 0.3
+    #	ensGene:cds 25.387%, mostConserved.bed 37.236%,
+    #	both 17.412%, cover 68.59%, enrich 1.84x
+
+    # Try for 70% CDS cover
+    # this same business in hg19 tried for phastConsElementsNway of %5
+    #	but this nematode business covers a lot more
+    featureBits ce10 -enrichment ensGene:cds phastConsElements7way
+    #	ensGene:cds 25.387%, phastConsElements7way 37.236%,
+    #	both 17.412%, cover 68.59%, enrich 1.84x
+
+    # in ce6 6-way this was:
+    #	--expected-length 15 --target-coverage 0.55
+    #	sangerGene:cds 25.329%, phastConsElements6way.bed 29.557%,
+    #	both 15.469%, cover 61.07%, enrich 2.07x
+
+    # Create merged posterier probability file and wiggle track data
+    # files
+    cd /hive/data/genomes/ce10/bed/multiz7way/cons/all
+    mkdir downloads
+    for C in I II III IV V X M
+do
+    find ./pp/chr${C} -type f | sed -e "s#^./##" | sed -e "s/\./_/" \
+	| sort -t'_' -k1,1 -k2,2n | sed -e "s/_/./"
+done | xargs cat | gzip > downloads/ce10.phastCons7way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/ce10.phastCons7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/ce10/chrom.sizes \
+	    phastCons7way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    # pid=25339: VmPeak:      570124 kB
+    #	real    0m46.601s
+
+    bigWigInfo phastCons7way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 125,710,211
+# primaryIndexSize: 2,492,172
+# zoomLevels: 10
+# chromCount: 7
+# basesCovered: 48,904,982
+# mean: 0.697972
+# min: 0.000000
+# max: 1.000000
+# std: 0.313008
+
+    #   encode those files into wiggle data
+    zcat downloads/ce10.phastCons7way.wigFix.gz \
+        | wigEncode stdin phastCons7way.wig phastCons7way.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+
+    du -hsc phastCons7way.wi?
+    #	47M     phastCons7way.wib
+    #	7.3M    phastCons7way.wig
+    #	54M     total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons7way.wib /gbdb/ce10/multiz7way/phastCons7way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/ce10/multiz7way ce10 \
+        phastCons7way phastCons7way.wig
+
+    wigTableStats.sh ce10 phastCons7way
+# db.table          min max mean     count sumData      stdDev viewLimits
+# ce10.phastCons7way 0 1 0.697972 48904982 3.41343e+07 0.313008 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /hive/data/genomes/ce10/bed/multiz7way/cons/all
+    time nice -n +19 hgWiggle -doHistogram -db=ce10 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons7way > histogram.data 2>&1
+    #	real    0m4.189s
+
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small size 1000,600 x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Nematode Ce10 Histogram phastCons7way track"
+set xlabel " phastCons7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+############################################################################
+# phyloP conservation (DONE - 2011-06-09 - Hiram)
+    # run phyloP with score=LRT 
+    ssh memk
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/consPhyloP
+    cd /hive/data/genomes/ce10/bed/multiz7way/consPhyloP
+    mkdir run.phyloP
+    cd run.phyloP
+
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.353
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.353 > all.mod
+    # to see if that works, look at the BACKGROUND line:
+    #	BACKGROUND: 0.323500 0.176500 0.176500 0.323500
+    # note it is now two pairs of the same value
+
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set out = $2
+set cName = $f:r:r
+set chrDir = $f:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/ce10/bed/multiz7way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = /hive/data/genomes/ce10/bed/multiz7way/cons/msa.split/$cName/$f.ss
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc > $f.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+mv $tmp/$f.wigFix $out
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find  ../../cons/msa.split -type f | grep ".ss$" \
+	| sed -e "s#../../cons/msa.split/##" | sed -e "s/.ss//" > ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(file1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/consPhyloP/all
+    cd /hive/data/genomes/ce10/bed/multiz7way/consPhyloP/all
+
+    #	slow this down with -ram=8g to allow only one job per node
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc ...
+    para time
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:        732s      12.20m     0.20h    0.01d  0.000 y
+# IO & Wait Time:                   698s      11.64m     0.19h    0.01d  0.000 y
+# Average job time:                  14s       0.23m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:           103s       1.72m     0.03h    0.00d
+
+    mkdir downloads
+    for C in I II III IV V X M
+do
+    find ./wigFix/chr${C} -type f | sed -e "s#^./##" | sed -e "s/\./_/" \
+	| sort -t'_' -k1,1 -k2,2n | sed -e "s/_/./"
+done | xargs cat | gzip > downloads/ce10.phyloP7way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/ce10.phyloP7way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/ce10/chrom.sizes \
+	    phyloP7way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    # pid=4918: VmPeak:       570120 kB
+    #	real    1m2.051s
+
+    bigWigInfo phyloP7way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 85,383,604
+# primaryIndexSize: 2,492,172
+# zoomLevels: 10
+# chromCount: 7
+# basesCovered: 48,904,982
+# mean: 0.579886
+# min: -1.402000
+# max: 2.482000
+# std: 0.768655
+
+    wigEncode downloads/ce10.phyloP7way.wigFix.gz phyloP7way.wig phyloP7way.wib
+    #	upper limit 2.48, lower limit -1.40
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP7way.wib /gbdb/ce10/multiz7way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/ce10/multiz7way ce10 \
+	phyloP7way phyloP7way.wig
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /hive/data/genomes/ce10/bed/multiz7way/consPhyloP/all
+    time nice -n +19 hgWiggle -doHistogram -db=ce10 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phyloP7way > histogram.data 2>&1
+    #	real    0m3.435s
+
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small size 1000,600 x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Nematode Ce10 Histogram phyloP7way track"
+set xlabel " phyloP7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+############################################################################
+# multiz7Way MAF FRAMES (DONE - 2011-12-19 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/frames
+    cd /hive/data/genomes/ce10/bed/multiz7way/frames
+    mkdir genes
+    # The following is adapted from the ce6 6-way sequence
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # using ensGene for ce10
+    # using xenoRefGene for cb4, caeRem4, caePb3, caeJap4
+    # there are no genes on caeSp111 or caeAng1
+    hgsql -N -e "select * from ensGene" ce10 | cut -f 2-12 \
+	| genePredSingleCover stdin stdout | gzip -2c \
+	    > genes/ce10.gp.gz
+
+    for qDB in cb4 caeRem4 caePb3 caeJap4
+    do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${qDB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+		> genes/$qDB.gp.gz
+    done
+
+    ls -ogrt genes
+# -rw-rw-r-- 1 1273808 Dec 19 11:57 ce10.gp.gz
+# -rw-rw-r-- 1  907761 Dec 19 11:59 cb4.gp.gz
+# -rw-rw-r-- 1  987565 Dec 19 11:59 caeRem4.gp.gz
+# -rw-rw-r-- 1 1258275 Dec 19 11:59 caePb3.gp.gz
+# -rw-rw-r-- 1  854239 Dec 19 11:59 caeJap4.gp.gz
+
+
+    cd /hive/data/genomes/ce10/bed/multiz7way/frames
+    cat ../maf/*.maf | nice -n +19 genePredToMafFrames ce10 \
+    cat ../anno/maf/*.maf | nice -n +19 genePredToMafFrames ce10 \
+	stdin stdout \
+	ce10 genes/ce10.gp.gz cb4 genes/cb4.gp.gz caeRem4 genes/caeRem4.gp.gz caePb3 genes/caePb3.gp.gz caeJap4 genes/caeJap4.gp.gz \
+	| gzip > multiz7way.mafFrames.gz
+
+    #	the sed trick with ../species.list did not work here:
+	`sed -e "s#caeSp111 ##; s#caeAng1##; s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+    #	list:
+# ce10 genes/ce10.gp.gz cb3 genes/cb3.gp.gz caeRem3 genes/caeRem3.gp.gz \
+# caePb2 genes/caePb2.gp.gz caeJap3 genes/caeJap3.gp.gz \
+# haeCon1 genes/haeCon1.gp.gz priPac2 genes/priPac2.gp.gz \
+# melHap1 genes/melHap1.gp.gz melInc1 genes/melInc1.gp.gz \
+# bruMal1 genes/bruMal1.gp.gz
+
+    ssh hgwdev
+    cd /hive/data/genomes/ce10/bed/multiz7way/frames
+    nice -n +19 hgLoadMafFrames ce10 multiz7wayFrames multiz7way.mafFrames.gz
+
+
+############################################################################
+# Constructing Downloads for 7way (DONE - 2011-12-16 - Hiram)
+    cd /hive/data/genomes/ce10/goldenPath
+
+    mkdir multiz7way phastCons7way phyloP7way
+    cd multiz7way
+    ln -s ../../bed/multiz7way/4d/tree_4d.7way.nh ce10.7way.nh
+    ln -s ../../bed/multiz7way/7way.commonNames.downloads.nh \
+	7way.commonNames.nh
+    /cluster/bin/phast/tree_doctor --rename \
+"ce10->CX_elegans; cb4->CX_briggsae; caeRem4->CX_remanei; caeSp111->CX_spX_11; caePb3->CX_brenneri; caeJap4->CX_japonica; caeAng1->CX_angaria" ce10.7way.nh | sed -e "s/X/./g" > ce10.commonNames.7way.nh
+
+    cat ce10.commonNames.7way.nh
+# (((C._elegans:0.528629,((C._briggsae:0.462053,C._remanei:0.408390):0.047416,
+# (C._sp._11:0.431868,C._brenneri:0.398465):0.080743):0.088346):0.203157,
+# C._japonica:0.510030):0.271286,C._angaria:0.271286);
+
+    cd ../phyloP7way
+    ln -s \
+../../bed/multiz7way/consPhyloP/all/downloads/ce10.phyloP7way.wigFix.gz .
+    ln -s ../../bed/multiz7way/consPhyloP/all/phyloP7way.bw ce10.phyloP7way.bw
+
+    ln -s ../../bed/multiz7way/consPhyloP/run.phyloP/all.mod ./nematode.mod
+
+    cd ../phastCons7way
+    ln -s ../../bed/multiz7way/cons/all/downloads/ce10.phastCons7way.wigFix.gz .
+    ln -s ../../bed/multiz7way/cons/all/phastCons7way.bw ce10.phastCons7way.bw
+    ln -s ../../bed/multiz7way/cons/all/all.mod ./nematode.mod
+
+    cd ../multiz7way
+    cp -p ../../bed/multiz7way/anno/maf/*.maf .
+    gzip *.maf
+
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    nice -n +19 featureBits -verbose=2 ce10 \
+        ensGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | mafFrags ce10 multiz7way stdin stdout \
+	    -orgs=../../bed/multiz7way/species.list \
+        | gzip -c > ensGene.upstream${S}.maf.gz
+    echo "done ensGene.upstream${S}.maf.gz"
+done
+
+    md5sum *.gz *.nh > md5sum.txt
+
+    # use a README from a recent multiz like this, this one is from the 9-way
+    cp ../multiz9way/README.txt .
+    # edit this README.txt to fixup for this alignment
+
+    cd ../phastCons7way
+    cp -p ../phastCons9way/README.txt .
+    # edit this README.txt to fixup for this alignment
+
+    cd ../phyloP7way
+    cp ../phyloP9way/README.txt .
+    # edit this README.txt to fixup for this alignment
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/multiz7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/multiz7way
+    ln -s /hive/data/genomes/ce10/goldenPath/multiz7way/* .
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/phastCons7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/phastCons7way
+    ln -s /hive/data/genomes/ce10/goldenPath/phastCons7way/* .
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/phyloP7way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/ce10/phyloP7way
+    ln -s /hive/data/genomes/ce10/goldenPath/phyloP7way/* .
+
+############################################################################
+# construct pushQ entries (DONE - 2011-12-19 - Hiram)
+    # verify featureBits functions correctly:
+    mkdir  /hive/data/genomes/ce10/pushQ
+    cd  /hive/data/genomes/ce10/pushQ
+    joinerCheck -all -database=ce10 /usr/local/apache/cgi-bin/all.joiner \
+	> ce10.featureBits.txt 2>&1 &
+    # examine that output to make sure the table checks are clean
+    #	There will be errors about other databases due to the -all flag
+    #	but that has nothing to do with this one.
+    makePushQSql.pl ce10 > ce10.pushQ.sql 2> stderr.out
+    # verify stderr.out has nothing highly unusual
+    scp -p ce10.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < ce10.pushQ.sql
 
 ############################################################################

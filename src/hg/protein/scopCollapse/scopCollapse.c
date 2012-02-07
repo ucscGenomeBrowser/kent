@@ -6,7 +6,6 @@
 #include "rangeTree.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: scopCollapse.c,v 1.3 2007/04/03 16:24:50 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

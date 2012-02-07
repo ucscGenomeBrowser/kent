@@ -8,7 +8,6 @@
 #include "txInfo.h"
 #include "protFeat.h"
 
-static char const rcsid[] = "$Id: txPaperPfam.c,v 1.2 2007/03/29 11:08:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

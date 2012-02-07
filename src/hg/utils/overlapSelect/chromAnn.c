@@ -11,7 +11,6 @@
 #include "coordCols.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: chromAnn.c,v 1.16 2010/01/30 01:13:59 markd Exp $";
 
 static struct chromAnnBlk* chromAnnBlkNew(struct chromAnn *ca, int start, int end)
 /* create new block object and add to chromAnn object */

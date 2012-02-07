@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: chicken13kInfo.c,v 1.1 2005/05/19 11:44:27 aamp Exp $";
 
 void chicken13kInfoStaticLoad(char **row, struct chicken13kInfo *ret)
 /* Load a row from chicken13kInfo table into ret.  The contents of ret will

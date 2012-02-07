@@ -8,7 +8,6 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafsInRegion.c,v 1.7 2009/07/25 08:32:16 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

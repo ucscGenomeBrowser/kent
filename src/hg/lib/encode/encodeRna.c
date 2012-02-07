@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/encodeRna.h"
 
-static char const rcsid[] = "$Id: encodeRna.c,v 1.1 2008/08/01 17:49:07 aamp Exp $";
 
 void encodeRnaStaticLoad(char **row, struct encodeRna *ret)
 /* Load a row from encodeRna table into ret.  The contents of ret will

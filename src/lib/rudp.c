@@ -59,7 +59,6 @@
 #include "obscure.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.24 2010/01/07 19:53:45 angie Exp $";
 
 #define MAX_TIME_OUT 999999
 

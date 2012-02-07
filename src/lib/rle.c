@@ -6,7 +6,6 @@
 #include "common.h"
 #include "rle.h"
 
-static char const rcsid[] = "$Id: rle.c,v 1.6 2005/05/10 00:50:16 markd Exp $";
 
 static int countSameAsStart(signed char *s, int max)
 /* Count number of signed chars that are the same as first. */

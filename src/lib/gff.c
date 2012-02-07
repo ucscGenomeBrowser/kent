@@ -11,7 +11,6 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.24 2009/02/05 20:53:24 hiram Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */

@@ -7,7 +7,6 @@
 #include "gbGenome.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbDefs.c,v 1.12 2009/06/24 17:00:37 genbank Exp $";
 
 /* Directories */
 char* GB_PROCESSED_DIR = "data/processed";

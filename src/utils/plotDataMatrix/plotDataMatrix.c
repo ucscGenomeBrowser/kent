@@ -9,7 +9,6 @@
 
 struct vGfx *vgOpenGif(int width, int height, char *fileName, boolean useTransparency);
 
-static char const rcsid[] = "$Id: plotDataMatrix.c,v 1.1 2010/05/26 22:41:32 kent Exp $";
 
 int cellWidth = 25;
 int cellHeight = 25;

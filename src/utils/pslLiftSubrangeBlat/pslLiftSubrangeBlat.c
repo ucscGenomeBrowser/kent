@@ -7,7 +7,6 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: pslLiftSubrangeBlat.c,v 1.1 2010/06/02 07:07:45 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

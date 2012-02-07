@@ -7,7 +7,6 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: clusterClone.c,v 1.9 2004/07/16 22:27:09 hiram Exp $";
 
 float minCover = 80.0;		/*	percent coverage to count hit */
 unsigned maxGap = 1000;		/*	maximum gap between pieces */

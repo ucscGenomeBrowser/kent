@@ -8,7 +8,6 @@
 #include "sqlNum.h"
 #include "../hg/inc/bed.h"
 
-static char const rcsid[] = "$Id: wigAsciiAverageOverBed.c,v 1.1 2007/09/14 22:36:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

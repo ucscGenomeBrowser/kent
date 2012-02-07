@@ -9,7 +9,6 @@
 #include "dnautil.h"
 #include "itsa.h"
 
-static char const rcsid[] = "$Id: itsaDump.c,v 1.3 2008/11/06 07:03:00 kent Exp $";
 
 int maxSize = 1000000;
 

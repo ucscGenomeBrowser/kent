@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: cytoBand.c,v 1.4 2005/04/13 06:25:51 markd Exp $";
 
 void cytoBandStaticLoad(char **row, struct cytoBand *ret)
 /* Load a row from cytoBand table into ret.  The contents of ret will

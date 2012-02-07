@@ -10,7 +10,6 @@
 #include "obscure.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: flyBase.c,v 1.2 2010/05/07 03:37:41 galt Exp $";
 
 static char *flyTxToGene(char *tx)
 /* Convert transcript to gene (by cutting off '-') */

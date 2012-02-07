@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: fakeHomozygousity.c,v 1.1 2006/09/23 23:10:02 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

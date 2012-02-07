@@ -9,7 +9,6 @@
 #include "udc.h"
 
 
-static char const rcsid[] = "$Id: testCache.c,v 1.10 2009/02/07 17:23:22 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

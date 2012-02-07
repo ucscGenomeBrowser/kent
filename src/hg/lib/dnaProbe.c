@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "dnaProbe.h"
 
-static char const rcsid[] = "$Id: dnaProbe.c,v 1.3 2005/04/13 06:25:52 markd Exp $";
 
 void dnaProbeStaticLoad(char **row, struct dnaProbe *ret)
 /* Load a row from dnaProbe table into ret.  The contents of ret will

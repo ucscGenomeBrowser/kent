@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/wgEncodeGencodeUniProt.h"
 
-static char const rcsid[] = "$Id:$";
 
 /* definitions for dataset column */
 static char *values_dataset[] = {"SwissProt", "TrEMBL", NULL};

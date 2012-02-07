@@ -7,7 +7,6 @@
 #include "genePred.h"
 #include "sqlList.h"
 
-static char const rcsid[] = "$Id: liftAcross.c,v 1.9 2008/03/05 20:11:00 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */

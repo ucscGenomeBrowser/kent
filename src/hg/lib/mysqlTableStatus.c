@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "mysqlTableStatus.h"
 
-static char const rcsid[] = "$Id: mysqlTableStatus.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 void mysqlTableStatusStaticLoad(char **row, struct mysqlTableStatus *ret)
 /* Load a row from mysqlTableStatus table into ret.  The contents of ret will

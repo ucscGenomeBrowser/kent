@@ -22,7 +22,6 @@ char *functionStrings[] = {
 
 boolean functionFound[ArraySize(functionStrings)];
 
-static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.9 2006/12/05 17:59:28 heather Exp $";
 
 static char *snpDb = NULL;
 

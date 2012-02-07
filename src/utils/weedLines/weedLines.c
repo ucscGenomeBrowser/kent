@@ -5,7 +5,6 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: weedLines.c,v 1.5 2007/02/23 03:19:47 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

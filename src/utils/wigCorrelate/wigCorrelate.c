@@ -10,7 +10,6 @@
 #include "errCatch.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: wigCorrelate.c,v 1.7 2010/06/03 17:09:12 kent Exp $";
 boolean gotClampMax = FALSE;
 double clampMax = 100;
 

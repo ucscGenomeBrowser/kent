@@ -9,6 +9,7 @@
 
 #include "hash.h"
 #include "linefile.h"
+#include "asParse.h"
 
 enum vcfInfoType
 /* VCF header defines INFO column components; each component has one of these types: */
@@ -47,18 +48,20 @@ struct vcfInfoElement
     char *key;			// An identifier described by a struct vcfInfoDef
     int count;			// Number of data values following id
     union vcfDatum *values;	// Array of data values following id
+    bool *missingData;		// Array of flags for missing data values ("." instead of number)
     };
 
 struct vcfGenotype
 /* A single component of the optional GENOTYPE column. */
     {
     char *id;			// Name of individual/sample (pointer to vcfFile genotypeIds) or .
-    unsigned char hapIxA;	// Index of one haplotype's allele: 0=reference, 1=alt, 2=other alt
-    unsigned char hapIxB;	// Index of other haplotype's allele
+    char hapIxA;		// Index of one haplotype's allele: 0=reference, 1=alt, 2=other alt
+				// *or* if negative, missing data
+    char hapIxB;		// Index of other haplotype's allele, or if negative, missing data
     bool isPhased;		// True if haplotypes are phased
     bool isHaploid;		// True if there is only one haplotype (e.g. chrY)
     int infoCount;		// Number of components named in FORMAT column
-    struct vcfInfoElement *infoElements;	// Array of info components
+    struct vcfInfoElement *infoElements;	// Array of info components for this genotype call
     };
 
 struct vcfRecord
@@ -100,7 +103,7 @@ struct vcfFile
     struct vcfRecord *records;	// VCF data rows, sorted by position
     struct hash *byName;		// Hash records by name -- not populated until needed.
     struct hash *pool;		// Used to allocate string values that tend to
-				// be repeated in the files.  hash's localMem is also 
+				// be repeated in the files.  hash's localMem is also
 				// use to allocated memory for all other objects.
     struct lineFile *lf;	// Used only during parsing
     int maxErr;			// Maximum number of errors before aborting
@@ -178,18 +181,20 @@ switch (type)
     }
 }
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr);
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords);
 /* Parse a VCF file into a vcfFile object; return NULL if unable.
  * If maxErr not zero, then continue to parse until this number of error have been reached.
- * A maxErr less than zero does not stop and reports all errors. */
+ * A maxErr less than zero does not stop and reports all errors.
+ * If maxRecords >= 0, then at most that many records will be parsed. */
 
 struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
-				    int maxErr);
+				    int maxErr, int maxRecords);
 /* Parse header and rows within the given position range from a VCF file that has been
  * compressed and indexed by tabix into a vcfFile object; return NULL if or if file has
  * no items in range.
  * If maxErr not zero, then continue to parse until this number of error have been reached.
- * A maxErr less than zero does not stop and reports all errors. */
+ * A maxErr less than zero does not stop and reports all errors.
+ * If maxRecords >= 0, then at most that many records will be parsed. */
 
 void vcfFileFree(struct vcfFile **vcffPtr);
 /* Free a vcfFile object. */
@@ -214,5 +219,8 @@ const struct vcfGenotype *vcfRecordFindGenotype(struct vcfRecord *record, char *
 struct vcfInfoDef *vcfInfoDefForGtKey(struct vcfFile *vcff, const char *key);
 /* Look up the type of genotype FORMAT component key, in the definitions from the header,
  * and failing that, from the keys reserved in the spec. */
+
+struct asObject *vcfAsObj();
+// Return asObject describing fields of VCF
 
 #endif // vcf_h

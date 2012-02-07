@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "pslWQueryID.h"
 
-static char const rcsid[] = "$Id: pslWQueryID.c,v 1.1 2004/07/14 22:08:06 hartera Exp $";
 
 struct pslWQueryID *pslWQueryIDLoad(char **row)
 /* Load a pslWQueryID from row fetched with select * from pslWQueryID

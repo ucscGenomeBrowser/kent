@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: bigGene.c,v 1.2 2007/08/27 21:42:11 kent Exp $";
 
 char *db = NULL;
 

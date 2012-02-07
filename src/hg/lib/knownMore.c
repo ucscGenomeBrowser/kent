@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "knownMore.h"
 
-static char const rcsid[] = "$Id: knownMore.c,v 1.4 2005/04/13 06:25:55 markd Exp $";
 
 void knownMoreStaticLoad(char **row, struct knownMore *ret)
 /* Load a row from knownMore table into ret.  The contents of ret will

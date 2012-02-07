@@ -2,6 +2,8 @@ metaObject wgEncodeOpenChromChip
 objType composite
 composite wgEncodeOpenChromChip
 expVars lab,dataType,cell,treatment,antibody
+geoSeriesAccession GSE33213
+treatment None
 
 metaObject wgEncodeOpenChromChipA549CtcfAlnRep1
 objType file
@@ -10,12 +12,13 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
 expId 2078
 fileName wgEncodeOpenChromChipA549CtcfAlnRep1.bam,wgEncodeOpenChromChipA549CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822289
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -24,6 +27,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4935
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipA549CtcfAlnRep2
@@ -33,12 +37,13 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
 expId 2078
 fileName wgEncodeOpenChromChipA549CtcfAlnRep2.bam,wgEncodeOpenChromChipA549CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822289
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -47,6 +52,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4935
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipA549CtcfBaseOverlapSignal
@@ -56,12 +62,13 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
 expId 2078
 fileName wgEncodeOpenChromChipA549CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822289
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -70,6 +77,7 @@ project wgEncode
 setType exp
 subId 4935
 tableName wgEncodeOpenChromChipA549CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipA549CtcfPkRep1
@@ -79,21 +87,23 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
 expId 2078
 fileName wgEncodeOpenChromChipA549CtcfPkRep1.narrowPeak.gz
+geoSampleAccession GSM822289
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum d569f0c82f20b4f8dc5d0dd7534be445
+md5sum 6e75cb1ed090ad425235c4ef78b30d5f
 project wgEncode
 replicate 1
 setType exp
 subId 4935
 tableName wgEncodeOpenChromChipA549CtcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipA549CtcfRawDataRep1
@@ -103,19 +113,21 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
 expId 2078
 fileName wgEncodeOpenChromChipA549CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822289
 grant Crawford
 lab UT-A
-md5sum d84f963c22e1377c29a00fbd8637f599
+md5sum 3f35abf03202160b4190c0dbded337bf
 project wgEncode
 replicate 1
 setType exp
 subId 4935
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipA549CtcfRawDataRep2
@@ -125,19 +137,21 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
 expId 2078
 fileName wgEncodeOpenChromChipA549CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822289
 grant Crawford
 lab UT-A
-md5sum b1a64febac13a7b47420e15f6a95fef5
+md5sum 8d09d5ce3c83ea5d9ebd3b1229af3802
 project wgEncode
 replicate 2
 setType exp
 subId 4935
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipA549CtcfSig
@@ -147,12 +161,13 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
 expId 2078
 fileName wgEncodeOpenChromChipA549CtcfSig.bigWig
+geoSampleAccession GSM822289
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_A549
@@ -161,6 +176,7 @@ project wgEncode
 setType exp
 subId 4935
 tableName wgEncodeOpenChromChipA549CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipA549InputAln
@@ -170,12 +186,13 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH002077
 expId 2077
 fileName wgEncodeOpenChromChipA549InputAln.bam,wgEncodeOpenChromChipA549InputAln.bam.bai
+geoSampleAccession GSM822307
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -183,6 +200,7 @@ md5sum 0f17442a40250b0f831fffdd9dcf59d9,8c8481ce35c9d1fff458e52abe44bffc
 project wgEncode
 setType input
 subId 4906
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipA549InputRawData
@@ -192,18 +210,20 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH002077
 expId 2077
 fileName wgEncodeOpenChromChipA549InputRawData.fastq.gz
+geoSampleAccession GSM822307
 grant Crawford
 lab UT-A
-md5sum 3738dc8b22cc0d554f73eee05d7c7cf6
+md5sum 3ad65535406938bb2fa33745b3d8740a
 project wgEncode
 setType input
 subId 4906
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipA549InputSig
@@ -213,12 +233,13 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH002077
 expId 2077
 fileName wgEncodeOpenChromChipA549InputSig.bigWig
+geoSampleAccession GSM822307
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -227,6 +248,7 @@ project wgEncode
 setType input
 subId 4906
 tableName wgEncodeOpenChromChipA549InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipA549Pol2AlnRep1
@@ -236,12 +258,13 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
 expId 2079
 fileName wgEncodeOpenChromChipA549Pol2AlnRep1.bam,wgEncodeOpenChromChipA549Pol2AlnRep1.bam.bai
+geoSampleAccession GSM822288
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -250,6 +273,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4934
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipA549Pol2AlnRep2
@@ -259,12 +283,13 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
 expId 2079
 fileName wgEncodeOpenChromChipA549Pol2AlnRep2.bam,wgEncodeOpenChromChipA549Pol2AlnRep2.bam.bai
+geoSampleAccession GSM822288
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -273,6 +298,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4934
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipA549Pol2BaseOverlapSignal
@@ -282,12 +308,13 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
 expId 2079
 fileName wgEncodeOpenChromChipA549Pol2BaseOverlapSignal.bigWig
+geoSampleAccession GSM822288
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -296,6 +323,7 @@ project wgEncode
 setType exp
 subId 4934
 tableName wgEncodeOpenChromChipA549Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipA549Pol2PkRep1
@@ -305,21 +333,23 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
 expId 2079
 fileName wgEncodeOpenChromChipA549Pol2PkRep1.narrowPeak.gz
+geoSampleAccession GSM822288
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum edf11360e951aea8bcb51a66682293a3
+md5sum f77efb415458d0acfa1aa522110abb7b
 project wgEncode
 replicate 1
 setType exp
 subId 4934
 tableName wgEncodeOpenChromChipA549Pol2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipA549Pol2RawDataRep1
@@ -329,19 +359,21 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
 expId 2079
 fileName wgEncodeOpenChromChipA549Pol2RawDataRep1.fastq.gz
+geoSampleAccession GSM822288
 grant Crawford
 lab UT-A
-md5sum df96e7f012a0d38b9e26508e9c9a3bd9
+md5sum 27801708ff46faea4ab7792084797a4c
 project wgEncode
 replicate 1
 setType exp
 subId 4934
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipA549Pol2RawDataRep2
@@ -351,19 +383,21 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
 expId 2079
 fileName wgEncodeOpenChromChipA549Pol2RawDataRep2.fastq.gz
+geoSampleAccession GSM822288
 grant Crawford
 lab UT-A
-md5sum 2e059073c17a18017f1d60df3a780e29
+md5sum 1211222085aea7dd1c595b17f960ad3b
 project wgEncode
 replicate 2
 setType exp
 subId 4934
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipA549Pol2Sig
@@ -373,12 +407,13 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
 expId 2079
 fileName wgEncodeOpenChromChipA549Pol2Sig.bigWig
+geoSampleAccession GSM822288
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_A549
@@ -387,6 +422,7 @@ project wgEncode
 setType exp
 subId 4934
 tableName wgEncodeOpenChromChipA549Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipFibroblCtcfAlnRep1
@@ -402,6 +438,7 @@ dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
 expId 1127
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam,wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam.bai
+geoSampleAccession GSM822281
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -412,6 +449,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2480
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipFibroblCtcfAlnRep2
@@ -427,6 +465,7 @@ dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
 expId 1127
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam,wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam.bai
+geoSampleAccession GSM822281
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -437,6 +476,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2480
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal
@@ -452,6 +492,7 @@ dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
 expId 1127
 fileName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822281
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -462,6 +503,7 @@ project wgEncode
 setType exp
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipFibroblCtcfPkRep1
@@ -477,16 +519,18 @@ dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
 expId 1127
 fileName wgEncodeOpenChromChipFibroblCtcfPkRep1.narrowPeak.gz
+geoSampleAccession GSM822281
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum a96e9f71210ee3c26b25b88cbd17ea77
+md5sum 6ff4896fbdab19d5c75c6aee1bc00f47
 origAssembly hg19
 privacy noSequence
 project wgEncode
 setType exp
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipFibroblCtcfSig
@@ -502,6 +546,7 @@ dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
 expId 1127
 fileName wgEncodeOpenChromChipFibroblCtcfSig.bigWig
+geoSampleAccession GSM822281
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB8470
@@ -512,6 +557,7 @@ project wgEncode
 setType exp
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipFibroblInputAln
@@ -527,6 +573,7 @@ dateUnrestricted 2011-07-14
 dccAccession wgEncodeEH001128
 expId 1128
 fileName wgEncodeOpenChromChipFibroblInputAln.bam,wgEncodeOpenChromChipFibroblInputAln.bam.bai
+geoSampleAccession GSM822267
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -536,6 +583,7 @@ privacy noSequence
 project wgEncode
 setType input
 subId 2487
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipFibroblInputSig
@@ -551,6 +599,7 @@ dateUnrestricted 2011-07-14
 dccAccession wgEncodeEH001128
 expId 1128
 fileName wgEncodeOpenChromChipFibroblInputSig.bigWig
+geoSampleAccession GSM822267
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -561,6 +610,7 @@ project wgEncode
 setType input
 subId 2487
 tableName wgEncodeOpenChromChipFibroblInputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfAlnRep1
@@ -576,6 +626,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam,wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam.bai
+geoSampleAccession GSM822303
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -585,6 +636,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2516
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfAlnRep2
@@ -600,6 +652,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam,wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam.bai
+geoSampleAccession GSM822303
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -609,6 +662,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2516
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal
@@ -624,6 +678,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822303
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -633,6 +688,7 @@ project wgEncode
 setType exp
 subId 2516
 tableName wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfPkRep1
@@ -648,15 +704,17 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfPkRep1.narrowPeak.gz
+geoSampleAccession GSM822303
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum e27c1acde99518f5f34f251f54c957a2
+md5sum 96b8d19a81b3f9be45f8423899863b28
 origAssembly hg19
 project wgEncode
 setType exp
 subId 2516
 tableName wgEncodeOpenChromChipGlioblaCtcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfRawDataRep1
@@ -672,14 +730,16 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822303
 grant Crawford
 lab UT-A
-md5sum 849b9f6f615b1d7c8aa3622a9687274e
+md5sum 23c1ea85e6a1335075a62bff08d3aa32
 origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
 subId 2516
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfRawDataRep2
@@ -695,14 +755,16 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822303
 grant Crawford
 lab UT-A
-md5sum ed32408f66371c6e766d1035a501d070
+md5sum 1742a5b269558efbbaccc757aa263ab2
 origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
 subId 2516
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfSig
@@ -718,6 +780,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfSig.bigWig
+geoSampleAccession GSM822303
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_H54
@@ -727,6 +790,7 @@ project wgEncode
 setType exp
 subId 2516
 tableName wgEncodeOpenChromChipGlioblaCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGlioblaInputAln
@@ -742,6 +806,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001129
 expId 1129
 fileName wgEncodeOpenChromChipGlioblaInputAln.bam,wgEncodeOpenChromChipGlioblaInputAln.bam.bai
+geoSampleAccession GSM822268
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -750,6 +815,7 @@ origAssembly hg19
 project wgEncode
 setType input
 subId 2499
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGlioblaInputRawData
@@ -765,13 +831,15 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001129
 expId 1129
 fileName wgEncodeOpenChromChipGlioblaInputRawData.fastq.gz
+geoSampleAccession GSM822268
 grant Crawford
 lab UT-A
-md5sum b1fb67288714bb4a83d4f087718c4a6d
+md5sum 1963179d3d416eeef838d1a54d04a21c
 origAssembly hg19
 project wgEncode
 setType input
 subId 2499
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGlioblaInputSig
@@ -787,6 +855,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001129
 expId 1129
 fileName wgEncodeOpenChromChipGlioblaInputSig.bigWig
+geoSampleAccession GSM822268
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -796,6 +865,7 @@ project wgEncode
 setType input
 subId 2499
 tableName wgEncodeOpenChromChipGlioblaInputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGlioblaPol2AlnRep1
@@ -811,6 +881,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam,wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam.bai
+geoSampleAccession GSM822302
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -820,6 +891,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 3272
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGlioblaPol2AlnRep2
@@ -835,6 +907,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam,wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam.bai
+geoSampleAccession GSM822302
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -844,6 +917,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 3272
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal
@@ -859,6 +933,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal.bigWig
+geoSampleAccession GSM822302
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -868,6 +943,7 @@ project wgEncode
 setType exp
 subId 3272
 tableName wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGlioblaPol2PkRep1
@@ -883,15 +959,17 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2PkRep1.narrowPeak.gz
+geoSampleAccession GSM822302
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 97a044a6db51ad201006ae8fa72c21f6
+md5sum 2d2836a574faa8acd83c71185879ddbf
 origAssembly hg19
 project wgEncode
 setType exp
 subId 3272
 tableName wgEncodeOpenChromChipGlioblaPol2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGlioblaPol2RawDataRep1
@@ -907,14 +985,16 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2RawDataRep1.fastq.gz
+geoSampleAccession GSM822302
 grant Crawford
 lab UT-A
-md5sum 11a3ad89c2effc4ea915a3f996c4eec0
+md5sum 1532523a4f1a412e3f4d5d4f3aa24265
 origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
 subId 3272
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGlioblaPol2RawDataRep2
@@ -930,14 +1010,16 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2RawDataRep2.fastq.gz
+geoSampleAccession GSM822302
 grant Crawford
 lab UT-A
-md5sum e828cc6ce8470b3c74c3d9a3a9fe7b4e
+md5sum 180465931f6be17c6fa79bac6fd05ad1
 origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
 subId 3272
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGlioblaPol2Sig
@@ -953,6 +1035,7 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2Sig.bigWig
+geoSampleAccession GSM822302
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_H54
@@ -962,6 +1045,7 @@ project wgEncode
 setType exp
 subId 3272
 tableName wgEncodeOpenChromChipGlioblaPol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878CmycAlnRep1
@@ -978,6 +1062,7 @@ dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeOpenChromChipGm12878CmycAlnRep1.bam,wgEncodeOpenChromChipGm12878CmycAlnRep1.bam.bai
+geoSampleAccession GSM822290
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -987,6 +1072,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1229
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878CmycAlnRep2
@@ -1003,6 +1089,7 @@ dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeOpenChromChipGm12878CmycAlnRep2.bam,wgEncodeOpenChromChipGm12878CmycAlnRep2.bam.bai
+geoSampleAccession GSM822290
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1012,6 +1099,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1229
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal
@@ -1028,6 +1116,7 @@ dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal.bigWig
+geoSampleAccession GSM822290
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -1037,6 +1126,7 @@ project wgEncode
 setType exp
 subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm12878CmycPk
@@ -1053,15 +1143,17 @@ dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeOpenChromChipGm12878CmycPk.narrowPeak.gz
+geoSampleAccession GSM822290
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.001
-md5sum 06cbc50b630d710ae406dfce63ec642e
+md5sum 09562f42529df8d27d08821072a7d566
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm12878CmycRawDataRep1
@@ -1077,14 +1169,16 @@ dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeOpenChromChipGm12878CmycRawDataRep1.fastq.gz
+geoSampleAccession GSM822290
 grant Crawford
 lab UT-A
-md5sum c1de271c9500a813ceb21d13419894f2
+md5sum 30dd0f72601efa1fd32ba66c5d47a2dd
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 472
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CmycRawDataRep2
@@ -1100,14 +1194,16 @@ dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeOpenChromChipGm12878CmycRawDataRep2.fastq.gz
+geoSampleAccession GSM822290
 grant Crawford
 lab UT-A
-md5sum 833ff9e94d7e1f32da61fe3670ac117e
+md5sum fd453a2a4e0ae127e2db288378fa2231
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 472
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CmycSig
@@ -1124,6 +1220,7 @@ dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeOpenChromChipGm12878CmycSig.bigWig
+geoSampleAccession GSM822290
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_GM12878
@@ -1133,6 +1230,7 @@ project wgEncode
 setType exp
 subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878CmycValidation
@@ -1143,12 +1241,13 @@ cell GM12878
 composite wgEncodeOpenChromChip
 controlId GM12878/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000547
 expId 547
 fileName wgEncodeOpenChromChipGm12878CmycValidation.tgz
+geoSampleAccession GSM822290
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -1156,6 +1255,7 @@ md5sum 764998ed632d7689fa67ef10536ce880
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipGm12878CtcfAlnRep1
@@ -1171,6 +1271,7 @@ dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam,wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822312
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1180,6 +1281,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2449
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878CtcfAlnRep2
@@ -1195,6 +1297,7 @@ dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam,wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822312
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1204,6 +1307,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2449
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878CtcfAlnRep3
@@ -1219,6 +1323,7 @@ dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam,wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam.bai
+geoSampleAccession GSM822312
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1228,6 +1333,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 2449
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal
@@ -1243,6 +1349,7 @@ dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822312
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -1252,6 +1359,7 @@ project wgEncode
 setType exp
 subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm12878CtcfPkRep1
@@ -1267,15 +1375,17 @@ dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfPkRep1.narrowPeak.gz
+geoSampleAccession GSM822312
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum a6f856eb3742b57cd1515cf4669b620d
+md5sum 7d6319f9f492b69379fd3ae43ed9faa4
 origAssembly hg18
 project wgEncode
 setType exp
 subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm12878CtcfRawDataRep1
@@ -1292,14 +1402,16 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822312
 grant Crawford
 lab UT-A
-md5sum 49d078a7cc72e52fdca9c9806c9d375f
+md5sum db5d06d3396064c4eb282d4de34f286e
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 468
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CtcfRawDataRep2
@@ -1318,12 +1430,13 @@ expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
-md5sum 8857dc283de4486075d9220966431943
+md5sum 65232c1445bd39bb934b9882e8c5b320
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 468
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CtcfRawDataRep3
@@ -1340,14 +1453,16 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep3.fastq.gz
+geoSampleAccession GSM822312
 grant Crawford
 lab UT-A
-md5sum 60159eff02f764d871ed8c38882debb7
+md5sum 26613a10886c463ac89435782eb8c34c
 origAssembly hg18
 project wgEncode
 replicate 3
 setType exp
 subId 468
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CtcfSig
@@ -1363,6 +1478,7 @@ dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfSig.bigWig
+geoSampleAccession GSM822312
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_GM12878
@@ -1372,6 +1488,7 @@ project wgEncode
 setType exp
 subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878CtcfValidation
@@ -1382,12 +1499,13 @@ cell GM12878
 composite wgEncodeOpenChromChip
 controlId GM12878/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfValidation.tgz
+geoSampleAccession GSM822312
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -1395,6 +1513,7 @@ md5sum 6ce33a140c328e68d52bd1124d610624
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipGm12878InputAln
@@ -1411,6 +1530,7 @@ dateUnrestricted 2009-07-07
 dccAccession wgEncodeEH000528
 expId 528
 fileName wgEncodeOpenChromChipGm12878InputAln.bam,wgEncodeOpenChromChipGm12878InputAln.bam.bai
+geoSampleAccession GSM822292
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1419,6 +1539,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1518
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878InputRawData
@@ -1434,13 +1555,15 @@ dateUnrestricted 2009-07-07
 dccAccession wgEncodeEH000528
 expId 528
 fileName wgEncodeOpenChromChipGm12878InputRawData.fastq.gz
+geoSampleAccession GSM822292
 grant Crawford
 lab UT-A
-md5sum b7b552c10494212ce4f100d1b4bf75d5
+md5sum ed23e257c89d98062132bd37ebc19b17
 origAssembly hg18
 project wgEncode
 setType input
 subId 34
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878InputSig
@@ -1457,6 +1580,7 @@ dateUnrestricted 2009-07-07
 dccAccession wgEncodeEH000528
 expId 528
 fileName wgEncodeOpenChromChipGm12878InputSig.bigWig
+geoSampleAccession GSM822292
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -1466,6 +1590,7 @@ project wgEncode
 setType input
 subId 1518
 tableName wgEncodeOpenChromChipGm12878InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878Pol2AlnRep1
@@ -1482,6 +1607,7 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam,wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam.bai
+geoSampleAccession GSM822270
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1491,6 +1617,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1478
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878Pol2AlnRep2
@@ -1507,6 +1634,7 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam,wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam.bai
+geoSampleAccession GSM822270
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1516,6 +1644,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1478
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal
@@ -1532,6 +1661,7 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal.bigWig
+geoSampleAccession GSM822270
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -1541,6 +1671,7 @@ project wgEncode
 setType exp
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm12878Pol2Pk
@@ -1557,15 +1688,17 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2Pk.narrowPeak.gz
+geoSampleAccession GSM822270
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 15373f463f3d6821047e8a4167a978c1
+md5sum f6a38b4aed81c71bac145a6b11021416
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm12878Pol2RawDataRep1
@@ -1581,14 +1714,16 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2RawDataRep1.fastq.gz
+geoSampleAccession GSM822270
 grant Crawford
 lab UT-A
-md5sum 284e70e9916c0b35a8340784d8e08238
+md5sum a9ac5e9ac93863f09d6da2e1fdd27fa5
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 868
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878Pol2RawDataRep2
@@ -1604,14 +1739,16 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2RawDataRep2.fastq.gz
+geoSampleAccession GSM822270
 grant Crawford
 lab UT-A
-md5sum 7dc1d7dbf009327e1344261758218e3e
+md5sum e933146a55b4bef2824a8902ea56004a
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 868
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878Pol2Sig
@@ -1628,6 +1765,7 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2Sig.bigWig
+geoSampleAccession GSM822270
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_GM12878
@@ -1637,6 +1775,7 @@ project wgEncode
 setType exp
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878Pol2Validation
@@ -1647,12 +1786,13 @@ cell GM12878
 composite wgEncodeOpenChromChip
 controlId GM12878/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000592
 expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2Validation.tgz
+geoSampleAccession GSM822270
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -1660,6 +1800,7 @@ md5sum 2be0fbf348e706ba4862cc72c5df2a13
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipGm12891CtcfAlnRep1
@@ -1676,6 +1817,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam,wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822294
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1685,6 +1827,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1490
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12891CtcfAlnRep2
@@ -1701,6 +1844,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam,wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822294
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1710,6 +1854,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1490
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal
@@ -1726,6 +1871,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822294
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -1735,6 +1881,7 @@ project wgEncode
 setType exp
 subId 1490
 tableName wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm12891CtcfPk
@@ -1751,15 +1898,17 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfPk.narrowPeak.gz
+geoSampleAccession GSM822294
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 9c8ce6b60bbee76bcc1d88097bdf6705
+md5sum f1d14153e2804ea309bf878cc4a5cebb
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1490
 tableName wgEncodeOpenChromChipGm12891CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm12891CtcfRawDataRep1
@@ -1775,14 +1924,16 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822294
 grant Crawford
 lab UT-A
-md5sum 750523aba52772a9dadc23039e4c1c5c
+md5sum 722e55df6a093e9b9482560efb2fd55a
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 644
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12891CtcfRawDataRep2
@@ -1798,14 +1949,16 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822294
 grant Crawford
 lab UT-A
-md5sum d8c16ab6d6a9ea6b5341612cad9ced07
+md5sum 0242004a9c53f0cb7e313b8f8fe9bb46
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 644
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12891CtcfSig
@@ -1822,6 +1975,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfSig.bigWig
+geoSampleAccession GSM822294
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_male
@@ -1831,6 +1985,7 @@ project wgEncode
 setType exp
 subId 1490
 tableName wgEncodeOpenChromChipGm12891CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12892CtcfAlnRep1
@@ -1847,6 +2002,7 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam,wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822299
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1856,6 +2012,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1491
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12892CtcfAlnRep2
@@ -1872,6 +2029,7 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam,wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822299
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1881,6 +2039,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1491
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal
@@ -1897,6 +2056,7 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822299
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -1906,6 +2066,7 @@ project wgEncode
 setType exp
 subId 1491
 tableName wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm12892CtcfPk
@@ -1922,15 +2083,17 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfPk.narrowPeak.gz
+geoSampleAccession GSM822299
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 62afc2eada9b495bce82f8793934e08b
+md5sum bda040240477bee66eca8a7043411284
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1491
 tableName wgEncodeOpenChromChipGm12892CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm12892CtcfRawDataRep1
@@ -1946,14 +2109,16 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822299
 grant Crawford
 lab UT-A
-md5sum 6c7c24ce8e70f7bbf35a8da1b156fa91
+md5sum 924c4cbf7965057fb01834473ca64744
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 638
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12892CtcfRawDataRep2
@@ -1969,14 +2134,16 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822299
 grant Crawford
 lab UT-A
-md5sum 5c8dfa6ed9836d3ffc05cf658ff2a8c0
+md5sum 88a334471370e49b1908edc22fe38f4e
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 638
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12892CtcfSig
@@ -1993,6 +2160,7 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfSig.bigWig
+geoSampleAccession GSM822299
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_female
@@ -2002,6 +2170,7 @@ project wgEncode
 setType exp
 subId 1491
 tableName wgEncodeOpenChromChipGm12892CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm19238CtcfAlnRep1
@@ -2018,6 +2187,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam,wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822278
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2027,6 +2197,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1516
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19238CtcfAlnRep2
@@ -2043,6 +2214,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam,wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822278
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2052,6 +2224,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1516
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal
@@ -2068,6 +2241,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822278
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -2077,6 +2251,7 @@ project wgEncode
 setType exp
 subId 1516
 tableName wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm19238CtcfPk
@@ -2093,15 +2268,17 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfPk.narrowPeak.gz
+geoSampleAccession GSM822278
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum fc1b839efa8f54f75eb47cc6803b478c
+md5sum eacbff8686db89c66446398ebe584609
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1516
 tableName wgEncodeOpenChromChipGm19238CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm19238CtcfRawDataRep1
@@ -2117,14 +2294,16 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822278
 grant Crawford
 lab UT-A
-md5sum 07373500f01bce3a0972539a4b2ef05c
+md5sum 92797a2562db97e53ded8eeaa23cb36e
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 646
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19238CtcfRawDataRep2
@@ -2140,14 +2319,16 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822278
 grant Crawford
 lab UT-A
-md5sum d409893fcecbd001bf148b23977fc1c8
+md5sum d7a8b1e9234f88147644ad50df9413f5
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 646
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19238CtcfSig
@@ -2164,6 +2345,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfSig.bigWig
+geoSampleAccession GSM822278
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_female
@@ -2173,6 +2355,7 @@ project wgEncode
 setType exp
 subId 1516
 tableName wgEncodeOpenChromChipGm19238CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm19239CtcfAlnRep1
@@ -2189,6 +2372,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam,wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822277
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2198,6 +2382,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1525
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19239CtcfAlnRep2
@@ -2214,6 +2399,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam,wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822277
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2223,6 +2409,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1525
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal
@@ -2239,6 +2426,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822277
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -2248,6 +2436,7 @@ project wgEncode
 setType exp
 subId 1525
 tableName wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm19239CtcfPk
@@ -2264,15 +2453,17 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfPk.narrowPeak.gz
+geoSampleAccession GSM822277
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 12e1b7e9a3f42051505faad4dcc6d71b
+md5sum 9e0456867002697b152d1dafbfa0d869
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1525
 tableName wgEncodeOpenChromChipGm19239CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm19239CtcfRawDataRep1
@@ -2288,14 +2479,16 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822277
 grant Crawford
 lab UT-A
-md5sum 5bc645a3b5ee7de9e8ccee37623ac7bb
+md5sum 301abf6ed1599bf4840c7c14c70e01fa
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 648
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19239CtcfRawDataRep2
@@ -2311,14 +2504,16 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822277
 grant Crawford
 lab UT-A
-md5sum 4945a7cffebee93482a650d31e5e4f74
+md5sum 42a6242756087d7205fb7ad147f4ad74
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 648
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19239CtcfSig
@@ -2335,6 +2530,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfSig.bigWig
+geoSampleAccession GSM822277
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_male
@@ -2344,6 +2540,7 @@ project wgEncode
 setType exp
 subId 1525
 tableName wgEncodeOpenChromChipGm19239CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm19240CtcfAlnRep1
@@ -2360,6 +2557,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam,wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822276
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2369,6 +2567,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1536
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19240CtcfAlnRep2
@@ -2385,6 +2584,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam,wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822276
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2394,6 +2594,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1536
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal
@@ -2410,6 +2611,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822276
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -2419,6 +2621,7 @@ project wgEncode
 setType exp
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm19240CtcfPk
@@ -2435,15 +2638,17 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfPk.narrowPeak.gz
+geoSampleAccession GSM822276
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum ec2da19aaf0112aa496eca7c788a7bb0
+md5sum 9fc892e40707769eb3fb782d9bbf9998
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm19240CtcfRawDataRep1
@@ -2459,14 +2664,16 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822276
 grant Crawford
 lab UT-A
-md5sum 774b7d8eb142528fe79073a5344d3d43
+md5sum 9eb7b8ed496fdcbbe5d48fa9c22828b8
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 650
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19240CtcfRawDataRep2
@@ -2482,14 +2689,16 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822276
 grant Crawford
 lab UT-A
-md5sum e23d448d34c29350e90cf06279666b59
+md5sum d69f73d610083c7538078ca41d75a7af
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 650
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19240CtcfSig
@@ -2506,6 +2715,7 @@ dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfSig.bigWig
+geoSampleAccession GSM822276
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_female
@@ -2515,6 +2725,7 @@ project wgEncode
 setType exp
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipH1hescCmycAlnRep1
@@ -2531,6 +2742,7 @@ dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
 expId 596
 fileName wgEncodeOpenChromChipH1hescCmycAlnRep1.bam,wgEncodeOpenChromChipH1hescCmycAlnRep1.bam.bai
+geoSampleAccession GSM822274
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2540,6 +2752,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1504
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal
@@ -2556,6 +2769,7 @@ dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
 expId 596
 fileName wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal.bigWig
+geoSampleAccession GSM822274
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -2565,6 +2779,7 @@ project wgEncode
 setType exp
 subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipH1hescCmycPk
@@ -2581,15 +2796,17 @@ dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
 expId 596
 fileName wgEncodeOpenChromChipH1hescCmycPk.narrowPeak.gz
+geoSampleAccession GSM822274
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.01
-md5sum 3babd9bdcb6dd59af96e8091adc56f05
+md5sum 2685123b18f58eae5ff6ec614684afe7
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipH1hescCmycRawDataRep1
@@ -2605,13 +2822,15 @@ dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
 expId 596
 fileName wgEncodeOpenChromChipH1hescCmycRawDataRep1.fastq.gz
+geoSampleAccession GSM822274
 grant Crawford
 lab UT-A
-md5sum 80eae886c68f29570bfa5c89ac6a0f6a
+md5sum 84f7e9eda0092fa5ae497ad806c209ae
 origAssembly hg18
 project wgEncode
 setType exp
 subId 882
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipH1hescCmycSig
@@ -2628,6 +2847,7 @@ dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
 expId 596
 fileName wgEncodeOpenChromChipH1hescCmycSig.bigWig
+geoSampleAccession GSM822274
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_male
@@ -2637,6 +2857,7 @@ project wgEncode
 setType exp
 subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipH1hescCtcfAlnRep1
@@ -2653,6 +2874,7 @@ dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
 expId 560
 fileName wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam,wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam.bai
+geoSampleAccession GSM822297
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2662,6 +2884,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1500
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal
@@ -2678,6 +2901,7 @@ dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
 expId 560
 fileName wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822297
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -2687,6 +2911,7 @@ project wgEncode
 setType exp
 subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipH1hescCtcfPk
@@ -2703,15 +2928,17 @@ dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
 expId 560
 fileName wgEncodeOpenChromChipH1hescCtcfPk.narrowPeak.gz
+geoSampleAccession GSM822297
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum f184dbeabc74f58f3dcf39b997556962
+md5sum 2113c7b4cddff8e44f145a4708c35a3a
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipH1hescCtcfRawDataRep1
@@ -2727,13 +2954,15 @@ dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
 expId 560
 fileName wgEncodeOpenChromChipH1hescCtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822297
 grant Crawford
 lab UT-A
-md5sum 10a7190630c1cf28e238423cb98b5cfa
+md5sum 81b16591af82ed74cfc664621f246afa
 origAssembly hg18
 project wgEncode
 setType exp
 subId 636
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipH1hescCtcfSig
@@ -2750,6 +2979,7 @@ dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
 expId 560
 fileName wgEncodeOpenChromChipH1hescCtcfSig.bigWig
+geoSampleAccession GSM822297
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_male
@@ -2759,6 +2989,7 @@ project wgEncode
 setType exp
 subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipH1hescPol2AlnRep1
@@ -2775,6 +3006,7 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
 expId 563
 fileName wgEncodeOpenChromChipH1hescPol2AlnRep1.bam,wgEncodeOpenChromChipH1hescPol2AlnRep1.bam.bai
+geoSampleAccession GSM822300
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2784,6 +3016,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1833
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal
@@ -2800,6 +3033,7 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
 expId 563
 fileName wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal.bigWig
+geoSampleAccession GSM822300
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -2809,6 +3043,7 @@ project wgEncode
 setType exp
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipH1hescPol2Pk
@@ -2825,15 +3060,17 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
 expId 563
 fileName wgEncodeOpenChromChipH1hescPol2Pk.narrowPeak.gz
+geoSampleAccession GSM822300
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 9574fdb9b41b1a550abb70dc98e89964
+md5sum 001407d5b82d867868c7c88f89b205ac
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipH1hescPol2RawDataRep1
@@ -2849,13 +3086,15 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
 expId 563
 fileName wgEncodeOpenChromChipH1hescPol2RawDataRep1.fastq.gz
+geoSampleAccession GSM822300
 grant Crawford
 lab UT-A
-md5sum 118d25425882ec15bc6159e2b1006fa9
+md5sum 3d1348c883406cff5356c9c3a8b6974c
 origAssembly hg18
 project wgEncode
 setType exp
 subId 641
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipH1hescPol2Sig
@@ -2872,6 +3111,7 @@ dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
 expId 563
 fileName wgEncodeOpenChromChipH1hescPol2Sig.bigWig
+geoSampleAccession GSM822300
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_male
@@ -2881,6 +3121,7 @@ project wgEncode
 setType exp
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3CmycAlnRep1
@@ -2897,6 +3138,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeOpenChromChipHelas3CmycAlnRep1.bam,wgEncodeOpenChromChipHelas3CmycAlnRep1.bam.bai
+geoSampleAccession GSM822286
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2906,6 +3148,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1501
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3CmycAlnRep2
@@ -2922,6 +3165,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeOpenChromChipHelas3CmycAlnRep2.bam,wgEncodeOpenChromChipHelas3CmycAlnRep2.bam.bai
+geoSampleAccession GSM822286
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2931,6 +3175,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1501
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal
@@ -2947,6 +3192,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal.bigWig
+geoSampleAccession GSM822286
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -2956,6 +3202,7 @@ project wgEncode
 setType exp
 subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHelas3CmycPk
@@ -2972,15 +3219,17 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeOpenChromChipHelas3CmycPk.narrowPeak.gz
+geoSampleAccession GSM822286
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.01
-md5sum fdb401701d25d6e7aa7309739253846d
+md5sum 591b04769780494be61e195b600fd2f4
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHelas3CmycRawDataRep1
@@ -2997,14 +3246,16 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeOpenChromChipHelas3CmycRawDataRep1.fastq.gz
+geoSampleAccession GSM822286
 grant Crawford
 lab UT-A
-md5sum 0174582a01bae667f78c9c297bd1ea3e
+md5sum ee16b770a7f4df3ced82e6b125bf3d13
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 642
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CmycRawDataRep2
@@ -3021,14 +3272,16 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeOpenChromChipHelas3CmycRawDataRep2.fastq.gz
+geoSampleAccession GSM822286
 grant Crawford
 lab UT-A
-md5sum 0a68c601fabbdb3422d41842e2e29842
+md5sum d53bc94fdcc2dc3bfec5f3893c099b7c
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 642
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CmycSig
@@ -3045,6 +3298,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeOpenChromChipHelas3CmycSig.bigWig
+geoSampleAccession GSM822286
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
@@ -3054,6 +3308,7 @@ project wgEncode
 setType exp
 subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3CmycValidation
@@ -3064,12 +3319,13 @@ cell HeLa-S3
 composite wgEncodeOpenChromChip
 controlId HeLa-S3/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000542
 expId 542
 fileName wgEncodeOpenChromChipHelas3CmycValidation.tgz
+geoSampleAccession GSM822286
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -3094,6 +3350,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam,wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822285
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3103,6 +3360,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1499
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3CtcfAlnRep2
@@ -3119,6 +3377,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam,wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822285
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3128,6 +3387,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1499
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal
@@ -3144,6 +3404,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822285
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -3153,6 +3414,7 @@ project wgEncode
 setType exp
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHelas3CtcfPk
@@ -3169,15 +3431,17 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfPk.narrowPeak.gz
+geoSampleAccession GSM822285
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 96fd9d6f3d25f6cfd8b0b3a88de4b7b7
+md5sum bf2e3964191a8e8f99519d539a703272
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHelas3CtcfRawDataRep1
@@ -3194,14 +3458,16 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822285
 grant Crawford
 lab UT-A
-md5sum cc6dede9ef9834b2b68ff569789bea6e
+md5sum 5277b16720725bf15f05b5c0e85a1fc3
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 493
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CtcfRawDataRep2
@@ -3218,14 +3484,16 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822285
 grant Crawford
 lab UT-A
-md5sum fe0a03481b3d2f4de90dedeab1cd8f7b
+md5sum 8a80e4c27b8df7f35663c087c97e7b94
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 493
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CtcfSig
@@ -3242,6 +3510,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfSig.bigWig
+geoSampleAccession GSM822285
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
@@ -3251,6 +3520,7 @@ project wgEncode
 setType exp
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3CtcfValidation
@@ -3261,12 +3531,13 @@ cell HeLa-S3
 composite wgEncodeOpenChromChip
 controlId HeLa-S3/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000541
 expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfValidation.tgz
+geoSampleAccession GSM822285
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -3291,6 +3562,7 @@ dateUnrestricted 2009-12-16
 dccAccession wgEncodeEH000539
 expId 539
 fileName wgEncodeOpenChromChipHelas3InputAln.bam,wgEncodeOpenChromChipHelas3InputAln.bam.bai
+geoSampleAccession GSM822313
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3299,6 +3571,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1609
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3InputRawData
@@ -3314,14 +3587,16 @@ dateUnrestricted 2009-12-16
 dccAccession wgEncodeEH000539
 expId 539
 fileName wgEncodeOpenChromChipHelas3InputRawData.fastq.gz
+geoSampleAccession GSM822313
 grant Crawford
 lab UT-A
 labVersion Illumina, pooled
-md5sum 44654f51fcfcec8d2dd4edcd880fb533
+md5sum 0dfecefe986f3eb68930872c5382900d
 origAssembly hg18
 project wgEncode
 setType input
 subId 275
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3InputSig
@@ -3338,6 +3613,7 @@ dateUnrestricted 2009-12-16
 dccAccession wgEncodeEH000539
 expId 539
 fileName wgEncodeOpenChromChipHelas3InputSig.bigWig
+geoSampleAccession GSM822313
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -3347,6 +3623,7 @@ project wgEncode
 setType input
 subId 1609
 tableName wgEncodeOpenChromChipHelas3InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3Pol2AlnRep1
@@ -3363,6 +3640,7 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam,wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam.bai
+geoSampleAccession GSM822273
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3372,6 +3650,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1505
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3Pol2AlnRep2
@@ -3388,6 +3667,7 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam,wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam.bai
+geoSampleAccession GSM822273
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3397,6 +3677,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1505
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal
@@ -3413,6 +3694,7 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal.bigWig
+geoSampleAccession GSM822273
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -3422,6 +3704,7 @@ project wgEncode
 setType exp
 subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHelas3Pol2Pk
@@ -3438,15 +3721,17 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2Pk.narrowPeak.gz
+geoSampleAccession GSM822273
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum edcfd33a19590f9c6be568e40d917e47
+md5sum 71f3d2b1bc122cb42f14139f5356e170
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHelas3Pol2RawDataRep1
@@ -3462,14 +3747,16 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2RawDataRep1.fastq.gz
+geoSampleAccession GSM822273
 grant Crawford
 lab UT-A
-md5sum 6d03920b23df44c9b2c131fd65aa4c92
+md5sum 99adfcff750d4a13f36dac6da0135164
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 885
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3Pol2RawDataRep2
@@ -3486,14 +3773,16 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2RawDataRep2.fastq.gz
+geoSampleAccession GSM822273
 grant Crawford
 lab UT-A
-md5sum 87e64f48658b0be49698f0d4ba6f127e
+md5sum f9ca87f0df583c6a3766b809ba2e99fa
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 3141
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3Pol2Sig
@@ -3510,6 +3799,7 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2Sig.bigWig
+geoSampleAccession GSM822273
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
@@ -3519,6 +3809,7 @@ project wgEncode
 setType exp
 subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3Pol2Validation
@@ -3529,12 +3820,13 @@ cell HeLa-S3
 composite wgEncodeOpenChromChip
 controlId HeLa-S3/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000597
 expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2Validation.tgz
+geoSampleAccession GSM822273
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -3559,6 +3851,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycAlnRep1.bam,wgEncodeOpenChromChipHepg2CmycAlnRep1.bam.bai
+geoSampleAccession GSM822291
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3568,6 +3861,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1527
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2CmycAlnRep2
@@ -3584,6 +3878,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycAlnRep2.bam,wgEncodeOpenChromChipHepg2CmycAlnRep2.bam.bai
+geoSampleAccession GSM822291
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3593,6 +3888,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1527
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2CmycAlnRep3
@@ -3609,6 +3905,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycAlnRep3.bam,wgEncodeOpenChromChipHepg2CmycAlnRep3.bam.bai
+geoSampleAccession GSM822291
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3618,6 +3915,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1527
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal
@@ -3634,6 +3932,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal.bigWig
+geoSampleAccession GSM822291
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -3643,6 +3942,7 @@ project wgEncode
 setType exp
 subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHepg2CmycPk
@@ -3659,15 +3959,17 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycPk.narrowPeak.gz
+geoSampleAccession GSM822291
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.01
-md5sum d2af1dbad600c784333d1548bd30442b
+md5sum 5f40a1850dae648779bacabe0d75a605
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHepg2CmycRawDataRep1
@@ -3684,14 +3986,16 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycRawDataRep1.fastq.gz
+geoSampleAccession GSM822291
 grant Crawford
 lab UT-A
-md5sum f2fa084d57e032045dcacd669d11e268
+md5sum fdfed48e8fd94d2ea9e691de011cbe6d
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 593
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CmycRawDataRep2
@@ -3708,14 +4012,16 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycRawDataRep2.fastq.gz
+geoSampleAccession GSM822291
 grant Crawford
 lab UT-A
-md5sum 8807afa94c7be0451a1aef92d15ed3ac
+md5sum c9f352112dd97c9ecb6ea6c68cc76d5b
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 593
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CmycRawDataRep3
@@ -3732,14 +4038,16 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycRawDataRep3.fastq.gz
+geoSampleAccession GSM822291
 grant Crawford
 lab UT-A
-md5sum 55aaa5192ac5d2a668f2e23eab9b2823
+md5sum 7d09771d9d7dc1e5364d6d87c5a2957d
 origAssembly hg18
 project wgEncode
 replicate 3
 setType exp
 subId 593
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CmycSig
@@ -3756,6 +4064,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycSig.bigWig
+geoSampleAccession GSM822291
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HepG2
@@ -3765,6 +4074,7 @@ project wgEncode
 setType exp
 subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHepg2CmycValidation
@@ -3775,12 +4085,13 @@ cell HepG2
 composite wgEncodeOpenChromChip
 controlId HepG2/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000545
 expId 545
 fileName wgEncodeOpenChromChipHepg2CmycValidation.tgz
+geoSampleAccession GSM822291
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -3805,6 +4116,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam,wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822287
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3814,6 +4126,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1517
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2CtcfAlnRep2
@@ -3830,6 +4143,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam,wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822287
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3839,6 +4153,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1517
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal
@@ -3855,6 +4170,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822287
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -3864,6 +4180,7 @@ project wgEncode
 setType exp
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHepg2CtcfPk
@@ -3880,15 +4197,17 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfPk.narrowPeak.gz
+geoSampleAccession GSM822287
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum aefe60b388b602f45494cebd7fe7b00c
+md5sum e98e73df8810ef58b5c5cab47dca8fbe
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHepg2CtcfRawDataRep1
@@ -3905,14 +4224,16 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822287
 grant Crawford
 lab UT-A
-md5sum 8265f525858edd5e00a75471499bc650
+md5sum 6fbf6761641703b469114aa130985522
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 555
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CtcfRawDataRep2
@@ -3929,14 +4250,16 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822287
 grant Crawford
 lab UT-A
-md5sum 3b236e74cf471a3f1c60dfd0599f6238
+md5sum 0832566cd5fba1cddb592af97d2d21af
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 555
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CtcfSig
@@ -3953,6 +4276,7 @@ dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfSig.bigWig
+geoSampleAccession GSM822287
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HepG2
@@ -3962,6 +4286,7 @@ project wgEncode
 setType exp
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHepg2CtcfValidation
@@ -3972,12 +4297,13 @@ cell HepG2
 composite wgEncodeOpenChromChip
 controlId HepG2/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000543
 expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfValidation.tgz
+geoSampleAccession GSM822287
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -4002,6 +4328,7 @@ dateUnrestricted 2009-12-13
 dccAccession wgEncodeEH000538
 expId 538
 fileName wgEncodeOpenChromChipHepg2InputAln.bam,wgEncodeOpenChromChipHepg2InputAln.bam.bai
+geoSampleAccession GSM822314
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4010,6 +4337,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1608
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2InputRawData
@@ -4025,14 +4353,16 @@ dateUnrestricted 2009-12-13
 dccAccession wgEncodeEH000538
 expId 538
 fileName wgEncodeOpenChromChipHepg2InputRawData.fastq.gz
+geoSampleAccession GSM822314
 grant Crawford
 lab UT-A
 labVersion Illumina, pooled
-md5sum 4c7956a71015a34d68ab5f9930f0be94
+md5sum 6d51efae82c867ac49144a5fb9a3cb2d
 origAssembly hg18
 project wgEncode
 setType input
 subId 274
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2InputSig
@@ -4049,6 +4379,7 @@ dateUnrestricted 2009-12-13
 dccAccession wgEncodeEH000538
 expId 538
 fileName wgEncodeOpenChromChipHepg2InputSig.bigWig
+geoSampleAccession GSM822314
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -4058,6 +4389,7 @@ project wgEncode
 setType input
 subId 1608
 tableName wgEncodeOpenChromChipHepg2InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHepg2Pol2AlnRep1
@@ -4074,6 +4406,7 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam,wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam.bai
+geoSampleAccession GSM822284
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4083,6 +4416,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1526
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2Pol2AlnRep2
@@ -4099,6 +4433,7 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam,wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam.bai
+geoSampleAccession GSM822284
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4108,6 +4443,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1526
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2Pol2AlnRep3
@@ -4124,6 +4460,7 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam,wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam.bai
+geoSampleAccession GSM822284
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4133,6 +4470,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1526
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal
@@ -4149,6 +4487,7 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal.bigWig
+geoSampleAccession GSM822284
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -4158,6 +4497,7 @@ project wgEncode
 setType exp
 subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHepg2Pol2Pk
@@ -4174,15 +4514,17 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2Pk.narrowPeak.gz
+geoSampleAccession GSM822284
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 405b4330b21e58252dfa43bb6f4f244d
+md5sum 0ac8a2c2f6e5c20da4076f0e45775e1b
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHepg2Pol2RawDataRep1
@@ -4201,12 +4543,13 @@ expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
-md5sum 603257a462a1010ba9d09d0266cc07b8
+md5sum 427859e2eaae2e2e9d485db5e2b75d43
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 3141
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2Pol2RawDataRep2
@@ -4222,14 +4565,16 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep2.fastq.gz
+geoSampleAccession GSM822284
 grant Crawford
 lab UT-A
-md5sum 355ea63de92cdab471b34b8da210a266
+md5sum 87da0abfe1a93e5797058c26a1dbcbf4
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 589
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2Pol2RawDataRep3
@@ -4245,14 +4590,16 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep3.fastq.gz
+geoSampleAccession GSM822284
 grant Crawford
 lab UT-A
-md5sum 20e856e8da4099c3ff8960322fe386b8
+md5sum 9e55ecaadf1f95e337b7953472960d12
 origAssembly hg18
 project wgEncode
 replicate 3
 setType exp
 subId 589
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2Pol2Sig
@@ -4269,6 +4616,7 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2Sig.bigWig
+geoSampleAccession GSM822284
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HepG2
@@ -4278,6 +4626,7 @@ project wgEncode
 setType exp
 subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHepg2Pol2Validation
@@ -4288,12 +4637,13 @@ cell HepG2
 composite wgEncodeOpenChromChip
 controlId HepG2/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2Validation.tgz
+geoSampleAccession GSM822284
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -4318,6 +4668,7 @@ dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
 expId 561
 fileName wgEncodeOpenChromChipHuvecCmycAlnRep1.bam,wgEncodeOpenChromChipHuvecCmycAlnRep1.bam.bai
+geoSampleAccession GSM822298
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4327,6 +4678,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1542
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal
@@ -4343,6 +4695,7 @@ dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
 expId 561
 fileName wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal.bigWig
+geoSampleAccession GSM822298
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -4352,6 +4705,7 @@ project wgEncode
 setType exp
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHuvecCmycPk
@@ -4368,15 +4722,17 @@ dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
 expId 561
 fileName wgEncodeOpenChromChipHuvecCmycPk.narrowPeak.gz
+geoSampleAccession GSM822298
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.01
-md5sum 7d4ce26014fe47628cf45bf77bb5c3b2
+md5sum 00555ca4fe976c71d4d09a9b6eb63414
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHuvecCmycRawDataRep1
@@ -4392,14 +4748,16 @@ dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
 expId 561
 fileName wgEncodeOpenChromChipHuvecCmycRawDataRep1.fastq.gz
+geoSampleAccession GSM822298
 grant Crawford
 lab UT-A
-md5sum 760dbd85983c80cae6f30ca06d98d94e
+md5sum b2ea9be21acf8bcb3cda415938462a30
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 635
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecCmycSig
@@ -4416,6 +4774,7 @@ dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
 expId 561
 fileName wgEncodeOpenChromChipHuvecCmycSig.bigWig
+geoSampleAccession GSM822298
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
@@ -4425,6 +4784,7 @@ project wgEncode
 setType exp
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHuvecCtcfAlnRep1
@@ -4441,6 +4801,7 @@ dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam,wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam.bai
+geoSampleAccession GSM822279
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4450,6 +4811,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1537
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecCtcfAlnRep2
@@ -4466,6 +4828,7 @@ dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam,wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam.bai
+geoSampleAccession GSM822279
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4475,6 +4838,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1537
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal
@@ -4491,6 +4855,7 @@ dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822279
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -4500,6 +4865,7 @@ project wgEncode
 setType exp
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHuvecCtcfPk
@@ -4516,15 +4882,17 @@ dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfPk.narrowPeak.gz
+geoSampleAccession GSM822279
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 822b039ee9aa4e2e5c8813657c2a970f
+md5sum daafa2789e7118e300455a9a456d67ac
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHuvecCtcfRawDataRep1
@@ -4540,14 +4908,16 @@ dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822279
 grant Crawford
 lab UT-A
-md5sum 27774230b1d8e487d14960b579c92a06
+md5sum 2503a026bd0fae71474c674cec4da568
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 548
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecCtcfRawDataRep2
@@ -4563,14 +4933,16 @@ dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822279
 grant Crawford
 lab UT-A
-md5sum 74b5a7630b8685d94f76343594d3b641
+md5sum e3ae7073ac58f6081619cbfa61a66815
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 548
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecCtcfSig
@@ -4587,6 +4959,7 @@ dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfSig.bigWig
+geoSampleAccession GSM822279
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
@@ -4596,6 +4969,7 @@ project wgEncode
 setType exp
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHuvecCtcfValidation
@@ -4606,12 +4980,13 @@ cell HUVEC
 composite wgEncodeOpenChromChip
 controlId HUVEC/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000551
 expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfValidation.tgz
+geoSampleAccession GSM822279
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -4636,6 +5011,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000550
 expId 550
 fileName wgEncodeOpenChromChipHuvecInputAln.bam,wgEncodeOpenChromChipHuvecInputAln.bam.bai
+geoSampleAccession GSM822280
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4644,6 +5020,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1607
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecInputRawData
@@ -4659,13 +5036,15 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000550
 expId 550
 fileName wgEncodeOpenChromChipHuvecInputRawData.fastq.gz
+geoSampleAccession GSM822280
 grant Crawford
 lab UT-A
-md5sum 1243f5fc0b82f2f059ddf6b81c886a82
+md5sum 4c07b4f40b8c6c528965835fcbb5707d
 origAssembly hg18
 project wgEncode
 setType input
 subId 544
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecInputSig
@@ -4682,6 +5061,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000550
 expId 550
 fileName wgEncodeOpenChromChipHuvecInputSig.bigWig
+geoSampleAccession GSM822280
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -4691,6 +5071,7 @@ project wgEncode
 setType input
 subId 1607
 tableName wgEncodeOpenChromChipHuvecInputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHuvecPol2AlnRep1
@@ -4707,6 +5088,7 @@ dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeOpenChromChipHuvecPol2AlnRep1.bam,wgEncodeOpenChromChipHuvecPol2AlnRep1.bam.bai
+geoSampleAccession GSM822306
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4716,6 +5098,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1540
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecPol2AlnRep2
@@ -4732,6 +5115,7 @@ dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeOpenChromChipHuvecPol2AlnRep2.bam,wgEncodeOpenChromChipHuvecPol2AlnRep2.bam.bai
+geoSampleAccession GSM822306
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4741,6 +5125,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1540
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal
@@ -4757,6 +5142,7 @@ dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal.bigWig
+geoSampleAccession GSM822306
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -4766,6 +5152,7 @@ project wgEncode
 setType exp
 subId 1540
 tableName wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHuvecPol2Pk
@@ -4782,15 +5169,17 @@ dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeOpenChromChipHuvecPol2Pk.narrowPeak.gz
+geoSampleAccession GSM822306
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum b77f6a78edd00ce73c3c9d4bdee43cbc
+md5sum 13a10aeb7444e807962a27563637a633
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1540
 tableName wgEncodeOpenChromChipHuvecPol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHuvecPol2RawDataRep1
@@ -4806,14 +5195,16 @@ dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeOpenChromChipHuvecPol2RawDataRep1.fastq.gz
+geoSampleAccession GSM822306
 grant Crawford
 lab UT-A
-md5sum c950e3248495e3952a5f5d9676d97ebe
+md5sum d3df37d3d5a43b35e24afd9e0ecf554f
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 552
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecPol2RawDataRep2
@@ -4829,14 +5220,16 @@ dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeOpenChromChipHuvecPol2RawDataRep2.fastq.gz
+geoSampleAccession GSM822306
 grant Crawford
 lab UT-A
-md5sum 2335dfc6e65ba78aac14af943101b0f2
+md5sum fb89c0567f723ccba23bb145586ab190
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 552
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecPol2Sig
@@ -4853,6 +5246,7 @@ dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
 fileName wgEncodeOpenChromChipHuvecPol2Sig.bigWig
+geoSampleAccession GSM822306
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
@@ -4862,6 +5256,7 @@ project wgEncode
 setType exp
 subId 1540
 tableName wgEncodeOpenChromChipHuvecPol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipK562CmycAlnRep1
@@ -4878,6 +5273,7 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeOpenChromChipK562CmycAlnRep1.bam,wgEncodeOpenChromChipK562CmycAlnRep1.bam.bai
+geoSampleAccession GSM822310
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4887,6 +5283,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1543
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CmycAlnRep2
@@ -4903,6 +5300,7 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeOpenChromChipK562CmycAlnRep2.bam,wgEncodeOpenChromChipK562CmycAlnRep2.bam.bai
+geoSampleAccession GSM822310
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4912,6 +5310,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1543
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CmycAlnRep3
@@ -4928,6 +5327,7 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeOpenChromChipK562CmycAlnRep3.bam,wgEncodeOpenChromChipK562CmycAlnRep3.bam.bai
+geoSampleAccession GSM822310
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4937,6 +5337,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1543
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CmycBaseOverlapSignal
@@ -4953,6 +5354,7 @@ dateUnrestricted 2009-11-27
 dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeOpenChromChipK562CmycBaseOverlapSignal.bigWig
+geoSampleAccession GSM822310
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -4962,6 +5364,7 @@ project wgEncode
 setType exp
 subId 1543
 tableName wgEncodeOpenChromChipK562CmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipK562CmycPk
@@ -4978,15 +5381,17 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeOpenChromChipK562CmycPk.narrowPeak.gz
+geoSampleAccession GSM822310
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.01
-md5sum 286efa162c05702c48d2945e6062b946
+md5sum 4aea56b59f38e1033f7638348850eee2
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1543
 tableName wgEncodeOpenChromChipK562CmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipK562CmycRawDataRep1
@@ -5003,14 +5408,16 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeOpenChromChipK562CmycRawDataRep1.fastq.gz
+geoSampleAccession GSM822310
 grant Crawford
 lab UT-A
-md5sum 79cc7260d5c1c77f6cfd586aadd18984
+md5sum 997d7b390142d5f72fa3f4b3e35057b2
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 482
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CmycRawDataRep2
@@ -5027,14 +5434,16 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeOpenChromChipK562CmycRawDataRep2.fastq.gz
+geoSampleAccession GSM822310
 grant Crawford
 lab UT-A
-md5sum 65aaa71a340369df8dca70a50a78a92a
+md5sum 361b6b5c129e6a13f6e401bbae608426
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 482
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CmycRawDataRep3
@@ -5051,14 +5460,16 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeOpenChromChipK562CmycRawDataRep3.fastq.gz
+geoSampleAccession GSM822310
 grant Crawford
 lab UT-A
-md5sum 59b616640a9f9254f8515e7748cc5934
+md5sum d6ab7b4c96462a9b25a2e046b4909ce3
 origAssembly hg18
 project wgEncode
 replicate 3
 setType exp
 subId 482
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CmycSig
@@ -5075,6 +5486,7 @@ dateUnrestricted 2009-11-27
 dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeOpenChromChipK562CmycSig.bigWig
+geoSampleAccession GSM822310
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_K562
@@ -5084,6 +5496,7 @@ project wgEncode
 setType exp
 subId 1543
 tableName wgEncodeOpenChromChipK562CmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipK562CmycValidation
@@ -5094,12 +5507,13 @@ cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000536
 expId 536
 fileName wgEncodeOpenChromChipK562CmycValidation.tgz
+geoSampleAccession GSM822310
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -5107,6 +5521,7 @@ md5sum 1c69f30938898c91098f969c6bd46fa0
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipK562CtcfAlnRep1
@@ -5123,6 +5538,7 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeOpenChromChipK562CtcfAlnRep1.bam,wgEncodeOpenChromChipK562CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822311
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5132,6 +5548,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1538
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CtcfAlnRep2
@@ -5148,6 +5565,7 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeOpenChromChipK562CtcfAlnRep2.bam,wgEncodeOpenChromChipK562CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822311
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5157,6 +5575,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1538
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CtcfAlnRep3
@@ -5173,6 +5592,7 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeOpenChromChipK562CtcfAlnRep3.bam,wgEncodeOpenChromChipK562CtcfAlnRep3.bam.bai
+geoSampleAccession GSM822311
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5182,6 +5602,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1538
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CtcfBaseOverlapSignal
@@ -5198,6 +5619,7 @@ dateUnrestricted 2009-11-27
 dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeOpenChromChipK562CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822311
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -5207,6 +5629,7 @@ project wgEncode
 setType exp
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipK562CtcfPk
@@ -5223,15 +5646,17 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeOpenChromChipK562CtcfPk.narrowPeak.gz
+geoSampleAccession GSM822311
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 984abaf5e5a6fa22237906bc107644ac
+md5sum 7077e48fd37f557e0c193324dedcbb86
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipK562CtcfRawDataRep1
@@ -5248,14 +5673,16 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeOpenChromChipK562CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822311
 grant Crawford
 lab UT-A
-md5sum e7d01096a547d126f43b37595ab9a73e
+md5sum 50dd397d0b7c9020841edc723598714f
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 481
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CtcfRawDataRep2
@@ -5272,14 +5699,16 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeOpenChromChipK562CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822311
 grant Crawford
 lab UT-A
-md5sum f5483a78de4fddd0f3b92e3edb3beea7
+md5sum f33ba7c5aec14c57e3917188167030d8
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 481
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CtcfRawDataRep3
@@ -5296,14 +5725,16 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeOpenChromChipK562CtcfRawDataRep3.fastq.gz
+geoSampleAccession GSM822311
 grant Crawford
 lab UT-A
-md5sum 6f38b2c666e66d2ea2cacb4ce5b6f079
+md5sum 534ff12cd794d3a500d8e560e255d747
 origAssembly hg18
 project wgEncode
 replicate 3
 setType exp
 subId 481
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CtcfSig
@@ -5320,6 +5751,7 @@ dateUnrestricted 2009-11-27
 dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeOpenChromChipK562CtcfSig.bigWig
+geoSampleAccession GSM822311
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_K562
@@ -5329,6 +5761,7 @@ project wgEncode
 setType exp
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipK562CtcfValidation
@@ -5339,12 +5772,13 @@ cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000535
 expId 535
 fileName wgEncodeOpenChromChipK562CtcfValidation.tgz
+geoSampleAccession GSM822311
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -5352,6 +5786,7 @@ md5sum 19a8516b14dad6f7216581b3e52c9e1e
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipK562InputAln
@@ -5368,6 +5803,7 @@ dateUnrestricted 2009-08-05
 dccAccession wgEncodeEH000529
 expId 529
 fileName wgEncodeOpenChromChipK562InputAln.bam,wgEncodeOpenChromChipK562InputAln.bam.bai
+geoSampleAccession GSM822293
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5376,6 +5812,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1606
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562InputRawData
@@ -5391,14 +5828,16 @@ dateUnrestricted 2009-08-05
 dccAccession wgEncodeEH000529
 expId 529
 fileName wgEncodeOpenChromChipK562InputRawData.fastq.gz
+geoSampleAccession GSM822293
 grant Crawford
 lab UT-A
 labVersion Illumina
-md5sum faef9165afd3051ee701f853027a4d34
+md5sum 6f20fed3f4af225e980856a0a0aa8f27
 origAssembly hg18
 project wgEncode
 setType input
 subId 109
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562InputSig
@@ -5415,6 +5854,7 @@ dateUnrestricted 2009-08-05
 dccAccession wgEncodeEH000529
 expId 529
 fileName wgEncodeOpenChromChipK562InputSig.bigWig
+geoSampleAccession GSM822293
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -5424,6 +5864,7 @@ project wgEncode
 setType input
 subId 1606
 tableName wgEncodeOpenChromChipK562InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipK562Pol2AlnRep1
@@ -5440,6 +5881,7 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeOpenChromChipK562Pol2AlnRep1.bam,wgEncodeOpenChromChipK562Pol2AlnRep1.bam.bai
+geoSampleAccession GSM822275
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5449,6 +5891,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1541
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562Pol2AlnRep2
@@ -5465,6 +5908,7 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeOpenChromChipK562Pol2AlnRep2.bam,wgEncodeOpenChromChipK562Pol2AlnRep2.bam.bai
+geoSampleAccession GSM822275
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5474,6 +5918,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1541
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562Pol2BaseOverlapSignal
@@ -5490,6 +5935,7 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeOpenChromChipK562Pol2BaseOverlapSignal.bigWig
+geoSampleAccession GSM822275
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -5499,6 +5945,7 @@ project wgEncode
 setType exp
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipK562Pol2Pk
@@ -5515,15 +5962,17 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeOpenChromChipK562Pol2Pk.narrowPeak.gz
+geoSampleAccession GSM822275
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum cce54edb5e2bd0631db9d67b6025055e
+md5sum cbb0188574f00f105f55ef780ceb351c
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipK562Pol2RawDataRep1
@@ -5539,14 +5988,16 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeOpenChromChipK562Pol2RawDataRep1.fastq.gz
+geoSampleAccession GSM822275
 grant Crawford
 lab UT-A
-md5sum 0cb2219e1742000f919c7b74b042a8ec
+md5sum e946610f31c845c7a4e3ce5ce666e2ef
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 588
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562Pol2RawDataRep2
@@ -5562,14 +6013,16 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeOpenChromChipK562Pol2RawDataRep2.fastq.gz
+geoSampleAccession GSM822275
 grant Crawford
 lab UT-A
-md5sum be625e4898d465f75fd1f350e6beeecb
+md5sum fe84f57a7a79eea8bb32f62764cb13f8
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 588
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562Pol2Sig
@@ -5586,6 +6039,7 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeOpenChromChipK562Pol2Sig.bigWig
+geoSampleAccession GSM822275
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_K562
@@ -5595,6 +6049,7 @@ project wgEncode
 setType exp
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipK562Pol2Validation
@@ -5605,12 +6060,13 @@ cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000555
 expId 555
 fileName wgEncodeOpenChromChipK562Pol2Validation.tgz
+geoSampleAccession GSM822275
 grant Crawford
 lab UT-A
 labVersion 1% ENCODE array platform validation tests
@@ -5618,6 +6074,7 @@ md5sum 1ed0e72b3eebdf93ffedec9ed945696b
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipMcf7CmycEstroAlnRep1
@@ -5633,6 +6090,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam.bai
+geoSampleAccession GSM822304
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5658,6 +6116,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam.bai
+geoSampleAccession GSM822304
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5683,6 +6142,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal.bigWig
+geoSampleAccession GSM822304
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -5708,10 +6168,11 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroPkRep1.narrowPeak.gz
+geoSampleAccession GSM822304
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum bea123167eb09018fddc1f18affb7aa9
+md5sum ead27015de163477359b0a9b3e0d599c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5734,9 +6195,10 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep1.fastq.gz
+geoSampleAccession GSM822304
 grant Crawford
 lab UT-A
-md5sum 65c6553a41d94e026f83f14c7aa940eb
+md5sum fbcd400aababee9b8f9e7ee1bbf124ea
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5758,9 +6220,10 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep2.fastq.gz
+geoSampleAccession GSM822304
 grant Crawford
 lab UT-A
-md5sum 1d1def9ab536ed88c77c918ea96dd93b
+md5sum 30e32206590d7fdf7ee529accbdc0de1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5782,6 +6245,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroSig.bigWig
+geoSampleAccession GSM822304
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
@@ -5810,12 +6274,13 @@ expId 599
 fileName wgEncodeOpenChromChipMcf7CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
-md5sum e38e1dfbd4b44347aed9538791f4d9f7
+md5sum 097383141b906f7b978be98935db8b66
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 3141
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CmycRawDataRep2
@@ -5834,12 +6299,13 @@ expId 599
 fileName wgEncodeOpenChromChipMcf7CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
-md5sum 0967f7364de1ed61c39f1c85da3648c5
+md5sum 01d1d092342b37f0a68c0ac267881042
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 3141
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CmycVehAlnRep1
@@ -5855,6 +6321,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam.bai
+geoSampleAccession GSM822301
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5880,6 +6347,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam.bai
+geoSampleAccession GSM822301
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5905,6 +6373,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal.bigWig
+geoSampleAccession GSM822301
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -5930,10 +6399,11 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehPkRep1.narrowPeak.gz
+geoSampleAccession GSM822301
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum f17bfac31153100ea484b0a73946e194
+md5sum 0563260911b832cf41326dd838b3ae19
 origAssembly hg19
 project wgEncode
 setType exp
@@ -5955,9 +6425,10 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep1.fastq.gz
+geoSampleAccession GSM822301
 grant Crawford
 lab UT-A
-md5sum ffe77bc6be2de28593a7bf90608d209b
+md5sum a828de4fe102b03fd110165a0b3a72b6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5979,9 +6450,10 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep2.fastq.gz
+geoSampleAccession GSM822301
 grant Crawford
 lab UT-A
-md5sum 17e0fbe3f94e55a76ee889d84341efc4
+md5sum 6f01305eaafd574ef84b284ae541e424
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6003,6 +6475,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehSig.bigWig
+geoSampleAccession GSM822301
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
@@ -6029,6 +6502,7 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam.bai
+geoSampleAccession GSM822305
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6038,6 +6512,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1580
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMcf7CtcfAlnRep2
@@ -6054,6 +6529,7 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam.bai
+geoSampleAccession GSM822305
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6063,6 +6539,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1580
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal
@@ -6079,6 +6556,7 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822305
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -6088,6 +6566,7 @@ project wgEncode
 setType exp
 subId 1580
 tableName wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1
@@ -6103,6 +6582,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam.bai
+geoSampleAccession GSM822309
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6128,6 +6608,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam.bai
+geoSampleAccession GSM822309
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6153,6 +6634,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroBaseOverlapSignal.bigWig
+geoSampleAccession GSM822309
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -6178,10 +6660,11 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroPkRep1.narrowPeak.gz
+geoSampleAccession GSM822309
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum eb4322e60c37f8b88cbfc12a9abe8c4f
+md5sum 2db9faef9c10fd3112a8b01cc142671a
 origAssembly hg19
 project wgEncode
 setType exp
@@ -6203,9 +6686,10 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep1.fastq.gz
+geoSampleAccession GSM822309
 grant Crawford
 lab UT-A
-md5sum 3e46b33103320ac66d233ec3656504a0
+md5sum e5ee05777ea91d9e3e4f87a7a341e937
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6227,9 +6711,10 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep2.fastq.gz
+geoSampleAccession GSM822309
 grant Crawford
 lab UT-A
-md5sum e396639e76ca8be3160884eb591e3563
+md5sum 89700df2fb6ee49af4b574103a06b269
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6251,6 +6736,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroSig.bigWig
+geoSampleAccession GSM822309
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
@@ -6277,15 +6763,17 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfPk.narrowPeak.gz
+geoSampleAccession GSM822305
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 2a7778dac2cb0e23cb3a83c5eea41cf9
+md5sum 9340658fdf7a5335bcdd7549e92304f9
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1580
 tableName wgEncodeOpenChromChipMcf7CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipMcf7CtcfRawDataRep1
@@ -6301,14 +6789,16 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822305
 grant Crawford
 lab UT-A
-md5sum 6a9a967f5fb8216c48726339eb549ce4
+md5sum 81c9a6f15c7854e480edbaa8b9019a35
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 884
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CtcfRawDataRep2
@@ -6324,14 +6814,16 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822305
 grant Crawford
 lab UT-A
-md5sum 4c3ffa144de1488fb762aad6c6876522
+md5sum 85150b4b00075a0d64dbd1b1956a1dbc
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 884
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CtcfSig
@@ -6348,6 +6840,7 @@ dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfSig.bigWig
+geoSampleAccession GSM822305
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
@@ -6357,6 +6850,7 @@ project wgEncode
 setType exp
 subId 1580
 tableName wgEncodeOpenChromChipMcf7CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipMcf7CtcfVehAlnRep1
@@ -6372,6 +6866,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam.bai
+geoSampleAccession GSM822308
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6397,6 +6892,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam.bai
+geoSampleAccession GSM822308
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6422,6 +6918,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehBaseOverlapSignal.bigWig
+geoSampleAccession GSM822308
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -6447,10 +6944,11 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehPkRep1.narrowPeak.gz
+geoSampleAccession GSM822308
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum ad2972e4ab6e0b01298aef5d8a8eae23
+md5sum c97ca5452192891dcd6d8a3bcbfb3e6a
 origAssembly hg19
 project wgEncode
 setType exp
@@ -6472,9 +6970,10 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep1.fastq.gz
+geoSampleAccession GSM822308
 grant Crawford
 lab UT-A
-md5sum 0a6bdde8340853b0651ae5374b6db476
+md5sum 4ba38aa40b5b098510bab3aeb4f04240
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6496,9 +6995,10 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep2.fastq.gz
+geoSampleAccession GSM822308
 grant Crawford
 lab UT-A
-md5sum e5a1de99ebb821a6d89fdb876c44be75
+md5sum 8a4c8462f5a1780534976633cdc7c84b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6520,6 +7020,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehSig.bigWig
+geoSampleAccession GSM822308
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
@@ -6546,6 +7047,7 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000589
 expId 589
 fileName wgEncodeOpenChromChipMcf7InputAln.bam,wgEncodeOpenChromChipMcf7InputAln.bam.bai
+geoSampleAccession GSM822283
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6554,6 +7056,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1834
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMcf7InputRawDataRep1
@@ -6569,13 +7072,15 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000589
 expId 589
 fileName wgEncodeOpenChromChipMcf7InputRawDataRep1.fastq.gz
+geoSampleAccession GSM822283
 grant Crawford
 lab UT-A
-md5sum a50029660a56274542b1b9bf3a1024bd
+md5sum 233aa5f3cea3d65c0e50c1c045440c59
 origAssembly hg18
 project wgEncode
 setType input
 subId 866
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7InputSig
@@ -6592,6 +7097,7 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000589
 expId 589
 fileName wgEncodeOpenChromChipMcf7InputSig.bigWig
+geoSampleAccession GSM822283
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -6601,6 +7107,7 @@ project wgEncode
 setType input
 subId 1834
 tableName wgEncodeOpenChromChipMcf7InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipMcf7Pol2AlnRep1
@@ -6616,6 +7123,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam,wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam.bai
+geoSampleAccession GSM822295
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6625,6 +7133,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2495
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMcf7Pol2AlnRep2
@@ -6640,6 +7149,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam,wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam.bai
+geoSampleAccession GSM822295
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6649,6 +7159,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2495
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal
@@ -6664,6 +7175,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal.bigWig
+geoSampleAccession GSM822295
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -6673,6 +7185,7 @@ project wgEncode
 setType exp
 subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipMcf7Pol2PkRep1
@@ -6688,15 +7201,17 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2PkRep1.narrowPeak.gz
+geoSampleAccession GSM822295
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum d1cebd057ea17dd9de18487291bd39de
+md5sum ee87a36022cf4cf690f8e21a6294a096
 origAssembly hg19
 project wgEncode
 setType exp
 subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipMcf7Pol2RawDataRep1
@@ -6712,14 +7227,16 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep1.fastq.gz
+geoSampleAccession GSM822295
 grant Crawford
 lab UT-A
-md5sum 370f92afe8a636afc509e5946651b947
+md5sum b3e7e4e3ddc52eb5b4ed0267429b63a7
 origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
 subId 2495
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7Pol2RawDataRep2
@@ -6735,14 +7252,16 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep2.fastq.gz
+geoSampleAccession GSM822295
 grant Crawford
 lab UT-A
-md5sum 985ae9d76701893603bc8bec0c029cef
+md5sum e370e4bf27a818319975c67fbff46403
 origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
 subId 2495
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7Pol2Sig
@@ -6758,6 +7277,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2Sig.bigWig
+geoSampleAccession GSM822295
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
@@ -6767,6 +7287,7 @@ project wgEncode
 setType exp
 subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipMonocd14InputAln
@@ -6782,14 +7303,17 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001137
 expId 1137
 fileName wgEncodeOpenChromChipMonocd14InputAln.bam,wgEncodeOpenChromChipMonocd14InputAln.bam.bai
+geoSampleAccession GSM822296
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 md5sum 490c5d71e6c847ca77d93b562f173a6a,543d82be8f8ca67f7313949a86733e7d
+objStatus renamed - added in cell donor name - wgEncodeOpenChromChipMonocd14ro01746InputAln
 origAssembly hg19
 project wgEncode
 setType input
 subId 3271
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMonocd14InputRawData
@@ -6805,13 +7329,16 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001137
 expId 1137
 fileName wgEncodeOpenChromChipMonocd14InputRawData.fastq.gz
+geoSampleAccession GSM822296
 grant Crawford
 lab UT-A
-md5sum f8628418043a552db8de137ffdadcabf
+md5sum d87021660a022e2646d4dd88779f1a35
+objStatus renamed - added in cell donor name - wgEncodeOpenChromChipMonocd14ro01746InputRawData
 origAssembly hg19
 project wgEncode
 setType input
 subId 3271
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMonocd14InputSig
@@ -6827,6 +7354,83 @@ dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001137
 expId 1137
 fileName wgEncodeOpenChromChipMonocd14InputSig.bigWig
+geoSampleAccession GSM822296
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+md5sum 10c502bdfbdcdbf2fffee2318626c6e7
+objStatus renamed - added in cell donor name - wgEncodeOpenChromChipMonocd14ro01746InputSig
+origAssembly hg19
+project wgEncode
+setType input
+subId 3271
+tableName wgEncodeOpenChromChipMonocd14InputSig
+treatment None
+view Signal
+
+metaObject wgEncodeOpenChromChipMonocd14ro1746InputAln
+objType file
+antibody Input
+cell Monocytes-CD14+_RO01746
+composite wgEncodeOpenChromChip
+controlId Monocytes-CD14+/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001137
+expId 1137
+fileName wgEncodeOpenChromChipMonocd14ro1746InputAln.bam,wgEncodeOpenChromChipMonocd14ro1746InputAln.bam.bai
+geoSampleAccession GSM822296
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 490c5d71e6c847ca77d93b562f173a6a,543d82be8f8ca67f7313949a86733e7d
+origAssembly hg19
+project wgEncode
+setType input
+subId 3271
+treatment None
+view Alignments
+
+metaObject wgEncodeOpenChromChipMonocd14ro1746InputRawData
+objType file
+antibody Input
+cell Monocytes-CD14+_RO01746
+composite wgEncodeOpenChromChip
+controlId Monocytes-CD14+/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001137
+expId 1137
+fileName wgEncodeOpenChromChipMonocd14ro1746InputRawData.fastq.gz
+geoSampleAccession GSM822296
+grant Crawford
+lab UT-A
+md5sum d87021660a022e2646d4dd88779f1a35
+origAssembly hg19
+project wgEncode
+setType input
+subId 3271
+treatment None
+view RawData
+
+metaObject wgEncodeOpenChromChipMonocd14ro1746InputSig
+objType table
+antibody Input
+cell Monocytes-CD14+_RO01746
+composite wgEncodeOpenChromChip
+controlId Monocytes-CD14+/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001137
+expId 1137
+fileName wgEncodeOpenChromChipMonocd14ro1746InputSig.bigWig
+geoSampleAccession GSM822296
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -6835,7 +7439,8 @@ origAssembly hg19
 project wgEncode
 setType input
 subId 3271
-tableName wgEncodeOpenChromChipMonocd14InputSig
+tableName wgEncodeOpenChromChipMonocd14ro1746InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipNhekCtcfAlnRep1
@@ -6852,6 +7457,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeOpenChromChipNhekCtcfAlnRep1.bam,wgEncodeOpenChromChipNhekCtcfAlnRep1.bam.bai
+geoSampleAccession GSM822271
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6861,6 +7467,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1539
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipNhekCtcfAlnRep2
@@ -6877,6 +7484,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeOpenChromChipNhekCtcfAlnRep2.bam,wgEncodeOpenChromChipNhekCtcfAlnRep2.bam.bai
+geoSampleAccession GSM822271
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6886,6 +7494,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1539
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal
@@ -6902,6 +7511,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822271
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -6911,6 +7521,7 @@ project wgEncode
 setType exp
 subId 1539
 tableName wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipNhekCtcfPk
@@ -6927,15 +7538,17 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeOpenChromChipNhekCtcfPk.narrowPeak.gz
+geoSampleAccession GSM822271
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 5def847dbb8a583b91d6da68b345c434
+md5sum d70fa2842b5563120691ad629252e89e
 origAssembly hg18
 project wgEncode
 setType exp
 subId 1539
 tableName wgEncodeOpenChromChipNhekCtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipNhekCtcfRawDataRep1
@@ -6951,14 +7564,16 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeOpenChromChipNhekCtcfRawDataRep1.fastq.gz
+geoSampleAccession GSM822271
 grant Crawford
 lab UT-A
-md5sum 594b3053658ae156d87456abaee6cf6f
+md5sum 4182b9c86557a1b35088fcd41ed7bcdb
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
 subId 624
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipNhekCtcfRawDataRep2
@@ -6974,14 +7589,16 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeOpenChromChipNhekCtcfRawDataRep2.fastq.gz
+geoSampleAccession GSM822271
 grant Crawford
 lab UT-A
-md5sum 74d0f1b86a363f808b9f1b2ce4025a90
+md5sum 7afc81aa19079ec59aa18c1c65dbaf4d
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
 subId 624
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipNhekCtcfSig
@@ -6998,6 +7615,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
 fileName wgEncodeOpenChromChipNhekCtcfSig.bigWig
+geoSampleAccession GSM822271
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_generic_female
@@ -7007,6 +7625,7 @@ project wgEncode
 setType exp
 subId 1539
 tableName wgEncodeOpenChromChipNhekCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipProgfibCtcfAlnRep1
@@ -7023,6 +7642,7 @@ dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
 expId 600
 fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam,wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam.bai
+geoSampleAccession GSM822272
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -7033,6 +7653,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1657
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipProgfibCtcfAlnRep2
@@ -7049,6 +7670,7 @@ dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
 expId 600
 fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam,wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam.bai
+geoSampleAccession GSM822272
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -7059,6 +7681,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1657
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal
@@ -7075,6 +7698,7 @@ dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
 expId 600
 fileName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal.bigWig
+geoSampleAccession GSM822272
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -7085,6 +7709,7 @@ project wgEncode
 setType exp
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipProgfibCtcfPkRep1
@@ -7101,10 +7726,11 @@ dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
 expId 600
 fileName wgEncodeOpenChromChipProgfibCtcfPkRep1.narrowPeak.gz
+geoSampleAccession GSM822272
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum b206dcb204aba0d956dffd12095ddc12
+md5sum a5758f424e0c4dc9bea8d9cd87d87e11
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -7112,6 +7738,7 @@ replicate 1
 setType exp
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipProgfibCtcfSig
@@ -7128,6 +7755,7 @@ dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
 expId 600
 fileName wgEncodeOpenChromChipProgfibCtcfSig.bigWig
+geoSampleAccession GSM822272
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB0167P
@@ -7138,6 +7766,7 @@ project wgEncode
 setType exp
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipProgfibInputAln
@@ -7154,6 +7783,7 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000593
 expId 593
 fileName wgEncodeOpenChromChipProgfibInputAln.bam,wgEncodeOpenChromChipProgfibInputAln.bam.bai
+geoSampleAccession GSM822269
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -7163,6 +7793,7 @@ privacy noSequence
 project wgEncode
 setType input
 subId 1832
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipProgfibInputSig
@@ -7179,6 +7810,7 @@ dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000593
 expId 593
 fileName wgEncodeOpenChromChipProgfibInputSig.bigWig
+geoSampleAccession GSM822269
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
@@ -7189,6 +7821,7 @@ project wgEncode
 setType input
 subId 1832
 tableName wgEncodeOpenChromChipProgfibInputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipProgfibPol2AlnRep1
@@ -7205,6 +7838,7 @@ dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
 expId 606
 fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam,wgEncodeOpenChromChipProgfibPol2AlnRep1.bam.bai
+geoSampleAccession GSM822282
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -7215,6 +7849,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1652
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipProgfibPol2AlnRep2
@@ -7231,6 +7866,7 @@ dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
 expId 606
 fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam,wgEncodeOpenChromChipProgfibPol2AlnRep2.bam.bai
+geoSampleAccession GSM822282
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -7241,6 +7877,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1652
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal
@@ -7257,6 +7894,7 @@ dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
 expId 606
 fileName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal.bigWig
+geoSampleAccession GSM822282
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
@@ -7267,6 +7905,7 @@ project wgEncode
 setType exp
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipProgfibPol2PkRep1
@@ -7283,10 +7922,11 @@ dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
 expId 606
 fileName wgEncodeOpenChromChipProgfibPol2PkRep1.narrowPeak.gz
+geoSampleAccession GSM822282
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
-md5sum 1b1edb6a3d0322e1bd22b4a472e739d9
+md5sum b90a52875788d85efa9d8e9ba599a8bd
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -7294,6 +7934,7 @@ replicate 1
 setType exp
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipProgfibPol2Sig
@@ -7310,6 +7951,7 @@ dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
 expId 606
 fileName wgEncodeOpenChromChipProgfibPol2Sig.bigWig
+geoSampleAccession GSM822282
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB0167P
@@ -7320,6 +7962,7 @@ project wgEncode
 setType exp
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
+treatment None
 view Signal
 
-# MAGIC: -853433522
+# MAGIC: -1815630508

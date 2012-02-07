@@ -13,7 +13,6 @@
 #include "portable.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.16 2009/07/09 20:10:05 mikep Exp $";
 
 static char *database = NULL;
 static boolean quiet = FALSE;

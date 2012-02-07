@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "jobDb.h"
 
-static char const rcsid[] = "$Id: jobDb.c,v 1.7 2003/05/06 07:22:15 kate Exp $";
 
 struct submission *submissionCommaIn(char **pS, struct submission *ret)
 /* Create a submission out of a comma separated string. 

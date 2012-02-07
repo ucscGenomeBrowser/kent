@@ -8,7 +8,6 @@
 #include "blastParse.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: blastParse.c,v 1.25 2010/01/06 21:09:18 markd Exp $";
 
 #define WARN_LEVEL 1   /* verbose level to enable warnings */
 #define TRACE_LEVEL 3  /* verbose level to enable tracing of files */

@@ -5,7 +5,6 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: snpMaskSingle.c,v 1.1 2008/02/04 20:16:54 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

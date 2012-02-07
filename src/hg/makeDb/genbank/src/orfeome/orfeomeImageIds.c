@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "orfeomeImageIds.h"
 
-static char const rcsid[] = "$Id: orfeomeImageIds.c,v 1.1 2006/12/24 20:48:14 markd Exp $";
 
 void orfeomeImageIdsStaticLoad(char **row, struct orfeomeImageIds *ret)
 /* Load a row from orfeomeImageIds table into ret.  The contents of ret will

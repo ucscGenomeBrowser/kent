@@ -102,7 +102,10 @@ for (i = 0;  i < rec->infoCount;  i++)
 	{
 	if (j > 0)
 	    printf(", ");
-	vcfPrintDatum(stdout, el->values[j], type);
+	if (el->missingData[j])
+	    printf(".");
+	else
+	    vcfPrintDatum(stdout, el->values[j], type);
 	}
     if (def != NULL)
 	printf("</TD><TD>&nbsp;%s", def->description);
@@ -141,13 +144,13 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	phasedGts++;
     if (gt->hapIxA == 0)
 	refs++;
-    else
+    else if (gt->hapIxA > 0)
 	alts++;
     if (!gt->isHaploid)
 	{
 	if (gt->hapIxB == 0)
 	    refs++;
-	else
+	else if (gt->hapIxB > 0)
 	    alts++;
 	if (gt->hapIxA == 0 && gt->hapIxB == 0)
 	    refRefs++;
@@ -172,7 +175,7 @@ if (vcff->genotypeCount > 1)
 	   rec->alleles[0], rec->alleles[1], refAlts, 100*(double)refAlts/vcff->genotypeCount,
 	   rec->alleles[1], rec->alleles[1], altAlts, 100*(double)altAlts/vcff->genotypeCount);
     if (gtOther > 0)
-	printf("; other: %d (%.3f)", gtOther, (double)gtOther/vcff->genotypeCount);
+	printf("; other: %d (%.3f%%)", gtOther, 100*(double)gtOther/vcff->genotypeCount);
     printf("<BR>\n");
     if (rec->alleleCount == 2)
 	printf("<B>Hardy-Weinberg equilibrium:</B> "
@@ -209,8 +212,13 @@ puts("</TR>\n");
 for (i = 0;  i < vcff->genotypeCount;  i++)
     {
     struct vcfGenotype *gt = &(rec->genotypes[i]);
-    char *hapA = rec->alleles[gt->hapIxA];
-    char *hapB = gt->isHaploid ? NA : rec->alleles[gt->hapIxB];
+    char *hapA = ".", *hapB = ".";
+    if (gt->hapIxA >= 0)
+	hapA = rec->alleles[(unsigned char)gt->hapIxA];
+    if (gt->isHaploid)
+	hapB = NA;
+    else if (gt->hapIxB >= 0)
+	hapB = rec->alleles[(unsigned char)gt->hapIxB];
     char sep = gt->isPhased ? '|' : '/';
     char *phasing = gt->isHaploid ? NA : gt->isPhased ? "Y" : "n";
     printf("<TR><TD>%s</TD><TD>%s%c%s</TD><TD>%s</TD>", vcff->genotypeIds[i],
@@ -227,7 +235,10 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	    {
 	    if (k > 0)
 		printf(", ");
-	    vcfPrintDatum(stdout, el->values[k], formatTypes[j]);
+	    if (el->missingData[k])
+		printf(".");
+	    else
+		vcfPrintDatum(stdout, el->values[k], formatTypes[j]);
 	    }
 	printf("</TD>");
 	}
@@ -241,13 +252,14 @@ static void pgSnpCodingDetail(struct vcfRecord *rec)
 /* Translate rec into pgSnp (with proper chrom name) and call Belinda's
  * coding effect predictor from pgSnp details. */
 {
-if (hTableExists(database, "knownGene"))
+char *genePredTable = "knownGene";
+if (hTableExists(database, genePredTable))
     {
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
     if (!sameString(rec->chrom, seqName))
 	// rec->chrom might be missing "chr" prefix:
 	pgs->chrom = seqName;
-    printSeqCodDisplay(database, pgs);
+    printSeqCodDisplay(database, pgs, genePredTable);
     }
 }
 
@@ -259,7 +271,9 @@ printf("<B>Name:</B> %s<BR>\n", rec->name);
 printCustomUrl(tdb, rec->name, TRUE);
 static char *formName = "vcfCfgHapCenter";
 printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
-vcfCfgHaplotypeCenter(cart, tdb, rec->file, rec->name, seqName, rec->chromStart, formName);
+cartSaveSession(cart);
+vcfCfgHaplotypeCenter(cart, tdb, tdb->track, FALSE, rec->file, rec->name,
+		      seqName, rec->chromStart, formName);
 printf("</FORM>\n");
 printPosOnChrom(seqName, rec->chromStart, rec->chromEnd, NULL, FALSE, rec->name);
 printf("<B>Reference allele:</B> %s<BR>\n", rec->alleles[0]);
@@ -294,7 +308,7 @@ struct vcfFile *vcff = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr);
+    vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)

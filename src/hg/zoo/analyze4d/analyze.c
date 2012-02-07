@@ -7,7 +7,6 @@
 #include "string.h"
 #include "read_malign.h"
 
-static char const rcsid[] = "$Id: analyze.c,v 1.2 2003/05/06 07:22:36 kate Exp $";
 
 #define SAME_STRING(x,y) (!strcasecmp(x,y))
 #define ALPHA_SIZE 4

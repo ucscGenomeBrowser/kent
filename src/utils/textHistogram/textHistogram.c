@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.26 2009/02/01 04:03:24 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

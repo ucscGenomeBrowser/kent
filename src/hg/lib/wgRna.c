@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "wgRna.h"
 
-static char const rcsid[] = "$Id: wgRna.c,v 1.1 2004/12/13 16:28:38 fanhsu Exp $";
 
 void wgRnaStaticLoad(char **row, struct wgRna *ret)
 /* Load a row from wgRna table into ret.  The contents of ret will

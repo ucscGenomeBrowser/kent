@@ -15,7 +15,6 @@
 #include "udc.h"
 #endif
 
-static char const rcsid[] = "$Id: customPp.c,v 1.8 2009/09/25 00:20:20 galt Exp $";
 
 struct customPp *customDocPpNew(struct lineFile *lf)
 /* Return customPp that will ignore browser lines, for doc files */

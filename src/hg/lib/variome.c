@@ -10,7 +10,6 @@
 #include "hdb.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id:$";
 
 void variomeStaticLoad(char **row, struct variome *ret)
 /* Load a row from variome table into ret.  The contents of ret will

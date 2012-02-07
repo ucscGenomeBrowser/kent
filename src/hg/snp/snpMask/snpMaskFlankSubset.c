@@ -11,7 +11,6 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.7 2006/08/25 15:47:50 angie Exp $";
 
 char *database = NULL;
 char *chromName = NULL;

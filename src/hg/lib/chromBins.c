@@ -4,7 +4,6 @@
 #include "binRange.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: chromBins.c,v 1.6 2008/09/17 18:10:13 kent Exp $";
 
 /* Sized hold a very larger chromosome. */
 static const int MAX_CHROM_SIZE = 1000000000;

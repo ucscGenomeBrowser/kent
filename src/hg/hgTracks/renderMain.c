@@ -132,10 +132,14 @@ if(argc == 1)
 
         cartSetString(cart, "hgt.contentType", "png");
         cartSetBoolean(cart, "hgt.imageV1", TRUE);
-        if(!cartVarExists(cart, "hgt.baseShowAsm"))
-            cartSetBoolean(cart, "hgt.baseShowAsm", TRUE);
-        if(!cartVarExists(cart, "hgt.baseShowPos"))
-            cartSetBoolean(cart, "hgt.baseShowPos", TRUE);
+        if(!cartVarExists(cart, "hgt.internal"))
+            {
+            if(!cartVarExists(cart, "hgt.baseShowAsm"))
+                cartSetBoolean(cart, "hgt.baseShowAsm", TRUE);
+            if(!cartVarExists(cart, "hgt.baseShowPos"))
+                cartSetBoolean(cart, "hgt.baseShowPos", TRUE);
+            }
+        // XXXX support track filtering? - if(cartVarExists(cart, "hgt.trackNameFilter"))
         }
     doMiddle(cart);
     }

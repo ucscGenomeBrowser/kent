@@ -4,6 +4,8 @@
 # ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/
 #	Danio_rerio/Zv9/
 
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CABZ00
+
 ##########################################################################
 # Download sequence (DONE - 2010-11-30 - Hiram)
     mkdir /hive/data/genomes/danRer7

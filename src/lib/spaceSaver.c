@@ -8,7 +8,6 @@
 #include "common.h"
 #include "spaceSaver.h"
 
-static char const rcsid[] = "$Id: spaceSaver.c,v 1.10 2004/09/02 20:08:44 kent Exp $";
 
 
 struct spaceSaver *spaceSaverMaxCellsNew(int winStart, int winEnd, int maxRows, int maxCells)

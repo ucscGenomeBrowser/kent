@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "trackVersion.h"
 
-static char const rcsid[] = "$Id: trackVersion.c,v 1.1 2008/03/06 19:05:37 hiram Exp $";
 
 void trackVersionStaticLoad(char **row, struct trackVersion *ret)
 /* Load a row from trackVersion table into ret.  The contents of ret will

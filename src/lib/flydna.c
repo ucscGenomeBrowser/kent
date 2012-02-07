@@ -12,7 +12,6 @@
 #include "wormdna.h"
 #include "flydna.h"
 
-static char const rcsid[] = "$Id: flydna.c,v 1.4 2003/05/06 07:33:42 kate Exp $";
 
 static char *chromNames[] = {"adh"};
 static char *ntFileNames[] = {"c:/biodata/fly/chrom/adh.nt"};

@@ -5,7 +5,6 @@
 #include "jksql.h"
 #include "knownInfo.h"
 
-static char const rcsid[] = "$Id: cgiExample.c,v 1.2 2003/05/06 07:22:14 kate Exp $";
 
 char *lookupName(struct sqlConnection *conn, char *table, unsigned id)
 /* Look up name based on numerical id in given table.  Return "n/a" if

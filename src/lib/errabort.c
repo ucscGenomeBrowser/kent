@@ -14,7 +14,6 @@
 
 // developer: this include is for an occasionally useful means of getting stack info without crashing
 // however, it is not supported on cygwin.  Conditionally compile this in when desired.
-
 //#define BACKTRACE_EXISTS
 #ifdef BACKTRACE_EXISTS
 #include <execinfo.h>
@@ -25,7 +24,6 @@
 #include "dystring.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: errabort.c,v 1.16 2010/01/12 18:16:27 markd Exp $";
 
 
 #define maxWarnHandlers 20
@@ -35,8 +33,8 @@ struct perThreadAbortVars
     {
     boolean debugPushPopErr;        // generate stack dump on push/pop error
     boolean errAbortInProgress;     /* Flag to indicate that an error abort is in progress.
-				     * Needed so that a warn handler can tell if it's really
-				     * being called because of a warning or an error. */
+                                      * Needed so that a warn handler can tell if it's really
+                                      * being called because of a warning or an error. */
     WarnHandler warnArray[maxWarnHandlers];
     int warnIx;
     AbortHandler abortArray[maxAbortHandlers];
@@ -104,10 +102,20 @@ if (strings == NULL)
     dyStringAppend(dy,"\nno backtrace_symbols available in errabort::warnWithBackTrace().");
 else
     {
-    dyStringAppend(dy,"\nBACKTRACE [can use 'addr2line -Cfise {exe} addr addr ...']:");
-    int ix;
-    for (ix = 1; ix < count && strings[ix] != NULL; ix++)
-        dyStringPrintf(dy,"\n%s", strings[ix]);
+    int ix = 1;
+    dyStringAppend(dy,"\nBACKTRACE (use on cmdLine):");
+    if (strings[1] != NULL)
+        {
+        strSwapChar(strings[1],' ','\0');
+        dyStringPrintf(dy,"\naddr2line -Cfise %s",strings[1]);
+        strings[1] += strlen(strings[1]) + 1;
+        }
+    for (; ix < count && strings[ix] != NULL; ix++)
+        {
+        strings[ix] = skipBeyondDelimit(strings[ix],'[');
+        strSwapChar(strings[ix],']','\0');
+        dyStringPrintf(dy," %s",strings[ix]);
+        }
 
     free(strings);
     }

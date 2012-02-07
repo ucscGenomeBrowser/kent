@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "flyBaseSwissProt.h"
 
-static char const rcsid[] = "$Id: flyBaseSwissProt.c,v 1.2 2005/04/13 06:25:53 markd Exp $";
 
 void flyBaseSwissProtStaticLoad(char **row, struct flyBaseSwissProt *ret)
 /* Load a row from flyBaseSwissProt table into ret.  The contents of ret will

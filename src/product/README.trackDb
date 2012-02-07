@@ -24,7 +24,7 @@ and they create the proper indexes on the table to allow
 efficient display by the genome browser.
 
 By far the most common format of track data is the BED format.
-See also: http://genome.ucsc.edu/goldenPath/help/customTrack.html#BED
+See also: http://genome.ucsc.edu/FAQ/FAQformat.html#format1
 for a description of BED file formats.
 
 A typical BED file format is loaded into a database table with
@@ -78,9 +78,10 @@ trackDb entries from the source tree hierarchy: src/hg/makeDb/trackDb/
 in any of the *.ra files.  And you will need to refer to the README
 file in that directory for information about options you can use with
 each track type.  To work independently of the UCSC source tree,
-establish your own trackDb.ra files outside the UCSC source tree.  Then,
-to load them into the database, run the hgTrackDb command with this
-simple makefile:
+establish your own trackDb.ra files outside the UCSC source tree in
+a directory of your choice under your control.  Then, to load them
+into the database, run the hgTrackDb command with this
+simple makefile in the directory where your .ra file exists:
 	
 trackDbSql=/path/to/kent/source/tree/src/hg/lib/trackDb.sql
 DB=hg19
@@ -88,11 +89,19 @@ DB=hg19
 all::
 	hgTrackDb . ${DB} trackDb_localTracks ${trackDbSql} .
 
+This hgTrackDb command reads your trackDb.ra file and converts it
+into row entries for each track specified in it into row contents
+in this new table trackDb_localTracks.
+
 The DB= specification is your database of interest, this example: hg19
 This loads your local specific table trackDb_localTracks in the database.
 This name trackDb_localTracks is not special, just different than
 the ordinary trackDb table.  It should have some meaning to anyone
-in your environment.
+in your environment and not be the same name as any UCSC database
+table.  The two '.' arguments in the command above refer
+to directory names.  Since you have no hierarchy of levels in this
+single directory, unlike in the source tree trackDb hierarchy, the
+'.' arguments refer to the current directory.
 
 To direct the genome browser to this table to use as extra trackDb
 definitions, add to the specification in your cgi-bin/hg.conf file:

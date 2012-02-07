@@ -7,3 +7,9 @@
 .verticalText {
     width: 10px;
 }
+
+#spinner {
+    position: absolute;
+    left: 50%;
+    height: 35px;
+}

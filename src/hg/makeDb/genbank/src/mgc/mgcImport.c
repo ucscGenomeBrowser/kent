@@ -10,7 +10,6 @@
 #include "linefile.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcImport.c,v 1.10 2006/09/20 23:53:14 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

@@ -10,7 +10,6 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.28 2009/09/23 18:42:21 angie Exp $";
 
 int bedPlus = 0;
 bool fudgeThick = FALSE;
@@ -56,8 +55,10 @@ errAbort(
   "as the query.\n\n"
   "***********************************************************************\n"
   "WARNING: liftOver was only designed to work between different\n"
-  "         assemblies of the same organism, it may not do what you want\n"
-  "         if you are lifting between different organisms.\n"
+  "         assemblies of the same organism. It may not do what you want\n"
+  "         if you are lifting between different organisms. If there has\n"
+  "         been a rearrangement in one of the species, the size of the\n"
+  "         region being mapped may change dramatically after mapping.\n"
   "***********************************************************************\n\n"
   "options:\n"
   "   -minMatch=0.N Minimum ratio of bases that must remap. Default %3.2f\n"

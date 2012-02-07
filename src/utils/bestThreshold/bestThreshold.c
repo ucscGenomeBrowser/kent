@@ -6,7 +6,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: bestThreshold.c,v 1.1 2007/03/16 05:37:30 kent Exp $";
 
 double minDelta = 0.001;
 

@@ -7,7 +7,6 @@
 #include "imageClone.h"
 #include "stanMad.h"
 
-static char const rcsid[] = "$Id: findStanAlignments.c,v 1.6 2008/09/03 19:20:40 markd Exp $";
 
 void usage() 
 {

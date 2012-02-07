@@ -7,7 +7,6 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSort.c,v 1.10 2006/04/22 00:32:06 heather Exp $";
 
 struct snpTmp
     {

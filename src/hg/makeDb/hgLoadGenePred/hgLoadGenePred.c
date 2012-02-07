@@ -8,7 +8,6 @@
 #include "hgRelate.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.9 2008/09/03 19:19:43 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

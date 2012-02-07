@@ -13,7 +13,6 @@
 #include "colHash.h"
 
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.54 2010/06/05 19:29:53 braney Exp $";
 
 Color multiply(Color src, Color new)
 {

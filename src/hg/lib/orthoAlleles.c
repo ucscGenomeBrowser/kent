@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "orthoAlleles.h"
 
-static char const rcsid[] = "$Id: orthoAlleles.c,v 1.1 2006/08/12 03:22:19 heather Exp $";
 
 void orthoAllelesStaticLoad(char **row, struct orthoAlleles *ret)
 /* Load a row from orthoAlleles table into ret.  The contents of ret will

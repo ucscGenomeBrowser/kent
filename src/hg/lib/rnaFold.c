@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "rnaFold.h"
 
-static char const rcsid[] = "$Id: rnaFold.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 void rnaFoldStaticLoad(char **row, struct rnaFold *ret)
 /* Load a row from rnaFold table into ret.  The contents of ret will

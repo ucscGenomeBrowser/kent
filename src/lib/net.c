@@ -21,7 +21,6 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.80 2010/04/14 07:42:06 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 

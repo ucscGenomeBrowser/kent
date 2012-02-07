@@ -6,7 +6,6 @@
 #include "sqlNum.h"
 #include "crTree.h"
 
-static char const rcsid[] = "$Id: crTreeSearchBed.c,v 1.1 2009/01/21 20:35:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

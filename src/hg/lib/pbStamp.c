@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "pbStamp.h"
 
-//static char const rcsid[] = "$Id: pbStamp.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 void pbStampStaticLoad(char **row, struct pbStamp *ret)
 /* Load a row from pbStamp table into ret.  The contents of ret will

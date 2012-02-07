@@ -5,7 +5,6 @@
 #include "jksql.h"
 #include "sqlUpdater.h"
 
-static char const rcsid[] = "$Id: uniqueStrTbl.c,v 1.3 2005/08/22 19:55:35 markd Exp $";
 
 /*
  * The id is not auto_increment, as the zero id didn't work with mysqlimport

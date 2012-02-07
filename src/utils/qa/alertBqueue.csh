@@ -96,7 +96,6 @@ endif
 
 # add ann and b0b to list
 set contacts="$contacts ann kuhn"
-echo contacts $contacts
 
 foreach contact ( $contacts )
   cat Bfile | mail $contact'@soe.ucsc.edu' -s "B-queue alert"

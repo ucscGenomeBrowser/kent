@@ -6,7 +6,6 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.16 2010/04/30 19:57:34 bsuh Exp $";
 
 #define DEFAULT_MAX_ROW 100
 #define DEFAULT_MIN_ROW 2

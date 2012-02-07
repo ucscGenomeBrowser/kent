@@ -9,7 +9,6 @@
 #include "twoBit.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: streamer.c,v 1.1 2008/11/03 19:06:30 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

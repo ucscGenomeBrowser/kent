@@ -26,7 +26,8 @@ td {
 
 /* vertical column headers (th child of columnHeaders row) */
 #columnHeaders th {
-    height: 150px;
+    /*height: 150px;    restore when data types labels are cleaned up */
+    height: 180px;
 }
 
 .matrix {
@@ -70,7 +71,7 @@ td {
     color: #004D99;
 }
 
-.cellType {
+.matrixCell {
     border: 1px solid darkgray;
     background-color: white;
 }
@@ -97,3 +98,39 @@ text-decoration: none;
 .elementType a {
 text-decoration: none;
 }
+
+#searchTypePanel {
+    margin: auto;
+    margin-top: 3em;
+    padding: 5px;
+    background-color: #EEE;
+    width: 13em;
+}
+
+#cellHeaderLabel {
+    margin-top: 2em;
+}
+
+/* colored bullets on cell types based on karyotype CV field */
+
+.cancer {
+    color: brown;
+    font-size: large;
+    text-align: right;
+    float: right;
+}
+
+.normal {
+    color: green;
+    font-size: large;
+    text-align: right;
+    float: right;
+}
+
+.unknown {
+    color: lightgrey;
+    text-align: right;
+    float: right;
+}
+
+

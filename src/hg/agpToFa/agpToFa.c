@@ -8,7 +8,6 @@
 #include "agpGap.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.15 2006/09/29 00:02:18 angie Exp $";
 
 static void usage()
 /* Explain usage and exit. */

@@ -6,7 +6,6 @@
 #include "obscure.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udcCleanup.c,v 1.2 2009/02/10 02:39:23 kent Exp $";
 
 char *cacheDir = NULL;
 boolean testOnly = FALSE;

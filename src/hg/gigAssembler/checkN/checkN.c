@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-static char const rcsid[] = "$Id: checkN.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
 
 int main(argc, argv)
 	int argc;

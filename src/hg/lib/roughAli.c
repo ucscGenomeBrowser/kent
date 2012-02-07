@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "roughAli.h"
 
-static char const rcsid[] = "$Id: roughAli.c,v 1.4 2005/04/13 06:25:56 markd Exp $";
 
 void roughAliStaticLoad(char **row, struct roughAli *ret)
 /* Load a row from roughAli table into ret.  The contents of ret will

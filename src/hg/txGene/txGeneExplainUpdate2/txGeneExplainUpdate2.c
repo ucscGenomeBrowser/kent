@@ -7,7 +7,6 @@
 #include "binRange.h"
 
 
-static char const rcsid[] = "$Id: txGeneExplainUpdate2.c,v 1.2 2009/10/03 02:15:22 kent Exp $";
 
 char *unmapped = NULL;
 char *oldAsm = NULL;

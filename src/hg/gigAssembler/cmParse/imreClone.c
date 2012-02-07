@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "imreClone.h"
 
-static char const rcsid[] = "$Id: imreClone.c,v 1.2 2003/05/06 07:22:15 kate Exp $";
 
 void imreCloneStaticLoad(char **row, struct imreClone *ret)
 /* Load a row from imreClone table into ret.  The contents of ret will

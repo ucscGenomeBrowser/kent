@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/encodePrimateAlleles.h"
 
-static char const rcsid[] = "$Id: encodePrimateAlleles.c,v 1.1 2008/08/01 17:49:07 aamp Exp $";
 
 void encodePrimateAllelesStaticLoad(char **row, struct encodePrimateAlleles *ret)
 /* Load a row from encodePrimateAlleles table into ret.  The contents of ret will

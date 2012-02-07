@@ -5,7 +5,6 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: affyVsIlluminaCommon.c,v 1.3 2007/08/27 21:59:17 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

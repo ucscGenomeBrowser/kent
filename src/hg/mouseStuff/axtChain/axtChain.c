@@ -16,7 +16,6 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.37 2009/01/15 06:37:16 markd Exp $";
 
 /* Variables set via command line. */
 int minScore = 1000;

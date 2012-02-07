@@ -7,7 +7,6 @@
 #include "hdb.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: gpToGtf.c,v 1.4 2008/09/03 19:18:46 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

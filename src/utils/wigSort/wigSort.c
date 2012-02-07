@@ -7,7 +7,6 @@
 #include "bigWig.h"
 #include "bwgInternal.h"
 
-static char const rcsid[] = "$Id: wigSort.c,v 1.1 2009/02/21 02:14:15 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

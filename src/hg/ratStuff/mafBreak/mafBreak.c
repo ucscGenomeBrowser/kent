@@ -9,7 +9,6 @@
 #include "bed.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: mafBreak.c,v 1.3 2007/06/25 16:51:13 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
