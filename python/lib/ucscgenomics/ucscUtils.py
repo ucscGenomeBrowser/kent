@@ -68,7 +68,7 @@ def mergeList(list1,list2):
         for j in range(1,n+1):
             scoreUp = score[i-1][j]+penalty
             scoreDown = score[i][j-1]+penalty
-            scoreDiagonal = score[i-1][j-1]
+            scoreDiagonal = score[i-1][j-1]-5
             if list1[i-1] == list2[j-1]:
                 scoreDiagonal = scoreDiagonal + 10
             score[i][j] = max(0,scoreUp,scoreDown,scoreDiagonal)
