@@ -1262,8 +1262,10 @@ html wgEncodeCshlShortRnaSeq.release2
         shortLabel HepG nucl sm - 1
         longLabel HepG2 nucleus small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL protocol=TAP rep=rep1
-        type bigWig 1.000000 2627394.000000
+        type bigWig 1.000000 2034826.000000
         color 189,0,157
+        # subId=4061 dateSubmitted=2011-05-11
+        #type bigWig 1.000000 2627394.000000
         # subId=4112 dateSubmitted=2011-06-01
 
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
