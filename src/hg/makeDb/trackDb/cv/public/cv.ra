@@ -10140,12 +10140,6 @@ dataGroup Other
 #label CNV
 #description Copy Number Variation
 #dataGroup Other
-term Cnv
-tag CNVdt
-type dataType
-label CNV
-description Copy Number Variation
-dataGroup Other
 
 
 term Combined
