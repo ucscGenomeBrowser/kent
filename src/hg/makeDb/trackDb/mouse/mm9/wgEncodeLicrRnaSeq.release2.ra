@@ -44,6 +44,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
+html wgEncodeLicrRnaSeq.release2
 
 	track wgEncodeLicrRnaSeqViewSignal
 	shortLabel sgnal
