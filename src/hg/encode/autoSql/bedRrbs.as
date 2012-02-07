@@ -10,6 +10,6 @@ table bedRrbs
     uint thickStart;   "Start of where display should be thick (start codon)"
     uint thickEnd;     "End of where display should be thick (stop codon)"
     uint itemRgb;      "Color value"
-    uint readCount;    "number of reads or coverage"
-    uint percentMeth;  "percentage of reads that show methylation at this position in the genome"
+    uint readCount;    "Number of reads or coverage"
+    uint percentMeth;  "Percentage of reads that show methylation at this position in the genome"
     )

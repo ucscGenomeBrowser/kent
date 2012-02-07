@@ -2349,7 +2349,7 @@ var popUp = {
     {   // When hgTrackUi Cfg popup closes with ok, then update cart and refresh parts of page
         var rec = hgTracks.trackDb[trackName];
         var subtrack = tdbIsSubtrack(rec) ? trackName :undefined;  // If subtrack then vis rules differ
-        var allVars = getAllVars($('#pop'), subtrack );
+        var allVars = getAllVars($('#hgTrackUiDialog'), subtrack );// For unknown reasons IE8 fails to find $('#pop'), occasionally
         var changedVars = varHashChanges(allVars,popUp.saveAllVars);
         //warn("cfgVars:"+varHashToQueryString(changedVars));
         var newVis = changedVars[trackName];

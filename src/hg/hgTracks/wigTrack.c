@@ -1197,7 +1197,21 @@ for(preContainer = preDrawList; preContainer; preContainer = preContainer->next)
     }
 
 overallRange = overallUpperLimit - overallLowerLimit;
-graphRange = graphUpperLimit - graphLowerLimit;
+
+/* if we're autoscaling and the range is 0 this implies that all values 
+ * in the given range are the same.  We create a bottom of the scale  
+ * by subtracting one from the only value.
+ * This results in drawing a box that fills the range. */
+if ((graphUpperLimit == graphLowerLimit))
+    {
+    graphRange = 1.0;
+    graphLowerLimit = graphUpperLimit - 1;
+    }
+else
+    {
+    graphRange = graphUpperLimit - graphLowerLimit;
+    }
+
 epsilon = graphRange / tg->lineHeight;
 struct preDrawElement *preDraw = preDrawList->preDraw;
 colorArray = makeColorArray(preDraw, width, preDrawZero, wigCart, tg, hvg);

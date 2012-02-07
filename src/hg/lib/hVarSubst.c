@@ -167,6 +167,7 @@ static boolean isDatabaseVar(char *varBase)
 {
 return (strcasecmp(varBase, "organism") == 0)
     || (strcasecmp(varBase, "date") == 0)
+    || (strcasecmp(varBase, "linkToGatewayPage") == 0)
     || (strcasecmp(varBase, "db") == 0);
 }
 
@@ -176,6 +177,12 @@ static char *valOrDb(char *val, char *database)
 if (val == NULL)
     val = cloneString(database);
 return val;
+}
+
+static void substLinkToGatewayPage( struct dyString *dest, char *database)
+/* substitute a link to the gateway page for this database */
+{
+dyStringPrintf(dest,"<a target=_blank href='/cgi-bin/hgGateway?db=%s'>Assembly Gateway page</a>.", database);
 }
 
 static void substDatabaseVar(char *database, char *varBase,
@@ -218,6 +225,8 @@ else if (sameString(varBase, "date"))
     }
 else if (sameString(varBase, "db"))
     dyStringAppend(dest, database);
+else if (sameString(varBase, "linkToGatewayPage"))
+    substLinkToGatewayPage(dest, database);
 }
 
 static void substTrackDbVar(char *desc, struct trackDb *tdb, char *database,

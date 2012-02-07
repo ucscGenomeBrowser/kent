@@ -119,6 +119,29 @@ sub unloadBigWig
     #}
 }
 
+sub unloadBigBed
+{
+    my ($assembly, $db, $tableName) = @_;
+    $db->dropTableIfExist($tableName);
+    
+    # remove symlink
+    my $file = "/gbdb/$assembly/bbi/$tableName.bigBed";
+    if(-e $file) {
+        HgAutomate::verbose(3, "removing bigBed '$file'\n");
+        if(system("rm -f $file")) { 
+            die "unexpected error removing symlink $file";
+        }
+    }
+    # FIXME: Souldn't we remove files from downloads dir (and gbdb subdir) as well??
+    #my $file = "/usr/local/apache/htdocs/goldenPath/$assembly/encodeDCC/encSydhTfbsStanf/gbdb/$tableName.bw";
+    #if(-e $file) {
+    #    HgAutomate::verbose(3, "removing wib '$file'\n");
+    #    if(system("rm -f $file")) {
+    #        die "unexpected error removing symlink $file";
+    #    }
+    #}
+}
+
 ############################################################################
 # Main
 
@@ -202,6 +225,9 @@ for my $key (keys %ra) {
         unloadBigWig($assembly, $db, $tablename);
 #        unlink "$downloadDir/gbdb/$tablename.bw";
         unlink "$downloadDir/$tablename.bigWig";
+    } elsif ($type eq "bigBed") {
+        unloadBigBed($assembly, $db, $tablename);
+        unlink "$downloadDir/$tablename.bigBed";
     } else {
         die "ERROR: unknown type: $h->{type} in load.ra ($PROG)\n";
     }

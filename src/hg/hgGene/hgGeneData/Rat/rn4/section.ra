@@ -1,0 +1,12 @@
+# Rat sections.
+
+name rgdGeneRaw
+shortLabel RGD Gene Data
+longLabel Additional Data from RGD
+priority 15
+
+name ctd
+shortLabel CTD
+longLabel Comparative Toxicogenomics Database (CTD)
+priority 35.2
+
