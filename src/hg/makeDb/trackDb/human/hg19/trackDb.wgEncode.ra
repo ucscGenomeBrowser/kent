@@ -144,6 +144,7 @@ include wgEncodeHaibMethylRrbs.ra
 # ENCODE HISTONE --------------------------------------
 
 #Broad Histone (wrangler: Matt and Venkat)
+#include wgEncodeBroadHistone.release3.ra alpha
 include wgEncodeBroadHistone.release2.ra alpha
 include wgEncodeBroadHistone.ra beta,public
 
