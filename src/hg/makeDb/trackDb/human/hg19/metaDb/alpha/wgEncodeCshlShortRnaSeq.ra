@@ -587,7 +587,7 @@ seqPlatform Illumina_GA2x
 subId 3336
 view RawData
 
-metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2
+metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2
 objType table
 bioRep 038WC
 cell BJ
@@ -599,7 +599,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
 dccRep 2
 expId 1079
-fileName wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2.bam.bai
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20910
@@ -614,7 +614,7 @@ replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3293
-tableName wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2
+tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalContigs
@@ -644,7 +644,7 @@ subId 4474
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep2
+metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2
 objType table
 bioRep 038WC
 cell BJ
@@ -656,7 +656,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
 dccRep 2
 expId 1079
-fileName wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep2.bigWig
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20910
@@ -671,10 +671,10 @@ replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3293
-tableName wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep2
+tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2
 view MinusRawSignal
 
-metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2
+metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2
 objType table
 bioRep 038WC
 cell BJ
@@ -686,7 +686,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
 dccRep 2
 expId 1079
-fileName wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2.bigWig
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20910
@@ -701,7 +701,7 @@ replicate 2
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3293
-tableName wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2
+tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2
 view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep1

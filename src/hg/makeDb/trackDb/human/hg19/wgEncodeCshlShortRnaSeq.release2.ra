@@ -149,7 +149,7 @@ html wgEncodeCshlShortRnaSeq.release2
         #color 153,38,0
         ## subId=1402 dateSubmitted=2010-06-14
 
-        track wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel BJ cell sm A 2
         longLabel BJ whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
@@ -157,6 +157,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bam
         origAssembly hg19
         # subId=3293 dateSubmitted=2011-01-18
+        # went through a bad rename from wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2 Feb 2012
 
         track wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
@@ -821,7 +822,7 @@ html wgEncodeCshlShortRnaSeq.release2
         #color 153,38,0
         ## subId=1402 dateSubmitted=2010-06-14
 
-        track wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep2
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
         shortLabel BJ cell sm - 2
         longLabel BJ whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
@@ -829,6 +830,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 1923500.000000
         origAssembly hg19
         # subId=3293 dateSubmitted=2011-01-18
+        # went through a bad rename from wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep2
 
         track wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep1
         parent wgEncodeCshlShortRnaSeqViewMinusRawSignal off
@@ -1495,7 +1497,7 @@ html wgEncodeCshlShortRnaSeq.release2
         #color 153,38,0
         # subId=1402 dateSubmitted=2010-06-14
 
-        track wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
         shortLabel BJ cell sm + 2
         longLabel BJ whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
@@ -1503,6 +1505,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bigWig 1.000000 6896581.000000
         origAssembly hg19
         # subId=3293 dateSubmitted=2011-01-18
+        # went through a bad rename from wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2
 
         track wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep1
         parent wgEncodeCshlShortRnaSeqViewPlusRawSignal off
