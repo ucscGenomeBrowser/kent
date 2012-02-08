@@ -587,36 +587,6 @@ seqPlatform Illumina_GA2x
 subId 3336
 view RawData
 
-metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2
-objType table
-bioRep 038WC
-cell BJ
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-dccAccession wgEncodeEH001079
-dccRep 2
-expId 1079
-fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2.bam.bai
-grant Gingeras
-lab CSHL
-labExpId LID20910
-labProtocolId 038WCs
-localization cell
-md5sum c2ae5eab4f1100b16b035f771d7c89c4,b7dc6f376373490ce27dbc0fcdd7b81e
-origAssembly hg19
-project wgEncode
-protocol TAP-Only
-readType 1x36
-replicate 2
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 3293
-tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2
-view Alignments
-
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalContigs
 objType table
 bioRep 037WC,038WC
@@ -643,66 +613,6 @@ seqPlatform Illumina_GA2x
 subId 4474
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalContigs
 view Contigs
-
-metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2
-objType table
-bioRep 038WC
-cell BJ
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-dccAccession wgEncodeEH001079
-dccRep 2
-expId 1079
-fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID20910
-labProtocolId 038WCs
-localization cell
-md5sum 9404df46696fe113bab5fe0949a92732
-origAssembly hg19
-project wgEncode
-protocol TAP-Only
-readType 1x36
-replicate 2
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 3293
-tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2
-view MinusRawSignal
-
-metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2
-objType table
-bioRep 038WC
-cell BJ
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-18
-dateUnrestricted 2011-10-18
-dccAccession wgEncodeEH001079
-dccRep 2
-expId 1079
-fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID20910
-labProtocolId 038WCs
-localization cell
-md5sum cace71c4c83f23b7a79e93fb26d9afa1
-origAssembly hg19
-project wgEncode
-protocol TAP-Only
-readType 1x36
-replicate 2
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 3293
-tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2
-view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep1
 objType table
@@ -732,6 +642,36 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3294
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2
+objType table
+bioRep 038WC
+cell BJ
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001079
+dccRep 2
+expId 1079
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20910
+labProtocolId 038WCs
+localization cell
+md5sum c2ae5eab4f1100b16b035f771d7c89c4,b7dc6f376373490ce27dbc0fcdd7b81e
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 3293
+tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapExonsGencV7
@@ -790,6 +730,36 @@ subId 3294
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep1
 view MinusRawSignal
 
+metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2
+objType table
+bioRep 038WC
+cell BJ
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001079
+dccRep 2
+expId 1079
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20910
+labProtocolId 038WCs
+localization cell
+md5sum 9404df46696fe113bab5fe0949a92732
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 3293
+tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2
+view MinusRawSignal
+
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep1
 objType table
 bioRep 037WC
@@ -818,6 +788,36 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3294
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2
+objType table
+bioRep 038WC
+cell BJ
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001079
+dccRep 2
+expId 1079
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20910
+labProtocolId 038WCs
+localization cell
+md5sum cace71c4c83f23b7a79e93fb26d9afa1
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 3293
+tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2
 view PlusRawSignal
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapRawDataRep1
@@ -1051,32 +1051,6 @@ subId 4482
 tableName wgEncodeCshlShortRnaSeqGm12878CellShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalExonsGencV7
-objType file
-bioRep 003WC,004WC
-cell GM12878
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH000212
-expId 212
-fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID20899,LID20902
-labProtocolId 003WCs,004WCs
-labVersion iIDR
-localization cell
-md5sum ecb360155d1dcd894b8cefaa78652bf3
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4482
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapAlnRep1
 objType table
 bioRep 003WC
@@ -1136,6 +1110,32 @@ seqPlatform Illumina_GA2x
 subId 3304
 tableName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapExonsGencV7
+objType file
+bioRep 003WC,004WC
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000212
+expId 212
+fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20899,LID20902
+labProtocolId 003WCs,004WCs
+labVersion iIDR
+localization cell
+md5sum ecb360155d1dcd894b8cefaa78652bf3
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4482
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapMinusRawRep1
 objType table
@@ -1495,32 +1495,6 @@ subId 4489
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalExonsGencV7
-objType file
-bioRep 003C,004C
-cell GM12878
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH000203
-expId 203
-fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID20901,LID20904
-labProtocolId 003Cs,004Cs
-labVersion iIDR
-localization cytosol
-md5sum b3e4bf177ec4d02b548464a4f2e3d45f
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4489
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapAlnRep1
 objType table
 bioRep 003C
@@ -1580,6 +1554,32 @@ seqPlatform Illumina_GA2x
 subId 3307
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapExonsGencV7
+objType file
+bioRep 003C,004C
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000203
+expId 203
+fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20901,LID20904
+labProtocolId 003Cs,004Cs
+labVersion iIDR
+localization cytosol
+md5sum b3e4bf177ec4d02b548464a4f2e3d45f
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4489
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapMinusRawRep1
 objType table
@@ -1939,32 +1939,6 @@ subId 4477
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalExonsGencV7
-objType file
-bioRep 003N,004N
-cell GM12878
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH000204
-expId 204
-fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID20900,LID20903
-labProtocolId 003Ns,004Ns
-labVersion iIDR
-localization nucleus
-md5sum 1f9ac70bbb56b4836f727535934e1975
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4477
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapAlnRep1
 objType table
 bioRep 003N
@@ -2024,6 +1998,32 @@ seqPlatform Illumina_GA2x
 subId 3338
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapExonsGencV7
+objType file
+bioRep 003N,004N
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000204
+expId 204
+fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20900,LID20903
+labProtocolId 003Ns,004Ns
+labVersion iIDR
+localization nucleus
+md5sum 1f9ac70bbb56b4836f727535934e1975
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4477
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapMinusRawRep1
 objType table
@@ -2230,32 +2230,6 @@ subId 4485
 tableName wgEncodeCshlShortRnaSeqH1hescCellShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalExonsGencV7
-objType file
-bioRep 005WC,006WC
-cell H1-hESC
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH001082
-expId 1082
-fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID20905,LID20906
-labProtocolId 005WCs,006WCs
-labVersion iIDR
-localization cell
-md5sum b7915f6c1f4f1832bbc23715c888d01f
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4485
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapAlnRep1
 objType table
 bioRep 005WC
@@ -2315,6 +2289,32 @@ seqPlatform Illumina_GA2x
 subId 3341
 tableName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapExonsGencV7
+objType file
+bioRep 005WC,006WC
+cell H1-hESC
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001082
+expId 1082
+fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20905,LID20906
+labProtocolId 005WCs,006WCs
+labVersion iIDR
+localization cell
+md5sum b7915f6c1f4f1832bbc23715c888d01f
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4485
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapMinusRawRep1
 objType table
@@ -2521,32 +2521,6 @@ subId 4495
 tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalExonsGencV7
-objType file
-bioRep 006C
-cell H1-hESC
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH001083
-expId 1083
-fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID20908
-labProtocolId 006Cs
-labVersion iIDR
-localization cytosol
-md5sum 3f17c0c427a08e4308e314655d037ccb
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4495
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2
 objType table
 bioRep 006C
@@ -2576,6 +2550,32 @@ seqPlatform Illumina_GA2x
 subId 3342
 tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapExonsGencV7
+objType file
+bioRep 006C
+cell H1-hESC
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001083
+expId 1083
+fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20908
+labProtocolId 006Cs
+labVersion iIDR
+localization cytosol
+md5sum 3f17c0c427a08e4308e314655d037ccb
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4495
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapMinusRawRep2
 objType table
@@ -2693,32 +2693,6 @@ subId 4496
 tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalExonsGencV7
-objType file
-bioRep 006N
-cell H1-hESC
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH001084
-expId 1084
-fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID20907
-labProtocolId 006Ns
-labVersion iIDR
-localization nucleus
-md5sum 6fd7e6b3c821057ec1f2c159f6eb845f
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4496
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2
 objType table
 bioRep 006N
@@ -2748,6 +2722,32 @@ seqPlatform Illumina_GA2x
 subId 3343
 tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapExonsGencV7
+objType file
+bioRep 006N
+cell H1-hESC
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001084
+expId 1084
+fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20907
+labProtocolId 006Ns
+labVersion iIDR
+localization nucleus
+md5sum 6fd7e6b3c821057ec1f2c159f6eb845f
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4496
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapMinusRawRep2
 objType table
@@ -3738,32 +3738,6 @@ subId 4479
 tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalExonsGencV7
-objType file
-bioRep 013WC,014WC
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH001741
-expId 1741
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID44460,LID44461
-labProtocolId 013WCs,014WCs
-labVersion iIDR
-localization cell
-md5sum 11308f834bc398b2796c05d84f5e0917
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4479
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapAlnRep1
 objType table
 bioRep 013WC
@@ -3823,6 +3797,32 @@ seqPlatform Illumina_GA2x
 subId 4062
 tableName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapExonsGencV7
+objType file
+bioRep 013WC,014WC
+cell HepG2
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001741
+expId 1741
+fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID44460,LID44461
+labProtocolId 013WCs,014WCs
+labVersion iIDR
+localization cell
+md5sum 11308f834bc398b2796c05d84f5e0917
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4479
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapMinusRawRep1
 objType table
@@ -4029,32 +4029,6 @@ subId 4484
 tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalExonsGencV7
-objType file
-bioRep 013C,014C
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH001743
-expId 1743
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID44464,LID44465
-labProtocolId 013Cs,014Cs
-labVersion iIDR
-localization cytosol
-md5sum 71b0fe60cf3d5e604f6c97ad1e44ab72
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4484
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep1
 objType table
 bioRep 013C
@@ -4107,6 +4081,32 @@ seqPlatform Illumina_GA2x
 subId 4114
 tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapExonsGencV7
+objType file
+bioRep 013C,014C
+cell HepG2
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001743
+expId 1743
+fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID44464,LID44465
+labProtocolId 013Cs,014Cs
+labVersion iIDR
+localization cytosol
+md5sum 71b0fe60cf3d5e604f6c97ad1e44ab72
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4484
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep1
 objType table
@@ -4292,32 +4292,6 @@ subId 4480
 tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalExonsGencV7
-objType file
-bioRep 013N,014N
-cell HepG2
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH001742
-expId 1742
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID44462,LID44463
-labProtocolId 013Ns,014Ns
-labVersion iIDR
-localization nucleus
-md5sum 9d4e5af3ce150589f057ec364acd3a7f
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4480
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep1
 objType table
 bioRep 013N
@@ -4377,6 +4351,32 @@ seqPlatform Illumina_GA2x
 subId 4113
 tableName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapExonsGencV7
+objType file
+bioRep 013N,014N
+cell HepG2
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001742
+expId 1742
+fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID44462,LID44463
+labProtocolId 013Ns,014Ns
+labVersion iIDR
+localization nucleus
+md5sum 9d4e5af3ce150589f057ec364acd3a7f
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4480
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapMinusRawRep1
 objType table
@@ -4583,32 +4583,6 @@ subId 4475
 tableName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalExonsGencV7
-objType file
-bioRep 029N,030N
-cell HUVEC
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH001080
-expId 1080
-fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID21056,LID21058
-labProtocolId 029Ns,030Ns
-labVersion iIDR
-localization nucleus
-md5sum 672a54c83780a160aa72362283199787
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4475
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep3
 objType table
 bioRep 029N
@@ -4668,6 +4642,32 @@ seqPlatform Illumina_GA2x
 subId 3295
 tableName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep4
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapExonsGencV7
+objType file
+bioRep 029N,030N
+cell HUVEC
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH001080
+expId 1080
+fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21056,LID21058
+labProtocolId 029Ns,030Ns
+labVersion iIDR
+localization nucleus
+md5sum 672a54c83780a160aa72362283199787
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4475
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapMinusRawRep3
 objType table
@@ -5473,32 +5473,6 @@ subId 4476
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalExonsGencV7
-objType file
-bioRep 025CH,026CH
-cell K562
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH000205
-expId 205
-fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID8930,LID18560
-labProtocolId 025CHs,026CHs
-labVersion iIDR
-localization chromatin
-md5sum 3b56c3b4f10c128458c0bda30438597f
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4476
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapAlnRep3
 objType table
 bioRep 025CH
@@ -5558,6 +5532,32 @@ seqPlatform Illumina_GA2x
 subId 3365
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapAlnRep4
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapExonsGencV7
+objType file
+bioRep 025CH,026CH
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000205
+expId 205
+fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8930,LID18560
+labProtocolId 025CHs,026CHs
+labVersion iIDR
+localization chromatin
+md5sum 3b56c3b4f10c128458c0bda30438597f
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4476
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapMinusRawRep3
 objType table
@@ -5917,32 +5917,6 @@ subId 4493
 tableName wgEncodeCshlShortRnaSeqK562CytosolShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalExonsGencV7
-objType file
-bioRep 001C,002C
-cell K562
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH000206
-expId 206
-fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID10572,LID10571
-labProtocolId 001Cs,002Cs
-labVersion iIDR
-localization cytosol
-md5sum 8faebd571ecacaea9a8ebafd6f8824f9
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4493
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapAlnRep1
 objType table
 bioRep 001C
@@ -6002,6 +5976,32 @@ seqPlatform Illumina_GA2x
 subId 3298
 tableName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapExonsGencV7
+objType file
+bioRep 001C,002C
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000206
+expId 206
+fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID10572,LID10571
+labProtocolId 001Cs,002Cs
+labVersion iIDR
+localization cytosol
+md5sum 8faebd571ecacaea9a8ebafd6f8824f9
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4493
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapMinusRawRep1
 objType table
@@ -6361,32 +6361,6 @@ subId 4481
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalExonsGencV7
-objType file
-bioRep 025NL,026NL
-cell K562
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH000207
-expId 207
-fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID8928,LID18558
-labProtocolId 025NLs,026NLs
-labVersion iIDR
-localization nucleolus
-md5sum 16e37beddb6a8d43426a1d646d95bb9e
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4481
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapAlnRep3
 objType table
 bioRep 025NL
@@ -6446,6 +6420,32 @@ seqPlatform Illumina_GA2x
 subId 3367
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapAlnRep4
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapExonsGencV7
+objType file
+bioRep 025NL,026NL
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000207
+expId 207
+fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8928,LID18558
+labProtocolId 025NLs,026NLs
+labVersion iIDR
+localization nucleolus
+md5sum 16e37beddb6a8d43426a1d646d95bb9e
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4481
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapMinusRawRep3
 objType table
@@ -6805,32 +6805,6 @@ subId 4494
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalExonsGencV7
-objType file
-bioRep 025NP,026NP
-cell K562
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH000208
-expId 208
-fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID8929,LID18559
-labProtocolId 025NPs,026NPs
-labVersion iIDR
-localization nucleoplasm
-md5sum fa3c27ef7846dae19b90a3642c2cb600
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4494
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep3
 objType table
 bioRep 025NP
@@ -6890,6 +6864,32 @@ seqPlatform Illumina_GA2x
 subId 3369
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep4
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapExonsGencV7
+objType file
+bioRep 025NP,026NP
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000208
+expId 208
+fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID8929,LID18559
+labProtocolId 025NPs,026NPs
+labVersion iIDR
+localization nucleoplasm
+md5sum fa3c27ef7846dae19b90a3642c2cb600
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4494
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapMinusRawRep3
 objType table
@@ -7249,32 +7249,6 @@ subId 4490
 tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalExonsGencV7
-objType file
-bioRep 001N,002N
-cell K562
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-07-12
-dateUnrestricted 2012-04-12
-dccAccession wgEncodeEH000209
-expId 209
-fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalExonsGencV7.gtf.gz
-grant Gingeras
-lab CSHL
-labExpId LID10570,LID10569
-labProtocolId 001Ns,002Ns
-labVersion iIDR
-localization nucleus
-md5sum ee64e445a0f98c4b6a8391d6cd9a9aa3
-project wgEncode
-protocol TAP-Only
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 4490
-view ExonsGencV7
-
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapAlnRep1
 objType table
 bioRep 001N
@@ -7334,6 +7308,32 @@ seqPlatform Illumina_GA2x
 subId 3301
 tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapExonsGencV7
+objType file
+bioRep 001N,002N
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-12
+dateUnrestricted 2012-04-12
+dccAccession wgEncodeEH000209
+expId 209
+fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapExonsGencV7.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID10570,LID10569
+labProtocolId 001Ns,002Ns
+labVersion iIDR
+localization nucleus
+md5sum ee64e445a0f98c4b6a8391d6cd9a9aa3
+project wgEncode
+protocol TAP-Only
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 4490
+view ExonsGencV7
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapMinusRawRep1
 objType table
@@ -9256,4 +9256,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 884900257
+# MAGIC: -622809239
