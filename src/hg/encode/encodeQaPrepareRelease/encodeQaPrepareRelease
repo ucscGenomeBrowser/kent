@@ -56,9 +56,13 @@ def parseTrackDb(c, args):
     includeLines = f.readlines()
     f.close()
     p = re.compile("include (%s.*)" % args.composite)
+    p2 = re.compile("^#")
     compositeLines = list()
     for i in includeLines:
         m = p.search(i)
+        m1 = p2.search(i)
+        if m1:
+            continue
         if m:
             compositeLines.append(m.group(1))
 
@@ -141,7 +145,7 @@ def main():
     includeLines, compositeLines, trackDbInclude = parseTrackDb(c, args)
 
     if len(compositeLines) > 2:
-        print "There are 3 include lines for composite %s, this must currently be resolved manually"
+        print "There are 3 include lines for composite %s, this must currently be resolved manually" % args.composite
         return
     #make dictionary of included composites to compare
     compare = dict()

@@ -2240,6 +2240,177 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
     origAssembly hg18
     pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
+track polyASeqSites
+compositeTrack on
+shortLabel PolyA-Seq
+longLabel Poly(A)-sequencing from Merck Research Laboratories
+group rna
+subGroup1 view Views Signal=Signal 
+subGroup2 tissType Tissue_Type Kidney=Kidney Brain=Brain Liver=Liver MaqcBrain1=MAQC_Brain_1 MaqcBrain2=MAQC_Brain_2 MaqcUhr1=MAQC_UHR_1 MaqcUhr2=MAQC_UHR_2 Muscle=Muscle Testis=Testis
+subGroup3 strand Strand fwd=Forward rev=Reverse
+dimensions dimensionY=tissType dimensionX=strand
+sortOrder tissType=+ strand=+ view=+
+priority 79.2
+type bed 
+dragAndDrop subTracks
+visibility hide
+noInherit on
+
+    track polyASeqSitesSignalView
+    shortLabel Signal
+    view Signal
+    visibility full
+    subTrack polyASeqSites
+    maxHeightPixels 50:50:5
+    autoScale on
+    yLineOnOff on
+    type bigWig -1 2 
+
+        track polyASeqSitesBrainFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Brain strand=fwd
+        shortLabel PolyA-Seq Brain
+        longLabel Poly(A)-tail sequencing of Brain from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.340000 194860.187500
+
+        track polyASeqSitesBrainRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Brain strand=rev
+        shortLabel PolyA-Seq Brain
+        longLabel Poly(A)-tail sequencing of Brain from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.340000 21771.560547
+
+        track polyASeqSitesKidneyFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Kidney strand=fwd
+        shortLabel PolyA-Seq Kidney
+        longLabel Poly(A)-tail sequencing of Kidney from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.220000 146019.640625
+
+        track polyASeqSitesKidneyRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Kidney strand=rev
+        shortLabel PolyA-Seq Kidney
+        longLabel Poly(A)-tail sequencing of Kidney from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.220000 12818.589844
+
+        track polyASeqSitesLiverFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Liver strand=fwd
+        shortLabel PolyA-Seq Liver
+        longLabel Poly(A)-tail sequencing of Liver from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.180000 63606.449219
+
+        track polyASeqSitesLiverRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Liver strand=rev
+        shortLabel PolyA-Seq Liver
+        longLabel Poly(A)-tail sequencing of Liver from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.180000 109706.320312
+
+        track polyASeqSitesMaqcBrain1Fwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=MaqcBrain1 strand=fwd
+        shortLabel PolyA-Seq MaqcBrain1
+        longLabel Poly(A)-tail sequencing of MAQC Brain (replicate 1) from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.250000 62850.468750
+
+        track polyASeqSitesMaqcBrain1Rev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=MaqcBrain1 strand=rev
+        shortLabel PolyA-Seq MaqcBrain1
+        longLabel Poly(A)-tail sequencing of MAQC Brain (replicate 1) from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.250000 15009.809570
+
+        track polyASeqSitesMaqcBrain2Fwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=MaqcBrain2 strand=fwd
+        shortLabel PolyA-Seq MaqcBrain2
+        longLabel Poly(A)-tail sequencing of MAQC Brain (replicate 2) from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.260000 61466.800781
+
+        track polyASeqSitesMaqcBrain2Rev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=MaqcBrain2 strand=rev
+        shortLabel PolyA-Seq MaqcBrain2
+        longLabel Poly(A)-tail sequencing of MAQC Brain (replicate 2) from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.260000 17027.939453
+
+        track polyASeqSitesMaqcUhr1Fwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=MaqcUhr1 strand=fwd
+        shortLabel PolyA-Seq MaqcUhr1
+        longLabel Poly(A)-tail sequencing of MAQC UHR (replicate 1) from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.200000 25178.449219
+
+        track polyASeqSitesMaqcUhr1Rev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=MaqcUhr1 strand=rev
+        shortLabel PolyA-Seq MaqcUhr1
+        longLabel Poly(A)-tail sequencing of MAQC UHR (replicate 1) from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.200000 18536.800781
+
+        track polyASeqSitesMaqcUhr2Fwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=MaqcUhr2 strand=fwd
+        shortLabel PolyA-Seq MaqcUhr2
+        longLabel Poly(A)-tail sequencing of MAQC UHR (replicate 2) from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.200000 25301.960938
+
+        track polyASeqSitesMaqcUhr2Rev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=MaqcUhr2 strand=rev
+        shortLabel PolyA-Seq MaqcUhr2
+        longLabel Poly(A)-tail sequencing of MAQC UHR (replicate 2) from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.200000 16088.179688
+
+        track polyASeqSitesMuscleFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Muscle strand=fwd
+        shortLabel PolyA-Seq Muscle
+        longLabel Poly(A)-tail sequencing of Muscle from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.210000 37201.500000
+
+        track polyASeqSitesMuscleRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Muscle strand=rev
+        shortLabel PolyA-Seq Muscle
+        longLabel Poly(A)-tail sequencing of Muscle from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.210000 124901.000000
+
+        track polyASeqSitesTestisFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Testis strand=fwd
+        shortLabel PolyA-Seq Testis
+        longLabel Poly(A)-tail sequencing of Testis from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.200000 61261.609375
+
+        track polyASeqSitesTestisRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Testis strand=rev
+        shortLabel PolyA-Seq Testis
+        longLabel Poly(A)-tail sequencing of Testis from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.200000 69989.523438
+
+
 #include jkExperiments.ra
 
 track agilentCgh

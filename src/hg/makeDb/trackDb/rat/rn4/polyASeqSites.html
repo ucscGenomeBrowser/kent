@@ -1,0 +1,74 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"></head><body><h2>Description</h2>
+<P>
+The track displays the location of RNA polyadenylation (polyA) sites based
+on high-throughput RNA sequencing using the PolyA-seq protocol.
+</P>
+<H2>Display Conventions and Configuration</H2>
+<P>
+These tracks may be configured in a variety of ways to highlight different 
+aspects of the displayed data. The graphical configuration options 
+are shown at the top of the track description page.  For more information, 
+click the 
+<A HREF="../goldenPath/help/hgWiggleTrackHelp.html" TARGET=_blank>Graph
+configuration help</A> link.</P>
+<P>
+In the full and pack display modes, forward-strand tracks are shown in <font color='993333'>
+<B>red</B></font> and reverse-strand tracks are shown in <font color='000000'><B>black</B></font>.
+In the squish and dense display modes, intensity is represented in grayscale (the darker
+the shading, the higher the intensity).
+To show only selected subtracks, uncheck the boxes next to the tracks that 
+you wish to hide.</p>
+<P>
+PolyA-Seq data is strand-specific, therefore two tracks are provided for each tissue. PolyA
+site positions correspond to a single base, namely the ends of read alignments immediately
+upstream of the polyadenylation site. The data provided in this track consists of filtered
+polyA sites (see Methods). When multiple sites occurred within a 30-bp window on the same
+strand, the sum of the reads was attributed to the site with the most reads. Units are in
+reads per million (RPM) aligned. To obtain read counts, multiply RPM values by the total
+number of filtered reads for the corresponding experiment:
+</P>
+<table class="descTbl" border=1 cellspacing=1 cellpadding=3>
+<thead>
+<tr style="background-color: #1616D1; color: #fff;"> 
+	<th>Sample</th>
+	<th>Filtered reads</th>
+</tr>
+</thead>
+<tbody>
+<tr style="background-color: #d9f8e4">
+	<td>Brain</td>
+	<td>5549424</td>
+</tr>
+<tr style="background-color: #d9e4ff">
+	<td>Testis</td>
+	<td>7466688</td>
+</tr>
+</tbody>
+</table>
+
+<H2>Methods</H2>
+
+<P>A detailed explanation of the experimental methods is provided at NCBI's Gene 
+Expression Omnibus under accession <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30198" 
+target=_blank>GSE30198</a>. Briefly, PolyA+ RNA was reverse-transcribed
+using a T(10)VN primer and strand-specific universal adapters, amplified, and sequenced
+on an Illumina GAIIx sequencer. Reads were reverse-complemented, aligned to the corresponding
+reference genome and splice junctions, and retained only if they aligned uniquely. 3' ends of
+alignments were considered polyA sites. Sites were then filtered using downstream base
+frequency matrices for true- and false-positive sites determined from a modified experiment 
+based on a T(10) primer (i.e., excluding the 3' VN). When multiple filtered sites occurred
+within a 30-nt window on the same strand, read counts were summed and attributed to the most
+abundant peak. For each tissue, read counts were then divided by the total number of reads,
+in millions, from all filtered sites.
+
+<H2>Credits</H2>
+<P>
+These data were generated at <a href="http://www.merck.com/mrl/" TARGET=_blank>Merck Research Laboratories</a> and submitted by Adnan Derti.
+</P>
+
+<H2> Data Release Policy </H2>
+
+<P>No restrictions.</P>
+
+</body></html>

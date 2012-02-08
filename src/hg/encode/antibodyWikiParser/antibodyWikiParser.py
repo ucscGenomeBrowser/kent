@@ -15,12 +15,14 @@ import string
 import subprocess
 import sys
 import urllib2 
-from ucscgenomics.rafile.RaFile import *
+from ucscgenomics.ra import *
 
 
 
 def stripLeadingTrailingWhitespace(text):
     """Given a string, remove any leading or trailing whitespace"""
+    #print "text = %s" % text
+    text = HTMLParser.HTMLParser().unescape(str(text))
     text = re.sub("^([" + string.whitespace + "])+", "", text)
     text = re.sub("([" + string.whitespace + "])+$", "", text)
     return(text)
