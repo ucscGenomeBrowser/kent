@@ -57,7 +57,7 @@ print "<TABLE>\n";
 print "<TR><TH>scoring:</TH>\n";
 print "    <TH CLASS='highConf'>good - 10 points</TH>\n";
 print "    <TH CLASS='mediumConf'>medium - 5 points</TH>\n";
-print "    <TH CLASS='lowConf'>low - 1 points</TH>\n";
+print "    <TH CLASS='lowConf'>low - 1 point</TH>\n";
 print "    <TH CLASS='noConf'>N/A - 0 points</TH>\n";
 print "</TR>\n";
 print "</TABLE>\n";
