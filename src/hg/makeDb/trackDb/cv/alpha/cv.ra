@@ -9383,7 +9383,8 @@ tag MAZAB85725
 type Antibody
 antibodyDescription Rabbit polyclonal, immunogen is synthetic peptide, corresponding to a region within amino acids 427-477 of Human MAZ, GenBank BAA33064.1
 target MAZ 
-targetDescription May function as a transcription factor with dual roles in transcription initiation and termination. Binds to two sites, ME1a1 and ME1a2, within the MYC promoter having greater affinity for the former. Also binds to multiple G/C-rich sites within the promoter of the Sp1 family of transcription factors.vendorName Abcam
+targetDescription May function as a transcription factor with dual roles in transcription initiation and termination. Binds to two sites, ME1a1 and ME1a2, within the MYC promoter having greater affinity for the former. Also binds to multiple G/C-rich sites within the promoter of the Sp1 family of transcription factors.
+vendorName Abcam
 vendorId ab85725
 orderUrl http://www.abcam.com/MAZ-antibody-ab85725.html
 lab Snyder
