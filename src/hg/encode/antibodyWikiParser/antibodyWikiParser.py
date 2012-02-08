@@ -220,7 +220,10 @@ def processAntibodyEntry(entry, species, downloadsDirectory, noDownload, usernam
             stanza["term"] = term
         else:
             stanza["term"] = term + "_(" + vendorId + ")"
-        stanza['term'] = re.sub("\s+", "_", stanza['term'])
+        m = re.search("\s+", stanza['term'])
+        if m:
+            print "term: %s has spaces in the name" % stanza['term']
+            sys.exit()
         stanza["tag"] = re.sub("[-_\(\)]", "", stanza["term"]).upper()
         stanza["type"] = "Antibody"
         stanza["antibodyDescription"] = getContents(cells[1])
