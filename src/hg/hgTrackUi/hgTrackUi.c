@@ -1912,7 +1912,7 @@ void cutterUi(struct trackDb *tdb)
 /* UI for restriction enzyme track */
 {
 char *enz = cartUsualString(cart, cutterVar, cutterDefault);
-puts("<P><B>Enzymes (separate with commas):</B><BR>");
+puts("<P><B>Filter display by enzymes (separate with commas):</B><BR>");
 cgiMakeTextVar(cutterVar, enz, 100);
 }
 
@@ -2793,10 +2793,18 @@ if (!tdbIsDownloadsOnly(tdb))
                     canPack = rTdbTreeCanPack(tdbGetComposite(tdb));
                 }
             else
+                {
                 vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
-            hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,
-                canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),
-                                (tdb->parent != NULL ?"onchange='return visTriggersHiddenSelect(this);'":NULL));
+                if (tdbIsSuperTrackChild(tdb))
+                    {
+                    hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
+                        "normalText superChild visDD", trackDbSetting(tdb, "onlyVisibility"),
+                        "onchange='visTriggersHiddenSelect(this);'");
+                    }
+                else
+                    hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
+                        "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),NULL);
+                }
             }
     if (!ajax)
         {

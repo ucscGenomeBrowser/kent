@@ -6147,4 +6147,7 @@ TMPDIR=/scratch/tmp
     ln -s blastz.rn4.swap lastz.rn4
 
 #########################################################################
+# POLYA-SEQ TRACK (from Adnan Derti, Merck) (DONE, Andy 2012-02-06)
+# (see hg19.txt for multi-species build notes)
 
+##############################################################################
