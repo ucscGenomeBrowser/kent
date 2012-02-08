@@ -21,7 +21,6 @@ from ucscgenomics.ra import *
 
 def stripLeadingTrailingWhitespace(text):
     """Given a string, remove any leading or trailing whitespace"""
-    #print "text = %s" % text
     text = HTMLParser.HTMLParser().unescape(str(text))
     text = re.sub("^([" + string.whitespace + "])+", "", text)
     text = re.sub("([" + string.whitespace + "])+$", "", text)
@@ -221,6 +220,7 @@ def processAntibodyEntry(entry, species, downloadsDirectory, noDownload, usernam
             stanza["term"] = term
         else:
             stanza["term"] = term + "_(" + vendorId + ")"
+        stanza['term'] = re.sub("\s+", "_", stanza['term'])
         stanza["tag"] = re.sub("[-_\(\)]", "", stanza["term"]).upper()
         stanza["type"] = "Antibody"
         stanza["antibodyDescription"] = getContents(cells[1])
