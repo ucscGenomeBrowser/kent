@@ -3466,7 +3466,7 @@ hubConnectStatusFreeList(&hubList);
 boolean restrictionEnzymesOk()
 /* Check to see if it's OK to do restriction enzymes. */
 {
-return (hDbExists("hgFixed") && hTableExists("hgFixed", "cutters") &&
+return (sqlDatabaseExists("hgFixed") && hTableExists("hgFixed", "cutters") &&
     hTableExists("hgFixed", "rebaseRefs") &&
     hTableExists("hgFixed", "rebaseCompanies"));
 }

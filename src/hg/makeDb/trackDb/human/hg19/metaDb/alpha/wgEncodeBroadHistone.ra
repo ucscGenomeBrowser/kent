@@ -156,6 +156,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002434
+expId 2434
 fileName wgEncodeBroadHistoneDnd41ControlStdAlnRep1.bam,wgEncodeBroadHistoneDnd41ControlStdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -178,6 +180,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002434
+expId 2434
 fileName wgEncodeBroadHistoneDnd41ControlStdAlnRep2.bam,wgEncodeBroadHistoneDnd41ControlStdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -200,6 +204,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002434
+expId 2434
 fileName wgEncodeBroadHistoneDnd41ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -223,6 +229,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002434
+expId 2434
 fileName wgEncodeBroadHistoneDnd41ControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -246,6 +254,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002434
+expId 2434
 fileName wgEncodeBroadHistoneDnd41ControlStdSig.bigWig
 grant Bernstein
 lab Broad
@@ -268,6 +278,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002402
+expId 2402
 fileName wgEncodeBroadHistoneDnd41CtcfAlnRep1.bam,wgEncodeBroadHistoneDnd41CtcfAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -290,6 +302,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002402
+expId 2402
 fileName wgEncodeBroadHistoneDnd41CtcfAlnRep2.bam,wgEncodeBroadHistoneDnd41CtcfAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -312,6 +326,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002402
+expId 2402
 fileName wgEncodeBroadHistoneDnd41CtcfPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -335,6 +351,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002402
+expId 2402
 fileName wgEncodeBroadHistoneDnd41CtcfRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -358,6 +376,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002402
+expId 2402
 fileName wgEncodeBroadHistoneDnd41CtcfRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -381,6 +401,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002402
+expId 2402
 fileName wgEncodeBroadHistoneDnd41CtcfSig.bigWig
 grant Bernstein
 lab Broad
@@ -403,6 +425,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002403
+expId 2403
 fileName wgEncodeBroadHistoneDnd41H2azAlnRep1.bam,wgEncodeBroadHistoneDnd41H2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -425,6 +449,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002403
+expId 2403
 fileName wgEncodeBroadHistoneDnd41H2azAlnRep2.bam,wgEncodeBroadHistoneDnd41H2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -447,6 +473,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002403
+expId 2403
 fileName wgEncodeBroadHistoneDnd41H2azPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -470,6 +498,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002403
+expId 2403
 fileName wgEncodeBroadHistoneDnd41H2azRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -493,6 +523,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002403
+expId 2403
 fileName wgEncodeBroadHistoneDnd41H2azRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -516,6 +548,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002403
+expId 2403
 fileName wgEncodeBroadHistoneDnd41H2azSig.bigWig
 grant Bernstein
 lab Broad
@@ -538,6 +572,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002406
+expId 2406
 fileName wgEncodeBroadHistoneDnd41H3k04me1AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k04me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -560,6 +596,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002406
+expId 2406
 fileName wgEncodeBroadHistoneDnd41H3k04me1AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k04me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -582,6 +620,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002406
+expId 2406
 fileName wgEncodeBroadHistoneDnd41H3k04me1Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -605,6 +645,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002406
+expId 2406
 fileName wgEncodeBroadHistoneDnd41H3k04me1RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -628,6 +670,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002406
+expId 2406
 fileName wgEncodeBroadHistoneDnd41H3k04me1RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -651,6 +695,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002406
+expId 2406
 fileName wgEncodeBroadHistoneDnd41H3k04me1Sig.bigWig
 grant Bernstein
 lab Broad
@@ -673,6 +719,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002407
+expId 2407
 fileName wgEncodeBroadHistoneDnd41H3k04me2AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k04me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -695,6 +743,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002407
+expId 2407
 fileName wgEncodeBroadHistoneDnd41H3k04me2AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k04me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -717,6 +767,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002407
+expId 2407
 fileName wgEncodeBroadHistoneDnd41H3k04me2Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -740,6 +792,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002407
+expId 2407
 fileName wgEncodeBroadHistoneDnd41H3k04me2RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -763,6 +817,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002407
+expId 2407
 fileName wgEncodeBroadHistoneDnd41H3k04me2RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -786,6 +842,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002407
+expId 2407
 fileName wgEncodeBroadHistoneDnd41H3k04me2Sig.bigWig
 grant Bernstein
 lab Broad
@@ -808,6 +866,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002408
+expId 2408
 fileName wgEncodeBroadHistoneDnd41H3k04me3AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k04me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -830,6 +890,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002408
+expId 2408
 fileName wgEncodeBroadHistoneDnd41H3k04me3AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k04me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -852,6 +914,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002408
+expId 2408
 fileName wgEncodeBroadHistoneDnd41H3k04me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -875,6 +939,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002408
+expId 2408
 fileName wgEncodeBroadHistoneDnd41H3k04me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -898,6 +964,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002408
+expId 2408
 fileName wgEncodeBroadHistoneDnd41H3k04me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -921,6 +989,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002408
+expId 2408
 fileName wgEncodeBroadHistoneDnd41H3k04me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -943,6 +1013,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002432
+expId 2432
 fileName wgEncodeBroadHistoneDnd41H3k09acAlnRep1.bam,wgEncodeBroadHistoneDnd41H3k09acAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -965,6 +1037,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002432
+expId 2432
 fileName wgEncodeBroadHistoneDnd41H3k09acAlnRep2.bam,wgEncodeBroadHistoneDnd41H3k09acAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -987,6 +1061,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002432
+expId 2432
 fileName wgEncodeBroadHistoneDnd41H3k09acPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1010,6 +1086,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002432
+expId 2432
 fileName wgEncodeBroadHistoneDnd41H3k09acRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -1033,6 +1111,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002432
+expId 2432
 fileName wgEncodeBroadHistoneDnd41H3k09acRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -1056,6 +1136,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002432
+expId 2432
 fileName wgEncodeBroadHistoneDnd41H3k09acSig.bigWig
 grant Bernstein
 lab Broad
@@ -1078,6 +1160,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002433
+expId 2433
 fileName wgEncodeBroadHistoneDnd41H3k09me3AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -1100,6 +1184,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002433
+expId 2433
 fileName wgEncodeBroadHistoneDnd41H3k09me3AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -1122,6 +1208,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002433
+expId 2433
 fileName wgEncodeBroadHistoneDnd41H3k09me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1145,6 +1233,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002433
+expId 2433
 fileName wgEncodeBroadHistoneDnd41H3k09me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -1168,6 +1258,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002433
+expId 2433
 fileName wgEncodeBroadHistoneDnd41H3k09me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -1191,6 +1283,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002433
+expId 2433
 fileName wgEncodeBroadHistoneDnd41H3k09me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -1213,6 +1307,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002404
+expId 2404
 fileName wgEncodeBroadHistoneDnd41H3k27acAlnRep1.bam,wgEncodeBroadHistoneDnd41H3k27acAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -1235,6 +1331,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002404
+expId 2404
 fileName wgEncodeBroadHistoneDnd41H3k27acAlnRep2.bam,wgEncodeBroadHistoneDnd41H3k27acAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -1257,6 +1355,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002404
+expId 2404
 fileName wgEncodeBroadHistoneDnd41H3k27acPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1280,6 +1380,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002404
+expId 2404
 fileName wgEncodeBroadHistoneDnd41H3k27acRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -1303,6 +1405,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002404
+expId 2404
 fileName wgEncodeBroadHistoneDnd41H3k27acRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -1326,6 +1430,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002404
+expId 2404
 fileName wgEncodeBroadHistoneDnd41H3k27acSig.bigWig
 grant Bernstein
 lab Broad
@@ -1348,6 +1454,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002405
+expId 2405
 fileName wgEncodeBroadHistoneDnd41H3k36me3AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k36me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -1370,6 +1478,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002405
+expId 2405
 fileName wgEncodeBroadHistoneDnd41H3k36me3AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k36me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -1392,6 +1502,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002405
+expId 2405
 fileName wgEncodeBroadHistoneDnd41H3k36me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1415,6 +1527,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002405
+expId 2405
 fileName wgEncodeBroadHistoneDnd41H3k36me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -1438,6 +1552,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002405
+expId 2405
 fileName wgEncodeBroadHistoneDnd41H3k36me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -1461,6 +1577,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002405
+expId 2405
 fileName wgEncodeBroadHistoneDnd41H3k36me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -1483,6 +1601,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002409
+expId 2409
 fileName wgEncodeBroadHistoneDnd41H3k79me2AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -1505,6 +1625,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002409
+expId 2409
 fileName wgEncodeBroadHistoneDnd41H3k79me2AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -1527,6 +1649,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002409
+expId 2409
 fileName wgEncodeBroadHistoneDnd41H3k79me2Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1550,6 +1674,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002409
+expId 2409
 fileName wgEncodeBroadHistoneDnd41H3k79me2RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -1573,6 +1699,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002409
+expId 2409
 fileName wgEncodeBroadHistoneDnd41H3k79me2RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -1596,6 +1724,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002409
+expId 2409
 fileName wgEncodeBroadHistoneDnd41H3k79me2Sig.bigWig
 grant Bernstein
 lab Broad
@@ -1618,6 +1748,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002410
+expId 2410
 fileName wgEncodeBroadHistoneDnd41H4k20me1AlnRep1.bam,wgEncodeBroadHistoneDnd41H4k20me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -1640,6 +1772,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002410
+expId 2410
 fileName wgEncodeBroadHistoneDnd41H4k20me1AlnRep2.bam,wgEncodeBroadHistoneDnd41H4k20me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -1662,6 +1796,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002410
+expId 2410
 fileName wgEncodeBroadHistoneDnd41H4k20me1Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1685,6 +1821,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002410
+expId 2410
 fileName wgEncodeBroadHistoneDnd41H4k20me1RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -1708,6 +1846,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002410
+expId 2410
 fileName wgEncodeBroadHistoneDnd41H4k20me1RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -1731,6 +1871,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002410
+expId 2410
 fileName wgEncodeBroadHistoneDnd41H4k20me1Sig.bigWig
 grant Bernstein
 lab Broad
@@ -2043,6 +2185,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002411
+expId 2411
 fileName wgEncodeBroadHistoneGm12878Ezh239875AlnRep1.bam,wgEncodeBroadHistoneGm12878Ezh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -2065,6 +2209,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002411
+expId 2411
 fileName wgEncodeBroadHistoneGm12878Ezh239875AlnRep2.bam,wgEncodeBroadHistoneGm12878Ezh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -2087,6 +2233,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002411
+expId 2411
 fileName wgEncodeBroadHistoneGm12878Ezh239875Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -2110,6 +2258,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002411
+expId 2411
 fileName wgEncodeBroadHistoneGm12878Ezh239875RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -2133,6 +2283,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002411
+expId 2411
 fileName wgEncodeBroadHistoneGm12878Ezh239875RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -2156,6 +2308,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002411
+expId 2411
 fileName wgEncodeBroadHistoneGm12878Ezh239875Sig.bigWig
 grant Bernstein
 lab Broad
@@ -2775,6 +2929,7 @@ dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000031
+expId 31
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -2905,6 +3060,7 @@ dateResubmitted 2010-11-05
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
+expId 31
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdSig.bigWig
 grant Bernstein
 lab Broad
@@ -3114,6 +3270,7 @@ dateResubmitted 2010-11-05
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
+expId 33
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -3167,6 +3324,7 @@ dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000033
+expId 33
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -3192,6 +3350,7 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
+expId 33
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -3244,6 +3403,7 @@ dateResubmitted 2010-11-05
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
+expId 33
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdSig.bigWig
 grant Bernstein
 lab Broad
@@ -3455,6 +3615,7 @@ dateResubmitted 2010-11-05
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
 dccAccession wgEncodeEH000028
+expId 28
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -3481,6 +3642,7 @@ dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH000028
+expId 28
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -3531,6 +3693,7 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000028
+expId 28
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -3557,6 +3720,7 @@ dateResubmitted 2010-11-05
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
 dccAccession wgEncodeEH000028
+expId 28
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig
 grant Bernstein
 lab Broad
@@ -6991,6 +7155,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002395
+expId 2395
 fileName wgEncodeBroadHistoneHelas3H2azAlnRep1.bam,wgEncodeBroadHistoneHelas3H2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -7013,6 +7179,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002395
+expId 2395
 fileName wgEncodeBroadHistoneHelas3H2azAlnRep2.bam,wgEncodeBroadHistoneHelas3H2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -7035,6 +7203,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002395
+expId 2395
 fileName wgEncodeBroadHistoneHelas3H2azPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -7058,6 +7228,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002395
+expId 2395
 fileName wgEncodeBroadHistoneHelas3H2azRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -7081,6 +7253,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002395
+expId 2395
 fileName wgEncodeBroadHistoneHelas3H2azRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -7104,6 +7278,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002395
+expId 2395
 fileName wgEncodeBroadHistoneHelas3H2azSig.bigWig
 grant Bernstein
 lab Broad
@@ -7273,6 +7449,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002396
+expId 2396
 fileName wgEncodeBroadHistoneHelas3H3k09me3AlnRep1.bam,wgEncodeBroadHistoneHelas3H3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -7295,6 +7473,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002396
+expId 2396
 fileName wgEncodeBroadHistoneHelas3H3k09me3AlnRep2.bam,wgEncodeBroadHistoneHelas3H3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -7317,6 +7497,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002396
+expId 2396
 fileName wgEncodeBroadHistoneHelas3H3k09me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -7340,6 +7522,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002396
+expId 2396
 fileName wgEncodeBroadHistoneHelas3H3k09me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -7363,6 +7547,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002396
+expId 2396
 fileName wgEncodeBroadHistoneHelas3H3k09me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -7386,6 +7572,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002396
+expId 2396
 fileName wgEncodeBroadHistoneHelas3H3k09me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -9124,6 +9312,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002416
+expId 2416
 fileName wgEncodeBroadHistoneHepg2Ezh239875AlnRep1.bam,wgEncodeBroadHistoneHepg2Ezh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -9146,6 +9336,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002416
+expId 2416
 fileName wgEncodeBroadHistoneHepg2Ezh239875AlnRep2.bam,wgEncodeBroadHistoneHepg2Ezh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -9168,6 +9360,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002416
+expId 2416
 fileName wgEncodeBroadHistoneHepg2Ezh239875Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -9191,6 +9385,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002416
+expId 2416
 fileName wgEncodeBroadHistoneHepg2Ezh239875RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -9214,6 +9410,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002416
+expId 2416
 fileName wgEncodeBroadHistoneHepg2Ezh239875RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -9237,6 +9435,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002416
+expId 2416
 fileName wgEncodeBroadHistoneHepg2Ezh239875Sig.bigWig
 grant Bernstein
 lab Broad
@@ -11127,6 +11327,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002412
+expId 2412
 fileName wgEncodeBroadHistoneHmecEzh239875AlnRep1.bam,wgEncodeBroadHistoneHmecEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -11149,6 +11351,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002412
+expId 2412
 fileName wgEncodeBroadHistoneHmecEzh239875AlnRep2.bam,wgEncodeBroadHistoneHmecEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -11171,6 +11375,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002412
+expId 2412
 fileName wgEncodeBroadHistoneHmecEzh239875Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -11194,6 +11400,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002412
+expId 2412
 fileName wgEncodeBroadHistoneHmecEzh239875RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -11217,6 +11425,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002412
+expId 2412
 fileName wgEncodeBroadHistoneHmecEzh239875RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -11240,6 +11450,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002412
+expId 2412
 fileName wgEncodeBroadHistoneHmecEzh239875Sig.bigWig
 grant Bernstein
 lab Broad
@@ -11262,6 +11474,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002413
+expId 2413
 fileName wgEncodeBroadHistoneHmecH2azAlnRep1.bam,wgEncodeBroadHistoneHmecH2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -11284,6 +11498,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002413
+expId 2413
 fileName wgEncodeBroadHistoneHmecH2azAlnRep2.bam,wgEncodeBroadHistoneHmecH2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -11306,6 +11522,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002413
+expId 2413
 fileName wgEncodeBroadHistoneHmecH2azPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -11329,6 +11547,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002413
+expId 2413
 fileName wgEncodeBroadHistoneHmecH2azRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -11352,6 +11572,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002413
+expId 2413
 fileName wgEncodeBroadHistoneHmecH2azRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -11375,6 +11597,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002413
+expId 2413
 fileName wgEncodeBroadHistoneHmecH2azSig.bigWig
 grant Bernstein
 lab Broad
@@ -11397,6 +11621,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002414
+expId 2414
 fileName wgEncodeBroadHistoneHmecH3k09me3AlnRep1.bam,wgEncodeBroadHistoneHmecH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -11419,6 +11645,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002414
+expId 2414
 fileName wgEncodeBroadHistoneHmecH3k09me3AlnRep2.bam,wgEncodeBroadHistoneHmecH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -11441,6 +11669,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002414
+expId 2414
 fileName wgEncodeBroadHistoneHmecH3k09me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -11464,6 +11694,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002414
+expId 2414
 fileName wgEncodeBroadHistoneHmecH3k09me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -11487,6 +11719,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002414
+expId 2414
 fileName wgEncodeBroadHistoneHmecH3k09me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -11510,6 +11744,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002414
+expId 2414
 fileName wgEncodeBroadHistoneHmecH3k09me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -12486,6 +12722,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002435
+expId 2435
 fileName wgEncodeBroadHistoneHmecH3k79me2AlnRep1.bam,wgEncodeBroadHistoneHmecH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -12508,6 +12746,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002435
+expId 2435
 fileName wgEncodeBroadHistoneHmecH3k79me2AlnRep2.bam,wgEncodeBroadHistoneHmecH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -12530,6 +12770,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002435
+expId 2435
 fileName wgEncodeBroadHistoneHmecH3k79me2Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -12553,6 +12795,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002435
+expId 2435
 fileName wgEncodeBroadHistoneHmecH3k79me2RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -12576,6 +12820,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002435
+expId 2435
 fileName wgEncodeBroadHistoneHmecH3k79me2RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -12599,6 +12845,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002435
+expId 2435
 fileName wgEncodeBroadHistoneHmecH3k79me2Sig.bigWig
 grant Bernstein
 lab Broad
@@ -13228,6 +13476,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002415
+expId 2415
 fileName wgEncodeBroadHistoneHsmmEzh239875AlnRep1.bam,wgEncodeBroadHistoneHsmmEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -13250,6 +13500,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002415
+expId 2415
 fileName wgEncodeBroadHistoneHsmmEzh239875AlnRep2.bam,wgEncodeBroadHistoneHsmmEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -13272,6 +13524,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002415
+expId 2415
 fileName wgEncodeBroadHistoneHsmmEzh239875Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -13295,6 +13549,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002415
+expId 2415
 fileName wgEncodeBroadHistoneHsmmEzh239875RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -13318,6 +13574,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002415
+expId 2415
 fileName wgEncodeBroadHistoneHsmmEzh239875RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -13341,6 +13599,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002415
+expId 2415
 fileName wgEncodeBroadHistoneHsmmEzh239875Sig.bigWig
 grant Bernstein
 lab Broad
@@ -15556,6 +15816,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002394
+expId 2394
 fileName wgEncodeBroadHistoneHsmmtH3k09me3AlnRep1.bam,wgEncodeBroadHistoneHsmmtH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -15578,6 +15840,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002394
+expId 2394
 fileName wgEncodeBroadHistoneHsmmtH3k09me3AlnRep2.bam,wgEncodeBroadHistoneHsmmtH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -15600,6 +15864,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002394
+expId 2394
 fileName wgEncodeBroadHistoneHsmmtH3k09me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -15623,6 +15889,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002394
+expId 2394
 fileName wgEncodeBroadHistoneHsmmtH3k09me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -15646,6 +15914,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002394
+expId 2394
 fileName wgEncodeBroadHistoneHsmmtH3k09me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -15669,6 +15939,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002394
+expId 2394
 fileName wgEncodeBroadHistoneHsmmtH3k09me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -17360,6 +17632,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002436
+expId 2436
 fileName wgEncodeBroadHistoneHuvecH2azAlnRep1.bam,wgEncodeBroadHistoneHuvecH2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -17382,6 +17656,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002436
+expId 2436
 fileName wgEncodeBroadHistoneHuvecH2azAlnRep2.bam,wgEncodeBroadHistoneHuvecH2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -17404,6 +17680,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002436
+expId 2436
 fileName wgEncodeBroadHistoneHuvecH2azPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -17427,6 +17705,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002436
+expId 2436
 fileName wgEncodeBroadHistoneHuvecH2azRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -17450,6 +17730,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002436
+expId 2436
 fileName wgEncodeBroadHistoneHuvecH2azRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -17473,6 +17755,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002436
+expId 2436
 fileName wgEncodeBroadHistoneHuvecH2azSig.bigWig
 grant Bernstein
 lab Broad
@@ -18660,6 +18944,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002437
+expId 2437
 fileName wgEncodeBroadHistoneHuvecH3k79me2AlnRep1.bam,wgEncodeBroadHistoneHuvecH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -18682,6 +18968,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002437
+expId 2437
 fileName wgEncodeBroadHistoneHuvecH3k79me2AlnRep2.bam,wgEncodeBroadHistoneHuvecH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -18704,6 +18992,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002437
+expId 2437
 fileName wgEncodeBroadHistoneHuvecH3k79me2Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -18727,6 +19017,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002437
+expId 2437
 fileName wgEncodeBroadHistoneHuvecH3k79me2RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -18750,6 +19042,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002437
+expId 2437
 fileName wgEncodeBroadHistoneHuvecH3k79me2RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -18773,6 +19067,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002437
+expId 2437
 fileName wgEncodeBroadHistoneHuvecH3k79me2Sig.bigWig
 grant Bernstein
 lab Broad
@@ -24699,6 +24995,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002425
+expId 2425
 fileName wgEncodeBroadHistoneNhaEzh239875AlnRep1.bam,wgEncodeBroadHistoneNhaEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -24721,6 +25019,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002425
+expId 2425
 fileName wgEncodeBroadHistoneNhaEzh239875AlnRep2.bam,wgEncodeBroadHistoneNhaEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -24743,6 +25043,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002425
+expId 2425
 fileName wgEncodeBroadHistoneNhaEzh239875Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -24766,6 +25068,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002425
+expId 2425
 fileName wgEncodeBroadHistoneNhaEzh239875RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -24789,6 +25093,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002425
+expId 2425
 fileName wgEncodeBroadHistoneNhaEzh239875RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -24812,6 +25118,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002425
+expId 2425
 fileName wgEncodeBroadHistoneNhaEzh239875Sig.bigWig
 grant Bernstein
 lab Broad
@@ -24834,6 +25142,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002397
+expId 2397
 fileName wgEncodeBroadHistoneNhaH2azAlnRep1.bam,wgEncodeBroadHistoneNhaH2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -24856,6 +25166,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002397
+expId 2397
 fileName wgEncodeBroadHistoneNhaH2azAlnRep2.bam,wgEncodeBroadHistoneNhaH2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -24878,6 +25190,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002397
+expId 2397
 fileName wgEncodeBroadHistoneNhaH2azPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -24901,6 +25215,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002397
+expId 2397
 fileName wgEncodeBroadHistoneNhaH2azRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -24924,6 +25240,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002397
+expId 2397
 fileName wgEncodeBroadHistoneNhaH2azRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -24947,6 +25265,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002397
+expId 2397
 fileName wgEncodeBroadHistoneNhaH2azSig.bigWig
 grant Bernstein
 lab Broad
@@ -24969,6 +25289,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002426
+expId 2426
 fileName wgEncodeBroadHistoneNhaH3k04me2AlnRep1.bam,wgEncodeBroadHistoneNhaH3k04me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -24991,6 +25313,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002426
+expId 2426
 fileName wgEncodeBroadHistoneNhaH3k04me2AlnRep2.bam,wgEncodeBroadHistoneNhaH3k04me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -25013,6 +25337,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002426
+expId 2426
 fileName wgEncodeBroadHistoneNhaH3k04me2Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -25036,6 +25362,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002426
+expId 2426
 fileName wgEncodeBroadHistoneNhaH3k04me2RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -25059,6 +25387,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002426
+expId 2426
 fileName wgEncodeBroadHistoneNhaH3k04me2RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -25082,6 +25412,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002426
+expId 2426
 fileName wgEncodeBroadHistoneNhaH3k04me2Sig.bigWig
 grant Bernstein
 lab Broad
@@ -25104,6 +25436,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002427
+expId 2427
 fileName wgEncodeBroadHistoneNhaH3k09acAlnRep1.bam,wgEncodeBroadHistoneNhaH3k09acAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -25126,6 +25460,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002427
+expId 2427
 fileName wgEncodeBroadHistoneNhaH3k09acAlnRep2.bam,wgEncodeBroadHistoneNhaH3k09acAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -25148,6 +25484,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002427
+expId 2427
 fileName wgEncodeBroadHistoneNhaH3k09acPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -25171,6 +25509,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002427
+expId 2427
 fileName wgEncodeBroadHistoneNhaH3k09acRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -25194,6 +25534,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002427
+expId 2427
 fileName wgEncodeBroadHistoneNhaH3k09acRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -25217,6 +25559,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002427
+expId 2427
 fileName wgEncodeBroadHistoneNhaH3k09acSig.bigWig
 grant Bernstein
 lab Broad
@@ -25239,6 +25583,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002399
+expId 2399
 fileName wgEncodeBroadHistoneNhaH3k09me3AlnRep1.bam,wgEncodeBroadHistoneNhaH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -25261,6 +25607,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002399
+expId 2399
 fileName wgEncodeBroadHistoneNhaH3k09me3AlnRep2.bam,wgEncodeBroadHistoneNhaH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -25283,6 +25631,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002399
+expId 2399
 fileName wgEncodeBroadHistoneNhaH3k09me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -25306,6 +25656,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002399
+expId 2399
 fileName wgEncodeBroadHistoneNhaH3k09me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -25329,6 +25681,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002399
+expId 2399
 fileName wgEncodeBroadHistoneNhaH3k09me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -25352,6 +25706,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002399
+expId 2399
 fileName wgEncodeBroadHistoneNhaH3k09me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -26171,6 +26527,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002398
+expId 2398
 fileName wgEncodeBroadHistoneNhaH3k79me2AlnRep1.bam,wgEncodeBroadHistoneNhaH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -26193,6 +26551,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002398
+expId 2398
 fileName wgEncodeBroadHistoneNhaH3k79me2AlnRep2.bam,wgEncodeBroadHistoneNhaH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -26215,6 +26575,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002398
+expId 2398
 fileName wgEncodeBroadHistoneNhaH3k79me2Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -26238,6 +26600,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002398
+expId 2398
 fileName wgEncodeBroadHistoneNhaH3k79me2RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -26261,6 +26625,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002398
+expId 2398
 fileName wgEncodeBroadHistoneNhaH3k79me2RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -26284,6 +26650,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002398
+expId 2398
 fileName wgEncodeBroadHistoneNhaH3k79me2Sig.bigWig
 grant Bernstein
 lab Broad
@@ -26306,6 +26674,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002428
+expId 2428
 fileName wgEncodeBroadHistoneNhaH4k20me1AlnRep1.bam,wgEncodeBroadHistoneNhaH4k20me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -26328,6 +26698,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002428
+expId 2428
 fileName wgEncodeBroadHistoneNhaH4k20me1AlnRep2.bam,wgEncodeBroadHistoneNhaH4k20me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -26350,6 +26722,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002428
+expId 2428
 fileName wgEncodeBroadHistoneNhaH4k20me1Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -26373,6 +26747,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002428
+expId 2428
 fileName wgEncodeBroadHistoneNhaH4k20me1RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -26396,6 +26772,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002428
+expId 2428
 fileName wgEncodeBroadHistoneNhaH4k20me1RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -26419,6 +26797,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002428
+expId 2428
 fileName wgEncodeBroadHistoneNhaH4k20me1Sig.bigWig
 grant Bernstein
 lab Broad
@@ -26721,6 +27101,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002438
+expId 2438
 fileName wgEncodeBroadHistoneNhdfadEzh239875AlnRep1.bam,wgEncodeBroadHistoneNhdfadEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -26743,6 +27125,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002438
+expId 2438
 fileName wgEncodeBroadHistoneNhdfadEzh239875AlnRep2.bam,wgEncodeBroadHistoneNhdfadEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -26765,6 +27149,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002438
+expId 2438
 fileName wgEncodeBroadHistoneNhdfadEzh239875Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -26788,6 +27174,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002438
+expId 2438
 fileName wgEncodeBroadHistoneNhdfadEzh239875RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -26811,6 +27199,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002438
+expId 2438
 fileName wgEncodeBroadHistoneNhdfadEzh239875RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -26834,6 +27224,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002438
+expId 2438
 fileName wgEncodeBroadHistoneNhdfadEzh239875Sig.bigWig
 grant Bernstein
 lab Broad
@@ -26856,6 +27248,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002429
+expId 2429
 fileName wgEncodeBroadHistoneNhdfadH3k04me1AlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k04me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -26878,6 +27272,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002429
+expId 2429
 fileName wgEncodeBroadHistoneNhdfadH3k04me1AlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k04me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -26900,6 +27296,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002429
+expId 2429
 fileName wgEncodeBroadHistoneNhdfadH3k04me1Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -26923,6 +27321,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002429
+expId 2429
 fileName wgEncodeBroadHistoneNhdfadH3k04me1RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -26946,6 +27346,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002429
+expId 2429
 fileName wgEncodeBroadHistoneNhdfadH3k04me1RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -26969,6 +27371,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002429
+expId 2429
 fileName wgEncodeBroadHistoneNhdfadH3k04me1Sig.bigWig
 grant Bernstein
 lab Broad
@@ -26991,6 +27395,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002431
+expId 2431
 fileName wgEncodeBroadHistoneNhdfadH3k09me3AlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -27013,6 +27419,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002431
+expId 2431
 fileName wgEncodeBroadHistoneNhdfadH3k09me3AlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -27035,6 +27443,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002431
+expId 2431
 fileName wgEncodeBroadHistoneNhdfadH3k09me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -27058,6 +27468,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002431
+expId 2431
 fileName wgEncodeBroadHistoneNhdfadH3k09me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -27081,6 +27493,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002431
+expId 2431
 fileName wgEncodeBroadHistoneNhdfadH3k09me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -27104,6 +27518,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002431
+expId 2431
 fileName wgEncodeBroadHistoneNhdfadH3k09me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -27891,6 +28307,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002430
+expId 2430
 fileName wgEncodeBroadHistoneNhdfadH3k79me2AlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -27913,6 +28331,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002430
+expId 2430
 fileName wgEncodeBroadHistoneNhdfadH3k79me2AlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -27935,6 +28355,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002430
+expId 2430
 fileName wgEncodeBroadHistoneNhdfadH3k79me2Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -27958,6 +28380,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002430
+expId 2430
 fileName wgEncodeBroadHistoneNhdfadH3k79me2RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -27981,6 +28405,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002430
+expId 2430
 fileName wgEncodeBroadHistoneNhdfadH3k79me2RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -28004,6 +28430,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEH002430
+expId 2430
 fileName wgEncodeBroadHistoneNhdfadH3k79me2Sig.bigWig
 grant Bernstein
 lab Broad
@@ -28179,6 +28607,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002417
+expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1AlnRep1.bam,wgEncodeBroadHistoneNhdfadH4k20me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -28201,6 +28631,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002417
+expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1AlnRep2.bam,wgEncodeBroadHistoneNhdfadH4k20me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -28223,6 +28655,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002417
+expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1AlnRep3.bam,wgEncodeBroadHistoneNhdfadH4k20me1AlnRep3.bam.bai
 grant Bernstein
 lab Broad
@@ -28245,6 +28679,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002417
+expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -28268,6 +28704,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002417
+expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -28291,6 +28729,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002417
+expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -28314,6 +28754,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002417
+expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1RawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
@@ -28337,6 +28779,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002417
+expId 2417
 fileName wgEncodeBroadHistoneNhdfadH4k20me1Sig.bigWig
 grant Bernstein
 lab Broad
@@ -28703,6 +29147,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002418
+expId 2418
 fileName wgEncodeBroadHistoneNhekEzh239875AlnRep1.bam,wgEncodeBroadHistoneNhekEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -28726,6 +29172,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002418
+expId 2418
 fileName wgEncodeBroadHistoneNhekEzh239875AlnRep2.bam,wgEncodeBroadHistoneNhekEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -28749,6 +29197,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002418
+expId 2418
 fileName wgEncodeBroadHistoneNhekEzh239875Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -28773,6 +29223,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002418
+expId 2418
 fileName wgEncodeBroadHistoneNhekEzh239875RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -28797,6 +29249,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002418
+expId 2418
 fileName wgEncodeBroadHistoneNhekEzh239875RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -28821,6 +29275,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002418
+expId 2418
 fileName wgEncodeBroadHistoneNhekEzh239875Sig.bigWig
 grant Bernstein
 lab Broad
@@ -28844,6 +29300,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002419
+expId 2419
 fileName wgEncodeBroadHistoneNhekH2azAlnRep1.bam,wgEncodeBroadHistoneNhekH2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -28867,6 +29325,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002419
+expId 2419
 fileName wgEncodeBroadHistoneNhekH2azAlnRep2.bam,wgEncodeBroadHistoneNhekH2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -28890,6 +29350,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002419
+expId 2419
 fileName wgEncodeBroadHistoneNhekH2azPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -28914,6 +29376,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002419
+expId 2419
 fileName wgEncodeBroadHistoneNhekH2azRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -28938,6 +29402,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002419
+expId 2419
 fileName wgEncodeBroadHistoneNhekH2azRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -28962,6 +29428,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002419
+expId 2419
 fileName wgEncodeBroadHistoneNhekH2azSig.bigWig
 grant Bernstein
 lab Broad
@@ -28985,6 +29453,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002421
+expId 2421
 fileName wgEncodeBroadHistoneNhekH3k09me3AlnRep1.bam,wgEncodeBroadHistoneNhekH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -29008,6 +29478,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002421
+expId 2421
 fileName wgEncodeBroadHistoneNhekH3k09me3AlnRep2.bam,wgEncodeBroadHistoneNhekH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -29031,6 +29503,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002421
+expId 2421
 fileName wgEncodeBroadHistoneNhekH3k09me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -29055,6 +29529,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002421
+expId 2421
 fileName wgEncodeBroadHistoneNhekH3k09me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -29079,6 +29555,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002421
+expId 2421
 fileName wgEncodeBroadHistoneNhekH3k09me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -29103,6 +29581,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002421
+expId 2421
 fileName wgEncodeBroadHistoneNhekH3k09me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -30398,6 +30878,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002420
+expId 2420
 fileName wgEncodeBroadHistoneNhekH3k79me2AlnRep1.bam,wgEncodeBroadHistoneNhekH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -30421,6 +30903,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002420
+expId 2420
 fileName wgEncodeBroadHistoneNhekH3k79me2AlnRep2.bam,wgEncodeBroadHistoneNhekH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -30444,6 +30928,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002420
+expId 2420
 fileName wgEncodeBroadHistoneNhekH3k79me2Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -30468,6 +30954,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002420
+expId 2420
 fileName wgEncodeBroadHistoneNhekH3k79me2RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -30492,6 +30980,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002420
+expId 2420
 fileName wgEncodeBroadHistoneNhekH3k79me2RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -30516,6 +31006,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002420
+expId 2420
 fileName wgEncodeBroadHistoneNhekH3k79me2Sig.bigWig
 grant Bernstein
 lab Broad
@@ -31625,6 +32117,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002422
+expId 2422
 fileName wgEncodeBroadHistoneNhlfEzh239875AlnRep1.bam,wgEncodeBroadHistoneNhlfEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -31647,6 +32141,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002422
+expId 2422
 fileName wgEncodeBroadHistoneNhlfEzh239875AlnRep2.bam,wgEncodeBroadHistoneNhlfEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -31669,6 +32165,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002422
+expId 2422
 fileName wgEncodeBroadHistoneNhlfEzh239875Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -31692,6 +32190,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002422
+expId 2422
 fileName wgEncodeBroadHistoneNhlfEzh239875RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -31715,6 +32215,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002422
+expId 2422
 fileName wgEncodeBroadHistoneNhlfEzh239875RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -31738,6 +32240,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEH002422
+expId 2422
 fileName wgEncodeBroadHistoneNhlfEzh239875Sig.bigWig
 grant Bernstein
 lab Broad
@@ -31760,6 +32264,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002423
+expId 2423
 fileName wgEncodeBroadHistoneNhlfH2azAlnRep1.bam,wgEncodeBroadHistoneNhlfH2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -31782,6 +32288,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002423
+expId 2423
 fileName wgEncodeBroadHistoneNhlfH2azAlnRep2.bam,wgEncodeBroadHistoneNhlfH2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -31804,6 +32312,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002423
+expId 2423
 fileName wgEncodeBroadHistoneNhlfH2azPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -31827,6 +32337,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002423
+expId 2423
 fileName wgEncodeBroadHistoneNhlfH2azRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -31850,6 +32362,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002423
+expId 2423
 fileName wgEncodeBroadHistoneNhlfH2azRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -31873,6 +32387,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002423
+expId 2423
 fileName wgEncodeBroadHistoneNhlfH2azSig.bigWig
 grant Bernstein
 lab Broad
@@ -31895,6 +32411,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002424
+expId 2424
 fileName wgEncodeBroadHistoneNhlfH3k09me3AlnRep1.bam,wgEncodeBroadHistoneNhlfH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -31917,6 +32435,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002424
+expId 2424
 fileName wgEncodeBroadHistoneNhlfH3k09me3AlnRep2.bam,wgEncodeBroadHistoneNhlfH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -31939,6 +32459,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002424
+expId 2424
 fileName wgEncodeBroadHistoneNhlfH3k09me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -31962,6 +32484,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002424
+expId 2424
 fileName wgEncodeBroadHistoneNhlfH3k09me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -31985,6 +32509,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002424
+expId 2424
 fileName wgEncodeBroadHistoneNhlfH3k09me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -32008,6 +32534,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002424
+expId 2424
 fileName wgEncodeBroadHistoneNhlfH3k09me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -32984,6 +33512,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002439
+expId 2439
 fileName wgEncodeBroadHistoneNhlfH3k79me2AlnRep1.bam,wgEncodeBroadHistoneNhlfH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -33006,6 +33536,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002439
+expId 2439
 fileName wgEncodeBroadHistoneNhlfH3k79me2AlnRep2.bam,wgEncodeBroadHistoneNhlfH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -33028,6 +33560,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002439
+expId 2439
 fileName wgEncodeBroadHistoneNhlfH3k79me2Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -33051,6 +33585,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002439
+expId 2439
 fileName wgEncodeBroadHistoneNhlfH3k79me2RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -33074,6 +33610,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002439
+expId 2439
 fileName wgEncodeBroadHistoneNhlfH3k79me2RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -33097,6 +33635,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002439
+expId 2439
 fileName wgEncodeBroadHistoneNhlfH3k79me2Sig.bigWig
 grant Bernstein
 lab Broad
@@ -33437,6 +33977,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002400
+expId 2400
 fileName wgEncodeBroadHistoneOsteoH3k27me3AlnRep1.bam,wgEncodeBroadHistoneOsteoH3k27me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -33459,6 +34001,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002400
+expId 2400
 fileName wgEncodeBroadHistoneOsteoH3k27me3AlnRep2.bam,wgEncodeBroadHistoneOsteoH3k27me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -33481,6 +34025,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002400
+expId 2400
 fileName wgEncodeBroadHistoneOsteoH3k27me3Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -33504,6 +34050,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002400
+expId 2400
 fileName wgEncodeBroadHistoneOsteoH3k27me3RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -33527,6 +34075,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002400
+expId 2400
 fileName wgEncodeBroadHistoneOsteoH3k27me3RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -33550,6 +34100,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002400
+expId 2400
 fileName wgEncodeBroadHistoneOsteoH3k27me3Sig.bigWig
 grant Bernstein
 lab Broad
@@ -33572,6 +34124,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002440
+expId 2440
 fileName wgEncodeBroadHistoneOsteoH3k79me2AlnRep1.bam,wgEncodeBroadHistoneOsteoH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -33594,6 +34148,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002440
+expId 2440
 fileName wgEncodeBroadHistoneOsteoH3k79me2AlnRep2.bam,wgEncodeBroadHistoneOsteoH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -33616,6 +34172,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002440
+expId 2440
 fileName wgEncodeBroadHistoneOsteoH3k79me2Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -33639,6 +34197,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002440
+expId 2440
 fileName wgEncodeBroadHistoneOsteoH3k79me2RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -33662,6 +34222,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002440
+expId 2440
 fileName wgEncodeBroadHistoneOsteoH3k79me2RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -33685,6 +34247,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
+dccAccession wgEncodeEH002440
+expId 2440
 fileName wgEncodeBroadHistoneOsteoH3k79me2Sig.bigWig
 grant Bernstein
 lab Broad
@@ -33707,6 +34271,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002401
+expId 2401
 fileName wgEncodeBroadHistoneOsteoH4k20me1AlnRep1.bam,wgEncodeBroadHistoneOsteoH4k20me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
@@ -33729,6 +34295,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002401
+expId 2401
 fileName wgEncodeBroadHistoneOsteoH4k20me1AlnRep2.bam,wgEncodeBroadHistoneOsteoH4k20me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
@@ -33751,6 +34319,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002401
+expId 2401
 fileName wgEncodeBroadHistoneOsteoH4k20me1Pk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -33774,6 +34344,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002401
+expId 2401
 fileName wgEncodeBroadHistoneOsteoH4k20me1RawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -33797,6 +34369,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002401
+expId 2401
 fileName wgEncodeBroadHistoneOsteoH4k20me1RawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -33820,6 +34394,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
+dccAccession wgEncodeEH002401
+expId 2401
 fileName wgEncodeBroadHistoneOsteoH4k20me1Sig.bigWig
 grant Bernstein
 lab Broad
@@ -35029,4 +35605,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: 729054955
+# MAGIC: -653517292
