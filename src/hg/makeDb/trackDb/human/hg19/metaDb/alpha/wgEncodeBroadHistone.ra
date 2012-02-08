@@ -268,10 +268,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41CtcfAlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41CtcfAlnRep1.bam,wgEncodeBroadHistoneDnd41CtcfAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 11c7563e7bb343664a88c02a8b290d87
+md5sum 11c7563e7bb343664a88c02a8b290d87,aa99e4c224becbd52a31919928eb6770
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -290,10 +290,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41CtcfAlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41CtcfAlnRep2.bam,wgEncodeBroadHistoneDnd41CtcfAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum daaa86ba89f6c40f0a97ba749da0e52d
+md5sum daaa86ba89f6c40f0a97ba749da0e52d,a7f51ada6d2c2a2f5196d8e1163dfce8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -403,10 +403,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H2azAlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41H2azAlnRep1.bam,wgEncodeBroadHistoneDnd41H2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 28dfa85a7a721b8537810db14655bf7d
+md5sum 28dfa85a7a721b8537810db14655bf7d,635631fb3bc10d21cee3b65b37cfaca8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -425,10 +425,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H2azAlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41H2azAlnRep2.bam,wgEncodeBroadHistoneDnd41H2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum b437dfc1a4cc4cca8c5e3090ac68929f
+md5sum b437dfc1a4cc4cca8c5e3090ac68929f,f4858b98b8cecddc78df2df55413817f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -538,10 +538,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k04me1AlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41H3k04me1AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k04me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 26cc7b42af57534b7cd276f40e6fa1a7
+md5sum 26cc7b42af57534b7cd276f40e6fa1a7,207450ca3b7d83e89a2e987bb0e61bc3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -560,10 +560,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k04me1AlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41H3k04me1AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k04me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 87e1fd1f90b1ddf3ab30915670128255
+md5sum 87e1fd1f90b1ddf3ab30915670128255,ca3bac12e1750651ac8ea31c92b71999
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -673,10 +673,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k04me2AlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41H3k04me2AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k04me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum ff5742783481b22bc1c36ff47a2172c1
+md5sum ff5742783481b22bc1c36ff47a2172c1,f5d4341ac335a32dfc949f45c6632c95
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -695,10 +695,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k04me2AlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41H3k04me2AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k04me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum edbe22867dd3a3e12182482c77770d44
+md5sum edbe22867dd3a3e12182482c77770d44,f469eba4e16ae0ff94e9dc59815546b3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -808,10 +808,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k04me3AlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41H3k04me3AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k04me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum bca3d80f22250abf2006c28d74b5a30b
+md5sum bca3d80f22250abf2006c28d74b5a30b,cae53ecf000b705d5a6ac5fee89d0502
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -830,10 +830,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k04me3AlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41H3k04me3AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k04me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 4d2db97919e502480a1eeabb5b224465
+md5sum 4d2db97919e502480a1eeabb5b224465,e6480f6f3e63503664adbbc6cf7da693
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -943,10 +943,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneDnd41H3k09acAlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41H3k09acAlnRep1.bam,wgEncodeBroadHistoneDnd41H3k09acAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 863428c2f519d0b0b9f9a894c294cc8c
+md5sum 863428c2f519d0b0b9f9a894c294cc8c,3bd565b6b706e5e8bbe0e3b6bdecfa36
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -965,10 +965,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneDnd41H3k09acAlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41H3k09acAlnRep2.bam,wgEncodeBroadHistoneDnd41H3k09acAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 97d68f49ca51c5e7399bf9fd3916b068
+md5sum 97d68f49ca51c5e7399bf9fd3916b068,ae202af41138b93fcde30991d204239e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1078,10 +1078,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneDnd41H3k09me3AlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41H3k09me3AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum f997c77f83b70605d3673466eecbbd83
+md5sum f997c77f83b70605d3673466eecbbd83,cc516b12fe3f27c3248ca2c284a0ba2f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1100,10 +1100,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneDnd41H3k09me3AlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41H3k09me3AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 5aab970d26e8adedc62180f9649c17c4
+md5sum 5aab970d26e8adedc62180f9649c17c4,0e06b8e54f331f08a1237b9ee704e981
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1213,10 +1213,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k27acAlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41H3k27acAlnRep1.bam,wgEncodeBroadHistoneDnd41H3k27acAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum ea42b206ecc0f991be6323f8ea91a205
+md5sum ea42b206ecc0f991be6323f8ea91a205,d96b4352ea04b9fb47b73ae7a29c5468
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1235,10 +1235,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k27acAlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41H3k27acAlnRep2.bam,wgEncodeBroadHistoneDnd41H3k27acAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum d349f3d2409740b2dffa8cd75f2aa96e
+md5sum d349f3d2409740b2dffa8cd75f2aa96e,b1ad66ac12700f8cfd93bffecf516e17
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1348,10 +1348,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k36me3AlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41H3k36me3AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k36me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 7dd3ebbb1618d8dfadb8f7402b138718
+md5sum 7dd3ebbb1618d8dfadb8f7402b138718,57fd28dda491527632054072a505ed7a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1370,10 +1370,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k36me3AlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41H3k36me3AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k36me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum f6a79ac4c8ffdba1d61c0c1bf93131f4
+md5sum f6a79ac4c8ffdba1d61c0c1bf93131f4,fd53ded267fb2bfaf0084627f353af81
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1483,10 +1483,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k79me2AlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41H3k79me2AlnRep1.bam,wgEncodeBroadHistoneDnd41H3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 29d09c8dba3bd812858f48ef5ec3b289
+md5sum 29d09c8dba3bd812858f48ef5ec3b289,5abeda3253d7831c01c26f4716197359
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1505,10 +1505,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H3k79me2AlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41H3k79me2AlnRep2.bam,wgEncodeBroadHistoneDnd41H3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 2c30bd36a0032e0130041c565e349993
+md5sum 2c30bd36a0032e0130041c565e349993,281b912724960ec5afc435892c75fea5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1618,10 +1618,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H4k20me1AlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41H4k20me1AlnRep1.bam,wgEncodeBroadHistoneDnd41H4k20me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum d69b493934234305cc6d4c4d5392e5ba
+md5sum d69b493934234305cc6d4c4d5392e5ba,6d6033d52a92b593e74b36c0777ea59e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1640,10 +1640,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneDnd41H4k20me1AlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41H4k20me1AlnRep2.bam,wgEncodeBroadHistoneDnd41H4k20me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 3dae9de6e4e632a7e34a590b20c72038
+md5sum 3dae9de6e4e632a7e34a590b20c72038,9f424b7ceef6b0acbafda2e2c8cf798b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2043,10 +2043,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneGm12878Ezh239875AlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878Ezh239875AlnRep1.bam,wgEncodeBroadHistoneGm12878Ezh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 57f58669d77e727da5e63061710810e3
+md5sum 57f58669d77e727da5e63061710810e3,09740ab59fd1a444ce06cfdb0ed53331
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2065,10 +2065,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneGm12878Ezh239875AlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878Ezh239875AlnRep2.bam,wgEncodeBroadHistoneGm12878Ezh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 1cdb9405911ae67a064eabeb1e19158c
+md5sum 1cdb9405911ae67a064eabeb1e19158c,42b21dcfb7e773f5d64aacdb1b463242
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4257,10 +4257,10 @@ dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
 expId 2095
-fileName wgEncodeBroadHistoneH1hescChd1a301218aStdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescChd1a301218aStdAlnRep1.bam,wgEncodeBroadHistoneH1hescChd1a301218aStdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 86b592d7e61422d57a8a3b529039f1c7
+md5sum 86b592d7e61422d57a8a3b529039f1c7,cec18b92e93dd53c413ced43f9c87348
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4281,10 +4281,10 @@ dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
 expId 2095
-fileName wgEncodeBroadHistoneH1hescChd1a301218aStdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescChd1a301218aStdAlnRep2.bam,wgEncodeBroadHistoneH1hescChd1a301218aStdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 475f354cf90191c7cae8d7ef00c22bd3
+md5sum 475f354cf90191c7cae8d7ef00c22bd3,9ec7dbc44a68a292a20942e2adee5f71
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6408,10 +6408,10 @@ dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
 expId 2096
-fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdAlnRep1.bam,wgEncodeBroadHistoneH1hescJarid1aab26049StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum c302a1d30df008a05d7ce8c2668749e9
+md5sum c302a1d30df008a05d7ce8c2668749e9,aaed3b31fee14a1af4d93bf68cf864de
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6432,10 +6432,10 @@ dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
 expId 2096
-fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdAlnRep2.bam,wgEncodeBroadHistoneH1hescJarid1aab26049StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum bf0565d45d3aea80eabf2ad40a89746b
+md5sum bf0565d45d3aea80eabf2ad40a89746b,a5cd85cee345ed43a7d1a8800be7b410
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6555,10 +6555,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
 expId 2087
-fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdAlnRep1.bam,wgEncodeBroadHistoneH1hescRbbp5a300109aStdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 1346f372dd0ec4ad691ba001ef8e8a4b
+md5sum 1346f372dd0ec4ad691ba001ef8e8a4b,4e1a0ecca6fe17ceda7179b70fad30a9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6579,10 +6579,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
 expId 2087
-fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdAlnRep2.bam,wgEncodeBroadHistoneH1hescRbbp5a300109aStdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum d58e977635b6ac865ce6c3a407703b50
+md5sum d58e977635b6ac865ce6c3a407703b50,c65d9e2df120e9e88b4dc50fa4521dc4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6991,10 +6991,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneHelas3H2azAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H2azAlnRep1.bam,wgEncodeBroadHistoneHelas3H2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 76a2edc75be0b254fb06c4e54e6795ad
+md5sum 76a2edc75be0b254fb06c4e54e6795ad,bb42c9bb3e2bb34165a640181acaa0c2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7013,10 +7013,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneHelas3H2azAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H2azAlnRep2.bam,wgEncodeBroadHistoneHelas3H2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum e34724e73e381c1167a69b72fa952d79
+md5sum e34724e73e381c1167a69b72fa952d79,0f233537882b46b848c2fe0e848b9531
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7273,10 +7273,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneHelas3H3k09me3AlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H3k09me3AlnRep1.bam,wgEncodeBroadHistoneHelas3H3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum d8957890a4a0b21712b0dc429f768292
+md5sum d8957890a4a0b21712b0dc429f768292,d5f56aafca36754620a2171ee8634e14
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7295,10 +7295,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneHelas3H3k09me3AlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H3k09me3AlnRep2.bam,wgEncodeBroadHistoneHelas3H3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum a5e1d204f0d39b5c84aa1b15ceb6c4f6
+md5sum a5e1d204f0d39b5c84aa1b15ceb6c4f6,1b49d19907429222898de744b7b4b8c1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9124,10 +9124,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneHepg2Ezh239875AlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2Ezh239875AlnRep1.bam,wgEncodeBroadHistoneHepg2Ezh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum edf2b71524e34bb1a6fd14b383d81db1
+md5sum edf2b71524e34bb1a6fd14b383d81db1,e66993f82cd950f26c7736083d0240df
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9146,10 +9146,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneHepg2Ezh239875AlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2Ezh239875AlnRep2.bam,wgEncodeBroadHistoneHepg2Ezh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 490110ea23fcd5fe8d8073e593367163
+md5sum 490110ea23fcd5fe8d8073e593367163,16023122f532a38d0de5958780db33a5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11127,10 +11127,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneHmecEzh239875AlnRep1.bam
+fileName wgEncodeBroadHistoneHmecEzh239875AlnRep1.bam,wgEncodeBroadHistoneHmecEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 6691e6cd709cd27a18f48a39575e0691
+md5sum 6691e6cd709cd27a18f48a39575e0691,5ab5f91eb1fc91dfec21df91297ce851
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11149,10 +11149,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneHmecEzh239875AlnRep2.bam
+fileName wgEncodeBroadHistoneHmecEzh239875AlnRep2.bam,wgEncodeBroadHistoneHmecEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum ea982cb6c85bd472ba3fc48a7b6a63be
+md5sum ea982cb6c85bd472ba3fc48a7b6a63be,d87d0c5b5710c0b9f62f52f47c708e57
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11262,10 +11262,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneHmecH2azAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH2azAlnRep1.bam,wgEncodeBroadHistoneHmecH2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 04cba31b994e337d44d174eaaac4e86c
+md5sum 04cba31b994e337d44d174eaaac4e86c,7a5d69e5a81d7ec5a1d11744bc4a6025
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11284,10 +11284,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneHmecH2azAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH2azAlnRep2.bam,wgEncodeBroadHistoneHmecH2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 5a69390cf889401713269d1d69c46185
+md5sum 5a69390cf889401713269d1d69c46185,e4fdd0a2fc7cd09841d8ba2ac04346f4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11397,10 +11397,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneHmecH3k09me3AlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH3k09me3AlnRep1.bam,wgEncodeBroadHistoneHmecH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 6c572be2ad28e9a56f464219be830121
+md5sum 6c572be2ad28e9a56f464219be830121,9dc0d373c2282aba0684e32c4212cf6b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11419,10 +11419,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneHmecH3k09me3AlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH3k09me3AlnRep2.bam,wgEncodeBroadHistoneHmecH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum fe1be1ab79db43eb0f9278b78499d39d
+md5sum fe1be1ab79db43eb0f9278b78499d39d,4e4da2ba6293187a6133143caf8c9d4a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12486,10 +12486,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneHmecH3k79me2AlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH3k79me2AlnRep1.bam,wgEncodeBroadHistoneHmecH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum e3694e490620d0536babea7bedca976a
+md5sum e3694e490620d0536babea7bedca976a,43af0f358014b929d7e6a9666cc3823c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12508,10 +12508,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneHmecH3k79me2AlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH3k79me2AlnRep2.bam,wgEncodeBroadHistoneHmecH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 03936c1b360e42dd56a629b1cc9937bb
+md5sum 03936c1b360e42dd56a629b1cc9937bb,bc5c1f8949ca29390f49d9dcf62a52dc
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13228,10 +13228,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneHsmmEzh239875AlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmEzh239875AlnRep1.bam,wgEncodeBroadHistoneHsmmEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 1f893a23c980414eb56c17ecd0aaba61
+md5sum 1f893a23c980414eb56c17ecd0aaba61,6e3fc8d760ca6fbd0cacc7767b391c69
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13250,10 +13250,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneHsmmEzh239875AlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmEzh239875AlnRep2.bam,wgEncodeBroadHistoneHsmmEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 44acd8c87ca2625e5778cf9cab2f7802
+md5sum 44acd8c87ca2625e5778cf9cab2f7802,4613166334358cf2b82ca956af420b46
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15556,10 +15556,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneHsmmtH3k09me3AlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtH3k09me3AlnRep1.bam,wgEncodeBroadHistoneHsmmtH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 55cd6e0fba1df373338c4016ed835466
+md5sum 55cd6e0fba1df373338c4016ed835466,45f9cecd678a8f08ddf6781dabc22102
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15578,10 +15578,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneHsmmtH3k09me3AlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtH3k09me3AlnRep2.bam,wgEncodeBroadHistoneHsmmtH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum c22a532c387e19eb92506a9610212775
+md5sum c22a532c387e19eb92506a9610212775,fe1ca7236009b9f5eb299c8359a7dbf5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17360,10 +17360,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneHuvecH2azAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH2azAlnRep1.bam,wgEncodeBroadHistoneHuvecH2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum ef337b647dc604e0b78244e12c6ce43c
+md5sum ef337b647dc604e0b78244e12c6ce43c,81f7a6b6d2b948d5d55ef0fc09f5ce9f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17382,10 +17382,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneHuvecH2azAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH2azAlnRep2.bam,wgEncodeBroadHistoneHuvecH2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum d10ac58d47001b559d6fc87c2b8e0667
+md5sum d10ac58d47001b559d6fc87c2b8e0667,83ae9ea6a4a0a180e46c03fe2d32feb3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18660,10 +18660,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneHuvecH3k79me2AlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH3k79me2AlnRep1.bam,wgEncodeBroadHistoneHuvecH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 65d9f5ca990ff805acfceed917d9129b
+md5sum 65d9f5ca990ff805acfceed917d9129b,32a410588c900905b1d8defcae5d5a71
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18682,10 +18682,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneHuvecH3k79me2AlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH3k79me2AlnRep2.bam,wgEncodeBroadHistoneHuvecH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum f727a68e7144a489c6e679b4afbc01dc
+md5sum f727a68e7144a489c6e679b4afbc01dc,de42c15f9cc3813b38508bc30aeefa7c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19645,10 +19645,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
 expId 2088
-fileName wgEncodeBroadHistoneK562Chd1a301218aStdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562Chd1a301218aStdAlnRep1.bam,wgEncodeBroadHistoneK562Chd1a301218aStdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 44106358b07db2448e6456f34e7c2b1a
+md5sum 44106358b07db2448e6456f34e7c2b1a,6d466fb27e1d448cb49babfe71c153d7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19669,10 +19669,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
 expId 2088
-fileName wgEncodeBroadHistoneK562Chd1a301218aStdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562Chd1a301218aStdAlnRep2.bam,wgEncodeBroadHistoneK562Chd1a301218aStdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 5da9827158f777bcd1d4793ef89ac74c
+md5sum 5da9827158f777bcd1d4793ef89ac74c,3e8dc2ee2df59d0bc818ddff41963505
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -20029,10 +20029,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
 expId 2089
-fileName wgEncodeBroadHistoneK562Ezh239875StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562Ezh239875StdAlnRep1.bam,wgEncodeBroadHistoneK562Ezh239875StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum be2deac429d566474c91c3574752d04f
+md5sum be2deac429d566474c91c3574752d04f,1c9ea03081d5a40f895d3a937d74683b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20053,10 +20053,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
 expId 2089
-fileName wgEncodeBroadHistoneK562Ezh239875StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562Ezh239875StdAlnRep2.bam,wgEncodeBroadHistoneK562Ezh239875StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum db037e71ad56c7e540c6649a6a40d89b
+md5sum db037e71ad56c7e540c6649a6a40d89b,f99d753d6b9d911ce88f76f2f8b07d03
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22008,10 +22008,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
 expId 2090
-fileName wgEncodeBroadHistoneK562Hdac1sc6298StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562Hdac1sc6298StdAlnRep1.bam,wgEncodeBroadHistoneK562Hdac1sc6298StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum cd45dd74d736750edc525b34be0c8408
+md5sum cd45dd74d736750edc525b34be0c8408,24f1eb20d72d7159e8b2cdb38186e1b2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22032,10 +22032,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
 expId 2090
-fileName wgEncodeBroadHistoneK562Hdac1sc6298StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562Hdac1sc6298StdAlnRep2.bam,wgEncodeBroadHistoneK562Hdac1sc6298StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 7beb4a2d1a9b7c4d8e841dab42c4755a
+md5sum 7beb4a2d1a9b7c4d8e841dab42c4755a,a94ce482acf6128d2931a6ca74735ba1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22155,10 +22155,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
 expId 2091
-fileName wgEncodeBroadHistoneK562Hdac2a300705aStdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562Hdac2a300705aStdAlnRep1.bam,wgEncodeBroadHistoneK562Hdac2a300705aStdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 94a9db41c02a9dad39b3fc6104b78658
+md5sum 94a9db41c02a9dad39b3fc6104b78658,d95243ce7c15e77c42ee97d72980c6cb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22179,10 +22179,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
 expId 2091
-fileName wgEncodeBroadHistoneK562Hdac2a300705aStdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562Hdac2a300705aStdAlnRep2.bam,wgEncodeBroadHistoneK562Hdac2a300705aStdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 150a73e331d59563816984922be767b2
+md5sum 150a73e331d59563816984922be767b2,de999a0add7283c23b238b8536ec99ea
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22449,10 +22449,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
 expId 2092
-fileName wgEncodeBroadHistoneK562Phf8a301772aStdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562Phf8a301772aStdAlnRep1.bam,wgEncodeBroadHistoneK562Phf8a301772aStdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum c489d05e6d16934f6ebc91a29f7bd182
+md5sum c489d05e6d16934f6ebc91a29f7bd182,954d2012eee4a1b00167f9b810d21e07
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22473,10 +22473,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
 expId 2092
-fileName wgEncodeBroadHistoneK562Phf8a301772aStdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562Phf8a301772aStdAlnRep2.bam,wgEncodeBroadHistoneK562Phf8a301772aStdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum c8ffae3ad040d6e35e614db06b4ada1d
+md5sum c8ffae3ad040d6e35e614db06b4ada1d,36ec04da992ee6a013f0c30b0874f828
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22596,10 +22596,10 @@ dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002085
 expId 2085
-fileName wgEncodeBroadHistoneK562Plu1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562Plu1StdAlnRep1.bam,wgEncodeBroadHistoneK562Plu1StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum d44c18edc5f61d0719e805311a4369f7
+md5sum d44c18edc5f61d0719e805311a4369f7,ff7b9e4118394f58a70cb1809a2b99e7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22620,10 +22620,10 @@ dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002085
 expId 2085
-fileName wgEncodeBroadHistoneK562Plu1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562Plu1StdAlnRep2.bam,wgEncodeBroadHistoneK562Plu1StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 98504c95d926dc10dba0039a9f24e3f8
+md5sum 98504c95d926dc10dba0039a9f24e3f8,85ed6507b654f6e3eda62c17e624b0fa
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22901,10 +22901,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
 expId 2093
-fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdAlnRep1.bam,wgEncodeBroadHistoneK562Rbbp5a300109aStdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum ca2a2a9d0455346d5d1e1b32be3c8dd8
+md5sum ca2a2a9d0455346d5d1e1b32be3c8dd8,77d1c58ef4617995387233a73b1a79e3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22925,10 +22925,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
 expId 2093
-fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdAlnRep2.bam,wgEncodeBroadHistoneK562Rbbp5a300109aStdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum c731a6e50ebd5402ef72323308f974bc
+md5sum c731a6e50ebd5402ef72323308f974bc,6cb0c8ab946a7532c86b9fe6e7d3bd0a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23048,10 +23048,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
 expId 2094
-fileName wgEncodeBroadHistoneK562Sap3039731StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562Sap3039731StdAlnRep1.bam,wgEncodeBroadHistoneK562Sap3039731StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 1e4c7440b4732fe7508e0e160ab14e9a
+md5sum 1e4c7440b4732fe7508e0e160ab14e9a,cbfd3e34706ce0109568ea3baad6b507
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23072,10 +23072,10 @@ dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
 expId 2094
-fileName wgEncodeBroadHistoneK562Sap3039731StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562Sap3039731StdAlnRep2.bam,wgEncodeBroadHistoneK562Sap3039731StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 0685ed43c42c9def181f236ca3e53cde
+md5sum 0685ed43c42c9def181f236ca3e53cde,96f4cc42a4bf92e7d8c0d0a2dd1cbf4b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24699,10 +24699,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhaEzh239875AlnRep1.bam
+fileName wgEncodeBroadHistoneNhaEzh239875AlnRep1.bam,wgEncodeBroadHistoneNhaEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 3d27cc8a3d7897947275795aaabb0421
+md5sum 3d27cc8a3d7897947275795aaabb0421,e957e943eaafcee70d5f67ac3d33a5ff
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24721,10 +24721,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhaEzh239875AlnRep2.bam
+fileName wgEncodeBroadHistoneNhaEzh239875AlnRep2.bam,wgEncodeBroadHistoneNhaEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum f02258e97410eba9b3999a1705ddcf57
+md5sum f02258e97410eba9b3999a1705ddcf57,9c1aae2beaa1319aa5fdb50ec29bf065
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24834,10 +24834,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhaH2azAlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH2azAlnRep1.bam,wgEncodeBroadHistoneNhaH2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 16dc5eff03a8beb6d3a7e34d85f548fb
+md5sum 16dc5eff03a8beb6d3a7e34d85f548fb,7b636d3ff9b7dd215a34dd7815bc3e48
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24856,10 +24856,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhaH2azAlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH2azAlnRep2.bam,wgEncodeBroadHistoneNhaH2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 8dfb2fd3a1be94f614c3d11a4507b25f
+md5sum 8dfb2fd3a1be94f614c3d11a4507b25f,5810c35b1ac1fa5c0e854d6b4cd61339
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24969,10 +24969,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhaH3k04me2AlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH3k04me2AlnRep1.bam,wgEncodeBroadHistoneNhaH3k04me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 517bb28ca47aed7d898b32dc0e9cde9e
+md5sum 517bb28ca47aed7d898b32dc0e9cde9e,a3ee6296c0a36b0755d1edcde112ddd3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24991,10 +24991,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhaH3k04me2AlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH3k04me2AlnRep2.bam,wgEncodeBroadHistoneNhaH3k04me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 9f907f22d94c32cf56f05a92134cb633
+md5sum 9f907f22d94c32cf56f05a92134cb633,f1b524f7928c60198811263873d2876e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25104,10 +25104,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhaH3k09acAlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH3k09acAlnRep1.bam,wgEncodeBroadHistoneNhaH3k09acAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum f2f0a91c7990ab331ed3fb2d8ed9ed59
+md5sum f2f0a91c7990ab331ed3fb2d8ed9ed59,6edb564ad192794c45d4e5bb82e6add1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25126,10 +25126,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhaH3k09acAlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH3k09acAlnRep2.bam,wgEncodeBroadHistoneNhaH3k09acAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 4879457489d3884c1b1538bc9431066a
+md5sum 4879457489d3884c1b1538bc9431066a,b51475af7012fa1816e8930239c4da48
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25239,10 +25239,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhaH3k09me3AlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH3k09me3AlnRep1.bam,wgEncodeBroadHistoneNhaH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 3256ed294cb9a702480f1e1ce5eee858
+md5sum 3256ed294cb9a702480f1e1ce5eee858,f19b2a9abc9319c82280c51423ef2b01
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25261,10 +25261,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhaH3k09me3AlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH3k09me3AlnRep2.bam,wgEncodeBroadHistoneNhaH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum e2147c299f4458286faff55cc8f42887
+md5sum e2147c299f4458286faff55cc8f42887,f2f7dfab669c17a2a85fa7850c68d2d2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26171,10 +26171,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhaH3k79me2AlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH3k79me2AlnRep1.bam,wgEncodeBroadHistoneNhaH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 97404dee75e8b1121159fdd452691730
+md5sum 97404dee75e8b1121159fdd452691730,3e5b2283e29aed5807aff2dc9549845c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26193,10 +26193,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhaH3k79me2AlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH3k79me2AlnRep2.bam,wgEncodeBroadHistoneNhaH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 132967fce9274ea5df9a5193639f55e4
+md5sum 132967fce9274ea5df9a5193639f55e4,3f904b66bc8a30d600343a3e953026d4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26306,10 +26306,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhaH4k20me1AlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH4k20me1AlnRep1.bam,wgEncodeBroadHistoneNhaH4k20me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum d6e0a5086748de2ca7cf4725bb578400
+md5sum d6e0a5086748de2ca7cf4725bb578400,0b4c739e295fdacae0710cef9478a0f4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26328,10 +26328,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhaH4k20me1AlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH4k20me1AlnRep2.bam,wgEncodeBroadHistoneNhaH4k20me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum acf70af625ffd001c1c03f62af0fb384
+md5sum acf70af625ffd001c1c03f62af0fb384,d3878bb87ebcca65b1c7b2a5217f23bb
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26721,10 +26721,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneNhdfadEzh239875AlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadEzh239875AlnRep1.bam,wgEncodeBroadHistoneNhdfadEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum e2160645116330fc1b482be2a83e8e7a
+md5sum e2160645116330fc1b482be2a83e8e7a,30dbb80a6c020ed8a1b925cdcc311797
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26743,10 +26743,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneNhdfadEzh239875AlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadEzh239875AlnRep2.bam,wgEncodeBroadHistoneNhdfadEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 7dea483bcd0e280d6cb5bc25bf55039d
+md5sum 7dea483bcd0e280d6cb5bc25bf55039d,5b3977d16d1c286bc32ec7a2202360aa
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26856,10 +26856,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhdfadH3k04me1AlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadH3k04me1AlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k04me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 2015a8c1237fb600e994dd44a5f7e424
+md5sum 2015a8c1237fb600e994dd44a5f7e424,9ebe67698c9466c97923552d99e3b36c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26878,10 +26878,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhdfadH3k04me1AlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadH3k04me1AlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k04me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 21ea7fafe88ddc42a379c51e80773fa3
+md5sum 21ea7fafe88ddc42a379c51e80773fa3,c1038be7075686c20a8686bbc56ce659
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -26991,10 +26991,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhdfadH3k09me3AlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadH3k09me3AlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 50295bc6514b549d13b903cc22e04928
+md5sum 50295bc6514b549d13b903cc22e04928,c400f09851cf77c55bf1fcb1fc7a1fad
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -27013,10 +27013,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhdfadH3k09me3AlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadH3k09me3AlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 88d4ad4acceece29a287be0acb9ed42a
+md5sum 88d4ad4acceece29a287be0acb9ed42a,6c49bbae0d1f0ce529d137cd8a4834a2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -27891,10 +27891,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhdfadH3k79me2AlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadH3k79me2AlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 65e45ce2876ffc8daf520f9c764a1a45
+md5sum 65e45ce2876ffc8daf520f9c764a1a45,1aa17d140961e0acf69c36c642ab6d89
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -27913,10 +27913,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
-fileName wgEncodeBroadHistoneNhdfadH3k79me2AlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadH3k79me2AlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum db0e896990f8c28ecffad9c59cc1c5a7
+md5sum db0e896990f8c28ecffad9c59cc1c5a7,10c98ec0d9aecbc4c381f63626e6a8f7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -28179,10 +28179,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhdfadH4k20me1AlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadH4k20me1AlnRep1.bam,wgEncodeBroadHistoneNhdfadH4k20me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum caedb19ecab838a4e89973364c0b4040
+md5sum caedb19ecab838a4e89973364c0b4040,ae9621931019fee648d213727476ea1e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -28201,10 +28201,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhdfadH4k20me1AlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadH4k20me1AlnRep2.bam,wgEncodeBroadHistoneNhdfadH4k20me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 220c3558c844589a5add42e5f6c47e8a
+md5sum 220c3558c844589a5add42e5f6c47e8a,545e4c244be035fd75cd61dcdfb383b8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -28223,10 +28223,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhdfadH4k20me1AlnRep3.bam
+fileName wgEncodeBroadHistoneNhdfadH4k20me1AlnRep3.bam,wgEncodeBroadHistoneNhdfadH4k20me1AlnRep3.bam.bai
 grant Bernstein
 lab Broad
-md5sum b790e6568ca08b1eae1f136bff836f5b
+md5sum b790e6568ca08b1eae1f136bff836f5b,c8dca70b305394ac85551e9f42ad1fc8
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -28703,10 +28703,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneNhekEzh239875AlnRep1.bam
+fileName wgEncodeBroadHistoneNhekEzh239875AlnRep1.bam,wgEncodeBroadHistoneNhekEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 9e8ad7084b167215b1aadf365098dc88
+md5sum 9e8ad7084b167215b1aadf365098dc88,1c297cb858e6787fec204255fe67a922
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -28726,10 +28726,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneNhekEzh239875AlnRep2.bam
+fileName wgEncodeBroadHistoneNhekEzh239875AlnRep2.bam,wgEncodeBroadHistoneNhekEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 7115855de808b79bc8a9c695846f8e99
+md5sum 7115855de808b79bc8a9c695846f8e99,389d639cd85a74b34964b7b03db3838b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -28844,10 +28844,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneNhekH2azAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH2azAlnRep1.bam,wgEncodeBroadHistoneNhekH2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 95fe6f87de44b25aeeb826e014577202
+md5sum 95fe6f87de44b25aeeb826e014577202,c62a946d0d73c36c729686cf92cd659e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -28867,10 +28867,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneNhekH2azAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH2azAlnRep2.bam,wgEncodeBroadHistoneNhekH2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 071e5721fe4611fcf8a8329bb993dbf3
+md5sum 071e5721fe4611fcf8a8329bb993dbf3,5bd93010b2200828b7f27fe331687db7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -28985,10 +28985,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneNhekH3k09me3AlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH3k09me3AlnRep1.bam,wgEncodeBroadHistoneNhekH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum e0767b8d02dcf99a20ec9e010007ae23
+md5sum e0767b8d02dcf99a20ec9e010007ae23,f8d80a4b2de8c4e61ffe8eea70519e5b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -29008,10 +29008,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneNhekH3k09me3AlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH3k09me3AlnRep2.bam,wgEncodeBroadHistoneNhekH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 58ec2ea53b288f97c5ecf059112f0edf
+md5sum 58ec2ea53b288f97c5ecf059112f0edf,b03af2eabe0f19a7efd39a0d672852bd
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -30398,10 +30398,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneNhekH3k79me2AlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH3k79me2AlnRep1.bam,wgEncodeBroadHistoneNhekH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 6f97cbd0f26a85e6cc7de92a1ba6bf0e
+md5sum 6f97cbd0f26a85e6cc7de92a1ba6bf0e,89154511ad2a421d3e9c81d64f698030
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -30421,10 +30421,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneNhekH3k79me2AlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH3k79me2AlnRep2.bam,wgEncodeBroadHistoneNhekH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum ef9e00247afc86fc2805f51d44035704
+md5sum ef9e00247afc86fc2805f51d44035704,c9339cb8b547423ba5bd9a19e2644c8c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -31625,10 +31625,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneNhlfEzh239875AlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfEzh239875AlnRep1.bam,wgEncodeBroadHistoneNhlfEzh239875AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 31c42686f52e1077960e713bbe7ffc22
+md5sum 31c42686f52e1077960e713bbe7ffc22,7ea6ea0b0719f98c5125a35050482e42
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -31647,10 +31647,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodeBroadHistoneNhlfEzh239875AlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfEzh239875AlnRep2.bam,wgEncodeBroadHistoneNhlfEzh239875AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum daaf08134f02796d0b16ec4a0e631d79
+md5sum daaf08134f02796d0b16ec4a0e631d79,7141bcfd92cd2fcb1768c6a80e7495e2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -31760,10 +31760,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhlfH2azAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH2azAlnRep1.bam,wgEncodeBroadHistoneNhlfH2azAlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum a6098298a8b4d174eaf9d7bdb2de62e8
+md5sum a6098298a8b4d174eaf9d7bdb2de62e8,5df4933e13d2dbfe6c31d6908fdc0d44
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -31782,10 +31782,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhlfH2azAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH2azAlnRep2.bam,wgEncodeBroadHistoneNhlfH2azAlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 8f8e386411d61a7d01bb27444558621a
+md5sum 8f8e386411d61a7d01bb27444558621a,2a04ebeb0523a992e2f4ca188111298f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -31895,10 +31895,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhlfH3k09me3AlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH3k09me3AlnRep1.bam,wgEncodeBroadHistoneNhlfH3k09me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 9a7a0687cd7632c3af603db8273df442
+md5sum 9a7a0687cd7632c3af603db8273df442,19ab9c9f443783e7d8ce016e0afde580
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -31917,10 +31917,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneNhlfH3k09me3AlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH3k09me3AlnRep2.bam,wgEncodeBroadHistoneNhlfH3k09me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 4c22d4e4d4fcd80ee41368d73b180b01
+md5sum 4c22d4e4d4fcd80ee41368d73b180b01,2dfdb64588f9ec5b6214ca52e0ae07b9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -32984,10 +32984,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneNhlfH3k79me2AlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH3k79me2AlnRep1.bam,wgEncodeBroadHistoneNhlfH3k79me2AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 7e927c62a44e1652724f7e5a429d093b
+md5sum 7e927c62a44e1652724f7e5a429d093b,127568397fc0e35b3923ba338f8a6d54
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -33006,10 +33006,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneNhlfH3k79me2AlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH3k79me2AlnRep2.bam,wgEncodeBroadHistoneNhlfH3k79me2AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum ba143f7b5e294649571e87cbf214b77c
+md5sum ba143f7b5e294649571e87cbf214b77c,fb741b1f0ae70c561b179c397cfb8beb
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -33437,10 +33437,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneOsteoH3k27me3AlnRep1.bam
+fileName wgEncodeBroadHistoneOsteoH3k27me3AlnRep1.bam,wgEncodeBroadHistoneOsteoH3k27me3AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum d64cee633074e9f1221ba5b9544c1904
+md5sum d64cee633074e9f1221ba5b9544c1904,7336ae6e8ed668bf6256a07c14f3fa6b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -33459,10 +33459,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneOsteoH3k27me3AlnRep2.bam
+fileName wgEncodeBroadHistoneOsteoH3k27me3AlnRep2.bam,wgEncodeBroadHistoneOsteoH3k27me3AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 329f047d54e6287766daf53b2856babd
+md5sum 329f047d54e6287766daf53b2856babd,0884190aa68163857cbefef55492f380
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -33707,10 +33707,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneOsteoH4k20me1AlnRep1.bam
+fileName wgEncodeBroadHistoneOsteoH4k20me1AlnRep1.bam,wgEncodeBroadHistoneOsteoH4k20me1AlnRep1.bam.bai
 grant Bernstein
 lab Broad
-md5sum 45705cc028178f26a864f5ad73f3c2ec
+md5sum 45705cc028178f26a864f5ad73f3c2ec,318a3f89569bef72cdbb5ce56df8dd62
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -33729,10 +33729,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
-fileName wgEncodeBroadHistoneOsteoH4k20me1AlnRep2.bam
+fileName wgEncodeBroadHistoneOsteoH4k20me1AlnRep2.bam,wgEncodeBroadHistoneOsteoH4k20me1AlnRep2.bam.bai
 grant Bernstein
 lab Broad
-md5sum 9b48994f6ee7b949bb92b6104c23a710
+md5sum 9b48994f6ee7b949bb92b6104c23a710,2617b393e84dca6d4f655653c9a61834
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -35029,4 +35029,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: -532880631
+# MAGIC: 729054955
