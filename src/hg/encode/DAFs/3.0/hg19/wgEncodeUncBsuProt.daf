@@ -1,4 +1,4 @@
-# Data Agreement File $Revision: 1.0 $
+# Data Agreement File $Revision: 2.0 $
 #
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -26,7 +26,7 @@ lab               UNC/BSU
 dataType          Proteogenomics
 compositeSuffix   UncBsuProt
 group             expression
-variables         cell, localization
+variables         cell, localization, protocol
 assembly          hg19
 
 
@@ -36,4 +36,21 @@ validationSettings allowReloads
 view             Signal
 type             peptideMapping
 hasReplicates    no
-required         yes
+required         no 
+
+view             RawSignal
+type             peptideMapping
+hasReplicates    no
+required         no 
+downloadOnly     yes
+
+view             Modified???
+type             bigBed
+hasReplicates    no
+required         no 
+
+view             ModifiedRaw??
+type             bigBed
+hasReplicates    no
+required         no 
+downloadOnly     yes

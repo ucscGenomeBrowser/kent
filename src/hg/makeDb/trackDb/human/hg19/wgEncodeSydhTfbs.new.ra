@@ -1867,15 +1867,6 @@ wgEncode 1
         color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm12878NfkbIggrabPk
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM78 NKB IgR
-        longLabel GM12878 NFKB IgG-rab ChIP-seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=NFKB cellType=1GM12878 control=IGGRAB treatment=aNone
-        type narrowPeak
-        color 153,38,0
-        # subId=4165 dateSubmitted=2011-06-03
-
         track wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM78 TNF NKB IgR
@@ -3604,15 +3595,6 @@ wgEncode 1
         #color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 		# revoked
-
-        track wgEncodeSydhTfbsGm12878NfkbIggrabSig
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM78 NKB IgR
-        longLabel GM12878 NFKB IgG-rab ChIP-seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=NFKB cellType=1GM12878 control=IGGRAB treatment=aNone
-        type bigWig 0.000000 9094.099609
-        color 153,38,0
-        # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off

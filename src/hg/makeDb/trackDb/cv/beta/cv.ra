@@ -3446,7 +3446,7 @@ lineage mesoderm
 #vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 vendorId PBDE
 vendorName Farnham lab
-orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
+orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205 
 termId BTO:0000574 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000574
 sex M
@@ -3668,7 +3668,7 @@ term SK-N-SH
 tag SKNSH
 type Cell Line
 organism human
-description neuroblastoma, newly promoted to tier 2: not in 2011 analysis PROVISONAL The SK-N-SH line was established from a neuroblastoma in a 4 year old individual.
+description neuroblastoma, newly promoted to tier 2: not in 2011 analysis, the SK-N-SH line was established from a neuroblastoma in a 4 year old individual.
 tissue brain
 lineage ectoderm
 vendorName ATCC
@@ -6739,7 +6739,7 @@ vendorName Abcam
 vendorId ab10483
 orderUrl http://www.abcam.com/index.html?datasheet=10483
 lab Farnham
-targetId GeneCard:TRIM2B
+targetId GeneCard:TRIM28
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation Human_-_KAP1(Western_blot,Immunoprecipitation-Western_blot):human_KAP1_validation_Farnham.pdf
 label KAP1 (ab10483)
@@ -7871,7 +7871,7 @@ targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, 
 antibodyDescription rabbit polyclonal. Antibody Target: SUZ12
 vendorName Antibody made by Farnham lab
 vendorId SUZ12
-orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
+orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205
 lab Farnham
 targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
@@ -9437,7 +9437,7 @@ type treatment
 term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
-description 24 h with 1% p02 and 10mM Lactate, pH 6.7
+description 24 h with 1% p02 and 10mM Lactate, pH 6.7 (Crawford)
 type treatment
 
 #missing concentration
@@ -10093,7 +10093,7 @@ term 5C
 tag 5C
 type dataType
 label 5C
-description 5C Interactions
+description Chromosome Conformation Capture Carbon Copy Genomic Interactions
 dataGroup Other
 
 term AffyExonArray
@@ -10122,7 +10122,7 @@ term ChipSeq
 tag CHIPSEQ
 type dataType
 label ChIP-seq
-description ChIP-seq
+description Chromatin Immunoprecipitation followed by sequencing
 dataGroup TFBS/Histones
 
 term Cluster
@@ -10133,12 +10133,12 @@ description Element cluster by integrative analysis
 dataGroup Other
 
 #tag not standard to match hg18
-term Cnv
-tag CNVdt
-type dataType
-label CNV
-description Copy Number Variation
-dataGroup Other
+#term Cnv
+#tag CNVdt
+#type dataType
+#label CNV
+#description Copy Number Variation
+#dataGroup Other
 
 term Combined
 tag COMBO
@@ -10175,7 +10175,7 @@ term FaireSeq
 tag FAIRESEQ
 type dataType
 label FAIRE-seq
-description FAIRE followed by sequencing
+description Formaldehyde-Assisted Isolation of Regulatory Elements followed by sequencing
 dataGroup Open Chromatin
 
 term Genotype
@@ -10188,22 +10188,22 @@ dataGroup Other
 term Gencode
 tag GENCODE
 type dataType
-label Gencode
-description Gencode
+label GENCODE
+description GENCODE
 dataGroup Other
 
 term ChiaPet
 tag CHIAPET
 type dataType
-label ChIA-pet
-description ChIA-pet
+label ChIA-PET
+description Chromatin Interaction Analysis Paired-End Tags
 dataGroup Other
 
 term Orchid
 tag ORCHID
 type dataType
 label ORChID
-description ORChID
+description OH Radical Cleavage Intensity Database
 dataGroup Other
 
 term Mapability
@@ -10217,21 +10217,21 @@ term MethylArray
 tag METHYLARRAY
 type dataType
 label Methyl Array
-description Methyl Bead Array
+description DNA Methylation Bead Array
 dataGroup DNA Methylation
 
 term MethylSeq
 tag METHYLSEQ
 type dataType
 label Methyl-Seq
-description MethylSeq
+description DNA Methylation sequencing
 dataGroup DNA Methylation
 
 term MethylRrbs
 tag METHYLRRBS
 type dataType
 label Methyl RRBS
-description Methyl RRBS
+description DNA Methylation Reduced Representation Bisulfite Sequencing
 dataGroup DNA Methylation
 
 # tag not standard to match hg18
@@ -10259,8 +10259,8 @@ dataGroup Other
 term RepliSeq
 tag  REPLISEQ
 type dataType
-label Repli-Seq
-description Replication Timing
+label Repli-seq
+description Assessment of DNA Replication Timing
 dataGroup Other
 
 # tag not standard to match hg18
@@ -10305,14 +10305,14 @@ term RipChip
 tag  RIPCHIP
 type dataType
 label RIP-chip
-description Rna IP measured on microarray
+description RNA Immunoprecipitation measured on microarray
 dataGroup RNA Binding Proteins
 
 term RipSeq
 tag  RIPSEQ
 type dataType
 label RIP-seq
-description RNA-seq on RIP-chip data
+description RNA binding protein associated mRNA sequencing
 dataGroup RNA Binding Proteins
 
 term Switchgear
@@ -10327,7 +10327,7 @@ term TfbsValid
 tag TFBSVALID
 type dataType
 label TFBS-Valid
-description TFBS-Valid
+description Valid Transcription Factor Binding Sites
 dataGroup Other
 
 ### version
@@ -11035,16 +11035,6 @@ labPiFull Kevin Struhl
 grantPi Snyder
 organism human
 
-#This is being depricated to be replaced by USC
-#term UCD
-#tag UCD
-#type lab
-#label Farnham - University of California at Davis
-#description Farnham - University of California at Davis
-#labPi Farnham
-#labPiFull Peggy Farnham
-#grantPi Snyder
-#organism human
 term USC
 tag USC
 type lab

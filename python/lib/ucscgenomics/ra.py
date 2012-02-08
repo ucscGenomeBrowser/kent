@@ -81,7 +81,8 @@ class RaFile(OrderedDict):
 
     def read(self, filePath, key=None):
         '''
-        Reads an rafile stanza by stanza, and internalizes it.
+        Reads an rafile stanza by stanza, and internalizes it. Don't override
+        this for derived types, instead override readStanza.
         '''
 
         file = open(filePath, 'r')
@@ -124,6 +125,18 @@ class RaFile(OrderedDict):
 
 
     def readStanza(self, stanza, key=None):
+        '''
+        Override this to create custom stanza behavior in derived types.
+        
+        IN
+        stanza: list of strings with keyval data
+        key: optional key for selective key filtering. Don't worry about it
+
+        OUT
+        namekey: the key of the stanza's name
+        nameval: the value of the stanza's name
+        entry: the stanza itself
+        '''
         entry = RaStanza()
         if entry.readStanza(stanza, key) == None:
             return None, None, None
@@ -407,21 +420,24 @@ class RaFile(OrderedDict):
                     else:
                         tempStanza[i] = self[stanza][i]
             ret[stanza] = tempStanza
-
         return ret
 
     def printTrackDbFormat(self):
+        '''
+        Converts a .ra file into TrackDb format.
+        Returns a printable string.
+        '''
         retstring = ""
-        space = False
-        tab = False
+        parentTrack = ""
+        tier = 0
         commentList = []
+        p = re.compile('^.*parent')
+        p2 = re.compile('^.*subTrack')
         for stanza in self:
             if stanza == "":
                 if commentList:
                     for line in commentList:
-                        if space == True:
-                            retstring += "    "
-                        if tab == True:
+                        for i in range(tier):
                             retstring += "    "
                         retstring += line + "\n"
                     commentList = []
@@ -430,24 +446,27 @@ class RaFile(OrderedDict):
             if stanza.startswith("#"):
                 commentList.append(stanza)
                 continue
-            if "visibility" in self[stanza].keys():
-                tab = False
-                space = True
-            if "subGroups" in self[stanza].keys():
-                tab = True
-                space = True
+            keys = self[stanza].keys()
+            parentKey = "NOKEYFOUND"
+            for key in keys:
+                if p.search(key):
+                    parentKey = key
+                if p2.search(key):
+                    parentKey = key
+            if parentKey in keys:
+                if parentTrack not in self[stanza][parentKey] or parentTrack == "":
+                    parentTrack = self[stanza]['track']
+                    tier = 1
+                else:
+                    tier = 2
             if commentList:
                 for line in commentList:
-                    if space == True:
-                        retstring += "    "
-                    if tab == True:
+                    for i in range(tier):
                         retstring += "    "
                     retstring += line + "\n"
                 commentList = []
             for line in self[stanza]:
-                if space == True:
-                    retstring += "    "
-                if tab == True:
+                for i in range(tier):
                     retstring += "    "
                 if line.startswith("#"):
                     retstring += line + "\n"
@@ -455,7 +474,6 @@ class RaFile(OrderedDict):
                     retstring += line + " " + self[stanza][line] + "\n"
             retstring += "\n"
         return retstring
-
 
     def __str__(self):
         str = ''
@@ -472,19 +490,19 @@ class RaStanza(OrderedDict):
     Holds an individual entry in the RaFile.
     '''
 
+    @property
+    def name(self):
+        return self._name
+
     def __init__(self):
         self._name = ''
         self._nametype = ''
         OrderedDict.__init__(self)
 
-    @property
-    def name(self):
-        return self._name
-
-
     def readStanza(self, stanza, key=None):
         '''
-        Populates this entry from a single stanza
+        Populates this entry from a single stanza. Override this to create
+        custom behavior in derived classes
         '''
 
         for line in stanza:

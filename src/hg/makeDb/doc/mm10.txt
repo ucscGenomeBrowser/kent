@@ -1,0 +1,715 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the mm10
+# Mus musculus (mouse)
+
+#	DATE:   07-Dec-2011
+#	ORGANISM:       Mus musculus
+#	TAXID:  10090
+#	ASSEMBLY LONG NAME:     Genome Reference Consortium Mouse Build 38
+#	ASSEMBLY SHORT NAME:    GRCm38
+#	ASSEMBLY SUBMITTER:     Genome Reference Consortium
+#	ASSEMBLY TYPE:  Haploid + alternate loci
+#	NUMBER OF ASSEMBLY-UNITS:       16
+#	ASSEMBLY ACCESSION:     GCA_000001635.2
+
+#	rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mus_musculus/GRCm38/
+
+#	Genome ID:
+#	http://www.ncbi.nlm.nih.gov/genome/52
+
+#	Taxonomy:
+#	http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=10090
+#	http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=39442
+
+#	GRC information
+#	http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/mouse/
+
+#	Mitochondrial sequence:
+#	http://www.ncbi.nlm.nih.gov/bioproject/13767
+#	C57BL/6J sequence:
+#	http://www.ncbi.nlm.nih.gov/bioproject/51977
+#	Finishing project:
+#	http://www.ncbi.nlm.nih.gov/bioproject/20689
+
+#	Assembly ID: 165668
+#	http://www.ncbi.nlm.nih.gov/genome/assembly/165668/
+
+#	Celera Assembly
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAHY00
+
+#############################################################################
+# fetch sequence from genbank (DONE - 2012-01-30 - Hiram)
+    mkdir -p /hive/data/genomes/mm10/genbank
+    cd /hive/data/genomes/mm10/genbank
+
+    rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Mus_musculus/GRCm38/ ./
+
+    # measure sequence to be used here
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/*.fa.gz \
+	Primary_Assembly/unplaced_scaffolds/FASTA/*.fa.gz \
+	Primary_Assembly/unlocalized_scaffolds/FASTA/*.fa.gz \
+	non-nuclear/assembled_chromosomes/FASTA/chrMT.fa.gz
+    # 2730871774 bases (78088274 N's 2652783500 real 2652783500 upper 0 lower)
+    # in 66 sequences in 29 files
+    #	Total size: mean 41376845.1 sd 63617337.3 min 1976
+    #	(gi|371559559|gb|JH584295.1|) max 195471971
+    #	(gi|371561115|gb|CM000994.2|) median 184189
+ 
+#############################################################################
+# fixup names for UCSC standards (WORKING - 2012-02-06 - Hiram)
+    mkdir /hive/data/genomes/mm10/ucsc
+    cd /hive/data/genomes/mm10/ucsc
+
+    ########################  Assembled Chromosomes
+    cat << '_EOF_' > toUcsc.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../genbank/Primary_Assembly/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.agp.gz|") or die "can not read chr${chrN}.agp.gz";
+    open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz|") or die "can not read chr${chrN}.fa.gz";
+    open (UC, ">chr${chrN}.fa") or die "can not write to chr${chrN}.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x toUcsc.pl
+    time ./toUcsc.pl
+    #	real    0m53.256s
+    faSize chr*.fa
+    #	2725521370 bases (77999939 N's 2647521431 real 2647521431 upper 0
+    #	lower) in 21 sequences in 21 files
+    #	Total size: mean 129786731.9 sd 33408399.1 min 61431566 (chr19)
+    #	max 195471971 (chr1) median 124902244
+
+    ########################  Unplaced scaffolds
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, ">unplaced.agp") or die "can not write to unplaced.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;    
+        printf UC "chrUn_%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, ">unplaced.fa") or die "can not write to unplaced.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\.1\|.*//;
+        printf UC ">chrUn_$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+    time ./unplaced.pl
+    #	real    0m0.119s
+    # make sure none of the names got to be over 31 characers long:
+    grep -v "^#" unplaced.agp | cut -f1 | sort | uniq -c | sort -rn
+    # not much in that sequence:
+    faSize unplaced.fa
+    #	803895 bases (62411 N's 741484 real 741484 upper 0 lower)
+    #	in 22 sequences in 1 files
+    #	Total size: mean 36540.7 sd 21518.0 min 20208 (chrUn_GL456368)
+    #	max 114452 (chrUn_JH584304) median 28772
+
+    ########## chrM
+    zcat ../genbank/non-nuclear/assembled_chromosomes/FASTA/chrMT.fa.gz \
+	| sed -e "s/^>.*/>chrM/" > chrM.fa
+    zcat ../genbank/non-nuclear/assembled_chromosomes/AGP/chrMT.comp.agp.gz \
+	| sed -e "s/^AY172335.1/chrM/" > chrM.agp
+
+    ########################  Unlocalized scaffolds
+    cat << '_EOF_' > unlocalized.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+my %chrNames;
+
+open (FH, "<../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf") or
+        die "can not read Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+    $chrNames{$chrN} += 1;
+}
+close (FH);
+
+foreach my $chrN (keys %chrNames) {
+    my $agpFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/AGP/chr$chrN.unlocalized.scaf.agp.gz";
+    my $fastaFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/FASTA/chr$chrN.unlocalized.scaf.fa.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    open (UC, ">chr${chrN}_random.agp") or die "can not write to chr${chrN}_random.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            chomp $line;
+            my (@a) = split('\t', $line);
+            my $acc = $a[0];
+            my $accNo1 = $acc;
+            $accNo1 =~ s/.1$//;
+            die "ERROR: acc not .1: $acc" if ($accNo1 =~ m/\./);
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${accNo1}_random";
+            printf UC "%s", $ucscName;
+            for (my $i = 1; $i < scalar(@a); ++$i) {
+                printf UC "\t%s", $a[$i];
+            }
+            printf UC "\n";
+        }
+    }
+    close (FH);
+    close (UC);
+    printf "chr%s\n", $chrN;
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    open (UC, ">chr${chrN}_random.fa") or die "can not write to chr${chrN}_random.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            chomp $line;
+            my $acc = $line;
+            $acc =~ s/.*gb\|//;
+            $acc =~ s/\|.*//;
+            my $accNo1 = $acc;
+            $accNo1 =~ s/.1$//;
+            die "ERROR: acc not .1: $acc" if ($accNo1 =~ m/\./);
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${accNo1}_random";
+            printf UC ">$ucscName\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x unlocalized.pl
+    time ./unlocalized.pl
+    #	real    0m0.430s
+    faSize chr*_random.fa
+    #	4530210 bases (25924 N's 4504286 real 4504286 upper 0 lower)
+    #	in 22 sequences in 6 files
+    #	Total size: mean 205918.6 sd 184688.0 min 1976 (chr4_JH584295_random)
+    #	max 953012 (chr5_JH584299_random) median 191905
+    # verify none of the names are longer than 31 characters:
+    grep -h -v "^#" chr*_random.agp | cut -f1 | sort | uniq -c | sort -nr
+
+
+    # compress all these fasta and agp files:
+    gzip *.fa *.agp
+    #	verify all the sequence is still here after all this rigamarole:
+    time faSize *.fa.gz
+    #	2730871774 bases (78088274 N's 2652783500 real 2652783500 upper 0
+    #	lower) in 66 sequences in 29 files
+    #	Total size: mean 41376845.1 sd 63617337.3 min 1976
+    #	(chr4_JH584295_random) max 195471971 (chr1) median 184189
+
+#############################################################################
+#   Initial browser build (DONE - 2012-01-06 - Hiram)
+    cd /hive/data/genomes/mm10
+    cat << '_EOF_' > mm10.config.ra
+# Config parameters for makeGenomeDb.pl:
+db mm10
+clade mammal
+genomeCladePriority 40
+scientificName Mus musculus
+commonName Mouse
+assemblyDate Dec. 2011
+assemblyLabel Genome Reference Consortium Mouse Build 38 (GCA_000001635.2)
+assemblyShortLabel GRCm38
+orderKey 1209
+mitoAcc none
+fastaFiles /hive/data/genomes/mm10/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/mm10/ucsc/*.agp.gz
+dbDbSpeciesDir mouse
+taxId   10090
+ncbiAssemblyId   165668
+ncbiAssemblyName   GRCm38
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -stop=agp mm10.config.ra > agp.log 2>&1 
+    #	real    3m4.568s
+    # check the end of agp.log to verify it is OK
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
+	-continue=db mm10.config.ra > db.log 2>&1 
+    #	real    20m51.374s
+    # verify the end of db.log indicates successful
+
+
+#############################################################################
+# running repeat masker (DONE - 2012-02-06 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/repeatMasker
+    cd /hive/data/genomes/mm10/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek mm10 > do.log 2>&1 &
+    #	real    609m48.767s
+
+    cat faSize.rmsk.txt
+    #	2730871774 bases (78088274 N's 2652783500 real 1456094545 upper
+    #	1196688955 lower) in 66 sequences in 1 files
+    #	Total size: mean 41376845.1 sd 63617337.3 min 1976
+    #	(chr4_JH584295_random) max 195471971 (chr1) median 184189
+    #	%43.82 masked total, %45.11 masked real
+
+    grep -i versi do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+
+    time featureBits -countGaps mm10 rmsk
+    #	1196694219 bases of 2730871774 (43.821%) in intersection
+    #	real    0m30.460s
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2012-02-06 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/simpleRepeat
+    cd /hive/data/genomes/mm10/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	mm10 > do.log 2>&1 &
+    #	real    16m35.603s
+
+    #	batch failed, one job failed:
+    # ./TrfRun.csh /hive/data/genomes/mm10/TrfPart/062/062.lst.bed
+    # which is the chrM sequence - it has no simple repeats
+    # create an empty output file result:
+    touch /hive/data/genomes/mm10/TrfPart/062/062.lst.bed
+    # go to encodek and create the run.time file to signal this step is done
+    cd /hive/data/genomes/mm10/bed/simpleRepeat/run.cluster
+    para time > run.time
+# Completed: 70 of 71 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      13103s     218.38m     3.64h    0.15d  0.000 y
+# IO & Wait Time:                   163s       2.72m     0.05h    0.00d  0.000 y
+# Average job time:                 190s       3.16m     0.05h    0.00d
+# Longest finished job:             392s       6.53m     0.11h    0.00d
+# Submission to last job:           894s      14.90m     0.25h    0.01d
+
+
+    # continue procedure:
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	-continue=filter mm10 > filter.log 2>&1 &
+    #	real    1m20.021s
+
+    cat fb.simpleRepeat 
+    #	92161833 bases of 2652783500 (3.474%) in intersection
+
+    # when RepeatMasker is done, add this mask to the sequence:
+    cd /hive/data/genomes/mm10
+    twoBitMask mm10.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed mm10.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa mm10.2bit stdout | faSize stdin > faSize.mm10.2bit.txt
+    cat faSize.mm10.2bit.txt
+    #	2730871774 bases (78088274 N's 2652783500 real 1454267808 upper
+    #	1198515692 lower) in 66 sequences in 1 files
+    #	Total size: mean 41376845.1 sd 63617337.3 min 1976
+    #	(chr4_JH584295_random) max 195471971 (chr1) median 184189
+    #	%43.89 masked total, %45.18 masked real
+
+    # set SymLink in gbdb to this masked sequence
+    rm /gbdb/mm10/mm10.2bit
+    ln -s `pwd`/mm10.2bit /gbdb/mm10/mm10.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-02-06 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/gap
+    cd /hive/data/genomes/mm10/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../mm10.unmasked.2bit > findMotif.txt 2>&1
+    #	real    1m0.372s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits -countGaps mm10 -not gap -bed=notGap.bed
+    #	2658879040 bases of 2730871774 (97.364%) in intersection
+    #	real    0m13.067s
+
+    time featureBits -countGaps mm10 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	6095540 bases of 2730871774 (0.223%) in intersection
+    #	real    0m15.177s
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" mm10 | sort -n | tail -1
+    #	54
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" mm10 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    wc -l other.bed
+    #	384
+    featureBits -countGaps mm10 other.bed
+    #	6095540 bases of 2730871774 (0.223%) in intersection
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad mm10 otherGap other.bed
+    # verify no overlap with gap table:
+    time featureBits -countGaps mm10 gap other.bed
+    #	0 bases of 2730871774 (0.000%) in intersection
+    #	real    0m1.281s
+
+    # verify no errors before adding to the table:
+    time gapToLift -minGap=1 mm10 nonBridged.before.lift \
+	-bedFile=nonBridged.before.bed > before.gapToLift.txt 2>&1 &
+    #	real    0m7.205s
+    # check for warnings in before.gapToLift.txt, should be empty:
+    #	-rw-rw-r-- 1     1633 Jan  6 15:20 before.gapToLift.txt
+    # it indicates that there are telomere's adjacent to centromere's
+    #	and heterochromatin
+    #	starting with this many:
+    hgsql -e "select count(*) from gap;" mm10
+    #	302
+    hgsql mm10 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" mm10
+    #	686
+    # == 302 + 384
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 mm10 nonBridged.lift -bedFile=nonBridged.bed
+    #same set of warnings as before, telomere's centromere's and heterochromatin
+    # there should be no errors or other output, checked bridged gaps:
+    hgsql -N -e "select bridge from gap;" mm10 | sort | uniq -c
+    #	191 no
+    #	495 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2012-02-06 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/windowMasker
+    cd /hive/data/genomes/mm10/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev mm10 > do.log 2>&1 &
+    #	real    167m12.012s
+
+    # Masking statistics
+    twoBitToFa mm10.wmsk.2bit stdout | faSize stdin
+    #	2730871774 bases (78088274 N's 2652783500 real 1686407708 upper
+    #	966375792 lower) in 66 sequences in 1 files
+    #	Total size: mean 41376845.1 sd 63617337.3 min 1976
+    #	(chr4_JH584295_random) max 195471971 (chr1) median 184189
+    #	%35.39 masked total, %36.43 masked real
+
+
+    twoBitToFa mm10.wmsk.sdust.2bit stdout | faSize stdin
+    #	2730871774 bases (78088274 N's 2652783500 real 1670424648 upper
+    #	982358852 lower) in 66 sequences in 1 files
+    #	Total size: mean 41376845.1 sd 63617337.3 min 1976
+    #	(chr4_JH584295_random) max 195471971 (chr1) median 184189
+    #	%35.97 masked total, %37.03 masked real
+
+    hgLoadBed mm10 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 12655947 elements of size 3
+
+    featureBits -countGaps mm10 windowmaskerSdust
+    #	1060447084 bases of 2730871774 (38.832%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits mm10 -not gap -bed=notGap.bed
+    #	2652783500 bases of 2652783500 (100.000%) in intersection
+    time nice -n +19 featureBits mm10 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	982358852 bases of 2652783500 (37.031%) in intersection
+    #	real    1m42.449s
+
+    #	reload track to get it clean
+    hgLoadBed mm10 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 12655987  elements of size 4
+    time featureBits -countGaps mm10 windowmaskerSdust
+    #	982358852 bases of 2730871774 (35.972%) in intersection
+    #	real    1m13.889s
+
+    #	do *not* need to mask with this clean result since RepeatMasker
+    #	does a very good job here.  Using RM masking instead.
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../mm10.unmasked.2bit stdin \
+	    -type=.bed mm10.cleanWMSdust.2bit
+    twoBitToFa mm10.cleanWMSdust.2bit stdout | faSize stdin \
+        > mm10.cleanWMSdust.faSize.txt
+    cat mm10.cleanWMSdust.faSize.txt
+
+    # how much does this window masker and repeat masker overlap:
+    time featureBits -countGaps mm10 rmsk windowmaskerSdust
+    #	753614881 bases of 2730871774 (27.596%) in intersection
+    #	real    1m42.691s
+    # RM by itself:
+    time featureBits -countGaps mm10 rmsk
+    #	1196694219 bases of 2730871774 (43.821%) in intersection
+    #	real    0m30.460s
+
+#############################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2012-02-07 - Hiram)
+    ssh encodek
+    mkdir /hive/data/genomes/mm10/bed/linSpecRep
+    cd /hive/data/genomes/mm10/bed/linSpecRep
+
+    # split the RM output by chromosome name into separate files
+    mkdir rmsk dateRepeats
+    head -3 ../repeatMasker/mm10.sorted.fa.out > rmsk.header.txt
+    headRest 3 ../repeatMasker/mm10.sorted.fa.out \
+	| splitFileByColumn -ending=.out -col=5 -head=rmsk.header.txt stdin rmsk
+
+    ls -1S rmsk/* > rmOut.list
+    
+    cat << '_EOF_' > mkLSR
+#!/bin/csh -fe
+rm -f dateRepeats/$1_homo-sapiens_rattus_canis-familiaris_bos-taurus
+/scratch/data/RepeatMasker/DateRepeats \
+    $1 -query mouse -comp human -comp rat -comp dog -comp cow
+mv $1_homo-sapiens_rattus_canis-lupus-familiaris_bos-taurus dateRepeats
+'_EOF_'
+    #	<< happy emacs
+    chmod +x mkLSR
+
+    cat << '_EOF_' > template
+#LOOP
+./mkLSR $(path1) {check out line+ dateRepeats/$(file1)_homo-sapiens_rattus_canis-lupus-familiaris_bos-taurus}
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    gensub2 rmOut.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 66 of 66 jobs
+# CPU time in finished jobs:       1743s      29.05m     0.48h    0.02d  0.000 y
+# IO & Wait Time:                   190s       3.16m     0.05h    0.00d  0.000 y
+# Average job time:                  29s       0.49m     0.01h    0.00d
+# Longest finished job:              65s       1.08m     0.02h    0.00d
+# Submission to last job:           160s       2.67m     0.04h    0.00d
+
+    mkdir notInHuman notInRat notInDog notInCow
+    for F in dateRepeats/chr*.out_homo-sapiens*
+    do
+	B=`basename ${F}`
+	B=${B/.out*/}
+	echo $B 
+        /cluster/bin/scripts/extractRepeats 1 ${F} > \
+		notInHuman/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 2 ${F} > \
+		notInRat/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 3 ${F} > \
+		notInDog/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 4 ${F} > \
+		notInCow/${B}.out.spec
+    done
+
+    #	notInDog, and notInCow ended up being identical.
+    #	The notInRat and notInHuman are different
+    #	To check identical
+    find . -name "*.out.spec" | \
+	while read FN; do echo `cat ${FN} | sum -r` ${FN}; done \
+	| sort -k1,1n | sort -t"/" -k3,3 > check.same
+    # this produces a count of 2 for the sums for Cow and Dog, all the same
+    egrep "Cow|Dog" check.same | awk '{print $1}' | sort | uniq -c | sort -rn
+    # this does not produce a count of 2 for the sums for Cow and Human
+    egrep "Cow|Human" check.same | awk '{print $1}' | sort | uniq -c | sort -rn
+    #	Copy to data staging for cluster replication
+    mkdir /hive/data/staging/data/mm10
+    rsync -a -P ./notInRat/ /hive/data/staging/data/mm10/notInRat/
+    rsync -a -P ./notInHuman/ /hive/data/staging/data/mm10/notInHuman/
+    rsync -a -P ./notInCow/ /hive/data/staging/data/mm10/notInOthers/
+    
+
+    # We also need the nibs for the lastz runs with lineage specific repeats
+    mkdir /hive/data/genomes/mm10/nib
+    cd /hive/data/genomes/mm10
+    cut -f1 chrom.sizes | while read C
+do
+    twoBitToFa -seq=${C} mm10.2bit stdout | faToNib -softMask stdin nib/${C}.nib
+    ls -og nib/$C.nib
+done
+    # verify one is properly masked:
+    nibFrag -masked nib/chrM.nib 0 16299 + stdout | less
+    # compare to:
+    twoBitToFa -seq=chrM mm10.fa stdout | less
+
+    #	Copy to data staging for cluster replication
+    rsync -a -P ./nib/ /hive/data/staging/data/mm10/nib/
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2011-09-09 - Hiram)
+    # Use -repMatch=650, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2652783500 / 2897316137 \) \* 1024
+    #	( 2652783500 / 2897316137 ) * 1024 = 937.574699
+
+    # round up to 1000  (mm9 used 912)
+
+    cd /hive/data/genomes/mm10
+    time blat mm10.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/mm10.11.ooc -repMatch=1000
+    #	Wrote 27208 overused 11-mers to jkStuff/mm10.11.ooc
+    #	real    2m9.568s
+
+    #	at repMatch=900:
+    #	Wrote 31822 overused 11-mers to jkStuff/mm10.11.ooc
+
+    # there are non-bridged gaps, make lift file for genbank
+    hgsql -N -e "select bridge from gap;" mm10 | sort | uniq -c
+    #	191 no
+    #	495 yes
+    cd /hive/data/genomes/mm10/jkStuff
+    gapToLift mm10 mm10.nonBridged.lift -bedFile=mm10.nonBridged.bed
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' mm10.nonBridged.bed | sort -nr | head
+    116378660 chr2  59120641        175499301       chr2.02
+
+    #	copy all of this stuff to the klusters:
+    cd /hive/data/genomes/mm10
+    mkdir /hive/data/staging/data/mm10
+    cp -p jkStuff/mm10.11.ooc jkStuff/mm10.nonBridged.lift chrom.sizes \
+	mm10.2bit /hive/data/staging/data/mm10
+    # request rsync copy from cluster admin
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-02-08 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Mus musculus    334577  4853663 26288
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # of course, mm10 has plenty of everything
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add mm10 just after mm9 and commit to GIT
+# mm10
+mm10.serverGenome = /hive/data/genomes/mm10/mm10.2bit
+mm10.clusterGenome = /scratch/data/mm10/mm10.2bit
+mm10.ooc = /scratch/data/mm10/mm10.11.ooc
+mm10.align.unplacedChroms = *_random chrUn_*
+mm10.lift = /scratch/data/mm10/mm10.nonBridgedGap.lift
+mm10.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+mm10.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+mm10.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+mm10.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+mm10.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+mm10.downloadDir = mm10
+mm10.refseq.mrna.xeno.load  = yes
+mm10.refseq.mrna.xeno.loadDesc = yes
+mm10.mgc = yes
+mm10.genbank.mrna.blatTargetDb = yes
+# mm10.ccds.ncbiBuild = 37.2
+# mm10.upstreamGeneTbl = refGene
+# mm10.upstreamMaf = multiz30way
+# /hive/data/genomes/mm10/bed/multiz30way/species.list
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding mm10 definitions" genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial xenTro3 &
+    #	var/build/logs/2011.09.12-09:03:09.xenTro3.initalign.log
+    #	real    360m20.657s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad xenTro3 &
+    #	logFile: var/dbload/hgwdev/logs/2011.09.12-20:47:05.dbload.log
+    #	real    118m27.671s
+
+    # enable daily alignment and update of hgwdev (DONE - 2011-09-13 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add xenTro3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added xenTro3." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+

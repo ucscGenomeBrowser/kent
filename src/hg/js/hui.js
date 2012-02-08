@@ -100,6 +100,10 @@ function exposeAll()
             $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
 	        $(visDD).change();// trigger on change code, which may trigger supertrack reshaping
         }                         // and effecting inherited subtrack vis
+
+        // If superChild and hidden by supertrack, wierd things go on unless we trigger reshape
+        if ($(visDD).hasClass('superChild'))
+            visTriggersHiddenSelect(visDD);
     }
 }
 
@@ -624,6 +628,11 @@ function showConfigControls(name)
         if( this.id == 'tr_cfg_'+name && this.style.display == 'none') {
             $( this ).css('display','');
 	    $("input[name$='."+name+".showCfg']").val("on");
+            var cfgBox = this;
+            // Since filterBys amy have been hidden on page load, must reinit them now.
+            $(cfgBox).find('.filterBy').each( function(i) {
+                ddcl.reinit(this,false); // false means conditioned on failed initial setup.
+            });
         }
         else if( this.style.display == '') {
             $( this ).css('display','none');

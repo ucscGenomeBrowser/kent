@@ -8411,30 +8411,42 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 12/7/11 angie)
-# NEXT TIME: use snp135 and squelch multiple-mappers
-# Updated 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
+# NHGRI GWAS CATALOG (DONE 2/6/12 angie)
+# Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
 # Updated 4/1/10, 3/1/10
 # Originally done 1/19/10
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
     # Done once, don't need to redo:
-    zcat ../snp132/snp132.bed.gz | cut -f 1-4  \
+    zcat ../snp135/snp135.bed.gz | cut -f 1-4  \
     | sort -k4,4 \
-      > snp132Coords.bed
+      > snp135Coords.bed
     set today = `date +%y%m%d`
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog/$today
     cd /hive/data/genomes/hg19/bed/gwasCatalog/$today
 
     # Mapping to hg19 by joining hg19 SNP coords with catalog flatfile (see hg18.txt)
-    join -t "	" -1 4 ../snp132Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/$today/noCoords.tab \
+    join -t "	" -1 4 ../snp135Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/$today/noCoords.tab \
         -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
     | sort -k1,1 -k2n,2n \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 7934 elements of size 22
+#Loaded 8561 elements of size 22
+    # For David: find examples of risk alleles for which dbSNP observed
+    # alleles are complementary (A/T or C/G) -- how do we know what strand the
+    # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
+    # always available in the original publication, so sadly there is not always
+    # a way to resolve these. GWAS catalog folks aren't going to modify their
+    # database to add a column for these cases.
+    hgsql hg19 -NBe 'select snp.name,gc.riskAllele,snp.strand,snp.refNcbi,snp.observed \
+                     from gwasCatalog as gc, snp130 as snp \
+                     where gc.riskAllele rlike "^rs[0-9]+-[ACGT]" and \
+                           gc.name = snp.name and snp.observed in ("C/G", "A/T") \
+                     order by gc.name;' > ambigStrand.txt
+    wc -l ambigStrand.txt
+#752 ambigStrand.txt
 
 
 ######################################################################## 
@@ -18109,3 +18121,154 @@ EOF
 
 
 ############################################################################
+# HGNC: Hugo Gene Nomenclature Committee (DONE 2012-01-17 cline)
+
+mkdir /hive/data/outside/hgnc
+cd /hive/data/outside/hgnc
+mkdir 011712
+cd 011712
+wet -O hgnc.txt "http://www.genenames.org/cgi-bin/hgnc_downloads.cgi?title=HGNC+output+data&hgnc_dbtag=on&preset=all&status=Approved&status=Entry+Withdrawn&status_opt=2&level=pri&=on&where=&order_by=gd_app_sym_sort&limit=&format=text&submit=submit&.cgifields=&.cgifields=level&.cgifields=chr&.cgifields=status&.cgifields=hgnc_dbtag"
+
+tail -n +2 hgnc.txt | hgLoadSqlTab hg19 hgnc ~/kent/src/hg/lib/hgnc.sql stdin       
+#########################################################################
+# LASTZ Cow BosTau7 (DONE - 2012-01-23 - Chin)
+    mkdir /hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23
+    cd /hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23
+
+    cat << '_EOF_' > DEF
+# human vs cow
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau7 
+SEQ2_DIR=/scratch/data/bosTau7/bosTau7.2bit
+SEQ2_LEN=/scratch/data/bosTau7/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0    
+
+    
+BASE=/hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    # real    433m45.814s
+    cat fb.hg19.chainBosTau7Link.txt
+    # 1360887008 bases of 2897316137 (46.971%) in intersection
+    # Create link
+    cd /hive/data/genomes/hg19/bed
+    ln -s  lastzBosTau7.2012-01-23 lastz.bosTau7
+
+    #   running the swap
+    mkdir /hive/data/genomes/bosTau7/bed/blastz.hg19.swap
+    cd /hive/data/genomes/bosTau7/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23/DEF \
+        -swap  -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real     95m9.611s
+    cat fb.bosTau7.chainHg19Link.txt
+    #   1388551419 bases of 2804673174 (49.508%) in intersection
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s blastz.hg19.swap lastz.hg19
+############################################################################
+# UPDATE COSMIC TRACK - v57 (DONE 2012-01-26 larrym)
+
+# Table stats before
+
+hgsql hg19 -s -e 'select count(*) from cosmicRaw'
+55579
+hgsql hg19 -s -e 'select count(*) from cosmic'
+49087
+
+~/kent/src/hg/utils/automation/loadCosmic.pl hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v57_180112.csv
+
+# Table stats after
+
+hgsql hg19 -s -e 'select count(*) from cosmicRaw'
+78152
+hgsql hg19 -s -e 'select count(*) from cosmic'
+71437
+
+Here's some ID's that were added in this release (and not present on RR):
+
+COSM143850
+COSM143824
+COSM143823
+COSM143802
+COSM143801
+
+############################################################################
+# POLYA-SEQ TRACK (from Adnan Derti, Merck) (LOADED, Andy 2012-01-30)
+
+# Fan unpacked the .zip a while back
+cd /hive/data/genomes/hg19/bed/polyA
+# make links with more UCSCish naming
+mkdir /hive/data/genomes/{hg18,hg19,canFam2,mm9,rn4,rheMac2}/bed/polyASeq
+mkdir -p /gbdb/{hg18,hg19,canFam2,mm9,rn4,rheMac2}/bbi
+for set in `ls -1 | grep -v orig | grep -v table`; do
+  suff=`echo $set | sed 's/^[a-z]\+_//'`; 
+  db=`echo $suff | sed 's/\_.*//'`;
+  tiss=`echo $suff | sed 's/.\+\_//; s/^[a-z]/\U&/; s/-[a-z]/\U&/; s/-//'`;
+  Db=`echo $db | sed 's/^[a-z]/\U&/'`; 
+  printf "%s\t%s\t%s\t%s\t%s\n" $set $db $Db $tiss $suff
+done > table.info
+for set in `ls -1 | grep -v orig | grep -v table`; do
+  suff=`echo $set | sed 's/^[a-z]\+_//'`; 
+  db=`echo $suff | sed 's/\_.*//'`;
+  tiss=`echo $suff | sed 's/.\+\_//; s/^[a-z]/\U&/; s/-[a-z]/\U&/; s/-//'`;
+  Db=`echo $db | sed 's/^[a-z]/\U&/'`; 
+  fwdTable=polyASeqSites${tiss}Fwd
+  revTable=polyASeqSites${tiss}Rev
+  fwdBg=/hive/data/genomes/${db}/bed/polyASeq/${fwdTable}.bedGraph
+  revBg=/hive/data/genomes/${db}/bed/polyASeq/${revTable}.bedGraph
+  fwdBw=${fwdBg%.bedGraph}.bw
+  revBw=${revBg%.bedGraph}.bw
+  tail -n +2 ${set}/polyaseq_sites_fwd_strand.bedgraph | sort -k1,1 -k2,2n > $fwdBg;
+  tail -n +2 ${set}/polyaseq_sites_rev_strand.bedgraph | sort -k1,1 -k2,2n > $revBg;
+  bedGraphToBigWig $fwdBg /hive/data/genomes/${db}/chrom.sizes $fwdBw
+  bedGraphToBigWig $revBg /hive/data/genomes/${db}/chrom.sizes $revBw
+  ln -s $fwdBw /gbdb/${db}/bbi/
+  ln -s $revBw /gbdb/${db}/bbi/
+  hgBbiDbLink $db $fwdTable /gbdb/${db}/bbi/${fwdTable}.bw
+  hgBbiDbLink $db $revTable /gbdb/${db}/bbi/${revTable}.bw
+done
+# silly loop to take care of the majority of the trackDb.
+# the rest copy/paste
+cat table.info | while read -a line; do 
+  db=${line[1]}
+  for Strand in Fwd Rev; do 
+     strand=`echo $Strand | tr [:upper:] [:lower:]`
+     bg=${line[0]}/polyaseq_sites_${strand}_strand.bedgraph
+     tiss=${line[3]}
+     table=polyASeqSites${tiss}${Strand}
+     bw=/gbdb/${db}/bbi/${table}.bw
+     min=`bigWigInfo $bw | grep "^min" | sed 's/min: //'`
+     max=`bigWigInfo $bw | grep "^max" | sed 's/max: //'`
+     echo "        track "$table
+     echo "        parent polyASeqSitesSignalView"
+     echo "        subGroups view=Signal tissType="$tiss" strand="$strand
+     echo "        shortLabel PolyA-Seq "$tiss
+     echo "        longLabel Poly(A)-tail sequencing of "$tiss" from Merck ("$Strand" strand)"
+     if [ $strand = "fwd" ]; then
+     echo "        color 153,51,51"
+     else
+     echo "        color 0,0,0"
+     fi 
+     echo "        type bigWig "$min" "$max
+     echo
+  done >> ${db}.ra 
+done 

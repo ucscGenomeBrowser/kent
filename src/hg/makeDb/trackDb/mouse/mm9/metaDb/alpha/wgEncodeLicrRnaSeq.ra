@@ -1,7 +1,7 @@
 metaObject wgEncodeLicrRnaSeq
 objType composite
 composite wgEncodeLicrRnaSeq
-expVars lab,dataType,cell
+expVars lab,dataType,cell,age
 
 metaObject wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1
 objType table
@@ -9,7 +9,7 @@ age adult-8wks
 cell BoneMarrow
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001706
@@ -38,7 +38,7 @@ age adult-8wks
 cell BoneMarrow
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001706
@@ -67,7 +67,7 @@ age adult-8wks
 cell BoneMarrow
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001706
@@ -95,7 +95,7 @@ age adult-8wks
 cell BoneMarrow
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001706
@@ -123,7 +123,7 @@ age adult-8wks
 cell BoneMarrow
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001706
@@ -152,7 +152,7 @@ age adult-8wks
 cell BoneMarrow
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001706
@@ -181,7 +181,7 @@ age adult-8wks
 cell Cerebellum
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001710
@@ -210,7 +210,7 @@ age adult-8wks
 cell Cerebellum
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001710
@@ -239,7 +239,7 @@ age adult-8wks
 cell Cerebellum
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001710
@@ -267,7 +267,7 @@ age adult-8wks
 cell Cerebellum
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001710
@@ -295,7 +295,7 @@ age adult-8wks
 cell Cerebellum
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001710
@@ -324,7 +324,7 @@ age adult-8wks
 cell Cerebellum
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001710
@@ -353,7 +353,7 @@ age adult-8wks
 cell Cortex
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001711
@@ -382,7 +382,7 @@ age adult-8wks
 cell Cortex
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001711
@@ -411,7 +411,7 @@ age adult-8wks
 cell Cortex
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001711
@@ -439,7 +439,7 @@ age adult-8wks
 cell Cortex
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001711
@@ -467,7 +467,7 @@ age adult-8wks
 cell Cortex
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001711
@@ -496,7 +496,7 @@ age adult-8wks
 cell Cortex
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001711
@@ -525,7 +525,7 @@ age E0
 cell ES-Bruce4
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001707
@@ -554,7 +554,7 @@ age E0
 cell ES-Bruce4
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001707
@@ -583,7 +583,7 @@ age E0
 cell ES-Bruce4
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001707
@@ -611,7 +611,7 @@ age E0
 cell ES-Bruce4
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001707
@@ -639,7 +639,7 @@ age E0
 cell ES-Bruce4
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001707
@@ -668,7 +668,7 @@ age E0
 cell ES-Bruce4
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001707
@@ -697,7 +697,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001712
@@ -726,7 +726,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001712
@@ -755,7 +755,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001712
@@ -783,7 +783,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001712
@@ -811,7 +811,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001712
@@ -840,7 +840,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001712
@@ -869,7 +869,7 @@ age E14.5
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep1.bam.bai
@@ -896,7 +896,7 @@ age E14.5
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep2.bam.bai
@@ -923,7 +923,7 @@ age E14.5
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6RawDataRep1.fastq.gz
@@ -949,7 +949,7 @@ age E14.5
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6RawDataRep2.fastq.gz
@@ -975,7 +975,7 @@ age E14.5
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6SigRep1.bigWig
@@ -1002,7 +1002,7 @@ age E14.5
 cell Heart
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6SigRep2.bigWig
@@ -1029,7 +1029,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001713
@@ -1058,7 +1058,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001713
@@ -1087,7 +1087,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001713
@@ -1115,7 +1115,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001713
@@ -1143,7 +1143,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001713
@@ -1172,7 +1172,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001713
@@ -1201,7 +1201,7 @@ age E14.5
 cell Limb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqLimbCellPapUE14halfC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqLimbCellPapUE14halfC57bl6AlnRep1.bam.bai
@@ -1228,7 +1228,7 @@ age E14.5
 cell Limb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqLimbCellPapUE14halfC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqLimbCellPapUE14halfC57bl6AlnRep2.bam.bai
@@ -1255,7 +1255,7 @@ age E14.5
 cell Limb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqLimbCellPapUE14halfC57bl6RawDataRep1.fastq.gz
@@ -1281,7 +1281,7 @@ age E14.5
 cell Limb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqLimbCellPapUE14halfC57bl6RawDataRep2.fastq.gz
@@ -1307,7 +1307,7 @@ age E14.5
 cell Limb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqLimbCellPapUE14halfC57bl6SigRep1.bigWig
@@ -1334,7 +1334,7 @@ age E14.5
 cell Limb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqLimbCellPapUE14halfC57bl6SigRep2.bigWig
@@ -1361,7 +1361,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001714
@@ -1390,7 +1390,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001714
@@ -1419,7 +1419,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001714
@@ -1447,7 +1447,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001714
@@ -1475,7 +1475,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001714
@@ -1504,7 +1504,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001714
@@ -1533,7 +1533,7 @@ age E14.5
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep1.bam.bai
@@ -1560,7 +1560,7 @@ age E14.5
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep2.bam.bai
@@ -1587,7 +1587,7 @@ age E14.5
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6RawDataRep1.fastq.gz
@@ -1613,7 +1613,7 @@ age E14.5
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6RawDataRep2.fastq.gz
@@ -1639,7 +1639,7 @@ age E14.5
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6SigRep1.bigWig
@@ -1666,7 +1666,7 @@ age E14.5
 cell Liver
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-04
 fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6SigRep2.bigWig
@@ -1693,7 +1693,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001715
@@ -1722,7 +1722,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001715
@@ -1751,7 +1751,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001715
@@ -1779,7 +1779,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001715
@@ -1807,7 +1807,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001715
@@ -1836,7 +1836,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001715
@@ -1865,7 +1865,7 @@ age adult-8wks
 cell MEF
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001708
@@ -1894,7 +1894,7 @@ age adult-8wks
 cell MEF
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001708
@@ -1923,7 +1923,7 @@ age adult-8wks
 cell MEF
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001708
@@ -1951,7 +1951,7 @@ age adult-8wks
 cell MEF
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001708
@@ -1979,7 +1979,7 @@ age adult-8wks
 cell MEF
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001708
@@ -2008,7 +2008,7 @@ age adult-8wks
 cell MEF
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001708
@@ -2037,7 +2037,7 @@ age adult-8wks
 cell OlfactBulb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqOlfactCellPapMAdult8wksC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqOlfactCellPapMAdult8wksC57bl6AlnRep1.bam.bai
@@ -2064,7 +2064,7 @@ age adult-8wks
 cell OlfactBulb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqOlfactCellPapMAdult8wksC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqOlfactCellPapMAdult8wksC57bl6AlnRep2.bam.bai
@@ -2091,7 +2091,7 @@ age adult-8wks
 cell OlfactBulb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqOlfactCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
@@ -2117,7 +2117,7 @@ age adult-8wks
 cell OlfactBulb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqOlfactCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
@@ -2143,7 +2143,7 @@ age adult-8wks
 cell OlfactBulb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqOlfactCellPapMAdult8wksC57bl6SigRep1.bigWig
@@ -2170,7 +2170,7 @@ age adult-8wks
 cell OlfactBulb
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqOlfactCellPapMAdult8wksC57bl6SigRep2.bigWig
@@ -2197,7 +2197,7 @@ age adult-8wks
 cell Placenta
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeLicrRnaSeqPlacCellPapFAdult8wksC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqPlacCellPapFAdult8wksC57bl6AlnRep1.bam.bai
@@ -2224,7 +2224,7 @@ age adult-8wks
 cell Placenta
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeLicrRnaSeqPlacCellPapFAdult8wksC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqPlacCellPapFAdult8wksC57bl6AlnRep2.bam.bai
@@ -2251,7 +2251,7 @@ age adult-8wks
 cell Placenta
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeLicrRnaSeqPlacCellPapFAdult8wksC57bl6RawDataRep1.fastq.gz
@@ -2277,7 +2277,7 @@ age adult-8wks
 cell Placenta
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeLicrRnaSeqPlacCellPapFAdult8wksC57bl6RawDataRep2.fastq.gz
@@ -2303,7 +2303,7 @@ age adult-8wks
 cell Placenta
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeLicrRnaSeqPlacCellPapFAdult8wksC57bl6SigRep1.bigWig
@@ -2330,7 +2330,7 @@ age adult-8wks
 cell Placenta
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeLicrRnaSeqPlacCellPapFAdult8wksC57bl6SigRep2.bigWig
@@ -2357,7 +2357,7 @@ age adult-8wks
 cell SmIntestine
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqSmintCellPapMAdult8wksC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqSmintCellPapMAdult8wksC57bl6AlnRep1.bam.bai
@@ -2384,7 +2384,7 @@ age adult-8wks
 cell SmIntestine
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqSmintCellPapMAdult8wksC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqSmintCellPapMAdult8wksC57bl6AlnRep2.bam.bai
@@ -2411,7 +2411,7 @@ age adult-8wks
 cell SmIntestine
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqSmintCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
@@ -2437,7 +2437,7 @@ age adult-8wks
 cell SmIntestine
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqSmintCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
@@ -2463,7 +2463,7 @@ age adult-8wks
 cell SmIntestine
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqSmintCellPapMAdult8wksC57bl6SigRep1.bigWig
@@ -2490,7 +2490,7 @@ age adult-8wks
 cell SmIntestine
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqSmintCellPapMAdult8wksC57bl6SigRep2.bigWig
@@ -2517,7 +2517,7 @@ age adult-8wks
 cell Spleen
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001709
@@ -2546,7 +2546,7 @@ age adult-8wks
 cell Spleen
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001709
@@ -2575,7 +2575,7 @@ age adult-8wks
 cell Spleen
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001709
@@ -2603,7 +2603,7 @@ age adult-8wks
 cell Spleen
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001709
@@ -2631,7 +2631,7 @@ age adult-8wks
 cell Spleen
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001709
@@ -2660,7 +2660,7 @@ age adult-8wks
 cell Spleen
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEM001709
@@ -2689,7 +2689,7 @@ age adult-8wks
 cell Testis
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqTestisCellPapMAdult8wksC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqTestisCellPapMAdult8wksC57bl6AlnRep1.bam.bai
@@ -2716,7 +2716,7 @@ age adult-8wks
 cell Testis
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqTestisCellPapMAdult8wksC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqTestisCellPapMAdult8wksC57bl6AlnRep2.bam.bai
@@ -2743,7 +2743,7 @@ age adult-8wks
 cell Testis
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqTestisCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
@@ -2769,7 +2769,7 @@ age adult-8wks
 cell Testis
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqTestisCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
@@ -2795,7 +2795,7 @@ age adult-8wks
 cell Testis
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqTestisCellPapMAdult8wksC57bl6SigRep1.bigWig
@@ -2822,7 +2822,7 @@ age adult-8wks
 cell Testis
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqTestisCellPapMAdult8wksC57bl6SigRep2.bigWig
@@ -2849,7 +2849,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqThymusCellPapMAdult8wksC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqThymusCellPapMAdult8wksC57bl6AlnRep1.bam.bai
@@ -2876,7 +2876,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqThymusCellPapMAdult8wksC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqThymusCellPapMAdult8wksC57bl6AlnRep2.bam.bai
@@ -2903,7 +2903,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqThymusCellPapMAdult8wksC57bl6RawDataRep1.fastq.gz
@@ -2929,7 +2929,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqThymusCellPapMAdult8wksC57bl6RawDataRep2.fastq.gz
@@ -2955,7 +2955,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqThymusCellPapMAdult8wksC57bl6SigRep1.bigWig
@@ -2982,7 +2982,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-20
 fileName wgEncodeLicrRnaSeqThymusCellPapMAdult8wksC57bl6SigRep2.bigWig
@@ -3009,7 +3009,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep1.bam.bai
@@ -3036,7 +3036,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep2.bam.bai
@@ -3063,7 +3063,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6RawDataRep1.fastq.gz
@@ -3089,7 +3089,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6RawDataRep2.fastq.gz
@@ -3115,7 +3115,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep1.bigWig
@@ -3142,7 +3142,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeLicrRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
 fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2.bigWig
@@ -3163,4 +3163,4 @@ tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: 1403834686
+# MAGIC: 1701485472

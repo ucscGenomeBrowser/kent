@@ -244,8 +244,8 @@ taxId   7897
     hgLoadBed latCha1 windowmaskerSdust cleanWMask.bed.gz
     #	Loaded 14630157 elements of size 4
     time featureBits -countGaps latCha1 windowmaskerSdust
-    #	859799890 bases of 2608572064 (32.961%) in intersection
-    #	real    1m24.055s
+    #	997396049 bases of 2860591921 (34.867%) in intersection
+    #	real    2m47.260s
 
     #	mask with this clean result
     zcat cleanWMask.bed.gz \

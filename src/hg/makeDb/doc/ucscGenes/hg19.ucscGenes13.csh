@@ -27,7 +27,7 @@ set RatDb = Rn4
 set fishDb = danRer7
 set flyDb = dm3
 set wormDb = ce6
-set yeastDb = sacCer2
+set yeastDb = sacCer3
 
 # The net alignment for the closely-related species indicated in $xdb
 set xdbNetDir = $genomes/$db/bed/lastz.${xdb}/axtChain
@@ -69,7 +69,7 @@ set ratFa = $genomes/$ratDb/bed/blastp/known.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
 set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
-set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
+set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
 
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
@@ -921,12 +921,14 @@ grep -v -e ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam $kent/src/hg/lib/knownTo.sql knownToTreefam.tab
 
 
+
 if ($db =~ hg*) then
     hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db HInvGeneMrna knownGene knownToHInv
     hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133Plus2 knownGene knownToU133Plus2
     hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133 knownGene knownToU133
     hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU95 knownGene knownToU95
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
+    hgsql $tempDb -e "delete k from knownToHprd k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 endif
 
 if ($db =~ hg*) then
@@ -953,6 +955,7 @@ endif
 
 # Update visiGene stuff
 knownToVisiGene $tempDb -probesDb=$db
+hgsql $tempDb -e "delete k from knownToVisiGene k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
 cd /usr/local/apache/cgi-bin/visiGeneData
 ixIxx visiGene.text visiGene.ix visiGene.ixx
@@ -994,6 +997,7 @@ buildDir $dir/hgNearBlastp
 scratchDir $scratchDir/jkgHgNearBlastp
 _EOF_
 
+
 doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra |& tee do.log 
 # real    464m36.473s
 # done 2009-06-29
@@ -1008,10 +1012,10 @@ hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
 hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
 
-
 # Remove non-syntenic hits for human and rat
 # Takes a few minutes
 mkdir -p /gbdb/$tempDb/liftOver
+rm /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
 ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
     /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz
 ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
@@ -1054,6 +1058,7 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $wormDb tfBlastTab $bToA/recipBest.tab
 
+
 # Us vs. yeast
 cd $dir/hgNearBlastp
 set aToB = run.$tempDb.$yeastDb
@@ -1068,7 +1073,6 @@ hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 # Clean up
 cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
-rm -r run.*/out
 gzip run.*/all.tab
 
 
@@ -1178,6 +1182,7 @@ cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > know
 rm -f sub.tab
 hgLoadSqlTab $tempDb knownToPfam $kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
+hgsql $tempDb -e "delete k from knownToPfam k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 
 
 # Do scop run. Takes about 6 hours
@@ -1217,6 +1222,8 @@ catDir scop/result | \
 scopCollapse scopPlusScore.tab /hive/data/outside/scop/model.tab ucscScop.tab \
 	scopDesc.tab knownToSuper.tab
 hgLoadSqlTab $tempDb knownToSuper $kent/src/hg/lib/knownToSuper.sql knownToSuper.tab
+hgsql $tempDb -e "delete k from knownToSuper k, kgXref x where k.gene = x.kgID and x.geneSymbol = 'abParts'"
+
 hgLoadSqlTab $tempDb scopDesc $kent/src/hg/lib/scopDesc.sql scopDesc.tab
 hgLoadSqlTab $tempDb ucscScop $kent/src/hg/lib/ucscScop.sql ucscScop.tab
 
@@ -1278,16 +1285,17 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     # Next, use the temporary contents of the keggPathway table to join with
     # knownToLocusLink, creating the real content of the keggPathway table.
     # Load this data, erasing the old temporary content
-    hgsql $tempDb -N -e \
-    'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+    hgsql $tempDb -B -N -e \
+    'select distinct name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
     >keggPathway.tab
     hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
 
    # Finally, update the knownToKeggEntrez table from the keggPathway table.
-   hgsql $tempDb -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' \
+   hgsql $tempDb -B -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' \
         |sort -u| sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
    hgLoadSqlTab $tempDb knownToKeggEntrez $kent/src/hg/lib/knownToKeggEntrez.sql \
         knownToKeggEntrez.tab
+    hgsql $tempDb -e "delete k from knownToKeggEntrez k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 
 # Make spMrna table (useful still?)
    cd $dir
@@ -1333,10 +1341,6 @@ ln -s $dir/kgTargetSeq.2bit /gbdb/hg19/targetDb/
 cut -f 1-10 ucscGenes.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
 hgLoadPsl $tempDb kgTargetAli.psl
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-cd $dir
-		
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
 
@@ -1347,9 +1351,10 @@ sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
 # Create backup database
 hgsqladmin create ${db}Backup
 
-# Drop tempDb chromInfo and history tables, we don't want to swap them in!
+# Drop tempDb history table and chromInfo, we don't want to swap them in!
 hgsql -e "drop table history" $tempDb
 hgsql -e "drop table chromInfo" $tempDb
+hgsql -e "drop table tableList" $tempDb
 
 # Swap in new tables, moving old tables to backup database.
 sudo ~kent/bin/swapInMysqlTempDb $tempDb $db ${db}Backup
@@ -1377,19 +1382,20 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
 # /gbdb/hg19/targetDb/kgTargetSeq.2bit .          
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
-# host (field 2) and port (field 3) specified by cluster-admin.
+# host (field 2) and port (field 3) specified by cluster-admin.  Identify the
+# blatServer by the keyword hg19Kg with the version number appended
 hgsql hgcentraltest -e \                                                
-      'INSERT into blatServers values ("hg19Kg", "blat5", 17783, 0, 1);'
+      'INSERT into blatServers values ("hg19Kgv13", "blat5", 17783, 0, 1);'
 hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg19Kg", "UCSC Genes", \                    
+      'INSERT into targetDb values("hg19Kgv13", "UCSC Genes", \                    
          "hg19", "kgTargetAli", "", "", \                                       
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+cd $dir
 
 
 #
@@ -1408,6 +1414,14 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
 synBlastp.csh $ratDb $db
+
+# Clean up
+rm -r run.*/out
+
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 #
 # Last step in setting up isPCR: after the new UCSC Genes with the new Known Gene isPcr

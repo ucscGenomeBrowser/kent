@@ -954,6 +954,7 @@ tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
 tdb->priority = tg->priority;
 tdb->type = cloneString("psl");
+tdb->canPack = tg->canPack;
 trackDbPolish(tdb);
 addUserSeqBaseAndIndelSettings(tdb);
 tg->tdb = tdb;
@@ -1114,6 +1115,7 @@ tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
 tdb->priority = tg->priority;
+tdb->canPack = tg->canPack;
 trackDbPolish(tdb);
 tg->tdb = tdb;
 return tg;
@@ -2777,7 +2779,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         }
     else
         {
-        handler = lookupTrackHandler(tdb->table);
+        handler = lookupTrackHandlerClosestToHome(tdb);
         if (handler != NULL)
             handler(track);
         }
@@ -3464,7 +3466,7 @@ hubConnectStatusFreeList(&hubList);
 boolean restrictionEnzymesOk()
 /* Check to see if it's OK to do restriction enzymes. */
 {
-return (hTableExists("hgFixed", "cutters") &&
+return (sqlDatabaseExists("hgFixed") && hTableExists("hgFixed", "cutters") &&
     hTableExists("hgFixed", "rebaseRefs") &&
     hTableExists("hgFixed", "rebaseCompanies"));
 }
@@ -4437,7 +4439,6 @@ for (;track != NULL; track = track->next)
         if(shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
-
     if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility
         // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
@@ -4447,9 +4448,12 @@ for (;track != NULL; track = track->next)
             {
             struct trackDb * childTdb = childRef->val;
             struct track *child = hashFindVal(trackHash, childTdb->track);
-            char *cartVis = cartOptionalString(cart,child->track);
-            if (cartVis)
-                child->visibility = hTvFromString(cartVis);
+            if (child != NULL && child->track!=NULL)
+                {
+                char *cartVis = cartOptionalString(cart,child->track);
+                if (cartVis)
+                    child->visibility = hTvFromString(cartVis);
+                }
             }
         }
     }
@@ -5934,9 +5938,7 @@ void ajaxWarnHandler(char *format, va_list args)
 // When we are generating a response for ajax client and hit an error, put any warnings into hgTracks.err in the response.
 char buf[4096];
 vsnprintf(buf, sizeof(buf), format, args);
-// We don't use jsonForClient for fear that it might now be corrupted.
-printf("<script type='text/javascript'>\n// START hgTracks\nvar hgTracks = {\"err\": \"%s\"};\n// END hgTracks\n</script>\n",
-       javaScriptLiteralEncode(buf));
+jsonHashAddString(jsonForClient, "err", buf);
 }
 
 void doMiddle(struct cart *theCart)

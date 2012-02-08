@@ -1,18 +1,27 @@
-# Build encode validator
+# Build encode loader
 
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
 	antibodyWikiParser.py
 
-all:	wranglerTools
-	
+SCRIPT_INSTALL = "/cluster/bin/scripts"
 
-wranglerTools:
-	@for F in ${SCRIPT_FILES}; do \
-	    chmod +x $$F; \
-            cp -upv $$F ${SCRIPTS}; \
-	done
+all:
+	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts scripts
+
+alpha:
+	@${MAKE} --no-print-directory SCRIPTS=${SCRIPT_INSTALL} scripts
+
+install: alpha
+
+scripts: ${SCRIPT_FILES:%=${SCRIPTS}/%}
+
+${SCRIPTS}/%: %
+	@mkdir -p $(dir $@)
+	chmod +x $<
+	cp -p $< $@.tmp
+	mv -f $@.tmp $@
 
 clean::
 	echo nothing to clean in hg/encode/antibodyWikiParser/

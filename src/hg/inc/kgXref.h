@@ -13,8 +13,8 @@ struct kgXref
     struct kgXref *next;  /* Next in singly linked list. */
     char *kgID;	/* Known Gene ID */
     char *mRNA;	/* mRNA ID */
-    char *spID;	/* SWISS-PROT protein Accession number */
-    char *spDisplayID;	/* SWISS-PROT display ID */
+    char *spID;	/* UniProt protein Accession number */
+    char *spDisplayID;	/* UniProt display ID */
     char *geneSymbol;	/* Gene Symbol */
     char *refseq;	/* RefSeq ID */
     char *protAcc;	/* NCBI protein Accession number */

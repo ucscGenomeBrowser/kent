@@ -1,0 +1,2392 @@
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeYaleChIPseq.ra,v 1.1 2010/05/27 21:30:24 tdreszer Exp $
+
+# Yale TFBS (wrangler: Venkat, assisted by Tim)
+
+track wgEncodeYaleChIPseq
+compositeTrack on
+shortLabel Yale TFBS
+longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from Yale/UC-Davis/Harvard
+group regulation
+priority 0
+type bed 3
+useScore 1
+origAssembly hg18
+subGroup1 view Views Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line t1GM12878=GM12878 t1K562=K562 t2HeLa=HeLa-S3 t2HepG2=HepG2 t2HUVEC=HUVEC t3GM10847=GM10847 t3GM12891=GM12891 t3GM12892=GM12892 t3GM15510=GM15510 t3GM18505=GM18505 t3GM18526=GM18526 t3GM18951=GM18951 t3GM19099=GM19099 t3GM19193=GM19193 t3HCT116=HCT-116 t3HEK293b=HEK293(b) t3MCF7=MCF-7 t3NB4=NB4 t3NT2D1=NT2-D1_(NTera2) uHeLaIg30=HeLa-S3_<i>IFN&gamma;_30min</i> uHEPG2for=HepG2_<i>forskolin</i> uHEPG2ins=HepG2_<i>insulin</i> uHEPG2pra=HepG2_<i>pravastatin</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
+subGroup3 factor Factor AP2alp=AP-2alpha AP2gam=AP-2gamma ATF3=ATF3 BAF155=BAF155 BAF155mig=BAF155_(<i>IgG-mus<i>) BAF170mig=BAF170_(<i>IgG-mus<i>) BDP1=BDP1 BRF1=BRF1 BRF2=BRF2 BRG1mig=Brg1_(<i>IgG-mus<i>) CEBPB=CEBPB CFOS=c-Fos CJUN=c-Jun CJUNrig=c-Jun_(<i>IgG-rab<i>) CMYC=c-Myc E2F1=E2F1 E2F1ha=E2F1_(HA-E2F1) E2F4=E2F4 E2F6=E2F6 ERRA=ERRA GATA1=GATA-1 GATA2=GATA-2 GRP20=GRp20 GTF2B=GTF2B HNF4A=HNF4A HSF1=HSF1 INI1mig=Ini1_(<i>IgG-mus<i>) JUND=JunD JUNDrig=JunD_(<i>IgG-rab<i>) MAX=Max NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFKBrig=NFKB_(<i>IgG-rab<i>) NRF1mig=NRF1_(<i>IgG-mus<i>) PGC1A=PGC1A POL2=Pol2 POL2mig=Pol2_(<i>IgG-mus<i>) POL3=Pol3 RAD21=Rad21 RAD21rab=Rad21_(<i>IgG-rab<i>) RPC155=RPC155 SETDB1=SETDB1 SETDB1m=SETDB1_(<i>MNase<i>) SIRT6=SIRT6 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 SUZ12=SUZ12 TCF7L2=TCF7L2_(TCF4) TF3C110=TFIIIC-110 TR4=TR4 XRCC4=XRCC4 YY1=YY1 ZNF263=ZNF263 ZNF274=ZNF274 ZZZ3=ZZZ3 yDNA=Control_(<i>DNA</i>) yFrag=Control_(<i>Fragment</i>) yIGm=Input_(<i>IgG-mus</i>) yIGr=Input_(<i>IgG-rab</i>) yMNase=Input_(<i>MNase</i>) zaCTRL=Input_(<i>UCDavis</i>) zCTRL=Input_(<i>std</i>)
+#subGroup4 treat Treatment ANOT=Standard IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
+dimensions dimensionX=cellType dimensionY=factor
+sortOrder cellType=+ factor=+ view=+
+dragAndDrop subTracks
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody
+noInherit on
+dataVersion through the ENCODE Jan 2010 Freeze
+wgEncode 1
+
+
+    track wgEncodeYaleChIPseqViewPeaks
+    shortLabel Peaks
+    view Peaks
+    visibility pack
+    viewUi on
+    parent wgEncodeYaleChIPseq
+    signalFilter 0
+    signalFilterLimits 0:18241
+    pValueFilter 0
+    pValueFilterLimits 0:300
+    qValueFilter 0
+    qValueFilterLimits 0:300
+
+        track wgEncodeYaleChIPseqPeaksGm12878JundV2
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel GM12878 JunD Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in GM12878 cells)
+        subGroups view=Peaks factor=JUND cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqPeaksGm12878MaxV3
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel GM12878 Max Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in GM12878 cells)
+        subGroups view=Peaks factor=MAX cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+        # subId=1182 dateSubmitted=2011-03-16 #track wgEncodeYaleChIPseqPeaksGm12878MaxV2
+
+        track wgEncodeYaleChIPseqPeaksGm12878NfkbTnfa
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12878 NFKB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB in GM12878 cells)
+        subGroups view=Peaks factor=NFKB cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqPeaksGm12878Pol2V3
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12878 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in GM12878 cells)
+        subGroups view=Peaks factor=POL2 cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+        # subId=1183 dateSubmitted=2011-03-16 #track wgEncodeYaleChIPseqPeaksGm12878Pol2V2
+
+        track wgEncodeYaleChIPseqPeaksGm12878Pol3
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel GM12878 Pol3 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol3 in GM12878 cells)
+        subGroups view=Peaks factor=POL3 cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqPeaksGm12878CfosV3
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel GM12878 c-Fos Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in GM12878 cells)
+        subGroups view=Peaks factor=CFOS cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+        # subId=1184 dateSubmitted=2011-03-16  #track wgEncodeYaleChIPseqPeaksGm12878CfosV2
+
+        track wgEncodeYaleChIPseqPeaksHct116Pol2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HCT116 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HCT-116 cells)
+        subGroups view=Peaks factor=POL2 cellType=t3HCT116
+        type narrowPeak
+        color 0,55,219
+
+        track wgEncodeYaleChIPseqPeaksHct116Tcf4V2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HCT116 TCF7L2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TCF7L2 in HCT-116 cells)
+        subGroups view=Peaks factor=TCF7L2 cellType=t3HCT116
+        type narrowPeak
+        color 0,55,219
+
+        track wgEncodeYaleChIPseqPeaksHek293Pol2V2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HEK293 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HEK293 cells)
+        subGroups view=Peaks factor=POL2 cellType=t3HEK293b
+        type narrowPeak
+        color 133,0,173
+
+        track wgEncodeYaleChIPseqPeaksHelas3Ap2alpha
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa AP-2a Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (AP-2alpha in HeLa-S3 cells)
+        subGroups view=Peaks factor=AP2alp cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Ap2gamma
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa AP-2g Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (AP-2gamma in HeLa-S3 cells)
+        subGroups view=Peaks factor=AP2gam cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3E2f4
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa E2F4 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F4 in HeLa-S3 cells)
+        subGroups view=Peaks factor=E2F4 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3E2f6
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa E2F6 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F6 in HeLa-S3 cells)
+        subGroups view=Peaks factor=E2F6 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Ha
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa HA-E2F1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HA-E2F1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=E2F1ha cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Max
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa Max Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in HeLa-S3 cells)
+        subGroups view=Peaks factor=MAX cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Pol2V2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HeLa-S3 cells)
+        subGroups view=Peaks factor=POL2 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Tr4
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa TR4 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in HeLa-S3 cells)
+        subGroups view=Peaks factor=TR4 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3ifngStat1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa/Ig3 STAT1 P
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in HeLa/IFNg30 cells)
+        subGroups view=Peaks factor=STAT1 cellType=uHeLaIg30
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Cfos
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa c-Fos Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in HeLa-S3 cells)
+        subGroups view=Peaks factor=CFOS cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Cmyc
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa c-Myc Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in HeLa-S3 cells)
+        subGroups view=Peaks factor=CMYC cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Largefragment
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa LgFrag Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Frag Control in HeLa cells)
+        subGroups view=Peaks factor=yFrag cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Mouseigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa IgG-mus Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Input/IgG-mus in HeLa cells)
+        subGroups view=Peaks factor=yIGm cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHepg2Pol2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2p Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2/pravastatin cells)
+        subGroups view=Peaks factor=POL2 cellType=uHEPG2pra
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHepg2Srebp1a
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2p SREBP1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1 in HepG2/pravastatin cells)
+        subGroups view=Peaks factor=SREBP1 cellType=uHEPG2pra
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHepg2Srebp2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2 SREBP2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP2 in HepG2 cells)
+        subGroups view=Peaks factor=SREBP2 cellType=uHEPG2pra
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHepg2bTr4
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2b TR4 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in HepG2b cells)
+        subGroups view=Peaks factor=TR4 cellType=t2HepG2
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksK562Bdp1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 BDP1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BDP1 in K562 cells)
+        subGroups view=Peaks factor=BDP1 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Brf1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 BRF1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BRF1 in K562 cells)
+        subGroups view=Peaks factor=BRF1 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562JundV2
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel K562 JunD Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD in K562 cells)
+        subGroups view=Peaks factor=JUND cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562MaxV2
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel K562 Max Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in K562 cells)
+        subGroups view=Peaks factor=MAX cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Nfe2V2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 NF-E2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NF-E2 in K562 cells)
+        subGroups view=Peaks factor=NFE2 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Pol2V2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562 cells)
+        subGroups view=Peaks factor=POL2 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifna30Pol2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ia3 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562/IFNa30 cells)
+        subGroups view=Peaks factor=POL2 cellType=uK562Ia30
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifna6hPol2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ia6 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562/IFNa6h cells)
+        subGroups view=Peaks factor=POL2 cellType=uK562Ia6
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifng6hPol2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ig6 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in K562/IFNg6h cells)
+        subGroups view=Peaks factor=POL2 cellType=uK562Ig6
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Pol3
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel K562 Pol3 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol3 in K562 cells)
+        subGroups view=Peaks factor=POL3 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Rad21
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 Rad21 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in K562 cells)
+        subGroups view=Peaks factor=RAD21 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Rpc155
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 RPC155 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (RPC155 in K562 cells)
+        subGroups view=Peaks factor=RPC155 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Sirt6
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 SIRT6 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SIRT6 in K562 cells)
+        subGroups view=Peaks factor=SIRT6 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifna30Stat1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ia3 STAT1 P
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in K562/IFNa30 cells)
+        subGroups view=Peaks factor=STAT1 cellType=uK562Ia30
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifna6hStat1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ia6 STAT1 P
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in K562/IFNa6h cells)
+        subGroups view=Peaks factor=STAT1 cellType=uK562Ia6
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifna30Stat2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ia3 STAT2 P
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT2 in K562/IFNa30 cells)
+        subGroups view=Peaks factor=STAT2 cellType=uK562Ia30
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifna6hStat2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ia6 STAT2 P
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT2 in K562/IFNa6h cells)
+        subGroups view=Peaks factor=STAT2 cellType=uK562Ia6
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Xrcc4
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 XRCC4 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (XRCC4 in K562 cells)
+        subGroups view=Peaks factor=XRCC4 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562CfosV2
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel K562 c-Fos Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Fos in K562 cells)
+        subGroups view=Peaks factor=CFOS cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562CjunV2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 c-Jun Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562 cells)
+        subGroups view=Peaks factor=CJUN cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifna6hCjun
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ia6 cJun Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562/IFNa6h cells)
+        subGroups view=Peaks factor=CJUN cellType=uK562Ia6
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifng30Cjun
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ig3 cJun Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562/IFNg30 cells)
+        subGroups view=Peaks factor=CJUN cellType=uK562Ig30
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifng6hCjun
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ig6 cJun Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in K562/IFNg6h cells)
+        subGroups view=Peaks factor=CJUN cellType=uK562Ig6
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562CmycV2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 c-Myc Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562 cells)
+        subGroups view=Peaks factor=CMYC cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifna30Cmyc
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ia3 cMyc Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562/IFNa30 cells)
+        subGroups view=Peaks factor=CMYC cellType=uK562Ia30
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifna6hCmyc
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ia6 cMyc Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562/IFNa6h cells)
+        subGroups view=Peaks factor=CMYC cellType=uK562Ia6
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ifng6hCmyc
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/Ig6 cMyc Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in K562/IFNg6h cells)
+        subGroups view=Peaks factor=CMYC cellType=uK562Ig6
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562bE2f4
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562b E2F4 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F4 in K562b cells)
+        subGroups view=Peaks factor=E2F4 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562bE2f6
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562b E2F6 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F6 in K562b cells)
+        subGroups view=Peaks factor=E2F6 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562bGata1V2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562b GATA-1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GATA-1 in K562b cells)
+        subGroups view=Peaks factor=GATA1 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562bGata2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562b GATA-2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GATA-2 in K562b cells)
+        subGroups view=Peaks factor=GATA2 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562bSetdb1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562b SETDB1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SETDB1 in K562b cells)
+        subGroups view=Peaks factor=SETDB1 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562bTr4
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel K562b TR4 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in K562b cells)
+        subGroups view=Peaks factor=TR4 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562bYy1
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel K562b YY1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (YY1 in K562b cells)
+        subGroups view=Peaks factor=YY1 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562bZnf263V2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562b ZNF263 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF263 in K562b cells)
+        subGroups view=Peaks factor=ZNF263 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksMcf7Hae2f1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel MCF7 HA-E2F1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HA-E2F1 in MCF-7 cells)
+        subGroups view=Peaks factor=E2F1ha cellType=t3MCF7
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksNb4Pol2V2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel NB4 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in NB4 cells)
+        subGroups view=Peaks factor=POL2 cellType=t3NB4
+        color 46,0,184
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksNt2d1Suz12
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel NT2D1 SUZ12 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SUZ12 in NT2-D1 cells)
+        subGroups view=Peaks factor=SUZ12 cellType=t3NT2D1
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksNt2d1Yy1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel NT2D1 YY1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (YY1 in NT2-D1 cells)
+        subGroups view=Peaks factor=YY1 cellType=t3NT2D1
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm12878Yy1
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel GM12878 YY1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (YY1 in GM12878 cells)
+        subGroups view=Peaks factor=YY1 cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqPeaksK562bZnf274
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562b ZNF274 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in K562b cells)
+        subGroups view=Peaks factor=ZNF274 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562/M SETDB1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SETDB1 in K562b/MNase cells)
+        subGroups view=Peaks factor=SETDB1m cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksGm12878Tr4
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel GM12878 TR4 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TR4 in GM12878 cells)
+        subGroups view=Peaks factor=TR4 cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqPeaksHelas3E2f1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa E2F1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (E2F1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=E2F1 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksGm10847NfkbIggrab
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM10847 NFKB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM10847 cells)
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM10847
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm10847Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM10847 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM10847 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t3GM10847
+        type narrowPeak
+
+        #track wgEncodeYaleChIPseqPeaksGm12878NfkbIggrab
+        #parent wgEncodeYaleChIPseqViewPeaks off
+        #shortLabel GM12878 NFKB Pk
+        #longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM12878 cells)
+        #subGroups view=Peaks factor=NFKBrig cellType=t1GM12878
+        #type narrowPeak
+        #color 153,38,0
+
+        track wgEncodeYaleChIPseqPeaksGm12878Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel GM12878 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM12878 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqPeaksGm12891NfkbIggrab
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12891 NFKB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM12891 cells)
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM12891
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm12891Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12891 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM12891 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t3GM12891
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm12892NfkbIggrab
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12892 NFKB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM12892 cells)
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM12892
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm12892Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12892 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM12892 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t3GM12892
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm15510NfkbIggrab
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM15510 NFKB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM15510 cells)
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM15510
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm15510Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM15510 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM15510 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t3GM15510
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm18505NfkbIggrab
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM18505 NFKB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM18505 cells)
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM18505
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm18505Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM18505 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM18505 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t3GM18505
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm18526NfkbIggrab
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM18526 NFKB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM18526 cells)
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM18526
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm18526Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM18526 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM18526 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t3GM18526
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm18951NfkbIggrab
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM18951 NFKB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM18951 cells)
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM18951
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm18951Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM18951 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM18951 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t3GM18951
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm19099NfkbIggrab
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM19099 NFKB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM19099 cells)
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM19099
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm19099Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM19099 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM19099 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t3GM19099
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm19193NfkbIggrab
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM19193 NFKB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM19193 cells)
+        subGroups view=Peaks factor=NFKBrig cellType=t3GM19193
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksGm19193Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM19193 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in GM19193 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t3GM19193
+        type narrowPeak
+
+        track wgEncodeYaleChIPseqPeaksK562Brg1Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 Brg1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Brg1/IgG-mus in K562 cells)
+        subGroups view=Peaks factor=BRG1mig cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Ini1Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 Ini1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Ini1/IgG-mus in K562 cells)
+        subGroups view=Peaks factor=INI1mig cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Pol2Musigg
+        parent wgEncodeYaleChIPseqViewPeaks
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2/IgG-mus in K562 cells)
+        subGroups view=Peaks factor=POL2mig cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksHelas3Ini1Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa Ini1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Ini1/IgG-mus in HeLa-S3 cells)
+        subGroups view=Peaks factor=INI1mig cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Nrf1Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa Nrf1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Nrf1/IgG-mus in HeLa-S3 cells)
+        subGroups view=Peaks factor=NRF1mig cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3CjunRabigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa c-Jun Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun/IgG-rab in HeLa-S3 cells)
+        subGroups view=Peaks factor=CJUNrig cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3JundRabigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa JunD Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (JunD/IgG-rab in HeLa-S3 cells)
+        subGroups view=Peaks factor=JUNDrig cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHepg2Srebp1aInsln
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2i SREBP1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (SREBP1 in HepG2/insolin cells)
+        subGroups view=Peaks factor=SREBP1 cellType=uHEPG2ins
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHepg2Hsf1Forskln
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2f HSF1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HSF1 in HepG2/forskolin cells)
+        subGroups view=Peaks factor=HSF1 cellType=uHEPG2for
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHepg2ErraForskln
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2f ERRA Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ERRA in HepG2/forskolin cells)
+        subGroups view=Peaks factor=ERRA cellType=uHEPG2for
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHepg2Hnf4aForskln
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2f HNF4A Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (HNF4A in HepG2/forskolin cells)
+        subGroups view=Peaks factor=HNF4A cellType=uHEPG2for
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHepg2Pol2Forskln
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2f Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2/forskolin cells)
+        subGroups view=Peaks factor=POL2 cellType=uHEPG2for
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHepg2Pgc1aForskln
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2f PGC1A Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (PGC1A in HepG2/forskolin cells)
+        subGroups view=Peaks factor=PGC1A cellType=uHEPG2for
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHepg2CebpbForskln
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2f CEBPB Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (CEBPB in HepG2/forskolin cells)
+        subGroups view=Peaks factor=CEBPB cellType=uHEPG2for
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHepg2Grp20Forskln
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HepG2f GRp20 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GRp20 in HepG2/forskolin cells)
+        subGroups view=Peaks factor=GRP20 cellType=uHEPG2for
+        type narrowPeak
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqPeaksHelas3Baf155Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa BAF155 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BAF155/IgG-mus in HeLa-S3 cells)
+        subGroups view=Peaks factor=BAF155mig cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Baf170Musigg
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa BAF170 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BAF170/IgG-mus in HeLa-S3 cells)
+        subGroups view=Peaks factor=BAF170mig cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksK562Ifng30Pol2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Peaks (Pol2 in K562/IFNg30 cells)
+        subGroups view=Peaks factor=POL2 cellType=uK562Ig30
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Stat1Ifng30
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 STAT1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in K562/IFNg30 cells)
+        subGroups view=Peaks factor=STAT1 cellType=uK562Ig30
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Stat1Ifng6h
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 STAT1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (STAT1 in K562/IFNg6h cells)
+        subGroups view=Peaks factor=STAT1 cellType=uK562Ig6
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksHuvecPol2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HUVEC Pol2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HUVEC cells)
+        subGroups view=Peaks factor=POL2 cellType=t2HUVEC
+        type narrowPeak
+        color 224,75,0
+
+        track wgEncodeYaleChIPseqPeaksHuvecCjun
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HUVEC c-Jun Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in HUVEC cells)
+        subGroups view=Peaks factor=CJUN cellType=t2HUVEC
+        type narrowPeak
+        color 224,75,0
+
+        track wgEncodeYaleChIPseqPeaksHuvecMax
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HUVEC Max Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Max in HUVEC cells)
+        subGroups view=Peaks factor=MAX cellType=t2HUVEC
+        type narrowPeak
+        color 224,75,0
+
+        track wgEncodeYaleChIPseqPeaksGm12878Rad21Iggrab
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12878 Rad21 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Rad21/IgG-rab in GM12878 cells)
+        subGroups view=Peaks factor=RAD21rab cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqPeaksGm12878Zzz3
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12878 ZZZ3 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ZZZ3 in GM12878 cells)
+        subGroups view=Peaks factor=ZZZ3 cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqPeaksK562Nelfe
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 NELFe Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NELFe in K562 cells)
+        subGroups view=Peaks factor=NELFE cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksHelas3Bdp1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa BDP1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BDP1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=BDP1 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Brf1
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa BRF1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BRF1 in HeLa-S3 cells)
+        subGroups view=Peaks factor=BRF1 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Brf2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa BRF2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BRF2 in HeLa-S3 cells)
+        subGroups view=Peaks factor=BRF2 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Rpc155
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa RPC155 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (RPC155 in HeLa-S3 cells)
+        subGroups view=Peaks factor=RPC155 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksHelas3Tfiiic
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa TFIIIC Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TFIIIC-110 in HeLa-S3 cells)
+        subGroups view=Peaks factor=TF3C110 cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksK562Atf3
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 ATF3 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (ATF3 in K562 cells)
+        subGroups view=Peaks factor=ATF3 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Gtf2b
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 GTF2B Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (GTF2B in K562 cells)
+        subGroups view=Peaks factor=GTF2B cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Brf2
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 BRF2 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (BRF2 in K562 cells)
+        subGroups view=Peaks factor=BRF2 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksK562Tfiiic
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel K562 TFIIIC Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (TFIIIC-110 in K562 cells)
+        subGroups view=Peaks factor=TF3C110 cellType=t1K562
+        type narrowPeak
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqPeaksHelas3Brg1Iggmus
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel HeLa Brg1 Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (Brg1/IgG-mus in HeLa-S3 cells)
+        subGroups view=Peaks factor=BRG1mig cellType=t2HeLa
+        type narrowPeak
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqPeaksGm12878Cjun
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12878 c-Jun Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in GM12878 cells)
+        subGroups view=Peaks factor=CJUN cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+        # subId=1185 dateSubmitted=2011-03-16
+
+        track wgEncodeYaleChIPseqPeaksGm12878Cmyc
+        parent wgEncodeYaleChIPseqViewPeaks off
+        shortLabel GM12878 c-Myc Pk
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (c-Myc in GM12878 cells)
+        subGroups view=Peaks factor=CMYC cellType=t1GM12878
+        type narrowPeak
+        color 153,38,0
+        # subId=1186 dateSubmitted=2011-03-16
+
+    track wgEncodeYaleChIPseqViewSignal
+    shortLabel Signal
+    view Signal
+    visibility full
+    parent wgEncodeYaleChIPseq
+    viewLimits 0:78
+    minLimit 0
+    maxLimit 20910
+    autoScale off
+    windowingFunction mean+whiskers
+    maxHeightPixels 100:32:16
+
+        track wgEncodeYaleChIPseqRel2SignalGm12878Jund
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel GM12878 JunD Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in GM12878 cells)
+        subGroups view=Signal factor=JUND cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalGm12878MaxV3
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel GM12878 Max Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in GM12878 cells)
+        subGroups view=Signal factor=MAX cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+        # subId=1182 dateSubmitted=2011-03-16 # track wgEncodeYaleChIPseqRel2SignalGm12878Max
+
+        track wgEncodeYaleChIPseqSignalGm12878NfkbTnfa
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 NFKB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB in GM12878 cells)
+        subGroups view=Signal factor=NFKB cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalGm12878Pol2V3
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in GM12878 cells)
+        subGroups view=Signal factor=POL2 cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+        # subId=1183 dateSubmitted=2011-03-16 # track wgEncodeYaleChIPseqRel2SignalGm12878Pol2
+
+        track wgEncodeYaleChIPseqSignalGm12878Pol3
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel GM12878 Pol3 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol3 in GM12878 cells)
+        subGroups view=Signal factor=POL3 cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalGm12878CfosV3
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel GM12878 c-Fos Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in GM12878 cells)
+        subGroups view=Signal factor=CFOS cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+        # subId=1184 dateSubmitted=2011-03-16 # track wgEncodeYaleChIPseqRel2SignalGm12878Cfos
+
+        track wgEncodeYaleChIPseqRel2SignalGm12878Input
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 Inp Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in GM12878 cells)
+        subGroups view=Signal factor=zCTRL cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalHct116Pol2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HCT116 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HCT-116 cells)
+        subGroups view=Signal factor=POL2 cellType=t3HCT116
+        type bedGraph 4
+        color 0,55,219
+
+        track wgEncodeYaleChIPseqRel2SignalHct116Tcf4
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HCT116 TCF7L2 Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TCF7L2 in HCT-116 cells)
+        subGroups view=Signal factor=TCF7L2 cellType=t3HCT116
+        type bedGraph 4
+        color 0,55,219
+
+        track wgEncodeYaleChIPseqRel2SignalHct116Input
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HCT116 Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HCT-116 cells)
+        subGroups view=Signal factor=zaCTRL cellType=t3HCT116
+        type bedGraph 4
+        color 0,55,219
+
+        track wgEncodeYaleChIPseqRel2SignalHek293Pol2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HEK293 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HEK293 cells)
+        subGroups view=Signal factor=POL2 cellType=t3HEK293b
+        type bedGraph 4
+        color 133,0,173
+
+        track wgEncodeYaleChIPseqRel2SignalHek293Input
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HEK293 Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HEK293 cells)
+        subGroups view=Signal factor=zCTRL cellType=t3HEK293b
+        type bedGraph 4
+        color 133,0,173
+        cell HEK293(b)
+
+        track wgEncodeYaleChIPseqSignalHelas3Ap2alpha
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa AP-2a Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (AP-2alpha in HeLa-S3 cells)
+        subGroups view=Signal factor=AP2alp cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Ap2gamma
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa AP-2g Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (AP-2gamma in HeLa-S3 cells)
+        subGroups view=Signal factor=AP2gam cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3E2f4
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa E2F4 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F4 in HeLa-S3 cells)
+        subGroups view=Signal factor=E2F4 cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3E2f6
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa E2F6 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F6 in HeLa-S3 cells)
+        subGroups view=Signal factor=E2F6 cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Ha
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa HA-E2F1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HA-E2F1 in HeLa-S3 cells)
+        subGroups view=Signal factor=E2F1ha cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Max
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa3 Max Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in HeLa-S3 cells)
+        subGroups view=Signal factor=MAX cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqRel2SignalHelas3Pol2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HeLa cells)
+        subGroups view=Signal factor=POL2 cellType=t2HeLa
+        type bedGraph 4
+        color 0,102,136
+
+        track wgEncodeYaleChIPseqSignalHelas3Tr4
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa TR4 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in HeLa-S3 cells)
+        subGroups view=Signal factor=TR4 cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3ifngStat1V2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa/Ig3 STAT1 S
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in HeLa/IFNg30 cells)
+        subGroups view=Signal factor=STAT1 cellType=uHeLaIg30
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Cfos
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa c-Fos Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in HeLa-S3 cells)
+        subGroups view=Signal factor=CFOS cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Cmyc
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa c-Myc Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in HeLa-S3 cells)
+        subGroups view=Signal factor=CMYC cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqRel2SignalHelas3Input
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa cells)
+        subGroups view=Signal factor=zCTRL cellType=t2HeLa
+        type bedGraph 4
+        color 0,102,136
+
+        track wgEncodeYaleChIPseqRel2SignalHelas3ifngInput
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa/Ig30 Inp Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa/IFNg30 cells)
+        subGroups view=Signal factor=zCTRL cellType=uHeLaIg30
+        type bedGraph 4
+        color 0,102,136
+
+        track wgEncodeYaleChIPseqSignalHelas3LargefragmentV2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa LgFrag Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Frag Control in HeLa cells)
+        subGroups view=Signal factor=yFrag cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3MnaseV2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa MNase Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (MNase Control in HeLa cells)
+        subGroups view=Signal factor=yMNase cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3MouseiggV2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in HeLa cells)
+        subGroups view=Signal factor=yIGm cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3NakeddnaV2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa DNA Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Naked DNA, HeLa cells)
+        subGroups view=Signal factor=yDNA cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHepg2Pol2V2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2 cells)
+        subGroups view=Signal factor=POL2 cellType=uHEPG2pra
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2Srebp1aV2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2p SREBP1 Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1 in HepG2/pravastatin cells)
+        subGroups view=Signal factor=SREBP1 cellType=uHEPG2pra
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2Srebp2V2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2 SREBP2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP2 in HepG2 cells)
+        subGroups view=Signal factor=SREBP2 cellType=uHEPG2pra
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqRel2SignalHepg2Input
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2 Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
+        subGroups view=Signal factor=zCTRL cellType=uHEPG2pra
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2bTr4
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2b TR4 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in HepG2b cells)
+        subGroups view=Signal factor=TR4 cellType=t2HepG2
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2bInput
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2b Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2b cells)
+        subGroups view=Signal factor=zaCTRL cellType=t2HepG2
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalK562Bdp1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 BDP1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BDP1 in K562 cells)
+        subGroups view=Signal factor=BDP1 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Brf1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 BRF1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BRF1 in K562 cells)
+        subGroups view=Signal factor=BRF1 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqRel2SignalK562Jund
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel K562 JunD Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD in K562 cells)
+        subGroups view=Signal factor=JUND cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqRel2SignalK562Max
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel K562 Max Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in K562 cells)
+        subGroups view=Signal factor=MAX cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqRel2SignalK562Nfe2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 NF-E2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NF-E2 in K562 cells)
+        subGroups view=Signal factor=NFE2 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqRel2SignalK562Pol2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562 cells)
+        subGroups view=Signal factor=POL2 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna30Pol2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia3 Pol2 Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562/IFNa30 cells)
+        subGroups view=Signal factor=POL2 cellType=uK562Ia30
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna6hPol2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia6 Pol2 Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562/IFNa6h cells)
+        subGroups view=Signal factor=POL2 cellType=uK562Ia6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifng6hPol2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ig6 Pol2 Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in K562/IFNg6h cells)
+        subGroups view=Signal factor=POL2 cellType=uK562Ig6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Pol3
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel K562 Pol3 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol3 in K562 cells)
+        subGroups view=Signal factor=POL3 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Rad21
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 Rad21 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Rad21 in K562 cells)
+        subGroups view=Signal factor=RAD21 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Rpc155
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 RPC155 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (RPC155 in K562 cells)
+        subGroups view=Signal factor=RPC155 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Sirt6
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 SIRT6 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SIRT6 in K562 cells)
+        subGroups view=Signal factor=SIRT6 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna30Stat1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia3 STAT1 S
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in K562/IFNa30 cells)
+        subGroups view=Signal factor=STAT1 cellType=uK562Ia30
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna6hStat1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia6 STAT1 S
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in K562/IFNa6h cells)
+        subGroups view=Signal factor=STAT1 cellType=uK562Ia6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna30Stat2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia3 STAT2 S
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT2 in K562/IFNa30 cells)
+        subGroups view=Signal factor=STAT2 cellType=uK562Ia30
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna6hStat2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia6 STAT2 S
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT2 in K562/IFNa6h cells)
+        subGroups view=Signal factor=STAT2 cellType=uK562Ia6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Xrcc4
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 XRCC4 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (XRCC4 in K562 cells)
+        subGroups view=Signal factor=XRCC4 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqRel2SignalK562Cfos
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel K562 c-Fos Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Fos in K562 cells)
+        subGroups view=Signal factor=CFOS cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqRel2SignalK562Cjun
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 c-Jun Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562 cells)
+        subGroups view=Signal factor=CJUN cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna6hCjun
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia6 cJun Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562/IFNa6h cells)
+        subGroups view=Signal factor=CJUN cellType=uK562Ia6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifng30Cjun
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ig30 cJun S
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562/IFNg30 cells)
+        subGroups view=Signal factor=CJUN cellType=uK562Ig30
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifng6hCjun
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ig6 cJun Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in K562/IFNg6h cells)
+        subGroups view=Signal factor=CJUN cellType=uK562Ig6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqRel2SignalK562Cmyc
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 c-Myc Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562 cells)
+        subGroups view=Signal factor=CMYC cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna30Cmyc
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia3 cMyc Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562/IFNa30 cells)
+        subGroups view=Signal factor=CMYC cellType=uK562Ia30
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna6hCmyc
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia6 cMyc Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562/IFNa6h cells)
+        subGroups view=Signal factor=CMYC cellType=uK562Ia6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifng6hCmyc
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ig6 cMyc Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in K562/IFNg6h cells)
+        subGroups view=Signal factor=CMYC cellType=uK562Ig6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalRep1K562InputV2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
+        subGroups view=Signal factor=zCTRL cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna30Input
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia3 Inp Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562/IFNa30 cells)
+        subGroups view=Signal factor=zCTRL cellType=uK562Ia30
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifna6hInput
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ia6 Inp Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562/IFNa6h cells)
+        subGroups view=Signal factor=zCTRL cellType=uK562Ia6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifng30Input
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ig3 Inp Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562/IFNg30 cells)
+        subGroups view=Signal factor=zCTRL cellType=uK562Ig30
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ifng6hInput
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/Ig6 Inp Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562/IFNg6h cells)
+        subGroups view=Signal factor=zCTRL cellType=uK562Ig6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562bE2f4
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562b E2F4 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F4 in K562b cells)
+        subGroups view=Signal factor=E2F4 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562bE2f6
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562b E2F6 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F6 in K562b cells)
+        subGroups view=Signal factor=E2F6 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqRel2SignalK562bGata1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562b GATA1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GATA-1 in K562b cells)
+        subGroups view=Signal factor=GATA1 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562bGata2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562b GATA-2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GATA-2 in K562b cells)
+        subGroups view=Signal factor=GATA2 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562bSetdb1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562b SETDB1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SETDB1 in K562b cells)
+        subGroups view=Signal factor=SETDB1 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562bTr4
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel K562b TR4 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in K562b cells)
+        subGroups view=Signal factor=TR4 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562bYy1
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel K562b YY1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (YY1 in K562b cells)
+        subGroups view=Signal factor=YY1 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqRel2SignalK562bZnf263
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 ZNF263 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZNF263 in K562 cells)
+        subGroups view=Signal factor=ZNF263 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562bInput
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562b Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in K562b cells)
+        subGroups view=Signal factor=zaCTRL cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalMcf7Hae2f1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel MCF7 HA-E2F1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HA-E2F1 in MCF-7 cells)
+        subGroups view=Signal factor=E2F1ha cellType=t3MCF7
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqRel2SignalNb4Pol2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel NB4 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in NB4 cells)
+        subGroups view=Signal factor=POL2 cellType=t3NB4
+        color 46,0,184
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqRel2SignalNb4Input
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel NB4 Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NB4 cells)
+        subGroups view=Signal factor=zCTRL cellType=t3NB4
+        color 46,0,184
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalNt2d1Suz12
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel NT2D1 SUZ12 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SUZ12 in NT2-D1 cells)
+        subGroups view=Signal factor=SUZ12 cellType=t3NT2D1
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalNt2d1Yy1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel NT2D1 YY1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (YY1 in NT2-D1 cells)
+        subGroups view=Signal factor=YY1 cellType=t3NT2D1
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalNt2d1Input
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel NT2D1 Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in NT2-D1 cells)
+        subGroups view=Signal factor=zaCTRL cellType=t3NT2D1
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm12878Yy1
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel GM12878 YY1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (YY1 in GM12878 cells)
+        subGroups view=Signal factor=YY1 cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalK562bZnf274
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562b ZNF274 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in K562b cells)
+        subGroups view=Signal factor=ZNF274 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562bSetdb1Mnase
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562/M SETDB1 Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SETDB1 in K562b/MNase cells)
+        subGroups view=Signal factor=SETDB1m cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalGm12878Tr4
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel GM12878 TR4 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TR4 in GM12878 cells)
+        subGroups view=Signal factor=TR4 cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalHelas3E2f1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa E2F1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (E2F1 in HeLa-S3 cells)
+        subGroups view=Signal factor=E2F1 cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalGm10847MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM10847 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM10847 cells)
+        subGroups view=Signal factor=yIGm cellType=t3GM10847
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm10847NfkbIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM10847 NFKB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM10847 cells)
+        subGroups view=Signal factor=NFKBrig cellType=t3GM10847
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm10847Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM10847 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM10847 cells)
+        subGroups view=Signal factor=POL2mig cellType=t3GM10847
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm12878MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM12878 cells)
+        subGroups view=Signal factor=yIGm cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        #track wgEncodeYaleChIPseqSignalGm12878NfkbIggrab
+        #parent wgEncodeYaleChIPseqViewSignal off
+        #shortLabel GM12878 NFKB Sig
+        #longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM12878 cells)
+        #subGroups view=Signal factor=NFKBrig cellType=t1GM12878
+        #type bedGraph 4
+        #color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalGm12878Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel GM12878 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM12878 cells)
+        subGroups view=Signal factor=POL2mig cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalGm12891MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12891 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM12891 cells)
+        subGroups view=Signal factor=yIGm cellType=t3GM12891
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm12891NfkbIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12891 NFKB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM12891 cells)
+        subGroups view=Signal factor=NFKBrig cellType=t3GM12891
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm12891Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12891 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM12891 cells)
+        subGroups view=Signal factor=POL2mig cellType=t3GM12891
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm12892MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12892 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM12892 cells)
+        subGroups view=Signal factor=yIGm cellType=t3GM12892
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm12892NfkbIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12892 NFKB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM12892 cells)
+        subGroups view=Signal factor=NFKBrig cellType=t3GM12892
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm12892Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12892 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM12892 cells)
+        subGroups view=Signal factor=POL2mig cellType=t3GM12892
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm15510MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM15510 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in GM15510 cells)
+        subGroups view=Signal factor=yIGm cellType=t3GM15510
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm15510NfkbIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM15510 NFKB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM15510 cells)
+        subGroups view=Signal factor=NFKBrig cellType=t3GM15510
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm15510Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM15510 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM15510 cells)
+        subGroups view=Signal factor=POL2mig cellType=t3GM15510
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18505MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18505 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in GM18505 cells)
+        subGroups view=Signal factor=yIGm cellType=t3GM18505
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18505NfkbIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18505 NFKB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM18505 cells)
+        subGroups view=Signal factor=NFKBrig cellType=t3GM18505
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18505Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18505 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM18505 cells)
+        subGroups view=Signal factor=POL2mig cellType=t3GM18505
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18526MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18526 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-mus in GM18526 cells)
+        subGroups view=Signal factor=yIGm cellType=t3GM18526
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18526NfkbIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18526 NFKB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM18526 cells)
+        subGroups view=Signal factor=NFKBrig cellType=t3GM18526
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18526Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18526 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM18526 cells)
+        subGroups view=Signal factor=POL2mig cellType=t3GM18526
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18951MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18951 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM18951 cells)
+        subGroups view=Signal factor=yIGm cellType=t3GM18951
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18951NfkbIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18951 NFKB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM18951 cells)
+        subGroups view=Signal factor=NFKBrig cellType=t3GM18951
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18951Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18951 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM18951 cells)
+        subGroups view=Signal factor=POL2mig cellType=t3GM18951
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm19099MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM19099 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM19099 cells)
+        subGroups view=Signal factor=yIGm cellType=t3GM19099
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm19099NfkbIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM19099 NFKB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM19099 cells)
+        subGroups view=Signal factor=NFKBrig cellType=t3GM19099
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm19099Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM19099 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM19099 cells)
+        subGroups view=Signal factor=POL2mig cellType=t3GM19099
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm19193MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM19193 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in GM19193 cells)
+        subGroups view=Signal factor=yIGm cellType=t3GM19193
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm19193NfkbIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM19193 NFKB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM19193 cells)
+        subGroups view=Signal factor=NFKBrig cellType=t3GM19193
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm19193Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM19193 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in GM19193 cells)
+        subGroups view=Signal factor=POL2mig cellType=t3GM19193
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalK562Brg1Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 Brg1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Brg1/IgG-mus in K562 cells)
+        subGroups view=Signal factor=BRG1mig cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562MusiggMusigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 mIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-mus in K562 cells)
+        subGroups view=Signal factor=yIGm cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Ini1Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 Ini1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Ini1/IgG-mus in K562 cells)
+        subGroups view=Signal factor=INI1mig cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Pol2Musigg
+        parent wgEncodeYaleChIPseqViewSignal
+        shortLabel K562 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2/IgG-mus in K562 cells)
+        subGroups view=Signal factor=POL2mig cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalHelas3Ini1Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa Ini1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Ini1/IgG-mus in HeLa-S3 cells)
+        subGroups view=Signal factor=INI1mig cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Nrf1Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa Nrf1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Nrf1/IgG-mus in HeLa-S3 cells)
+        subGroups view=Signal factor=NRF1mig cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Rabigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input/IgG-rab in HeLa-S3 cells)
+        subGroups view=Signal factor=yIGr cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3CjunRabigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa c-Jun Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun/IgG-rab in HeLa-S3 cells)
+        subGroups view=Signal factor=CJUNrig cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3JundRabigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa JunD Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (JunD/IgG-rab in HeLa-S3 cells)
+        subGroups view=Signal factor=JUNDrig cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHepg2ControlInsln
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2i Ctrl Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Control in HepG2/insolin cells)
+        subGroups view=Signal factor=zCTRL cellType=uHEPG2ins
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2Srebp1aInsln
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2i SREBP1 Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (SREBP1 in HepG2/insolin cells)
+        subGroups view=Signal factor=SREBP1 cellType=uHEPG2ins
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2ControlForskln
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2f Ctrl Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Control in HepG2/forskolin cells)
+        subGroups view=Signal factor=zCTRL cellType=uHEPG2for
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2Hsf1Forskln
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2f HSF1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HSF1 in HepG2/forskolin cells)
+        subGroups view=Signal factor=HSF1 cellType=uHEPG2for
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2ErraForskln
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2f ERRA Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ERRA in HepG2/forskolin cells)
+        subGroups view=Signal factor=ERRA cellType=uHEPG2for
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2Hnf4aForskln
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2f HNF4A Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (HNF4A in HepG2/forskolin cells)
+        subGroups view=Signal factor=HNF4A cellType=uHEPG2for
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2Pol2Forskln
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2f Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2/forskolin cells)
+        subGroups view=Signal factor=POL2 cellType=uHEPG2for
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2Pgc1aForskln
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2f PGC1A Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (PGC1A in HepG2/forskolin cells)
+        subGroups view=Signal factor=PGC1A cellType=uHEPG2for
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2CebpbForskln
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2f CEBPB Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (CEBPB in HepG2/forskolin cells)
+        subGroups view=Signal factor=CEBPB cellType=uHEPG2for
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHepg2Grp20Forskln
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HepG2f GRp20 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GRp20 in HepG2/forskolin cells)
+        subGroups view=Signal factor=GRP20 cellType=uHEPG2for
+        type bedGraph 4
+        color 189,0,157
+
+        track wgEncodeYaleChIPseqSignalHelas3Baf155Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa BAF155 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BAF155/IgG-mus in HeLa-S3 cells)
+        subGroups view=Signal factor=BAF155mig cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Baf170Musigg
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa BAF170 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BAF170/IgG-mus in HeLa-S3 cells)
+        subGroups view=Signal factor=BAF170mig cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalK562Ifng30Pol2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Pol2 in K562/IFNg30 cells)
+        subGroups view=Signal factor=POL2 cellType=uK562Ig30
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Stat1Ifng30
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 STAT1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in K562/IFNg30 cells)
+        subGroups view=Signal factor=STAT1 cellType=uK562Ig30
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Stat1Ifng6h
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 STAT1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (STAT1 in K562/IFNg6h cells)
+        subGroups view=Signal factor=STAT1 cellType=uK562Ig6
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalHuvecPol2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HUVEC Pol2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HUVEC cells)
+        subGroups view=Signal factor=POL2 cellType=t2HUVEC
+        type bedGraph 4
+        color 224,75,0
+
+        track wgEncodeYaleChIPseqSignalHuvecCjun
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HUVEC c-Jun Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in HUVEC cells)
+        subGroups view=Signal factor=CJUN cellType=t2HUVEC
+        type bedGraph 4
+        color 224,75,0
+
+        track wgEncodeYaleChIPseqSignalHuvecMax
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HUVEC Max Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Max in HUVEC cells)
+        subGroups view=Signal factor=MAX cellType=t2HUVEC
+        type bedGraph 4
+        color 224,75,0
+
+        track wgEncodeYaleChIPseqSignalGm12878Rad21Iggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 Rad21 Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Rad21/IgG-rab in GM12878 cells)
+        subGroups view=Signal factor=RAD21rab cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalGm12878Zzz3
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 ZZZ3 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ZZZ3 in GM12878 cells)
+        subGroups view=Signal factor=ZZZ3 cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalK562Nelfe
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 NELFe Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NELFe in K562 cells)
+        subGroups view=Signal factor=NELFE cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalHelas3Bdp1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa BDP1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BDP1 in HeLa-S3 cells)
+        subGroups view=Signal factor=BDP1 cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Brf1
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa BRF1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BRF1 in HeLa-S3 cells)
+        subGroups view=Signal factor=BRF1 cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Brf2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa BRF2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BRF2 in HeLa-S3 cells)
+        subGroups view=Signal factor=BRF2 cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Rpc155
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa RPC155 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (RPC155 in HeLa-S3 cells)
+        subGroups view=Signal factor=RPC155 cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalHelas3Tfiiic
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa TFIIIC Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TFIIIC-110 in HeLa-S3 cells)
+        subGroups view=Signal factor=TF3C110 cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalK562Atf3
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 ATF3 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (ATF3 in K562 cells)
+        subGroups view=Signal factor=ATF3 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Gtf2b
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 GTF2B Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (GTF2B in K562 cells)
+        subGroups view=Signal factor=GTF2B cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Brf2
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 BRF2 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (BRF2 in K562 cells)
+        subGroups view=Signal factor=BRF2 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalK562Tfiiic
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel K562 TFIIIC Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (TFIIIC-110 in K562 cells)
+        subGroups view=Signal factor=TF3C110 cellType=t1K562
+        type bedGraph 4
+        color 46,0,184
+
+        track wgEncodeYaleChIPseqSignalMcf7Input
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel MCF7 Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Input in MCF-7 cells)
+        subGroups view=Signal factor=zaCTRL cellType=t3MCF7
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm10847InputIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM10847 rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM10847 cells)
+        subGroups view=Signal factor=yIGr cellType=t3GM10847
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm12878InputIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM12878 cells)
+        subGroups view=Signal factor=yIGr cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+
+        track wgEncodeYaleChIPseqSignalGm12892InputIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12892 rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM12892 cells)
+        subGroups view=Signal factor=yIGr cellType=t3GM12892
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm12891InputIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12891 rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM12891 cells)
+        subGroups view=Signal factor=yIGr cellType=t3GM12891
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm15510InputIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM15510 rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM15510 cells)
+        subGroups view=Signal factor=yIGr cellType=t3GM15510
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18505InputIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18505 rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM18505 cells)
+        subGroups view=Signal factor=yIGr cellType=t3GM18505
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18526InputIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18526 rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM18526 cells)
+        subGroups view=Signal factor=yIGr cellType=t3GM18526
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm18951InputIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM18951 rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM18951 cells)
+        subGroups view=Signal factor=yIGr cellType=t3GM18951
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm19099InputIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM19099 rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM19099 cells)
+        subGroups view=Signal factor=yIGr cellType=t3GM19099
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalGm19193InputIggrab
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM19193 rIgG Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input/IgG-rab in GM19193 cells)
+        subGroups view=Signal factor=yIGr cellType=t3GM19193
+        type bedGraph 4
+
+        track wgEncodeYaleChIPseqSignalHuvecInputStd
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HUVEC Input Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-Seq Signal (Input in HUVEC cells)
+        subGroups view=Signal factor=zCTRL cellType=t2HUVEC
+        type bedGraph 4
+        color 224,75,0
+
+        track wgEncodeYaleChIPseqSignalHelas3Brg1Iggmus
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel HeLa Brg1 Sig
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (Brg1/IgG-mus in HeLa-S3 cells)
+        subGroups view=Signal factor=BRG1mig cellType=t2HeLa
+        type bedGraph 4
+        color 0,119,158
+
+        track wgEncodeYaleChIPseqSignalGm12878Cjun
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 c-Jun Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Jun in GM12878 cells)
+        subGroups view=Signal factor=CJUN cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+        # subId=1185 dateSubmitted=2011-03-16
+
+        track wgEncodeYaleChIPseqSignalGm12878Cmyc
+        parent wgEncodeYaleChIPseqViewSignal off
+        shortLabel GM12878 c-Myc Sg
+        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (c-Myc in GM12878 cells)
+        subGroups view=Signal factor=CMYC cellType=t1GM12878
+        type bedGraph 4
+        color 153,38,0
+        # subId=1186 dateSubmitted=2011-03-16
+

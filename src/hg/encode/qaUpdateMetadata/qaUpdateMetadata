@@ -5,7 +5,7 @@ from ucscgenomics import ra, track
 def main():
     parser = argparse.ArgumentParser(
         prog='qaUpdateMetadata',
-        description='Update a the beta metaDb with selected items from the corresponding alpha metaDb object',
+        description='Update the beta metaDb with selected items from the corresponding alpha metaDb object',
         epilog='example: qaUpdateMetadata hg19 wgEncodeUwDnaseSeq md5sum objType cell treatment'
         )
     parser.add_argument('database', help='The database, typically hg19 or mm9')

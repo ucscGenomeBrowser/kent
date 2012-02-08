@@ -335,6 +335,19 @@ echo drop table xmMrna | hgsql mm6
    mkdir rebase902
    mv rebase.gcg rebaseRefs.txt rebase902/
 
+# REBASE 201 (Dec 31, 2011) (DONE 2012-01-24, Andy)
+   ssh hgwdev
+   cd /hive/data/outside/rebase
+   mkdir rebase201
+   cd rebase201/
+   # go to http://rebase.neb.com/rebase/rebase.f3.html
+   # save the GET FILE files, then scp them to this dir
+   ln -s link_gcgenz.txt rebase.gcg
+   hgCutters hgFixed rebase.gcg
+   tail -n +15 link_gcgref.txt | sed '/^$/d; s/^\s*\([[:digit:]]\+\)\.\s\+\</\1\t/' > rebaseRefs.txt
+   hgsqldump -d --compact hgFixed rebaseRefs | grep -v "^SET" > rebaseRefs.sql
+   hgLoadSqlTab hgFixed rebaseRefs{,.sql,.txt} 
+
 # GLADSTONE hESC Novartis microarray data.
    # 1. Download http://www.genmapp.org/temp/humansimpleESC.zip
    # 2. Manually convert using MS access on Bob's laptop to a tab-delimited text file.

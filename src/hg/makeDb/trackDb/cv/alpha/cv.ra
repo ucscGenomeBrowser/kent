@@ -34,6 +34,7 @@
 #       Should correspond to a "type tier" stanza. required)
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human. optional)
+
 term GM12878
 tag GM12878
 type Cell Line
@@ -86,8 +87,8 @@ karyotype cancer
 lineage mesoderm
 termId BTO:0000664
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
-#color 46,0,184
 protocol Farnham:K562_protocol.pdf
+#color 46,0,184
 
 term HepG2
 tag HEPG2
@@ -160,6 +161,7 @@ protocol ENCODE:HeLa-S3_protocol.pdf Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
 #color 0,119,158
 #tier 3
 #protocol Protocol:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
+
 term HUVEC
 tag HUVEC
 type Cell Line
@@ -204,7 +206,6 @@ organism human
 description embryonic stem cells
 tissue embryonic stem cell
 vendorName Cellular Dynamics
-#vendorId
 orderUrl http://www.cellulardynamics.com/
 lineage inner cell mass
 karyotype normal
@@ -214,8 +215,10 @@ color 0,107,27
 sex M
 tier 1
 protocol ENCODE:H1_ES_protocol.pdf
+#vendorId
 
 ###### type 3 cells once they have been submitted.
+
 term 8988T
 tag 8988T
 type Cell Line
@@ -248,9 +251,9 @@ karyotype cancer
 termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
-#formerly tier 3
 tier 2
 protocol Myers:A549_protocol.pdf Crawford:A549_Crawford_protocol.pdf Stam:A549_Stam_protocol.pdf
+#formerly tier 3
 
 term AG04449
 tag AG04449
@@ -300,7 +303,6 @@ type Cell Line
 organism human
 description gum tissue fibroblasts from apparently heathly 24 year old
 tissue gingival
-#lineage mesoderm
 karyotype normal
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09319
 vendorName Coriell
@@ -308,6 +310,7 @@ vendorId AG09319
 sex F
 tier 3
 protocol Stam:AG09319_Stam_protocol.pdf
+#lineage mesoderm
 
 term AG10803
 tag AG10803
@@ -322,6 +325,57 @@ sex M
 tier 3
 protocol Stam:AG10803_Stam_protocol.pdf
 
+term Adult_CD4_naive
+tag ADULTCD4NAIVE
+type Cell Line
+organism human
+description CD4+ cells isolated from human blood and enriched for naive populations
+tissue blood
+karyotype blood
+vendorName David Randolph at University of Alabama, Birmingham 
+vendorId Adult_CD4_naive
+orderUrl drdrdr@uab.edu
+termId BTO:3A0000782
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
+sex B
+tier 3
+lab Crawford
+protocol Crawford:AdultCD4naive_Crawford_protocol.pdf
+
+term Adult_CD4_Th0
+tag ADULTCD4TH0
+type Cell Line
+organism human
+description CD4+ cells isolated from human blood and enriched for Th0 populations
+tissue blood
+karyotype blood
+vendorName David Randolph at University of Alabama, Birmingham 
+vendorId Adult_CD4_Th0
+orderUrl drdrdr@uab.edu
+termId BTO:3A0000782
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
+sex B
+tier 3
+lab Crawford
+protocol Crawford:AdultCD4Th0_Crawford_protocol.pdf
+
+term Adult_CD4_Th1
+tag ADULTCD4TH1
+type Cell Line
+organism human
+description CD4+ cells isolated from human blood and enriched for Th1 populations
+tissue blood
+karyotype blood
+vendorName David Randolph at University of Alabama, Birmingham 
+vendorId Adult_CD4_Th1
+orderUrl drdrdr@uab.edu
+termId BTO:3A0000782
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
+sex B
+tier 3
+lab Crawford
+protocol Crawford:AdultCD4Th1_Crawford_protocol.pdf
+
 term AoAF
 tag AOAF
 type Cell Line
@@ -333,11 +387,11 @@ karyotype normal
 vendorName Lonza
 vendorId CC-7014, CC-7014T75
 orderUrl http://www.lonza.com/
-#termId
-#termUrl
 sex F
 tier 3
 protocol Stam:AoAF_Stam_protocol.pdf
+#termId
+#termUrl
 
 term AoSMC
 tag AOSMC
@@ -381,7 +435,6 @@ tier 3
 organism human
 description adipose tissue, donor UHN0001, age 35, African American, DNA extract
 tissue adipose tissue
-#lineage mesoderm
 karyotype normal
 sex F
 vendorName BioChain
@@ -390,6 +443,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001487
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001487
 protocol Myers:Myers_BioChain_protocol.pdf
+#lineage mesoderm
 
 term BC_Adrenal_Gland_H12803N
 tag BCADRENAL
@@ -399,7 +453,6 @@ organism human
 description adrenal gland, donor H12803N, age 88, caucasian, DNA extract
 tissue adrenal gland
 lineage ectoderm, mesoderm
-# http://herkules.oulu.fi/isbn951426844X/html/i232188.html
 karyotype normal
 sex F
 vendorName BioChain
@@ -408,6 +461,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000047
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000047
 protocol Myers:Myers_BioChain_protocol.pdf
+# http://herkules.oulu.fi/isbn951426844X/html/i232188.html
 
 term BC_Bladder_01-11002
 tag BCBLADDER
@@ -478,6 +532,7 @@ protocol Myers:Myers_BioChain_protocol.pdf
 #termId BTO:0001421
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001421
 #protocol Myers:Myers_BioChain_protocol.pdf
+
 term BC_Colon_01-11002
 tag BCCOLON
 type Cell Line
@@ -554,7 +609,6 @@ organism human
 description jejunum, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue jejunum
 lineage endoderm
-# http://en.wikipedia.org/wiki/Jejunum
 karyotype normal
 sex M
 vendorName BioChain
@@ -563,6 +617,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000657
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000657
 protocol Myers:Myers_BioChain_protocol.pdf
+# http://en.wikipedia.org/wiki/Jejunum
 
 term BC_Kidney_01-11002
 tag BCKIDNEY
@@ -742,7 +797,6 @@ organism human
 description placenta, donor UHN00189, age 29
 tissue placenta
 lineage extraembryonic mesoderm, trophectoderm
-# decidua basalis, chorion frondosum
 karyotype normal
 sex F
 vendorName BioChain
@@ -751,6 +805,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001078
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001078
 protocol Myers:Myers_BioChain_protocol.pdf
+# lineage decidua basalis, chorion frondosum
 
 term BC_Prostate_Gland_H12817N
 tag BCPROSTATE
@@ -871,6 +926,7 @@ protocol Myers:Myers_BioChain_protocol.pdf
 #termId BTO:0001281
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
 #protocol Myers:Myers_BioChain_protocol.pdf
+
 term BC_Spleen_H12817N
 tag BCSPLEENb
 type Cell Line
@@ -1019,7 +1075,6 @@ sex M
 tier 3
 protocol Stam:BJ_Stam_protocol.pdf
 
-# Adding a derprecated term CD14+ for reference with other sorted cells.
 term CD14+
 tag CD14
 type Cell Line
@@ -1035,9 +1090,10 @@ vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
-#formerly tier 3
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
+#formerly tier 3
+# Adding a derprecated term CD14+ for reference with other sorted cells.
 
 term CD20+
 tag CD20
@@ -1066,7 +1122,7 @@ age 43
 tissue blood
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01778
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
+orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
@@ -1082,7 +1138,7 @@ age 27
 tissue blood
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01794
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
+orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
@@ -1098,7 +1154,7 @@ age 27
 tissue blood
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01746
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
+orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
@@ -1201,6 +1257,57 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 lab Crawford
 protocol Crawford:Colo829_Crawford_protocol.pdf
 
+term Cord_CD4_naive
+tag CORDCD4NAIVE
+type Cell Line
+organism human
+description CD4+ cells isolated from cord blood and enriched for naive populations
+tissue blood
+karyotype blood
+vendorName David Randolph at University of Alabama, Birmingham
+vendorId Cord_CD4_naive
+orderUrl drdrdr@uab.edu
+termId BTO:3A0000782
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
+sex B
+tier 3
+lab Crawford
+protocol Crawford:CordCD4naive_Crawford_protocol.pdf
+
+term Cord_CD4_Th0
+tag CORDCD4TH0
+type Cell Line
+organism human
+description CD4+ cells isolated from cord blood and enriched for Th0 populations
+tissue blood
+karyotype blood
+vendorName David Randolph at University of Alabama, Birmingham
+vendorId Cord_CD4_Th0
+orderUrl drdrdr@uab.edu
+termId BTO:3A0000782
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
+sex B
+tier 3
+lab Crawford
+protocol Crawford:CordCD4Th0_Crawford_protocol.pdf
+
+term Cord_CD4_Th1
+tag CORDCD4TH1
+type Cell Line
+organism human
+description CD4+ cells isolated from cord blood and enriched for Th1 populations
+tissue blood
+karyotype blood
+vendorName David Randolph at University of Alabama, Birmingham
+vendorId Cord_CD4_Th1
+orderUrl drdrdr@uab.edu
+termId BTO:3A0000782
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
+sex B
+tier 3
+lab Crawford
+protocol Crawford:CordCD4Th1_Crawford_protocol.pdf
+
 term Decidua
 tag DECIDUA
 type Cell Line
@@ -1280,6 +1387,54 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 termId BTO:0000452
 sex U
 tier 3
+protocol Crawford:FibroP_Crawford_protocol.pdf
+
+term FibroP_AG20443
+tag FIBROPAG20443
+type Cell Line
+organism human
+description fibroblasts taken from individuals with Parkinson's disease
+tissue skin fibroblast
+vendorName Coriell
+vendorId AG20443
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG20443&PgId=166
+termId BTO:0000452
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
+sex M
+tier 3
+lab Crawford
+protocol Crawford:FibroP_Crawford_protocol.pdf
+
+term FibroP_AG08395
+tag FIBROPAG08395
+type Cell Line
+organism human
+description fibroblasts taken from individuals with Parkinson's disease
+tissue skin fibroblast
+vendorName Coriell
+vendorId AG08395
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08395&PgId=166
+termId BTO:0000452
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
+sex F
+tier 3
+lab Crawford
+protocol Crawford:FibroP_Crawford_protocol.pdf
+
+term FibroP_AG08396
+tag FIBROPAG08396
+type Cell Line
+organism human
+description fibroblasts taken from individuals with Parkinson's disease
+tissue lung fibroblast
+vendorName Coriell
+vendorId AG08396
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08396&PgId=166
+termId BTO:0000452
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
+sex F
+tier 3
+lab Crawford
 protocol Crawford:FibroP_Crawford_protocol.pdf
 
 term Gliobla
@@ -1649,6 +1804,7 @@ protocol Myers:GM12878-XiMat_Myers_protocol.pdf
 #sex F
 #tier 3
 #protocol Myers:GM12878-XiPat_Myers_protocol.pdf
+
 term GM12891
 tag GM12891
 type Cell Line
@@ -2416,14 +2572,14 @@ tag HMF
 type Cell Line
 organism human
 description mammary fibroblasts
-# mammary stromal cell line
-tissue Mammary
+tissue mammary
 vendorName ScienCell
 vendorId 7630
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7630
 sex F
 tier 3
 protocol Stam:HMF_Stam_protocol.pdf
+# mammary stromal cell line
 
 term HMVEC-dAd
 tag HMVECDAD
@@ -2834,6 +2990,7 @@ protocol missing
 #sex F
 #tier 3
 #protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
+
 term HTR8svn
 tag HTR8
 type Cell Line
@@ -2913,9 +3070,9 @@ termId BTO:0001229
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001229&termName=IMR-90%20cell
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
 sex F
-#formerly tier 3
 tier 2
 protocol Stam:IMR90_Stam_protocol.pdf
+#formerly tier 3
 
 term iPS
 tag IPS
@@ -2932,6 +3089,57 @@ orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
 termId BTO:0000001 (nonspecific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 protocol Crawford:iPS_Crawford_protocol.pdf
+
+term iPS_CWRU1
+tag IPSCWRU1
+type Cell Line
+organism human
+description iPS cells derived from MSC658 fibroblast
+tissue induced pluripotent cell (iPS)
+karyotype iPS
+vendorName Paul Tesar at Case Western University
+vendorId iPS_CWRU1
+orderUrl pjt5@case.edu
+termId BTO:0000001
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
+sex M
+tier 3
+lab Crawford
+protocol Crawford:iPSCWRU1_Crawford_protocol.pdf
+
+term iPS_NIHi7
+tag IPSNIHI7
+type Cell Line
+organism human
+description iPS cells derived from AG08395 fibroblast
+tissue induced pluripotent cell (iPS)
+karyotype iPS
+vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
+vendorId iPS_NIHi7
+orderUrl chenowej@ninds.nih.gov
+termId BTO:0000001
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
+sex F
+tier 3
+lab Crawford
+protocol Crawford:iPSNIHi7_Crawford_protocol.pdf
+
+term iPS_NIHi11
+tag IPSNIHI11
+type Cell Line
+organism human
+description iPS cells derived from AG20443 fibroblast
+tissue induced pluripotent cell (iPS)
+karyotype iPS
+vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
+vendorId iPS_NIHi11
+orderUrl chenowej@ninds.nih.gov
+termId BTO:0000001
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
+sex M
+tier 3
+lab Crawford
+protocol Crawford:iPSNIHi11_Crawford_protocol.pdf
 
 term Ishikawa
 tag ISHIKAWA
@@ -2990,11 +3198,11 @@ vendorName William Hahn at the Dana Farber Cancer Institute, Boston, MA
 orderUrl http://physicians.dana-farber.org/directory/profile.asp?dbase=main&setsize=10&display=Y&nxtfmt=pc&pgt=William+C.+Hahn,+MD,+PhD&gs=r&picture_id=0000378&lookup=Y&pict_id=0000378
 lineage endoderm
 karyotype normal
-#termId BTO:0001389 (non-specific)
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
 sex U
 tier 3
 protocol Crawford:LHSR_Crawford_protocol.pdf
+#termId BTO:0001389 (non-specific)
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
 
 term LNCaP
 tag LNCAP
@@ -3063,9 +3271,9 @@ karyotype cancer
 termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093
 sex F
-#formerly tier 3
 tier 2
 protocol Crawford:MCF-7_Crawford_protocol.pdf Farnham:MCF-7_Farnham_protocol.pdf Stam:Stam_15_protocols.pdf
+#formerly tier 3
 
 #term MCF-10A
 #tag MCF10A
@@ -3083,6 +3291,7 @@ protocol Crawford:MCF-7_Crawford_protocol.pdf Farnham:MCF-7_Farnham_protocol.pdf
 #sex F
 #tier 3
 #protocol Yale_TFBS(Struhl):MCF-10A_Struhl_protocol.pdf
+
 term MCF10A-Er-Src
 tag MCF10AES
 type Cell Line
@@ -3132,6 +3341,23 @@ sex U
 tier 3
 protocol Crawford:D721_Crawford_protocol.pdf
 
+term Medullo_D341
+tag MEDULLOD341
+type Cell Line
+organism human
+description Medulloblastoma cell line of neuron or neuron precurosr origin
+tissue brain
+karyotype cancer
+vendorName Darrell Bigner at Duke University
+vendorId Medullo_D341
+orderUrl bigne001@mc.duke.edu
+termId BTO:0001757
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001757&termName=medulloblastoma%20cell
+sex U
+tier 3
+lab Crawford
+protocol Crawford:MedulloD341_Crawford_protocol.pdf
+
 term Melano
 tag MELANO
 type Cell Line
@@ -3148,9 +3374,23 @@ tier 3
 termId BTO:0000847
 protocol Crawford:Melano_Crawford_protocol.pdf
 
-#there is another Monocytes-CD14+ cell line
-#that is used in UW DNase and Open Chrom Chip
-#leaving this one in as a temporary stub
+term Mel_2183
+tag MEL2183
+type Cell Line
+organism human
+description Melanoma Cell line
+tissue Melanoma cell line derived from melanoma metastasis
+karyotype cancer
+vendorName Dr. Yardena Samuels
+vendorId Mel_2183
+orderUrl samuelsy@mail.nih.gov
+termId BTO:0000849
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000849&termName=melanoma%20cell%20line
+sex U
+tier 3
+lab Crawford
+protocol Crawford:Mel2183_Crawford_protocol.pdf
+
 term Monocytes-CD14+
 tag MONOCD14
 type Cell Line
@@ -3166,9 +3406,12 @@ vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
-#formerly tier 3
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
+#formerly tier 3
+#there is another Monocytes-CD14+ cell line
+#that is used in UW DNase and Open Chrom Chip
+#leaving this one in as a temporary stub
 
 term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
@@ -3184,9 +3427,9 @@ vendorId Monocytes-CD14+_RO01746
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
-#formerly tier 3
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
+#formerly tier 3
 
 term Monocytes-CD14+_RO01826
 tag MONOCD14RO1826
@@ -3203,9 +3446,9 @@ vendorId Monocytes-CD14+_RO01826
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
-#formerly tier 3
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
+#formerly tier 3
 
 term Myometr
 tag MYOMETR
@@ -3229,15 +3472,15 @@ tissue blood
 lineage mesoderm
 description acute promyelocytic leukemia cell line. (PMID: 1995093)
 vendorName Refer to protocol documents for differing sources, UW: DSMZ (Deutsche Sammlung von Mikroorganismen und Zellkulturen) ACC-207 http://www.dsmz.de/ or Yale (Stanford): National Cell Culture Center http://www.nccc.com/
-#put universities in for Stam and Snyder
 vendorId NB4
-#orderUrl
 karyotype cancer
 termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489
 sex U
 tier 3
 protocol ENCODE:NB4_protocol.pdf Stam:NB4_Stam_protocol.pdf
+#put universities in for Stam and Snyder
+#orderUrl
 
 term NH-A
 tag NHA
@@ -3369,6 +3612,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Crawford:Osteoblast_Crawford_protocol.pdf Bernstein:Osteoblast_Bernstein_protocol.pdf
+label Osteoblasts
 
 term ovcar-3
 tag OVCAR3
@@ -3443,7 +3687,6 @@ organism human
 description peripheral blood-derived erythroblasts
 tissue blood
 lineage mesoderm
-#vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 vendorId PBDE
 vendorName Farnham lab
 orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205 
@@ -3452,6 +3695,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol Farnham:PBDE_Farnham_protocol.pdf
+#vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 
 term PBDEFetal
 tag PBDEFETAL
@@ -3679,11 +3923,10 @@ karyotype cancer
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex F
-#formerly tier 3
 tier 2
 protocol Myers:SK-N-SH_Myers_protocol.pdf
+#formerly tier 3
 
-# In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
 term SK-N-SH_RA
 tag SKNSHRA
 type Cell Line
@@ -3701,6 +3944,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Stam:Stam_15_protocols.pdf
+# In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
 
 term SKMC
 tag SKMC
@@ -3735,7 +3979,6 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
 
-# Never submitted data. ~Jeff
 #term T98G
 #tag T98G
 #type Cell Line
@@ -3752,6 +3995,8 @@ protocol Crawford:Stellate_Crawford_protocol.pdf
 #sex M
 #tier 3
 #protocol Myers:T98G_Myers_protocol.pdf
+# Never submitted data. ~Jeff
+
 term TBEC
 tag TBEC
 type Cell Line
@@ -3761,13 +4006,13 @@ vendorName National Disease Research Interchange-provided fresh lung tissue, des
 tissue epithelium
 vendorId (see description)
 orderUrl http://www.ndriresource.org/
-#TIB-152 is a lymphocytic cell line with no relation to TBEC
 lineage endoderm
 termId BTO:0001389 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001389
 sex M
 tier 3
 protocol Crawford:TBEC_Crawford_protocol.pdf
+#TIB-152 is a lymphocytic cell line with no relation to TBEC
 
 term Th1
 tag TH1
@@ -3946,11 +4191,12 @@ protocol Stam:WI38_Stam_protocol.pdf
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
 # category: (T for tissue, L for cell line, or P for primary cells.  optional)
 # tier is NOT used in mouse
+
 term 3134
 tag 3134
 type Cell Line
 organism mouse
-tissue Mammary
+tissue mammary
 category cellLine
 description Mammary
 age immortalized
@@ -4004,7 +4250,7 @@ term AtT-20
 tag ATT20
 type Cell Line
 organism mouse
-tissue Cortex
+tissue cortex
 category cellLine
 description Pituitary tumor LAF1
 age immortalized
@@ -4017,6 +4263,24 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
 color 189,0,157
 sex M
 protocol missing
+
+term Adrenal
+tag ADRENAL
+type Cell Line
+organism mouse
+tissue adrenal gland 
+category Tissue
+age ageUnknown
+strain Unknown 
+description Adrenal gland PROVISIONAL
+vendorName CSHL lab
+vendorId Adrenal
+orderUrl http://gingeraslab.cshl.edu/
+termId 7097
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7097
+color 189,0,157
+sex U
+protocol Gingeras:Adrenal_Gingeras_protocol.pdf
 
 term B-cell_(CD19+)
 tag BCELLCD19P
@@ -4053,6 +4317,24 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 86,180,233
 sex M
 protocol Stam:bCellCd43_Stam_protocol.pdf
+
+term Bladder
+tag BLADDER
+type Cell Line
+organism mouse
+tissue urinary bladder
+category Tissue
+age ageUnknown
+strain Unknown 
+description Urinary Bladder PROVISIONAL
+vendorName CSHL lab
+vendorId Bladder
+orderUrl http://gingeraslab.cshl.edu/
+termId 6961
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6961 
+color 204,121,167 
+sex U
+protocol Gingeras:Bladder_Gingeras_protocol.pdf
 
 term BoneMarrow
 tag BMARROW
@@ -4094,25 +4376,25 @@ term Cerebellum
 tag CBELLUM
 type Cell Line
 organism mouse
-tissue Cerebellum
+tissue cerebellum
 category Tissue
 age ageUnknown
 strain Unknown
 description Cerebellum
-vendorName LICR lab
-vendorId Cerebellum
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Cerebellum; Cerebellum
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 105,105,105
 sex U
-protocol Ren:Cerebellum_Ren_protocol.pdf Stam:Tissue_Stam_protocol.pdf
+protocol Ren:Cerebellum_Ren_protocol.pdf Stam:Tissue_Stam_protocol.pdf Gingeras:Cerebellum_Gingeras_protocol.pdf
 
 term Cerebrum
 tag CEREBRUM
 type Cell Line
 organism mouse
-tissue Cerebrum
+tissue cerebrum
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4120,11 +4402,11 @@ description Cerebrum
 vendorName UW Lab
 vendorId Cerebrum
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
-#termId
-#termUrl
 color 105,105,105
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf
+#termId
+#termUrl
 
 term CH12
 tag CH12
@@ -4148,7 +4430,6 @@ term ES-CJ7
 tag ESCJ7
 type Cell Line
 organism mouse
-#tissue
 category primaryCells
 description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
 age E0
@@ -4156,11 +4437,12 @@ strain 129
 vendorName Uw lab
 vendorId ES-CJ7
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
-#termId
-#termUrl
 color 65,105,225
 sex U
 protocol Stam:ES-CJ7_Stam_protocol.pdf
+#tissue
+#termId
+#termUrl
 
 term Colon
 tag COLON
@@ -4180,23 +4462,59 @@ color 230,159,0
 sex U
 protocol Ren:Colon_Ren_protocol.pdf
 
+term CNS
+tag CNS
+type Cell Line
+organism mouse
+tissue central nervous system
+category Tissue
+age ageUnknown
+strain Unknown
+description Central Nervous System PROVSIONAL
+vendorName CSHL lab
+vendorId CNS
+orderUrl http://gingeraslab.cshl.edu/
+termId 7003
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7003
+color 105,105,105
+sex U
+protocol Gingeras:CNS_Gingeras_protocol.pdf
+
 term Cortex
 tag CORTEX
 type Cell Line
 organism mouse
-tissue Cortex
+tissue cortex
 category Tissue
 age ageUnknown
 strain Unknown
 description Cortex
-vendorName LICR lab
-vendorId Cortex
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL lab
+vendorId Cortex;Cortex
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 105,105,105
 sex U
-protocol Ren:Cortex_Ren_protocol.pdf
+protocol Ren:Cortex_Ren_protocol.pdf Gingeras:Cortex_Gingeras_protocol.pdf
+
+term Duodenum
+tag DUOD
+type Cell Line
+organism mouse
+tissue duodenum
+category Tissue
+age ageUnknown
+strain Unknown
+description Duodenum PROVSIONAL
+vendorName CSHL Long
+vendorId Duodenum
+orderUrl  http://gingeraslab.cshl.edu/
+termId 6977
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6977
+color 230,159,0
+sex U
+protocol Gingeras:Duodenum_Gingeras_protocol.pdf
 
 term ES-Bruce4
 tag ESB4
@@ -4209,11 +4527,11 @@ strain C57BL/6
 vendorName University of California, San Diego Transgenic Core and Embryonic Stem Cell
 vendorId ES-Bruce4
 orderUrl http://cancer.ucsd.edu/research-training/shared-resources/transgenic-core/Pages/default.aspx
-#termId
-#termUrl
 color 65,105,225
 sex M
 protocol Ren:ES-Bruce4_Ren_protocol.pdf
+#termId
+#termUrl
 
 term Erythrobl
 tag ERYTHROBL
@@ -4237,7 +4555,7 @@ term FatPad
 tag FAT
 type Cell Line
 organism mouse
-tissue Adipose
+tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4272,7 +4590,7 @@ term ForelimbBud
 tag FLBUD
 type Cell Line
 organism mouse
-tissue Limb
+tissue limb
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4285,6 +4603,25 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3883
 color 102,50,200
 sex U
 protocol Stam:ForelimbBuds_Stam_protocol.pdf
+
+term FrontalLobe
+tag FLOBE
+type Cell Line
+organism mouse
+tissue frontal lobe
+category Tissue
+age ageUnknown
+strain Unknown
+description Frontal Lobe PROVSIONAL
+vendorName CSHL lab
+vendorId Frontal Lobe
+orderUrl  http://gingeraslab.cshl.edu/
+termId 7003
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7003
+color 105,105,105
+sex U
+protocol Gingeras:FrontalLobe_Gingeras_protocol.pdf
+
 
 term G1E
 tag G1E
@@ -4324,19 +4661,19 @@ term GenitalFatPad
 tag GFAT
 type Cell Line
 organism mouse
-tissue Adipose
+tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
 description Genital Adipose tissue
-vendorName UW lab
-vendorId GenitalFatPad
-orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+vendorName 1)UW lab; 2)CSHL lab
+vendorId Genital Fat Pad; Gonadal Adipose Tissue
+orderUrl http://www.gs.washington.edu/faculty/stamj.html; http://gingeraslab.cshl.edu/
 termId 16230
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=16230
 color 189,0,157
 sex U
-protocol Stam:GenitalFatPad_Stam_protocol.pdf
+protocol Stam:GenitalFatPad_Stam_protocol.pdf Gingeras:GenitalFatPad_Gingeras_protocol.pdf
 
 term Heart
 tag HEART
@@ -4360,7 +4697,7 @@ term HeadlessEmbryo
 tag HLEMBRYO
 type Cell Line
 organism mouse
-tissue Embryo
+tissue embryo
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4378,7 +4715,7 @@ term HindlimbBud
 tag HLBUD
 type Cell Line
 organism mouse
-tissue Limb
+tissue limb
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4404,11 +4741,11 @@ description Kidney
 vendorName UW lab
 vendorId Kidney
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
-#termId
-#termUrl
-color 204,121,16
+color 204,121,167
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf
+#termId
+#termUrl
 
 term LgIntestine
 tag LGINT
@@ -4419,32 +4756,32 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Large Intestine
-vendorName UW lab
-vendorId Large Intestine
-orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+vendorName 1)UW lab; 2)CSHL lab
+vendorId Large Intestine; Large Intestine
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 6982
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6982
 color 230,159,0
 sex U
-protocol Stam:LargeIntestine_Stam_protocol.pdf
+protocol Stam:LargeIntestine_Stam_protocol.pdf Gingeras:LargeIntestine_Gingeras_protocol.pdf
 
 term Limb
 tag LIMB
 type Cell Line
 organism mouse
-tissue Limb
+tissue limb
 category Tissue
 age ageUnknown
 strain Unknown
 description Limb
-vendorName LICR lab
-vendorId Limb
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab 2)CSHL lab
+vendorId Limb; Limb
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 102,50,200
 sex U
-protocol Ren:Limb_Ren_protocol.pdf
+protocol Ren:Limb_Ren_protocol.pdf Gingeras:Limb_Gingeras_protocol.pdf
 
 term Liver
 tag LIVER
@@ -4481,11 +4818,29 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 sex U
 protocol Ren:Lung_Ren_protocol.pdf
 
+term MammaryGland
+tag MAMG
+type Cell Line
+organism mouse
+tissue mammary
+category Tissue
+age ageUnknown
+strain Unknown
+description Mammary Gland PROVISIONAL
+vendorName CSHL lab
+vendorId Mammary Gland
+orderUrl http://gingeraslab.cshl.edu/
+termId 7035
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035 
+color 0,158,115
+sex U
+protocol Gingeras:MammaryGland_Gingeras_protocol.pdf
+
 term MEF
 tag MEF
 type Cell Line
 organism mouse
-tissue Embryonic Fibroblast
+tissue embryonic fibroblast
 age ageUnknown
 strain Unknown
 category primaryCells
@@ -4499,7 +4854,6 @@ color 65,105,225
 sex U
 protocol Ren:MEF_Ren_protocol.pdf
 
-#Shortened Tem
 term Megakaryo
 tag MEGAKARYO
 type Cell Line
@@ -4516,8 +4870,8 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 86,180,233
 sex U
 protocol Hardison:Megakaryocyte_Hardison_protocol.pdf
+#Shortened Tem
 
-#Needs protocol, VendorName and Term Id
 term MEL
 tag MEL
 type Cell Line
@@ -4533,12 +4887,13 @@ orderUrl http://bbs.yale.edu/people/sherman_weissman.profile
 color 86,180,233
 sex M
 protocol Weissman:MEL_Weissman_protocol.pdf Stam:MEL_Stam_protocol.pdf
+#Needs protocol, VendorName and Term Id
 
 term Mesoderm
 tag MESODERM
 type Cell Line
 organism mouse
-tissue Mesoderm
+tissue mesoderm
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4604,12 +4959,11 @@ color 86,180,233
 sex M
 protocol Stam:NIH-3T3_Stam_protocol.pdf
 
-# shortened term
 term OlfactBulb
 tag OLFACT
 type Cell Line
 organism mouse
-tissue Olfactory Bulb
+tissue olfactory bulb
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4622,6 +4976,25 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 105,105,105
 sex U
 protocol Ren:OlfactoryBulb_Ren_protocol.pdf
+
+term Ovary
+tag OVARY
+type Cell Line
+organism mouse
+tissue ovary
+category Tissue
+age ageUnknown
+strain Unknown
+description OVARY PROVISIONAL
+vendorName CSHL lab
+vendorId Ovary
+orderUrl http://gingeraslab.cshl.edu/
+termId 6958
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6958 
+color 0,158,115
+sex U
+protocol Gingeras:Ovary_Gingeras_protocol.pdf
+
 
 term Pancreas
 tag PANCREAS
@@ -4640,6 +5013,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 189,0,157
 sex U
 protocol Ren:Pancreas_Ren_protocol.pdf
+# shortened term
 
 term Patski
 tag PATSKI
@@ -4713,7 +5087,6 @@ color 139,69,19
 sex U
 protocol Stam:SkeletalMuscle_Stam_protocol.pdf
 
-#Shortened term
 term SmIntestine
 tag SMINT
 type Cell Line
@@ -4723,14 +5096,15 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Small Intestine
-vendorName LICR lab
-vendorId Small Intestine
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1)LICR lab; 2)CSHL Long
+vendorId Small Intestine; Small Intestine
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 230,159,0
 sex U
-protocol Ren:SmallIntestine_Ren_protocol.pdf
+protocol Ren:SmallIntestine_Ren_protocol.pdf Gingeras:SmallIntestine_Gingeras_protocol.pdf
+#Shortened term
 
 term Spleen
 tag SPLEEN
@@ -4741,14 +5115,50 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Spleen
-vendorName LICR lab
-vendorId Spleen
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1) LICR lab; 2)UW Lab
+vendorId Spleen; Spleen
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 86,180,233
 sex U
-protocol Ren:Spleen_Ren_protocol.pdf
+protocol Ren:Spleen_Ren_protocol.pdf Stam:Spleen_Stam_protocol.pdf
+
+term Stomach
+tag STOM
+type Cell Line
+organism mouse
+tissue stomach
+category Tissue
+age ageUnknown
+strain Unknown
+description Stomach PROVISION
+vendorName CSHL lab
+vendorId Stomach
+orderUrl http://gingeraslab.cshl.edu/
+termId 6966
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6966 
+color 230,159,0
+sex U
+protocol Gingeras:Stomach_Gingeras_protocol.pdf
+
+term SubcFatPad
+tag SFAT
+type Cell Line
+organism mouse
+tissue adipose
+category Tissue
+age ageUnknown
+strain Unknown
+description Subcutaneous Adipose tissue PROVSIONAL
+vendorName CSHL lab
+vendorId Subcutaneous Adipose tissue
+orderUrl http://gingeraslab.cshl.edu/
+termId 17477
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=17477
+color 189,0,157
+sex U
+protocol Gingeras:SubcutaneousFatPad_Gingeras_protocol.pdf
 
 term Testis
 tag TESTIS
@@ -4772,7 +5182,7 @@ term Thymus
 tag THYMUS
 type Cell Line
 organism mouse
-tissue Thymus
+tissue thymus
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4831,20 +5241,19 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Whole Brain
-vendorName UW lab
-vendorId Whole Brain
-orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+vendorName 1)UW lab; 2)CSHL lab
+vendorId Whole Brain; Whole Brain
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 7005
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 105,105,105
 sex U
-protocol Stam:Tissue_Stam_protocol.pdf
+protocol Stam:Tissue_Stam_protocol.pdf Gingeras:WholeBrain_Gingeras_protocol.pdf
 
 term ZhBTc4
 tag ZHBTC4
 type Cell Line
 organism mouse
-#tissue
 category primaryCells
 age E0
 strain 129/Ola
@@ -4852,17 +5261,19 @@ description Undifferentiated mouse embryonic stem cells
 vendorName Dr. Levasseur (University of Iowa)
 vendorId ZhBTc4
 orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
-#termId
-#termUrl
 color 65,105,225
 sex M
 protocol Stam:ZhBTc4_Stam_protocol.pdf
+#tissue
+#termId
+#termUrl
 
 # Gene types
 # term (human-readable cell type name)
 # tag (machine-readable cell type name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be Gene Type)
 # description (human-readable description of the gene type.  Perhaps it's used by the Gencode track.(
+
 term Known
 tag KNOWN
 type Gene Type
@@ -4899,6 +5310,7 @@ description pseudogene
 # lab (lab that first asked for this antibody.  Should match the "labPi" field in some "type lab" stanza)
 # validation (either missing or the name of a validation document in a format to be documented by Venkat)
 # lots (optional lot numbers)
+
 term AP-2alpha
 tag AP2ALPHA
 type Antibody
@@ -4971,11 +5383,11 @@ orderUrl http://www.scbt.com/datasheet-10756-baf155-h-76-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-10756
 lab Snyder
-#The SMARCC1 genecard is for BAF155
 targetId GeneCard:SMARCC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC1
-validation Human_-_:missing
+validation Human_-_BAF155(Immunoprecipitation,IP-Mass_spec):human_BAF155_validation_Snyder.pdf
 label BAF155 (sc-10756)
+#The SMARCC1 genecard is for BAF155
 
 term BAF170
 tag BAF170
@@ -4989,7 +5401,7 @@ vendorId sc-10757
 lab Snyder
 targetId GeneCard:SMARCC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC2
-validation Human_-_:missing
+validation Human_-_BAF170(Immunoprecipitation,IP-Mass_spec):human_BAF170_validation_Snyder.pdf
 label BAF170 (sc-10757)
 
 term BATF
@@ -5171,7 +5583,7 @@ vendorId 16189
 lab Snyder
 targetId GeneCard:SMARCA4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
-validation Human_-_:missing
+validation Human_-_(Immunoprecipitation,IP-Mass_spec):human_BRG1_validation_Snyder.pdf
 label BRG1 (16189)
 
 term BTF3_(SC-166093)
@@ -5217,7 +5629,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=1694
 lab Snyder
 targetId GeneCard:JUN
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUN
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_(Immunoprecipitation,Motif_Enrichment):human_c-Jun_validation_Snyder.pdf Mouse_-_:missing
 label c-Jun (sc-1694)
 
 term c-Myb_(SC-7874)
@@ -5280,10 +5692,9 @@ targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 lab Snyder, Myers
 lots I1010 (Myers)
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_CEPBbeta(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
 label CEBPB (sc-150)
 
-#This antibody had the wrong vendorId SC-49548, it should be SC-150.
 term CEBPB_(SC-150)
 tag CEBPBSC150
 type Antibody
@@ -5299,6 +5710,7 @@ targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 validation Human_-_CEBPB_(SC-150)(Western_blot,IP-Mass_Spec):human_CEBPB_SC-150_validation_Myers.pdf
 label CEBPB (sc-150)
+#This antibody had the wrong vendorId SC-49548, it should be SC-150.
 
 term CEBPD_(SC-636)
 tag CEBPDSC636
@@ -5315,6 +5727,21 @@ targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
 validation Human_-_CEBPD_(SC-636)(Western_blot,IP-Mass_Spec):human_CEBPD_SC-636_validation_Myers.pdf
 label CEBPD (sc-636)
+
+term CEBPZ
+tag CEBPZ
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen sequence= KDNASLKQLRWEAERDDWLHNRDAKSIIKKKKHFKKKRIKTTQKTKKQRK.
+target CEBPZ
+targetDescription Stimulates transcription from the HSP70 promoter.
+vendorName Sigma-Aldrich
+vendorId SAB2100398
+orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?lang=en&N4=SAB2100398
+lab Snyder
+lots QC8343
+targetId GeneCard:CEBPZ
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPZ
+validation CEBPZ(Immunoprecipitation,IP-Mass_spec):human_CEBPZ_validation_Snyder.pdf
 
 term CHD1_(A301-218A)
 tag CHD1A301218A
@@ -5426,7 +5853,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCFL
 validation Human_-_:missing
 label CTCFL (sc-98982)
 
-##This does not appear in metaDb
 term CtBP1
 tag CTBP1
 type Antibody
@@ -5441,8 +5867,8 @@ targetId GeneCard:CTBP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP1
 validation 
 label CtBP1 (612042)
-
 ##This does not appear in metaDb
+
 term CtBP2
 tag CTBP2
 type Antibody
@@ -5663,7 +6089,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
 validation Human_-_ERalpha_a(Immunoprecipitation-Western_blot,MassSpect):human_ERalpha_a_validation_Myers.pdf
 label ERalpha_a (sc-543)
 
-##This does not appear in metaDb
 term ERalpha_b
 tag ERAB
 type Antibody
@@ -5678,6 +6103,7 @@ targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
 validation 
 label ERalpha_b (MAb-009-050)
+##This does not appear in metaDb
 
 term Egr-1
 tag EGR1
@@ -5706,10 +6132,9 @@ vendorId sc-66882
 targetId GeneCard:ESRRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESRRA
 lab Snyder
-validation Human_-_:missing
+validation Human_-_ERRA(Western_Blot,Motif_Enrichment):human_ERRA_validation_Snyder.pdf
 label ERRA (sc-66882)
 
-##This does not appear in metaDb
 term ETS1
 tag ETS1
 type Antibody
@@ -5725,6 +6150,7 @@ lots A1608
 lab Myers
 validation Human_-_ETS1(Immunoprecipitation-Western_blot,MassSpec):human_ETS1_validation_Myers.pdf Mouse_-_:missing
 label ETS1 (sc-350)
+##This does not appear in metaDb
 
 term EZH2_(39875)
 tag EZH239875
@@ -5908,11 +6334,11 @@ vendorName Santa Cruz Biotech
 vendorId sc-266
 orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
 lab Snyder
-#lots
 targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 validation Mouse_-_GATA1(Immunoblot):mouse_GATA1-SC266_validation_Snyder.pdf
 label  GATA1 (sc-266)
+#lots
 
 term GATA-2
 tag GATA2
@@ -6003,11 +6429,11 @@ vendorName Laszlo Tora
 vendorId Missing
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
 lab Struhl
-#lots
 targetId GeneCards:KAT2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A&search=gcn5
 validation Human_-_:missing
 label GCN5
+#lots
 
 term GR
 tag GR
@@ -6070,7 +6496,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2F1
 validation Human_-_GTF2F1_(AB28179)(Western_blot,Immunoprecipitation):human_GTF2F1_AB28179_validation_Snyder.pdf
 label GTF2F1 (ab28179)
 
-##This does not appear in metaDb
 term H2A.Z
 tag H2AZ
 type Antibody
@@ -6086,6 +6511,7 @@ targetId GeneCard:H2AFZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
 validation Human_-_:missing
 label H2AZ (07-594)
+##This does not appear in metaDb
 
 term H3ac_(06-599)
 tag H3AC06599
@@ -6176,17 +6602,16 @@ targetDescription Histone H3 (tri methyl K4). Marks promoters that are active or
 vendorName Millipore
 vendorId 07-473
 orderUrl http://www.millipore.com/catalogue/item/07-473
-#vendorName Abcam
-#vendorId ab8580
-#orderUrl http://www.abcam.com/index.html?datasheet=8580
 lab Bernstein
 lots 498616(Abcam:ab8580), 331024(Abcam:ab8580), R0903B0054(Millipore:07-473)
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf Mouse_-_:missing
 label H3K4me3 (07-473)
+#vendorName Abcam
+#vendorId ab8580
+#orderUrl http://www.abcam.com/index.html?datasheet=8580
 
-##This does not appear in metaDb 5/23/11
 term H3K4me3B
 tag H3K04ME3b
 type Antibody
@@ -6203,6 +6628,7 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K4me3B(Western_blot,Competitor_peptides):human_H3K4me3B_validation_Farnham.pdf
 label H3K4me3 (9751S)
+##This does not appear in metaDb 5/23/11
 
 term H3K9ac
 tag H3K09AC
@@ -6231,11 +6657,11 @@ orderUrl http://www.millipore.com/catalogue/item/07-352
 vendorName Millipore
 vendorId 07-352
 lab Farnham
-#lots
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_:missing
 label H3K9ac (07-352)
+#lots
 
 term H3K9Ac_(9649)
 tag H3K09ACc
@@ -6332,7 +6758,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K27me3(Dot_blot):human_H3K27me3_validation_Bernstein.pdf Mouse_-_:missing
 label H3K27me3 (07-449)
 
-##This does not appear in metaDb
 term H3K27me3B
 tag H3K27ME3b
 type Antibody
@@ -6349,6 +6774,7 @@ targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K27me3B(Western_blot,Peptide_ELISA):human_H3K27me3B_validation_Farnham.pdf
 label H3K27me3 (9733S)
+##This does not appear in metaDb
 
 term H3K36me3
 tag H3K36ME3
@@ -6377,11 +6803,11 @@ orderUrl http://www.cellsignal.com/products/9763.html
 vendorName Cell Signaling
 vendorId 9763S
 lab Farnham
-#lots
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation Human_-_H3K36me3B(Western_blot,Peptide_ELISA):human_H3K36me3B_validation_Farnham.pdf
 label H3K36me3 (9763S)
+#lots
 
 term H3K79me2
 tag H3K79ME2
@@ -6531,7 +6957,6 @@ type Antibody
 target HMGN3
 antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry. Antibody Target: HMGN3
 targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 to 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
-# wrong orderUrl: mixing vendorName and vendorIds
 orderUrl http://www.novusbio.com/HMGN3-Antibody_NB100-61076.html
 vendorName Novus Biologicals
 vendorId NB100-61076
@@ -6541,6 +6966,7 @@ targetId GeneCard:HMGN3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN3
 validation Human_-_:missing
 label HMGN3 (NB100-61076)
+# wrong orderUrl: mixing vendorName and vendorIds
 
 term HNF4A
 tag HNF4A
@@ -6601,7 +7027,7 @@ vendorId sc-9144
 lab Snyder
 targetId GeneCard:HSF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HSF1
-validation Human_-_:missing
+validation Human_-_HSF1(Immunoprecipitation,Motif_Enrichment):human_HSF1_validation_Snyder.pdf
 label HSF1 (sc-9144)
 
 term IKZF1_(IkN)_(UCLA)
@@ -6632,7 +7058,7 @@ vendorId sc-17796
 lab Snyder
 targetId GeneCard:SMARCB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCB1
-validation Human_-_:missing
+validation Human_-_INI1(Immunoprecipitation,IP-Mass_spec):human_INI1_validation_Snyder.pdf
 label INI1 (sc-17796)
 
 term IRF1
@@ -6708,11 +7134,11 @@ vendorId ab26049
 orderUrl http://www.abcam.com/KDM5A-Jarid1A-RBBP2-antibody-ab26049.html
 lab Bernstein
 lots 910477
-# JARID1A is an aliase for KDM5A in genecards.org
 targetId GeneCard:KDM5A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5A
 validation Human_-_JARID1A_(ab26049)(ChIP-String,ChIP-seq):human_JARID1A_validation_Bernstein.pdf
 label JARID1A (ab26049)
+# JARID1A is an aliase for KDM5A in genecards.org
 
 term JunD
 tag JUND
@@ -6769,11 +7195,11 @@ vendorName Sigma-Aldrich
 vendorId M8194
 orderUrl http://www.sigmaaldrich.com/
 lab Snyder
-#lots
 targetId GeneCards:MAFF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFF
 validation Human_-_:missing
 label MafF (M8194)
+#lots
 
 term MafK_(ab50322)
 tag MAFK
@@ -6785,11 +7211,11 @@ vendorName Abcam
 vendorId ab50322
 orderUrl http://www.abcam.com/MAFK-antibody-ab50322.html
 lab Snyder
-#lots
 targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_MAFK(ab50322)(Immunoprecipitation,ChIP):human_MafK_ab50322_validation_Snyder.pdf Mouse_-_:mouse_MafK_ab50322_validation_Snyder.pdf
 label MafK (ab50322)
+#lots
 
 term MafK_(SC-477)
 tag MAFKb
@@ -6801,11 +7227,11 @@ vendorName Santa Cruz Biotech
 vendorId SC-477
 orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
 lab Snyder
-#lots
 targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
-validation Human_-_:missing
+validation Human_-_MafK(sc477)(Immunoprecipitation,ChIP):human_MafK_sc477_validation_Snyder.pdf
 label MafK (SC-477)
+#lots
 
 term Max
 tag MAX
@@ -6820,7 +7246,7 @@ lab Myers
 lots  J0809
 targetId GeneCards:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation Human_-_MAX(Immunoprecipitation-Western_blot,MassSpec):human_Max_validation_Myers.pdf Mouse_-_:missing
+validation Human_-_MAX(Immunoprecipitation,Motif_Enrichment):human_Max_validation_Myers.pdf Mouse_-_:missing
 label Max (sc-197)
 
 term MBD4_(SC-271530)
@@ -6839,7 +7265,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MBD4
 validation Human_-_MBD4_(SC-271530)(Western_blot,IP-MassSpec):human_MBD4_SC-271530_sc-271530_validation_Myers.pdf
 label MBD4 (sc-271530)
 
-##This does not appear in metaDb
 term MEF2A
 tag MEF2A
 type Antibody
@@ -6854,6 +7279,7 @@ targetId GeneCard:MEF2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
 validation Human_-_MEF2A(Immunoblot):human_MEF2A_validation_Myers.pdf
 label MEF2A (sc-313)
+##This does not appear in metaDb
 
 term MEF2C_(SC-13268)
 tag MEF2C
@@ -7057,7 +7483,7 @@ orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
 lab Snyder
 targetId GeneCard:NFKB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1
-validation Human_-_:missing
+validation Human_-_NFKB1(Immunoprecipitation,Motif_EnrichmenImmunoprecipitation,Motif_Enrichment):human_NFKB_p65_validation_Snyder.pdf
 label NFKB (sc-372)
 
 term NF-YA
@@ -7102,7 +7528,7 @@ orderUrl http://www.abcam.com/NRF1-antibody-ab55744.html
 lab Snyder
 targetId GeneCard:NRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NRF1
-validation Human_-_:missing
+validation Human_-_NRF1(Immunoblots,Motif_Enrichment):human_NRF1_validation_Snyder.pdf
 label NRF1 (ab55744)
 
 term Nrf2
@@ -7316,10 +7742,10 @@ orderUrl http://www.shilab.info/ShiLab/Welcome.html
 lab Bernstein
 lots missing
 targetId GeneCards:KDM5B
-#PLU1 is a alias for KDM5B ~Jeff
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation Human_-_PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
 label PLU1
+#PLU1 is a alias for KDM5B ~Jeff
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -7350,7 +7776,7 @@ lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
 targetId GeneCard:POL2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
-validation Human_-_Pol2(Immunoblot):human_Pol2_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_Pol2(Immunoprecipitation,IP-Mass_spec):human_Pol2_validation_Snyder.pdf Mouse_-_:missing
 label POL2 (MMS-126R)
 
 term Pol2(b)
@@ -7411,7 +7837,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=21754
 lab Snyder
 targetId GeneCard:POLR3G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
-validation Human_-_:missing
+validation Human_-_Pol3(Immunoprecipitation,IP-Mass_spec):human_Pol3_validation_Snyder.pdf
 label POL3 (sc-21754)
 
 term POU5F1_(SC-9081)
@@ -7488,7 +7914,7 @@ lots 940739, 891751
 lab Snyder
 targetId GeneCard:RAD21
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
-validation Human_-_RAD21(Immunoblot):human_RAD21_validation_Myers.pdf Mouse_-_:missing
+validation Human_-_RAD21(Western Blot,siRNA):human_RAD21_validation_Snyder.pdf Mouse_-_:missing
 label RAD21 (ab992)
 
 term RBBP5_(A300-109A)
@@ -7534,7 +7960,7 @@ vendorId 200-401-194
 lab Snyder
 targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
-validation Human_-_RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_200-401-194_validation_Snyder.pdf
+validation Human_-_RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_validation_Snyder.pdf
 label RFX5 (200-401-194)
 
 term RUNX3_(SC-101553)
@@ -7609,11 +8035,26 @@ vendorName Santa Cruz Biotech
 vendorId sc-66884
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
 lab Farnham
-#lots
 targetId Genecard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
 validation Human_-_SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):human_SETDB1-SC66884_validation_Farnham.pdf
 label  SETDB1 (sc-66884)
+#lots
+
+term SIN3A (NB600-1263)
+tag SIN3A NB6001263
+type Antibody
+antibodyDescription Rabbit polyclonal, Immunogen: Synthetic peptide: MKRRLDDQESDVYAAQQRR, corresponding to amino acids 1-19 of Mouse mSin3A.
+target SIN3A (NB600-1263)
+targetDescription Mammalian Sin 3 (mSin 3) is closely related to the yeast SIN3 repressor protein involved in the transcriptional repression of many genes. Containing 4 paired amphipathic helix domains (PAH domains), mSin 3A and mSin 3B have been shown to directly interact with several other transcriptional repressor proteins including HDAC 1, HDAC 2, RbAp 46, the methyl CpG binding protein MeCP 2, the Mad/Max heterodimer, and the corepressors silencing mediator of retinoic acid &amp; thyroid hormone receptor (SMRT) and nuclear receptor corepressor (N-CoR).
+vendorName Novus Biologicals
+vendorId NB600-1263
+orderUrl http://www.novusbio.com/mSin3A-Antibody_NB600-1263.html
+lab Snyder
+lots LB140235
+targetId SIN3A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
+validation SIN3A(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_:mouse_SIN3A_NB600-1263_validation_Snyder.pdf
 
 term Sin3Ak-20
 tag SIN3AK20
@@ -7670,11 +8111,11 @@ vendorName Abcam
 vendorId ab9263
 orderUrl http://www.abcam.com/SMC3-antibody-ab9263.html
 lab Snyder
-#lots
 targetId GeneCards:SMC3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMC3
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_SMC3(Immunoprecipitation,ChIP):human_SMC3_validation_Snyder.pdf Mouse_-_:missing
 label SMC3 (ab9263)
+#lots
 
 term SP1
 tag SP1
@@ -7733,11 +8174,11 @@ vendorName Laszlo Tora
 vendorId missing
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
 lab Struhl
-#lots
 targetId GeneCards:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
 validation Human_-_:missing
 label SPT20
+#lots
 
 term SREBP1
 tag SREBP1
@@ -7798,7 +8239,7 @@ lab Snyder
 lots G2406 and K2106
 targetId GeneCard:STAT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1&search=STAT1
-validation Human_-_:missing
+validation Human_-_STAT1(Western_Blot,Motif_Enrichment):human_STAT1_validation_Snyder.pdf
 label STAT1 (sc-345)
 
 term STAT2
@@ -7813,7 +8254,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=476
 lab Snyder
 targetId GeneCard:STAT2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT2
-validation Human_-_:missing
+validation Human_-_STAT2(Immunoprecipitation,ChIP):human_STAT2_validation_Snyder.pdf
 label STAT2 (sc-476x)
 
 term STAT3
@@ -7828,7 +8269,7 @@ orderUrl http://www.scbt.com/datasheet-482-stat3-c-20-antibody.html
 lab Snyder
 targetId GeneCard:STAT3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT3
-validation Human_-_STAT3(Western_blot,Immunoprecipitation):human_STAT3_validation_Snyder.pdf
+validation Human_-_STAT3(Immunoprecipitation,IP-Mass_Spec):human_STAT3_validation_Snyder.pdf
 label STAT3 (sc-482)
 
 term STAT5A_(SC-74442)
@@ -7922,7 +8363,7 @@ targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basi
 targetId GeneCard:Tal1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
 lab Hardison
-validation Human_-_:missing Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
+validation Human_-_TAL1(Immunoprecipitaiton,IP-Mass_spec):human_TAL1_validation_Snyder.pdf Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
 label TAL1 (sc-12984)
 
 #term TAF-II
@@ -7936,6 +8377,7 @@ label TAL1 (sc-12984)
 #lab Myers / Wold
 #lots K0905 F2706
 #validation missing
+
 term TBP
 tag TBP
 type Antibody
@@ -7982,8 +8424,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
 validation Human_-_TCF3_(SC-349)(Western_blot,IP-MassSpec):human_TCF3_SC-349_validation_Myers.pdf Mouse_-_:missing
 label TCF3 (sc-349)
 
-# TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
-# TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
 term TCF4
 tag TCF4
 type Antibody
@@ -7999,10 +8439,9 @@ targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2&search=TCF7L2
 validation 
 label TCF4 (2569S)
-
 # TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
 # TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
-# This is a stub for the real TCF-4 which may be used later in ENCODE. ~Jeff
+
 #term TCF-4
 #tag TCF4
 #type Antibody
@@ -8015,6 +8454,10 @@ label TCF4 (2569S)
 #targetId GeneCard:TCF4
 #targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4
 #validation missing
+# TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
+# TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
+# This is a stub for the real TCF-4 which may be used later in ENCODE. ~Jeff
+
 term TCF7L2
 tag TCF7L2
 type Antibody
@@ -8062,7 +8505,6 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TEAD4
 validation Human_-_TEAD4_(SC-101184)(Western_blot,IP-Mass_Spec):human_TEAD4_SC-101184_validation_Myers.pdf
 label TEAD4 (sc-101184)
 
-##This does not appear in metaDb
 term TFIIB
 tag TFIIB
 type Antibody
@@ -8078,6 +8520,7 @@ lots J1905
 lab Struhl
 validation Human_-_:missing
 label TFIIB (sc-225)
+##This does not appear in metaDb
 
 term TFIIIC-110
 tag TF3C110
@@ -8184,7 +8627,7 @@ orderUrl http://www.abcam.com/USF2-antibody-ab60931.html
 lab Snyder
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
-validation Human_-_USF2(Immunoblot):human_USF2_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_USF2(Immunoprecipitation,Motif_Enrichment):human_USF2_validation_Snyder.pdf Mouse_-_:missing
 label USF2 (ab60931)
 
 term USF2_(C-20)
@@ -8320,11 +8763,11 @@ vendorName Proteintech
 vendorId 16618-1-AP
 orderUrl http://www.ptglab.com/Products/ZNF143-Antibody-16618-1-AP.htm
 lab Snyder
-#lots
 targetId GeneCards:ZNF143
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
 validation Human_-_:missing
 label Znf143 (16618-1-AP)
+#lots
 
 term ZNF217
 tag ZNF217
@@ -8407,7 +8850,7 @@ label ZZZ3
 ###  Antibodies
 ### These are all for the  experiments.
 ### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
-##This does not appear in metaDb
+
 term CBX3_(SC-101004)
 tag CBX3SC101004
 type Antibody
@@ -8434,11 +8877,11 @@ vendorName Millipore
 vendorId 05-689
 orderUrl http://www.millipore.com/catalogue/item/05-689
 lab Tenenbaum
-#lots
 targetId GeneCards:CBX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
 validation 
 label CBX5 (05-689)
+#lots
 
 term CELF1
 tag CELF1
@@ -8450,13 +8893,12 @@ vendorName Millipore
 vendorId 05-621
 orderUrl http://www.millipore.com/
 lab Tenenbaum
-# lots
 targetId GeneCards:CELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation Human_-_:missing
 label CELF1 (05-621)
+# lots
 
-##This does not appear in metaDb
 term CELF2
 tag CELF2
 type Antibody
@@ -8467,13 +8909,44 @@ vendorName Millipore
 vendorId 04-047
 orderUrl http://www.millipore.com/catalogue/item/04-047
 lab Tenenbaum
-# lots
 targetId GeneCards:CELF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
 validation 
 label CELF2 (04-047)
 
+term COREST (ab24166)
+tag CORESTAB24166
+type Antibody
+antibodyDescription Synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST.   Note: This antibody has since been discontinued.  Full product information is attached as part of validation document.
+target COREST (ab24166)
+targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
+vendorName Abcam
+vendorId ab24166
+lab Snyder
+lots 834865
+targetId RCOR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
+validation COREST(ab24166)(Western Blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
+
+
+term COREST (sc30189)
+tag COREST SC30189
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 246-310 mapping within an internal region of CoREST of human origin recommended for detection of CoREST of mouse, rat and human origin.
+target COREST (sc30189)
+targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
+vendorName Santa Cruz Biotech
+vendorId sc-30189
+orderUrl http://www.scbt.com/datasheet-30189-corest-h-65-antibody.html
+lab Snyder
+lots C0806
+targetId RCOR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
+validation Human_-_COREST(sc30189)(Immunoprecipitation,ChIP):human_COREST_sc30189_validation_Snyder.pdf Mouse_-_:mouse_COREST_sc30189_validation_Snyder.pdf
+
+# lots
 ##This does not appear in metaDb
+
 term EEF1A1
 tag EEF1A1
 type Antibody
@@ -8484,13 +8957,13 @@ vendorName Millipore
 vendorId 05-235
 orderUrl http://www.millipore.com/catalogue/item/05-235
 lab Tenenbaum
-# lots
 targetId Gene:1915
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
 validation 
 label EEF1A1 (05-235)
-
+# lots
 ##This does not appear in metaDb
+
 term EIF4E
 tag EIF4E
 type Antibody
@@ -8501,13 +8974,13 @@ vendorName Millipore
 vendorId 04-1058
 orderUrl http://www.millipore.com/catalogue/item/04-1058
 lab Tenenbaum
-# lots
 targetId Gene:45525
 targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
 validation 
 label EIF4E (04-1058)
-
+# lots
 ##This does not appear in metaDb
+
 term EIF4EBP1
 tag EIF4EBP1
 type Antibody
@@ -8518,7 +8991,6 @@ vendorName Millipore
 vendorId 04-1010
 orderUrl http://www.millipore.com/catalogue/item/04-1010
 lab Tenenbaum
-# lots
 targetId Gene:1978
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
 validation 
@@ -8540,7 +9012,21 @@ targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
 validation Human_-_:missing
 label ELAVL1 (SC-5261; 07-1735 is recommended replacement for AB5831)
 
-##This does not appear in metaDb
+term ELK1_(1277-1)
+tag ELK112771
+type Antibody
+antibodyDescription Rabbit polyclonal, a synthetic peptide corresponding to residues in C-terminus of human ELK-1 was used as immunogen. The antibody does not cross-react with other ETS family members.
+target ELK1
+targetDescription Elk-1 is a transcription factor that is part of the ets oncogene superfamily. Elk-1 forms a ternary complex with the serum response factors, SRE and SRF, mediating gene activity in response to serum and growth factors. Activation by several mitogen- activated protein kinases (Erk1 and Erk2) mediates the immediate early responses of the c-fos promoter to growth factors and other stimuli.
+vendorName Epitomics
+vendorId 1277-1
+orderUrl http://www.epitomics.com/products/product_info/194
+lab Snyder
+lots YG030402C
+targetId ELK1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK1
+validation ELK1_(1277-1)(Immunoprecipitation,IP-Mass_spec):human_ELK1_1277-1_validation_Snyder.pdf
+
 term FXR1
 tag FXR1
 type Antibody
@@ -8551,13 +9037,13 @@ vendorName Millipore
 vendorId 05-1529
 orderUrl http://www.millipore.com/catalogue/item/05-1529
 lab Tenenbaum
-# lots
 targetId Gene:8087
 targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
 validation 
 label FXR1 (05-1529)
-
+# lots
 ##This does not appear in metaDb
+
 term Hexim1
 tag HEXIM1
 type Antibody
@@ -8568,13 +9054,11 @@ vendorName Millipore
 vendorId 07-955
 orderUrl http://www.millipore.com/catalogue/item/07-955
 lab Tenenbaum
-# lots
 targetId Gene:10614
 targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
 validation 
 label Hexim1 (07-955)
 
-##This does not appear in metaDb
 term HNRNPD
 tag HNRNPD
 type Antibody
@@ -8585,13 +9069,13 @@ vendorName Millipore
 vendorId 07-260
 orderUrl http://www.millipore.com/catalogue/item/07-260
 lab Tenenbaum
-# lots
 targetId Gene:3184
 targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
 validation 
 label HNRNPD (07-260)
-
+# lots
 ##This does not appear in metaDb
+
 term hnRNPM
 tag HNRNPM
 type Antibody
@@ -8602,11 +9086,12 @@ vendorName Millipore
 vendorId 05-620
 orderUrl http://www.millipore.com/catalogue/item/05-620
 lab Tenenbaum
-# lots
 targetId Gene:76936
 targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
 validation 
 label hnRNPM (05-620)
+# lots
+##This does not appear in metaDb
 
 term IGF2BP1
 tag IGF2BP1
@@ -8624,6 +9109,20 @@ targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
 validation Human_-_:missing
 label IGF2BP1 (SC-21027)
 
+term MAZ_(ab85725)
+tag MAZAB85725
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen is synthetic peptide, corresponding to a region within amino acids 427-477 of Human MAZ, GenBank BAA33064.1
+target MAZ 
+targetDescription May function as a transcription factor with dual roles in transcription initiation and termination. Binds to two sites, ME1a1 and ME1a2, within the MYC promoter having greater affinity for the former. Also binds to multiple G/C-rich sites within the promoter of the Sp1 family of transcription factors.vendorName Abcam
+vendorId ab85725
+orderUrl http://www.abcam.com/MAZ-antibody-ab85725.html
+lab Snyder
+lots GR41711-2
+targetId MAZ
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAZ
+validation Human_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):human_MAZ_ab85725_validation_Snyder.pdf Mouse_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):mouse_MAZ_ab85725_validation_Snyder.pdf
+
 term Mxi1_(AF4185)
 tag MXI1
 type Antibody
@@ -8637,10 +9136,9 @@ lab Snyder
 lots ZIJ01
 targetId GeneCard:MXI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
-validation Human_-_:missing Mouse_-_:missing
+validation Human_-_MXI1(Immunoprecipitation,IP-Mass_spec):human_MXI1_validation_Snyder.pdf Mouse_-_:missing
 label Mxi1 (AF4185)
 
-##This does not appear in metaDb
 term NONO
 tag NONO
 type Antibody
@@ -8651,13 +9149,13 @@ vendorName Millipore
 vendorId 05-950
 orderUrl http://www.millipore.com/catalogue/item/05-950
 lab Tenenbaum
-# lots
 targetId GeneCard:NONO
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NONO
 validation 
 label NONO (05-950)
-
+# lots
 ##This does not appear in metaDb
+
 term PABP
 tag PABP
 type Antibody
@@ -8668,7 +9166,6 @@ vendorName Millipore
 vendorId 04-1467
 orderUrl http://www.millipore.com/catalogue/item/04-1467
 lab Tenenbaum
-# lots
 targetId Gene:37070
 targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
 validation 
@@ -8690,7 +9187,6 @@ targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
 validation Human_-_:missing
 label PABPC1 (P6246)
 
-##This does not appear in metaDb
 term QKI
 tag QKI
 type Antibody
@@ -8701,13 +9197,13 @@ vendorName Millipore
 vendorId AB9904
 orderUrl http://www.millipore.com/catalogue/item/ab9904
 lab Tenenbaum
-# lots
 targetId 9444
 targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
 validation 
 label QKI (AB9904)
-
+# lots
 ##This does not appear in metaDb
+
 term RPS6KA1
 tag RPS6KA1
 type Antibody
@@ -8718,11 +9214,12 @@ vendorName Millipore
 vendorId 07-1477
 orderUrl http://www.millipore.com/catalogue/item/07-1477
 lab Tenenbaum
-# lots
 targetId 6195
 targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
 validation 
 label RPS6KA1 (07-1477)
+# lots
+##This does not appear in metaDb
 
 term ripInput
 tag RIPIN
@@ -8734,11 +9231,11 @@ vendorId RIP Input
 vendorName Tenenbaum lab
 orderUrl http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml
 lab Tenenbaum
-# lots
 targetId (input)
-#targetUrl ;
 validation Human_-_:missing
 label RIP input
+# lots
+#targetUrl ;
 
 term SLBP
 tag SLBP
@@ -8766,17 +9263,18 @@ vendorName 1)Millipore; 2)Novagen
 vendorId AB3790; Nov_69522
 orderUrl http://www.millipore.com/
 lab Tenenbaum
-#lots
 targetId (input)
-#targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 validation Human_-_:missing
 label T7Tag (AB3790; Nov_69522)
+#lots
+#targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 
 ### mapAlgorithm : Comparing map algorithms
 # term (human-readable map algorithm name)
 # tag (machine-readable map algorithm name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be mapAlgorithm)
 # description (human-readable description of the map algorithm, unclear where/if it's used)
+
 term NA
 tag NA
 type mapAlgorithm
@@ -8842,6 +9340,7 @@ description TopHat v1.3.1
 # tag (machine-readable read type name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be readType)
 # description (human-readable description of the read type, unclear where/if it's used)
+
 term 1x25
 tag R1X25
 type readType
@@ -8900,6 +9399,7 @@ description Paired 101 nt directed reads
 #### insertLength
 #### This is being used by the Wold lab as a variable.
 #### I do not think that it needs to be controlled. - Cricket
+
 term 400
 tag IL400
 type insertLength
@@ -8916,6 +9416,7 @@ type insertLength
 description insert length not applicable
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
+
 term 1k
 tag F1K
 type fragSize
@@ -8943,6 +9444,7 @@ description 20 kb DNA fragments
 # description (human-readable description, used with matrix entries for subcellular localization tracks)
 # termId (GO ID for this subcellular compartment)
 # termUrl (a hyperlink to this GO ID.  Used with description in matrix entries)
+
 term cell
 tag CELL
 type localization
@@ -9015,6 +9517,7 @@ termId GO:0005739
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
 
 ### RNA extracts
+
 term total
 tag TOTAL
 type rnaExtract
@@ -9045,12 +9548,12 @@ type rnaExtract
 description Poly(A)- RNA longer than 200 nt
 label Long PolyA- RNA
 
-## This is what Yale and Caltech are using
 term polyA
 tag POLYA
 type rnaExtract
 description Isolated Poly(A) RNA
 label PolyA+ RNA
+## This is what Yale and Caltech are using
 
 term nonPolyARRna
 tag NONPOLYARRNA
@@ -9070,6 +9573,7 @@ type rnaExtract
 description RNA associated with RNA binding proteins
 
 ### promoters
+
 term SV40
 tag SV40
 type promoter
@@ -9081,6 +9585,7 @@ type promoter
 description promoter for the G-gamma globulin genes
 
 ### Species
+
 term hg18
 tag HG18
 type species
@@ -9117,6 +9622,7 @@ type species
 description Cow: Bos Taurus, October 2007 release
 
 ##### Control Terms
+
 term Control
 tag CONTROL
 type control
@@ -9198,6 +9704,7 @@ description No special treatment or protocol applies
 type control
 
 ### Inputs which are a special type of control
+
 term std
 tag STD
 type control
@@ -9239,6 +9746,7 @@ type control
 description Input library was prepared at UC Davis.
 
 ### Treatments
+
 term androgen
 tag ANDRO
 description 12 hrs with 1 nM Methyltrienolone (R1881) (Crawford)
@@ -9320,16 +9828,16 @@ description H7 embryoid bodies differentiation protocol for cardiomyocyte, endot
 label 14 day diffProtA
 
 term DMSO_0.02pct
-#tag DMSO2
 tag DM002P1H
 description 1 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
+#tag DMSO2
 
 term DMSO_0.02pct_24hr
-#tag DMSO224H
 tag DM002P24H
 description 24 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
+#tag DMSO224H
 
 term DMSO_0.02pct_7d
 tag DM002P7D
@@ -9337,17 +9845,17 @@ description 7 d with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term DMSO_2.0pct
-#tag DMSO20
 tag DM2P5D
 description 5 d with 2% Dimethyl sufloxide (DMSO) (Weissman)
 type treatment
+#tag DMSO20
 
 term DMSO_4hr
-#term DMSO_0.02pct_4hr  would like to change
-#tag DMSO4hr
 tag DM002P4H
 description 4 hr with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
+#term DMSO_0.02pct_4hr  would like to change
+#tag DMSO4hr
 
 term EqS_2.0pct_24hr
 tag E2P24H
@@ -9437,25 +9945,25 @@ type treatment
 term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
-description 24 h with 1% p02 and 10mM Lactate, pH 6.7
+description 24 h with 1% p02 and 10mM Lactate, pH 6.7 (Crawford)
 type treatment
 
-#missing concentration
 term IFNa30
 tag IFNA30
 description 30 m of Interferon alpha (Snyder)
 type treatment
+#missing concentration
 
 term IFNa4h
 tag IFNA4H
 description 4 hours of 500 U/ml Interferon alpha (Crawford)
 type treatment
 
-#missing concentration
 term IFNa6h
 tag IFNA6H
 description Interferon alpha treatment - 6 hours (Snyder)
 type treatment
+#missing concentration
 
 term IFNg30
 tag IFNG30
@@ -9528,12 +10036,24 @@ description Grown with normal serum levels (10%), then switched back to normal s
 type treatment
 label serum-stimulated media
 
+term 4OHTAM_1uM_4hr
+tag TAM14H
+description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+type treatment
+label 4-OHTAM_1uM_4hr
+
+term 4OHTAM_1uM_12hr
+tag TAM112H
+description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+type treatment
+label 4-OHTAM_1uM_12hr
+
 term 4OHTAM_1uM_36hr
-# Changed tag from OHTAM1: 6/9/11
 tag TAM
 description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
 label 4-OHTAM_1uM_36hr
+# Changed tag from OHTAM1: 6/9/11
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
@@ -9546,6 +10066,13 @@ tag TAM10030
 description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
 type treatment
 label 4-OHTAM_100nM_30m
+
+term Taxol_500nM_24hr
+tag TAX24H
+description 500 nM Taxol for 24 hours, then sorted for 4n DNA content (Crawford)
+type treatment
+label Taxol_500nM_24hr
+#provisional - added by wong
 
 term TGFb
 tag TGFB
@@ -9571,10 +10098,17 @@ description Charcoal stripped hormone-free FBS for 72 hours (Crawford)
 type treatment
 
 ### Protocols
+
 term FASP
 tag FASP
-description FASP (Filter-Assisted Sample Preparation) proteomics protocol (Giddings)
+description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
+
+term in-gel
+tag INGEL
+description In-gel digestion proteomics protocol (Giddings)
+type protocol
+label In-gel digestion
 
 term PCR1x
 tag PCR1X
@@ -9622,6 +10156,7 @@ description This kind of library was made from RNA < 200 nucleotides that was pr
 type protocol
 
 ### phase
+
 term G1
 tag G1
 type phase
@@ -9659,6 +10194,7 @@ description Flow sorted, S4 phase corresponds to the sixth DNA content window
 
 ### region
 # genomic regions used in experiments that are not whole-genome
+
 term chr21
 tag CHR21
 type region
@@ -9685,6 +10221,7 @@ type region
 description Set of 25 regions interrogated in UW 5C gene-targeted experiments
 
 ### restrictionEnzyme
+
 term msp
 tag MSP
 description MSP Restriction Enzyme
@@ -9699,6 +10236,7 @@ type restrictionEnzyme
 ### term:
 ### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display
+
 term Alignability
 tag ALIGNABI
 type view
@@ -9777,12 +10315,13 @@ type view
 label FastaRd2
 description FASTA Read 2
 
-#FastQ is now deprecated
 #term Fastq
 #tag FASTQ
 #type view
 #label Fastq
 #description Raw sequence with Phred33 quality scores
+#FastQ is now deprecated
+
 term FastqRd1
 tag FASTQRD1
 type view
@@ -9843,12 +10382,12 @@ type view
 label Junctions
 description TopHat-defined (Caltech) or STAR-defined (CSHL) splice junctions
 
-# Interactions may be a better view for this
 term Matrix
 tag MATRIX
 type view
 label Matrix
 description Interaction files in matrix format. The number of sequences mapped to each interaction fills the matrix.
+# Interactions may be a better view for this
 
 term MinusRawSignal
 tag MINUSRAWSIG
@@ -9874,6 +10413,12 @@ type view
 label PeakSeq Optimal Peaks
 description Regions of optimal enriched signal in experiment performed by PeakSeq
 
+term PrimerPeaks
+tag PRIMEPKS
+type view
+label Primer Peaks
+description Regions of enriched signal for a given Primer Set PROVISIONAL 
+
 term PeptideMapping
 tag PEPTIDEMAP
 type view
@@ -9892,12 +10437,12 @@ type view
 label Raw signal +
 description Graphs the base-by-base density of tags on the plus strand
 
-#snippet for UW5c's primer view
 term Primer
 tag PRIMER
 type view
 label Primer
 description The sequences of the primers used in the experiments and sequences for the control sites.
+#snippet for UW5c's primer view
 
 term Protocol
 tag PRTCL
@@ -10089,6 +10634,7 @@ label Wavelet-smoothed Signal
 ### term:  Ideally this should be the term used by NHGRI for the data type
 ### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display and should also match NHGRI with any further information
+
 term 5C
 tag 5C
 type dataType
@@ -10103,13 +10649,13 @@ label Exon-array
 description Affymetrix Exon Array
 dataGroup RNA Profiling
 
-#not currently in metaDb
 term Bip
 tag BIP
 type dataType
 label Bi-dir Promoters
 description Bidirectional Promoters
 dataGroup Other
+#not currently in metaDb
 
 term Cage
 tag CAGE
@@ -10132,13 +10678,13 @@ label Integ Cluster
 description Element cluster by integrative analysis
 dataGroup Other
 
-#tag not standard to match hg18
 #term Cnv
 #tag CNVdt
 #type dataType
 #label CNV
 #description Copy Number Variation
 #dataGroup Other
+#tag not standard to match hg18
 
 term Combined
 tag COMBO
@@ -10148,13 +10694,13 @@ description Synthesis of multiple types of data
 dataGroup Other
 # Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType (01/14/2011)
 
-#term not standard to match hg18???
 term DnaseDgf
 tag DGF
 type dataType
 label DNase-DGF
 description DNase Digital Footprinting
 dataGroup Open Chromatin
+#term not standard to match hg18???
 
 term DnaPet
 tag DNAPET
@@ -10170,13 +10716,13 @@ label DNase-seq
 description DNase digestion followed by sequencing
 dataGroup Open Chromatin
 
-#The tag is not standard Camel case to be consistent with hg18
 term FaireSeq
 tag FAIRESEQ
 type dataType
 label FAIRE-seq
 description Formaldehyde-Assisted Isolation of Regulatory Elements followed by sequencing
 dataGroup Open Chromatin
+#The tag is not standard Camel case to be consistent with hg18
 
 term Genotype
 tag GENOTYPE
@@ -10224,7 +10770,7 @@ term MethylSeq
 tag METHYLSEQ
 type dataType
 label Methyl-Seq
-description DNA Methylation sequencing
+description DNA Methylation Sequencing
 dataGroup DNA Methylation
 
 term MethylRrbs
@@ -10234,13 +10780,13 @@ label Methyl RRBS
 description DNA Methylation Reduced Representation Bisulfite Sequencing
 dataGroup DNA Methylation
 
-# tag not standard to match hg18
 term NRE
 tag NRE
 type dataType
 label Neg Regulatory
 description Negative Regulatory Elements
 dataGroup Other
+# tag not standard to match hg18
 
 term Nucleosome
 tag NUCLEOSOME
@@ -10263,13 +10809,13 @@ label Repli-seq
 description Assessment of DNA Replication Timing
 dataGroup Other
 
-# tag not standard to match hg18
 term RnaPet
 tag PET
 type dataType
 label RNA-PET
 description RNA Paired-End Tag
 dataGroup RNA Profiling
+# tag not standard to match hg18
 
 term RnaChip
 tag RNACHIP
@@ -10287,6 +10833,7 @@ dataGroup RNA Profiling
 
 #GeneST and Tiling are flavors of the RIP-chip.
 #They need separate dataTypes for the experiment table to work
+
 term RipGeneSt
 tag  GENEST
 type dataType
@@ -10322,15 +10869,16 @@ label SwitchGear
 description SwitchGear Genomics 3' UTR reporter assay
 dataGroup RNA Binding Proteins
 
-#This is not in the metaDB currently
 term TfbsValid
 tag TFBSVALID
 type dataType
 label TFBS-Valid
 description Valid Transcription Factor Binding Sites
 dataGroup Other
+#This is not in the metaDB currently
 
 ### version
+
 term V2
 tag V2
 type version
@@ -10344,6 +10892,7 @@ description version
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be strain)
 # description (human-readable description.  Can't say where/how it's used)
+
 term B10.H-2aH-4bp/Wts
 tag 2A4B
 type strain
@@ -10419,6 +10968,7 @@ description Unknown strain origin
 # type (informs pipeline code of stanza type.  Should always be age)
 # stage (either embryonic or adult.  cannot say how/where this is used)
 # description (human-readable description.  Can't say where/how it's used)
+
 term E0
 tag E0
 type age
@@ -10510,6 +11060,7 @@ description the age when the real age is unknown
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
+
 term supplemental
 tag SUP
 type attic
@@ -10538,6 +11089,7 @@ description Supplemental experiments
 # description (human-readable description.  Can't say where/how it's used)
 #
 # Category: T for tissue, L for cell Line, P for Primary cell
+
 term Tissue
 tag T
 type category
@@ -10574,6 +11126,7 @@ type sex
 description Unknown
 
 ## object Status
+
 term revoked
 tag REVOKED
 type objStatus
@@ -10589,18 +11142,21 @@ tag RENAMED
 type objStatus
 description This file has been RENAMED by the submitting laboratory. Please see updated file for newest metadata.
 
-## Organisms
+# Type Organism
+
 term human
 tag HUMAN
 type organism
-description human
+description Human
 
 term mouse
 tag MOUSE
 type organism
-description mouse
+description Mouse
 
 ## Tiers (used by cell types)
+# Venkat, I am really worried about this having a term and tag as a numeral.  The git history is lost on this data.  What do you know about it?
+
 term 1
 tag 1
 type tier
@@ -10617,6 +11173,7 @@ type tier
 description tier 3
 
 ## Tissue Sourced (Used for Mouse cell)
+
 term Both
 tag BOTH
 type tissueSourceType
@@ -10641,6 +11198,7 @@ description Tissue obtained from pooling samples from various sample organisms
 # tag (machine-readable name, no special characters. uppercase.)
 # type (informs pipeline code of stanza type, should be seqPlatform)
 # description: Working on inputing description from geo and product website
+
 term Illumina_GA
 tag ILLUMINAGA
 geo Illumina Genome Analyzer
@@ -10723,6 +11281,7 @@ description Applied Biosystems SOLiD System 3.5
 #grantInst:    The name of the institution where the grant is administered from.
 #projectName:
 #organism:     human or mouse
+
 term BioChain
 tag BIOCHAIN
 type lab
@@ -10764,7 +11323,7 @@ description Guigo - CGR, Barcelona
 labInst Genome Center for Genomic Regulation, Barcelona
 labPi Guigo
 labPiFull Roderic Guigo
-grantPi Guigo
+grantPi Gingeras
 organism human
 
 term GIS-Ruan
@@ -10824,6 +11383,7 @@ organism human
 
 ### Duke Labs
 ### Crawford and Iyer
+
 term Duke
 tag DUKE
 type lab
@@ -10859,17 +11419,18 @@ organism human
 
 ### HAIB Project Labs
 ### Caltech and HudsonAlpha
+
 term Caltech
 tag CALTECH
 type lab
 label Wold - CalTech
 description Wold - California Institute of Technology
-#grantInst California Institute of Technology (Wold Lab)
 labInst California Institute of Technology
 labPi Wold
 labPiFull Barbara Wold
 grantPi Myers
 organism human
+#description grantInst California Institute of Technology (Wold Lab)
 
 term HudsonAlpha
 tag HAIB
@@ -10884,6 +11445,7 @@ organism human
 
 ### NHGRI Labs
 ###
+
 term NHGRI-Elnitski
 tag NHGRI-ELNITSKI
 type lab
@@ -10908,10 +11470,10 @@ organism human
 
 ### Transcriptome Project Labs
 ### GIS, Riken, CHSL, CSHL, Affy, Helicos
+
 term CSHL
 tag CSHL
 type lab
-#project Transcriptome (should this be projectName?)
 label Gingeras - CSHL
 description Gingeras - Cold Spring Harbor Laboratory
 labInst Cold Spring Harbor Laboratory
@@ -10919,6 +11481,7 @@ labPi Gingeras
 labPiFull Thomas Gingeras
 grantPi Gingeras
 organism human
+#project Transcriptome (should this be projectName?)
 
 term GIS
 tag  GIS
@@ -10959,14 +11522,15 @@ type lab
 label Carninci - RIKEN
 labInst Riken Omics Science Center
 description Carninci - RIKEN Omics Science Center
-#labName Riken
 labPi Carninci
 labPiFull Piero Carninci
 grantPi Gingeras
 organism human
+#labName Riken
 
 ### UMass Labs
 ### Dekker and Weng
+
 term UMass-Dekker
 tag UMASS-DEKKER
 type lab
@@ -10991,6 +11555,7 @@ organism human
 
 #### The SYDH Project
 ####  Stanford, Yale, Davis, Harvard
+
 term Stanford
 tag STANFORD
 type lab
@@ -11048,6 +11613,7 @@ organism human
 
 ### ARRA human labs
 ###
+
 term UNC/BSU
 tag UNCBSU
 type lab
@@ -11072,6 +11638,7 @@ organism human
 
 ### Mouse labs
 ###
+
 term LICR-m
 tag LICRm
 type lab
@@ -11161,6 +11728,7 @@ grantPi Snyder
 organism mouse
 
 ### AWG (DAC) Labs
+
 term DAC-Stanford
 tag  DACSTANF
 type lab
@@ -11176,6 +11744,7 @@ organism human
 # term is the last name of the PI
 # grantInst Is the full name of the institution
 # projectName is the name we use to call the project
+
 term Bernstein
 tag BERNSTEIN
 type grant
@@ -11364,6 +11933,7 @@ projectName UNC-Giddings
 #  	  500s: typeOfTerm:500 accession:500 expVars:500 obtainedBy:500 region:500 size:500 annotation:590 fragLength:590 fragSize:590 level:590 uniqueness:590
 #	At End:
 #  	  900s: dccInternalNotes:910 sourceObj:921 tableName:970 fileName:980 type:985 md5sum:999
+
 term typeOfTerm
 tag TYPEOFTERM
 type typeOfTerm
@@ -11424,10 +11994,10 @@ label Is this auxillary data
 description This indicates the status of a file in the attic or not.  It is an internal piece of metaData.
 searchable no
 cvDefined yes
-#It probably should be cv defined, but Venkat will need to define the terms
 validate cv
 priority 190
 hidden yes
+#It probably should be cv defined, but Venkat will need to define the terms
 
 term bioRep
 tag BIOREP
@@ -11493,13 +12063,23 @@ term controlId
 tag CONTROLID
 type typeOfTerm
 label ControlId - explicit relationship
-#label Control ID - Specific dataset used as the control
 description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment.
 searchable no
 cvDefined no
 validate none
 priority 355
+#label Control ID - Specific dataset used as the control
 #This is diffiuclt to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
+
+term dataGroup
+tag DATAGROUP
+type typeOfTerm
+label Experiment (Assay) group
+description The larger groupings of dataTypes.
+searchable no
+cvDefined no 
+validate none
+priority 030
 
 term dataType
 tag DATATYPE
@@ -11511,7 +12091,6 @@ cvDefined yes
 validate cv
 priority 030
 
-# ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
 term dataVersion
 tag DATAVERSION
 type typeOfTerm
@@ -11521,8 +12100,8 @@ searchable multiSelect
 cvDefined no
 priority 310
 validate none
+# ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
 
-# later than dateSubmitted
 term dateResubmitted
 tag DATERESUBMITTED
 type typeOfTerm
@@ -11532,8 +12111,8 @@ searchable date
 cvDefined no
 priority 320
 validate date
+# later than dateSubmitted
 
-# nine months less than dateUnrestricted
 term dateSubmitted
 tag DATESUBMITTED
 type typeOfTerm
@@ -11543,8 +12122,8 @@ searchable date
 cvDefined no
 priority 315
 validate date
+# nine months less than dateUnrestricted
 
-# nine months more than dateSubmitted
 term dateUnrestricted
 tag DATEUNRESTRICTED
 type typeOfTerm
@@ -11554,6 +12133,7 @@ searchable date
 cvDefined no
 priority 325
 validate date
+# nine months more than dateSubmitted
 
 term dccAccession
 tag DCCACCESSION
@@ -11598,8 +12178,6 @@ hidden beta,public
 validate integer
 priority 100
 
-# Perhaps could add a validte option to restrict/require this var for objType=composite
-# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 term expVars
 tag EXPVARS
 type typeOfTerm
@@ -11610,6 +12188,8 @@ cvDefined no
 hidden yes
 priority 500
 validate none
+# Perhaps could add a validte option to restrict/require this var for objType=composite
+# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 
 term fileName
 tag FILENAME
@@ -11781,7 +12361,6 @@ cvDefined no
 validate regex: ^renamed\|replaced\|revoked - .*$
 priority 1
 
-#(Defined by lab)
 term obtainedBy
 tag OBTAINEDBY
 type typeOfTerm
@@ -11791,6 +12370,18 @@ searchable multiSelect
 cvDefined no
 validate none
 priority 500
+#(Defined by lab)
+
+term organism
+tag ORGANISM
+type typeOfTerm
+label Organism
+description The type of organism for an experiment. 
+searchable no
+cvDefined yes
+validate cv  
+priority 500
+#(Defined by lab)
 
 term origAssembly
 tag ORIGASSEMBLY
@@ -11826,7 +12417,6 @@ validate list: noSequence,none
 priority 450
 # Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided (01/14/2011)
 
-# Only one so far: all encode is under single project='wgEncode' (11/3/10)
 term project
 tag PROJECT
 type typeOfTerm
@@ -11836,6 +12426,7 @@ searchable no
 cvDefined no
 validate list: wgEncode
 priority 010
+# Only one so far: all encode is under single project='wgEncode' (11/3/10)
 
 term protocol
 tag PROTOCOL
@@ -11877,7 +12468,7 @@ label Genomic region(s)
 description Genomic region(s) targeted by an experiment that is not whole-genome
 searchable multiSelect
 cvDefined yes
-validate cv
+validate cv or None
 priority 500
 
 term replicate
@@ -12001,7 +12592,6 @@ cvDefined no
 validate integer
 priority 335
 
-# Format: "V# - {reason for version}".  An example :"V2 - earlier version had a bad smell"
 term submittedDataVersion
 tag SUBMITTEDDATAVERSION
 type typeOfTerm
@@ -12011,6 +12601,7 @@ searchable no
 cvDefined no
 validate regex: ^V[2-9]\+ \- .*$
 priority 250
+# Format: "V# - {reason for version}".  An example :"V2 - earlier version had a bad smell"
 
 term tableName
 tag TABLENAME

@@ -3360,14 +3360,16 @@ for(ix=0;ix<filterCount;ix++)
         safef(suffix, sizeof(suffix), "filterBy.%s", filterBy->column);
         boolean parentLevel = isNameAtParentLevel(tdb,name);
         if(cartLookUpVariableClosestToHome(cart,tdb,parentLevel,suffix,&(filterBy->htmlName)))
+            {
             filterBy->slChoices = cartOptionalSlNameList(cart,filterBy->htmlName);
+            freeMem(filterBy->htmlName);
+            }
         }
-    if(filterBy->htmlName == NULL)
-        {
-        int len = strlen(name) + strlen(filterBy->column) + 15;
-        filterBy->htmlName = needMem(len);
-        safef(filterBy->htmlName, len, "%s.filterBy.%s", name,filterBy->column);
-        }
+
+    // Note: cannot use found name above because that may be at a higher (composite/view) level
+    int len = strlen(name) + strlen(filterBy->column) + 15;
+    filterBy->htmlName = needMem(len);
+    safef(filterBy->htmlName, len, "%s.filterBy.%s", name,filterBy->column);
     }
 freeMem(setting);
 
@@ -3740,6 +3742,7 @@ void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *td
 // When only one subtrack, then show it's cfg settings instead of composite/view level settings
 // This simplifies the UI where hgTrackUi won't have 2 levels of cfg,
 // while hgTracks still supports rightClick cfg of the subtrack.
+
 if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by ajax do we consider this option
     {
     if (tdbIsComposite(tdb)                       // called for the composite
@@ -3757,8 +3760,15 @@ if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by aja
         prefix = tdb->track; // removes reference to view level
     }
 #endif///def SUBTRACK_CFG
-// composite without view should pass in subtrack as example track!
-if (tdbIsComposite(tdb) && !tdbIsCompositeView(tdb->subtracks))
+
+// Cfg could be explicitly blocked, but if tdb is example subtrack
+// then blocking should have occurred before we got here.
+if (!tdbIsSubtrack(tdb) && trackDbSettingBlocksConfiguration(tdb,FALSE))
+    return;
+
+// composite/view must pass in example subtrack
+// NOTE: if subtrack types vary then there shouldn't be cfg at composite/view level!
+while (tdb->subtracks)
     tdb = tdb->subtracks;
 
 switch(cType)
@@ -4111,6 +4121,14 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
            (enabledCB?"":" title='view is hidden'"),
            (useDragAndDrop?" class='dragHandle' title='Drag to reorder'":""));
 
+    // A hidden field to keep track of subtrack order if it could change
+    if (sortOrder != NULL || useDragAndDrop)
+        {
+        safef(buffer, sizeof(buffer), "%s.priority", subtrack->track);
+        float priority = (float)cartUsualDouble(cart, buffer, subtrack->priority);
+        printf("<INPUT TYPE=HIDDEN NAME='%s' class='trPos' VALUE=\"%.0f\">", buffer, priority); // keeing track of priority
+        }
+
     // The checkbox has identifying classes including subCB and the tag for each dimension (e.g. class='subCB GM12878 CTCF Peak')
     dyStringClear(dyHtml);
     dyStringAppend(dyHtml, "subCB"); // always first
@@ -4150,7 +4168,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #ifdef SUBTRACK_CFG
     if (!tdbIsMultiTrack(parentTdb))  // MultiTracks never have independent vis
         {
-        printf("<TD>"); // An extra column for subVis/wrench so dragAndDrop works
+        printf("</TD><TD>"); // An extra column for subVis/wrench so dragAndDrop works
         enum trackVisibility vis = tdbVisLimitedByAncestors(cart,subtrack,FALSE,FALSE);
         char *view = NULL;
         if (membersForAll->members[dimV]
@@ -4168,17 +4186,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return subCfg.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
             printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" disabled"),subtrack->track);
             }
-        printf("</TD>");
         }
+    printf("</TD>");
 #endif///def SUBTRACK_CFG
-
-    // A hidden field to keep track of subtrack order if it could change
-    if (sortOrder != NULL || useDragAndDrop)
-        {
-        safef(buffer, sizeof(buffer), "%s.priority", subtrack->track);
-        float priority = (float)cartUsualDouble(cart, buffer, subtrack->priority);
-        printf("<INPUT TYPE=HIDDEN NAME='%s' class='trPos' VALUE=\"%.0f\">", buffer, priority); // keeing track of priority
-        }
 
     // A color patch which helps distinguish subtracks in some types of composites
     if (doColorPatch)
@@ -4485,14 +4495,19 @@ wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
 
 printf("<TABLE BORDER=0>");
 
-char *aggregate = trackDbSetting(tdb, "aggregate");
-if (aggregate != NULL && tdb->subtracks)
+boolean parentLevel = isNameAtParentLevel(tdb, name);
+if(parentLevel)
     {
-    char *aggregateVal = cartOrTdbString(cart, tdb, "aggregate", NULL);
+    assert(tdb->parent != NULL);
+    char *aggregate = trackDbSetting(tdb->parent, "aggregate");
+    if (aggregate != NULL && parentLevel)
+        {
+        char *aggregateVal = cartOrTdbString(cart, tdb->parent, "aggregate", NULL);
     printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
     safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
     aggregateDropDown(option, aggregateVal);
     puts("</td></TR>");
+    }
     }
 
 printf("<TR valign=center><th align=right>Type of graph:</th><td align=left>");
@@ -6253,6 +6268,9 @@ for (ix = 0; ix < membersOfView->count; ix++)
         struct trackDb *subtrack = membersOfView->subtrackList[ix]->val;
         matchedViewTracks[ix] = subtrack->parent;
         configurable[ix] = (char)cfgTypeFromTdb(subtrack, TRUE);
+        if (configurable[ix] != cfgNone && trackDbSettingBlocksConfiguration(subtrack,FALSE))
+            configurable[ix]  = cfgNone;
+
         if(configurable[ix] != cfgNone)
             {
             if(firstOpened == -1)
@@ -7368,15 +7386,18 @@ enum trackVisibility tdbVisLimitedByAncestors(struct cart *cart, struct trackDb 
 {
 boolean subtrackOverride = FALSE;
 enum trackVisibility vis = tdbLocalVisibility(cart,tdb,&subtrackOverride);
-if (subtrackOverride)
-    return vis;
 
-// subtracks without explicit (cart) vis but are selected, should get inherited vis
 if (tdbIsContainerChild(tdb))
     {
-    if (!checkBoxToo || fourStateVisible(subtrackFourStateChecked(tdb,cart)))
-        vis = tvFull; // to be limited by ancestry
+    // subtracks without explicit (cart) vis but are selected, should get inherited vis
+    if (!subtrackOverride)
+        vis = tvFull;
+    // subtracks with checkbox that says no, are stopped cold
+    if (checkBoxToo && !fourStateVisible(subtrackFourStateChecked(tdb,cart)))
+        vis = tvHide; // Checkbox says no
     }
+if (subtrackOverride)
+    return vis;
 
 if (vis == tvHide || tdb->parent == NULL || (!foldersToo && tdbIsFolder(tdb->parent)))  // aka superTrack
     return vis; // end of line

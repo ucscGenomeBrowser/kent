@@ -501,91 +501,163 @@ rheMac3.upstreamGeneTbl = refGene
             hgcentraltest
     #   test it with some sequence
 
-XXXX 2012-01-13
+#########################################################################
+# reset default position (working DONE - 2012-01-13  - Chin)
+#       Reset default position to an area contains RHO and a number of
+#       other genes
+    hgsql -e \
+'update dbDb set defaultPos="chr22:56,647,062-58,290,728" where name="rheMac3";' \
+        hgcentraltest
 ############################################################################
-# scaffolds ctgPos2 track (pending working - 2011-10-13 - Chin)
-#### incorrect for GorGor3 !!!!!
+# ctgPos2 track - showing clone sequence locations on chromosomes
+#       (DONE 2012-01-18 - Chin)
+# NOTE - create rheMac3 entry in all.joiner since this is a new species
     mkdir /hive/data/genomes/rheMac3/bed/ctgPos2
     cd /hive/data/genomes/rheMac3/bed/ctgPos2
-    cat << '_EOF_' > scaffoldToCtgPos2.pl
+    cat << '_EOF_' > agpToCtgPos2.pl
 #!/usr/bin/env perl
 
-use strict;
 use warnings;
+use strict;
 
-my %chromSizes;
+my $argc = scalar(@ARGV);
 
-open (FH, "<../../chrom.sizes") or die "can not read ../../chrom.sizes";
-while (my $line = <FH>) {
-    chomp $line;
-    my ($chr, $size) = split('\s+', $line);
-    $chromSizes{$chr} = $size;
+if ($argc != 1) {
+    printf STDERR "usage: zcat your.files.agp.gz | agpToCtgPos2.pl /dev/stdin > ctgPos2.tab\n";
+    exit 255;
 }
-close (FH);
 
-my %fragToChrom;
-my %fragToPosition;
-my %fragType;
-my %fragSize;
-my %chrType;
+my $agpFile = shift;
 
-open (FH, "hgsql -N -e 'select chrom,chromStart,chromEnd,type,frag,fragStart,fragEnd,strand from gold;' rheMac3|") or die "can not select from gold.rheMac3";
+open (FH, "<$agpFile") or die "can not read $agpFile";
 while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
     chomp $line;
-    my ($chrom,$chromStart,$chromEnd,$type,$frag,$fragStart,$fragEnd,$strand) =
-        split('\t', $line);
-    next if (exists($fragToChrom{$frag}));
-    my $size = $fragEnd - $fragStart;
-    $fragToChrom{$frag} = $chrom;
-    $fragToPosition{$frag} = $chromStart;
-    $fragType{$frag} = $type;
-    if (exists($chrType{$chrom})) {
-        if ($chrType{$chrom} ne $type) {
-            printf STDERR "WARN: different types for chrom $chrom: $type NE $chrType{$chrom}\n";
-        }
-    }
-    $chrType{$chrom} = $type;
-    $fragSize{$frag} = $size;
-}
-close (FH);
-open (FH, "</hive/data/genomes/rheMac3/genbank/Primary_Assembly/scaffold_localID2acc") or die "can not read scaffold_localID2acc";
-while (my $line = <FH>) {
-    next if ($line =~ m/^#Scaffold/);
-    chomp $line;
-    my ($scafName, $fragName) = split('\s+', $line);
-    my $noSuffix = $fragName;
-    $noSuffix =~ s/\.1$//;
-    if (exists($chromSizes{$noSuffix})) {
-        my $type = "";
-        $type = $chrType{$noSuffix} if (exists($chrType{$noSuffix}));
-        $type = $fragType{$fragName} if (exists($fragType{$fragName}));
-        if (length($type) > 0) {
-        my $size = $chromSizes{$noSuffix};
-        printf "%s\t%d\t%s\t0\t%d\t%s\n", $scafName, $size, $noSuffix,
-            $size, $type;
-        } else {
-            printf STDERR "can not find fragType for $fragName, $noSuffix\n";
-        }
-    } elsif (exists($fragToChrom{$fragName})) {
-        printf "%s\t%d\t%s\t0\t%d\t%s\n", $scafName, $fragSize{$fragName},
-            $fragToChrom{$fragName}, $fragSize{$fragName}, $fragType{$fragName};
-    } else {
-        printf STDERR "can not find: $fragName -> $scafName\n";
-    }
+    my @a = split('\s+', $line);
+    next if ($a[4] =~ m/^U$/);
+    next if ($a[4] =~ m/^N$/);
+    my $chrSize = $a[2]-$a[1]+1;
+    my $ctgSize = $a[7]-$a[6]+1;
+    die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize != $ctgSize);
+    printf "%s\t%d\t%s\t%d\t%d\t%s\n", $a[5], $chrSize, $a[0], $a[1]-1, $a[2], $a[4];
 }
 close (FH);
 '_EOF_'
     # << happy emacs
-    chmod +x scaffoldToCtgPos2.pl
-    ./scaffoldToCtgPos2.pl > scaffold.ctgPos2.tab
 
-    cut -f1 scaffold.ctgPos2.tab | awk '{print length($1)}' | sort -rn | head -1
-    #   23
-    cut -f3 scaffold.ctgPos2.tab | awk '{print length($1)}' | sort -rn | head -1
-    #   12
+chmod 775 agpToCtgPos2.pl
 
-    sed -e "s/20/23/; s/16/12/" $HOME/kent/src/hg/lib/ctgPos2.sql > ctgPos2.sql
+export S=../../genbank/Primary_Assembly/assembled_chromosomes
+cat  ${S}/chr2acc | grep -v "^#Chromosome" | cut -f2 | while read ACC
+do
+    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    zcat ${S}/AGP/chr${C}.agp.gz \
+        | sed -e "s/^${ACC}/chr${C}/"
+done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
-    hgLoadSqlTab rheMac3 ctgPos2 ctgPos2.sql scaffold.ctgPos2.tab
+    hgLoadSqlTab rheMac3 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+    # add the track ctgPos2 to src/hg/makeDb/trackDb/cow/rheMac3/trackDb.ra
+    # at src/makeDb/trackdb do "make update DBS=rheMac3" or/and "make alpha"
+    # based on result of
+    # hgsql -N -e "select type from ctgPos2;" rheMac3 | sort | uniq
+    # W
+XXXX TODO: html
+    # prepare the src/hg/makeDb/trackDb/cow/rheMac3/ctgPos2.html 
+
+############################################################################
+# running cpgIsland business (DONE -2012-01-18 - Chin)
+    mkdir /hive/data/genomes/rheMac3/bed/cpgIsland
+    cd /hive/data/genomes/rheMac3/bed/cpgIsland
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    #   needed to fixup this source, adding include to readseq.c:
+#include "string.h"
+    #   and to cpg_lh.c:
+#include "unistd.h"
+#include "stdlib.h"
+    # and fixing a declaration in cpg_lh.c
+    sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
+    mv tmp.c cpg_lh.c
+    make
+    cd ../../
+    ln -s hg3rdParty/cpgIslands/cpglh.exe
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../rheMac3.2bit:$C stdout \
+        | maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/rheMac3/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check out exists results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #   the faCount business is to make sure there is enough sequence to
+    #   work with in the fasta.  cpglh.exe does not like files with too many
+    #   N's - it gets stuck
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | grep ^chr | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+
+
+    chmod 775 runOne
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para push
+    para time
+    para problems
+    para status
+    # then, kick it with para push
+    # check it with plb
+    # when all are done, para time shows:
+    # Checking finished jobs
+    # Completed: 34103 of 34103 jobs
+    # CPU time in finished jobs:    209s       3.49m     0.06h    0.00d  0.000 y
+    # IO & Wait Time:             88578s    1476.30m    24.60h    1.03d  0.003 y
+    # Average job time:                   3s       0.04m     0.00h    0.00d
+    # Longest finished job:              23s       0.38m     0.01h    0.00d
+    # Submission to last job:           146s       2.43m     0.04h    0.00d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    ssh hgwdev
+    cd /hive/data/genomes/rheMac3/bed/cpgIsland
+    hgLoadBed rheMac3 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    # Reading cpgIsland.bed
+    # Read 25189 elements of size 10 from cpgIsland.bed
+    # Sorted
+    # Creating table definition for cpgIslandExt
+    # Saving bed.tab
+    # Loading rheMac3
+
+    #   cleanup
+    rm -fr hardMaskedFa
+
 
 ########################################################################

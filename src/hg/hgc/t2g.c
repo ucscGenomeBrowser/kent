@@ -83,13 +83,33 @@ void printSeqHeaders(bool showDesc, bool isClickedSection)
     printf("<TR style=\"background-color: #%s; color: #FFFFFF\">\n", HG_COL_TABLE_LABEL);
     if (showDesc)
         puts("  <TH style=\"width: 10%\">Article file</TH>\n");
-    puts("  <TH style=\"width: 70%\">Sequence (in bold) with flanking text</TH>\n");
+    puts("  <TH style=\"width: 70%\">One table row per sequence, with flanking text, sequence in bold</TH>\n");
     if (t2gDebug)
         puts("  <TH style=\"width: 30%\">Identifiers</TH>\n");
 
     if (!isClickedSection && !t2gDebug)
-        puts("  <TH style=\"width: 20%\">Matches</TH>\n");
+        puts("  <TH style=\"width: 20%\">Feature that includes this match</TH>\n");
     puts("</TR>\n");
+}
+
+void printAddWbr(char* text, int distance) 
+/* a crazy hack for firefox/mozilla that is unable to break long words in tables
+ * We need to add a <wbr> tag every x characters in the text to make text breakable.
+ */
+{
+int i;
+i = 0;
+char* c;
+c = text;
+while (*c!=0){
+    {
+    if (i % distance == 0) 
+        printf("<wbr>");
+    printf("%c", *c);
+    c++;
+    i++;
+    }
+}
 }
 
 bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnection* conn, struct hash* clickedSeqs, bool isClickedSection, bool fasta)
@@ -150,9 +170,11 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
         {
             printf("<TR style=\"background-color: #%s\">\n", HG_COL_LOCAL_TABLE);
             if (showDesc)
-                printf("<TD style=\"word-break: break-all\">%s\n", fileDesc);
+                printf("<TD style=\"word-break:break-all\">%s\n", fileDesc);
             //printf("<TD><I>%s</I></TD>\n", snippet); 
-            printf("<TD style=\"word-break: break-all\"><I>%s</I></TD>\n", snippet); 
+            printf("<TD style=\"word-break:break-all;\"><I>");
+            printAddWbr(snippet, 40);
+            printf("</I></TD>\n"); 
             if (t2gDebug) 
             {
                 printf("<TD>article %s, file %s, seq %s, annotId %s", artId, fileId, seqId, annotId);

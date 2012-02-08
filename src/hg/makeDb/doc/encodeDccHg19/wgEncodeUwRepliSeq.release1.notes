@@ -1,6 +1,6 @@
 mkChangeNotes v2
 hg19 wgEncodeUwRepliSeq Release 1
-2011-12-02
+2012-01-26
 
 QA Count Summaries for Release 1:
 Tables: 160
@@ -174,16 +174,16 @@ wgEncodeUwRepliSeqNhekS4PctSignalRep1
 wgEncodeUwRepliSeqNhekSumSignalRep1
 wgEncodeUwRepliSeqNhekValleysRep1
 wgEncodeUwRepliSeqNhekWaveSignalRep1
-wgEncodeUwRepliSeqSknshraG1bPctSignalRep1
-wgEncodeUwRepliSeqSknshraG2PctSignalRep1
-wgEncodeUwRepliSeqSknshraPkRep1
-wgEncodeUwRepliSeqSknshraS1PctSignalRep1
-wgEncodeUwRepliSeqSknshraS2PctSignalRep1
-wgEncodeUwRepliSeqSknshraS3PctSignalRep1
-wgEncodeUwRepliSeqSknshraS4PctSignalRep1
-wgEncodeUwRepliSeqSknshraSumSignalRep1
-wgEncodeUwRepliSeqSknshraValleysRep1
-wgEncodeUwRepliSeqSknshraWaveSignalRep1
+wgEncodeUwRepliSeqSknshG1bPctSignalRep1
+wgEncodeUwRepliSeqSknshG2PctSignalRep1
+wgEncodeUwRepliSeqSknshPkRep1
+wgEncodeUwRepliSeqSknshS1PctSignalRep1
+wgEncodeUwRepliSeqSknshS2PctSignalRep1
+wgEncodeUwRepliSeqSknshS3PctSignalRep1
+wgEncodeUwRepliSeqSknshS4PctSignalRep1
+wgEncodeUwRepliSeqSknshSumSignalRep1
+wgEncodeUwRepliSeqSknshValleysRep1
+wgEncodeUwRepliSeqSknshWaveSignalRep1
 
 
 New Download Files (448):
@@ -607,34 +607,34 @@ New Download Files (448):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqNhekSumSignalRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqNhekValleysRep1.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqNhekWaveSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraG1bAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraG1bAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraG1bPctSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraG1bRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraG2AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraG2AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraG2PctSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraG2RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraPkRep1.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS1AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS1AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS1PctSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS1RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS2AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS2AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS2PctSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS2RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS3AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS3AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS3PctSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS3RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS4AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS4AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS4PctSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraS4RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraSumSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraValleysRep1.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshraWaveSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshG1bAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshG1bAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshG1bPctSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshG1bRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshG2AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshG2AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshG2PctSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshG2RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshPkRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS1AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS1AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS1PctSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS1RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS2AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS2AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS2PctSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS2RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS3AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS3AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS3PctSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS3RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS4AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS4AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS4PctSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshS4RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshSumSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshValleysRep1.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwRepliSeq/release1/wgEncodeUwRepliSeqSknshWaveSignalRep1.bigWig
 
 
 New Gbdb Files (128):
@@ -758,14 +758,14 @@ New Gbdb Files (128):
 /gbdb/hg19/bbi/wgEncodeUwRepliSeqNhekS4PctSignalRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwRepliSeqNhekSumSignalRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwRepliSeqNhekWaveSignalRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshraG1bPctSignalRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshraG2PctSignalRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshraS1PctSignalRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshraS2PctSignalRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshraS3PctSignalRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshraS4PctSignalRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshraSumSignalRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshraWaveSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshG1bPctSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshG2PctSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshS1PctSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshS2PctSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshS3PctSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshS4PctSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshSumSignalRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwRepliSeqSknshWaveSignalRep1.bigWig
 
 
 New Other Files (3):

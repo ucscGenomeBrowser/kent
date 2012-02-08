@@ -1249,8 +1249,9 @@ void createHgFindMatchHash();
 /* Read from the cart the string assocated with matches and
    put the matching items into a hash for highlighting later. */
 
-TrackHandler lookupTrackHandler(char *name);
-/* Lookup handler for track of give name.  Return NULL if none. */
+TrackHandler lookupTrackHandlerClosestToHome(struct trackDb *tdb);
+/* Lookup handler for track of give name.  Try parents if
+ * subtrack has a NULL handler.  Return NULL if none. */
 
 void registerTrackHandlers();
 /* Register tracks that include some non-standard methods. */

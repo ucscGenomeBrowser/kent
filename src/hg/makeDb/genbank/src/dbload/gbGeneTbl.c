@@ -156,7 +156,7 @@ static void gbGeneTblWriteGene(struct gbGeneTbl *ggt, struct gbStatus* status,
 {
 struct genePred* gp
     = genePredFromPsl3(psl, &status->cds, 
-                       (ggt->hasExtCols ? genePredAllFlds : 0), 0,
+                       (ggt->hasExtCols ? genePredAllFlds : 0), genePredPslCdsMod3,
                        genePredStdInsertMergeSize, genePredStdInsertMergeSize);
 FILE *fh = gbGeneTblGetTabFh(ggt, conn);
 if (ggt->hasExtCols)
@@ -176,7 +176,7 @@ static void gbGeneTblWriteGeneFlat(struct gbGeneTbl *ggt, struct gbStatus* statu
 /* write genePred flat row */
 {
 struct genePred* gp
-    = genePredFromPsl3(psl, &status->cds, 0, 0,
+    = genePredFromPsl3(psl, &status->cds, 0, genePredPslCdsMod3,
                        genePredStdInsertMergeSize, genePredStdInsertMergeSize);
 FILE *fh = gbGeneTblGetFlatTabFh(ggt, conn);
 fprintf(fh, "%s\t", ((status->geneName == NULL) ? "" : status->geneName));

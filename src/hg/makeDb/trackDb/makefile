@@ -43,10 +43,11 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	ailMel1 \
 	canFam1 canFam2 canFamPoodle1 \
 	felCat3 felCat4  \
-	mm6 mm7 mm8 mm9 \
+	mm6 mm7 mm8 mm9 mm10 \
 	rn3 rn4 \
 	speTri1 cavPor3 \
         hetGla1 \
+        sarHar1 \
 	oryCun1 oryCun2 \
 	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 \
 	equCab1 \
@@ -132,6 +133,7 @@ DATA_TRIX = /data/trix
 update: #clean
 	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} ${DBS}
 	./checkMetaDb alpha metaDb_${USER} ${DBS}
+	${MKDIR} ${CGI_BIN}-${USER}/encode
 	rm -f ${CGI_BIN}-${USER}/encode/cv.ra
 	cp -p cv/alpha/cv.ra  ${CGI_BIN}-${USER}/encode
 #  if you want to test track search tool with your own trix file
@@ -144,6 +146,7 @@ alpha: clean
 	${GIT} pull
 	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec ${DBS}
 	./checkMetaDb alpha metaDb ${DBS}
+	${MKDIR} ${CGI_BIN}/encode
 	rm -f ${CGI_BIN}/encode/cv.ra
 	cp -p cv/alpha/cv.ra ${CGI_BIN}/encode
 	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb.{ixx,ix}}
@@ -157,6 +160,7 @@ beta: onbeta clean
 	${GIT} pull
 	./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec ${DBS}
 	./checkMetaDb beta metaDb ${DBS}
+	${MKDIR} ${CGI_BIN}/encode
 	rm -f ${CGI_BIN}/encode/cv.ra
 	cp -p cv/beta/cv.ra ${CGI_BIN}/encode
 	rm -f ${DBS:%=${DATA_TRIX}/%_trackDb.{ixx,ix}}
@@ -167,6 +171,7 @@ public: onbeta clean
 	./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	./checkMetaDb public metaDb_public ${DBS}
 	rm -f ${CGI_BIN}-public/encode/cv.ra
+	${MKDIR} ${CGI_BIN}-public/encode
 	cp -p cv/public/cv.ra  ${CGI_BIN}-public/encode
 	rm -f ${DBS:%=${DATA_TRIX}/%_trackDb_public.{ixx,ix}}
 	HGDB_TRACKDB=trackDb_public ./buildTrix trackDb_public metaDb_public ${CGI_BIN}-public/encode/cv.ra ${DATA_TRIX} ${DBS}

@@ -1,6 +1,6 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, shutil 
-from ucscgenomics import track 
+from ucscgenomics import track, qa
 
 def addInclude(composite, makefile, stage):
     f = open(makefile, "r")
@@ -16,11 +16,37 @@ def addInclude(composite, makefile, stage):
         return
     else:
         f = open(makefile, "w")
+        beforelines = list()
+        afterlines = list()
+        encodelines = list()
         p = re.compile("LIST")
+        p2 = re.compile("wgEncode.*")
+        status = "before"
         for i in lines:
-            f.write(str(i))
+            if status == "before":
+                beforelines.append(i)
             if p.search(i):
-                f.write("%s.ra \\\n" % composite)
+                status = "encode"
+                continue
+            if status == "encode" and p2.search(i):
+                encodelines.append(i)
+            elif status == "encode":
+                afterlines.append(i)
+                status = "after"
+                continue
+            if status == "after":
+                afterlines.append(i)
+        encodeset = set(encodelines)
+        encodeset.add("%s.ra \\\n" % composite)
+        encodelines = list(qa.sorted_nicely(list(encodeset)))
+        for i in beforelines:
+            f.write(str(i))
+        for i in encodelines:
+            f.write(str(i))
+        for i in afterlines:
+            f.write(str(i))
+        f.close
+        print "Inserted %s into %s metaDb makefile" % (composite, stage)
     return
 
 def parseTrackDb(c, args):
@@ -30,9 +56,13 @@ def parseTrackDb(c, args):
     includeLines = f.readlines()
     f.close()
     p = re.compile("include (%s.*)" % args.composite)
+    p2 = re.compile("^#")
     compositeLines = list()
     for i in includeLines:
         m = p.search(i)
+        m1 = p2.search(i)
+        if m1:
+            continue
         if m:
             compositeLines.append(m.group(1))
 
@@ -41,7 +71,13 @@ def parseTrackDb(c, args):
 def compareMetaDb(c, args):
 
     alphaMetaDb = c.alphaMetaDb
-    betaMetaDb = c.betaMetaDb
+    try:
+       betaMetaDb = c.betaMetaDb
+    except KeyError:
+        print "No beta metaDb exists, this must be the first release"
+        print "Moving alpha metaDb to beta metaDb, please make on hgwbeta"
+        shutil.copy(c._alphaMdbPath, c._betaMdbPath)
+        return
     (retList, addList, dropList) = alphaMetaDb.changeSummary(betaMetaDb)
     if args.stage == "beta":
         f = open("%s.metaDb.beta.diff" % args.composite, "w")
@@ -57,6 +93,7 @@ def compareMetaDb(c, args):
             for j in retList[i]:
                 f.write("\t\t%s\n" % j)
         f.close
+        print "Printed out metaDb changelist between alpha and beta"
         print "Moving alpha metaDb to beta metaDb, please make on hgwbeta"
         shutil.copy(c._alphaMdbPath, c._betaMdbPath)
     if args.stage == "public":
@@ -108,7 +145,7 @@ def main():
     includeLines, compositeLines, trackDbInclude = parseTrackDb(c, args)
 
     if len(compositeLines) > 2:
-        print "There are 3 include lines for composite %s, this must currently be resolved manually"
+        print "There are 3 include lines for composite %s, this must currently be resolved manually" % args.composite
         return
     #make dictionary of included composites to compare
     compare = dict()
@@ -119,9 +156,11 @@ def main():
         addInclude(args.composite, betaMetaDbInclude, args.stage)
         for i in compare.keys():
             if re.search("alpha", compare[i]):
+                print "Staging %s from %s -> %s" % (i, compare[i], "alpha,beta")
                 compare[i] = "alpha,beta"
                 continue
             if re.search("public", compare[i]):
+                print "Staging %s from %s -> %s" % (i, compare[i], "public")
                 compare[i] = "public"
                 continue
 
@@ -130,9 +169,11 @@ def main():
         addInclude(args.composite, publicMetaDbInclude, args.stage)
         for i in compare.keys():
             if re.search("beta", compare[i]):
+                print "Staging %s from %s -> %s" % (i, compare[i], "NULL")
                 compare[i] = " "
                 continue
             if re.search("public", compare[i]):
+                print "Removing old public %s" % i
                 compare[i] = "delete"
                 continue
 
@@ -152,8 +193,8 @@ def main():
             continue
         f.write(i)
     f.close()
+    print "Printed out trackDb.wgEncode.ra"
 
     compareMetaDb(c, args)
-
 if __name__ == "__main__":
     main()

@@ -10,10 +10,12 @@ wgEncodeCshlShortRnaSeq.ra \
 wgEncodeDukeAffyExon.ra \
 wgEncodeGencodeV4.ra \
 wgEncodeGencodeV7.ra \
+wgEncodeGencodeV10.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaPet.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeHaibGenotype.ra \
+wgEncodeHaibMethyl450.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeMapability.ra \
@@ -38,8 +40,8 @@ wgEncodeUwAffyExonArray.ra \
 wgEncodeUwDgf.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwHistone.ra \
+wgEncodeUwRepliSeq.ra \
 wgEncodeUwTfbs.ra \
-wgEncodeHaibMethyl450.ra \
 
 include ../../../../makefile.metaDb
 

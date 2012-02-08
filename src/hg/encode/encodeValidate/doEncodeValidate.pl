@@ -195,6 +195,7 @@ our %validators = (
     tissueSourceType => \&validateControlledVocabOrNone,
     spikeInPool => \&validateNoValidation,
     readType => \&validateControlledVocabOrNone,
+	region => \&validateControlledVocabOrNone,
     default => \&validateControlledVocab,
     );
 
@@ -2067,7 +2068,7 @@ foreach my $ddfLine (@ddfLines) {
     $metadata .= " softwareVersion=$ddfLine->{softwareVersion}" if $ddfLine->{softwareVersion};
     $metadata .= " origAssembly=$ddfLine->{origAssembly}" if $ddfLine->{origAssembly};
     if ($daf->{assembly} eq "mm9"){
-        $metadata .= ' dataVersion="ENCODE Mar 2012 Freeze"';
+        $metadata .= ' dataVersion="' . $Encode::mouseDataVersion . '"';
     } else {
         $metadata .= ' dataVersion="' . $Encode::dataVersion .'"';
     }

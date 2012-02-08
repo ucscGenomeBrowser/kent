@@ -6,11 +6,11 @@
 #Describes the canonical splice variant of a gene
 CREATE TABLE knownCanonical (
     chrom varchar(255) not null,	# Chromosome
-    chromStart int not null,	# Start position (0 based). Corresponds to txStart
-    chromEnd int not null,	# End position (non-inclusive). Corresponds to txEnd
+    chromStart int not null,	# Start position (0 based). Represents transcription start for + strand genes, end for - strand genes
+    chromEnd int not null,	# End position (non-inclusive). Represents transcription end for + strand genes, start for - strand genes
     clusterId int not null,	# Which cluster of transcripts this belongs to in knownIsoforms
     transcript varchar(255) not null,	# Corresponds to knownGene name field.
-    protein varchar(255) not null,	# SwissProt ID of associated protein.
+    protein varchar(255) not null,	# Accession of the associated protein, or UCSC ID in newer tables.
               #Indices
     UNIQUE(clusterId),
     INDEX(transcript(12)),

@@ -175,7 +175,7 @@ class makeNotes(object):
         orsep = " OR "
         orstr = orsep.join(tablelist)
 
-        cmd = "hgsql %s -e \"SELECT ROUND(data_length/1024/1024,2) total_size_mb, ROUND(index_length/1024/1024,2) total_index_size_mb FROM information_schema.TABLES WHERE %s\"" % (database, orstr)
+        cmd = "hgsql %s -e \"SELECT ROUND(data_length,2) total_size_mb, ROUND(index_length,2) total_index_size_mb FROM information_schema.TABLES WHERE %s\"" % (database, orstr)
         p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
         cmdoutput = p.stdout.read()
 
@@ -183,19 +183,24 @@ class makeNotes(object):
             fields = i.split()
             for j in fields:
                 tablesize = tablesize + float(j)
+        tablesize = tablesize/(1024 ** 2)
 
         return int(math.ceil(tablesize))
 
     def __checkMd5sums(self):
         (newfiles, oldfiles, loose) = (self.newReleaseFiles, self.oldReleaseFiles, self.loose)
         errors = []
+        repush = set()
         for i in oldfiles:
             if i not in newfiles:
                 pass
             elif re.match('wgEncode.*', i):
                 if oldfiles[i].md5sum != newfiles[i].md5sum:
+                    repush.add(i)
                     errors.append("file: %s have changed md5sums between releases. %s vs %s" % (i, oldfiles[i].md5sum, newfiles[i].md5sum))
         if loose:
+            for i in repush:
+                del oldfiles[i]
             return list()
         else:
             return errors
@@ -423,6 +428,10 @@ class makeNotes(object):
         output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePathOld))
         output.append("\n")
         output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
+        output.extend("\n")
+        if self.atticSet:
+            output.append("Attic Objects")
+            output.extend(ucscUtils.printIter((self.atticSet), self.releasePath))
 
         if not args['ignore']:
             output.append("No Errors")
@@ -464,6 +473,9 @@ class makeNotes(object):
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedTables, 0), "Revoked Tables"))
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedFiles, self.releasePath), "Revoked Files"))
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedGbdbs, self.gbdbPath), "Revoked Gbdbs"))
+        if self.atticSet:
+            output.append("Attic Objects")
+            output.extend(ucscUtils.printIter((self.atticSet), self.releasePath))
 
         if not args['ignore']:
             output.append("No Errors")

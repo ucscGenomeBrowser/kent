@@ -1,3 +1,340 @@
+metaObject wgEncodeCshlLongRnaSeq
+objType composite
+composite wgEncodeCshlLongRnaSeq
+expVars lab,dataType,cell,age,strain
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1
+objType table
+age adult-8wks
+bioRep 1AWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20728
+labProtocolId 1A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5493
+tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep2
+objType table
+age adult-8wks
+bioRep 1BWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20729
+labProtocolId 1B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5485
+tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksFastqRd1Rep1
+objType file
+age adult-8wks
+bioRep 1AWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20728
+labProtocolId 1A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5493
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksFastqRd1Rep2
+objType file
+age adult-8wks
+bioRep 1BWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksFastqRd1Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20729
+labProtocolId 1B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5485
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksFastqRd2Rep1
+objType file
+age adult-8wks
+bioRep 1AWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20728
+labProtocolId 1A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5493
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksFastqRd2Rep2
+objType file
+age adult-8wks
+bioRep 1BWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksFastqRd2Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20729
+labProtocolId 1B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5485
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksMinusRawRep1
+objType table
+age adult-8wks
+bioRep 1AWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20728
+labProtocolId 1A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5493
+tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksMinusRawRep2
+objType table
+age adult-8wks
+bioRep 1BWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20729
+labProtocolId 1B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5485
+tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksPlusRawRep1
+objType table
+age adult-8wks
+bioRep 1AWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20728
+labProtocolId 1A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5493
+tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksPlusRawRep2
+objType table
+age adult-8wks
+bioRep 1BWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20729
+labProtocolId 1B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5485
+tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep1
+objType file
+age adult-8wks
+attic auxSup
+bioRep 1AWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20728
+labProtocolId 1A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5493
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep2
+objType file
+age adult-8wks
+attic auxSup
+bioRep 1BWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20729
+labProtocolId 1B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5485
+view Spikeins
+
 metaObject wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -5,14 +342,14 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21040
-labProtocolId 14AWC+
+labProtocolId 14A
 localization cell
 md5sum ea04394881d5c6697c4b72ee5c8ed65d,61ce59651939c681e5c0fe46f9b4ac12
 project wgEncode
@@ -34,14 +371,14 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21041
-labProtocolId 14BWC+
+labProtocolId 14B
 localization cell
 md5sum 822c5eb4a2d40b776a99a87c1e772b44,a564bbf1521163b47a267c220999c524
 project wgEncode
@@ -63,14 +400,14 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksFastqRd1Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21040
-labProtocolId 14AWC+
+labProtocolId 14A
 localization cell
 md5sum 1298dddfe68b48da4f8bb31d3682499c
 project wgEncode
@@ -91,14 +428,14 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksFastqRd1Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21041
-labProtocolId 14BWC+
+labProtocolId 14B
 localization cell
 md5sum e3d8144e0dad88e7464188e700be81e3
 project wgEncode
@@ -119,14 +456,14 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksFastqRd2Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21040
-labProtocolId 14AWC+
+labProtocolId 14A
 localization cell
 md5sum 66aecb5c9ff78e75b7f9515fcb990a87
 project wgEncode
@@ -147,14 +484,14 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksFastqRd2Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21041
-labProtocolId 14BWC+
+labProtocolId 14B
 localization cell
 md5sum aa3debc44689fd05d419c08c07a9bbf7
 project wgEncode
@@ -175,14 +512,14 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21040
-labProtocolId 14AWC+
+labProtocolId 14A
 localization cell
 md5sum 7bc848d177cff8835329996ff81705d3
 project wgEncode
@@ -204,14 +541,14 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21041
-labProtocolId 14BWC+
+labProtocolId 14B
 localization cell
 md5sum 70a6c5c65bc38783d5f9687571f681a4
 project wgEncode
@@ -233,14 +570,14 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21040
-labProtocolId 14AWC+
+labProtocolId 14A
 localization cell
 md5sum 4e806f89f5d87f7a05d2a4a04877e2f7
 project wgEncode
@@ -262,14 +599,14 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21041
-labProtocolId 14BWC+
+labProtocolId 14B
 localization cell
 md5sum 37644ed671ae2954eae640349ffd7377
 project wgEncode
@@ -292,14 +629,14 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID21040
-labProtocolId 14AWC+
+labProtocolId 14A
 localization cell
 md5sum 9de19d8687ae5bf8b29110c3d187118d
 project wgEncode
@@ -321,14 +658,14 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID21041
-labProtocolId 14BWC+
+labProtocolId 14B
 localization cell
 md5sum 7aa6c2bf44c3a5cebb02c429409a2835
 project wgEncode
@@ -342,6 +679,670 @@ strain C57BL/6J
 subId 5431
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep1
+objType table
+age adult-8wks
+bioRep 2AWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20730
+labProtocolId 2A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5491
+tableName wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep2
+objType table
+age adult-8wks
+bioRep 2BWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20731
+labProtocolId 2B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5498
+tableName wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksFastqRd1Rep1
+objType file
+age adult-8wks
+bioRep 2AWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20730
+labProtocolId 2A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5491
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksFastqRd1Rep2
+objType file
+age adult-8wks
+bioRep 2BWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksFastqRd1Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20731
+labProtocolId 2B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5498
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksFastqRd2Rep1
+objType file
+age adult-8wks
+bioRep 2AWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20730
+labProtocolId 2A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5491
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksFastqRd2Rep2
+objType file
+age adult-8wks
+bioRep 2BWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksFastqRd2Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20731
+labProtocolId 2B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5498
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksMinusRawRep1
+objType table
+age adult-8wks
+bioRep 2AWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20730
+labProtocolId 2A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5491
+tableName wgEncodeCshlLongRnaSeqDuodAdult8wksMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksMinusRawRep2
+objType table
+age adult-8wks
+bioRep 2BWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20731
+labProtocolId 2B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5498
+tableName wgEncodeCshlLongRnaSeqDuodAdult8wksMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksPlusRawRep1
+objType table
+age adult-8wks
+bioRep 2AWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20730
+labProtocolId 2A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5491
+tableName wgEncodeCshlLongRnaSeqDuodAdult8wksPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksPlusRawRep2
+objType table
+age adult-8wks
+bioRep 2BWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20731
+labProtocolId 2B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5498
+tableName wgEncodeCshlLongRnaSeqDuodAdult8wksPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep1
+objType file
+age adult-8wks
+attic auxSup
+bioRep 2AWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20730
+labProtocolId 2A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5491
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep2
+objType file
+age adult-8wks
+attic auxSup
+bioRep 2BWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20731
+labProtocolId 2B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5498
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep1
+objType table
+age adult-8wks
+bioRep 4AWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID21179
+labProtocolId 4A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5482
+tableName wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep2
+objType table
+age adult-8wks
+bioRep 4BWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID21180
+labProtocolId 4B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5488
+tableName wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksFastqRd1Rep1
+objType file
+age adult-8wks
+bioRep 4AWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21179
+labProtocolId 4A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5482
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksFastqRd1Rep2
+objType file
+age adult-8wks
+bioRep 4BWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksFastqRd1Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21180
+labProtocolId 4B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5488
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksFastqRd2Rep1
+objType file
+age adult-8wks
+bioRep 4AWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21179
+labProtocolId 4A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5482
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksFastqRd2Rep2
+objType file
+age adult-8wks
+bioRep 4BWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksFastqRd2Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21180
+labProtocolId 4B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5488
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksMinusRawRep1
+objType table
+age adult-8wks
+bioRep 4AWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21179
+labProtocolId 4A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5482
+tableName wgEncodeCshlLongRnaSeqGfatAdult8wksMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksMinusRawRep2
+objType table
+age adult-8wks
+bioRep 4BWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21180
+labProtocolId 4B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5488
+tableName wgEncodeCshlLongRnaSeqGfatAdult8wksMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksPlusRawRep1
+objType table
+age adult-8wks
+bioRep 4AWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21179
+labProtocolId 4A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5482
+tableName wgEncodeCshlLongRnaSeqGfatAdult8wksPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksPlusRawRep2
+objType table
+age adult-8wks
+bioRep 4BWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21180
+labProtocolId 4B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5488
+tableName wgEncodeCshlLongRnaSeqGfatAdult8wksPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep1
+objType file
+age adult-8wks
+attic auxSup
+bioRep 4AWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID21179
+labProtocolId 4A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5482
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep2
+objType file
+age adult-8wks
+attic auxSup
+bioRep 4BWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID21180
+labProtocolId 4B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5488
+view Spikeins
+
 metaObject wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -349,14 +1350,14 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20870
-labProtocolId 16AWC+
+labProtocolId 16A
 localization cell
 md5sum 6ef130a6a641ef4e78697937b01b4a4d,73e4171577948b1fc59842b90d3b3e2b
 project wgEncode
@@ -378,14 +1379,14 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20871
-labProtocolId 16BWC+
+labProtocolId 16B
 localization cell
 md5sum 40f4b96be5afde3964b96680733bb760,f915488359eb2e3bc9d92263a3516166
 project wgEncode
@@ -407,14 +1408,14 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksFastqRd1Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20870
-labProtocolId 16AWC+
+labProtocolId 16A
 localization cell
 md5sum 4796efb5007c43ad95a99a18b5d5397d
 project wgEncode
@@ -435,14 +1436,14 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksFastqRd1Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20871
-labProtocolId 16BWC+
+labProtocolId 16B
 localization cell
 md5sum 0e811257aad0776ab116317baa6f3133
 project wgEncode
@@ -463,14 +1464,14 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksFastqRd2Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20870
-labProtocolId 16AWC+
+labProtocolId 16A
 localization cell
 md5sum a8a12dfee4f0c79549a9f8d47e92a505
 project wgEncode
@@ -491,14 +1492,14 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksFastqRd2Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20871
-labProtocolId 16BWC+
+labProtocolId 16B
 localization cell
 md5sum 348d6f85de112c739ff649866b372153
 project wgEncode
@@ -519,14 +1520,14 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20870
-labProtocolId 16AWC+
+labProtocolId 16A
 localization cell
 md5sum 205e7438d74163c6a5f6190af76f6419
 project wgEncode
@@ -548,14 +1549,14 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20871
-labProtocolId 16BWC+
+labProtocolId 16B
 localization cell
 md5sum c5bfb863450d323bbaec288e364fdd8f
 project wgEncode
@@ -577,14 +1578,14 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20870
-labProtocolId 16AWC+
+labProtocolId 16A
 localization cell
 md5sum 51f4e544dc5aceb5f1e74544164a8ef6
 project wgEncode
@@ -606,14 +1607,14 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20871
-labProtocolId 16BWC+
+labProtocolId 16B
 localization cell
 md5sum 9a7d8de8e891746ee59895dacd201685
 project wgEncode
@@ -636,14 +1637,14 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID20870
-labProtocolId 16AWC+
+labProtocolId 16A
 localization cell
 md5sum 64bf19563012c86a819eeb3f466729d8
 project wgEncode
@@ -665,14 +1666,14 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID20871
-labProtocolId 16BWC+
+labProtocolId 16B
 localization cell
 md5sum f1d3ebbc233558b08fbe8663cbcb7617
 project wgEncode
@@ -693,14 +1694,14 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20872
-labProtocolId 17AWC+
+labProtocolId 17A
 localization cell
 md5sum 7b6fb73c0ee2914369a06b58736ef56d,8c1f95bf92ff30a0a2f253e3fafa033c
 project wgEncode
@@ -722,14 +1723,14 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20873
-labProtocolId 17BWC+
+labProtocolId 17B
 localization cell
 md5sum 1600e8d81f96aa58373287d2f4857b24,8f04664ba7d1ee24073944d2250ebdbc
 project wgEncode
@@ -751,14 +1752,14 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksFastqRd1Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20872
-labProtocolId 17AWC+
+labProtocolId 17A
 localization cell
 md5sum 440137e4aebc6dfe9e710d10107ed594
 project wgEncode
@@ -779,14 +1780,14 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksFastqRd1Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20873
-labProtocolId 17BWC+
+labProtocolId 17B
 localization cell
 md5sum 77ea7fc07db631410d60fd9bcef906cf
 project wgEncode
@@ -807,14 +1808,14 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksFastqRd2Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20872
-labProtocolId 17AWC+
+labProtocolId 17A
 localization cell
 md5sum bb66db3096965ace6a16e92f42ca15f9
 project wgEncode
@@ -835,14 +1836,14 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksFastqRd2Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20873
-labProtocolId 17BWC+
+labProtocolId 17B
 localization cell
 md5sum 922c345697eefe14213fa06f9920601f
 project wgEncode
@@ -863,14 +1864,14 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20872
-labProtocolId 17AWC+
+labProtocolId 17A
 localization cell
 md5sum 2a2b36fec9e5314d4dade0c8d77fd992
 project wgEncode
@@ -892,14 +1893,14 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20873
-labProtocolId 17BWC+
+labProtocolId 17B
 localization cell
 md5sum 1c1ec52e5a484aa64c5eb50d30be01a1
 project wgEncode
@@ -921,14 +1922,14 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20872
-labProtocolId 17AWC+
+labProtocolId 17A
 localization cell
 md5sum 026962055c414f4a1a0752297bcce6ed
 project wgEncode
@@ -950,14 +1951,14 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20873
-labProtocolId 17BWC+
+labProtocolId 17B
 localization cell
 md5sum b80f74b92ea7ff9fb3e07a209eb8079e
 project wgEncode
@@ -980,14 +1981,14 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID20872
-labProtocolId 17AWC+
+labProtocolId 17A
 localization cell
 md5sum dc3623e6f83cd73aad310c94102c63d8
 project wgEncode
@@ -1009,14 +2010,14 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID20873
-labProtocolId 17BWC+
+labProtocolId 17B
 localization cell
 md5sum dddce6223874d9acfea343de56c165fc
 project wgEncode
@@ -1030,6 +2031,338 @@ strain C57BL/6J
 subId 5439
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep1
+objType table
+age adult-8wks
+bioRep 8AWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID21183
+labProtocolId 8A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5494
+tableName wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep2
+objType table
+age adult-8wks
+bioRep 8BWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID21184
+labProtocolId 8B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5490
+tableName wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksFastqRd1Rep1
+objType file
+age adult-8wks
+bioRep 8AWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21183
+labProtocolId 8A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5494
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksFastqRd1Rep2
+objType file
+age adult-8wks
+bioRep 8BWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksFastqRd1Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21184
+labProtocolId 8B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5490
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksFastqRd2Rep1
+objType file
+age adult-8wks
+bioRep 8AWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21183
+labProtocolId 8A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5494
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksFastqRd2Rep2
+objType file
+age adult-8wks
+bioRep 8BWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksFastqRd2Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21184
+labProtocolId 8B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5490
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksMinusRawRep1
+objType table
+age adult-8wks
+bioRep 8AWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21183
+labProtocolId 8A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5494
+tableName wgEncodeCshlLongRnaSeqLgintAdult8wksMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksMinusRawRep2
+objType table
+age adult-8wks
+bioRep 8BWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21184
+labProtocolId 8B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5490
+tableName wgEncodeCshlLongRnaSeqLgintAdult8wksMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksPlusRawRep1
+objType table
+age adult-8wks
+bioRep 8AWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21183
+labProtocolId 8A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5494
+tableName wgEncodeCshlLongRnaSeqLgintAdult8wksPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksPlusRawRep2
+objType table
+age adult-8wks
+bioRep 8BWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21184
+labProtocolId 8B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5490
+tableName wgEncodeCshlLongRnaSeqLgintAdult8wksPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep1
+objType file
+age adult-8wks
+attic auxSup
+bioRep 8AWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID21183
+labProtocolId 8A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5494
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep2
+objType file
+age adult-8wks
+attic auxSup
+bioRep 8BWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID21184
+labProtocolId 8B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5490
+view Spikeins
+
 metaObject wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -1037,14 +2370,14 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21042
-labProtocolId 18AWC+
+labProtocolId 18A
 localization cell
 md5sum 859095835df92e8f5235d253416986e5,51c0aabd0ee0dac023408902a3b08b68
 project wgEncode
@@ -1066,14 +2399,14 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21043
-labProtocolId 18BWC+
+labProtocolId 18B
 localization cell
 md5sum dfe860afe7c36797cdaf8371d69f2966,68f60973c0c57449a307940dbb8547ad
 project wgEncode
@@ -1095,14 +2428,14 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksFastqRd1Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21042
-labProtocolId 18AWC+
+labProtocolId 18A
 localization cell
 md5sum e46a652f5bbe90a498c2da84321c216e
 project wgEncode
@@ -1123,14 +2456,14 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksFastqRd1Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21043
-labProtocolId 18BWC+
+labProtocolId 18B
 localization cell
 md5sum 7c112c63b5bce7de575ce722ccd8da0a
 project wgEncode
@@ -1151,14 +2484,14 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksFastqRd2Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21042
-labProtocolId 18AWC+
+labProtocolId 18A
 localization cell
 md5sum e5dd4bc9caa69eec643707ff40bee6cd
 project wgEncode
@@ -1179,14 +2512,14 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksFastqRd2Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21043
-labProtocolId 18BWC+
+labProtocolId 18B
 localization cell
 md5sum 299bf3454f7828bd8690ff0429130af1
 project wgEncode
@@ -1207,14 +2540,14 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21042
-labProtocolId 18AWC+
+labProtocolId 18A
 localization cell
 md5sum c284895fc7b0841eea17dd280cd50750
 project wgEncode
@@ -1236,14 +2569,14 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21043
-labProtocolId 18BWC+
+labProtocolId 18B
 localization cell
 md5sum fd94929a7d7911fb5446931b5c02eb23
 project wgEncode
@@ -1265,14 +2598,14 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21042
-labProtocolId 18AWC+
+labProtocolId 18A
 localization cell
 md5sum adfafa818af116dacf3cefefc1903dd7
 project wgEncode
@@ -1294,14 +2627,14 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21043
-labProtocolId 18BWC+
+labProtocolId 18B
 localization cell
 md5sum b3cacc2b89a4b42cd043e91d08b18874
 project wgEncode
@@ -1324,14 +2657,14 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID21042
-labProtocolId 18AWC+
+labProtocolId 18A
 localization cell
 md5sum df56efdb07fb35b0cb6f6afa6157c4ab
 project wgEncode
@@ -1353,14 +2686,14 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID21043
-labProtocolId 18BWC+
+labProtocolId 18B
 localization cell
 md5sum c005d10f542348af43f1c44e8dc1dd4d
 project wgEncode
@@ -1381,14 +2714,14 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20920
-labProtocolId 15AWC+
+labProtocolId 15A
 localization cell
 md5sum c489553aa70ba33be3db5c28ccec3fde,0eadb72fee2968bf0596e7f377503dc5
 project wgEncode
@@ -1410,14 +2743,14 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20921
-labProtocolId 15BWC+
+labProtocolId 15B
 localization cell
 md5sum 4dadd1d3f4118d98b9260e5c4bd301ff,1dbc2703775407426d27d50d0c9ffacb
 project wgEncode
@@ -1439,14 +2772,14 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksFastqRd1Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20920
-labProtocolId 15AWC+
+labProtocolId 15A
 localization cell
 md5sum 14bfd6adaf27e3f5985fdb313b040fa0
 project wgEncode
@@ -1467,14 +2800,14 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksFastqRd1Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20921
-labProtocolId 15BWC+
+labProtocolId 15B
 localization cell
 md5sum df3400c62a146a09e3caef0f38fe339b
 project wgEncode
@@ -1495,14 +2828,14 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksFastqRd2Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20920
-labProtocolId 15AWC+
+labProtocolId 15A
 localization cell
 md5sum 691c93912ce9d873cacd01ef403da252
 project wgEncode
@@ -1523,14 +2856,14 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksFastqRd2Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20921
-labProtocolId 15BWC+
+labProtocolId 15B
 localization cell
 md5sum 89ea4fa47dc7479d37c47d6688171bd7
 project wgEncode
@@ -1551,14 +2884,14 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20920
-labProtocolId 15AWC+
+labProtocolId 15A
 localization cell
 md5sum 2f707336e42e4330bd6c7264cc63589e
 project wgEncode
@@ -1580,14 +2913,14 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20921
-labProtocolId 15BWC+
+labProtocolId 15B
 localization cell
 md5sum a3a04922bd41ad33ca2f240cdb459dea
 project wgEncode
@@ -1609,14 +2942,14 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20920
-labProtocolId 15AWC+
+labProtocolId 15A
 localization cell
 md5sum 82ea68db0be0f59ceb6d21e57647f618
 project wgEncode
@@ -1638,14 +2971,14 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20921
-labProtocolId 15BWC+
+labProtocolId 15B
 localization cell
 md5sum 834351b39d372254aa3ef414e1c805d7
 project wgEncode
@@ -1668,14 +3001,14 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID20920
-labProtocolId 15AWC+
+labProtocolId 15A
 localization cell
 md5sum 2834d666ade4b086e6b4dbf3e4bc33bd
 project wgEncode
@@ -1697,14 +3030,14 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID20921
-labProtocolId 15BWC+
+labProtocolId 15B
 localization cell
 md5sum 54c55b94d8a0c7142e7097b825f75f26
 project wgEncode
@@ -1718,6 +3051,1334 @@ strain C57BL/6J
 subId 5429
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep1
+objType table
+age adult-8wks
+bioRep 22AWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20924
+labProtocolId 22A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5484
+tableName wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep2
+objType table
+age adult-8wks
+bioRep 22BWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20925
+labProtocolId 22B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5496
+tableName wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksFastqRd1Rep1
+objType file
+age adult-8wks
+bioRep 22AWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20924
+labProtocolId 22A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5484
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksFastqRd1Rep2
+objType file
+age adult-8wks
+bioRep 22BWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksFastqRd1Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20925
+labProtocolId 22B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5496
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksFastqRd2Rep1
+objType file
+age adult-8wks
+bioRep 22AWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20924
+labProtocolId 22A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5484
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksFastqRd2Rep2
+objType file
+age adult-8wks
+bioRep 22BWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksFastqRd2Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20925
+labProtocolId 22B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5496
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksMinusRawRep1
+objType table
+age adult-8wks
+bioRep 22AWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20924
+labProtocolId 22A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5484
+tableName wgEncodeCshlLongRnaSeqMamgAdult8wksMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksMinusRawRep2
+objType table
+age adult-8wks
+bioRep 22BWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20925
+labProtocolId 22B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5496
+tableName wgEncodeCshlLongRnaSeqMamgAdult8wksMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksPlusRawRep1
+objType table
+age adult-8wks
+bioRep 22AWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20924
+labProtocolId 22A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5484
+tableName wgEncodeCshlLongRnaSeqMamgAdult8wksPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksPlusRawRep2
+objType table
+age adult-8wks
+bioRep 22BWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20925
+labProtocolId 22B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5496
+tableName wgEncodeCshlLongRnaSeqMamgAdult8wksPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep1
+objType file
+age adult-8wks
+attic auxSup
+bioRep 22AWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20924
+labProtocolId 22A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5484
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep2
+objType file
+age adult-8wks
+attic auxSup
+bioRep 22BWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20925
+labProtocolId 22B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5496
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep1
+objType table
+age adult-8wks
+bioRep 11AWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20821
+labProtocolId 11A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5495
+tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep2
+objType table
+age adult-8wks
+bioRep 11BWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20822
+labProtocolId 11B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5483
+tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksFastqRd1Rep1
+objType file
+age adult-8wks
+bioRep 11AWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20821
+labProtocolId 11A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5495
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksFastqRd1Rep2
+objType file
+age adult-8wks
+bioRep 11BWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksFastqRd1Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20822
+labProtocolId 11B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5483
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksFastqRd2Rep1
+objType file
+age adult-8wks
+bioRep 11AWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20821
+labProtocolId 11A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5495
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksFastqRd2Rep2
+objType file
+age adult-8wks
+bioRep 11BWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksFastqRd2Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20822
+labProtocolId 11B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5483
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksMinusRawRep1
+objType table
+age adult-8wks
+bioRep 11AWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20821
+labProtocolId 11A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5495
+tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksMinusRawRep2
+objType table
+age adult-8wks
+bioRep 11BWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20822
+labProtocolId 11B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5483
+tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksPlusRawRep1
+objType table
+age adult-8wks
+bioRep 11AWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20821
+labProtocolId 11A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5495
+tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksPlusRawRep2
+objType table
+age adult-8wks
+bioRep 11BWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20822
+labProtocolId 11B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5483
+tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep1
+objType file
+age adult-8wks
+attic auxSup
+bioRep 11AWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20821
+labProtocolId 11A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5495
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep2
+objType file
+age adult-8wks
+attic auxSup
+bioRep 11BWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20822
+labProtocolId 11B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5483
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep1
+objType table
+age adult-8wks
+bioRep 5AWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID21181
+labProtocolId 5A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5487
+tableName wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep2
+objType table
+age adult-8wks
+bioRep 5BWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID21182
+labProtocolId 5B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5492
+tableName wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksFastqRd1Rep1
+objType file
+age adult-8wks
+bioRep 5AWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21181
+labProtocolId 5A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5487
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksFastqRd1Rep2
+objType file
+age adult-8wks
+bioRep 5BWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksFastqRd1Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21182
+labProtocolId 5B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5492
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksFastqRd2Rep1
+objType file
+age adult-8wks
+bioRep 5AWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21181
+labProtocolId 5A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5487
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksFastqRd2Rep2
+objType file
+age adult-8wks
+bioRep 5BWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksFastqRd2Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID21182
+labProtocolId 5B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5492
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksMinusRawRep1
+objType table
+age adult-8wks
+bioRep 5AWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21181
+labProtocolId 5A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5487
+tableName wgEncodeCshlLongRnaSeqSfatAdult8wksMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksMinusRawRep2
+objType table
+age adult-8wks
+bioRep 5BWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21182
+labProtocolId 5B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5492
+tableName wgEncodeCshlLongRnaSeqSfatAdult8wksMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksPlusRawRep1
+objType table
+age adult-8wks
+bioRep 5AWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21181
+labProtocolId 5A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5487
+tableName wgEncodeCshlLongRnaSeqSfatAdult8wksPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksPlusRawRep2
+objType table
+age adult-8wks
+bioRep 5BWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID21182
+labProtocolId 5B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5492
+tableName wgEncodeCshlLongRnaSeqSfatAdult8wksPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep1
+objType file
+age adult-8wks
+attic auxSup
+bioRep 5AWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID21181
+labProtocolId 5A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5487
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep2
+objType file
+age adult-8wks
+attic auxSup
+bioRep 5BWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID21182
+labProtocolId 5B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5492
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep1
+objType table
+age adult-8wks
+bioRep 9AWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20819
+labProtocolId 9A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5499
+tableName wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep2
+objType table
+age adult-8wks
+bioRep 9BWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20820
+labProtocolId 9B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5486
+tableName wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksFastqRd1Rep1
+objType file
+age adult-8wks
+bioRep 9AWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20819
+labProtocolId 9A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5499
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksFastqRd1Rep2
+objType file
+age adult-8wks
+bioRep 9BWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksFastqRd1Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20820
+labProtocolId 9B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5486
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksFastqRd2Rep1
+objType file
+age adult-8wks
+bioRep 9AWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20819
+labProtocolId 9A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5499
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksFastqRd2Rep2
+objType file
+age adult-8wks
+bioRep 9BWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksFastqRd2Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20820
+labProtocolId 9B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5486
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksMinusRawRep1
+objType table
+age adult-8wks
+bioRep 9AWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20819
+labProtocolId 9A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5499
+tableName wgEncodeCshlLongRnaSeqSmintAdult8wksMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksMinusRawRep2
+objType table
+age adult-8wks
+bioRep 9BWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20820
+labProtocolId 9B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5486
+tableName wgEncodeCshlLongRnaSeqSmintAdult8wksMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksPlusRawRep1
+objType table
+age adult-8wks
+bioRep 9AWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20819
+labProtocolId 9A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5499
+tableName wgEncodeCshlLongRnaSeqSmintAdult8wksPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksPlusRawRep2
+objType table
+age adult-8wks
+bioRep 9BWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20820
+labProtocolId 9B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5486
+tableName wgEncodeCshlLongRnaSeqSmintAdult8wksPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep1
+objType file
+age adult-8wks
+attic auxSup
+bioRep 9AWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20819
+labProtocolId 9A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5499
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep2
+objType file
+age adult-8wks
+attic auxSup
+bioRep 9BWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20820
+labProtocolId 9B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5486
+view Spikeins
+
 metaObject wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -1725,14 +4386,14 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21038
-labProtocolId 13AWC+
+labProtocolId 13A
 localization cell
 md5sum b6248afbd4db1b55d42fef2f3597395f,daf61f204d4503aabbdcb463447f57d8
 project wgEncode
@@ -1754,14 +4415,14 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21039
-labProtocolId 13BWC+
+labProtocolId 13B
 localization cell
 md5sum 9ec82409109fac1d6bbd0ba8b58b5e6b,24f1a331171b9495122e727565ed6e21
 project wgEncode
@@ -1783,14 +4444,14 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd1Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21038
-labProtocolId 13AWC+
+labProtocolId 13A
 localization cell
 md5sum 030b581e55a99ae6ccfd2510dae7dd47
 project wgEncode
@@ -1811,14 +4472,14 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd1Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21039
-labProtocolId 13BWC+
+labProtocolId 13B
 localization cell
 md5sum 78d5fa6fa08ba5aea0ad310bc631812b
 project wgEncode
@@ -1839,14 +4500,14 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd2Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21038
-labProtocolId 13AWC+
+labProtocolId 13A
 localization cell
 md5sum 3531d7e578f5749f579065b94fc5df87
 project wgEncode
@@ -1867,14 +4528,14 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd2Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID21039
-labProtocolId 13BWC+
+labProtocolId 13B
 localization cell
 md5sum ada3f995667cf43d552d591a44b36860
 project wgEncode
@@ -1895,14 +4556,14 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21038
-labProtocolId 13AWC+
+labProtocolId 13A
 localization cell
 md5sum 8142ad4f7a2070e5940c34e454a10fe9
 project wgEncode
@@ -1924,14 +4585,14 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21039
-labProtocolId 13BWC+
+labProtocolId 13B
 localization cell
 md5sum f68826ca23a4f1f562ae6d4757f2bfa8
 project wgEncode
@@ -1953,14 +4614,14 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21038
-labProtocolId 13AWC+
+labProtocolId 13A
 localization cell
 md5sum 4115f23106bb6a8f487cf1bd28b5b3c3
 project wgEncode
@@ -1982,14 +4643,14 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21039
-labProtocolId 13BWC+
+labProtocolId 13B
 localization cell
 md5sum 671b17da838d02f4f3912ae9f3cbcc93
 project wgEncode
@@ -2012,14 +4673,14 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID21038
-labProtocolId 13AWC+
+labProtocolId 13A
 localization cell
 md5sum 38d4e2dc3b8617f16a6927f4e6c257b8
 project wgEncode
@@ -2041,14 +4702,14 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID21039
-labProtocolId 13BWC+
+labProtocolId 13B
 localization cell
 md5sum 2ad90c87142c7368f48b46104b8ac84d
 project wgEncode
@@ -2062,6 +4723,338 @@ strain C57BL/6J
 subId 5425
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep1
+objType table
+age adult-8wks
+bioRep 3AWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20732
+labProtocolId 3A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5497
+tableName wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep2
+objType table
+age adult-8wks
+bioRep 3BWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep2.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID20733
+labProtocolId 3B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5489
+tableName wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksFastqRd1Rep1
+objType file
+age adult-8wks
+bioRep 3AWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20732
+labProtocolId 3A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5497
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksFastqRd1Rep2
+objType file
+age adult-8wks
+bioRep 3BWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksFastqRd1Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20733
+labProtocolId 3B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5489
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksFastqRd2Rep1
+objType file
+age adult-8wks
+bioRep 3AWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20732
+labProtocolId 3A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5497
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksFastqRd2Rep2
+objType file
+age adult-8wks
+bioRep 3BWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksFastqRd2Rep2.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID20733
+labProtocolId 3B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5489
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksMinusRawRep1
+objType table
+age adult-8wks
+bioRep 3AWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20732
+labProtocolId 3A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5497
+tableName wgEncodeCshlLongRnaSeqStomAdult8wksMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksMinusRawRep2
+objType table
+age adult-8wks
+bioRep 3BWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksMinusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20733
+labProtocolId 3B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5489
+tableName wgEncodeCshlLongRnaSeqStomAdult8wksMinusRawRep2
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksPlusRawRep1
+objType table
+age adult-8wks
+bioRep 3AWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20732
+labProtocolId 3A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5497
+tableName wgEncodeCshlLongRnaSeqStomAdult8wksPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksPlusRawRep2
+objType table
+age adult-8wks
+bioRep 3BWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksPlusRawRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID20733
+labProtocolId 3B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5489
+tableName wgEncodeCshlLongRnaSeqStomAdult8wksPlusRawRep2
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep1
+objType file
+age adult-8wks
+attic auxSup
+bioRep 3AWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20732
+labProtocolId 3A
+localization cell
+project wgEncode
+readType 2x76D
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5497
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep2
+objType file
+age adult-8wks
+attic auxSup
+bioRep 3BWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-01
+dateUnrestricted 2012-11-01
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
+grant Gingeras
+lab CSHL
+labExpId LID20733
+labProtocolId 3B
+localization cell
+project wgEncode
+readType 2x76D
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5489
+view Spikeins
+
 metaObject wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -2069,14 +5062,14 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20868
-labProtocolId 12AWC+
+labProtocolId 12A
 localization cell
 md5sum 318e444eed18988aed0210ec57199d20,02898d3bb9c00dd3a072fc59c8a06be5
 project wgEncode
@@ -2098,14 +5091,14 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20869
-labProtocolId 12BWC+
+labProtocolId 12B
 localization cell
 md5sum 2b321cc6dd8f0090d4c86bba063ba5c5,97e3b5805238cbb7500600ad5ae1e460
 project wgEncode
@@ -2127,14 +5120,14 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksFastqRd1Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20868
-labProtocolId 12AWC+
+labProtocolId 12A
 localization cell
 md5sum f4bd4f08d02013606f60102004073ecf
 project wgEncode
@@ -2155,14 +5148,14 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksFastqRd1Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20869
-labProtocolId 12BWC+
+labProtocolId 12B
 localization cell
 md5sum 1f1381a3674b438fa21850a4c2f78f2b
 project wgEncode
@@ -2183,14 +5176,14 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksFastqRd2Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20868
-labProtocolId 12AWC+
+labProtocolId 12A
 localization cell
 md5sum 646335a2ab3558cc79004a8933d88b6d
 project wgEncode
@@ -2211,14 +5204,14 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksFastqRd2Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20869
-labProtocolId 12BWC+
+labProtocolId 12B
 localization cell
 md5sum 9a20e2665549039d7fb4c496d3d204d5
 project wgEncode
@@ -2239,14 +5232,14 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20868
-labProtocolId 12AWC+
+labProtocolId 12A
 localization cell
 md5sum 6494896b6f9e3aef359082a2e1f8396d
 project wgEncode
@@ -2268,14 +5261,14 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20869
-labProtocolId 12BWC+
+labProtocolId 12B
 localization cell
 md5sum e6bbcd2d1274174f0271d7f1338f883a
 project wgEncode
@@ -2297,14 +5290,14 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20868
-labProtocolId 12AWC+
+labProtocolId 12A
 localization cell
 md5sum 21026339eb5c691c1ce1913474219c87
 project wgEncode
@@ -2326,14 +5319,14 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20869
-labProtocolId 12BWC+
+labProtocolId 12B
 localization cell
 md5sum d9a78e0013b70c36cbe2993fdc435027
 project wgEncode
@@ -2356,14 +5349,14 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID20868
-labProtocolId 12AWC+
+labProtocolId 12A
 localization cell
 md5sum bb28d5f1b70e6f5066a1f47b6beded94
 project wgEncode
@@ -2385,14 +5378,14 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID20869
-labProtocolId 12BWC+
+labProtocolId 12B
 localization cell
 md5sum 8f165fc51713c2fe381d8e575d68bdc2
 project wgEncode
@@ -2413,14 +5406,14 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20922
-labProtocolId 19AWC+
+labProtocolId 19A
 localization cell
 md5sum 72945c2573b4b23b2e85a77f6e0d513b,05c950fbaa61332101654815e452a80b
 project wgEncode
@@ -2442,14 +5435,14 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20923
-labProtocolId 19BWC+
+labProtocolId 19B
 localization cell
 md5sum b039d28a58d2c88ed8ce3dbf4855d4cd,dc6eff5d68bcf4ef110d0046f437f80c
 project wgEncode
@@ -2471,14 +5464,14 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksFastqRd1Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20922
-labProtocolId 19AWC+
+labProtocolId 19A
 localization cell
 md5sum d6a41fc6bed637201a857405b7726ba9
 project wgEncode
@@ -2499,14 +5492,14 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksFastqRd1Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20923
-labProtocolId 19BWC+
+labProtocolId 19B
 localization cell
 md5sum 655470b632e14ceff93e8e90feab432c
 project wgEncode
@@ -2527,14 +5520,14 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksFastqRd2Rep1.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20922
-labProtocolId 19AWC+
+labProtocolId 19A
 localization cell
 md5sum c3c5d3d4edc6edb9b94aaab45d07df0f
 project wgEncode
@@ -2555,14 +5548,14 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksFastqRd2Rep2.fastq.tgz
 grant Gingeras
 lab CSHL
 labExpId LID20923
-labProtocolId 19BWC+
+labProtocolId 19B
 localization cell
 md5sum 8a47ef52db6d00b9a1371b0480d7ead5
 project wgEncode
@@ -2583,14 +5576,14 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20922
-labProtocolId 19AWC+
+labProtocolId 19A
 localization cell
 md5sum 754291103431ef530b9b1615cf54ec05
 project wgEncode
@@ -2612,14 +5605,14 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20923
-labProtocolId 19BWC+
+labProtocolId 19B
 localization cell
 md5sum 1e366a791c132d42d620664dbc18b6b8
 project wgEncode
@@ -2641,14 +5634,14 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20922
-labProtocolId 19AWC+
+labProtocolId 19A
 localization cell
 md5sum 27702003bbc52e7b9bb284834ee27d72
 project wgEncode
@@ -2670,14 +5663,14 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20923
-labProtocolId 19BWC+
+labProtocolId 19B
 localization cell
 md5sum b45f8cdff7fb104b352b78a25f5b728b
 project wgEncode
@@ -2700,14 +5693,14 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID20922
-labProtocolId 19AWC+
+labProtocolId 19A
 localization cell
 md5sum a137383bd1d5351c3b6db6c2c4baa830
 project wgEncode
@@ -2729,14 +5722,14 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
 grant Gingeras
 lab CSHL
 labExpId LID20923
-labProtocolId 19BWC+
+labProtocolId 19B
 localization cell
 md5sum 08b52938d2f81986ff48e6925cf159f6
 project wgEncode
@@ -2750,9 +5743,4 @@ strain C57BL/6J
 subId 5437
 view Spikeins
 
-metaObject wgEncodeCshlLongRnaSeqq
-objType composite
-composite wgEncodeCshlLongRnaSeq
-expVars lab,dataType,cell,age,strain
-
-# MAGIC: 1551866721
+# MAGIC: -2037283525

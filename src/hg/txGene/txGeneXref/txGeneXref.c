@@ -108,11 +108,13 @@ safef(query, sizeof(query), "select name,product from refLink where mrnaAcc='%s'
 sr = sqlGetResult(gConn, query);
 char **row = sqlNextRow(sr);
 if (row != NULL)
-    {
     *geneSymbol = cloneString(row[0]);
-    if (!sameWord("unknown protein", row[1]) && !sameWord("", row[1]))
-	*description = cloneString(row[1]);
-    }
+sqlFreeResult(&sr);
+safef(query, sizeof(query), "select d.name from gbCdnaInfo g, description d where g.description = d.id and g.acc = '%s'", refseq);
+sr = sqlGetResult(gConn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    *description = cloneString(row[0]);
 sqlFreeResult(&sr);
 }
 
@@ -294,8 +296,12 @@ for (info = infoList; info != NULL; info = info->next)
 
 	/* Still no joy? Try genbank RNA records. 
 	 * First, try to get the symbol and description from 
-	 * the same record */
-	if (geneSymbol == NULL && description == NULL)
+	 * the same record.  Don't do any of this if there's a RefSeq.
+	 * GenBank records are last resort, and if there's a RefSeq with
+	 * a blank description, going to GenBank records for the description
+	 * involves too much risk of a gene symbol and description that 
+	 * contradict each other. */
+	if (geneSymbol == NULL && description == NULL && strcmp(refseq, "") != 0) 
 	    {
 	    if (ev != NULL)
 		{
