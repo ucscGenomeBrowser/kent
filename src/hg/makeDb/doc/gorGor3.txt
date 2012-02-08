@@ -1418,9 +1418,10 @@ done
     time ./mkUpstream.sh
     #	real    73m36.223s
 
-XXX - to be done vvv - Tue Dec  6 13:14:36 PST 2011
     # FIXUP/VERIFY the genbank.conf file to indicate this gene choice for the
-    #	upstream automatic generation
+    #	upstream automatic generation, in etc/genbank.conf:
+# gorGor3.upstreamGeneTbl = ensGene
+# gorGor3.upstreamMaf = multiz11way /hive/data/genomes/gorGor3/bed/multiz11way/species.list
 
 #########################################################################
 # Phylogenetic tree from 11-way (DONE - 2011-12-06 - Hiram)
