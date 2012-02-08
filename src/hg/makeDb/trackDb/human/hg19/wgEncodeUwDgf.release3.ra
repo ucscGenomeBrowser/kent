@@ -65,7 +65,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel SK-N-SH RA Hot
+        shortLabel SK-N-SH_RA Hot
         longLabel SK-N-SH_RA DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=SKNSHRA
         type broadPeak
@@ -444,7 +444,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraPk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel SK-N-SH RA Pk
+        shortLabel SK-N-SH_RA Pk
         longLabel SK-N-SH_RA DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=SKNSHRA
         type narrowPeak
@@ -830,7 +830,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraSig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel SK-N-SH RA Sig
+        shortLabel SK-N-SH_RA Sig
         longLabel SK-N-SH_RA DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=SKNSHRA
         type bigWig 1.000000 6713.000000
@@ -1209,7 +1209,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel SK-N-SH RA Raw
+        shortLabel SK-N-SH_RA Raw
         longLabel SK-N-SH_RA DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=SKNSHRA
         type bigWig 1.000000 36298.000000
