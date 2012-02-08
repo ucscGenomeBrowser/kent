@@ -5946,6 +5946,111 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation Human_-_EBF1_(SC-137065)(Immunoprecipitation-Western_blotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 label EBF1 (sc-137065)
 
+term eGFP-BACH1
+tag BACH1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1
+target eGFP-BACH1
+targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex,tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-BACH1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:BACH1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
+validation missing
+
+term eGFP-CCNE1
+tag CCNE1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CCNE1
+target eGFP-CCNE1
+targetDescription The protein encoded by this gene belongs to the highly conserved cyclin family,whose members are characterized by a dramatic periodicity in protein abundance through the cell cycle. Cyclins function as regulators of CDK kinases.Different cyclins exhibit distinct expression and degradation patterns which contribute to the temporal coordination of each mitotic event.
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-CCNE1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:CCNE1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNE1
+validation missing
+
+term eGFP-CDKN1B
+tag CDKN1B
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CDKN1B
+target eGFP-CDKN1B
+targetDescription This gene encodes a cyclin-dependent kinase inhibitor, which shares a limited similarity with CDK inhibitor CDKN1A/p21.The encoded protein binds to and prevents the activation of cyclin E-CDK2 or cyclin D-CDK4 complexes, and thus controls the cell cycle progression at G1
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-CDKN1B
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:CDKN1B
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CDKN1B
+validation missing
+
+term eGFP-E2F1
+tag E2F1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor E2F1
+target eGFP-E2F1
+targetDescription The protein encoded by this gene is a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-E2F1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:E2F1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
+validation missing
+
+term eGFP-EKLF1
+tag EKLF1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor EKLF1
+target eGFP-EKLF1
+targetDescription This gene encodes a hematopoietic-specific transcription factor that induces high-level expression of adult beta-globin and other erythroid genes. The zinc-finger protein binds to the DNA sequence CCACACCCT found in the beta hemoglobin promoter. Heterozygous loss-of-function mutations in this gene result in the dominant In(Lu) blood phenotype.
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-EKLF1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:EKLF1
+targetUrl missing
+validation missing
+
+term eGFP-ELF1
+tag ELF1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ELF1
+target eGFP-ELF1
+targetDescription This gene encodes an E26 transformation-specific related transcription factor.The encoded protein is primarily expressed in lymphoid cells and acts as both an enhancer and a repressor to regulate transcription of various genes.Alternative splicing results in multiple transcript variants
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-ELF1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:ELF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
+validation missing
+
+term eGFP-ESR
+tag ESR
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ESRA
+target eGFP-ESR
+targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2.
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-ESR
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:ESR
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
+validation missing
+
 term eGFP-FOS
 tag FOSe
 type Antibody
@@ -5994,6 +6099,36 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation Human_-_eGFP-HDAC8:human_validation_White.pdf
 label HDAC8 (eGFP-HDAC8)
 
+term eGFP-HMGBA1
+tag HMGBA1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGBA1
+target eGFP-HMGBA1
+targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA.Involved in V(D)J recombination by acting as a cofactor of the  RAG complex.
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-HMGBA1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:HMGB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGB1
+validation missing
+
+term eGFP-ILF2
+tag ILF2
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ILF2
+target eGFP-ILF2
+targetDescription Nuclear factor of activated T-cells (NFAT) is a transcription factor required for T-cell expression of the interleukin 2 gene. NFAT binds to a sequence in the interleukin 2 gene enhancer known as the antigen receptor response element 2.In addition, NFAT can bind RNA and is an essential component for encapsidation and protein priming of hepatitis B viral polymerase.
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-ILF2
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:ILF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF2
+validation missing
+
 term eGFP-JunB
 tag JUNBe
 type Antibody
@@ -6026,6 +6161,49 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation Human_-_eGFP-JunD:human_validation_White.pdf
 label JunB (eGFP-JunD)
 
+term eGFP-MLL5
+tag MLL5
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor MLL5
+target eGFP-MLL5
+targetDescription This gene is a member of the myeloid/lymphoid or mixed-lineage leukemia (MLL) family and encodes a protein with an N-terminal PHD zinc finger and a central SET domain. Overexpression of the protein inhibits cell cycle progression.
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-MLL5
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:MLL5
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MLL5
+validation missing
+
+term eGFP-NCOR1
+tag NCOR1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NCOR1
+target eGFP-NCOR1
+targetDescription This gene encodes a protein that mediates ligand-independent transcription repression of thyroid-hormone and retinoic-acid receptors by promoting chromatin condensation and preventing access of the transcription machinery. It is part of a complex which also includes histone deacetylases and transcriptional regulators similar to the yeast protein Sin3p. This gene is located between the Charcot-Marie-Tooth and Smith-Magenis syndrome critical regions on chromosome 17
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-NCOR1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:NCOR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
+validation missing
+
+term eGFP-NF90
+tag NF90
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NF90target eGFP-NF90targetDescription NF90 (nuclear factor of activated T cells 90 kDa), also known as NFAR is a ubiquitously expressed nuclear protein that exists in a heterodimer with NF45.vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-NF90 
+orderUrl http://www.igsb.org/labs/kevin-white/ 
+lab White
+lots 1
+targetId GeneCards:ILF3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF3
+validation missing
+#NF90 is associated with ILF3 ~Jeff
+
 term eGFP-NR4A1
 tag NR4A1e
 type Antibody
@@ -6041,6 +6219,50 @@ targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
 validation Human_-_eGFP-NR4A1:human_validation_White.pdf
 label NR4A1 (eGFP-NR4A1)
+
+term eGFP-SMARCA1
+tag SMARCA1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor SMARCA1
+target eGFP-SMARCA1
+targetDescription This gene encodes a member of the SWI/SNF family of proteins. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes.
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-SMARCA1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:SMARCA1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA1
+validation missing
+
+term eGFP-SMARCA2
+tag SMARCA2
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor SMARCA2
+target eGFP-SMARCA2
+targetDescription The protein encoded by this gene is a member of the SWI/SNF family of proteins and is highly similar to the brahma protein of Drosophila. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-SMARCA2
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:SMARCA2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA2
+validation missing
+
+term eGFP-STAT1
+tag STAT1
+type Antibody
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor STAT1
+target eGFP-STAT1targetDescription The protein encoded by this gene is a member of the STAT protein family.In response to cytokines and growth factors,STAT family members are phosphorylated by the receptor associated kinases, and then form homo-or heterodimers that translocate to the cell nucleus where they act as transcription activators.This protein can be activated by various ligands including interferon-alpha, interferon-gamma, EGF, PDGF and IL6
+vendorName Kevin White Lab, University of Chicago
+vendorId eGFP-STAT1
+orderUrl http://www.igsb.org/labs/kevin-white/
+lab White
+lots 1
+targetId GeneCards:STAT1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1
+validation missing
 
 term ELF1_(SC-631)
 tag ELF1
@@ -6261,6 +6483,21 @@ targetId GeneCards:FOXA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA2
 validation Human_-_:missing
 label FOXA2 (sc-6554)
+
+term FOXM1_(sc-502)
+tag FOXM1SC502
+type Antibody
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of FOXM1 of human origin.
+target FOXM1
+targetDescription The protein encoded by this gene is a transcriptional activator involved in cell proliferation. The encoded protein is phosphorylated in M phase and regulates the expression of several cell cycle genes, such as cyclin B1 and cyclin D1. Several transcript variants encoding different isoforms have been found for this gene. [provided by RefSeq, Jul 2011]
+vendorName Santa Cruz Biotech
+vendorId sc-502
+orderUrl http://www.scbt.com/datasheet-502-foxm1-c-20-antibody.html
+lab Myers
+lots C1909
+targetId GeneCards:FOXM1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXM1
+validation FOXM1_(sc-502)(missing):human_FOXM1_sc-502_validation_Myers.pdf
 
 term FOXP2
 tag FOXP2
@@ -8553,6 +8790,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=THAP1
 validation Human_-_:missing
 label THAP1 (sc-98174)
 
+term TP53_(sc-126)
+tag TP53SC126
+type Antibody
+antibodyDescription Mouse monoclonal IgG, N-terminal epitope mapping between amino acids 11-25 of TP53 of human origin.
+target TP53
+targetDescription This gene encodes tumor protein p53, which responds to diverse cellular stresses to regulate target genes that induce cell cycle arrest, apoptosis, senescence, DNA repair, or changes in metabolism. p53 protein is expressed at low level in normal cells and at a high level in a variety of transformed cell lines, where it's believed to contribute to transformation and malignancy. p53 is a DNA-binding protein containing transcription activation, DNA-binding, and oligomerization domains. It is postulated to bind to a p53-binding site and activate expression of downstream genes that inhibit growth and/or invasion, and thus function as a tumor suppressor. Mutants of p53 that frequently occur in a number of different human cancers fail to bind the consensus DNA binding site, and hence cause the loss of tumor suppressor activity. Alterations of this gene occur not only as somatic mutations in human malignancies, but also as germline mutations in some cancer-prone families with Li-Fraumeni syndrome. Multiple p53 variants due to alternative promoters and multiple alternative splicing have been found. These variants encode distinct isoforms, which can regulate p53 transcriptional activity. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-126
+orderUrl http://www.scbt.com/datasheet-126-p53-do-1-antibody.html
+lab Myers
+lots F0909
+targetId GeneCards:TP53
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53
+validation TP53_(sc-126)(missing):human_TP53_sc-126_validation_Myers.pdf
+
 term TR4
 tag TR4
 type Antibody
@@ -8567,6 +8819,21 @@ targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation Human_-_:missing Mouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
 label TR4
+
+term TRIM28_(sc-81411)
+tag TRIM28SC81411
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of TRIM28 of human origin.
+target TRIM28
+targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors.  The protein localizes to the nucleus and is thought to associate with specific chromatin regions.  The protein is a member of the tripartite motif family.  This tripartite motif includes three zinc-binding domains
+, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-81411
+orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.htmllab Myerslots L0309
+targetId GeneCards:TRIM28
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
+validation TRIM28_(sc-81411)(Western_blot,ChIP):human_TRIM28_sc-81411_
+validation_Myers.pdf
 
 term TRIM37_(SC-49548)
 tag TRIM37
