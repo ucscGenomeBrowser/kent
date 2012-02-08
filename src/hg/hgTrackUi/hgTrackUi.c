@@ -1912,7 +1912,7 @@ void cutterUi(struct trackDb *tdb)
 /* UI for restriction enzyme track */
 {
 char *enz = cartUsualString(cart, cutterVar, cutterDefault);
-puts("<P><B>Enzymes (separate with commas):</B><BR>");
+puts("<P><B>Filter display by enzymes (separate with commas):</B><BR>");
 cgiMakeTextVar(cutterVar, enz, 100);
 }
 
