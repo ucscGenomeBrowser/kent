@@ -2286,7 +2286,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 179,0,134
         # subId=4469 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqK562CellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqK562CellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 cell sm C 
         longLabel K562 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL

@@ -5000,7 +5000,7 @@ subId 1965
 tableName wgEncodeCshlShortRnaSeqK562CellShortTransfrags
 view Transfrags
 
-metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalContigs
+metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapContigs
 objType table
 bioRep 001WC,002WC
 cell K562
@@ -5011,7 +5011,7 @@ dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000213
 expId 213
-fileName wgEncodeCshlShortRnaSeqK562CellShorttotalContigs.bedRnaElements.gz
+fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID10567,LID10568
@@ -5025,10 +5025,10 @@ readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4468
-tableName wgEncodeCshlShortRnaSeqK562CellShorttotalContigs
+tableName wgEncodeCshlShortRnaSeqK562CellShorttotalTapContigs
 view Contigs
 
-metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalExonsGencV7
+metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapExonsGencV7
 objType file
 bioRep 001WC,002WC
 cell K562
@@ -5039,7 +5039,7 @@ dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000213
 expId 213
-fileName wgEncodeCshlShortRnaSeqK562CellShorttotalExonsGencV7.gtf.gz
+fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID10567,LID10568
