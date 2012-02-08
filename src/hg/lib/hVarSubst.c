@@ -179,12 +179,6 @@ if (val == NULL)
 return val;
 }
 
-static void substLinkToGatewayPage( struct dyString *dest, char *database)
-/* substitute a link to the gateway page for this database */
-{
-dyStringPrintf(dest,"<a target=_blank href='/cgi-bin/hgGateway?db=%s'>Assembly Gateway page</a>.", database);
-}
-
 static void substDatabaseVar(char *database, char *varBase,
                              struct dyString *dest)
 /* substitute a variable resolved from the database name.
@@ -225,8 +219,6 @@ else if (sameString(varBase, "date"))
     }
 else if (sameString(varBase, "db"))
     dyStringAppend(dest, database);
-else if (sameString(varBase, "linkToGatewayPage"))
-    substLinkToGatewayPage(dest, database);
 }
 
 static void substTrackDbVar(char *desc, struct trackDb *tdb, char *database,

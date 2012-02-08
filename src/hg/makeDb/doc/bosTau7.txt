@@ -853,6 +853,92 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.monDom5.swap lastz.monDom5
 
+#########################################################################
+# GENSCAN GENE PREDICTIONS (DONE  2012-01-31 - Chin)
+    mkdir /hive/data/genomes/bosTau7/bed/genscan
+    cd /hive/data/genomes/bosTau7/bed/genscan
+
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/genscanlinux
+
+    # create hard masked .fa files
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../bosTau7.2bit:$C stdout \
+        | maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    # Generate a list file, genome.list, of all the hard-masked contig
+    # chunks:
+    find ./hardMaskedFa/ -type f | sed -e 's#^./##' > genome.list
+
+    wc -l genome.list
+    #   11692 genome.list
+
+    # Run on small cluster (more mem than big cluster).
+    ssh swarm
+    cd /hive/data/genomes/bosTau7/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Create template file, template, for gensub2.  For example (3-line
+    # file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in exists+ $(path1)} {check out exists gtf/$(root1).gtf} -trans={check out exists pep/$(root1).pep} -subopt={check out exists subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 genome.list single template jobList
+    para create jobList
+    para try
+    para check ... etc...
+    para time
+    # Completed: 11690 of 11692 jobs
+    # Crashed: 2 jobs
+    # CPU time in finished jobs:  66494s    1108.23m    18.47h    0.77d  0.002 y
+    # IO & Wait Time:             33892s     564.87m     9.41h    0.39d  0.001 y
+    # Average job time:               9s       0.14m     0.00h    0.00d
+    # Longest finished job:        3664s      61.07m     1.02h    0.04d
+    # Submission to last job:      4007s      66.78m     1.11h    0.05d
+    # Two jobs (chr19 and chr26) failed, re-run them:
+    /cluster/bin/x86_64/gsBig hardMaskedFa/chr26.fa gtf/chr26.gtf -trans=pep/chr26.pep -subopt=subopt/chr26.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=200000
+
+   /cluster/bin/x86_64/gsBig hardMaskedFa/chr19.fa gtf/chr19.gtf -trans=pep/chr19.pep -subopt=subopt/chr19.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2200000
+
+    # this did not work, runs out of file handles ?
+    find ./gtf -type f | xargs -n 256 endsInLf -zeroOk
+
+    # Concatenate results:
+    cd /hive/data/genomes/bosTau7/bed/genscan
+    find ./gtf -type f | xargs cat > genscan.gtf
+    find ./pep -type f | xargs cat > genscan.pep
+    find ./subopt -type f | xargs cat > genscanSubopt.bed
+
+    # Load into the database (without -genePredExt because no frame
+    # info):
+    # Don't load the Pep anymore -- redundant since it's from genomic.
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau7/bed/genscan
+    # to construct a local file with the genePred business:
+    gtfToGenePred genscan.gtf genscan.gp
+    # this produces exactly the same thing and loads the table:
+    ldHgGene -gtf bosTau7 genscan genscan.gtf
+    # Reading genscan.gtf
+    # Read 47871 transcripts in 344386 lines in 1 files
+    #  47871 groups 4673 seqs 1 sources 1 feature types
+    # 47871 gene predictions
+    hgLoadBed bosTau7 genscanSubopt genscanSubopt.bed
+    # Read 518687 elements of size 6 from genscanSubopt.bed
+    featureBits bosTau7 genscan
+    # 58056267 bases of 2804673174 (2.070%) in intersection	
+    # previously:
+    featureBits bosTau4 genscan
+    #   58224594 bases of 2731830700 (2.131%) in intersection
+    featureBits bosTau3 genscan
+    #   59251085 bases of 2731807384 (2.169%) in intersection
+
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (working 2011-06-14 - Chin)
