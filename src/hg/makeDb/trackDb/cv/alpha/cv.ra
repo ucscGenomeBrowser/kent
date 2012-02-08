@@ -9112,7 +9112,7 @@ label IGF2BP1 (SC-21027)
 term MAZ_(ab85725)
 tag MAZAB85725
 type Antibody
-antibodyDescription Rabbit polyclonal, immunogen is synthetic peptide, corresponding to a region within amino acids 427-477 of Human MAZ, BAA33064.1
+antibodyDescription Rabbit polyclonal, immunogen is synthetic peptide, corresponding to a region within amino acids 427-477 of Human MAZ, GenBank BAA33064.1
 target MAZ 
 targetDescription May function as a transcription factor with dual roles in transcription initiation and termination. Binds to two sites, ME1a1 and ME1a2, within the MYC promoter having greater affinity for the former. Also binds to multiple G/C-rich sites within the promoter of the Sp1 family of transcription factors.vendorName Abcam
 vendorName abcam
@@ -10412,7 +10412,7 @@ term PrimerPeaks
 tag PRIMEPKS
 type view
 label Primer Peaks
-description egions of enriched signal for a given Primer Set PROVISIONAL 
+description Regions of enriched signal for a given Primer Set PROVISIONAL 
 
 term PeptideMapping
 tag PEPTIDEMAP
