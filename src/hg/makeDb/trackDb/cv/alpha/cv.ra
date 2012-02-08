@@ -10101,8 +10101,14 @@ type treatment
 
 term FASP
 tag FASP
-description FASP (Filter-Assisted Sample Preparation) proteomics protocol (Giddings)
+description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
+
+term in-gel
+tag INGEL
+description In-gel digestion proteomics protocol (Giddings)
+type protocol
+label In-gel digestion
 
 term PCR1x
 tag PCR1X
