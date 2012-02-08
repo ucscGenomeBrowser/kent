@@ -5385,7 +5385,7 @@ vendorId sc-10756
 lab Snyder
 targetId GeneCard:SMARCC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC1
-validation Human_-_:human_BAF155_validation_Snyder.pdf
+validation Human_-_BAF155(Immunoprecipitation,IP-Mass_spec):human_BAF155_validation_Snyder.pdf
 label BAF155 (sc-10756)
 #The SMARCC1 genecard is for BAF155
 
@@ -5401,7 +5401,7 @@ vendorId sc-10757
 lab Snyder
 targetId GeneCard:SMARCC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC2
-validation Human_-_:human_BAF170_validation_Snyder.pdf
+validation Human_-_BAF170(Immunoprecipitation,IP-Mass_spec):human_BAF170_validation_Snyder.pdf
 label BAF170 (sc-10757)
 
 term BATF
@@ -5583,7 +5583,7 @@ vendorId 16189
 lab Snyder
 targetId GeneCard:SMARCA4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
-validation Human_-_:human_BRG1_validation_Snyder.pdf
+validation Human_-_(Immunoprecipitation,IP-Mass_spec):human_BRG1_validation_Snyder.pdf
 label BRG1 (16189)
 
 term BTF3_(SC-166093)
@@ -5601,21 +5601,6 @@ targetId GeneCard:BTF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BTF3
 validation Human_-_BTF3_(SC-166093):human_BTF3_SC-166093_validation_Myers.pdf
 label BTF3 (sc-166093)
-
-term CEBPZ
-tag CEBPZ
-type Antibody
-antibodyDescription Rabbit polyclonal, immunogen sequence= KDNASLKQLRWEAERDDWLHNRDAKSIIKKKKHFKKKRIKTTQKTKKQRK.
-target CEBPZ
-targetDescription Stimulates transcription from the HSP70 promoter.
-vendorName Sigma-Aldrich
-vendorId |SIGMA&amp;N5=SEARCH_CONCAT_PNO|BRAND_KEY&amp;F=SPEC
-orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?lang=en&N4=SAB2100398
-lab Snyder
-lots QC8343
-targetId CEBPZ
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPZ
-validation CEBPZ(Immunoprecipitation,IP-Mass_spec):human_CEBPZ_validation_Snyder.pdf
 
 term c-Fos
 tag CFOS
@@ -5644,7 +5629,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=1694
 lab Snyder
 targetId GeneCard:JUN
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUN
-validation Human_-_:human_c-Jun_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_(Immunoprecipitation,Motif_Enrichment):human_c-Jun_validation_Snyder.pdf Mouse_-_:missing
 label c-Jun (sc-1694)
 
 term c-Myb_(SC-7874)
@@ -5707,7 +5692,7 @@ targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 lab Snyder, Myers
 lots I1010 (Myers)
-validation Human_-_:human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_CEPBbeta(Immunoprecipitation,Motif_Enrichment):human_CEBPbeta_validation_Snyder.pdf Mouse_-_:missing
 label CEBPB (sc-150)
 
 term CEBPB_(SC-150)
@@ -5742,6 +5727,21 @@ targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
 validation Human_-_CEBPD_(SC-636)(Western_blot,IP-Mass_Spec):human_CEBPD_SC-636_validation_Myers.pdf
 label CEBPD (sc-636)
+
+term CEBPZ
+tag CEBPZ
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen sequence= KDNASLKQLRWEAERDDWLHNRDAKSIIKKKKHFKKKRIKTTQKTKKQRK.
+target CEBPZ
+targetDescription Stimulates transcription from the HSP70 promoter.
+vendorName Sigma-Aldrich
+vendorId SAB2100398
+orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?lang=en&N4=SAB2100398
+lab Snyder
+lots QC8343
+targetId GeneCard:CEBPZ
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPZ
+validation CEBPZ(Immunoprecipitation,IP-Mass_spec):human_CEBPZ_validation_Snyder.pdf
 
 term CHD1_(A301-218A)
 tag CHD1A301218A
@@ -6132,7 +6132,7 @@ vendorId sc-66882
 targetId GeneCard:ESRRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESRRA
 lab Snyder
-validation Human_-_:human_ERRA_validation_Snyder.pdf
+validation Human_-_ERRA(Western_Blot,Motif_Enrichment):human_ERRA_validation_Snyder.pdf
 label ERRA (sc-66882)
 
 term ETS1
@@ -7027,7 +7027,7 @@ vendorId sc-9144
 lab Snyder
 targetId GeneCard:HSF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HSF1
-validation Human_-_:human_HSF1_validation_Snyder.pdf
+validation Human_-_HSF1(Immunoprecipitation,Motif_Enrichment):human_HSF1_validation_Snyder.pdf
 label HSF1 (sc-9144)
 
 term IKZF1_(IkN)_(UCLA)
@@ -7058,7 +7058,7 @@ vendorId sc-17796
 lab Snyder
 targetId GeneCard:SMARCB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCB1
-validation Human_-_:human_INI1_validation_Snyder.pdf
+validation Human_-_INI1(Immunoprecipitation,IP-Mass_spec):human_INI1_validation_Snyder.pdf
 label INI1 (sc-17796)
 
 term IRF1
@@ -7213,7 +7213,7 @@ orderUrl http://www.abcam.com/MAFK-antibody-ab50322.html
 lab Snyder
 targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
-validation Human_-_:human_MafK_ab50322_validation_Snyder.pdf Mouse_-_:mouse_MafK_ab50322_validation_Snyder.pdf
+validation Human_-_MAFK(ab50322)(Immunoprecipitation,ChIP):human_MafK_ab50322_validation_Snyder.pdf Mouse_-_:mouse_MafK_ab50322_validation_Snyder.pdf
 label MafK (ab50322)
 #lots
 
@@ -7229,7 +7229,7 @@ orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
 lab Snyder
 targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
-validation Human_-_:human_MafK_sc477_validation_Snyder.pdf
+validation Human_-_MafK(sc477)(Immunoprecipitation,ChIP):human_MafK_sc477_validation_Snyder.pdf
 label MafK (SC-477)
 #lots
 
@@ -7483,7 +7483,7 @@ orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
 lab Snyder
 targetId GeneCard:NFKB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1
-validation Human_-_:human_NFKB_p65_validation_Snyder.pdf
+validation Human_-_NFKB1(Immunoprecipitation,Motif_EnrichmenImmunoprecipitation,Motif_Enrichment):human_NFKB_p65_validation_Snyder.pdf
 label NFKB (sc-372)
 
 term NF-YA
@@ -7528,7 +7528,7 @@ orderUrl http://www.abcam.com/NRF1-antibody-ab55744.html
 lab Snyder
 targetId GeneCard:NRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NRF1
-validation Human_-_:human_NRF1_validation_Snyder.pdf
+validation Human_-_NRF1(Immunoblots,Motif_Enrichment):human_NRF1_validation_Snyder.pdf
 label NRF1 (ab55744)
 
 term Nrf2
@@ -7837,7 +7837,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=21754
 lab Snyder
 targetId GeneCard:POLR3G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
-validation Human_-_:human_Pol3_validation_Snyder.pdf
+validation Human_-_Pol3(Immunoprecipitation,IP-Mass_spec):human_Pol3_validation_Snyder.pdf
 label POL3 (sc-21754)
 
 term POU5F1_(SC-9081)
@@ -8113,7 +8113,7 @@ orderUrl http://www.abcam.com/SMC3-antibody-ab9263.html
 lab Snyder
 targetId GeneCards:SMC3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMC3
-validation Human_-_:human_SMC3_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_SMC3(Immunoprecipitation,ChIP):human_SMC3_validation_Snyder.pdf Mouse_-_:missing
 label SMC3 (ab9263)
 #lots
 
@@ -8239,7 +8239,7 @@ lab Snyder
 lots G2406 and K2106
 targetId GeneCard:STAT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1&search=STAT1
-validation Human_-_:human_STAT1_validation_Snyder.pdf
+validation Human_-_STAT1(Western_Blot,Motif_Enrichment):human_STAT1_validation_Snyder.pdf
 label STAT1 (sc-345)
 
 term STAT2
@@ -8254,7 +8254,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=476
 lab Snyder
 targetId GeneCard:STAT2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT2
-validation Human_-_:human_STAT2_validation_Snyder.pdf
+validation Human_-_STAT2(Immunoprecipitation,ChIP):human_STAT2_validation_Snyder.pdf
 label STAT2 (sc-476x)
 
 term STAT3
@@ -8363,7 +8363,7 @@ targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basi
 targetId GeneCard:Tal1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
 lab Hardison
-validation Human_-_:human_TAL1_validation_Snyder.pdf Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
+validation Human_-_TAL1(Immunoprecipitaiton,IP-Mass_spec):human_TAL1_validation_Snyder.pdf Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
 label TAL1 (sc-12984)
 
 #term TAF-II
@@ -8929,20 +8929,20 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
 validation COREST(ab24166)(Western Blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
 
 
-term COREST (sc30189)_(sc-101388)
-tag COREST SC30189_SC101388
+term COREST (sc30189)
+tag COREST SC30189
 type Antibody
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 246-310 mapping within an internal region of CoREST of human origin recommended for detection of CoREST of mouse, rat and human origin .
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 246-310 mapping within an internal region of CoREST of human origin recommended for detection of CoREST of mouse, rat and human origin.
 target COREST (sc30189)
 targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
 vendorName Santa Cruz Biotech
-vendorId sc-101388
+vendorId sc-30189
 orderUrl http://www.scbt.com/datasheet-30189-corest-h-65-antibody.html
 lab Snyder
 lots C0806
 targetId RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
-validation Human_-_COREST(sc30189)_(sc-101388)(Immunoprecipitation,ChIP):human_COREST_sc30189_validation_Snyder.pdf Mouse_-_:mouse_COREST_sc30189_validation_Snyder.pdf
+validation Human_-_COREST(sc30189)(Immunoprecipitation,ChIP):human_COREST_sc30189_validation_Snyder.pdf Mouse_-_:mouse_COREST_sc30189_validation_Snyder.pdf
 
 # lots
 ##This does not appear in metaDb
@@ -9115,14 +9115,13 @@ type Antibody
 antibodyDescription Rabbit polyclonal, immunogen is synthetic peptide, corresponding to a region within amino acids 427-477 of Human MAZ, GenBank BAA33064.1
 target MAZ 
 targetDescription May function as a transcription factor with dual roles in transcription initiation and termination. Binds to two sites, ME1a1 and ME1a2, within the MYC promoter having greater affinity for the former. Also binds to multiple G/C-rich sites within the promoter of the Sp1 family of transcription factors.vendorName Abcam
-vendorName abcam
 vendorId ab85725
 orderUrl http://www.abcam.com/MAZ-antibody-ab85725.html
 lab Snyder
 lots GR41711-2
 targetId MAZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAZ
-validation Human_-_:human_MAZ_ab85725_validation_Snyder.pdf Mouse_-_:mouse_MAZ_ab85725_validation_Snyder.pdf
+validation Human_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):human_MAZ_ab85725_validation_Snyder.pdf Mouse_-_MAZ(ab85725)(Immunoprecipitation,IP-Mass_spec):mouse_MAZ_ab85725_validation_Snyder.pdf
 
 term Mxi1_(AF4185)
 tag MXI1
@@ -9137,7 +9136,7 @@ lab Snyder
 lots ZIJ01
 targetId GeneCard:MXI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
-validation Human_-_:human_MXI1_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_MXI1(Immunoprecipitation,IP-Mass_spec):human_MXI1_validation_Snyder.pdf Mouse_-_:missing
 label Mxi1 (AF4185)
 
 term NONO
