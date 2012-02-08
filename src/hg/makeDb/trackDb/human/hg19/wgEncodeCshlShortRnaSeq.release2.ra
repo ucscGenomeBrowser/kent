@@ -2057,7 +2057,7 @@ html wgEncodeCshlShortRnaSeq.release2
     visibility full 
     subTrack wgEncodeCshlShortRnaSeq
 
-        track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalContigs
+        track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel H1ES nucl sm C 
         longLabel H1-hESC nucleus shortTotal RNA-seq Contigs from ENCODE/CSHL
@@ -2066,7 +2066,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 0,107,27
         # subId=4496 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalContigs
+        track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel H1ES cyto sm C 
         longLabel H1-hESC cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2075,7 +2075,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 0,107,27
         # subId=4495 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalContigs
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 nplm sm C 
         longLabel K562 nucleoplasm small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2084,7 +2084,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 46,0,184
         # subId=4494 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqK562CytosolShorttotalContigs
+        track wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 cyto sm C 
         longLabel K562 cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2093,7 +2093,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 46,0,184
         # subId=4493 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalContigs
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel NHEK nucl sm C 
         longLabel NHEK nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2102,7 +2102,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 179,0,134
         # subId=4492 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel MCF7 cell sm C 
         longLabel MCF-7 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2110,7 +2110,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bed 6
         # subId=4491 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs
+        track wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 nucl sm C 
         longLabel K562 nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2119,7 +2119,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 46,0,184
         # subId=4490 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalContigs
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel GM78 cyto sm C 
         longLabel GM12878 cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2128,7 +2128,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 153,38,0
         # subId=4489 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel AG50 cell sm C 
         longLabel AG04450 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2136,7 +2136,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bed 6
         # subId=4488 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalContigs
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HeLa cyto sm C 
         longLabel HeLa-S3 cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2145,7 +2145,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 0,119,158
         # subId=4487 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HeLa cell sm C 
         longLabel HeLa-S3 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2154,7 +2154,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 0,119,158
         # subId=4486 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqH1hescCellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel H1ES cell sm C 
         longLabel H1-hESC whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2163,7 +2163,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 0,107,27
         # subId=4485 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalContigs
+        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HepG cyto sm C 
         longLabel HepG2 cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2172,7 +2172,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 189,0,157
         # subId=4484 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqGm12878CellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel GM78 cell sm C 
         longLabel GM12878 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2181,7 +2181,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 153,38,0
         # subId=4482 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalContigs
+        track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 nlus sm C 
         longLabel K562 nucleolus small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2190,7 +2190,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 46,0,184
         # subId=4481 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalContigs
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HepG nucl sm C 
         longLabel HepG2 nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2199,7 +2199,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 189,0,157
         # subId=4480 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HepG cell sm C 
         longLabel HepG2 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2208,7 +2208,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 189,0,157
         # subId=4479 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqA549CellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel A549 cell sm C 
         longLabel A549 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2216,7 +2216,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bed 6
         # subId=4478 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalContigs
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel GM78 nucl sm C 
         longLabel GM12878 nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2225,7 +2225,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 153,38,0
         # subId=4477 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalContigs
+        track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 chrm sm C 
         longLabel K562 chromatin small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2234,7 +2234,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 46,0,184
         # subId=4476 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalContigs
+        track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HUVE nucl sm C 
         longLabel HUVEC nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2243,7 +2243,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 224,75,0
         # subId=4475 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqBjCellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel BJ cell sm C 
         longLabel BJ whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2251,7 +2251,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bed 6
         # subId=4474 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqNhekCellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel NHEK cell sm C 
         longLabel NHEK whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2260,7 +2260,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 179,0,134
         # subId=4472 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalContigs
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel SKRA cell sm C 
         longLabel SK-N-SH RA whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2268,7 +2268,7 @@ html wgEncodeCshlShortRnaSeq.release2
         type bed 6
         # subId=4471 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalContigs
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HeLa nucl sm C 
         longLabel HeLa-S3 nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
@@ -2277,7 +2277,7 @@ html wgEncodeCshlShortRnaSeq.release2
         color 0,119,158
         # subId=4470 dateSubmitted=2011-07-12
 
-        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalContigs
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel NHEK cyto sm C 
         longLabel NHEK cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
