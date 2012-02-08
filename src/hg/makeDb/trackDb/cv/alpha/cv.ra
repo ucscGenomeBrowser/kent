@@ -6194,7 +6194,9 @@ validation missing
 term eGFP-NF90
 tag NF90
 type Antibody
-antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NF90target eGFP-NF90targetDescription NF90 (nuclear factor of activated T cells 90 kDa), also known as NFAR is a ubiquitously expressed nuclear protein that exists in a heterodimer with NF45.vendorName Kevin White Lab, University of Chicago
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NF90target eGFP-NF90
+targetDescription NF90 (nuclear factor of activated T cells 90 kDa), also known as NFAR is a ubiquitously expressed nuclear protein that exists in a heterodimer with NF45.
+vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-NF90 
 orderUrl http://www.igsb.org/labs/kevin-white/ 
 lab White
