@@ -226,6 +226,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 	do1Colx(row, iCol, "genbank_protein", "Genebank Protein", GBNK_PROT_URL); 
 	
 	iCol++;
+	stripString(row[iCol],"Rn.");
 	do1Colx(row, iCol, "unigene_id", "UniGene", UNIGENE_URL); 
 	
 	iCol++;
