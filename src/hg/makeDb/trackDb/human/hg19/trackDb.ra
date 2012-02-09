@@ -2794,4 +2794,6 @@ url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg19&species=H.
 
 track iscaComposite override
 html ../iscaComposite.alpha
+release alpha
+
 
