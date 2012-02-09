@@ -6486,7 +6486,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA2
 validation Human_-_:missing
 label FOXA2 (sc-6554)
 
-term FOXM1_(sc-502)
+term FOXM1_(SC-502)
 tag FOXM1SC502
 type Antibody
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of FOXM1 of human origin.
@@ -8792,7 +8792,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=THAP1
 validation Human_-_:missing
 label THAP1 (sc-98174)
 
-term TP53_(sc-126)
+term TP53_(SC-126)
 tag TP53SC126
 type Antibody
 antibodyDescription Mouse monoclonal IgG, N-terminal epitope mapping between amino acids 11-25 of TP53 of human origin.
@@ -8822,7 +8822,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation Human_-_:missing Mouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
 label TR4
 
-term TRIM28_(sc-81411)
+term TRIM28_(SC-81411)
 tag TRIM28SC81411
 type Antibody
 antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of TRIM28 of human origin.

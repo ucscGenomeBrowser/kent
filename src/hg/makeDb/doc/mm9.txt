@@ -12177,3 +12177,23 @@ TMPDIR=/scratch/tmp
 # (see hg19.txt for multi-species build notes)
 
 ##############################################################################
+# construct liftOver to mm10 (DONE - 2012-02-09 - Hiram) 
+    screen	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/mm9/bed/blat.mm10.2012-02-09
+    cd /hive/data/genomes/mm9/bed/blat.mm10.2012-02-09
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/mm9/11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev mm9 mm10 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/mm9/11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev mm9 mm10 > do.log 2>&1
+    #	real    83m43.240s
+
+    # verify this file exists:
+    og -L /gbdb/mm9/liftOver/mm9ToMm10.over.chain.gz
+# -rw-rw-r-- 1 535855 Feb  9 12:07 /gbdb/mm9/liftOver/mm9ToMm10.over.chain.gz
+
+    # and try out the conversion on genome-test from mm9 to mm10 
+############################################################################

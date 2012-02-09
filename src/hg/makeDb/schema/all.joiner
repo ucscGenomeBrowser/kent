@@ -50,7 +50,7 @@ set macEug macEug1,macEug2
 set melInc melInc1
 set melHap melHap1
 set micMur micMur1
-set mm mm6,mm7,mm8,mm9
+set mm mm6,mm7,mm8,mm9,mm10
 set monDom monDom1,monDom4,monDom5
 set myoLuc myoLuc1,myoLuc2
 set nomLeu nomLeu1
@@ -93,14 +93,14 @@ set xrg $panTro,$galGal,$melGal,$myoLuc,$hetGla,$ci,$canFam,$dp,$droYak,$droMult
 
 # Ensembl gene track lists constructed from update procedure
 # set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,cavPor3,ci2,cioSav2,danRer7,dm3,equCab2,fr2,galGal3,gasAcu1,gorGor3,hg19,loxAfr3,melGal1,mm9,monDom5,nomLeu1,ornAna1,oryCun2,oryLat2,panTro2,ponAbe2,rheMac2,rn4,sacCer3,susScr1,susScr2,taeGut1,tetNig2
-set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,equCab2,eriEur1,felCat3,fr2,galGal3,gasAcu1,gorGor3,hg19,loxAfr3,macEug1,melGal1,micMur1,mm9,monDom5,myoLuc2,nomLeu1,ochPri2,ornAna1,oryCun2,oryLat2,otoGar1,panTro2,ponAbe2,proCap1,pteVam1,rheMac2,rn4,sacCer3,sorAra1,speTri1,susScr1,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,xenTro3
+set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,cavPor3,ce10,choHof1,ci2,cioSav2,danRer7,dasNov2,dipOrd1,dm3,echTel1,equCab2,eriEur1,felCat3,fr2,galGal3,gasAcu1,gorGor3,hg19,loxAfr3,macEug1,melGal1,micMur1,mm9,mm10,monDom5,myoLuc2,nomLeu1,ochPri2,ornAna1,oryCun2,oryLat2,otoGar1,panTro2,ponAbe2,proCap1,pteVam1,rheMac2,rn4,sacCer3,sorAra1,speTri1,susScr1,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,xenTro3
 
 set ensGeneWgs ce10,choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,myoLuc2,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1
 
 set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,eriEur1,felCat3,macEug1,micMur1,ochPri2,otoGar1,proCap1,pteVam1,sorAra1,speTri1,tarSyr1,tupBel1,turTru1,vicPac1
 
 # Define organism databases for which we host the vegaGenes
-set vegaGeneDbs hg18,hg19,mm9
+set vegaGeneDbs hg18,hg19,mm9,mm10
 
 # Define organism databases for which we build a SNP track:
 set snpDb127 hg18,bosTau3
@@ -124,10 +124,10 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Define transMap databases
 # transMapDb not public: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1,loxAfr3
-set transMapDb anoCar1,anoCar2,bosTau4,calJac1,calJac3,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,hg19,mm9,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,xenTro3,loxAfr3
+set transMapDb anoCar1,anoCar2,bosTau4,calJac1,calJac3,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,hg19,mm9,mm10,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,xenTro3,loxAfr3
 
 # Define ucscRetro databases
-set ucscRetroDb hg18,hg19,mm9
+set ucscRetroDb hg18,hg19,mm9,mm10
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
@@ -143,7 +143,7 @@ set kgDb $hg,$mm,$rn
 # Older format (KG 2)
 set kgDb2 hg16,hg17,mm7,mm8,rn3,rn4
 # Newer format (KG 3 aka UCSC Genes)
-set kgDb3 hg18,hg19,mm9
+set kgDb3 hg18,hg19,mm9,mm10
 
 # Protein browser databases.
 set pbDb hg18,hg17,hg16,mm7,mm8,mm9,rn3
@@ -155,13 +155,13 @@ set pbDb3 hg16,hg17,hg18
 set familyDb $hg,$mm,$rn,$ce,$sacCer,$dm
 
 # Define databases that support CCDS
-set ccdsDb hg19,hg18,hg17,mm8,mm9
+set ccdsDb hg19,hg18,hg17,mm8,mm9,mm10
 
 # Magic for tables split between chromosomes
 set split splitPrefix=chr%\_
 
 # Databases with the tRNAs track
-set tRNAsDbs hg18,hg19,mm9,rn4
+set tRNAsDbs hg18,hg19,mm9,mm10,rn4
 
 # Databases with the CGAP SAGE track
 set cgapSageDbs hg18,hg19,mm8
@@ -1496,13 +1496,14 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     ce2.mrnaOrientInfo.name minCheck=0.08
     $gbd,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.mrnaID minCheck=0.80
     $gbd,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.dupMrnaID minCheck=0.95
-    $gbd,!mm7,!mm8,!mm9,!hg17,!rn3,!rn4.mrnaRefseq.mrna minCheck=0.25
+    $gbd,!mm7,!mm8,!mm9,!mm10,!hg17,!rn3,!rn4.mrnaRefseq.mrna minCheck=0.25
     mm7.mrnaRefseq.mrna minCheck=0.30
     mm8.mrnaRefseq.mrna minCheck=0.30
     mm9.mrnaRefseq.mrna minCheck=0.30
+    mm10.mrnaRefseq.mrna minCheck=0.30
     hg17.mrnaRefseq.mrna minCheck=0.80
     $rn.mrnaRefseq.mrna minCheck=0.03
-    $gbd,!mm7,!mm8,!mm9,!hg17,!hg18,!rn4.spMrna.mrnaID minCheck=0.98
+    $gbd,!mm7,!mm8,!mm9,!mm10,!hg17,!hg18,!rn4.spMrna.mrnaID minCheck=0.98
     $mm.dupSpMrna.mrnaID minCheck=0.10
     $mm.dupSpMrna.dupMrnaID minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.30
@@ -1528,8 +1529,8 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refLink.mrnaAcc
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $kgDb.kgXref.refseq exclude= minCheck=0.50
-    $kgDb,!hg16,!hg17,!hg18,!mm7,!mm8,!mm9.knownToRefSeq.value minCheck=0.98
-    hg18,mm7,mm8,mm9.knownToRefSeq.value minCheck=0.96
+    $kgDb,!hg16,!hg17,!hg18,!mm7,!mm8,!mm9,!mm10.knownToRefSeq.value minCheck=0.98
+    hg18,mm7,mm8,mm9,mm10.knownToRefSeq.value minCheck=0.96
     hg16,hg17.knownToRefSeq.value minCheck=0.94
     $kgDb.refSeqKg.refseq minCheck=0.60
     $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.35
@@ -1547,7 +1548,8 @@ identifier refSeqId typeOf=mrnaAccession
     $dm,!dm1.flyBaseToRefSeq.value minCheck=0.96
     $mm.mrnaRefseq.mrna minCheck=0.03
     $mm.dupSpMrna.mrnaID minCheck=0.60
-    $mm,!mm8,!mm9.dupSpMrna.dupMrnaID minCheck=0.20
+    $mm,!mm8,!mm9,!mm10.dupSpMrna.dupMrnaID minCheck=0.20
+    mm10.dupSpMrna.dupMrnaID minCheck=0.19
     mm9.dupSpMrna.dupMrnaID minCheck=0.19
     mm8.dupSpMrna.dupMrnaID minCheck=0.19
     hg17.mrnaRefseq.mrna minCheck=0.10
@@ -1570,6 +1572,7 @@ identifier knownToRefSeqId typeOf=mrnaAccession
     mm7.geneNetworkId.id minCheck=0.80
     mm8.geneNetworkId.id minCheck=0.80
     mm9.geneNetworkId.id minCheck=0.40
+    mm10.geneNetworkId.id minCheck=0.40
     hg19.geneNetworkId.id
     rn3.geneNetworkId.id minCheck=0.40
 
@@ -1628,7 +1631,7 @@ identifier knownGeneId dependency
     $kgDb.knownBlastTab.target
     $kgDb.knownCanonical.transcript
     $kgDb.knownGeneMrna.name full
-    $kgDb,!hg18,!mm9.knownGeneLink.name
+    $kgDb,!hg18,!mm9,!mm10.knownGeneLink.name
     $kgDb.knownIsoforms.transcript full
     $kgDb.knownToAllenBrain.name
     $kgDb.knownToCdsSnp.name
@@ -1924,8 +1927,8 @@ identifier mouseStsTrueName typeOf=stsName
 "Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $mm.stsInfoMouseNew.name
     $mm.stsAlias.trueName minCheck=0.99
-    $mm,!mm7,!mm8,!mm9.all_sts_primer.qName chopBefore=_ minCheck=0.99
-    mm7,mm8,mm9.all_sts_primer.qName chopBefore=_ minCheck=0.98
+    $mm,!mm7,!mm8,!mm9,!mm10.all_sts_primer.qName chopBefore=_ minCheck=0.99
+    mm7,mm8,mm9,mm10.all_sts_primer.qName chopBefore=_ minCheck=0.98
     $mm.stsMapMouseNew.name
     $mm.jaxQTL3.marker exclude= minCheck=0.99
     $mm.jaxQTL3.flank1 exclude= minCheck=0.95
@@ -2056,7 +2059,7 @@ identifier flyBaseGeneId external=FlyBase
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
     $dm,!dm1.pscreen.geneIds comma minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!ce9,!ce10,!sacCer1,!sacCer2,!sacCer3.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!mm10,!rn3,!rn4,!ce2,!ce6,!ce9,!ce10,!sacCer1,!sacCer2,!sacCer3.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -2421,9 +2424,9 @@ identifier cgapMapId
 identifier cgapAlias
 "NCI Cancer Genome Annotation Project Alias"
     $gbd.cgapAlias.alias dupeOk
-    $gbd,!hg16,!hg18,!hg19,!mm9.knownGene.name minCheck=0.50
+    $gbd,!hg16,!hg18,!hg19,!mm9,!mm10.knownGene.name minCheck=0.50
     hg16.knownGene.name minCheck=0.05
-    hg18,hg19,mm9.kgXref.geneSymbol minCheck=0.85
+    hg18,hg19,mm9,mm10.kgXref.geneSymbol minCheck=0.85
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 
@@ -2976,7 +2979,7 @@ identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
     $mm.jaxPhenotype.name dupeOk
     $mm.jaxPhenotypeAlias.name
-    mm8,mm9.jaxAllelePheno.transcript minCheck=0.9
+    mm8,mm9,mm10.jaxAllelePheno.transcript minCheck=0.9
 
 identifier jaxGeneTrapName external=MGI
 "Jackson Labs/MGI GeneTrap name: concatenated representative transcript ID and allele ID"
