@@ -59,6 +59,33 @@ subId 5485
 tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep2
 view Alignments
 
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 1AWC,1BWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20728,LID20729
+labProtocolId 1A,1B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5583
+tableName wgEncodeCshlLongRnaSeqAdrenalAdult8wksContigs
+view Contigs
+
 metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksFastqRd1Rep1
 objType file
 age adult-8wks
@@ -335,6 +362,32 @@ strain C57BL/6J
 subId 5485
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 1AWC,1BWC
+cell Adrenal
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqAdrenalAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20728,LID20729
+labProtocolId 1A,1B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5583
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -392,6 +445,33 @@ strain C57BL/6J
 subId 5431
 tableName wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqColonAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 14AWC,14BWC
+cell Colon
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-08
+dateUnrestricted 2012-11-08
+fileName wgEncodeCshlLongRnaSeqColonAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID21040,LID21041
+labProtocolId 14A,14B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5566
+tableName wgEncodeCshlLongRnaSeqColonAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqColonAdult8wksFastqRd1Rep1
 objType file
@@ -679,6 +759,32 @@ strain C57BL/6J
 subId 5431
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqColonAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 14AWC,14BWC
+cell Colon
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-08
+dateUnrestricted 2012-11-08
+fileName wgEncodeCshlLongRnaSeqColonAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21040,LID21041
+labProtocolId 14A,14B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5566
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -734,6 +840,33 @@ strain C57BL/6J
 subId 5498
 tableName wgEncodeCshlLongRnaSeqDuodAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 2AWC,2BWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20730,LID20731
+labProtocolId 2A,2B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5573
+tableName wgEncodeCshlLongRnaSeqDuodAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksFastqRd1Rep1
 objType file
@@ -1011,6 +1144,32 @@ strain C57BL/6J
 subId 5498
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqDuodAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 2AWC,2BWC
+cell Duodenum
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqDuodAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20730,LID20731
+labProtocolId 2A,2B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5573
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -1066,6 +1225,33 @@ strain C57BL/6J
 subId 5488
 tableName wgEncodeCshlLongRnaSeqGfatAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 4AWC,4BWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID21179,LID21180
+labProtocolId 4A,4B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5577
+tableName wgEncodeCshlLongRnaSeqGfatAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksFastqRd1Rep1
 objType file
@@ -1343,6 +1529,32 @@ strain C57BL/6J
 subId 5488
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqGfatAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 4AWC,4BWC
+cell GenitalFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqGfatAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21179,LID21180
+labProtocolId 4A,4B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5577
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -1400,6 +1612,33 @@ strain C57BL/6J
 subId 5427
 tableName wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqHeartAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 16AWC,16BWC
+cell Heart
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqHeartAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20870,LID20871
+labProtocolId 16A,16B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5570
+tableName wgEncodeCshlLongRnaSeqHeartAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqHeartAdult8wksFastqRd1Rep1
 objType file
@@ -1687,6 +1926,32 @@ strain C57BL/6J
 subId 5427
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqHeartAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 16AWC,16BWC
+cell Heart
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqHeartAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20870,LID20871
+labProtocolId 16A,16B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5570
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -1744,6 +2009,33 @@ strain C57BL/6J
 subId 5439
 tableName wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqKidneyAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 17AWC,17BWC
+cell Kidney
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20872,LID20873
+labProtocolId 17A,17B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5571
+tableName wgEncodeCshlLongRnaSeqKidneyAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqKidneyAdult8wksFastqRd1Rep1
 objType file
@@ -2031,6 +2323,32 @@ strain C57BL/6J
 subId 5439
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqKidneyAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 17AWC,17BWC
+cell Kidney
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20872,LID20873
+labProtocolId 17A,17B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5571
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -2086,6 +2404,33 @@ strain C57BL/6J
 subId 5490
 tableName wgEncodeCshlLongRnaSeqLgintAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 8AWC,8BWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID21183,LID21184
+labProtocolId 8A,8B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5585
+tableName wgEncodeCshlLongRnaSeqLgintAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksFastqRd1Rep1
 objType file
@@ -2363,6 +2708,32 @@ strain C57BL/6J
 subId 5490
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqLgintAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 8AWC,8BWC
+cell LgIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqLgintAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21183,LID21184
+labProtocolId 8A,8B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5585
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -2420,6 +2791,33 @@ strain C57BL/6J
 subId 5432
 tableName wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqLiverAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 18AWC,18BWC
+cell Liver
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqLiverAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID21042,LID21043
+labProtocolId 18A,18B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5580
+tableName wgEncodeCshlLongRnaSeqLiverAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqLiverAdult8wksFastqRd1Rep1
 objType file
@@ -2707,6 +3105,32 @@ strain C57BL/6J
 subId 5432
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqLiverAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 18AWC,18BWC
+cell Liver
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqLiverAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21042,LID21043
+labProtocolId 18A,18B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5580
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -2764,6 +3188,33 @@ strain C57BL/6J
 subId 5429
 tableName wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqLungAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 15AWC,15BWC
+cell Lung
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqLungAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20920,LID20921
+labProtocolId 15A,15B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5572
+tableName wgEncodeCshlLongRnaSeqLungAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqLungAdult8wksFastqRd1Rep1
 objType file
@@ -3051,6 +3502,32 @@ strain C57BL/6J
 subId 5429
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqLungAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 15AWC,15BWC
+cell Lung
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqLungAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20920,LID20921
+labProtocolId 15A,15B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5572
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -3106,6 +3583,33 @@ strain C57BL/6J
 subId 5496
 tableName wgEncodeCshlLongRnaSeqMamgAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 22AWC,22BWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20924,LID20925
+labProtocolId 22A,22B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5576
+tableName wgEncodeCshlLongRnaSeqMamgAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksFastqRd1Rep1
 objType file
@@ -3383,6 +3887,32 @@ strain C57BL/6J
 subId 5496
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqMamgAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 22AWC,22BWC
+cell MammaryGland
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqMamgAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20924,LID20925
+labProtocolId 22A,22B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5576
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -3438,6 +3968,33 @@ strain C57BL/6J
 subId 5483
 tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 11AWC,11BWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20821,LID20822
+labProtocolId 11A,11B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5584
+tableName wgEncodeCshlLongRnaSeqOvaryAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksFastqRd1Rep1
 objType file
@@ -3715,6 +4272,32 @@ strain C57BL/6J
 subId 5483
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqOvaryAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 11AWC,11BWC
+cell Ovary
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqOvaryAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20821,LID20822
+labProtocolId 11A,11B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5584
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -3770,6 +4353,33 @@ strain C57BL/6J
 subId 5492
 tableName wgEncodeCshlLongRnaSeqSfatAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 5AWC,5BWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID21181,LID21182
+labProtocolId 5A,5B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5578
+tableName wgEncodeCshlLongRnaSeqSfatAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksFastqRd1Rep1
 objType file
@@ -4047,6 +4657,32 @@ strain C57BL/6J
 subId 5492
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqSfatAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 5AWC,5BWC
+cell SubcFatPad
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqSfatAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21181,LID21182
+labProtocolId 5A,5B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5578
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -4102,6 +4738,33 @@ strain C57BL/6J
 subId 5486
 tableName wgEncodeCshlLongRnaSeqSmintAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 9AWC,9BWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20819,LID20820
+labProtocolId 9A,9B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5574
+tableName wgEncodeCshlLongRnaSeqSmintAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksFastqRd1Rep1
 objType file
@@ -4379,6 +5042,32 @@ strain C57BL/6J
 subId 5486
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqSmintAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 9AWC,9BWC
+cell SmIntestine
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqSmintAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20819,LID20820
+labProtocolId 9A,9B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5574
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -4436,6 +5125,33 @@ strain C57BL/6J
 subId 5425
 tableName wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqSpleenAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 13AWC,13BWC
+cell Spleen
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID21038,LID21039
+labProtocolId 13A,13B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5575
+tableName wgEncodeCshlLongRnaSeqSpleenAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd1Rep1
 objType file
@@ -4723,6 +5439,32 @@ strain C57BL/6J
 subId 5425
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqSpleenAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 13AWC,13BWC
+cell Spleen
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21038,LID21039
+labProtocolId 13A,13B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5575
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -4778,6 +5520,33 @@ strain C57BL/6J
 subId 5489
 tableName wgEncodeCshlLongRnaSeqStomAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 3AWC,3BWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20732,LID20733
+labProtocolId 3A,3B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5581
+tableName wgEncodeCshlLongRnaSeqStomAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqStomAdult8wksFastqRd1Rep1
 objType file
@@ -5055,6 +5824,32 @@ strain C57BL/6J
 subId 5489
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqStomAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 3AWC,3BWC
+cell Stomach
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqStomAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20732,LID20733
+labProtocolId 3A,3B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5581
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -5112,6 +5907,33 @@ strain C57BL/6J
 subId 5448
 tableName wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqTestisAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 12AWC,12BWC
+cell Testis
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqTestisAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20868,LID20869
+labProtocolId 12A,12B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex M
+spikeInPool Nist14
+strain C57BL/6J
+subId 5579
+tableName wgEncodeCshlLongRnaSeqTestisAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqTestisAdult8wksFastqRd1Rep1
 objType file
@@ -5399,6 +6221,32 @@ strain C57BL/6J
 subId 5448
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqTestisAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 12AWC,12BWC
+cell Testis
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqTestisAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20868,LID20869
+labProtocolId 12A,12B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex M
+spikeInPool Nist14
+strain C57BL/6J
+subId 5579
+view TranscriptDeNovo
+
 metaObject wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -5456,6 +6304,33 @@ strain C57BL/6J
 subId 5437
 tableName wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep2
 view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqThymusAdult8wksContigs
+objType table
+age adult-8wks
+bioRep 19AWC,19BWC
+cell Thymus
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqThymusAdult8wksContigs.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID20922,LID20923
+labProtocolId 19A,19B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5582
+tableName wgEncodeCshlLongRnaSeqThymusAdult8wksContigs
+view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqThymusAdult8wksFastqRd1Rep1
 objType file
@@ -5743,4 +6618,30 @@ strain C57BL/6J
 subId 5437
 view Spikeins
 
-# MAGIC: -2037283525
+metaObject wgEncodeCshlLongRnaSeqThymusAdult8wksTranscriptDeNovo
+objType file
+age adult-8wks
+bioRep 19AWC,19BWC
+cell Thymus
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-09
+dateUnrestricted 2012-11-09
+fileName wgEncodeCshlLongRnaSeqThymusAdult8wksTranscriptDeNovo.gtf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20922,LID20923
+labProtocolId 19A,19B
+localization cell
+project wgEncode
+readType 2x76D
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex U
+spikeInPool Nist14
+strain C57BL/6J
+subId 5582
+view TranscriptDeNovo
+
+# MAGIC: -767233990
