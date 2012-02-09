@@ -682,8 +682,16 @@ var subCfg = { // subtrack config module.
             } else {
                 subCfg.markChange(e,this);
                 // If made visible, be sure to make composite visible
-                if (this.selectedIndex > 0)
-                    exposeAll();
+                // But do NOT turn composite from hide to full, since it will turn on other subs
+                // Just trigger a supertrack reshaping
+                if (this.selectedIndex > 0) {
+                    //exposeAll();
+                    var visDD = normed($("select.visDD"));
+                    if (visDD != undefined) {
+                        if ($(visDD).hasClass('superChild'))
+                            visTriggersHiddenSelect(visDD);
+                    }
+                }
             }
         });
     },
