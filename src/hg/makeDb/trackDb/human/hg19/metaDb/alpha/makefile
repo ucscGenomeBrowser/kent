@@ -42,7 +42,6 @@ wgEncodeSydhTfbs.ra \
 wgEncodeUchicagoTfbs.ra \
 wgEncodeUmassDekker5C.ra \
 wgEncodeUncBsuProt.ra \
-wgEncodeUncBsuProtFasp.ra \
 wgEncodeUw5C.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeUwDgf.ra \
