@@ -6099,14 +6099,14 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation Human_-_eGFP-HDAC8:human_validation_White.pdf
 label HDAC8 (eGFP-HDAC8)
 
-term eGFP-HMGBA1
-tag HMGBA1
+term eGFP-HMGB1
+tag HMGB1
 type Antibody
-antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGBA1
-target eGFP-HMGBA1
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGB1
+target eGFP-HMGB1
 targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA.Involved in V(D)J recombination by acting as a cofactor of the  RAG complex.
 vendorName Kevin White Lab, University of Chicago
-vendorId eGFP-HMGBA1
+vendorId eGFP-HMGB1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
@@ -9948,10 +9948,10 @@ tag CONTROLHDAC8
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HDAC8
 
-term Control_eGFP-HMGBA1
-tag CONTROLHMGBA1
+term Control_eGFP-HMGB1
+tag CONTROLHMGB1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-HMGBA1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-HMGB1 PROVISIONAL
 
 term Control_eGFP-ILF2
 tag CONTROLILF2
