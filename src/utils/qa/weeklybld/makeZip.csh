@@ -12,6 +12,9 @@ if ( -e $zip ) then
 endif
 echo "Dumping branch $BRANCHNN to zip file. [${0}: `date`]"
 git archive --format=zip --prefix=kent/ --remote=$GITSHAREDREPO v${BRANCHNN}_branch > $zip
+echo 'For installation instructions, see the README.* files in src/product' > /tmp/README.txt
+zip -j $zip /tmp/README.txt
+rm -f /tmp/README.txt
 chmod 664 $zip
 echo "Done. [${0}: `date`]"
 exit 0
