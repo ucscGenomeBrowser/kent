@@ -4,7 +4,7 @@
 #include "annoGrator.h"
 
 void annoGratorQueryExecute(struct annoGratorQuery *query)
-/* For each annoRow from spec->primarySource, invoke integrators and pass their annoRows
+/* For each annoRow from query->primarySource, invoke integrators and pass their annoRows
  * to formatters. */
 {
 printf("hello world!\n");

@@ -140,7 +140,7 @@ struct annoGratorQuery
     };
 
 void annoGratorQueryExecute(struct annoGratorQuery *query);
-/* For each annoRow from spec->primarySource, invoke integrators and pass their annoRows
+/* For each annoRow from query->primarySource, invoke integrators and pass their annoRows
  * to formatters. */
 
 void annoGratorQueryFree(struct annoGratorQuery **pQuery);
