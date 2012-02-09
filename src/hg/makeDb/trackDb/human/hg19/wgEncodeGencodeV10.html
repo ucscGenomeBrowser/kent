@@ -26,33 +26,32 @@ This track is a multi-view composite track that contains differing data sets
 <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 To show only selected subtracks, uncheck the boxes next to the tracks that
 you wish to hide.</P>
-<P>
-<b>The available tracks</b> are divided into sets of annotations based on selection criteria:
-</p>
-<ul>
-  <li><em>GENCODE Basic set</em> - a subset of the GENCODE coding and non-coding
-    transcript annotations, including polymorphic pseudogenes.  This includes
-    both manual and automatic annotations.  The selection criteria are 
-    described in the <a href="#basicSetSelection">methods section</a>.
-    This is a subset of the <em>comprehensive set</em>.
-
-  <li><em>GENCODE Comprehensive set</em> - all GENCODE coding and non-coding transcript annotations,
+<b>Views</b> available on this track are:
+<dl>
+<dt><i>Genes</i></dt>
+<dd> The gene annotations in this view are divided into three subtracks:
+  <li><em>GENCODE Basic set</em> is a subset of the <em>Comprehensive set</em>. 
+    The selection criteria are described in the <a href="#basicSetSelection">methods section</a>.
+  <li><em>GENCODE Comprehensive set</em> contains all GENCODE coding and non-coding transcript annotations,
     including polymorphic pseudogenes.  This includes both manual and
-    automatic annotations.  This is a super-set of the <em>basic set</em>.
-
+    automatic annotations.  This is a super-set of the <em>Basic set</em>.
   <li><em>GENCODE Pseudogenes</em> - all pseudogene annotations except polymorphic pseudogenes.
-
-  <li><em>GENCODE 2-way Pseudogenes</em> - pseudogenes predicted by both the Yale
+</dd>
+<dt><i>2-way</i></dt> 
+<dd><li><em>GENCODE 2-way Pseudogenes</em> contains pseudogenes predicted by both the Yale
     Pseudopipe and UCSC Retrofinder pipelines. 
     The set was derived by looking for 50 base pairs
     of overlap between pseudogenes derived from both sets based on their 
     chromosomal coordinates.  When multiple Pseudopipe
     predictions map to a single Retrofinder prediction, only one match is kept
     for the 2-way consensus set.
-  <li><em>GENCODE PolyA</em> - polyA signals and sites manually annotated on
+</dd>
+<dt><i>PolyA</i></dt>
+<dd><li><em>GENCODE PolyA</em> contains polyA signals and sites manually annotated on
     the genome based on transcribed evidence (ESTs and cDNAs) of 3' end of
     transcripts containing at least 3 A's not matching the genome.
-</ul>
+</dd>
+</dl>
 
 <b>Filtering</b> is available for the items in the GENCODE Basic, Comprehensive and Pseudogene tracks
 using the following criteria:
