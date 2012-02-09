@@ -9898,6 +9898,41 @@ tag CONTROL
 type control
 description This data represents a control being compared with the other tracks in the set.
 
+term Control_eGFP-BACH1
+tag CONTROLBACH1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-BACH1 PROVISIONAL
+
+term Control_eGFP-CCNE1
+tag CONTROLCCNE1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-CCNE1 PROVISIONAL
+
+term Control_eGFP-CDKN1B
+tag CONTROLCDKN1B
+type control
+description This data represents a control being compared to experiments using antibody eGFP-CDKN1B PROVISIONAL
+
+term Control_eGFP-E2F1
+tag CONTROLE2F1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-E2F1 PROVISIONAL
+
+term Control_eGFP-EKLF1
+tag CONTROLEKLF1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-EKLF1 PROVISIONAL
+
+term Control_eGFP-ELF1
+tag CONTROLELF1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-ELF1 PROVISIONAL
+
+term Control_eGFP-ESR
+tag CONTROLESR
+type control
+description This data represents a control being compared to experiments using antibody eGFP-ESR PROVISIONAL
+
 term Control_eGFP-FOS
 tag CONTROLFOS
 type control
@@ -9913,6 +9948,16 @@ tag CONTROLHDAC8
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HDAC8
 
+term Control_eGFP-HMGBA1
+tag CONTROLHMGBA1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-HMGBA1 PROVISIONAL
+
+term Control_eGFP-ILF2
+tag CONTROLILF2
+type control
+description This data represents a control being compared to experiments using antibody eGFP-ILF2 PROVISIONAL
+
 term Control_eGFP-JunB
 tag CONTROLJUNB
 type control
@@ -9923,10 +9968,40 @@ tag CONTROLJUND
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunD
 
+term Control_eGFP-MLL5
+tag CONTROLMLL5
+type control
+description This data represents a control being compared to experiments using antibody eGFP-MLL5 PROVISIONAL
+
+term Control_eGFP-NCOR1
+tag CONTROLNCOR1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-NCOR1 PROVISIONAL
+
+term Control_eGFP-NF90
+tag CONTROLNF90
+type control
+description This data represents a control being compared to experiments using antibody eGFP-NF90 PROVISIONAL
+
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
+
+term Control_eGFP-SMARCA1
+tag CONTROLSMARCA1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-SMARCA1 PROVISIONAL
+
+term Control_eGFP-SMARCA2
+tag CONTROLSMARCA2
+type control
+description This data represents a control being compared to experiments using antibody eGFP-SMARCA2 PROVISIONAL
+
+term Control_eGFP-STAT1
+tag CONTROLSTAT1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-STAT1 PROVISIONAL
 
 term Control_32bp
 tag CNTRL32B
