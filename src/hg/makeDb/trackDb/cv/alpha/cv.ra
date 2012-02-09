@@ -11268,6 +11268,33 @@ geo AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
 
+#Uses the GEO terms to be conistent and help with GEO submissions
+### Platform
+# Expected fields:
+# ---------------
+# term (human-readable name)
+# tag (machine-readable name, no special characters. uppercase.)
+# type (informs pipeline code of stanza type, should be seqPlatform)
+# description: Working on inputing description from geo and product website
+
+term GPL13190  
+tag GPL13190 
+geo NimbleGen Human CGH 2.1M Whole-Genome Tiling Array [080131_HG18_WG_CGH_v2D_HX1]
+type platform
+description Human CGH 2.1M Whole-Genome Tiling v2.0D Array PROVISIONAL
+
+term GPL14965 
+tag GPL14965 
+geo NimbleGen Human 3x720k Whole Genome CGH [100718_HG18_WG_CGH_v3.1_HX3]
+type platform
+description Human 3x720k Whole Genome CGH PROVISIONAL
+
+term GPL9156 
+tag GPL9156 
+geo FSU NimbleGen Mouse 385K Whole Genome Tiling
+type platform
+description FSU NimbleGen Mouse 385K Whole Genome Tiling PROVISIONAL
+
 #LABS          This is the CV for naming the labs.
 #term:
 #tag:	       Short, uppercase, no special characters
@@ -11636,6 +11663,20 @@ labPiFull Kevin White
 grantPi White
 organism human
 
+### Gilbert lab
+###
+term FSU
+tag FSU
+type lab
+label Gilbert - FSU
+description Gilber - The Florida State University
+labInst The Florida State University
+labPi Gilbert
+labPiFull David Gilbert
+grantPi Gilbert
+organism human
+
+
 ### Mouse labs
 ###
 
@@ -11725,6 +11766,17 @@ labInst Yale
 labPi Weissman
 labPiFull Sherman Weissman
 grantPi Snyder
+organism mouse
+
+term FSU-m
+tag FSUm
+type lab
+label Gilbert - FSU
+description Gilber - The Florida State University
+labInst The Florida State University
+labPi Gilbert
+labPiFull David Gilbert
+grantPi Gilbert
 organism mouse
 
 ### AWG (DAC) Labs
@@ -11887,6 +11939,13 @@ description Giddings
 grantInst University of North Carolina
 projectName UNC-Giddings
 
+term Gilbert
+tag GILBERT
+type grant
+description Gilbert
+grantInst The Florida State University
+projectName FSU
+
 #################################################################################################################
 #############   Definition of all term types in cv.ra and most other terms that are in the metaDb   #############
 #################################################################################################################
@@ -11928,7 +11987,7 @@ projectName UNC-Giddings
 #	DCC descriptive:
 #  	  300s: origAssembly:305 dataVersion:310 dccAccession:312 dateSubmitted:315 dateResubmitted:320 dateUnrestricted:325 subId:335 geoSeriesAccession:340 geoSampleAccession:345 setType:350 controlId:355
 #	Lab descriptive:
-#  	  400s: labExpId:410 bioRep:415 labProtocolId:420 labVersion:430 mapAlgorithm:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
+#  	  400s: labExpId:410 bioRep:415 labProtocolId:420 labVersion:430 mapAlgorithm:430 platform:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
 #	Miscellaneous junk which will be put into the 500 pot which will sort near the end:
 #  	  500s: typeOfTerm:500 accession:500 expVars:500 obtainedBy:500 region:500 size:500 annotation:590 fragLength:590 fragSize:590 level:590 uniqueness:590
 #	At End:
@@ -12405,6 +12464,16 @@ validate cv or None
 priority 170
 # Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
 # We have talked about obsoleting this term, but thought there was more data like this coming (11/3/10)
+
+term platform
+tag PLATFORM
+type typeOfTerm
+label Platform
+description Platform used in experiment. PROVISIONAL
+searchable multiSelect
+cvDefined yes
+validate cv
+priority 430
 
 term privacy
 tag PRIVACY
