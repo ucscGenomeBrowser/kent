@@ -17486,7 +17486,7 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
-# ISCA AGGREGATE PATHOGENIC TRACKS (DONE 2012-02-xx b0b)
+# ISCA AGGREGATE PATHOGENIC TRACKS (DONE 2012-02-08 b0b)
 
   # get files of ISCA Pathogenic Gain and Loss  
     set today = `date +%Y_%m_%d`
