@@ -4024,6 +4024,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH001743
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -4132,6 +4134,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH001743
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -4186,6 +4190,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH001743
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -4240,6 +4246,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH001743
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -9287,4 +9295,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1842959713
+# MAGIC: 1094937805
