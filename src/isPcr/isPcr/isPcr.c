@@ -157,8 +157,10 @@ while (lineFileRow(lf, row))
                                 gpi.name, gpi.fPrimer, gpi.rPrimer);
     if (flipReverse)
         reverseComplement(gpi.rPrimer, strlen(gpi.rPrimer));
-    pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, 0, maxSize, '+', out, f);
-    pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, 0, maxSize, '-', out, f);
+    pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, minSize, maxSize, 
+    	'+', out, f);
+    pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, minSize, maxSize, 
+    	'-', out, f);
     }
 lineFileClose(&lf);
 carefulClose(&f);
