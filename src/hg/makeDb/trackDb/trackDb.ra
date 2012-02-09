@@ -497,11 +497,11 @@ prevExonText Prev Match
 
     track t2gPmc
     shortLabel Sequences (PMC)
-    longLabel Sequences from PubmedCentral Articles
+    longLabel Sequences from PubmedCentral Articles (Open-access)
     parent t2g
     type bed 12 .
-    articleTable t2gPmcArticle
-    sequenceTable t2gPmcSequence
+    t2gArticleTable hgFixed.t2gPmcArticle
+    t2gSequenceTable hgFixed.t2gPmcSequence
     priority 1
     color 0,0,100
     release alpha
@@ -511,8 +511,8 @@ prevExonText Prev Match
     longLabel Sequences from Elsevier Articles
     parent t2g
     priority 2
-    articleTable t2gElsevierArticle
-    sequenceTable t2gElsevierSequence
+    t2gArticleTable hgFixed.t2gElsevierArticle
+    t2gSequenceTable hgFixed.t2gElsevierSequence
     type bed 12 .
     release alpha
     color 0,100,0

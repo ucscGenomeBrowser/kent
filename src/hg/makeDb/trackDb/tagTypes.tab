@@ -17,7 +17,7 @@ aggregate bigWig wig bedGraph
 aliQualRange bam
 allButtonPair *
 altColor *
-articleTable bed
+t2gArticleTable bed
 autoScale *
 autoTranslate genePred
 bamColorMode bam
@@ -293,7 +293,7 @@ searchMethod bed
 searchType bed
 selectSubject psl
 seqTable bed
-sequenceTable bed
+t2gSequenceTable bed
 settingsByView *
 shortLabel *
 showCdsAllScales psl
