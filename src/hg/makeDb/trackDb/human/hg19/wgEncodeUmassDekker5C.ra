@@ -17,7 +17,7 @@ boxedCfg on
 canPack On
 priority 0
 type bed 12 +
-scoreFilter 300
+scoreFilter 0
 noInherit on
 wgEncode 1
 

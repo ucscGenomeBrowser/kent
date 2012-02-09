@@ -21,7 +21,7 @@ include wgEncodeReg.new.ra alpha
 
 
 # UW Repli-Seq track (wrangler: venkat)
-include wgEncodeUwRepliSeq.ra alpha
+include wgEncodeUwRepliSeq.ra alpha,beta
 
 #include wgEncodeRegNorm.ra alpha
 
@@ -84,7 +84,7 @@ include wgEncodeUwDnase.release3.ra beta,public
 include wgEncodeUwDnase.release4.ra alpha
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.new.ra alpha
+include wgEncodeUwDgf.release3.ra alpha
 include wgEncodeUwDgf.ra beta,public
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
@@ -169,9 +169,9 @@ include wgEncodeOpenChromChip.release2.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra beta,public
+include wgEncodeHaibTfbs.ra public
 #include wgEncodeHaibTfbs.patch.ra beta
-include wgEncodeHaibTfbs.release2.ra alpha
+include wgEncodeHaibTfbs.release2.ra alpha,beta
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
 include wgEncodeSydhTfbs.new.ra alpha
