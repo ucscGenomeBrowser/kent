@@ -12124,6 +12124,17 @@ labPiFull David Gilbert
 grantPi Gilbert
 organism mouse
 
+term CSHL-m
+tag CSHLm
+type lab
+label Gingeras - CSHL
+description Gingeras - Cold Spring Harbor Laboratory
+labInst Cold Spring Harbor Laboratory
+labPi Gingeras
+labPiFull Thomas Gingeras
+grantPi Gingeras
+organism mouse
+
 ### AWG (DAC) Labs
 
 term DAC-Stanford
