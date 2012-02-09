@@ -1,7 +1,7 @@
 metaObject wgEncodeUncBsuProt
 objType composite
 composite wgEncodeUncBsuProt
-expVars lab,dataType,cell,localization,protocol
+expVars lab,dataType,cell,localization
 
 metaObject wgEncodeUncBsuProtGm12878MembranefractionRaw
 objType file
