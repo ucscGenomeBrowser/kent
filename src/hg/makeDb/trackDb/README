@@ -245,9 +245,11 @@ The format of the type fields:
       maxHeightPixels   max:default:min      # default is 128:128:11
       graphType         bar|points           # default is bar
       viewLimits        lower:upper    # default is from the type line limits
+                                       # refers to data value
       viewLimitsMax     lower:upper    # UNENFORCED: suggested bounds of viewLimits
       yLineMark         real-value     # default is 0.0
       yLineOnOff        on|off         # default is off (draw y=yLineMark line)
+      alwaysZero        on|off         # default is off (show zero in graph)
       windowingFunction maximum|mean|minimum # default is mean
       smoothingWindow   off|[2-16]           # default is off
       transformFunc	NONE|LOG	     # default is NONE

@@ -1,4 +1,4 @@
-# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.4 $
+# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.8 $
 
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -30,7 +30,7 @@
 # Lab and general info
 dafVersion        2.0
 grant             Gingeras
-lab               CSHL
+lab               CSHL-m
 dataType          RnaSeq
 compositeSuffix   CshlLongRnaSeq
 group             expression
@@ -42,35 +42,47 @@ validationSettings validateFiles.bam:mismatches=7,nMatch,allowOther
 view             PlusRawSignal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
 view             MinusRawSignal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
 view             Alignments
 type             bam
 hasReplicates    yes
-required         yes
+required         no
 
 # Solexa paired sequence
 view             FastqRd1
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
 downloadOnly     yes
 
 view             FastqRd2
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
 downloadOnly     yes
 
 view             Spikeins
-longLabelPrefix  CSHL Long RNA-seq Spike-ins
 type             doc
 hasReplicates    yes
-required         yes
+required         no
 downloadOnly    yes
+
+view             TranscriptDeNovo
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     yes
+
+view             Contigs
+type             bedRnaElements
+sql				 bedRnaElements
+hasReplicates    no
+required         no
+downloadOnly     no
 

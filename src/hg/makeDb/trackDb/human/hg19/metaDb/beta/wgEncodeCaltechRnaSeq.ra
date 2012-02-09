@@ -112,7 +112,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
@@ -140,7 +140,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -168,7 +168,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
@@ -196,7 +196,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -446,7 +446,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -473,7 +473,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -553,7 +553,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-07
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -633,7 +633,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-07
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -660,7 +660,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -687,7 +687,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -714,7 +714,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -741,7 +741,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -768,7 +768,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -796,7 +796,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -940,7 +940,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -967,7 +967,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -994,7 +994,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -1021,7 +1021,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -1048,7 +1048,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -1075,7 +1075,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
@@ -1131,7 +1131,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1185,7 +1185,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-07
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -1239,7 +1239,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-07
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -1266,7 +1266,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1293,7 +1293,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1320,7 +1320,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
@@ -1406,7 +1406,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1433,7 +1433,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1460,7 +1460,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
@@ -1599,7 +1599,7 @@ objType table
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
@@ -1627,7 +1627,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -1654,7 +1654,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -1706,7 +1706,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
@@ -1757,7 +1757,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
@@ -1783,7 +1783,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -1810,7 +1810,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -1837,7 +1837,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -1864,7 +1864,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -1891,7 +1891,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
@@ -1919,7 +1919,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
@@ -1975,7 +1975,7 @@ objType table
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
@@ -2031,7 +2031,7 @@ objType table
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
@@ -2059,7 +2059,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -2086,7 +2086,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -2113,7 +2113,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -2140,7 +2140,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -2167,7 +2167,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
@@ -2194,7 +2194,7 @@ objType file
 cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
@@ -2305,7 +2305,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2332,7 +2332,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -2359,7 +2359,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2411,7 +2411,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
@@ -2437,7 +2437,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
@@ -2488,7 +2488,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
@@ -2514,7 +2514,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001424
@@ -2540,7 +2540,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2567,7 +2567,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -2594,7 +2594,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2621,7 +2621,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2648,7 +2648,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -2675,7 +2675,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2702,7 +2702,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
@@ -2730,7 +2730,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
@@ -2758,7 +2758,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
@@ -2954,7 +2954,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -2981,7 +2981,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -3008,7 +3008,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -3035,7 +3035,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -3062,7 +3062,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -3089,7 +3089,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -3116,7 +3116,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -3143,7 +3143,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
@@ -3170,7 +3170,7 @@ objType file
 cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
@@ -3302,7 +3302,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -3330,7 +3330,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -3358,7 +3358,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -3386,7 +3386,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -3694,7 +3694,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3721,7 +3721,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3748,7 +3748,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -3775,7 +3775,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4010,7 +4010,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4037,7 +4037,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4064,7 +4064,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4091,7 +4091,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4118,7 +4118,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4145,7 +4145,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4172,7 +4172,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4199,7 +4199,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4226,7 +4226,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -4254,7 +4254,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -4282,7 +4282,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -4310,7 +4310,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -4570,7 +4570,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4597,7 +4597,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4624,7 +4624,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4651,7 +4651,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4678,7 +4678,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4705,7 +4705,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4732,7 +4732,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4759,7 +4759,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4786,7 +4786,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4813,7 +4813,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4840,7 +4840,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4867,7 +4867,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
@@ -4894,7 +4894,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -4923,7 +4923,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -5002,7 +5002,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -5029,7 +5029,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -5056,7 +5056,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
@@ -5084,7 +5084,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -5113,7 +5113,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-01-22
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -5142,7 +5142,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -5169,7 +5169,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -5196,7 +5196,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
@@ -5391,7 +5391,7 @@ objType table
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
@@ -5419,7 +5419,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5446,7 +5446,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5498,7 +5498,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
@@ -5548,7 +5548,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
@@ -5573,7 +5573,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5600,7 +5600,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5627,7 +5627,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5654,7 +5654,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5681,7 +5681,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -5709,7 +5709,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -5737,7 +5737,7 @@ objType table
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-12-16
 dccAccession wgEncodeEH001425
@@ -5765,7 +5765,7 @@ objType table
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
@@ -5821,7 +5821,7 @@ objType table
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
@@ -5849,7 +5849,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5876,7 +5876,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5903,7 +5903,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5930,7 +5930,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5957,7 +5957,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -5984,7 +5984,7 @@ objType file
 cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
@@ -6117,7 +6117,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -6145,7 +6145,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -6173,7 +6173,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -6201,7 +6201,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -6451,7 +6451,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6478,7 +6478,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6609,7 +6609,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6636,7 +6636,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6663,7 +6663,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6690,7 +6690,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6717,7 +6717,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -6745,7 +6745,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -6889,7 +6889,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6916,7 +6916,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6943,7 +6943,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6970,7 +6970,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -6997,7 +6997,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -7024,7 +7024,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
@@ -7213,7 +7213,7 @@ objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -7240,7 +7240,7 @@ objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -7267,7 +7267,7 @@ objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -7295,7 +7295,7 @@ objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -7545,7 +7545,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7572,7 +7572,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7703,7 +7703,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7730,7 +7730,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7757,7 +7757,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7784,7 +7784,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -7811,7 +7811,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -7839,7 +7839,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -7983,7 +7983,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -8010,7 +8010,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -8037,7 +8037,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -8064,7 +8064,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -8091,7 +8091,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -8118,7 +8118,7 @@ objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
@@ -8257,7 +8257,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8284,7 +8284,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8411,7 +8411,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8438,7 +8438,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8465,7 +8465,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8492,7 +8492,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8519,7 +8519,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -8547,7 +8547,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -8687,7 +8687,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8714,7 +8714,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8741,7 +8741,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8768,7 +8768,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8795,7 +8795,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -8822,7 +8822,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
@@ -9009,7 +9009,7 @@ objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -9037,7 +9037,7 @@ objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -9065,7 +9065,7 @@ objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -9093,7 +9093,7 @@ objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -9343,7 +9343,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9370,7 +9370,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9501,7 +9501,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9528,7 +9528,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9555,7 +9555,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9582,7 +9582,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9609,7 +9609,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -9637,7 +9637,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -9781,7 +9781,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9808,7 +9808,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9835,7 +9835,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9862,7 +9862,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9889,7 +9889,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -9916,7 +9916,7 @@ objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
@@ -10104,7 +10104,7 @@ objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -10132,7 +10132,7 @@ objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -10160,7 +10160,7 @@ objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -10188,7 +10188,7 @@ objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-14
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
@@ -10438,7 +10438,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10465,7 +10465,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10519,7 +10519,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-07
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -10572,7 +10572,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-07
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -10626,7 +10626,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-07
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -10679,7 +10679,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-07
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
@@ -10706,7 +10706,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10733,7 +10733,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10760,7 +10760,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10787,7 +10787,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -10814,7 +10814,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -10842,7 +10842,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -10986,7 +10986,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -11013,7 +11013,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -11040,7 +11040,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -11067,7 +11067,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -11094,7 +11094,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -11121,7 +11121,7 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
@@ -11204,7 +11204,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11233,7 +11233,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11261,7 +11261,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11287,7 +11287,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11313,7 +11313,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11341,7 +11341,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11369,7 +11369,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
@@ -11398,7 +11398,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
@@ -11427,7 +11427,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11456,7 +11456,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
@@ -11483,7 +11483,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
@@ -11510,7 +11510,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11539,7 +11539,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11568,7 +11568,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
@@ -11598,7 +11598,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11627,7 +11627,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
@@ -11656,7 +11656,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11685,7 +11685,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11714,7 +11714,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
@@ -11743,7 +11743,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001669
@@ -11771,7 +11771,7 @@ objType table
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11800,7 +11800,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11828,7 +11828,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11856,7 +11856,7 @@ objType file
 cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
@@ -11884,7 +11884,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
@@ -11940,7 +11940,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001421
@@ -11968,7 +11968,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -11995,7 +11995,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12022,7 +12022,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12100,7 +12100,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
@@ -12176,7 +12176,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
@@ -12201,7 +12201,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12228,7 +12228,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12255,7 +12255,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12282,7 +12282,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12309,7 +12309,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12336,7 +12336,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12363,7 +12363,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -12391,7 +12391,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -12419,7 +12419,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
@@ -12447,7 +12447,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
@@ -12503,7 +12503,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
@@ -12531,7 +12531,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
@@ -12587,7 +12587,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
@@ -12615,7 +12615,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12642,7 +12642,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12669,7 +12669,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12696,7 +12696,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12723,7 +12723,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12750,7 +12750,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12777,7 +12777,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12804,7 +12804,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12831,7 +12831,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
@@ -12967,7 +12967,7 @@ objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-15
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -12995,7 +12995,7 @@ objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-15
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -13162,7 +13162,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13189,7 +13189,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13318,7 +13318,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13345,7 +13345,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13372,7 +13372,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13399,7 +13399,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13426,7 +13426,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -13454,7 +13454,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -13596,7 +13596,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13623,7 +13623,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13650,7 +13650,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13677,7 +13677,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13704,7 +13704,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13731,7 +13731,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
@@ -13869,7 +13869,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -13896,7 +13896,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14023,7 +14023,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14050,7 +14050,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14077,7 +14077,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14104,7 +14104,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14131,7 +14131,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -14159,7 +14159,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
@@ -14299,7 +14299,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14326,7 +14326,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14353,7 +14353,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14380,7 +14380,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14407,7 +14407,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14434,7 +14434,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
@@ -14510,4 +14510,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: -1033077789
+# MAGIC: 1387740363

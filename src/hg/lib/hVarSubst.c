@@ -167,6 +167,7 @@ static boolean isDatabaseVar(char *varBase)
 {
 return (strcasecmp(varBase, "organism") == 0)
     || (strcasecmp(varBase, "date") == 0)
+    || (strcasecmp(varBase, "linkToGatewayPage") == 0)
     || (strcasecmp(varBase, "db") == 0);
 }
 

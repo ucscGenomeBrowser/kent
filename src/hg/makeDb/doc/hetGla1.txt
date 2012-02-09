@@ -522,6 +522,89 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
             hgcentraltest
     #   test it with some sequence
 
+
+#########################################################################
+# GENSCAN GENE PREDICTIONS (DONE 2012-02-02 - Chin)
+    mkdir /hive/data/genomes/hetGla1/bed/genscan
+    cd /hive/data/genomes/hetGla1/bed/genscan
+
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/genscanlinux
+
+    # create hard masked .fa files
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../hetGla1.2bit:$C stdout \
+        | maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    # Generate a list file, genome.list, of all the hard-masked contig
+    # chunks:
+    find ./hardMaskedFa/ -type f | sed -e 's#^./##' > genome.list
+
+    wc -l genome.list
+    #   39267 genome.list
+
+    # Run on small cluster (more mem than big cluster).
+    ssh swarm
+    cd /hive/data/genomes/hetGla1/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Create template file, template, for gensub2.  For example (3-line
+    # file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in exists+ $(path1)} {check out exists gtf/$(root1).gtf} -trans={check out exists pep/$(root1).pep} -subopt={check out exists subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 genome.list single template jobList
+    para create jobList
+    para try
+    para check ... etc...
+    para time
+    # Completed: 39267 of 39267 jobs
+    # CPU time in finished jobs:  38098s     634.96m    10.58h    0.44d  0.001 y
+    # IO & Wait Time:            102541s    1709.02m    28.48h    1.19d  0.003 y
+    # Average job time:               4s       0.06m     0.00h    0.00d
+    # Longest finished job:         225s       3.75m     0.06h    0.00d
+    # Submission to last job:       600s      10.00m     0.17h    0.01d
+
+    # Make sure all files ended with linefeed 
+    # this did not work, runs out of file handles ?
+    # run endsInLf in batch of 256 files
+    find ./gtf -type f | xargs -n 256 endsInLf -zeroOk
+
+    # Concatenate results:
+    cd /hive/data/genomes/hetGla1/bed/genscan
+    find ./gtf -type f | xargs cat > genscan.gtf
+    find ./pep -type f | xargs cat > genscan.pep
+    find ./subopt -type f | xargs cat > genscanSubopt.bed
+
+    # Load into the database (without -genePredExt because no frame
+    # info):
+    ssh hgwdev
+    cd /hive/data/genomes/hetGla1/bed/genscan
+    # to construct a local file with the genePred business:
+    gtfToGenePred genscan.gtf genscan.gp
+    # this produces exactly the same thing and loads the table:
+    ldHgGene -gtf hetGla1 genscan genscan.gtf
+    # Read 41311 transcripts in 271899 lines in 1 files
+    # 41311 groups 5593 seqs 1 sources 1 feature types
+    # 41311 gene predictions
+    # ???? Don't load the Pep anymore -- redundant since it's from genomic.
+    hgPepPred hetGla1 generic genscanPep genscan.pep
+    # Processing genscan.pep
+    hgLoadBed hetGla1 genscanSubopt genscanSubopt.bed
+    # Reading genscanSubopt.bed
+    # Read 504519 elements of size 6 from genscanSubopt.bed
+    featureBits hetGla1 genscan
+    #   62125158 bases of 1358334882 (4.574%) in intersection
+    # previously:
+
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - ( working 2012-01-04 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema

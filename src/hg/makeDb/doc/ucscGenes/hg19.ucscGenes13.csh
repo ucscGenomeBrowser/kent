@@ -1355,9 +1355,10 @@ sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
 # Create backup database
 hgsqladmin create ${db}Backup
 
-# Drop tempDb chromInfo and history tables, we don't want to swap them in!
+# Drop tempDb history table and chromInfo, we don't want to swap them in!
 hgsql -e "drop table history" $tempDb
 hgsql -e "drop table chromInfo" $tempDb
+hgsql -e "drop table tableList" $tempDb
 
 # Swap in new tables, moving old tables to backup database.
 sudo ~kent/bin/swapInMysqlTempDb $tempDb $db ${db}Backup

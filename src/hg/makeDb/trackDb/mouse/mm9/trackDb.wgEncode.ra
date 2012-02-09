@@ -14,10 +14,10 @@ include wgEncodeUwDnase.ra beta,public
 include wgEncodeUwDnase.new.ra alpha 
 
 # PSU TFBS (wrangler: Venkat)
-include wgEncodePsuTfbs.ra alpha
+include wgEncodePsuTfbs.ra alpha,beta
 
 # PSU Histone (wrangler: Venkat)
-include wgEncodePsuHistone.ra alpha
+include wgEncodePsuHistone.ra alpha,beta
 
 # LICR Histone (wrangler: Venkat)
 include wgEncodeLicrHistone.ra beta,public
@@ -49,3 +49,6 @@ include wgEncodeUwDgf.ra alpha
 
 # CSHL Long RNA-Seq (wrangler: Venkat)
 include wgEncodeCshlLongRnaSeq.ra alpha
+
+# Caltech RNA-Seq (wrangler: Venkat)
+include wgEncodeCaltechRnaSeq.ra alpha

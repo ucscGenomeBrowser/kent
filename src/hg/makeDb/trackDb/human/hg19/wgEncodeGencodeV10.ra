@@ -2,7 +2,6 @@
 # WARNING: must update hgTracks/simpleTracks.c to add calls
 # to registerTrackHandlerOnFamily for new gencode versions
 ##
-
 track wgEncodeGencodeV10
 compositeTrack on
 shortLabel GENCODE Genes V10
@@ -16,8 +15,10 @@ ensemblGeneIdUrl http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s
 vegaTranscriptIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Transcript/Summary?db=core;t=%s
 vegaGeneIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Gene/Summary?db=core;g=%s
 yalePseudoUrl http://tables.pseudogene.org/%s
-subGroup1 view View 1Genes=Genes 42-way=2-way_Pseudogenes  5Polya=PolyA
-sortOrder view=+
+subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
+subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
+allButtonPair on
+sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred 
 configurable off
@@ -36,24 +37,27 @@ wgEncodeGencodeUniProt wgEncodeGencodeUniProtV10
 wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV10
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV10
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV10
-cdsDrawDefault genomic\ codons
-geneClasses coding nonCoding pseudo problem
-gClass_coding 12,12,120
-gClass_nonCoding 0,100,0
-gClass_pseudo 255,51,255
-gClass_problem 254,0,0
+    cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    geneClasses coding nonCoding pseudo problem
+    gClass_coding 12,12,120
+    gClass_nonCoding 0,100,0
+    gClass_pseudo 255,51,255
+    gClass_problem 254,0,0
+#These last terms should move the Genes view after CGI is fixed
+
+
 
     track wgEncodeGencodeV10ViewGenes
     shortLabel Genes
-    view 1Genes
+    view aGenes
     configurable on
     visibility full
     subTrack wgEncodeGencodeV10
     type genePred
     hgGene on
     hgsid on
-    baseColorUseCds given
-    baseColorDefault genomicCodons
     itemClassTbl wgEncodeGencodeAttrsV10
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass
@@ -68,14 +72,14 @@ gClass_problem 254,0,0
         track wgEncodeGencodeBasicV10
         subTrack wgEncodeGencodeV10ViewGenes on
         shortLabel Basic
-        subGroups view=1Genes
+        subGroups view=aGenes name=Basic
         longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version 10
         type genePred
         priority 1
     
         track wgEncodeGencodeCompV10
         subTrack wgEncodeGencodeV10ViewGenes off
-        subGroups view=1Genes
+        subGroups view=aGenes name=Comprehensive
         shortLabel Comprehensive
         longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version 10 
         type genePred
@@ -83,7 +87,7 @@ gClass_problem 254,0,0
     
         track wgEncodeGencodePseudoGeneV10
         subTrack wgEncodeGencodeV10ViewGenes off
-        subGroups view=1Genes 
+        subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version 10
         type genePred
@@ -100,7 +104,7 @@ gClass_problem 254,0,0
 
         track wgEncodeGencode2wayConsPseudoV10
         subTrack wgEncodeGencodeV10View2Way off
-        subGroups view=42-way
+        subGroups view=b2-way name=yTwo-way
         shortLabel 2-way Pseudogenes
         longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version 10
         type genePred
@@ -109,7 +113,7 @@ gClass_problem 254,0,0
     
     track wgEncodeGencodeV10ViewPolya
     shortLabel PolyA
-    view 5Polya
+    view cPolya
     visibility hide
     subTrack wgEncodeGencodeV10
     type genePred
@@ -117,7 +121,7 @@ gClass_problem 254,0,0
 
         track wgEncodeGencodePolyaV10
         subTrack wgEncodeGencodeV10ViewPolya off
-        subGroups view=5Polya
+        subGroups view=cPolya name=zPolyA
         shortLabel PolyA
         longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version 10
         type genePred

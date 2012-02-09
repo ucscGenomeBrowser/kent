@@ -140,7 +140,7 @@ void ensGeneTrackVersion(char *database, char *ensVersionString,
 /* check for trackVersion table and find Ensembl version */
 {
 /* see if hgFixed.trackVersion exists */
-boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+boolean trackVersionExists = (sqlDatabaseExists("hgFixed") && hTableExists("hgFixed", "trackVersion"));
 ensVersionString[0] = 0;
 ensDateReference[0] = 0;
 if (trackVersionExists)

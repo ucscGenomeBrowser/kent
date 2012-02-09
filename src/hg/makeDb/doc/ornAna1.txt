@@ -1783,7 +1783,6 @@ endif
     para create jobList
     para try
     para check ... etc
-XXXX 2011-11-28
     para time
     para problems
     para status
@@ -1819,5 +1818,15 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
     #   cleanup
     rm -fr hardMaskedFa
+
+#########################################################################
+# SWAP BOSTAU7 CHAIN/NET (DONE 2012-01-18 - Chin)
+    cd /cluster/data/ornAna1/bed/blastz.bosTau7.swap
+    cat fb.ornAna1.chainBosTau7Link.txt
+    # 190094136 bases of 1842236818 (10.319%) in intersection
+
+    cd /cluster/data/ornAna1/bed
+    ln -s blastz.bosTau7.swap lastz.bosTau7
+
 
 ############################################################################

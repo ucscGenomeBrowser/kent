@@ -2,14 +2,13 @@ metaObject wgEncodeUncBsuProt
 objType composite
 composite wgEncodeUncBsuProt
 expVars lab,dataType,cell,localization
-protocol SDS-Page
 
 metaObject wgEncodeUncBsuProtGm12878MembranefractionRaw
 objType file
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
 dccAccession wgEncodeEH002073
@@ -21,6 +20,7 @@ labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTo
 localization membraneFraction
 md5sum 39d3b579d474f4c7ea4c5beaee740f3e
 project wgEncode
+protocol SDS-Page
 subId 4775
 view RawSignal
 
@@ -29,7 +29,7 @@ objType table
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEH002073
@@ -41,6 +41,7 @@ labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTo
 localization membraneFraction
 md5sum b28328193a2c17a9ee964e9690b7440a
 project wgEncode
+protocol SDS-Page
 subId 4773
 tableName wgEncodeUncBsuProtGm12878MembranefractionSig
 view Signal
@@ -50,7 +51,7 @@ objType file
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
 dccAccession wgEncodeEH002074
@@ -62,6 +63,7 @@ labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTo
 localization mitochondria
 md5sum 7a84440f858ec21ed71ee1054ef5ffbc
 project wgEncode
+protocol SDS-Page
 subId 4774
 view RawSignal
 
@@ -70,7 +72,7 @@ objType table
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEH002074
@@ -82,6 +84,7 @@ labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTo
 localization mitochondria
 md5sum 18bf0967bfa56f3fd5472b5639f6c7a8
 project wgEncode
+protocol SDS-Page
 subId 4771
 tableName wgEncodeUncBsuProtGm12878MitoSig
 view Signal
@@ -91,7 +94,7 @@ objType file
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-06
 dateUnrestricted 2012-03-06
 dccAccession wgEncodeEH001199
@@ -112,7 +115,7 @@ objType table
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2012-10-05
 dccAccession wgEncodeEH001199
@@ -135,7 +138,7 @@ objType file
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-06
 dateUnrestricted 2012-03-06
 dccAccession wgEncodeEH001737
@@ -156,7 +159,7 @@ objType table
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH001737
@@ -173,12 +176,51 @@ subId 4171
 tableName wgEncodeUncBsuProtK562CytosolSig
 view Signal
 
+metaObject wgEncodeUncBsuProtK562MembranefractionFaspRaw
+objType file
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-09-28
+dateUnrestricted 2012-06-28
+dateResubmitted 2012-02-08
+fileName wgEncodeUncBsuProtK562MembranefractionFaspRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+project wgEncode
+protocol FASP
+subId 4183
+view RawSignal
+
+metaObject wgEncodeUncBsuProtK562MembranefractionFaspSig
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-06-03
+dateUnrestricted 2012-03-03
+dateResubmitted 2012-02-08
+fileName wgEncodeUncBsuProtK562MembranefractionFaspSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+project wgEncode
+protocol FASP
+subId 4175
+tableName wgEncodeUncBsuProtK562MembranefractionFaspSig
+view Signal
+
 metaObject wgEncodeUncBsuProtK562MembranefractionRaw
 objType file
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-06
 dateUnrestricted 2012-03-06
 dccAccession wgEncodeEH001200
@@ -199,7 +241,7 @@ objType table
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2012-10-05
 dccAccession wgEncodeEH001200
@@ -222,7 +264,7 @@ objType file
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-06
 dateUnrestricted 2012-03-06
 dccAccession wgEncodeEH001738
@@ -243,7 +285,7 @@ objType table
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH001738
@@ -265,7 +307,7 @@ objType file
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-06
 dateUnrestricted 2012-03-06
 dccAccession wgEncodeEH001739
@@ -286,7 +328,7 @@ objType table
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH001739
@@ -303,4 +345,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: -805847425
+# MAGIC: -907339946

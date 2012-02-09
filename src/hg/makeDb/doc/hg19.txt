@@ -8411,30 +8411,42 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 12/7/11 angie)
-# NEXT TIME: use snp135 and squelch multiple-mappers
-# Updated 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
+# NHGRI GWAS CATALOG (DONE 2/6/12 angie)
+# Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
 # Updated 4/1/10, 3/1/10
 # Originally done 1/19/10
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
     # Done once, don't need to redo:
-    zcat ../snp132/snp132.bed.gz | cut -f 1-4  \
+    zcat ../snp135/snp135.bed.gz | cut -f 1-4  \
     | sort -k4,4 \
-      > snp132Coords.bed
+      > snp135Coords.bed
     set today = `date +%y%m%d`
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog/$today
     cd /hive/data/genomes/hg19/bed/gwasCatalog/$today
 
     # Mapping to hg19 by joining hg19 SNP coords with catalog flatfile (see hg18.txt)
-    join -t "	" -1 4 ../snp132Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/$today/noCoords.tab \
+    join -t "	" -1 4 ../snp135Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/$today/noCoords.tab \
         -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
     | sort -k1,1 -k2n,2n \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 7934 elements of size 22
+#Loaded 8561 elements of size 22
+    # For David: find examples of risk alleles for which dbSNP observed
+    # alleles are complementary (A/T or C/G) -- how do we know what strand the
+    # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
+    # always available in the original publication, so sadly there is not always
+    # a way to resolve these. GWAS catalog folks aren't going to modify their
+    # database to add a column for these cases.
+    hgsql hg19 -NBe 'select snp.name,gc.riskAllele,snp.strand,snp.refNcbi,snp.observed \
+                     from gwasCatalog as gc, snp130 as snp \
+                     where gc.riskAllele rlike "^rs[0-9]+-[ACGT]" and \
+                           gc.name = snp.name and snp.observed in ("C/G", "A/T") \
+                     order by gc.name;' > ambigStrand.txt
+    wc -l ambigStrand.txt
+#752 ambigStrand.txt
 
 
 ######################################################################## 
@@ -17474,6 +17486,70 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
+# ISCA AGGREGATE PATHOGENIC TRACKS (DONE 2012-02-08 b0b)
+
+  # get files of ISCA Pathogenic Gain and Loss  
+    set today = `date +%Y_%m_%d`
+    mkdir /hive/data/genomes/hg19/bed/isca/$today
+    cd /hive/data/genomes/hg19/bed/isca/$today
+    hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
+      WHERE attrVals LIKE '%number_loss%'" hg19 > hg19.iscaPathLoss
+    hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
+      WHERE attrVals LIKE '%number_gain%'" hg19 > hg19.iscaPathGain
+
+  # make bedGraphs
+    sort hg19.iscaPathGain | bedItemOverlapCount hg19 stdin > hg19.iscaPathGain.bedGraph
+    wc -l hg19.iscaPathGain.bedGraph
+#   1857 hg19.iscaPathGain.bedGraph
+
+    sort hg19.iscaPathLoss | bedItemOverlapCount hg19 stdin > hg19.iscaPathLoss.bedGraph
+    wc -l hg19.iscaPathLoss.bedGraph
+#   3237 hg19.iscaPathLoss.bedGraph
+
+  # load tables
+    hgLoadBed -bedGraph=4 hg19 iscaPathGainCum hg19.iscaPathGain.bedGraph
+#   Read 1857 elements of size 4 from hg19.iscaPathGain.bedGraph
+
+    hgLoadBed -bedGraph=4 hg19 iscaPathLossCum hg19.iscaPathLoss.bedGraph
+#   Read 3237 elements of size 4 from hg19.iscaPathLoss.bedGraph
+ 
+  # trackDb
+  # get 2 stdDev value to set default maxHeightPixels 
+    # use average of: median + 2 SD - would mean be better?
+    # use same viewLimit for both:  average the two
+    # note that chr21 (Down's) is overrepresented in the dataset
+    ave  hg19.iscaPathGain.bedGraph -col=4
+#    median 9.000000
+#    average 20.970921
+#    max 105.000000
+#    standard deviation 25.652712
+    median + 2SD = 60 
+
+    ave  hg19.iscaPathLoss.bedGraph -col=4
+#    median 6.000000
+#    average 15.998146
+#    max 171.000000
+#    standard deviation 23.526095
+    median + 2SD = 53 
+ 
+  # move some settings down to existing subtracks:  
+       type gvf 
+       noScoreFilter . 
+  # add settings to parent track:
+      type bed
+      noInherit on
+  # set these two new tracks:
+      release alpha
+      type bedGraph 4
+      maxHeightPixels 100:57:16
+      viewLimits 0:60 (halfway betw 2 SD and max)
+      alwaysZero on
+      color 0,0,200 (Gain)
+      color 200,0,0 (Loss)
+  #  new html page using override in trackDb/human/hg19/trackDb.ra
+
+
+############################################################################
 # LINCRNAS FROM BROAD (DONE 2011-10-10 Chin)
 # Human lincRNA Catalog
 
@@ -18198,3 +18274,65 @@ COSM143824
 COSM143823
 COSM143802
 COSM143801
+
+############################################################################
+# POLYA-SEQ TRACK (from Adnan Derti, Merck) (LOADED, Andy 2012-01-30)
+
+# Fan unpacked the .zip a while back
+cd /hive/data/genomes/hg19/bed/polyA
+# make links with more UCSCish naming
+mkdir /hive/data/genomes/{hg18,hg19,canFam2,mm9,rn4,rheMac2}/bed/polyASeq
+mkdir -p /gbdb/{hg18,hg19,canFam2,mm9,rn4,rheMac2}/bbi
+for set in `ls -1 | grep -v orig | grep -v table`; do
+  suff=`echo $set | sed 's/^[a-z]\+_//'`; 
+  db=`echo $suff | sed 's/\_.*//'`;
+  tiss=`echo $suff | sed 's/.\+\_//; s/^[a-z]/\U&/; s/-[a-z]/\U&/; s/-//'`;
+  Db=`echo $db | sed 's/^[a-z]/\U&/'`; 
+  printf "%s\t%s\t%s\t%s\t%s\n" $set $db $Db $tiss $suff
+done > table.info
+for set in `ls -1 | grep -v orig | grep -v table`; do
+  suff=`echo $set | sed 's/^[a-z]\+_//'`; 
+  db=`echo $suff | sed 's/\_.*//'`;
+  tiss=`echo $suff | sed 's/.\+\_//; s/^[a-z]/\U&/; s/-[a-z]/\U&/; s/-//'`;
+  Db=`echo $db | sed 's/^[a-z]/\U&/'`; 
+  fwdTable=polyASeqSites${tiss}Fwd
+  revTable=polyASeqSites${tiss}Rev
+  fwdBg=/hive/data/genomes/${db}/bed/polyASeq/${fwdTable}.bedGraph
+  revBg=/hive/data/genomes/${db}/bed/polyASeq/${revTable}.bedGraph
+  fwdBw=${fwdBg%.bedGraph}.bw
+  revBw=${revBg%.bedGraph}.bw
+  tail -n +2 ${set}/polyaseq_sites_fwd_strand.bedgraph | sort -k1,1 -k2,2n > $fwdBg;
+  tail -n +2 ${set}/polyaseq_sites_rev_strand.bedgraph | sort -k1,1 -k2,2n > $revBg;
+  bedGraphToBigWig $fwdBg /hive/data/genomes/${db}/chrom.sizes $fwdBw
+  bedGraphToBigWig $revBg /hive/data/genomes/${db}/chrom.sizes $revBw
+  ln -s $fwdBw /gbdb/${db}/bbi/
+  ln -s $revBw /gbdb/${db}/bbi/
+  hgBbiDbLink $db $fwdTable /gbdb/${db}/bbi/${fwdTable}.bw
+  hgBbiDbLink $db $revTable /gbdb/${db}/bbi/${revTable}.bw
+done
+# silly loop to take care of the majority of the trackDb.
+# the rest copy/paste
+cat table.info | while read -a line; do 
+  db=${line[1]}
+  for Strand in Fwd Rev; do 
+     strand=`echo $Strand | tr [:upper:] [:lower:]`
+     bg=${line[0]}/polyaseq_sites_${strand}_strand.bedgraph
+     tiss=${line[3]}
+     table=polyASeqSites${tiss}${Strand}
+     bw=/gbdb/${db}/bbi/${table}.bw
+     min=`bigWigInfo $bw | grep "^min" | sed 's/min: //'`
+     max=`bigWigInfo $bw | grep "^max" | sed 's/max: //'`
+     echo "        track "$table
+     echo "        parent polyASeqSitesSignalView"
+     echo "        subGroups view=Signal tissType="$tiss" strand="$strand
+     echo "        shortLabel PolyA-Seq "$tiss
+     echo "        longLabel Poly(A)-tail sequencing of "$tiss" from Merck ("$Strand" strand)"
+     if [ $strand = "fwd" ]; then
+     echo "        color 153,51,51"
+     else
+     echo "        color 0,0,0"
+     fi 
+     echo "        type bigWig "$min" "$max
+     echo
+  done >> ${db}.ra 
+done 

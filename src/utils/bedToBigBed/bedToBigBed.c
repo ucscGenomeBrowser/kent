@@ -32,6 +32,8 @@ errAbort(
   "Where in.bed is in one of the ascii bed formats, but not including track lines\n"
   "and chrom.sizes is two column: <chromosome name> <size in bases>\n"
   "and out.bb is the output indexed big bed file.\n"
+  "Use the script: fetchChromSizes to obtain the actual chrom.sizes information\n"
+  "from UCSC, please do not make up a chrom sizes from your own information.\n"
   "The in.bed file must be sorted by chromosome,start,\n"
   "  to sort a bed file, use the unix sort command:\n"
   "     sort -k1,1 -k2,2n unsorted.bed > sorted.bed\n"

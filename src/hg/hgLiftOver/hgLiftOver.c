@@ -188,7 +188,7 @@ cgiTableRowEnd();
 cgiTableEnd();
 
 /* text box and two buttons (submit, reset) */
-cgiParagraph("&nbsp;Paste in data:\n");
+cgiParagraph("&nbsp;Paste in data (<a href=\"../FAQ/FAQformat.html#format1\" target=\"_blank\">BED</a> or chrN:start-end formats):\n");
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 
@@ -220,7 +220,7 @@ cgiTableRowEnd();
 cgiTableEnd();
 
 /* next  row -- file upload controls */
-cgiParagraph("&nbsp;Or upload data from a file:");
+cgiParagraph("&nbsp;Or upload data from a file (<a href=\"../FAQ/FAQformat.html#format1\" target=\"_blank\">BED</a> or chrN:start-end in plain text format):");
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
@@ -302,22 +302,6 @@ cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiTableEnd();
-}
-
-void webDataFormats()
-{
-webNewSection("Data Formats");
-puts("<ul>");
-puts("<LI>");
-puts(
-    "<A HREF=\"../FAQ/FAQformat.html#format1\" TARGET=_blank>"
-    "Browser Extensible Data (BED)</A>\n");
-puts("</LI>");
-puts("<LI>");
-puts("Genomic Coordinate Position<BR>");
-puts("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; chrN<B>:</B>start<B>-</B>end");
-puts("</LI>");
-puts("</ul>");
 }
 
 void webDownloads()
@@ -563,7 +547,6 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
 
     carefulClose(&unmapped);
     }
-webDataFormats();
 webDownloads();
 cartWebEnd();
 }
