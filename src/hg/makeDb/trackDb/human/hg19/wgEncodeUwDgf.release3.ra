@@ -37,7 +37,7 @@ sortOrder cellType=+ view=+
 fileSortOrder cell=Cell_Line view=View origAssembly=Original_Assembly dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
-html wgEncodeUwDgf.new
+html wgEncodeUwDgf.release3
 dragAndDrop subTracks
 priority 5
 type bed 3
