@@ -614,7 +614,7 @@ done
     rsync -a -P ./nib/ /hive/data/staging/data/mm10/nib/
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2011-09-09 - Hiram)
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-02-08 - Hiram)
     # Use -repMatch=650, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
@@ -667,8 +667,8 @@ done
 mm10.serverGenome = /hive/data/genomes/mm10/mm10.2bit
 mm10.clusterGenome = /scratch/data/mm10/mm10.2bit
 mm10.ooc = /scratch/data/mm10/mm10.11.ooc
-mm10.align.unplacedChroms = *_random chrUn_*
-mm10.lift = /scratch/data/mm10/mm10.nonBridgedGap.lift
+mm10.align.unplacedChroms = chr*
+mm10.lift = /scratch/data/mm10/mm10.nonBridged.lift
 mm10.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
 mm10.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
 mm10.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
@@ -692,24 +692,216 @@ mm10.genbank.mrna.blatTargetDb = yes
     ssh hgwdev			# used to do this on "genbank" machine
     screen			# long running job managed in screen
     cd /cluster/data/genbank
-    time nice -n +19 ./bin/gbAlignStep -initial xenTro3 &
-    #	var/build/logs/2011.09.12-09:03:09.xenTro3.initalign.log
-    #	real    360m20.657s
+    time nice -n +19 ./bin/gbAlignStep -initial mm10 &
+    #	var/build/logs/2012.02.08-11:38:50.mm10.initalign.log
+    #	real    795m52.388s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad xenTro3 &
-    #	logFile: var/dbload/hgwdev/logs/2011.09.12-20:47:05.dbload.log
-    #	real    118m27.671s
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad mm10 &
+    #	logFile: var/dbload/hgwdev/logs/2012.02.09-10:05:25.dbload.log
+    #	real    114m56.461s
 
-    # enable daily alignment and update of hgwdev (DONE - 2011-09-13 - Hiram)
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
-    # add xenTro3 to:
+    # add mm10 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    git commit -m "Added xenTro3." etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added mm10." etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
+############################################################################
+# running cpgIsland business (DONE - 2012-02-09 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/cpgIsland
+    cd /hive/data/genomes/mm10/bed/cpgIsland
+    # use a previous binary for this program
+    ln -s ../../../mm9/bed/cpgIsland/hg3rdParty/cpgIslands/cpglh.exe .
+
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../mm10.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/mm10/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check out exists results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	the faCount business is to make sure there is enough sequence to
+    #	work with in the fasta.  cpglh.exe does not like files with too many
+    #	N's - it gets stuck.
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | egrep -v "^#seq|^total" | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+# Completed: 66 of 66 jobs
+# CPU time in finished jobs:        191s       3.19m     0.05h    0.00d  0.000 y
+# IO & Wait Time:                   189s       3.14m     0.05h    0.00d  0.000 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest finished job:              19s       0.32m     0.01h    0.00d
+# Submission to last job:            51s       0.85m     0.01h    0.00d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    # verify longest unique chrom name:
+    cut -f1 cpgIsland.bed | awk '{print length($0)}' | sort -rn | head -1
+    #	20
+    # update the length 14 in the template to be 16:
+    sed -e "s/14/20/" $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
+
+    cd /hive/data/genomes/mm10/bed/cpgIsland
+    hgLoadBed mm10 cpgIslandExt -tab -sqlTable=cpgIslandExt.sql cpgIsland.bed
+# Loaded 16023 elements of size 10
+
+    featureBits mm10 cpgIslandExt
+    #	10495450 bases of 2652783500 (0.396%) in intersection
+    # compare to previous:
+    featureBits mm9 cpgIslandExt
+    #	10496250 bases of 2620346127 (0.401%) in intersection
+
+    # there should be no output from checkTableCoords:
+    checkTableCoords -verboseBlocks -table=cpgIslandExt mm10
+
+    #	cleanup, unless you want to move them to the genscan procedure below
+    rm -fr hardMaskedFa
+
+#########################################################################
+# GENSCAN GENE PREDICTIONS (DONE - 2012-02-09 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/genscan
+    cd /hive/data/genomes/mm10/bed/genscan
+    # use a previously existing genscan binary
+    ln -s ../../../mm9/bed/genscan/hg3rdParty .
+
+    # create hard masked .fa files
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../mm10.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    # Generate a list file, genome.list, of all the hard-masked contig chunks:
+    find ./hardMaskedFa/ -type f | sed -e 's#^./##' > genome.list
+
+    wc -l genome.list
+    #	66 genome.list
+
+    # Run on small cluster (more mem than big cluster).
+    ssh encodek
+    cd /hive/data/genomes/mm10/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Create template file, template, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in exists+ $(path1)} {check out exists gtf/$(root1).gtf} -trans={check out exists pep/$(root1).pep} -subopt={check out exists subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 genome.list single template jobList
+    para create jobList
+XXX - running - Thu Feb  9 11:39:01 PST 2012
+    para try
+    para check ... etc...
+    para time
+# Completed: 19550 of 19550 jobs
+# CPU time in finished jobs:      25171s     419.52m     6.99h    0.29d  0.001 y
+# IO & Wait Time:                 51770s     862.83m    14.38h    0.60d  0.002 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:             176s       2.93m     0.05h    0.00d
+# Submission to last job:           336s       5.60m     0.09h    0.00d
+
+    # this did not work, runs out of file handles ?
+    find ./gtf -type f | xargs -n 256 endsInLf -zeroOk
+
+    # Concatenate results:
+    cd /hive/data/genomes/mm10/bed/genscan
+    find ./gtf -type f | xargs cat > genscan.gtf
+    find ./pep -type f | xargs cat > genscan.pep
+    find ./subopt -type f | xargs cat > genscanSubopt.bed
+
+    # Load into the database (without -genePredExt because no frame info):
+    # Don't load the Pep anymore -- redundant since it's from genomic.
+    ssh hgwdev
+    cd /hive/data/genomes/mm10/bed/genscan
+    # to construct a local file with the genePred business:
+    gtfToGenePred genscan.gtf genscan.gp
+    # this produces exactly the same thing and loads the table:
+    ldHgGene -gtf mm10 genscan genscan.gtf
+    #	Read 47412 transcripts in 293762 lines in 1 files
+    #	47412 groups 9702 seqs 1 sources 1 feature types
+    #	47412 gene predictions
+    hgLoadBed mm10 genscanSubopt genscanSubopt.bed
+    #	Loaded 369728 elements of size 6
+    featureBits mm10 genscan
+    #	62125158 bases of 1358334882 (4.574%) in intersection
+    # previously:
+    featureBits xenTro2 genscan
+    #	62149060 bases of 1359412157 (4.572%) in intersection
+    featureBits xenTro1 genscan
+    #	63766483 bases of 1381238994 (4.617%) in intersection
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2012-02-09 - Hiram
+     ssh hgwdev
+     mkdir /cluster/data/mm10/bed/microsat
+     cd /cluster/data/mm10/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    hgLoadBed mm10 microsat microsat.bed
+    #	Read 197237 elements of size 4 from microsat.bed
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2012-02-09 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("mm10", "blat13", "17832", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("mm10", "blat13", "17833", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# set default position the same as was mm9 via blat
+#	(DONE - 2012-02-09 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr12:56694976-56714605" where name="mm10";' \
+	hgcentraltest
+
+############################################################################
