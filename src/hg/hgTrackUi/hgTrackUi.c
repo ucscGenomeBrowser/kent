@@ -2793,18 +2793,17 @@ if (!tdbIsDownloadsOnly(tdb))
                     canPack = rTdbTreeCanPack(tdbGetComposite(tdb));
                 }
             else
-                {
                 vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
-                if (tdbIsSuperTrackChild(tdb))
-                    {
-                    hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
-                        "normalText superChild visDD", trackDbSetting(tdb, "onlyVisibility"),
-                        "onchange='visTriggersHiddenSelect(this);'");
-                    }
-                else
-                    hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
-                        "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),NULL);
+
+            if (tdbIsSuperTrackChild(tdb))
+                {
+                hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
+                    "normalText superChild visDD", trackDbSetting(tdb, "onlyVisibility"),
+                    "onchange='visTriggersHiddenSelect(this);'");
                 }
+            else
+                hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
+                    "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),NULL);
             }
     if (!ajax)
         {

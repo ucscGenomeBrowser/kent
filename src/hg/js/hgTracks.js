@@ -2556,6 +2556,16 @@ var imageV2 = {
             var tr = $(document.getElementById("tr_" + id));
             if (tr.length > 0) {
                 $(tr).html(a[1]);
+
+                // Need to update tr class list too
+                str = "<TR id='tr_" + id + "[^>]* class='(.*)'>";
+                reg = new RegExp(str);
+                var classes = reg.exec(html);
+                if(classes && classes[1] && classes[1].length > 0) {
+                    $(tr).removeClass();
+                    $(tr).addClass(classes[1]);
+                }
+
                 // NOTE: Want to examine the png? Uncomment:
                 //var img = $('#tr_' + id).find("img[id^='img_data_']").attr('src');
                 //warn("Just parsed image:<BR>"+img);

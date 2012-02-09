@@ -231,7 +231,11 @@ if (isCustomTrack(table))
 else
     {
     dbTable = table;
-    struct trackDb *tdb = hTrackDbForTrack(db, table);
+    struct trackDb *tdb;
+    if(sameWord(db, database))
+        tdb = tdbForTrack(db, table, &fullTrackList);
+    else
+        tdb = hTrackDbForTrack(db, table);
     conn = (tdb ? hAllocConnTrack(db, tdb) : hAllocConn(db));
     hti = hFindTableInfo(db, region->chrom, table);
     }

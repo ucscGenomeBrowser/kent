@@ -35,6 +35,9 @@
 #	Assembly ID: 165668
 #	http://www.ncbi.nlm.nih.gov/genome/assembly/165668/
 
+#	Celera Assembly
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAHY00
+
 #############################################################################
 # fetch sequence from genbank (DONE - 2012-01-30 - Hiram)
     mkdir -p /hive/data/genomes/mm10/genbank
@@ -306,33 +309,22 @@ ncbiAssemblyName   GRCm38
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek mm10 > do.log 2>&1 &
-XXX - running - Mon Feb  6 13:04:43 PST 2012
-    #	real    761m6.538s
-
-    # slight problem, 5 entries without IDs, removed them:
-    egrep -v "102404757 102404806|102405794 102405850|102406616 102406871|20433770 20433795|20434607 20434807" mm10.fa.out > mm10.clean.fa.out
-    # finish the doCat.csh script:
-    /cluster/bin/scripts/extractNestedRepeats.pl mm10.clean.fa.out \
-	| sort -k1,1 -k2,2n > mm10.nestedRepeats.bed
-    # continuing with masking
-    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
-	-continue=mask -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
-	-smallClusterHub=memk mm10 > mask.log 2>&1 &
-    #	real    43m48.192s
+    #	real    609m48.767s
 
     cat faSize.rmsk.txt
-    #	3309577922 bases (407238955 N's 2902338967 real 1415372307 upper
-    #	1486966660 lower) in 24129 sequences in 1 files
-    #	Total size: mean 137161.8 sd 4455791.7
-    #	min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
-    #	%10.65 masked total, %10.79 masked real
+    #	2730871774 bases (78088274 N's 2652783500 real 1456094545 upper
+    #	1196688955 lower) in 66 sequences in 1 files
+    #	Total size: mean 41376845.1 sd 63617337.3 min 1976
+    #	(chr4_JH584295_random) max 195471971 (chr1) median 184189
+    #	%43.82 masked total, %45.11 masked real
 
     grep -i versi do.log
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
 
-    featureBits -countGaps mm10 rmsk
-    #	1490804137 bases of 3309577922 (45.045%) in intersection
+    time featureBits -countGaps mm10 rmsk
+    #	1196694219 bases of 2730871774 (43.821%) in intersection
+    #	real    0m30.460s
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
     #	separates out the N's from the bases, it doesn't show lower case N's
@@ -372,7 +364,7 @@ XXX - running - Mon Feb  6 13:04:43 PST 2012
     cat fb.simpleRepeat 
     #	92161833 bases of 2652783500 (3.474%) in intersection
 
-    # XXX when RepeatMasker is done, add this mask to the sequence:
+    # when RepeatMasker is done, add this mask to the sequence:
     cd /hive/data/genomes/mm10
     twoBitMask mm10.rmsk.2bit \
 	-add bed/simpleRepeat/trfMask.bed mm10.2bit
@@ -380,11 +372,13 @@ XXX - running - Mon Feb  6 13:04:43 PST 2012
 
     twoBitToFa mm10.2bit stdout | faSize stdin > faSize.mm10.2bit.txt
     cat faSize.mm10.2bit.txt
-    #	3309577922 bases (407238955 N's 2902338967 real 1413870150 upper
-    #	1488468817 lower) in 24129 sequences in 1 files
-    #	Total size: mean 137161.8 sd 4455791.7
-    #	min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
+    #	2730871774 bases (78088274 N's 2652783500 real 1454267808 upper
+    #	1198515692 lower) in 66 sequences in 1 files
+    #	Total size: mean 41376845.1 sd 63617337.3 min 1976
+    #	(chr4_JH584295_random) max 195471971 (chr1) median 184189
+    #	%43.89 masked total, %45.18 masked real
 
+    # set SymLink in gbdb to this masked sequence
     rm /gbdb/mm10/mm10.2bit
     ln -s `pwd`/mm10.2bit /gbdb/mm10/mm10.2bit
 
@@ -471,64 +465,443 @@ close (FH);
     cd /hive/data/genomes/mm10/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev mm10 > do.log 2>&1 &
-XXX - running - Mon Feb  6 13:05:34 PST 2012
-    # this failed the first time with some kind of network error
-    # it was restarted completely and finished normally
-    #	real    268m21.572s
-
-    #	about 45 minutes
+    #	real    167m12.012s
 
     # Masking statistics
     twoBitToFa mm10.wmsk.2bit stdout | faSize stdin
-    #	3309577922 bases (407238955 N's 2902338967 real 1830845011 upper
-    #	1071493956 lower) in 24129 sequences in 1 files
-    #	Total size: mean 137161.8 sd 4455791.7
-    #	min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
-    #	%32.38 masked total, %36.92 masked real
+    #	2730871774 bases (78088274 N's 2652783500 real 1686407708 upper
+    #	966375792 lower) in 66 sequences in 1 files
+    #	Total size: mean 41376845.1 sd 63617337.3 min 1976
+    #	(chr4_JH584295_random) max 195471971 (chr1) median 184189
+    #	%35.39 masked total, %36.43 masked real
+
 
     twoBitToFa mm10.wmsk.sdust.2bit stdout | faSize stdin
-    #	3309577922 bases (407238955 N's 2902338967 real 1814008749 upper
-    #	1088330218 lower) in 24129 sequences in 1 files
-    #	Total size: mean 137161.8 sd 4455791.7
-    #	min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
-    #	%32.88 masked total, %37.50 masked real
+    #	2730871774 bases (78088274 N's 2652783500 real 1670424648 upper
+    #	982358852 lower) in 66 sequences in 1 files
+    #	Total size: mean 41376845.1 sd 63617337.3 min 1976
+    #	(chr4_JH584295_random) max 195471971 (chr1) median 184189
+    #	%35.97 masked total, %37.03 masked real
 
     hgLoadBed mm10 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 16464562 elements of size 3
+    #	Loaded 12655947 elements of size 3
 
     featureBits -countGaps mm10 windowmaskerSdust
-    #	1495546550 bases of 3309577922 (45.188%) in intersection
+    #	1060447084 bases of 2730871774 (38.832%) in intersection
 
     #	eliminate the gaps from the masking
     featureBits mm10 -not gap -bed=notGap.bed
-    #	2902338967 bases of 2902338967 (100.000%) in intersection
+    #	2652783500 bases of 2652783500 (100.000%) in intersection
     time nice -n +19 featureBits mm10 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	1088330218 bases of 2902338967 (37.498%) in intersection
-    #	real    49m22.981s
+    #	982358852 bases of 2652783500 (37.031%) in intersection
+    #	real    1m42.449s
 
     #	reload track to get it clean
     hgLoadBed mm10 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 16467228  elements of size 4
+    #	Loaded 12655987  elements of size 4
     time featureBits -countGaps mm10 windowmaskerSdust
-    #	1088330218 bases of 3309577922 (32.884%) in intersection
-    #	real    1m45.898s
+    #	982358852 bases of 2730871774 (35.972%) in intersection
+    #	real    1m13.889s
 
-    #	mask with this clean result
+    #	do *not* need to mask with this clean result since RepeatMasker
+    #	does a very good job here.  Using RM masking instead.
     zcat cleanWMask.bed.gz \
 	| twoBitMask ../../mm10.unmasked.2bit stdin \
 	    -type=.bed mm10.cleanWMSdust.2bit
     twoBitToFa mm10.cleanWMSdust.2bit stdout | faSize stdin \
         > mm10.cleanWMSdust.faSize.txt
     cat mm10.cleanWMSdust.faSize.txt
-    #	3309577922 bases (407238955 N's 2902338967 real 1814008749 upper
-    #	1088330218 lower) in 24129 sequences in 1 files
-    #	Total size: mean 137161.8 sd 4455791.7
-    #	min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
-    #	%32.88 masked total, %37.50 masked real
 
     # how much does this window masker and repeat masker overlap:
-    featureBits -countGaps mm10 rmsk windowmaskerSdust
-    #	854923909 bases of 3309577922 (25.832%) in intersection
+    time featureBits -countGaps mm10 rmsk windowmaskerSdust
+    #	753614881 bases of 2730871774 (27.596%) in intersection
+    #	real    1m42.691s
+    # RM by itself:
+    time featureBits -countGaps mm10 rmsk
+    #	1196694219 bases of 2730871774 (43.821%) in intersection
+    #	real    0m30.460s
+
+#############################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2012-02-07 - Hiram)
+    ssh encodek
+    mkdir /hive/data/genomes/mm10/bed/linSpecRep
+    cd /hive/data/genomes/mm10/bed/linSpecRep
+
+    # split the RM output by chromosome name into separate files
+    mkdir rmsk dateRepeats
+    head -3 ../repeatMasker/mm10.sorted.fa.out > rmsk.header.txt
+    headRest 3 ../repeatMasker/mm10.sorted.fa.out \
+	| splitFileByColumn -ending=.out -col=5 -head=rmsk.header.txt stdin rmsk
+
+    ls -1S rmsk/* > rmOut.list
+    
+    cat << '_EOF_' > mkLSR
+#!/bin/csh -fe
+rm -f dateRepeats/$1_homo-sapiens_rattus_canis-familiaris_bos-taurus
+/scratch/data/RepeatMasker/DateRepeats \
+    $1 -query mouse -comp human -comp rat -comp dog -comp cow
+mv $1_homo-sapiens_rattus_canis-lupus-familiaris_bos-taurus dateRepeats
+'_EOF_'
+    #	<< happy emacs
+    chmod +x mkLSR
+
+    cat << '_EOF_' > template
+#LOOP
+./mkLSR $(path1) {check out line+ dateRepeats/$(file1)_homo-sapiens_rattus_canis-lupus-familiaris_bos-taurus}
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    gensub2 rmOut.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 66 of 66 jobs
+# CPU time in finished jobs:       1743s      29.05m     0.48h    0.02d  0.000 y
+# IO & Wait Time:                   190s       3.16m     0.05h    0.00d  0.000 y
+# Average job time:                  29s       0.49m     0.01h    0.00d
+# Longest finished job:              65s       1.08m     0.02h    0.00d
+# Submission to last job:           160s       2.67m     0.04h    0.00d
+
+    mkdir notInHuman notInRat notInDog notInCow
+    for F in dateRepeats/chr*.out_homo-sapiens*
+    do
+	B=`basename ${F}`
+	B=${B/.out*/}
+	echo $B 
+        /cluster/bin/scripts/extractRepeats 1 ${F} > \
+		notInHuman/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 2 ${F} > \
+		notInRat/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 3 ${F} > \
+		notInDog/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 4 ${F} > \
+		notInCow/${B}.out.spec
+    done
+
+    #	notInDog, and notInCow ended up being identical.
+    #	The notInRat and notInHuman are different
+    #	To check identical
+    find . -name "*.out.spec" | \
+	while read FN; do echo `cat ${FN} | sum -r` ${FN}; done \
+	| sort -k1,1n | sort -t"/" -k3,3 > check.same
+    # this produces a count of 2 for the sums for Cow and Dog, all the same
+    egrep "Cow|Dog" check.same | awk '{print $1}' | sort | uniq -c | sort -rn
+    # this does not produce a count of 2 for the sums for Cow and Human
+    egrep "Cow|Human" check.same | awk '{print $1}' | sort | uniq -c | sort -rn
+    #	Copy to data staging for cluster replication
+    mkdir /hive/data/staging/data/mm10
+    rsync -a -P ./notInRat/ /hive/data/staging/data/mm10/notInRat/
+    rsync -a -P ./notInHuman/ /hive/data/staging/data/mm10/notInHuman/
+    rsync -a -P ./notInCow/ /hive/data/staging/data/mm10/notInOthers/
+    
+
+    # We also need the nibs for the lastz runs with lineage specific repeats
+    mkdir /hive/data/genomes/mm10/nib
+    cd /hive/data/genomes/mm10
+    cut -f1 chrom.sizes | while read C
+do
+    twoBitToFa -seq=${C} mm10.2bit stdout | faToNib -softMask stdin nib/${C}.nib
+    ls -og nib/$C.nib
+done
+    # verify one is properly masked:
+    nibFrag -masked nib/chrM.nib 0 16299 + stdout | less
+    # compare to:
+    twoBitToFa -seq=chrM mm10.fa stdout | less
+
+    #	Copy to data staging for cluster replication
+    rsync -a -P ./nib/ /hive/data/staging/data/mm10/nib/
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-02-08 - Hiram)
+    # Use -repMatch=650, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2652783500 / 2897316137 \) \* 1024
+    #	( 2652783500 / 2897316137 ) * 1024 = 937.574699
+
+    # round up to 1000  (mm9 used 912)
+
+    cd /hive/data/genomes/mm10
+    time blat mm10.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/mm10.11.ooc -repMatch=1000
+    #	Wrote 27208 overused 11-mers to jkStuff/mm10.11.ooc
+    #	real    2m9.568s
+
+    #	at repMatch=900:
+    #	Wrote 31822 overused 11-mers to jkStuff/mm10.11.ooc
+
+    # there are non-bridged gaps, make lift file for genbank
+    hgsql -N -e "select bridge from gap;" mm10 | sort | uniq -c
+    #	191 no
+    #	495 yes
+    cd /hive/data/genomes/mm10/jkStuff
+    gapToLift mm10 mm10.nonBridged.lift -bedFile=mm10.nonBridged.bed
+    # largest non-bridged contig:
+    awk '{print $3-$2,$0}' mm10.nonBridged.bed | sort -nr | head
+    116378660 chr2  59120641        175499301       chr2.02
+
+    #	copy all of this stuff to the klusters:
+    cd /hive/data/genomes/mm10
+    mkdir /hive/data/staging/data/mm10
+    cp -p jkStuff/mm10.11.ooc jkStuff/mm10.nonBridged.lift chrom.sizes \
+	mm10.2bit /hive/data/staging/data/mm10
+    # request rsync copy from cluster admin
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-02-08 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Mus musculus    334577  4853663 26288
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # of course, mm10 has plenty of everything
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add mm10 just after mm9 and commit to GIT
+# mm10
+mm10.serverGenome = /hive/data/genomes/mm10/mm10.2bit
+mm10.clusterGenome = /scratch/data/mm10/mm10.2bit
+mm10.ooc = /scratch/data/mm10/mm10.11.ooc
+mm10.align.unplacedChroms = chr*
+mm10.lift = /scratch/data/mm10/mm10.nonBridged.lift
+mm10.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+mm10.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+mm10.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+mm10.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+mm10.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+mm10.downloadDir = mm10
+mm10.refseq.mrna.xeno.load  = yes
+mm10.refseq.mrna.xeno.loadDesc = yes
+mm10.mgc = yes
+mm10.genbank.mrna.blatTargetDb = yes
+# mm10.ccds.ncbiBuild = 37.2
+# mm10.upstreamGeneTbl = refGene
+# mm10.upstreamMaf = multiz30way
+# /hive/data/genomes/mm10/bed/multiz30way/species.list
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding mm10 definitions" genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial mm10 &
+    #	var/build/logs/2012.02.08-11:38:50.mm10.initalign.log
+    #	real    795m52.388s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad mm10 &
+    #	logFile: var/dbload/hgwdev/logs/2012.02.09-10:05:25.dbload.log
+    #	real    114m56.461s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add mm10 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added mm10." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+# running cpgIsland business (DONE - 2012-02-09 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/cpgIsland
+    cd /hive/data/genomes/mm10/bed/cpgIsland
+    # use a previous binary for this program
+    ln -s ../../../mm9/bed/cpgIsland/hg3rdParty/cpgIslands/cpglh.exe .
+
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../mm10.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/mm10/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check out exists results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	the faCount business is to make sure there is enough sequence to
+    #	work with in the fasta.  cpglh.exe does not like files with too many
+    #	N's - it gets stuck.
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | egrep -v "^#seq|^total" | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+# Completed: 66 of 66 jobs
+# CPU time in finished jobs:        191s       3.19m     0.05h    0.00d  0.000 y
+# IO & Wait Time:                   189s       3.14m     0.05h    0.00d  0.000 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest finished job:              19s       0.32m     0.01h    0.00d
+# Submission to last job:            51s       0.85m     0.01h    0.00d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    # verify longest unique chrom name:
+    cut -f1 cpgIsland.bed | awk '{print length($0)}' | sort -rn | head -1
+    #	20
+    # update the length 14 in the template to be 16:
+    sed -e "s/14/20/" $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
+
+    cd /hive/data/genomes/mm10/bed/cpgIsland
+    hgLoadBed mm10 cpgIslandExt -tab -sqlTable=cpgIslandExt.sql cpgIsland.bed
+# Loaded 16023 elements of size 10
+
+    featureBits mm10 cpgIslandExt
+    #	10495450 bases of 2652783500 (0.396%) in intersection
+    # compare to previous:
+    featureBits mm9 cpgIslandExt
+    #	10496250 bases of 2620346127 (0.401%) in intersection
+
+    # there should be no output from checkTableCoords:
+    checkTableCoords -verboseBlocks -table=cpgIslandExt mm10
+
+    #	cleanup, unless you want to move them to the genscan procedure below
+    rm -fr hardMaskedFa
+
+#########################################################################
+# GENSCAN GENE PREDICTIONS (DONE - 2012-02-09 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/genscan
+    cd /hive/data/genomes/mm10/bed/genscan
+    # use a previously existing genscan binary
+    ln -s ../../../mm9/bed/genscan/hg3rdParty .
+
+    # create hard masked .fa files
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../mm10.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    # Generate a list file, genome.list, of all the hard-masked contig chunks:
+    find ./hardMaskedFa/ -type f | sed -e 's#^./##' > genome.list
+
+    wc -l genome.list
+    #	66 genome.list
+
+    # Run on small cluster (more mem than big cluster).
+    ssh encodek
+    cd /hive/data/genomes/mm10/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Create template file, template, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in exists+ $(path1)} {check out exists gtf/$(root1).gtf} -trans={check out exists pep/$(root1).pep} -subopt={check out exists subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 genome.list single template jobList
+    para create jobList
+XXX - running - Thu Feb  9 11:39:01 PST 2012
+    para try
+    para check ... etc...
+    para time
+# Completed: 19550 of 19550 jobs
+# CPU time in finished jobs:      25171s     419.52m     6.99h    0.29d  0.001 y
+# IO & Wait Time:                 51770s     862.83m    14.38h    0.60d  0.002 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:             176s       2.93m     0.05h    0.00d
+# Submission to last job:           336s       5.60m     0.09h    0.00d
+
+    # this did not work, runs out of file handles ?
+    find ./gtf -type f | xargs -n 256 endsInLf -zeroOk
+
+    # Concatenate results:
+    cd /hive/data/genomes/mm10/bed/genscan
+    find ./gtf -type f | xargs cat > genscan.gtf
+    find ./pep -type f | xargs cat > genscan.pep
+    find ./subopt -type f | xargs cat > genscanSubopt.bed
+
+    # Load into the database (without -genePredExt because no frame info):
+    # Don't load the Pep anymore -- redundant since it's from genomic.
+    ssh hgwdev
+    cd /hive/data/genomes/mm10/bed/genscan
+    # to construct a local file with the genePred business:
+    gtfToGenePred genscan.gtf genscan.gp
+    # this produces exactly the same thing and loads the table:
+    ldHgGene -gtf mm10 genscan genscan.gtf
+    #	Read 47412 transcripts in 293762 lines in 1 files
+    #	47412 groups 9702 seqs 1 sources 1 feature types
+    #	47412 gene predictions
+    hgLoadBed mm10 genscanSubopt genscanSubopt.bed
+    #	Loaded 369728 elements of size 6
+    featureBits mm10 genscan
+    #	62125158 bases of 1358334882 (4.574%) in intersection
+    # previously:
+    featureBits xenTro2 genscan
+    #	62149060 bases of 1359412157 (4.572%) in intersection
+    featureBits xenTro1 genscan
+    #	63766483 bases of 1381238994 (4.617%) in intersection
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2012-02-09 - Hiram
+     ssh hgwdev
+     mkdir /cluster/data/mm10/bed/microsat
+     cd /cluster/data/mm10/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    hgLoadBed mm10 microsat microsat.bed
+    #	Read 197237 elements of size 4 from microsat.bed
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2012-02-09 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("mm10", "blat13", "17832", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("mm10", "blat13", "17833", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# set default position the same as was mm9 via blat
+#	(DONE - 2012-02-09 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr12:56694976-56714605" where name="mm10";' \
+	hgcentraltest
+
+############################################################################

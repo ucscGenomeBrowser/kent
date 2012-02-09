@@ -31,14 +31,6 @@ assembly          hg19
 validationSettings      validateFiles.bam:mismatches=8
 
 # Track/view definition
-# Change the required field if you need to submit data separately
-
-#This is still in negotiation with Timo
-#view             Promoters
-#type		 encodeRnaElements
-#required         no
-#hasReplicates    no  #pooled
-
 view             PlusRawSignal   
 type             bigWig    
 required         no 
@@ -56,24 +48,15 @@ hasReplicates    yes
 
 view             RawData
 type             fastq
-hasReplicates    no 
-required         yes 
+hasReplicates    yes
+required         no  
 
-# Optional elements files can be submitted with data or with separate DAF
 # Pooled replicates
-view             Clusters  
-longLabelPrefix  RIKEN CAGE Clusters 
-type             bedRnaElements
-sql		 bedRnaElements
-required         no
-hasReplicates    no
-
 view             TssHmm
 type             bedRnaElements
 sql		 bedRnaElements
 hasReplicates    no 
 required         no
-downloadOnly     yes
 
 view             TssGencV7
 type             gtf
