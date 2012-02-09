@@ -18,8 +18,8 @@ group x
 priority 12
 visibility hide
 type bed 12
-articleTable t2gElsevierArticle
-sequenceTable t2gElsevierSequence
+t2gArticleTable t2gElsevierArticle
+t2gSequenceTable t2gElsevierSequence
 release alpha
 
 track kgExons
@@ -45,8 +45,8 @@ shortLabel T2gElsevier in Jim Enhancers
 longLabel T2gElsevier in Jim Enhancers
 group x
 type bed 12
-articleTable t2gElsevierArticle
-sequenceTable t2gElsevierSequence
+t2gArticleTable t2gElsevierArticle
+t2gSequenceTable t2gElsevierSequence
 priority 41
 color 150,150,200
 visibility dense
