@@ -36,7 +36,7 @@ group             regulation
 variables         cell, antibody, control
 assembly          hg19
 
-validationSettings validateFiles.bam:mismatches=2
+validationSettings validateFiles.bam:mismatches=2,bamPercent=99.0
 
 # Track/view definition
 view             Peaks
