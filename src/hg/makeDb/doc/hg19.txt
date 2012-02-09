@@ -17486,6 +17486,70 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
+# ISCA AGGREGATE PATHOGENIC TRACKS (DONE 2012-02-xx b0b)
+
+  # get files of ISCA Pathogenic Gain and Loss  
+    set today = `date +%Y_%m_%d`
+    mkdir /hive/data/genomes/hg19/bed/isca/$today
+    cd /hive/data/genomes/hg19/bed/isca/$today
+    hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
+      WHERE attrVals LIKE '%number_loss%'" hg19 > hg19.iscaPathLoss
+    hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
+      WHERE attrVals LIKE '%number_gain%'" hg19 > hg19.iscaPathGain
+
+  # make bedGraphs
+    sort hg19.iscaPathGain | bedItemOverlapCount hg19 stdin > hg19.iscaPathGain.bedGraph
+    wc -l hg19.iscaPathGain.bedGraph
+#   1857 hg19.iscaPathGain.bedGraph
+
+    sort hg19.iscaPathLoss | bedItemOverlapCount hg19 stdin > hg19.iscaPathLoss.bedGraph
+    wc -l hg19.iscaPathLoss.bedGraph
+#   3237 hg19.iscaPathLoss.bedGraph
+
+  # load tables
+    hgLoadBed -bedGraph=4 hg19 iscaPathGainCum hg19.iscaPathGain.bedGraph
+#   Read 1857 elements of size 4 from hg19.iscaPathGain.bedGraph
+
+    hgLoadBed -bedGraph=4 hg19 iscaPathLossCum hg19.iscaPathLoss.bedGraph
+#   Read 3237 elements of size 4 from hg19.iscaPathLoss.bedGraph
+ 
+  # trackDb
+  # get 2 stdDev value to set default maxHeightPixels 
+    # use average of: median + 2 SD - would mean be better?
+    # use same viewLimit for both:  average the two
+    # note that chr21 (Down's) is overrepresented in the dataset
+    ave  hg19.iscaPathGain.bedGraph -col=4
+#    median 9.000000
+#    average 20.970921
+#    max 105.000000
+#    standard deviation 25.652712
+    median + 2SD = 60 
+
+    ave  hg19.iscaPathLoss.bedGraph -col=4
+#    median 6.000000
+#    average 15.998146
+#    max 171.000000
+#    standard deviation 23.526095
+    median + 2SD = 53 
+ 
+  # move some settings down to existing subtracks:  
+       type gvf 
+       noScoreFilter . 
+  # add settings to parent track:
+      type bed
+      noInherit on
+  # set these two new tracks:
+      release alpha
+      type bedGraph 4
+      maxHeightPixels 100:57:16
+      viewLimits 0:60 (halfway betw 2 SD and max)
+      alwaysZero on
+      color 0,0,200 (Gain)
+      color 200,0,0 (Loss)
+  #  new html page using override in trackDb/human/hg19/trackDb.ra
+
+
+############################################################################
 # LINCRNAS FROM BROAD (DONE 2011-10-10 Chin)
 # Human lincRNA Catalog
 
