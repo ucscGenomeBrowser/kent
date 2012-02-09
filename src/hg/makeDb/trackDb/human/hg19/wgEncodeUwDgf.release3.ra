@@ -25,7 +25,7 @@
 
 track wgEncodeUwDgf
 compositeTrack on
-superTrack wgEncodeDNAseSuper dense
+superTrack wgEncodeDNAseSuper full 
 shortLabel UW DNaseI DGF
 longLabel DNaseI Digital Genomic Footprinting from ENCODE/University of Washington
 group regulation
@@ -72,7 +72,7 @@ wgEncode 1
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Hotspots
-        parent wgEncodeUwDgfViewHotspots off
+        parent wgEncodeUwDgfViewHotspots on
         shortLabel HepG2 Hot
         longLabel HepG2 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=2HepG2
@@ -81,7 +81,7 @@ wgEncode 1
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Hotspots
-        parent wgEncodeUwDgfViewHotspots off
+        parent wgEncodeUwDgfViewHotspots on
         shortLabel K562 Hot
         longLabel K562 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=1K562
@@ -451,7 +451,7 @@ wgEncode 1
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Pk
-        parent wgEncodeUwDgfViewPeaks off
+        parent wgEncodeUwDgfViewPeaks on
         shortLabel HepG2 Pk
         longLabel HepG2 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=2HepG2
@@ -460,7 +460,7 @@ wgEncode 1
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Pk
-        parent wgEncodeUwDgfViewPeaks off
+        parent wgEncodeUwDgfViewPeaks on
         shortLabel K562 Pk
         longLabel K562 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=1K562
@@ -837,7 +837,7 @@ wgEncode 1
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Sig
-        parent wgEncodeUwDgfViewSignal 
+        parent wgEncodeUwDgfViewSignal on 
         shortLabel HepG2 Sig
         longLabel HepG2 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=2HepG2
@@ -846,7 +846,7 @@ wgEncode 1
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Sig
-        parent wgEncodeUwDgfViewSignal
+        parent wgEncodeUwDgfViewSignal on
         shortLabel K562 Sig
         longLabel K562 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=1K562
@@ -1216,7 +1216,7 @@ wgEncode 1
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Raw
-        parent wgEncodeUwDgfViewzRaw off
+        parent wgEncodeUwDgfViewzRaw on
         shortLabel HepG2 Raw
         longLabel HepG2 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=2HepG2
@@ -1225,7 +1225,7 @@ wgEncode 1
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Raw
-        parent wgEncodeUwDgfViewzRaw off
+        parent wgEncodeUwDgfViewzRaw on
         shortLabel K562 Raw
         longLabel K562 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=1K562
