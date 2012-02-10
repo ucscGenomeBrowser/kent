@@ -21,7 +21,6 @@ priority 0
 type bed 3
 wgEncode 1
 superTrack wgEncodeRnaSeqSuper dense
-html wgEncodeRikenCage.new
 
     track wgEncodeRikenCageViewPlusSignal
     shortLabel Plus Signal
@@ -777,7 +776,7 @@ html wgEncodeRikenCage.new
     windowingFunction mean+whiskers
     autoScale off
     transformFunc NONE
-    maxWindowToDraw 10000000
+    maxWindowToDraw 1000000
 
         track wgEncodeRikenCageNhekCytosolPamMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal off
@@ -1491,7 +1490,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageSknshraCellPapMinusRawRep1
         subTrack wgEncodeRikenCageViewMinusSignal off
-        shortLabel SKSH cell pA+ - 1
+        shortLabel SKSH cell pAP - 1
         longLabel SK-N-SH_RA whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 134321.000000

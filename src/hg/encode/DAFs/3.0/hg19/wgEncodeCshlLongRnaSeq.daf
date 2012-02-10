@@ -33,6 +33,20 @@ assembly          hg19
 validationSettings validateFiles.bam:mismatches=10,nMatch,allowOther
 
 # Track/view definition
+#Pooled replicates
+view             Contigs
+type             bedRnaElements
+sql		 bedRnaElements
+hasReplicates    no
+required         no
+
+view             ExonsGencV7
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     yes 
+
+# Individual Replicates
 view             PlusRawSignal
 type             bigWig
 hasReplicates    yes
@@ -62,8 +76,14 @@ required         no
 downloadOnly     yes
 
 view             Spikeins
-longLabelPrefix  CSHL Long RNA-seq Spike-ins
 type             doc
 hasReplicates    yes
 required         no
 downloadOnly     yes
+
+view             Protocol 
+type             pdf
+hasReplicates    yes 
+required         no 
+downloadOnly     yes
+

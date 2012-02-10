@@ -1,6 +1,6 @@
 mkChangeNotes v2
 hg19 wgEncodeCshlShortRnaSeq Release 2 vs Release 1
-2012-02-09
+2012-02-10
 
 QA Count Summaries for Release 2:
 Tables: 189
@@ -15,12 +15,12 @@ Files: 1
 Gbdbs: 0
 
 Sizes of New:
-Table: 191 MB
+Table: 188 MB
 Files: 100175 MB (98 GB)
 Gbdbs: 53861 MB (53 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 154228 MB (151 GB)
+Total: 154225 MB (151 GB)
 
 
 TABLES:
@@ -81,11 +81,11 @@ wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapMinusRawRep2
 wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep1
 wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep2
 wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2
-wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigs
+wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigsV2
 wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapMinusRawRep2
 wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapPlusRawRep2
 wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2
-wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigs
+wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigsV2
 wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapMinusRawRep2
 wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapPlusRawRep2
 wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep1
@@ -320,14 +320,14 @@ New Download Files (315):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigs.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigsV2.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapExonsGencV7.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapPlusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigs.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigsV2.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapExonsGencV7.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlShortRnaSeq/release2/wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapPlusRawRep2.bigWig
