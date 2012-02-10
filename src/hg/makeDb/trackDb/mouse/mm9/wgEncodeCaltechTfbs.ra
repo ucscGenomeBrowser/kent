@@ -298,7 +298,7 @@ noInherit on
         track wgEncodeCaltechTfbsC2c12Tcf12FCntrl50bE2p60hPcr1xPkRep1
         parent wgEncodeCaltechTfbsViewPeaks off
         shortLabel C2 TCF12 60h 1
-        longLabel C2C12 TCF12 Myocyte 60h2 TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        longLabel C2C12 TCF12 Myocyte 60h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
         subGroups view=Peaks factor=TCF12 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
         type narrowPeak
         color 139,69,19
