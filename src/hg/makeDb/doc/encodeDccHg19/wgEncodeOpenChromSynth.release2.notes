@@ -16,11 +16,11 @@ Gbdbs: 0
 
 Sizes of New:
 Table: 472 MB
-Files: 129 MB
+Files: 74 MB
 Gbdbs: 0 MB
 Supplemental: 0 MB
 Other: 1 MB
-Total: 602 MB
+Total: 547 MB
 
 
 TABLES:
@@ -55,32 +55,32 @@ Revoked/Replaced/Renamed Tables (0):
 
 
 DOWNLOAD FILES:
-New: 17
-Untouched: 0
+New: 10
+Untouched: 7
 Revoked/Replaced/Renamed: 0
 New + Untouched: 17
 Total (New + Untouched + Revoked/Replaced/Renamed): 17
 
-New Download Files (17):
+New Download Files (10):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthGlioblaPk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthGm12878Pk.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthGm12891Pk.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthGm12892Pk.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthGm18507Pk.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthGm19239Pk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthH1hescPk.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthHelas3Ifna4hPk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthHelas3Pk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthHepg2Pk.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthHtr8Pk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthHuvecPk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthK562Pk.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthMedulloPk.bed.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthNhekPk.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthPanisletsPk.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthUrothelUt189Pk.bed.gz
 
-Untouched Download Files (0):
+Untouched Download Files (7):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthGm12878Pk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthH1hescPk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthHelas3Pk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthHepg2Pk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthHuvecPk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthK562Pk.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromSynth/release2/wgEncodeOpenChromSynthNhekPk.bed.gz
 
 Revoked/Replaced/Renamed Download Files (0):
 
