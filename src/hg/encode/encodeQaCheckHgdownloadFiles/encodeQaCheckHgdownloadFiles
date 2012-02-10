@@ -89,6 +89,8 @@ encodeQaCheckHgdownloadFiles hg18 wgEncodeHudsonalphaChipSeq checkPushFilesList
     missingFromRR = DevFiles - RRFiles
     missingFromDev = RRFiles - DevFiles
 
+    missingFromRR.discard("README.txt")
+
     print ""
     if missingFromRR:
         print "Missing from %s (%s):" % (args.server, len(missingFromRR))
