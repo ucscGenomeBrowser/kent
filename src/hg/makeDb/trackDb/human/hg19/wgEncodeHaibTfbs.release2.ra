@@ -21,7 +21,7 @@ filterComposite dimB=one dimC=one
 sortOrder cellType=+ factor=+ treatment=+ protocol=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target protocol=Protocol treatment=Treatment replicate=Rep view=View labExpId=Lab_ID controlId=Control_ID setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
-controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protocol treatment=treatment rep=replicate i]
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protocol treatment=treatment rep=replicate
 priority 0
 type bed 3
 wgEncode 1
