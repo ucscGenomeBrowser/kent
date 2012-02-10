@@ -18,7 +18,6 @@ aliQualRange bam
 allButtonPair *
 altColor *
 alwaysZero wig bedGraph
-articleTable bed
 autoScale *
 autoTranslate genePred
 bamColorMode bam
@@ -294,7 +293,6 @@ searchMethod bed
 searchType bed
 selectSubject psl
 seqTable bed
-sequenceTable bed
 settingsByView *
 shortLabel *
 showCdsAllScales psl
@@ -340,6 +338,9 @@ subgroups bed
 summary wigMaf
 superTrack *
 symbolTable bed genePred
+t2gArticleTable bed
+t2gSequenceTable bed
+t2gMarkerTable bed
 thickDrawItem bed
 table *
 tableBrowser *

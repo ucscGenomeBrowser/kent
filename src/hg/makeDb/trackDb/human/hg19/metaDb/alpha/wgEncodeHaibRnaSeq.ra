@@ -2564,6 +2564,7 @@ labExpId SL316
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum c5ed0353c53dd0279760c5c30db6d37f,f6cd84f81add6073b066eb97d350c87b
+objStatus revoked - lab redid alignment
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -2571,6 +2572,32 @@ replicate 1
 rnaExtract longPolyA
 subId 3868
 tableName wgEncodeHaibRnaSeqJurkatAlnRep1
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibRnaSeqJurkatAlnRep1V2
+objType table
+cell Jurkat
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-01-24
+dateUnrestricted 2012-10-24
+fileName wgEncodeHaibRnaSeqJurkatAlnRep1V2.bam,wgEncodeHaibRnaSeqJurkatAlnRep1V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL316
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 4cb7717974114b4c59e5572bea98e484,366014b9b2910de7ccdfb23067e479df
+origAssembly hg18
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 5454
+submittedDataVersion V2 - Fixing an old broken alignment file
+tableName wgEncodeHaibRnaSeqJurkatAlnRep1V2
 treatment None
 view Alignments
 
@@ -2652,6 +2679,31 @@ rnaExtract longPolyA
 subId 3868
 treatment None
 view RawData
+
+metaObject wgEncodeHaibRnaSeqJurkatRawRep1
+objType table
+cell Jurkat
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-01-24
+dateUnrestricted 2012-10-24
+fileName wgEncodeHaibRnaSeqJurkatRawRep1.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL316
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 6595c6e0894bf2b8de5f67d79d46dc53
+origAssembly hg18
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 5478
+tableName wgEncodeHaibRnaSeqJurkatRawRep1
+treatment None
+view RawSignal
 
 metaObject wgEncodeHaibRnaSeqJurkatRawRep2
 objType table
@@ -4233,6 +4285,7 @@ labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum 7f0106c1d7d4da6d67717aa247a24cce,ee177b76d5f812ecd733c5ae59f0fab3
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4241,6 +4294,32 @@ rnaExtract longPolyA
 sex F
 subId 3838
 tableName wgEncodeHaibRnaSeqU87AlnRep1
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibRnaSeqU87AlnRep1V2
+objType table
+cell U87
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-09
+fileName wgEncodeHaibRnaSeqU87AlnRep1V2.bam,wgEncodeHaibRnaSeqU87AlnRep1V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL532
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 1d332eb4bdd4a50fb31cee42e1570b93,42cc9f1f55cd6b0c3273b7bbfe6d93b6
+origAssembly hg18
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 5606
+submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex originally
+tableName wgEncodeHaibRnaSeqU87AlnRep1V2
 treatment None
 view Alignments
 
@@ -4261,6 +4340,7 @@ labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum 956938709fdaa7a7032474a546dea8c0,18a48c23e1484cd994d749fa86872447
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4269,6 +4349,32 @@ rnaExtract longPolyA
 sex F
 subId 3838
 tableName wgEncodeHaibRnaSeqU87AlnRep2
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibRnaSeqU87AlnRep2V2
+objType table
+cell U87
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-09
+fileName wgEncodeHaibRnaSeqU87AlnRep2V2.bam,wgEncodeHaibRnaSeqU87AlnRep2V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL533
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 716ab760756b6e900838070b8c1f78ab,3bbc87c71f121967c31429e1a262dac5
+origAssembly hg18
+project wgEncode
+readType 1x36
+replicate 2
+rnaExtract longPolyA
+subId 5606
+submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex originally
+tableName wgEncodeHaibRnaSeqU87AlnRep2V2
 treatment None
 view Alignments
 
@@ -4289,6 +4395,7 @@ labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum c7fc99666fc48e4aede662b0442a2314
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4296,6 +4403,31 @@ replicate 1
 rnaExtract longPolyA
 sex F
 subId 3838
+treatment None
+view RawData
+
+metaObject wgEncodeHaibRnaSeqU87RawDataRep1V2
+objType file
+cell U87
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-01-21
+dateUnrestricted 2012-10-20
+fileName wgEncodeHaibRnaSeqU87RawDataRep1V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL532
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 2b7992b8af6f13290c64f823e3fd32cb
+origAssembly hg18
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 5455
+submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex originally
 treatment None
 view RawData
 
@@ -4316,6 +4448,7 @@ labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum 544dd61705de9157e80fc033d741a6ff
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4323,6 +4456,31 @@ replicate 2
 rnaExtract longPolyA
 sex F
 subId 3838
+treatment None
+view RawData
+
+metaObject wgEncodeHaibRnaSeqU87RawDataRep2V2
+objType file
+cell U87
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-01-21
+dateUnrestricted 2012-10-20
+fileName wgEncodeHaibRnaSeqU87RawDataRep2V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL533
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 7e976d2e7b81b98225dcd17c3017ad4f
+origAssembly hg18
+project wgEncode
+readType 1x36
+replicate 2
+rnaExtract longPolyA
+subId 5455
+submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex originally
 treatment None
 view RawData
 
@@ -4354,6 +4512,32 @@ tableName wgEncodeHaibRnaSeqU87RawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibRnaSeqU87RawRep1V2
+objType table
+cell U87
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-09
+fileName wgEncodeHaibRnaSeqU87RawRep1V2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL532
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 53797d3521d858254254196fd1ecf92f
+origAssembly hg18
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 5606
+submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex originally
+tableName wgEncodeHaibRnaSeqU87RawRep1V2
+treatment None
+view RawSignal
+
 metaObject wgEncodeHaibRnaSeqU87RawRep2
 objType table
 cell U87
@@ -4379,6 +4563,32 @@ rnaExtract longPolyA
 sex F
 subId 3838
 tableName wgEncodeHaibRnaSeqU87RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibRnaSeqU87RawRep2V2
+objType table
+cell U87
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-09
+fileName wgEncodeHaibRnaSeqU87RawRep2V2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL533
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 51d00d417b14af32b23bad5f321c44be
+origAssembly hg18
+project wgEncode
+readType 1x36
+replicate 2
+rnaExtract longPolyA
+subId 5606
+submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex originally
+tableName wgEncodeHaibRnaSeqU87RawRep2V2
 treatment None
 view RawSignal
 
@@ -4409,6 +4619,31 @@ subId 4811
 treatment None
 view TranscriptGencV7
 
+metaObject wgEncodeHaibRnaSeqU87TranscriptGencV7Rep1V2
+objType file
+cell U87
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-01-21
+dateUnrestricted 2012-10-20
+fileName wgEncodeHaibRnaSeqU87TranscriptGencV7Rep1V2.gtf.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL532
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum 188f96aa58f1c723133a5ecf0a859ac7
+origAssembly hg18
+project wgEncode
+readType 1x36
+replicate 1
+rnaExtract longPolyA
+subId 5455
+submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex originally
+treatment None
+view TranscriptGencV7
+
 metaObject wgEncodeHaibRnaSeqU87TranscriptGencV7Rep2
 objType file
 cell U87
@@ -4436,4 +4671,29 @@ subId 4811
 treatment None
 view TranscriptGencV7
 
-# MAGIC: 219342526
+metaObject wgEncodeHaibRnaSeqU87TranscriptGencV7Rep2V2
+objType file
+cell U87
+composite wgEncodeHaibRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-01-21
+dateUnrestricted 2012-10-20
+fileName wgEncodeHaibRnaSeqU87TranscriptGencV7Rep2V2.gtf.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL533
+labVersion cufflinks_v_0.9
+mapAlgorithm bow125
+md5sum eb5efe45da1e1a1a86252c918665a35f
+origAssembly hg18
+project wgEncode
+readType 1x36
+replicate 2
+rnaExtract longPolyA
+subId 5455
+submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex originally
+treatment None
+view TranscriptGencV7
+
+# MAGIC: 1484410816

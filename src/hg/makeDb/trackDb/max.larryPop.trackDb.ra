@@ -1,0 +1,106 @@
+track larryPop
+shortLabel Larry's Genome Popularity
+longLabel Larry's Genome Popularity
+group x
+compositeTrack on
+viewLimits 0:20
+type bigWig 2000
+maxHeightPixels 100:40:10  
+release alpha
+
+        track popPosAll
+        parent larryPop
+        shortLabel Popularity, all Years
+        longLabel Larry's Popularity, all Years
+        color 0,0,0
+        group x
+        priority 20
+        visibility full
+        autoScale On
+        release alpha
+        type bigWig 2000
+
+        track popPos2005
+        parent larryPop
+        shortLabel Popularity 2005
+        longLabel Popularity 2005
+        color 0,0,0
+        group x
+        priority 20
+        visibility dense
+        autoScale On
+        release alpha
+        type bigWig 2000
+
+        track popPos2006
+        parent larryPop
+        shortLabel Popularity 2006
+        longLabel Popularity 2006
+        color 0,0,0
+        group x
+        priority 20
+        visibility dense
+        autoScale On
+        release alpha
+        type bigWig 2000
+
+        track popPos2007
+        parent larryPop
+        shortLabel Popularity 2007
+        longLabel Popularity 2007
+        color 0,0,0
+        group x
+        priority 20
+        visibility dense
+        autoScale On
+        release alpha
+        type bigWig 2000
+
+        track popPos2008
+        parent larryPop
+        shortLabel Popularity 2008
+        longLabel Popularity 2008
+        color 0,0,0
+        group x
+        priority 20
+        visibility dense
+        autoScale On
+        release alpha
+        type bigWig 2000
+
+        track popPos2009
+        parent larryPop
+        shortLabel Popularity 2009
+        longLabel Popularity 2009
+        color 0,0,0
+        group x
+        priority 20
+        visibility dense
+        autoScale On
+        release alpha
+        type bigWig 2000
+
+        track popPos2010
+        parent larryPop
+        shortLabel Popularity 2010
+        longLabel Popularity 2010
+        color 0,0,0
+        group x
+        priority 20
+        visibility dense
+        autoScale On
+        release alpha
+        type bigWig 2000
+
+        track popPos2011
+        parent larryPop
+        shortLabel Popularity 2011
+        longLabel Popularity 2011
+        color 0,0,0
+        group x
+        priority 20
+        visibility dense
+        autoScale On
+        release alpha
+        type bigWig 2000
+
