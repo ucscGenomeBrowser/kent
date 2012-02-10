@@ -2564,6 +2564,7 @@ labExpId SL316
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum c5ed0353c53dd0279760c5c30db6d37f,f6cd84f81add6073b066eb97d350c87b
+objStatus revoked - lab redid alignment
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -2588,6 +2589,7 @@ lab HudsonAlpha
 labExpId SL316
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 4cb7717974114b4c59e5572bea98e484,366014b9b2910de7ccdfb23067e479df
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -2692,6 +2694,7 @@ lab HudsonAlpha
 labExpId SL316
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 6595c6e0894bf2b8de5f67d79d46dc53
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4282,6 +4285,7 @@ labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum 7f0106c1d7d4da6d67717aa247a24cce,ee177b76d5f812ecd733c5ae59f0fab3
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4307,6 +4311,7 @@ lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 1d332eb4bdd4a50fb31cee42e1570b93,42cc9f1f55cd6b0c3273b7bbfe6d93b6
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4335,6 +4340,7 @@ labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum 956938709fdaa7a7032474a546dea8c0,18a48c23e1484cd994d749fa86872447
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4360,6 +4366,7 @@ lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 716ab760756b6e900838070b8c1f78ab,3bbc87c71f121967c31429e1a262dac5
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4388,6 +4395,7 @@ labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum c7fc99666fc48e4aede662b0442a2314
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4412,6 +4420,7 @@ lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 2b7992b8af6f13290c64f823e3fd32cb
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4439,6 +4448,7 @@ labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum 544dd61705de9157e80fc033d741a6ff
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4463,6 +4473,7 @@ lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 7e976d2e7b81b98225dcd17c3017ad4f
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4515,6 +4526,7 @@ lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 53797d3521d858254254196fd1ecf92f
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4568,6 +4580,7 @@ lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 51d00d417b14af32b23bad5f321c44be
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4620,6 +4633,7 @@ lab HudsonAlpha
 labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum 188f96aa58f1c723133a5ecf0a859ac7
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4671,6 +4685,7 @@ lab HudsonAlpha
 labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
+md5sum eb5efe45da1e1a1a86252c918665a35f
 origAssembly hg18
 project wgEncode
 readType 1x36
@@ -4681,4 +4696,4 @@ submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex original
 treatment None
 view TranscriptGencV7
 
-# MAGIC: 1805389584
+# MAGIC: 1484410816
