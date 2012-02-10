@@ -3,7 +3,6 @@ objType composite
 composite wgEncodeUwDgf
 expVars lab,dataType,cell
 geoSeriesAccession GSE26328
-origAssembly hg19
 
 metaObject wgEncodeUwDgfAg10803Aln
 objType file
