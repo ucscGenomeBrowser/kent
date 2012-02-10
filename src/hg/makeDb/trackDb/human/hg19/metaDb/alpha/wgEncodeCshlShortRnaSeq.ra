@@ -2551,7 +2551,7 @@ labExpId LID20908
 labProtocolId 006Cs
 labVersion iIDR
 localization cytosol
-md5sum bcc5193eb29a521fac56d018f0d4c8da
+md5sum 7384e3635e8d94c72ad3874efdba4792
 project wgEncode
 protocol TAP-Only
 rnaExtract shortTotal
@@ -2726,7 +2726,7 @@ labExpId LID20907
 labProtocolId 006Ns
 labVersion iIDR
 localization nucleus
-md5sum 9e86022588bad43795e9e38f43e8aa70
+md5sum 4351f6c13d1808789b853cce67fa9a59
 project wgEncode
 protocol TAP-Only
 rnaExtract shortTotal
@@ -9301,4 +9301,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1487995729
+# MAGIC: 914963976
