@@ -3671,7 +3671,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Foxa1V0416102Dex100nmPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 FOX1 DX100 2
+        shortLabel A549 FOXA1 D100 2
         longLabel A549 FOXA1 101058 DEX 100nM v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC101058 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep2
         type broadPeak
@@ -3679,7 +3679,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Foxa1V0416102Dex100nmPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-	shortLabel A549 FOX1 DX100 1
+	shortLabel A549 FOXA1 D100 1
         longLabel A549 FOXA1 101058 DEX 100nM v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC101058 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep1
         type broadPeak
@@ -8943,7 +8943,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Creb1sc240V0416102Dex100nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 CREB DX100 2
+        shortLabel A549 CREB1 D100 2
         longLabel A549 CREB1 DEX 100nM v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=CREB1SC240 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep2
         type bigWig 0.258863 313.613007
@@ -8951,7 +8951,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Creb1sc240V0416102Dex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 CREB DX100 1
+        shortLabel A549 CREB1 D100 1
         longLabel A549 CREB1 DEX 100nM v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=CREB1SC240 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep1
         type bigWig 0.169944 126.098999
