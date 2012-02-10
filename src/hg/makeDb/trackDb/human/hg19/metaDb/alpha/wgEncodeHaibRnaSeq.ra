@@ -4501,6 +4501,7 @@ labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum 34a2c4401616083fb01c7bb9bcfc520d
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4555,6 +4556,7 @@ labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum af74f97c429ed68f3df3cf5200ccfc94
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4609,6 +4611,7 @@ labExpId SL532
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum 415e0e6b92c240731d06b785b1784139
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4661,6 +4664,7 @@ labExpId SL533
 labVersion cufflinks_v_0.9
 mapAlgorithm bow125
 md5sum b9ac0eca8b538d48cb6bda228218311e
+objStatus revoked - remapped entire cell line to correct sex, see V2
 origAssembly hg19
 project wgEncode
 readType 1x36
@@ -4696,4 +4700,4 @@ submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex original
 treatment None
 view TranscriptGencV7
 
-# MAGIC: 1484410816
+# MAGIC: -538448064
