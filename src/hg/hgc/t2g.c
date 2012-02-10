@@ -30,8 +30,8 @@ int t2gSecChecked[] ={
       1, 0,
       0, 1 };
 
-char* sequenceTable;
-char* articleTable;
+char* t2gSequenceTable;
+char* t2gArticleTable;
 
 char* makeSqlMarkerList(void)
 /* return list of sections from cgi vars, format like "'abstract','header'" */
@@ -59,7 +59,7 @@ slNameFree(names);
 return nameListString;
 }
 
-struct sqlResult* queryMarkerRows(struct sqlConnection* conn, char* item, int itemLimit)
+struct sqlResult* queryMarkerRows(struct sqlConnection* conn, char* markerTable, char* articleTable, char* item, int itemLimit)
 /* query marker rows from mysql, based on http parameters */
 {
 char query[4000];
@@ -67,7 +67,7 @@ sqlUpdate(conn, "SET SESSION group_concat_max_len = 40000");
 
 char* sectionList = makeSqlMarkerList();
 
-safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet, section SEPARATOR ' (...) ') FROM t2gElsevierMarker JOIN t2gElsevierArticle USING (articleId) WHERE markerId='%s' GROUP by articleId LIMIT %d", item, itemLimit);
+safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet, section SEPARATOR ' (...) ') FROM %s JOIN %s USING (articleId) WHERE markerId='%s' GROUP by articleId LIMIT %d", markerTable, articleTable, item, itemLimit);
 //safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet SEPARATOR ' (...) ') FROM t2gElsevierMarker JOIN t2gElsevierArticle USING (articleId) WHERE markerId='%s' AND section IN (%s) GROUP by articleId LIMIT %d", item, sectionList, itemLimit);
 
 printf(sectionList);
@@ -135,7 +135,7 @@ if (sqlNeedQuickNum(conn, query) > itemLimit)
 }
 }
 
-void printMarkerSnippets(struct sqlConnection *conn, char* item)
+void printMarkerSnippets(struct sqlConnection *conn, char* articleTable, char* markerTable, char* item)
 {
 
 /* do not show more snippets than this limit */
@@ -146,7 +146,7 @@ printLimitWarning(conn, item, itemLimit);
 
 printf("<H3>Snippets from Publications:</H3>");
 
-struct sqlResult* sr = queryMarkerRows(conn, item, itemLimit);
+struct sqlResult* sr = queryMarkerRows(conn, markerTable, articleTable, item, itemLimit);
 
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -172,7 +172,7 @@ char* printArticleInfo(struct sqlConnection *conn, char* item)
 {
     char query[512];
 
-    safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract FROM %s WHERE displayId='%s'", articleTable, item);
+    safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract FROM %s WHERE displayId='%s'", t2gArticleTable, item);
 
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
@@ -272,7 +272,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
 {
     // get data from mysql
     char query[4096];
-    safef(query, sizeof(query), "SELECT fileDesc, snippet, locations, articleId,fileId, seqId, sequence FROM %s WHERE articleId='%s';", sequenceTable, docId);
+    safef(query, sizeof(query), "SELECT fileDesc, snippet, locations, articleId,fileId, seqId, sequence FROM %s WHERE articleId='%s';", t2gSequenceTable, docId);
     if (t2gDebug)
         puts(query);
     struct sqlResult *sr = sqlGetResult(conn, query);
@@ -456,14 +456,16 @@ printTrackVersion(tdb, conn, item);
 
 if (startsWith("t2gMarker", trackTable)) 
 {
+    char* markerTable = hashMustFindVal(tdb->settingsHash, "t2gMarkerTable");
+    char* articleTable = hashMustFindVal(tdb->settingsHash, "t2gArticleTable");
     printPositionAndSize(start, end, 0);
-    printMarkerSnippets(conn, item);
+    printMarkerSnippets(conn, articleTable, markerTable, item);
 }
 else 
 {
     printPositionAndSize(start, end, 1);
-    sequenceTable = hashMustFindVal(tdb->settingsHash, "sequenceTable");
-    articleTable = hashMustFindVal(tdb->settingsHash, "articleTable");
+    t2gSequenceTable = hashMustFindVal(tdb->settingsHash, "t2gSequenceTable");
+    t2gArticleTable = hashMustFindVal(tdb->settingsHash, "t2gArticleTable");
 
     char* docId = printArticleInfo(conn, item);
     if (docId!=0) 
