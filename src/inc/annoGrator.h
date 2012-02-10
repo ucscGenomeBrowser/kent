@@ -100,7 +100,9 @@ struct annoGrator
     struct asObject *(*getAutoSqlObject)(struct annoGrator *self, struct annoStreamer *primary);
     // Integrate own source's data with single row of primary source's data
     struct annoRow *(*integrate)(struct annoGrator *self, struct annoStreamer *primary,
-				 struct annoRow *primaryData);
+				 struct annoRow *primaryRow, boolean *retFilterFailed);
+    // Close connection to source and free self.
+    void (*close)(struct annoGrator **pSelf);
 };
 
 struct annoOutputOption
@@ -124,7 +126,7 @@ struct annoFormatter
     void (*collect)(struct annoFormatter *self, struct annoStreamer *source, struct annoRow *rows,
 		    boolean filterFailed);
     // Aggregate all sources' data for a single primarySource item into output:
-    void (*writeOne)(struct annoFormatter *self);
+    void (*formatOne)(struct annoFormatter *self);
     // End of input; finish output, close connection/handle and free self.
     void (*close)(struct annoFormatter **pSelf);
 };
