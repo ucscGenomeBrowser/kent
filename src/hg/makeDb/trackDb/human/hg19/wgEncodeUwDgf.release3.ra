@@ -392,7 +392,7 @@ wgEncode 1
         # subId=5232 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfHuvecHotspots
-        parent wgEncodeUwDgfViewHotspots off
+        parent wgEncodeUwDgfViewHotspots on
         shortLabel HUVEC Hot
         longLabel HUVEC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=2HUVEC
@@ -758,7 +758,7 @@ wgEncode 1
         # subId=5232 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfHuvecPk
-        parent wgEncodeUwDgfViewPeaks off
+        parent wgEncodeUwDgfViewPeaks on
         shortLabel HUVEC Pk
         longLabel HUVEC DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=2HUVEC
@@ -1117,7 +1117,7 @@ wgEncode 1
         # subId=5232 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfHuvecSig
-        parent wgEncodeUwDgfViewSignal off
+        parent wgEncodeUwDgfViewSignal on
         shortLabel HUVEC Sig
         longLabel HUVEC DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=2HUVEC
@@ -1476,7 +1476,7 @@ wgEncode 1
         # subId=5232 dateSubmitted=2011-12-16
 
         track wgEncodeUwDgfHuvecRaw
-        parent wgEncodeUwDgfViewzRaw off
+        parent wgEncodeUwDgfViewzRaw on
         shortLabel HUVEC Raw
         longLabel HUVEC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=2HUVEC
