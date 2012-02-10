@@ -31,7 +31,7 @@ longLabel DNaseI Digital Genomic Footprinting from ENCODE/University of Washingt
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
-subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC AOAF=AoAF AG10803=AG10803 CD20RO01778=CD20&nbsp;(RO_01778) GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC HAH=HA-h HASP=HA-sp HCF=HCF HCM=HCM HCPE=HCPEpiC HEE=HEEpiC HFF=HFF HIPE=HIPEpiC HMF=HMF HMVECb=HMVEC-LLy HMVECdBlAd=HMVEC-dBl-Ad HMVECd=HMVEC-dBl-Neo HMVECf=HMVEC-dLy-Neo HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HSMM=HSMM HVMF=HVMF MONOCD14=Monocytes-CD14+ NB4=NB4 NHA=NH-A NHDF-Ad=NHDF-Ad NHDFNEO=NHDF-neo NHLF=NHLF SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
+subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) AG10803=AG10803 AOAF=AoAF CD20RO01778=CD20&nbsp;(RO_01778) GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC HAH=HA-h HASP=HA-sp HCF=HCF HCM=HCM HCPE=HCPEpiC HEE=HEEpiC HFF=HFF HIPE=HIPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECd=HMVEC-dBl-Neo HMVECf=HMVEC-dLy-Neo HMVECb=HMVEC-LLy HPAF=HPAF HPDLF=HPdLF HPF=HPF HRCE=HRCEpiC HSMM=HSMM HVMF=HVMF MONOCD14=Monocytes-CD14+ NB4=NB4 NHDF-Ad=NHDF-Ad NHDFNEO=NHDF-neo NHLF=NHLF NHA=NH-A SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH&#95;RA Th1=Th1
 dimensions dimensionY=cellType
 sortOrder cellType=+ view=+
 fileSortOrder cell=Cell_Line view=View origAssembly=Original_Assembly dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -46,7 +46,7 @@ wgEncode 1
     track wgEncodeUwDgfViewHotspots
     shortLabel Hotspots
     view Hotspots
-    visibility full
+    visibility hide 
     parent wgEncodeUwDgf
     pValueFilter 0.0
     pValueFilterLimits 1:324
@@ -75,7 +75,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots on
         shortLabel HepG2 Hot
         longLabel HepG2 DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=2HepG2
+        subGroups view=Hotspots cellType=2HEPG2
         type broadPeak
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
@@ -175,7 +175,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HPdLF Hot
         longLabel HPdLf DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=HPdLF
+        subGroups view=Hotspots cellType=HPDLF
         type broadPeak
         origAssembly hg19
         # subId=3194 dateSubmitted=2011-01-07
@@ -405,7 +405,7 @@ wgEncode 1
     track wgEncodeUwDgfViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility pack
+    visibility hide
     parent wgEncodeUwDgf
     pValueFilter 0.0
     pValueFilterLimits 1:324
@@ -434,7 +434,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks on
         shortLabel HepG2 Pk
         longLabel HepG2 DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=2HepG2
+        subGroups view=Peaks cellType=2HEPG2
         type narrowPeak
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
@@ -478,7 +478,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HPdLF Pk
         longLabel HPdLF DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=HPdLF
+        subGroups view=Peaks cellType=HPDLF
         type narrowPeak
         origAssembly hg19
         # subId=3194 dateSubmitted=2011-01-07
@@ -800,7 +800,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal on 
         shortLabel HepG2 Sig
         longLabel HepG2 DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=2HepG2
+        subGroups view=Signal cellType=2HEPG2
         type bigWig 1.000000 23188.000000
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
@@ -900,7 +900,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel HPdLF Sig
         longLabel HPdLF DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=HPdLF
+        subGroups view=Signal cellType=HPDLF
         type bigWig 1.000000 100346.000000
         origAssembly hg19
         # subId=3194 dateSubmitted=2011-01-07
@@ -1130,7 +1130,7 @@ wgEncode 1
     track wgEncodeUwDgfViewzRaw
     shortLabel RawSignal
     view zRaw
-    visibility full
+    visibility hide
     parent wgEncodeUwDgf
     viewLimits 1:250
     minLimit 1
@@ -1159,7 +1159,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewzRaw on
         shortLabel HepG2 Raw
         longLabel HepG2 DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=2HepG2
+        subGroups view=zRaw cellType=2HEPG2
         type bigWig 1.000000 102081.000000
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
@@ -1259,7 +1259,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewzRaw off
         shortLabel HPdLF Raw
         longLabel HPdLF DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=HPdLF
+        subGroups view=zRaw cellType=HPDLF
         type bigWig 1.000000 377118.000000
         origAssembly hg19
         # subId=3194 dateSubmitted=2011-01-07
