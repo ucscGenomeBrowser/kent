@@ -7666,7 +7666,8 @@ subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
-objType file
+objType table
+attic auxSup
 bioRep gen0154P
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -8864,7 +8865,8 @@ subId 3375
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
-objType file
+objType table
+attic auxSup
 bioRep gen0161WC
 cell prostate
 composite wgEncodeCshlShortRnaSeq
