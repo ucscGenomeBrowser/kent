@@ -75,7 +75,7 @@ include wgEncodeOpenChromSynth.release2.ra alpha,beta
 include wgEncodeOpenChromSynth.ra public
 
 #Duke DNaseI HS (wrangler: Matt)
-include wgEncodeOpenChromDnase.new.ra alpha
+include wgEncodeOpenChromDnase.release2.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
