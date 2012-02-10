@@ -2052,24 +2052,25 @@ html wgEncodeCshlShortRnaSeq.release2
     view Contigs
     visibility full 
     subTrack wgEncodeCshlShortRnaSeq
+    type bedRnaElements
 
-        track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigs
+        track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigsV2
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel H1ES nucl sm C 
         longLabel H1-hESC nucleus shortTotal RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs cellType=aH1hESC localization=nucleus rnaExtract=SHORTTOTAL protocol=TAP rep=Pooled
         type bed 6
         color 0,107,27
-        # subId=4496 dateSubmitted=2011-07-12
+        # subId=4496 dateSubmitted=2011-07-12 resubmitted in subId=5587
 
-        track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigs
+        track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigsV2
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel H1ES cyto sm C 
         longLabel H1-hESC cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=aH1hESC localization=cytosol rnaExtract=SHORTTOTAL protocol=TAP rep=Pooled
         type bed 6
         color 0,107,27
-        # subId=4495 dateSubmitted=2011-07-12
+        # subId=4495 dateSubmitted=2011-07-12 resubmitted in subId 5587
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
