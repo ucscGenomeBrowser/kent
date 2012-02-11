@@ -8,6 +8,7 @@
 #include "rbTree.h"
 
 int maxChainSize = 3;
+int maxNonsenseSize = 10000;
 int minUse = 1;
 boolean lower = FALSE;
 boolean unpunc = FALSE;
@@ -24,6 +25,7 @@ errAbort(
   "   -size=N - Set max chain size, default %d\n"
   "   -chain=fileName - Write out word chain to file\n"
   "   -nonsense=fileName - Write out predicted nonsense to file\n"
+  "   -maxNonsenseSize=N - Keep nonsense output to this many words.\n"
   "   -lower - Lowercase all words\n"
   "   -unpunc - Strip punctuation\n"
   "   -fullOnly - Only output chains of size\n"
@@ -40,6 +42,7 @@ static struct optionSpec options[] = {
    {"lower", OPTION_BOOLEAN},
    {"unpunc", OPTION_BOOLEAN},
    {"fullOnly", OPTION_BOOLEAN},
+   {"maxNonsenseSize", OPTION_INT},
    {NULL, 0},
 };
 
@@ -166,6 +169,7 @@ pickedWord = NULL;
 curUses = 0;
 totalUses = 0;
 rbTreeTraverse(rbTree, addUse);
+useThreshold = rand() % totalUses;
 rbTreeTraverse(rbTree, pickIfInThreshold);
 assert(pickedWord != NULL);
 return pickedWord;
@@ -184,22 +188,24 @@ for (node = recent->head; !dlEnd(node); node = node->next)
     if (wt == NULL)
         errAbort("%s isn't a follower of %s\n", word, wt->word);
     }
-if (wt->following == NULL)
-    return NULL;
-else
-    return pickRandomWord(wt->following);
+char *result = NULL;
+if (wt->following != NULL)
+    result = pickRandomWord(wt->following);
+return result;
 }
 
 static void wordTreeMakeNonsense(struct wordTree *wt, int maxSize, char *firstWord, 
-	int wordCount, FILE *f)
+	int maxOutputWords, FILE *f)
 /* Go spew out a bunch of words according to probabilities in tree. */
 {
 struct dlList *ll = dlListNew();
 int listSize = 0;
-int i;
+int outputWords = 0;
 
 for (;;)
     {
+    if (++outputWords > maxOutputWords)
+        break;
     struct dlNode *node;
     char *word;
 
@@ -255,7 +261,7 @@ int wordCount = 0;
 struct lm *lm = lmInit(0);
 struct rbTreeNode **stack;
 
-stack = lmAllocArray(lm, stack, 256);
+lmAllocArray(lm, stack, 256);
 while (lineFileNext(lf, &line, NULL))
     {
     if (lower)
@@ -321,7 +327,8 @@ if (optionExists("nonsense"))
     {
     char *fileName = optionVal("nonsense", NULL);
     FILE *f = mustOpen(fileName, "w");
-    wordTreeMakeNonsense(wt, maxSize, firstWord, wordCount, f);
+    int maxSize = min(wordCount, maxNonsenseSize);
+    wordTreeMakeNonsense(wt, maxChainSize, firstWord, maxSize, f);
     carefulClose(&f);
     }
 }
@@ -334,6 +341,7 @@ if (argc != 2)
     usage();
 maxChainSize = optionInt("size", maxChainSize);
 minUse = optionInt("minUse", minUse);
+maxNonsenseSize = optionInt("maxNonsenseSize", maxNonsenseSize);
 lower = optionExists("lower");
 unpunc = optionExists("unpunc");
 fullOnly = optionExists("fullOnly");
