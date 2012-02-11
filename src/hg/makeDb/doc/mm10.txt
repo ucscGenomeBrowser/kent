@@ -799,7 +799,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -fr hardMaskedFa
 
 #########################################################################
-# GENSCAN GENE PREDICTIONS (DONE - 2012-02-09 - Hiram)
+# GENSCAN GENE PREDICTIONS (DONE - 2012-02-09,10 - Hiram)
     mkdir /hive/data/genomes/mm10/bed/genscan
     cd /hive/data/genomes/mm10/bed/genscan
     # use a previously existing genscan binary
@@ -838,14 +838,52 @@ XXX - running - Thu Feb  9 11:39:01 PST 2012
     para try
     para check ... etc...
     para time
-# Completed: 19550 of 19550 jobs
-# CPU time in finished jobs:      25171s     419.52m     6.99h    0.29d  0.001 y
-# IO & Wait Time:                 51770s     862.83m    14.38h    0.60d  0.002 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest finished job:             176s       2.93m     0.05h    0.00d
-# Submission to last job:           336s       5.60m     0.09h    0.00d
+# Crashed: 2 jobs
+# CPU time in finished jobs:     171336s    2855.60m    47.59h    1.98d  0.005 y
+# IO & Wait Time:                   261s       4.35m     0.07h    0.00d  0.000 y
+# Average job time:                2640s      44.00m     0.73h    0.03d
+# Longest finished job:           22618s     376.97m     6.28h    0.26d
+# Submission to last job:         28682s     478.03m     7.97h    0.33d
 
-    # this did not work, runs out of file handles ?
+    # one of the two crashed jobs was just a stray line in the jobList,
+    # somehow a line with the string: '_EOF_' got in there.
+
+    # as with mm9, chr7 did not work.  Break it up into pieces
+    mkdir /hive/data/genomes/mm10/bed/genscan/chr7Split
+    cd /hive/data/genomes/mm10/bed/genscan/chr7Split
+    grep chr7 ../../../jkStuff/mm10.nonBridged.lift | grep -v random \
+	> chr7.nonBridged.lift
+    faToTwoBit ../hardMaskedFa/chr7.fa chr7.2bit
+    ~/kent/src/hg/utils/lft2BitToFa.pl chr7.2bit chr7.nonBridged.lift \
+	| sed -e "s/chr7./chr7_/" > chr7.nonBridged.fa
+    faSplit sequence chr7.nonBridged.fa 100 split7/chr7_
+
+    ln -s ../../../../mm9/bed/genscan/hg3rdParty .
+    echo '#!/bin/sh' > cmdList.sh
+    ls split7 | while read F
+do
+echo "/cluster/bin/x86_64/gsBig split7/${F} gtf/${F}.gtf} -trans=pep/${F}.pep} -subopt=subopt/${F}.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000 &" 
+done >> cmdList.sh
+    echo "wait" >> cmdList.sh
+    chmod +x cmdList.sh
+    mkdir gtf pep subopt
+    time ./cmdList.sh > run.log 2>&1
+    # about 20 minutes
+
+    # fix the names in the lift file
+    cat chr7.nonBridged.lift | sed -e "s/chr7./chr7_/" > chr7.lift
+
+    # the sed mangling will provide unique names for them all, but they
+    #	will not be in the strict numerical order that genscan usually produces
+    cat gtf/chr7_*.gtf | liftUp -type=.gtf stdout chr7.lift error stdin \
+	| sed -e "s/chr7_0\([0-4]\)\./chr7.\1/g" > chr7.gtf
+    cat subopt/chr7_*.bed | liftUp -type=.bed stdout chr7.lift error stdin \
+	| sed -e "s/chr7_0\([0-4]\)\./chr7.\1/g" > chr7.subopt.bed
+    cat pep/chr7_*.pep | sed -e "s/chr7_0\([0-4]\)\./chr7.\1/g" > chr7.pep
+    cp -p chr7.pep ../pep
+    cp -p chr7.gtf ../gtf
+    cp -p chr7.subopt.bed ../subopt/chr7.bed
+
     find ./gtf -type f | xargs -n 256 endsInLf -zeroOk
 
     # Concatenate results:
@@ -862,18 +900,16 @@ XXX - running - Thu Feb  9 11:39:01 PST 2012
     gtfToGenePred genscan.gtf genscan.gp
     # this produces exactly the same thing and loads the table:
     ldHgGene -gtf mm10 genscan genscan.gtf
-    #	Read 47412 transcripts in 293762 lines in 1 files
-    #	47412 groups 9702 seqs 1 sources 1 feature types
-    #	47412 gene predictions
+    #	Read 45012 transcripts in 323529 lines in 1 files
+    #	45012 groups 59 seqs 1 sources 1 feature types
+    #	45012 gene predictions
     hgLoadBed mm10 genscanSubopt genscanSubopt.bed
-    #	Loaded 369728 elements of size 6
+    #	Read 526572 elements of size 6 from genscanSubopt.bed
     featureBits mm10 genscan
-    #	62125158 bases of 1358334882 (4.574%) in intersection
+    #	55743040 bases of 2652783500 (2.101%) in intersection
     # previously:
-    featureBits xenTro2 genscan
-    #	62149060 bases of 1359412157 (4.572%) in intersection
-    featureBits xenTro1 genscan
-    #	63766483 bases of 1381238994 (4.617%) in intersection
+    featureBits mm9 genscan
+    #	55293837 bases of 2620346127 (2.110%) in intersection
 
 #########################################################################
 # CREATE MICROSAT TRACK (DONE - 2012-02-09 - Hiram
@@ -905,3 +941,41 @@ XXX - running - Thu Feb  9 11:39:01 PST 2012
 	hgcentraltest
 
 ############################################################################
+# constructing downloads (DONE - 2012-02-09 - Hiram)
+    cd /hive/data/genomes/mm10
+    # some of the smaller bits are missing the simple repeat results
+    time makeDownloads.pl -allowMissedTrfs -workhorse=hgwdev mm10
+    #	real    41m42.408s
+
+    # edit the README files in goldenPath/*/README.txt
+
+#########################################################################
+# create pushQ entry (DONE - 2012-02-09 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=mm10 -keys all.joiner
+
+    mkdir /hive/data/genomes/mm10/pushQ
+    cd /hive/data/genomes/mm10/pushQ
+    makePushQSql.pl mm10 > mm10.sql 2> stderr.out
+    # check stderr.out for no significant problems, it is common to see:
+# WARNING: hgwdev does not have /gbdb/mm10/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/mm10/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/mm10/bbi/quality.bw
+# WARNING: mm10 does not have seq
+# WARNING: mm10 does not have extFile
+# *** All done!
+
+    # which are not real problem
+    # if some tables are not identified:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#  list of tables will be in the output
+# put them in manually after loading the pushQ entry
+    scp -p mm10.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < mm10.sql
+
+#########################################################################
