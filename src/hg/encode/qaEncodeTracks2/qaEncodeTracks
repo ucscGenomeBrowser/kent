@@ -21,7 +21,7 @@ qaChecks hg19 tableList ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeSydhTfbs
         )
 	parser.add_argument('database', help='The database, typically hg19 or mm9')
 	parser.add_argument('tableList', help='The file containing a list of tables')
-	parser.add_argument('trackDb', nargs='?', default=0, help='The trackDb file to check')
+	#parser.add_argument('trackDb', nargs='?', default=0, help='The trackDb file to check')
 
 	if len(sys.argv) == 1:
 		parser.print_help()
@@ -45,11 +45,11 @@ qaChecks hg19 tableList ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeSydhTfbs
 	(tableIndexOut, missingIndex) = qa.checkTableIndex(args.database, tables)
 	output.extend(tableIndexOut)
 
-	output.append("Test 4: Checking tables for underscores in the name")
+	output.append("Test 3: Checking tables for underscores in the name")
 	(tableNameOut, badTableNames) = qa.checkTableName(tables)
 	output.extend(tableNameOut)
 
-	output.append("Test 5: Checking TrackDb.ra file for short and long label length")
+	output.append("Test 4: Checking TrackDb.ra file for short and long label length")
 	if args.trackDb:
 		(labelOut, badLabels) = qa.checkLabels(args.trackDb)
 		output.extend(labelOut)
@@ -57,15 +57,15 @@ qaChecks hg19 tableList ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeSydhTfbs
 		output.append("Skipped, no trackDb file given")
 		output.append("")
 
-	output.append("Test 6: Checking tables for coordinate errors")
+	output.append("Test 5: Checking tables for coordinate errors")
 	(coordsOut, badCoords) = qa.checkTableCoords(args.database, tables)
 	output.extend(coordsOut)
 
-	output.append("Test 7: Checking tables for positional errors (sort)")
+	output.append("Test 6: Checking tables for positional errors (sort)")
 	(posOut, badPos) = qa.positionalTblCheck(args.database, tables)
 	output.extend(posOut)
 
-	output.append("Test 8: Counting row per chromosomes per table")
+	output.append("Test 7: Counting row per chromosomes per table")
 	(countChromOut, tableCounts) = qa.countPerChrom(args.database, tables)
 	output.extend(countChromOut)
 
