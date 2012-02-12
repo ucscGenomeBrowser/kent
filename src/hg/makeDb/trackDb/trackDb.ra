@@ -4,7 +4,8 @@ include max.trackDb.ra
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
-include trackDb.genbank.ra
+include trackDb.genbank.ra beta,public
+include trackDb.genbank.new.ra alpha
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
