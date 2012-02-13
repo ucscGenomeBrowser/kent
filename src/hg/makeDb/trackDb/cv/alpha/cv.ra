@@ -11236,7 +11236,7 @@ term Transfrags
 tag TRANSFRAGS
 type view
 label Transfrags
-description Transfrags
+description Transcribed fragments
 
 term TssGencV3c
 tag TssV3c
@@ -13036,7 +13036,7 @@ priority 430
 term level
 tag LEVEL
 type typeOfTerm
-label Gencode level
+label GENCODE level
 description GENCODE level of annotation.  Level 1: validated.  Level 2: manually annotated.  Level 3: automated annotation.
 searchable no
 cvDefined no
