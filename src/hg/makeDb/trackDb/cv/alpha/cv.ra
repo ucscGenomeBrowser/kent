@@ -2126,7 +2126,7 @@ sex U
 tissue cerebellar
 vendorName ScienCell
 vendorId 1810
-orderUrl http://www.sciencellonline.com/site/products/1810.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1810
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
 protocol Stam:HAc_Stam_protocol.pdf
@@ -2139,7 +2139,7 @@ description amniotic epithelial cells
 tissue epithelium
 vendorName ScienCell
 vendorId 7100
-orderUrl http://www.sciencellonline.com/site/products/7100.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7100
 tier 3
 sex U
 protocol Stam:HAEpiC_Stam_protocol.pdf
@@ -2156,7 +2156,7 @@ sex U
 tissue brain hippocampus
 vendorName ScienCell
 vendorId 1830
-orderUrl http://www.sciencellonline.com/site/products/1830.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1830
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
 protocol Stam:HAh_Stam_protocol.pdf
@@ -2184,7 +2184,7 @@ description astrocytes spinal cord
 tissue spinal cord
 vendorName ScienCell
 vendorId 1820
-orderUrl http://www.sciencellonline.com/site/products/1820.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1820
 karyotype normal
 lineage ectoderm
 termId BTO:0000099
@@ -2203,7 +2203,7 @@ tier 3
 lineage ectoderm
 vendorName ScienCell
 vendorId 1000
-orderUrl http://www.sciencellonline.com/site/products/1000.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1000
 sex U
 protocol Stam:HBMEC_Stam_protocol.pdf
 
@@ -2246,7 +2246,7 @@ tissue heart
 lineage mesoderm
 vendorName ScienCell
 vendorId 6320
-orderUrl http://www.sciencellonline.com/site/products/6320.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6320
 sex F
 tier 3
 protocol Stam:HCFaa_Stam_protocol.pdf
@@ -2260,7 +2260,7 @@ tissue heart
 lineage mesoderm
 vendorName ScienCell
 vendorId 6300
-orderUrl http://www.sciencellonline.com/site/products/6300.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6300
 sex U
 tier 3
 protocol Stam:HCF_Stam_protocol.pdf
@@ -2274,7 +2274,7 @@ tissue eye
 lineage ectoderm
 vendorName ScienCell
 vendorId 6570
-orderUrl http://www.sciencellonline.com/site/products/6570.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6570
 sex U
 tier 3
 protocol Stam:HConF_Stam_protocol.pdf
@@ -2288,7 +2288,7 @@ tissue heart
 lineage mesoderm
 vendorName ScienCell
 vendorId 6200
-orderUrl http://www.sciencellonline.com/site/products/6200.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6200
 sex U
 tier 3
 protocol Stam:HCM_Stam_protocol.pdf
@@ -2302,7 +2302,7 @@ tissue epithelium
 lineage ectoderm
 vendorName ScienCell
 vendorId 1310
-orderUrl http://www.sciencellonline.com/site/products/1310.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1310
 sex U
 tier 3
 protocol Stam:HCPEpiC_Stam_protocol.pdf
@@ -2333,7 +2333,7 @@ tissue epithelium
 lineage endoderm
 vendorName ScienCell
 vendorId 2700
-orderUrl http://www.sciencellonline.com/site/products/2700.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2700
 sex U
 tier 3
 protocol Stam:HEEpiC_Stam_protocol.pdf
@@ -2498,7 +2498,7 @@ description gingival fibroblasts
 tissue gingiva
 vendorName ScienCell
 vendorId 2620
-orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_42&products_id=83 ScienCell
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2620
 karyotype normal
 termId BTO:0000519 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000519
@@ -2515,7 +2515,7 @@ tissue liver
 lineage endoderm
 vendorName ScienCell
 vendorId 5000
-orderUrl http://www.sciencellonline.com/site/products/5000.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=5000
 sex U
 tier 3
 protocol Stam:HHSEC_Stam_protocol.pdf
@@ -2529,7 +2529,7 @@ tissue eye
 lineage ectoderm
 vendorName ScienCell
 vendorId 6560
-orderUrl http://www.sciencellonline.com/site/products/6560.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6560
 sex U
 tier 3
 protocol Stam:HIPEpiC_Stam_protocol.pdf
@@ -2709,7 +2709,7 @@ description non-pigment ciliary epithelial cells
 tissue epithelium
 vendorName ScienCell
 vendorId 6580
-orderUrl http://www.sciencellonline.com/site/products/6580.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6580
 sex U
 tier 3
 protocol Stam:HNPCEpiC_Stam_protocol.pdf
@@ -2737,7 +2737,7 @@ description pulmonary alevolar epithelial cells
 tissue epithelium
 vendorName ScienCell
 vendorId 3200
-orderUrl http://www.sciencellonline.com/site/products/3200.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3200
 sex U
 tier 3
 protocol Stam:HPAEpiC_Stam_protocol.pdf
@@ -2751,7 +2751,7 @@ tissue blood
 lineage mesoderm
 vendorName ScienCell
 vendorId 3120
-orderUrl http://www.sciencellonline.com/site/products/3120.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3120
 sex U
 tier 3
 protocol Stam:HPAF_Stam_protocol.pdf
@@ -2845,7 +2845,7 @@ sex U
 tissue kidney
 vendorName ScienCell
 vendorId 4000
-orderUrl http://www.sciencellonline.com/site/products/4000.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=4000
 termId BTO:0001176
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001176
 protocol Stam:HRGEC_Stam_protocol.pdf
@@ -2859,7 +2859,7 @@ tissue epithelium
 lineage ectoderm
 vendorName ScienCell
 vendorId 6540
-orderUrl http://www.sciencellonline.com/site/products/6540.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6540
 sex U
 tier 3
 protocol Stam:HRPEpiC_Stam_protocol.pdf
@@ -3050,7 +3050,7 @@ description villous mesenchymal fibroblast cells
 tissue connective
 vendorName ScienCell
 vendorId 7130
-orderUrl http://www.sciencellonline.com/site/products/7130.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7130
 sex U
 tier 3
 protocol Stam:HVMF_Stam_protocol.pdf
