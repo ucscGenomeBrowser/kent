@@ -88,23 +88,23 @@ visibility hide
         type peptideMapping
         color 46,0,184
         # subId=4176 dateSubmitted=2011-06-03
-				
+
         track wgEncodeUncBsuProtGm12878MitoSig
         parent wgEncodeUncBsuProtViewSignal
-       	shortLabel GM12878 mito
+        shortLabel GM12878 mito
         longLabel GM12878 mitochondria Proteogenomic Mapping Hits from ENCODE/UNC/BSU
         subGroups view=Signal cellType=GM12878 localization=mito protocol=SDS-Page
         visibility full
         type peptideMapping
         color 153,38,0
-       	# subId=4771 dateSubmitted=2011-08-11
+       # subId=4771 dateSubmitted=2011-08-11
 
-       	track wgEncodeUncBsuProtGm12878MembranefractionSig
-       	parent wgEncodeUncBsuProtViewSignal
-       	shortLabel GM12878 membrane
-       	longLabel GM12878 membrane Proteogenomic Mapping Hits from ENCODE/UNC/BSU
-       	subGroups view=Signal cellType=GM12878 localization=membraneFraction protocol=SDS-Page
-       	visibility full
-       	type peptideMapping
-       	color 153,38,0
-       	# subId=4773 dateSubmitted=2011-08-11
+       track wgEncodeUncBsuProtGm12878MembranefractionSig
+       parent wgEncodeUncBsuProtViewSignal
+       shortLabel GM12878 membrane
+       longLabel GM12878 membrane Proteogenomic Mapping Hits from ENCODE/UNC/BSU
+       subGroups view=Signal cellType=GM12878 localization=membraneFraction protocol=SDS-Page
+       visibility full
+       type peptideMapping
+       color 153,38,0
+       # subId=4773 dateSubmitted=2011-08-11
