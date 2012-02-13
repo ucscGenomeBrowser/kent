@@ -7,6 +7,10 @@
 
 #	"$Id: hg19.ucscGenes13.csh,v 1.4 2010/06/08 01:57:08 cline Exp $"
 
+#
+# Prerequisites
+# Before executing this script, rebuild the swissprot and proteins databases.
+
 
 # Directories
 set genomes = /hive/data/genomes
@@ -1351,9 +1355,10 @@ sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
 # Create backup database
 hgsqladmin create ${db}Backup
 
-# Drop tempDb chromInfo and history tables, we don't want to swap them in!
+# Drop tempDb history table and chromInfo, we don't want to swap them in!
 hgsql -e "drop table history" $tempDb
 hgsql -e "drop table chromInfo" $tempDb
+hgsql -e "drop table tableList" $tempDb
 
 # Swap in new tables, moving old tables to backup database.
 sudo ~kent/bin/swapInMysqlTempDb $tempDb $db ${db}Backup

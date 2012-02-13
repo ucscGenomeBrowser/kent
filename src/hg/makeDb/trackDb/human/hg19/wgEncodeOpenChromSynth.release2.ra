@@ -37,7 +37,7 @@ html wgEncodeOpenChromSynth.release2
 
 	track wgEncodeOpenChromSynthK562Pk
         parent wgEncodeOpenChromSynth
-        shortLabel K562 OpChr Syn
+        shortLabel K562 Syn Pk
         longLabel K562 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=1K5 treatment=aNone
         type bed 9 +
@@ -45,7 +45,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthGm12878Pk
         parent wgEncodeOpenChromSynth
-        shortLabel GM12878 OpChr Syn
+        shortLabel GM12878 Syn Pk
         longLabel GM12878 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=1GM treatment=aNone
         type bed 9 +
@@ -53,7 +53,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthH1hescPk
         parent wgEncodeOpenChromSynth
-        shortLabel H1-hESC OpChr Syn
+        shortLabel H1-hESC Syn Pk
         longLabel H1-hESC DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=1H1 treatment=aNone
         type bed 9 +
@@ -61,7 +61,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthHepg2Pk
         parent wgEncodeOpenChromSynth off
-        shortLabel HepG2 OpChr Syn
+        shortLabel HepG2 Syn Pk
         longLabel HepG2 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=2HEP treatment=aNone
         type bed 9 +
@@ -69,7 +69,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthHelas3Pk
         parent wgEncodeOpenChromSynth off
-        shortLabel HeLa-S3 OpChr Syn
+        shortLabel HeLa-S3 Syn Pk
         longLabel HeLa-S3 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=2HELA treatment=aNone
         type bed 9 +
@@ -77,7 +77,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthHuvecPk
         parent wgEncodeOpenChromSynth off
-        shortLabel HUVEC OpChr Syn
+        shortLabel HUVEC Syn Pk
         longLabel HUVEC DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=2HUV treatment=aNone
         type bed 9 +
@@ -85,7 +85,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthNhekPk
         parent wgEncodeOpenChromSynth off
-        shortLabel NHEK OpChr Syn
+        shortLabel NHEK Syn Pk
         longLabel NHEK DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=NHEK treatment=aNone
         type bed 9 +
@@ -93,7 +93,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthMedulloPk
         parent wgEncodeOpenChromSynth off
-        shortLabel Medullo Pk
+        shortLabel Medullo Syn Pk
         longLabel Medullo DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=MEDULLO treatment=aNone
         type bed 9 +
@@ -102,7 +102,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthGm12891Pk
         parent wgEncodeOpenChromSynth off
-        shortLabel GM12891 Pk
+        shortLabel GM12891 Syn Pk
         longLabel GM12891 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=GM12891 treatment=aNone
         type bed 9 +
@@ -111,7 +111,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthGm12892Pk
         parent wgEncodeOpenChromSynth off
-        shortLabel GM12892 Pk
+        shortLabel GM12892 Syn Pk
         longLabel GM12892 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=GM12892 treatment=aNone
         type bed 9 +
@@ -120,7 +120,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthGm19239Pk
         parent wgEncodeOpenChromSynth off
-        shortLabel GM19239 Pk
+        shortLabel GM19239 Syn Pk
         longLabel GM19239 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=GM19239 treatment=aNone
         type bed 9 +
@@ -129,7 +129,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthGm18507Pk
         parent wgEncodeOpenChromSynth off
-        shortLabel GM18507 Pk
+        shortLabel GM18507 Syn Pk
         longLabel GM18507 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=GM18507 treatment=aNone
         type bed 9 +
@@ -138,7 +138,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthGlioblaPk
         parent wgEncodeOpenChromSynth off
-        shortLabel Gliobla Pk
+        shortLabel Gliobla Syn Pk
         longLabel Gliobla DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=GLIOBLA treatment=aNone
         type bed 9 +
@@ -147,7 +147,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthHelas3Ifna4hPk
         parent wgEncodeOpenChromSynth off
-        shortLabel HeLa-S3 Pk
+        shortLabel HeLa-S3 Syn Pk
         longLabel HeLa-S3 IFNa4h DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=2HELA treatment=IFNA4H
         type bed 9 +
@@ -157,7 +157,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthPanisletsPk
         parent wgEncodeOpenChromSynth off
-        shortLabel PanIslets Pk
+        shortLabel Pan Islets Syn Pk
         longLabel PanIslets DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=PANISLETS treatment=aNone
         type bed 9 +
@@ -166,7 +166,7 @@ html wgEncodeOpenChromSynth.release2
 
         track wgEncodeOpenChromSynthHtr8Pk
         parent wgEncodeOpenChromSynth off
-        shortLabel HTR8svn Pk
+        shortLabel HTR8svn Syn Pk
         longLabel HTR8svn DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
         subGroups cellType=HTR8 treatment=aNone
         type bed 9 +

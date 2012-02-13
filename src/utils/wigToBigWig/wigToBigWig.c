@@ -26,6 +26,8 @@ errAbort(
   "Where in.wig is in one of the ascii wiggle formats, but not including track lines\n"
   "and chrom.sizes is two column: <chromosome name> <size in bases>\n"
   "and out.bw is the output indexed big wig file.\n"
+  "Use the script: fetchChromSizes to obtain the actual chrom.sizes information\n"
+  "from UCSC, please do not make up a chrom sizes from your own information.\n"
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"

@@ -895,3 +895,87 @@ TMPDIR=/scratch/tmp
     #	62854403 bases of 2183592768 (2.878%) in intersection
 
 ############################################################################
+## 8-Way Multiz (WORKING - 2012-01-18 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/fr3/bed/multiz8way
+    cd /hive/data/genomes/fr3/bed/multiz8way
+
+    # species list:
+    cd /hive/data/genomes/fr3/bed
+    ls -d lastz.* | sed -e "s/lastz.//" | sort | xargs echo
+# danRer7 gadMor1 gasAcu1 latCha1 oreNil1 oryLat2 tetNig2
+    # plus this one
+# fr3
+
+    #	All distances remain as specified in the 60way.nh
+    /cluster/bin/phast/tree_doctor --prune-all-but \
+	fr3,danRer7,gadMor1,gasAcu1,latCha1,oreNil1,oryLat2,tetNig2 \
+	    $HOME/kent/src/hg/utils/phyloTrees/60way.nh > 8way.nh
+    #	what that looks like:
+    cat 8way.nh
+# (latCha1:1.166927,((((((tetNig2:0.224159,fr3:0.203847):0.097590,
+# oreNil1:0.200000):0.097590,gasAcu1:0.316413):0.030000,
+# oryLat2:0.511970):0.030000,gadMor1:0.350000):0.225640,
+# danRer7:0.730752):0.147949);
+
+    #	rearrange to get fr3 on top:
+    cat << '_EOF_' > fr3.8way.nh
+(((((((fr3:0.008825,(hg19:0.006700,panTro3:0.006667):0.002250):0.009680,
+ponAbe2:0.018318):0.007000,nomLeu1:0.010000):0.007000,(rheMac2:0.007853,
+papHam1:0.007637):0.029618):0.021965,calJac3:0.066131):0.057590,
+tarSyr1:0.137823):0.08062,(micMur1:0.092749,otoGar1:0.129725):0.035463);
+'_EOF_'
+    # << happy emacs
+
+    # convert to species names
+    /cluster/bin/phast/tree_doctor --rename \
+"fr3->Gorilla; hg19->Human; panTro3->Chimp; ponAbe2->Orangutan; nomLeu1->Gibbon; rheMac2->Rhesus; papHam1->Baboon; calJac3->Marmoset; tarSyr1->Tarsier; micMur1->Mouse_lemur; otoGar1->Bushbaby" \
+fr3.8way.nh > fr3.commonNames.8way.nh
+
+# (((((((Gorilla:0.008825,(Human:0.006700,Chimp:0.006667):0.002250):0.009680,
+# Orangutan:0.018318):0.007000,Gibbon:0.010000):0.007000,
+# (Rhesus:0.007853,Baboon:0.007637):0.029618):0.021965,
+# Marmoset:0.066131):0.057590,Tarsier:0.137823):0.08062,
+# (Mouse_lemur:0.092749,Bushbaby:0.129725):0.035463);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/fr3_8way.png
+
+    /cluster/bin/phast/all_dists fr3.8way.nh > 8way.distances.txt
+    #	Use this output to create the table below
+    grep -i fr3 8way.distances.txt | sort -k3,3n
+# fr3     tetNig2 0.428006
+# fr3     oreNil1 0.501437
+# fr3     gasAcu1 0.715440
+# fr3     gadMor1 0.809027
+# fr3     oryLat2 0.940997
+# fr3     danRer7 1.415419
+# fr3     latCha1 1.999543
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#                         featureBits chainLink measures
+#                                        chainGorGor3Link  chain linearGap
+#    distance                    on fr3  on other     minScore
+#  1  0.018 - chimp panTro3      (% 89.04) (% 88.04)       5000     medium
+#  2  0.018 - human hg19         (% 91.8) (% 89.88)       5000     medium
+#  3  0.036 - gibbon nomLeu1     (% 83.48) (% 84.12)       5000     medium
+#  4  0.037 - orangutan ponAbe2  (% 86.35) (% 83.55)       5000     medium
+#  5  0.070 - baboon papHam1     (% 79.43) (% 80.87)       5000     medium
+#  6  0.070 - rhesus rheMac2     (% 79.24) (% 82.19)       5000     medium
+#  7  0.121 - marmoset calJac3   (% 68.51) (% 70.07)       5000     medium
+#  8  0.250 - tarsier tarSyr1    (% 19.48) (% 20.48)       5000     medium
+#  9  0.251 - mouse lemur micMur1(% 22.91) (% 34.56)       5000     medium
+# 10  0.288 - bushbaby otoGar1   (% 12.02) (% 17.08)       5000     medium
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	fr3.8way.nh > tmp.nh
+    echo `cat tmp.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+

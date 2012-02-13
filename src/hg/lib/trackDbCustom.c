@@ -794,6 +794,12 @@ for (generation = tdb; generation != NULL; generation = generation->parent)
 return trackSetting;
 }
 
+void trackDbAddSetting(struct trackDb *bt, char *name, char *val)
+{
+/* Add a setting to a trackDb rec */
+hashAdd(trackDbHashSettings(bt), name, cloneString(val));
+}
+
 char *trackDbSettingByView(struct trackDb *tdb, char *name)
 /* For a subtrack of a multiview composite, get a setting stored in the view or any other
  * ancestor. */

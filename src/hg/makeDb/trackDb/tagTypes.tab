@@ -5,7 +5,7 @@
 #
 # The format of this file is simple.  The first word in a line is the tag name.  The
 # subsequent words are types it is allowed in.  Wildcards are allowed in the types.
-# This file was generate initially with src/hg/oneShot/makeTrackDbTypeTags and then
+# This file was generated initially with src/hg/oneShot/makeTrackDbTypeTags and then
 # edited lightly by hand.
 #
 # Note that type "customTracks" is used to reserve a symbol that can be in a
@@ -17,7 +17,7 @@ aggregate bigWig wig bedGraph
 aliQualRange bam
 allButtonPair *
 altColor *
-articleTable bed
+alwaysZero wig bedGraph
 autoScale *
 autoTranslate genePred
 bamColorMode bam
@@ -293,7 +293,6 @@ searchMethod bed
 searchType bed
 selectSubject psl
 seqTable bed
-sequenceTable bed
 settingsByView *
 shortLabel *
 showCdsAllScales psl
@@ -339,6 +338,9 @@ subgroups bed
 summary wigMaf
 superTrack *
 symbolTable bed genePred
+t2gArticleTable bed
+t2gSequenceTable bed
+t2gMarkerTable bed
 thickDrawItem bed
 table *
 tableBrowser *
