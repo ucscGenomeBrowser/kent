@@ -1737,8 +1737,8 @@ identifier knownXref
 
 identifier tRNAName
 "tRNA track name"
-    $kgDb3.kgXref.tRname
-    $kgDb3.tRNAsDbs.tRNAs.name
+    $kgDb3.kgXref.tRnaName dupeOk
+    $tRNAsDbs.tRNAs.name
 
 identifier ccdsGeneId
 "CCDS Gene ID"

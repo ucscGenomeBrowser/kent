@@ -4,7 +4,7 @@ shortLabel UW Repli-seq
 longLabel Replication Timing by Repli-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views 1PctSignal=Percentage-normalized_Signal 2Peaks=Peaks 3Valleys=Valleys 4WaveSignal=Wavelet-smoothed_Signal 5SumSignal=Summed_Densities
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HEPG2=HepG2&nbsp;(Tier_2) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) BJ=BJ BG02ES=BG02ES GM06990=GM06990 GM12801=GM12801 GM12812=GM12812 GM12813=GM12813 IMR90=IMR90 MCF7=MCF-7 NHEK=NHEK SKNSH=SK-N-SH
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) BG02ES=BG02ES BJ=BJ GM06990=GM06990 GM12801=GM12801 GM12812=GM12812 GM12813=GM12813 IMR90=IMR90 MCF7=MCF-7 NHEK=NHEK SKNSH=SK-N-SH
 subGroup3 phase Phase 1G1=G1 1G1B=G1b 2S1=S1 3S2=S2 4S3=S3 5S4=S4 6G2=G2 zNONE=None
 subGroup4 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=rep
@@ -1260,7 +1260,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12878SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off 
         shortLabel GM12878 Sd 1
-        longLabel GM12878 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel GM12878 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=1GM12878 phase=zNONE rep=rep1
         type bigWig 2.000000 2332.000000
         origAssembly hg19
@@ -1270,7 +1270,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqK562SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel K562 Sd 1
-        longLabel K562 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel K562 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=1K562 phase=zNONE rep=rep1
         type bigWig 2.000000 3354.000000
         origAssembly hg19
@@ -1280,7 +1280,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqImr90SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel IMR90 Sd 1
-        longLabel IMR90 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel IMR90 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=IMR90 phase=zNONE rep=rep1
         type bigWig 1.000000 1949.000000
         origAssembly hg19
@@ -1289,7 +1289,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqMcf7SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel MCF-7 Sd 1
-        longLabel MCF-7 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel MCF-7 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=MCF7 phase=zNONE rep=rep1
         type bigWig 1.000000 5286.000000
         origAssembly hg19
@@ -1298,7 +1298,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqNhekSumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel NHEK Sd 1
-        longLabel NHEK Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel NHEK Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=NHEK phase=zNONE rep=rep1
         type bigWig 1.000000 3234.000000
         origAssembly hg19
@@ -1308,7 +1308,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqSknshSumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel SK-N-SH Sd 1
-        longLabel SK-N-SH Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel SK-N-SH Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=SKNSH phase=zNONE rep=rep1
         type bigWig 1.000000 2886.000000
         origAssembly hg19
@@ -1318,7 +1318,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjSumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel BJ Sd 1
-        longLabel BJ Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel BJ Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=BJ phase=zNONE rep=rep1
         type bigWig 1.000000 2370.000000
         origAssembly hg19
@@ -1327,7 +1327,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjSumSignalRep2
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel BJ Sd 2
-        longLabel BJ Replication Timing by Summed Densities Rep 2 from ENCODE/UW
+        longLabel BJ Repli-seq Summed Densities Rep 2 from ENCODE/UW
         subGroups view=5SumSignal cellType=BJ phase=zNONE rep=rep2
         type bigWig 1.000000 2359.000000
         origAssembly hg19
@@ -1336,7 +1336,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm06990SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel GM06990 Sd 1
-        longLabel GM06990 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel GM06990 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=GM06990 phase=zNONE rep=rep1
         type bigWig 1.000000 2459.000000
         origAssembly hg19
@@ -1345,7 +1345,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12801SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel GM12801 Sd 1
-        longLabel GM12801 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel GM12801 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=GM12801 phase=zNONE rep=rep1
         type bigWig 1.000000 3476.000000
         origAssembly hg19
@@ -1354,7 +1354,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHelas3SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel HeLa-S3 Sd 1
-        longLabel HeLa-S3 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=2HELAS3 phase=zNONE rep=rep1
         type bigWig 1.000000 2522.000000
         origAssembly hg19
@@ -1364,7 +1364,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHepg2SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel HepG2 Sd 1
-        longLabel HepG2 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel HepG2 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=2HEPG2 phase=zNONE rep=rep1
         type bigWig 1.000000 2691.000000
         origAssembly hg19
@@ -1374,7 +1374,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHuvecSumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel HUVEC Sd 1
-        longLabel HUVEC Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel HUVEC Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=2HUVEC phase=zNONE rep=rep1
         type bigWig 1.000000 2431.000000
         origAssembly hg19
@@ -1384,7 +1384,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBg02esSumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel BG02ES Sd 1
-        longLabel BG02ES Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel BG02ES Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=BG02ES phase=zNONE rep=rep1
         type bigWig 2.000000 2088.000000
         origAssembly hg19
@@ -1393,7 +1393,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12813SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel GM12813 Sd 1
-        longLabel GM12813 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel GM12813 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=GM12813 phase=zNONE rep=rep1
         type bigWig 1.000000 3195.000000
         origAssembly hg19
@@ -1402,7 +1402,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12812SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel GM12812 Sd 1
-        longLabel GM12812 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        longLabel GM12812 Repli-seq Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=GM12812 phase=zNONE rep=rep1
         type bigWig 1.000000 3003.000000
         origAssembly hg19
@@ -1419,7 +1419,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12878WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal
         shortLabel GM12878 Ws 1
-        longLabel GM12878 Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel GM12878 Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=1GM12878 phase=zNONE rep=rep1
         type bigWig -5.058377 85.875435
         origAssembly hg19
@@ -1429,7 +1429,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqK562WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal
         shortLabel K562 Ws 1
-        longLabel K562 Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel K562 Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=1K562 phase=zNONE rep=rep1
         type bigWig -8.533489 91.331688
         origAssembly hg19
@@ -1439,7 +1439,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqImr90WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel IMR90 Ws 1
-        longLabel IMR90 Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel IMR90 Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=IMR90 phase=zNONE rep=rep1
         type bigWig -4.765058 90.173477
         origAssembly hg19
@@ -1448,7 +1448,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqMcf7WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel MCF-7 Ws 1
-        longLabel MCF-7 Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel MCF-7 Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=MCF7 phase=zNONE rep=rep1
         type bigWig -3.953135 86.434151
         origAssembly hg19
@@ -1457,7 +1457,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqNhekWaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel NHEK Ws 1
-        longLabel NHEK Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel NHEK Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=NHEK phase=zNONE rep=rep1
         type bigWig -3.430146 80.768188
         origAssembly hg19
@@ -1467,7 +1467,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqSknshWaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel SK-N-SH Ws 1
-        longLabel SK-N-SH Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel SK-N-SH Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=SKNSH phase=zNONE rep=rep1
         type bigWig -4.517115 80.696381
         origAssembly hg19
@@ -1477,7 +1477,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjWaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel BJ Ws 1
-        longLabel BJ Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel BJ Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=BJ phase=zNONE rep=rep1
         type bigWig -5.426893 81.547684
         origAssembly hg19
@@ -1486,7 +1486,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjWaveSignalRep2
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel BJ Ws 2
-        longLabel BJ Replication Timing by Wavelet-smoothed Signal Rep 2 from ENCODE/UW
+        longLabel BJ Repli-seq Wavelet-smoothed Signal Rep 2 from ENCODE/UW
         subGroups view=4WaveSignal cellType=BJ phase=zNONE rep=rep2
         type bigWig -4.167373 85.385254
         origAssembly hg19
@@ -1495,7 +1495,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm06990WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel GM06990 Ws 1
-        longLabel GM06990 Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel GM06990 Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=GM06990 phase=zNONE rep=rep1
         type bigWig -5.937394 86.593140
         origAssembly hg19
@@ -1504,7 +1504,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12801WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel GM12801 Ws 1
-        longLabel GM12801 Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel GM12801 Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=GM12801 phase=zNONE rep=rep1
         type bigWig -7.980212 81.235001
         origAssembly hg19
@@ -1513,7 +1513,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHelas3WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal
         shortLabel HeLa-S3 Ws 1
-        longLabel HeLa-S3 Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=2HELAS3 phase=zNONE rep=rep1
         type bigWig -5.460803 85.228607
         origAssembly hg19
@@ -1523,7 +1523,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHepg2WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal
         shortLabel HepG2 Ws 1
-        longLabel HepG2 Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel HepG2 Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=2HEPG2 phase=zNONE rep=rep1
         type bigWig -7.742796 88.110779
         origAssembly hg19
@@ -1533,7 +1533,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHuvecWaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal
         shortLabel HUVEC Ws 1
-        longLabel HUVEC Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel HUVEC Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=2HUVEC phase=zNONE rep=rep1
         type bigWig -5.104345 89.079559
         origAssembly hg19
@@ -1543,7 +1543,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBg02esWaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel BG02ES Ws 1
-        longLabel BG02ES Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel BG02ES Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=BG02ES phase=zNONE rep=rep1
         type bigWig -3.279608 86.164284
         origAssembly hg19
@@ -1552,7 +1552,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12813WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel GM12813 Ws 1
-        longLabel GM12813 Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel GM12813 Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=GM12813 phase=zNONE rep=rep1
         type bigWig -4.763633 79.900345
         origAssembly hg19
@@ -1561,7 +1561,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12812WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
         shortLabel GM12812 Ws 1
-        longLabel GM12812 Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        longLabel GM12812 Repli-seq Wavelet-smoothed Signal Rep 1 from ENCODE/UW
         subGroups view=4WaveSignal cellType=GM12812 phase=zNONE rep=rep1
         type bigWig -7.395215 79.570450
         origAssembly hg19

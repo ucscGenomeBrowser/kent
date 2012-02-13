@@ -19,20 +19,20 @@ include wgEncodePsuTfbs.ra alpha,beta
 # PSU Histone (wrangler: Venkat)
 include wgEncodePsuHistone.ra alpha,beta
 
-# LICR Histone (wrangler: Venkat)
+# LICR Histone (wrangler: Fang)
 include wgEncodeLicrHistone.ra beta,public
-include wgEncodeLicrHistone.new.ra alpha
+include wgEncodeLicrHistone.release2.ra alpha
 
-# LICR TFBS (wrangler: Venkat)
+# LICR TFBS (wrangler: Fang)
 include wgEncodeLicrTfbs.ra beta,public
-include wgEncodeLicrTfbs.new.ra alpha
+include wgEncodeLicrTfbs.release2.ra alpha
 
 # Stan/Yale RNA-Seq (wrangler: Venkat)
 include wgEncodeSydhRnaSeq.ra alpha
 
-# Licr RNA-Seq (wrangler: Venkat)
+# Licr RNA-Seq (wrangler: Fang)
 include wgEncodeLicrRnaSeq.ra beta,public
-include wgEncodeLicrRnaSeq.new.ra alpha
+include wgEncodeLicrRnaSeq.release2.ra alpha
 
 # Uw RNA-Seq (wrangler: Venkat)
 include wgEncodeUwRnaSeq.ra alpha
