@@ -357,6 +357,9 @@ struct hash *trackDbSettingsFromString(char *string);
 char *trackDbSetting(struct trackDb *tdb, char *name);
 /* Return setting string or NULL if none exists. */
 
+void trackDbAddSetting(struct trackDb *bt, char *name, char *val);
+/* Add a setting to a trackDb rec */
+
 boolean trackDbSettingOn(struct trackDb *tdb, char *name);
 /* Return true if a tdb setting is "on" "true" or "enabled". */
 

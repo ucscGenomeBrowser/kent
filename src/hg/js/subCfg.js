@@ -844,7 +844,8 @@ var subCfg = { // subtrack config module.
         // Tricky for composite level controls.  Could wrap cfg controls in new div.
         // DO THIS AFTER Views
         // NOTE: excluding sortOrder and showCfg which are special cases we don't care about in subCfg
-        var compObjs = $('select,input').filter("[name^='"+subCfg.compositeName+"\\.'],[name^='"+subCfg.compositeName+"_']").not(".viewDD");
+        // Excluding views and subCBs because a {composite}_{subtrack} naming scheme may be used
+        var compObjs = $('select,input').filter("[name^='"+subCfg.compositeName+"\\.'],[name^='"+subCfg.compositeName+"_']").not(".viewDD,.subCB");
         if (compObjs.length > 0) {
             $(compObjs).each(function (i) {
                 if (this.type != 'hidden') {
@@ -853,8 +854,8 @@ var subCfg = { // subtrack config module.
                     && this.id.length > 0
                     && $(this).hasClass('filterBy') == false
                     && $(this).hasClass('filterComp') == false)
-                        warn('DEBUG: Not expected control with name ['+this.name + '], and id #'+this.id);
-                    // DEBUG -------------
+                        warn('DEBUG: Unexpected control with name ['+this.name + '], and id #'+this.id);
+                    // DEBUG ------------- Helps find unexpected problems.
 
                     $(this).change(function (e) {
                         subCfg.markChange(e,this);

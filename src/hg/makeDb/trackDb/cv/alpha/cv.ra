@@ -2126,7 +2126,7 @@ sex U
 tissue cerebellar
 vendorName ScienCell
 vendorId 1810
-orderUrl http://www.sciencellonline.com/site/products/1810.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1810
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
 protocol Stam:HAc_Stam_protocol.pdf
@@ -2139,7 +2139,7 @@ description amniotic epithelial cells
 tissue epithelium
 vendorName ScienCell
 vendorId 7100
-orderUrl http://www.sciencellonline.com/site/products/7100.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7100
 tier 3
 sex U
 protocol Stam:HAEpiC_Stam_protocol.pdf
@@ -2156,7 +2156,7 @@ sex U
 tissue brain hippocampus
 vendorName ScienCell
 vendorId 1830
-orderUrl http://www.sciencellonline.com/site/products/1830.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1830
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
 protocol Stam:HAh_Stam_protocol.pdf
@@ -2184,7 +2184,7 @@ description astrocytes spinal cord
 tissue spinal cord
 vendorName ScienCell
 vendorId 1820
-orderUrl http://www.sciencellonline.com/site/products/1820.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1820
 karyotype normal
 lineage ectoderm
 termId BTO:0000099
@@ -2203,7 +2203,7 @@ tier 3
 lineage ectoderm
 vendorName ScienCell
 vendorId 1000
-orderUrl http://www.sciencellonline.com/site/products/1000.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1000
 sex U
 protocol Stam:HBMEC_Stam_protocol.pdf
 
@@ -2246,7 +2246,7 @@ tissue heart
 lineage mesoderm
 vendorName ScienCell
 vendorId 6320
-orderUrl http://www.sciencellonline.com/site/products/6320.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6320
 sex F
 tier 3
 protocol Stam:HCFaa_Stam_protocol.pdf
@@ -2260,7 +2260,7 @@ tissue heart
 lineage mesoderm
 vendorName ScienCell
 vendorId 6300
-orderUrl http://www.sciencellonline.com/site/products/6300.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6300
 sex U
 tier 3
 protocol Stam:HCF_Stam_protocol.pdf
@@ -2274,7 +2274,7 @@ tissue eye
 lineage ectoderm
 vendorName ScienCell
 vendorId 6570
-orderUrl http://www.sciencellonline.com/site/products/6570.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6570
 sex U
 tier 3
 protocol Stam:HConF_Stam_protocol.pdf
@@ -2288,7 +2288,7 @@ tissue heart
 lineage mesoderm
 vendorName ScienCell
 vendorId 6200
-orderUrl http://www.sciencellonline.com/site/products/6200.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6200
 sex U
 tier 3
 protocol Stam:HCM_Stam_protocol.pdf
@@ -2302,7 +2302,7 @@ tissue epithelium
 lineage ectoderm
 vendorName ScienCell
 vendorId 1310
-orderUrl http://www.sciencellonline.com/site/products/1310.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1310
 sex U
 tier 3
 protocol Stam:HCPEpiC_Stam_protocol.pdf
@@ -2333,7 +2333,7 @@ tissue epithelium
 lineage endoderm
 vendorName ScienCell
 vendorId 2700
-orderUrl http://www.sciencellonline.com/site/products/2700.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2700
 sex U
 tier 3
 protocol Stam:HEEpiC_Stam_protocol.pdf
@@ -2498,7 +2498,7 @@ description gingival fibroblasts
 tissue gingiva
 vendorName ScienCell
 vendorId 2620
-orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_42&products_id=83 ScienCell
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2620
 karyotype normal
 termId BTO:0000519 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000519
@@ -2515,7 +2515,7 @@ tissue liver
 lineage endoderm
 vendorName ScienCell
 vendorId 5000
-orderUrl http://www.sciencellonline.com/site/products/5000.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=5000
 sex U
 tier 3
 protocol Stam:HHSEC_Stam_protocol.pdf
@@ -2529,7 +2529,7 @@ tissue eye
 lineage ectoderm
 vendorName ScienCell
 vendorId 6560
-orderUrl http://www.sciencellonline.com/site/products/6560.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6560
 sex U
 tier 3
 protocol Stam:HIPEpiC_Stam_protocol.pdf
@@ -2709,7 +2709,7 @@ description non-pigment ciliary epithelial cells
 tissue epithelium
 vendorName ScienCell
 vendorId 6580
-orderUrl http://www.sciencellonline.com/site/products/6580.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6580
 sex U
 tier 3
 protocol Stam:HNPCEpiC_Stam_protocol.pdf
@@ -2737,7 +2737,7 @@ description pulmonary alevolar epithelial cells
 tissue epithelium
 vendorName ScienCell
 vendorId 3200
-orderUrl http://www.sciencellonline.com/site/products/3200.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3200
 sex U
 tier 3
 protocol Stam:HPAEpiC_Stam_protocol.pdf
@@ -2751,7 +2751,7 @@ tissue blood
 lineage mesoderm
 vendorName ScienCell
 vendorId 3120
-orderUrl http://www.sciencellonline.com/site/products/3120.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3120
 sex U
 tier 3
 protocol Stam:HPAF_Stam_protocol.pdf
@@ -2845,7 +2845,7 @@ sex U
 tissue kidney
 vendorName ScienCell
 vendorId 4000
-orderUrl http://www.sciencellonline.com/site/products/4000.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=4000
 termId BTO:0001176
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001176
 protocol Stam:HRGEC_Stam_protocol.pdf
@@ -2859,7 +2859,7 @@ tissue epithelium
 lineage ectoderm
 vendorName ScienCell
 vendorId 6540
-orderUrl http://www.sciencellonline.com/site/products/6540.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6540
 sex U
 tier 3
 protocol Stam:HRPEpiC_Stam_protocol.pdf
@@ -3050,7 +3050,7 @@ description villous mesenchymal fibroblast cells
 tissue connective
 vendorName ScienCell
 vendorId 7130
-orderUrl http://www.sciencellonline.com/site/products/7130.php
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7130
 sex U
 tier 3
 protocol Stam:HVMF_Stam_protocol.pdf
@@ -5341,6 +5341,79 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C
 validation Human_-_AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
 label AP-2gamma (sc-8977)
 
+term ARID3A_(NB100-279)
+tag ARID3ANB100279
+type Antibody
+antibodyDescription Rabbit polyclonal, Immunogen: A synthetic peptide, which represented a portion of human Dead Ringer-Like 1 encoded within exon 8
+target ARID3A
+targetDescription This gene encodes a member of the ARID (AT-rich interaction domain) family of DNA binding proteins. It was found by homology to the Drosophila dead ringer gene, which is important for normal embryogenesis. Other ARID family members have roles in embryonic patterning, cell lineage gene regulation, cell cycle control, transcriptional regulation, and possibly in chromatin structure modification. (provided by RefSeq)
+vendorName Novus Biologicals
+vendorId NB100-279
+orderUrl http://www.novusbio.com/DRIL1-Antibody_NB100-279.html
+lab Snyder
+lots A1
+targetId GeneCard:ARID3A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ARID3A
+validation ARID3A_(NB100-279)(Immunoprecipitation,ChIP):human_ARID3A_NB100-279_validation_Snyder.pdf
+
+term ARID3A_(sc-8821)
+tag ARID3ASC8821
+type Antibody
+antibodyDescription affinity purified goat polyclonal antibody raised against a peptide mapping at the N-terminus of ARID3A of human origin.
+target ARID3A
+targetDescription This gene encodes a member of the ARID (AT-rich interaction domain) family of DNA binding proteins. It was found by homology to the Drosophila dead ringer gene, which is important for normal embryogenesis. Other ARID family members have roles in embryonic patterning, cell lineage gene regulation, cell cycle control, transcriptional regulation, and possibly in chromatin structure modification. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-8821
+orderUrl http://www.scbt.com/datasheet-8821-arid3a-n-20-antibody.html
+lab Snyder
+lots B100
+targetId GeneCard:ARID3A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ARID3A
+validation ARID3A_(sc-8821)(Immunoprecipitation,ChIP):human_ARID3A_sc-8821_validation_Snyder.pdf
+
+term ATF1_(Millipore_06-325)
+tag ATF1MILLIPORE06325
+type Antibody
+antibodyDescription Sheep polyclonal, immunogen: CPVTLTSQTTKTDDPQL
+target ATF1
+targetDescription ATF1 is a bZip transcription factor from the CREB family.  ATF1 binds to both cAMP response elements (TGACGTCA).
+vendorName Millipore
+vendorId 06-325
+orderUrl http://www.millipore.com/catalogue/item/06-325
+lab Struhl
+targetId GeneCard:ATF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF1
+validation ATF1_(Millipore_06-325)(Western_blot,ChIP):human_ATF1_Millipore_06-325_validation_Struhl.pdf
+
+term ATF2_pT71
+tag ATF2PT71
+type Antibody
+antibodyDescription Rabbit polyclonal, antibodies are produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Thr71 of human ATF2. Antibodies are purified by protein A and peptide affinity chromatography.
+target ATF2
+targetDescription ATF2 is a stress inducible basic leucine zipper transcription factor from the CREB family.  ATF2 is phosphorylated at threonine residues 69 and 71 by JNK or p38 mitogen activated protein kinases.  Mutation of these residues leads to the loss of ATF2 transactivation in vitro.
+vendorName Cell Signaling
+vendorId 9221
+orderUrl http://www.cellsignal.com/products/9221.html
+lab Struhl
+targetId GeneCard:ATF2_pT71
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
+validation ATF2_pT71_(9221)(Western_Blot,Immunoprecipitation):human_ATF2_pT71_9221_validation_Struhl.pdf
+
+
+term ATF2_(sc-6233)
+tag ATF2SC6233
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 1-96 mapping at the N-terminus of ATF-2 of human origin
+target ATF2
+targetDescription ATF2 is a bZip transcription factor from the CREB family.  ATF2 binds to both cAMP response elements (TGACGTCA) and TPA responsive element (TGAGTCA) and is known to heterodimerize with JUN members of the AP1 family of transcription factors. ATF2 is activated by phosphorylation of Thr71 by the stress activated p38 mitogen activated protein kinases.
+vendorName Santa Cruz Biotech
+vendorId sc-6233
+orderUrl http://www.scbt.com/datasheet-6233-atf-2-n-96-antibody.html
+lab Struhl
+targetId GeneCard:ATF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
+validation ATF2_(sc-6233)(Western_blot,ChIP):human_ATF2_sc-6233_validation_Struhl.pdf
+
 term ATF2_(SC-81188)
 tag ATF2SC81188
 type Antibody
@@ -5372,6 +5445,22 @@ targetId GeneCard:ATF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
 validation Human_-_ATF3(Immunoblot):human_ATF3_validation_Myers.pdf
 label ATF3 (sc-188)
+
+term Bach1_(sc-14700)
+tag BACH1SC14700
+type Antibody
+antibodyDescription BACH1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of BACH1 of human origin.
+target Bach1
+targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members. These BTB/POZ domains facilitate protein-protein interactions and formation of homo- and/or hetero-oligomers. When this encoded protein forms a heterodimer with MafK, it functions as a repressor of Maf recognition element (MARE) and transcription is repressed. Multiple alternatively spliced transcript variants have been identified for this gene. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-14700
+orderUrl http://www.scbt.com/datasheet-14700-bach1-c-20-antibody.html
+lab Snyder
+lots E1503
+targetId GeneCard:BACH1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
+validation Bach1_(sc-14700)(Immunoblots,IP-Mass_spec):human_Bach1_sc-14700_validation_Snyder.pdf
+
 
 term BAF155
 tag BAF155
@@ -5521,7 +5610,7 @@ vendorId NB100-1800
 orderUrl http://www.novusbio.com/DEC1-Antibody-_NB100-1800.html?rr=true
 lab Snyder
 lots N/A
-targetId GeneCards:BHLHE40
+targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation Human_-_:missing Mouse_-_:missing
 label BHLHE40 (NB100-1800)
@@ -5679,6 +5768,20 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNT2
 validation Human_-_:missing
 label CCNT2 (sc-12419)
 
+term CDK9_(ab75898)
+tag CDK9AB75898
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen= multiple synthetic peptides corresponding to C-terminal and N-terminal domains of the protein coded by the human gene cdk9 (PITALRE)
+target CDK9
+targetDescription Cyclin dependent kinase 9 (CDK9) heterodimerizes with Cyclin T1 or Cyclin T2. The heterodimer is also known as positive elongation factor B (P-TEFb) and is responsible for the phosphorylation of Ser2 of the RNA polymerase II C-terminal
+vendorName Abcam
+vendorId ab75898
+orderUrl http://www.abcam.com/Cdk9-antibody-ab6544.html
+lab Struhl
+targetId GeneCard:CDK9
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CDK9&search=cdk9
+validation CDK9_(ab75898)(Western_Blot,ChIP):human_CDK9_ab75898_validation_Struhl.pdf
+
 term CEBPB
 tag CEBPB
 type Antibody
@@ -5754,10 +5857,26 @@ vendorId A301-218A
 orderUrl http://www.bethyl.com/product/A301-218A
 lab Bernstein
 lots A301-218A-1
-targetId GeneCards:CHD1
+targetId GeneCard:CHD1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
 validation Human_-_CHD1_(A301-218A)(ChIP-String,ChIP-seq):human_CHD1_validation_Bernstein.pdf
 label CHD1 (A301-218A)
+
+term CHD1_(NB100-60411)
+tag CHD1NB10060411
+type Antibody
+antibodyDescription Rabbit polyclonal, The epitope recognized by this antibody maps to a region between residue 1660 and 1710 of human chromodomain helicase DNA binding protein 1 using the numbering given in entry NP_001261.2 (GeneID 1105).
+target CHD1
+targetDescription ATP-dependent chromatin-remodeling factor which functions as substrate recognition component of the transcription regulatory histone acetylation (HAT) complex SAGA. Regulates polymerase II transcription. Also required for efficient transcription by RNA polymerase I, and more specifically the polymerase I transcription termination step. Also required to maintain a specific chromatin configuration across the genome. Is also associated with histone deacetylase (HDAC) activity (By similarity). Required for the bridging of SNF2, the FACT complex, the PAF complex as well as the U2 snRNP complex to H3K4me3. Required for maintaining open chromatin and pluripotency in embryonic stem cells
+vendorName Novus Biologicals
+vendorId NB100-60411
+orderUrl http://www.novusbio.com/CHD1-Antibody_NB100-60411.html
+lab Snyder
+lots A1
+targetId GeneCard:CHD1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
+validation CHD1_(NB100-60411)(Immunoprecipitation,IP-Mass_spec):human_CHD1_NB100-60411_validation_Snyder.pdf
+
 
 term CHD2_(AB68301)
 tag CHD2
@@ -5773,6 +5892,35 @@ targetId GeneCard:CHD2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD2
 validation Human_-_:missing Mouse_-_:missing
 label CHD2 (ab68301)
+
+term CREB1_(06-863)
+tag CREB106863
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen= KLH-conjugated, synthetic peptide (CSGAENQ QSGDAAVTEAENQQ) corresponding to a.a. 5-24 of human CREB. The immunizing sequence is identical in pig, shares 19 of 20 residues with mouse and bovine and 18 of 20 residues with rat.
+target CREB1
+targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in  neurite outgrowth and neuronal differentiation.
+vendorName Millipore
+vendorId 06-863
+orderUrl http://www.millipore.com/catalogue/item/06-863
+lab Struhl
+targetId GeneCard:CREB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
+validation CREB1_(06-863)(Western_Blot,ChIP):human_CREB1_06-863_Millipore_06-863_validation_Struhl.pdf
+
+
+term CREB1_pS133
+tag CREB1PS133
+type Antibody
+antibodyDescription Rabbit monoclonal antibody is produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Ser133 of human CREB.
+target CREB1
+targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in  neurite outgrowth and neuronal differentiation.
+vendorName Cell Signaling
+vendorId 9198
+orderUrl http://www.cellsignal.com/pdf/9198.pdf
+lab Struhl
+targetId GeneCard:CREB1_pS133
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
+validation CREB1_pS133_(Cell_Signaling_9198)(Western_Blot,ChIP):human_CREB1_pS133_Cell_Signaling_9198_validation_Struhl.pdf
 
 term CREB1_(SC-240)
 tag CREB1SC240
@@ -5832,7 +5980,7 @@ vendorId sc-5916
 orderUrl http://www.scbt.com/datasheet-5916-ctcf-n-17-antibody.html
 lab Myers
 lots K0902
-targetId GeneCards:CTCF
+targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation Human_-_:missing
 label CTCF (sc-5916)
@@ -5848,7 +5996,7 @@ vendorId sc-98982
 orderUrl http://www.scbt.com/datasheet-98982-boris-h-120-antibody.html
 lab Myers
 lots E0109
-targetId GeneCards:CTCFL
+targetId GeneCard:CTCFL
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCFL
 validation Human_-_:missing
 label CTCFL (sc-98982)
@@ -5883,6 +6031,21 @@ targetId GeneCard:CTBP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2
 validation Human_-_CtBP2(Western_blot,siRna):human_CtBP2_validation_Farnham.pdf
 label CtBP2 (612044)
+
+term CycT1
+tag CYCT1
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 261-505 mapping to an internal region of cyclin T1 of human origin
+target CycT1
+targetDescription Cyclin T1 is a cyclin that forms heterodimers with the cyclin dependent kinase CDK9.  CDK9 is responsible for phosphorylating Ser2 of the heptad repeat of the C-terminal domain of the large subunit of RNA polymerase II, and negative elongation factors NELF and DSIF.   Cyclin T1 makes contacts with RNAPII and nascent mRNA and as such recruits CDK9 to facilitate release of stalled RNAPII and productive elongation.
+vendorName Santa Cruz Biotech
+vendorId CycT1
+orderUrl http://www.scbt.com/datasheet-10750-cyclin-t1-h-245-antibody.html
+lab Struhl
+targetId GeneCard:CCNT1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNT1
+validation CycT1(Western_Blot,Immunoprecipitation):human_CycT1_validation_Struhl.pdf
+
 
 term E2F1
 tag E2F1
@@ -5957,7 +6120,7 @@ vendorId eGFP-BACH1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:BACH1
+targetId GeneCard:BACH1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BACH1
 validation missing
 
@@ -5972,7 +6135,7 @@ vendorId eGFP-CCNE1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:CCNE1
+targetId GeneCard:CCNE1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNE1
 validation missing
 
@@ -5987,7 +6150,7 @@ vendorId eGFP-CDKN1B
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:CDKN1B
+targetId GeneCard:CDKN1B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CDKN1B
 validation missing
 
@@ -6002,7 +6165,7 @@ vendorId eGFP-E2F1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:E2F1
+targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation missing
 
@@ -6017,7 +6180,7 @@ vendorId eGFP-EKLF1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:EKLF1
+targetId GeneCard:EKLF1
 targetUrl missing
 validation missing
 
@@ -6032,7 +6195,7 @@ vendorId eGFP-ELF1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:ELF1
+targetId GeneCard:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
 validation missing
 
@@ -6047,7 +6210,7 @@ vendorId eGFP-ESR
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:ESR
+targetId GeneCard:ESR
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
 validation missing
 
@@ -6062,7 +6225,7 @@ vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
-targetId GeneCards:FOS
+targetId GeneCard:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation Human_-_eGFP-FOS:human_validation_White.pdf
 label FOS (eGFP-FOS)
@@ -6078,7 +6241,7 @@ vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
-targetId GeneCards:GATA2
+targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 validation Human_-_eGFP-GATA2:human_validation_White.pdf
 label GATA2 (eGFP-GATA2)
@@ -6094,23 +6257,23 @@ vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
-targetId GeneCards:HDAC8
+targetId GeneCard:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation Human_-_eGFP-HDAC8:human_validation_White.pdf
 label HDAC8 (eGFP-HDAC8)
 
-term eGFP-HMGBA1
-tag HMGBA1
+term eGFP-HMGB1
+tag HMGB1
 type Antibody
-antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGBA1
-target eGFP-HMGBA1
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGB1
+target eGFP-HMGB1
 targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA.Involved in V(D)J recombination by acting as a cofactor of the  RAG complex.
 vendorName Kevin White Lab, University of Chicago
-vendorId eGFP-HMGBA1
+vendorId eGFP-HMGB1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:HMGB1
+targetId GeneCard:HMGB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGB1
 validation missing
 
@@ -6125,7 +6288,7 @@ vendorId eGFP-ILF2
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:ILF2
+targetId GeneCard:ILF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF2
 validation missing
 
@@ -6140,7 +6303,7 @@ vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
-targetId GeneCards:JUNB
+targetId GeneCard:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
 validation Human_-_eGFP-JunB:human_validation_White.pdf
 label JunB (eGFP-JunB)
@@ -6156,7 +6319,7 @@ vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
-targetId GeneCards:JUND
+targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation Human_-_eGFP-JunD:human_validation_White.pdf
 label JunB (eGFP-JunD)
@@ -6172,7 +6335,7 @@ vendorId eGFP-MLL5
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:MLL5
+targetId GeneCard:MLL5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MLL5
 validation missing
 
@@ -6187,7 +6350,7 @@ vendorId eGFP-NCOR1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:NCOR1
+targetId GeneCard:NCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NCOR1
 validation missing
 
@@ -6201,7 +6364,7 @@ vendorId eGFP-NF90
 orderUrl http://www.igsb.org/labs/kevin-white/ 
 lab White
 lots 1
-targetId GeneCards:ILF3
+targetId GeneCard:ILF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF3
 validation missing
 #NF90 is associated with ILF3 ~Jeff
@@ -6217,7 +6380,7 @@ vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
-targetId GeneCards:NR4A1
+targetId GeneCard:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
 validation Human_-_eGFP-NR4A1:human_validation_White.pdf
 label NR4A1 (eGFP-NR4A1)
@@ -6233,7 +6396,7 @@ vendorId eGFP-SMARCA1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:SMARCA1
+targetId GeneCard:SMARCA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA1
 validation missing
 
@@ -6248,7 +6411,7 @@ vendorId eGFP-SMARCA2
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:SMARCA2
+targetId GeneCard:SMARCA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA2
 validation missing
 
@@ -6262,7 +6425,7 @@ vendorId eGFP-STAT1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
-targetId GeneCards:STAT1
+targetId GeneCard:STAT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1
 validation missing
 
@@ -6277,7 +6440,7 @@ vendorId sc-631
 orderUrl http://www.scbt.com/datasheet-631-elf-1-c-20-antibody.html
 lab Myers
 lots L2707
-targetId GeneCards:ELF1
+targetId GeneCard:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
 validation Human_-_ELF1_(SC-631)(Western_blot,IP-MassSpec):human_ELF1_SC-631_validation_Myers.pdf
 label  ELF1 (sc-631)
@@ -6387,7 +6550,7 @@ vendorId 39875
 orderUrl http://www.activemotif.com/catalog/details/39875/ezh2-antibody-mab-clone-ac22
 lab Bernstein
 lots 27210001
-targetId GeneCards:EZH2
+targetId GeneCard:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
 validation Human_-_EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bernstein.pdf
 label EZH2 (39875)
@@ -6465,7 +6628,7 @@ vendorId sc-101058
 orderUrl http://www.scbt.com/datasheet-101058-hnf-3alpha-q-6-antibody.html
 lab Myers
 lots  A2706
-targetId GeneCards:FOXA1
+targetId GeneCard:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
 validation Human_-_FOXA1_(SC-101058)(Immunoprecipitation-Western_blot,MassSpec):human_FOXA1_SC-101058_validation_Myers.pdf
 label  FOXA1 (sc-101058)
@@ -6481,12 +6644,12 @@ vendorId sc-6554
 orderUrl http://www.scbt.com/datasheet-6554-hnf-3beta-m-20-antibody.html
 lab Myers
 lots L1409
-targetId GeneCards:FOXA2
+targetId GeneCard:FOXA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA2
 validation Human_-_:missing
 label FOXA2 (sc-6554)
 
-term FOXM1_(sc-502)
+term FOXM1_(SC-502)
 tag FOXM1SC502
 type Antibody
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of FOXM1 of human origin.
@@ -6497,7 +6660,7 @@ vendorId sc-502
 orderUrl http://www.scbt.com/datasheet-502-foxm1-c-20-antibody.html
 lab Myers
 lots C1909
-targetId GeneCards:FOXM1
+targetId GeneCard:FOXM1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXM1
 validation FOXM1_(sc-502)(missing):human_FOXM1_sc-502_validation_Myers.pdf
 
@@ -6668,7 +6831,7 @@ vendorName Laszlo Tora
 vendorId Missing
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
 lab Struhl
-targetId GeneCards:KAT2A
+targetId GeneCard:KAT2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A&search=gcn5
 validation Human_-_:missing
 label GCN5
@@ -7138,7 +7301,7 @@ vendorId sc-6298
 orderUrl http://www.scbt.com/datasheet-6298-hdac1-c-19-antibody.html
 lab Bernstein
 lots H0509
-targetId GeneCards:HDAC1
+targetId GeneCard:HDAC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC1
 validation Human_-_HDAC1_(SC-6298)(ChIP-String,ChIP-seq):human_HDAC1_validation_Bernstein.pdf
 label HDAC1 (sc-6298)
@@ -7154,7 +7317,7 @@ vendorId A300-705A
 orderUrl http://www.bethyl.com/product/A300-705A
 lab Bernstein
 lots A300-705A-1
-targetId GeneCards:HDAC2
+targetId GeneCard:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
 validation Human_-_HDAC2_(A300-705A)(ChIP-String,ChIP-seq):human_HDAC2_validation_Bernstein.pdf
 label HDAC2 (A300-705A)
@@ -7170,7 +7333,7 @@ vendorId sc-6296
 orderUrl http://www.scbt.com/datasheet-6296-hdac2-c-19-antibody.html
 lab Myers
 lots  G0307
-targetId GeneCards:HDAC2
+targetId GeneCard:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
 validation Human_-_HDAC2_(SC-6296)(Immunoprecipitation-Western_blot,MassSpec):human_HDAC2_SC-6296_validation_Myers.pdf
 label  HDAC2 (sc-6296)
@@ -7249,7 +7412,7 @@ vendorId sc-6558
 orderUrl http://www.scbt.com/datasheet-6558-hnf-4gamma-c-18-antibody.html
 lab Myers
 lots I299
-targetId GeneCards:HNF4G
+targetId GeneCard:HNF4G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
 validation Human_-_HNF4G_(SC-6558)(ChIP,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
 label HNF4G (sc-6558)
@@ -7434,7 +7597,7 @@ vendorName Sigma-Aldrich
 vendorId M8194
 orderUrl http://www.sigmaaldrich.com/
 lab Snyder
-targetId GeneCards:MAFF
+targetId GeneCard:MAFF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFF
 validation Human_-_:missing
 label MafF (M8194)
@@ -7450,7 +7613,7 @@ vendorName Abcam
 vendorId ab50322
 orderUrl http://www.abcam.com/MAFK-antibody-ab50322.html
 lab Snyder
-targetId GeneCards:MAFK
+targetId GeneCard:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation Human_-_MAFK(ab50322)(Immunoprecipitation,ChIP):human_MafK_ab50322_validation_Snyder.pdf Mouse_-_:mouse_MafK_ab50322_validation_Snyder.pdf
 label MafK (ab50322)
@@ -7466,7 +7629,7 @@ vendorName Santa Cruz Biotech
 vendorId SC-477
 orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
 lab Snyder
-targetId GeneCards:MAFK
+targetId GeneCard:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation Human_-_MafK(sc477)(Immunoprecipitation,ChIP):human_MafK_sc477_validation_Snyder.pdf
 label MafK (SC-477)
@@ -7483,7 +7646,7 @@ vendorId sc-197
 orderUrl http://www.scbt.com/datasheet-197-max-c-17-antibody.html
 lab Myers
 lots  J0809
-targetId GeneCards:MAX
+targetId GeneCard:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
 validation Human_-_MAX(Immunoprecipitation,Motif_Enrichment):human_Max_validation_Myers.pdf Mouse_-_:missing
 label Max (sc-197)
@@ -7503,6 +7666,35 @@ targetId GeneCard:MBD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MBD4
 validation Human_-_MBD4_(SC-271530)(Western_blot,IP-MassSpec):human_MBD4_SC-271530_sc-271530_validation_Myers.pdf
 label MBD4 (sc-271530)
+
+term Med1
+tag MED1
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 502-756 of TRAP220 of mouse origin
+target Med1
+targetDescription Med1 is a core subunit of the large coactivator known as mediator.  Mediator is believed to promote transcription by bridging transcription factors and the RNA polymerase II holoenzyme.
+vendorName Santa Cruz Biotech
+vendorId Med1
+orderUrl http://www.scbt.com/datasheet-8998-trap220-m-255-antibody.html
+lab Struhl
+targetId GeneCard:MED1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED1
+validation Med1(Western_Blot,Immunoprecipitation):human_Med1_validation_Struhl.pdf
+
+term Med26_(sc48776)
+tag MED26SC48776
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 373-600 mapping at the C-terminus of CRSP70 of human origin
+target Med26
+targetDescription Med26 is a subunit of the large coactivator known as mediator. Med26 is subunit found to be mutually exclusive from the CDK8 module of mediator. Med26 has been associated with activating effects on transcription in context specific manner. Mediator is believed to promote transcription by bridging transcription factors and the RNA polymerase II holoenzyme.
+vendorName Santa Cruz Biotech
+vendorId sc48776
+orderUrl http://www.scbt.com/datasheet-48776-crsp70-h-228-antibody.html
+lab Struhl
+targetId GeneCard:Med26
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26&search=Med26
+validation Med26_(sc48776)(Western_Blot,Immunoprecipitation):human_Med26_sc48776_validation_Struhl.pdf
+
 
 term MEF2A
 tag MEF2A
@@ -7531,7 +7723,7 @@ vendorId sc-13268
 orderUrl http://www.scbt.com/datasheet-13268-mef-2c-c-17-antibody.html
 lab Myers
 lots K2009
-targetId GeneCards:MEF2C
+targetId GeneCard:MEF2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
 validation Human_-_:missing
 label MEF2C (sc-13268)
@@ -7627,7 +7819,7 @@ vendorId sc-33759
 orderUrl http://www.scbt.com/datasheet-33759-nanog-h-155-antibody.html
 lab Myers
 lots C0909
-targetId GeneCards:NANOG
+targetId GeneCard:NANOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
 validation Human_-_NANOG_(SC-33759)(Western_blot,IP-MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
 label NANOG (sc-33759)
@@ -7948,7 +8140,7 @@ vendorId A301-772A
 orderUrl http://www.bethyl.com/product/A301-772A
 lab Bernstein
 lots A301-772A-1
-targetId GeneCards:PHF8
+targetId GeneCard:PHF8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PHF8
 validation Human_-_PHF8_(A301-772A)(ChIP-String,ChIP-seq):human_PHF8_validation_Bernstein.pdf
 label PHF8 (A301-772A)
@@ -7964,7 +8156,7 @@ vendorId sc-81979
 orderUrl http://www.scbt.com/datasheet-81979-pitx1-r-129-antibody.html
 lab Myers
 lots J0109
-targetId GeneCards:PITX1
+targetId GeneCard:PITX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PITX1
 validation Human_-_PITX1_(SC-81979)(Immunoprecipitation-Western_blot,MassSpec):human_PITX1_SC-81979_validation_Myers.pdf
 label PITX1 (sc-81979)
@@ -7980,7 +8172,7 @@ vendorId PLU1
 orderUrl http://www.shilab.info/ShiLab/Welcome.html
 lab Bernstein
 lots missing
-targetId GeneCards:KDM5B
+targetId GeneCard:KDM5B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation Human_-_PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
 label PLU1
@@ -8090,7 +8282,7 @@ vendorId sc-9081
 orderUrl http://www.scbt.com/datasheet-9081-oct-3-4-h-134-antibody.html
 lab Myers
 lots F2609
-targetId GeneCards:POU5F1
+targetId GeneCard:POU5F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU5F1
 validation Human_-_POU5F1_(SC-9081)(Western_blot,IP-MassSpec):human_POU5F1_SC-9081_validation_Myers.pdf
 label POU5F1 (sc-9081)
@@ -8167,7 +8359,7 @@ vendorId A300-109A
 orderUrl http://www.bethyl.com/product/A300-109A
 lab Bernstein
 lots A300-109A-2
-targetId GeneCards:RBBP5
+targetId GeneCard:RBBP5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
 validation Human_-_RBBP5_(A300-109A)(ChIP-String,ChIP-seq):human_RBBP5_validation_Bernstein.pdf
 label RBBP5 (A300-109A)
@@ -8244,7 +8436,7 @@ vendorId 39731
 orderUrl http://www.activemotif.com/catalog/details/39731.html
 lab Bernstein
 lots 4710001
-targetId GeneCards:SAP30
+targetId GeneCard:SAP30
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SAP30
 validation Human_-_SAP30_(39731)(ChIP-String,ChIP-seq):human_SAP30_validation_Bernstein.pdf
 label SAP30 (39731)
@@ -8350,7 +8542,7 @@ vendorName Abcam
 vendorId ab9263
 orderUrl http://www.abcam.com/SMC3-antibody-ab9263.html
 lab Snyder
-targetId GeneCards:SMC3
+targetId GeneCard:SMC3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMC3
 validation Human_-_SMC3(Immunoprecipitation,ChIP):human_SMC3_validation_Snyder.pdf Mouse_-_:missing
 label SMC3 (ab9263)
@@ -8382,7 +8574,7 @@ vendorId sc-643
 orderUrl http://www.scbt.com/datasheet-643-sp2-k-20-antibody.html
 lab Myers
 lots K1803
-targetId GeneCards:SP2
+targetId GeneCard:SP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP2
 validation Human_-_:missing
 label SP2 (sc-643)
@@ -8413,7 +8605,7 @@ vendorName Laszlo Tora
 vendorId missing
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
 lab Struhl
-targetId GeneCards:FAM48A
+targetId GeneCard:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
 validation Human_-_:missing
 label SPT20
@@ -8429,7 +8621,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-8984
 orderUrl http://www.scbt.com/product.php?datasheet=8984
 lab Snyder
-targetId GeneCards:SREBF1
+targetId GeneCard:SREBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF1
 validation Human_-_:missing
 label SREBP1 (sc-8984)
@@ -8444,7 +8636,7 @@ vendorName Cayman Chemical
 vendorId 10007663
 orderUrl http://www.caymanchem.com/app/template/Product.vm/catalog/10007663
 lab Snyder
-targetId GeneCards:SREBF2
+targetId GeneCard:SREBF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF2
 validation Human_-_:missing
 label SREBP2 (10007663)
@@ -8538,7 +8730,7 @@ vendorId 05-1317
 orderUrl http://www.millipore.com/catalogue/item/05-1317&open&cid=BIOS-A-BIOC-2538-1102-RC
 lab Bernstein
 lots NRG1665726
-targetId GeneCards:SUZ12
+targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
 validation Human_-_SUZ12_(05-1317)(ChIP-String,ChIP-seq):human_SUZ12_validation_Bernstein.pdf
 label SUZ12 (05-1317)
@@ -8567,7 +8759,7 @@ antibodyDescription Mouse monoclonal (p250). Antibody Target: TAF1
 vendorName Santa Cruz Biotech
 vendorId sc-735
 orderUrl http://www.scbt.com/product.php?datasheet=735
-targetId GeneCards:TAF1
+targetId GeneCard:TAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF1
 lab Myers, Wold
 lots K0905 F2706
@@ -8617,6 +8809,21 @@ label TAL1 (sc-12984)
 #lots K0905 F2706
 #validation missing
 
+term TBLR1_(ab24550)
+tag TBLR1AB24550
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen: Recombinant full length protein (Human)
+target TBLR1
+targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
+vendorName Abcam
+vendorId ab24550
+orderUrl http://www.abcam.com/TBLR1-antibody-ChIP-Grade-ab24550.html
+lab Snyder
+lots GR340121
+targetId GeneCard:TBL1XR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
+validation TBLR1_(ab24550)(Immunoprecipitation,ChIP):human_TBLR1_ab24550_validation_Snyder.pdf
+
 term TBP
 tag TBP
 type Antibody
@@ -8631,6 +8838,21 @@ targetId GeneCard:TBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
 validation Human_-_TBP(Immunoblot):human_TBP_validation_Snyder.pdf Mouse_-_:missing
 label TBP (ab62126)
+
+term TBP_(sc273)
+tag TBPSC273
+type Antibody
+antibodyDescription Rabbit polyclonal, raised against full length TFIID of human origin
+target TBP
+targetDescription TBP is an integral subunit of the TFIID complex.  TBP recognizes the TATA box and helps to recruit and orient the RNA poymerase II initiation complex and RNA polymerase III.
+vendorName Santa Cruz Biotech
+vendorId sc273
+orderUrl http://www.scbt.com/datasheet-273-tfiid-tbp-si-1-antibody.html
+lab Struhl
+targetId GeneCard:TBP
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
+validation TBP_(sc273)(Western_Blot,Immunoprecipitation):human_TBP_sc273_validation_Struhl.pdf
+
 
 term TCF12
 tag TCF12
@@ -8787,12 +9009,12 @@ vendorId sc-98174
 orderUrl http://www.scbt.com/datasheet-98174-thap1-c-18-antibody.html
 lab Myers
 lots D1910
-targetId GeneCards:THAP1
+targetId GeneCard:THAP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=THAP1
 validation Human_-_:missing
 label THAP1 (sc-98174)
 
-term TP53_(sc-126)
+term TP53_(SC-126)
 tag TP53SC126
 type Antibody
 antibodyDescription Mouse monoclonal IgG, N-terminal epitope mapping between amino acids 11-25 of TP53 of human origin.
@@ -8803,7 +9025,7 @@ vendorId sc-126
 orderUrl http://www.scbt.com/datasheet-126-p53-do-1-antibody.html
 lab Myers
 lots F0909
-targetId GeneCards:TP53
+targetId GeneCard:TP53
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53
 validation TP53_(sc-126)(missing):human_TP53_sc-126_validation_Myers.pdf
 
@@ -8822,7 +9044,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation Human_-_:missing Mouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
 label TR4
 
-term TRIM28_(sc-81411)
+term TRIM28_(SC-81411)
 tag TRIM28SC81411
 type Antibody
 antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of TRIM28 of human origin.
@@ -8832,7 +9054,7 @@ targetDescription The protein encoded by this gene mediates transcriptional cont
 vendorName Santa Cruz Biotech
 vendorId sc-81411
 orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.htmllab Myerslots L0309
-targetId GeneCards:TRIM28
+targetId GeneCard:TRIM28
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation TRIM28_(sc-81411)(Western_blot,ChIP):human_TRIM28_sc-81411_
 validation_Myers.pdf
@@ -8852,6 +9074,37 @@ targetId GeneCard:TRIM37
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
 validation Human_-_TRIM37_(SC-49548)(ChIP,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
 label TRIM37 (sc-49548)
+
+term UBF_(sc-13125)
+tag UBFSC13125
+type Antibody
+antibodyDescription UBF (F-9) is a mouse monoclonal antibody raised against amino acids 1-220 of UBF of human origin.
+target UBF
+targetDescription Upstream binding factor (UBF) is a transcription factor required for expression of the 18S, 5.8S, and 28S ribosomal RNAs, along with SL1 (a complex of TBP (MIM 600075) and multiple TBP-associated factors or 'TAFs'). Two UBF polypeptides, of 94 and 97 kD, exist in the human (Bell et al., 1988 (PubMed 3413483)). UBF is a nucleolar phosphoprotein with both DNA binding and transactivation domains. Sequence-specific DNA binding to the core and upstream control elements of the human rRNA promoter is mediated through several HMG boxes
+vendorName Santa Cruz Biotech
+vendorId sc-13125
+orderUrl http://www.scbt.com/datasheet-13125-ubf-f-9-antibody.html
+lab Snyder
+lots B1804
+targetId GeneCard:UBTF
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=UBTF
+validation UBF_(sc-13125)(Immunoprecipitation,ChIP):human_UBF_sc-13125_validation_Snyder.pdf
+
+
+term UBTF_(SAB1404509)
+tag UBTFSAB1404509
+type Antibody
+antibodyDescription Mouse monoclonal, immunogen:UBTF (NP_055048, 551 a.a. ~ 651 a.a) partial recombinant protein with GST tag.
+target UBTF
+targetDescription Upstream binding factor (UBF) is a transcription factor required for expression of the 18S, 5.8S, and 28S ribosomal RNAs, along with SL1 (a complex of TBP (MIM 600075) and multiple TBP-associated factors or 'TAFs'). Two UBF polypeptides, of 94 and 97 kD, exist in the human (Bell et al., 1988 (PubMed 3413483)). UBF is a nucleolar phosphoprotein with both DNA binding and transactivation domains. Sequence-specific DNA binding to the core and upstream control elements of the human rRNA promoter is mediated through several HMG boxes
+vendorName Sigma-Aldrich
+vendorId SAB1404509
+orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?D7=0&N5=SEARCH_CONCAT_PNO%7CBRAND_KEY&N4=SAB1404509%7CSIGMA&N25=0&QS=ON&F=SPEC
+lab Snyder
+lots 07219-A2
+targetId GeneCard:UBTF
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=UBTF
+validation UBTF_(SAB1404509)(Immunoprecipitation,ChIP):human_UBTF_SAB1404509_validation_Snyder.pdf
 
 term USF-1
 tag USF1
@@ -8879,7 +9132,7 @@ vendorId sc-8983
 orderUrl http://www.scbt.com/datasheet-8983-usf-1-h-86-antibody.html
 lab Myers
 lots  E2810
-targetId GeneCards:USF1
+targetId GeneCard:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
 validation Human_-_USF1_SC-8983(Immunoprecipitation-Western_blot,MassSpec):human_USF1_SC-8983_validation_Myers.pdf
 label  USF1 (sc-8983)
@@ -9001,7 +9254,7 @@ vendorId sc-34508
 orderUrl http://www.scbt.com/datasheet-34508-lrf-c-18-antibody.html
 lab Myers
 lots  H2406
-targetId GeneCards:ZBTB7A
+targetId GeneCard:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
 validation Human_-_ZBTB7A_SC-34508(Immunoprecipitation-Western_blot,MassSpec):human_ZBTB7A_SC-34508_validation_Myers.pdf
 label  ZBTB7A (sc-34508)
@@ -9017,10 +9270,25 @@ vendorId sc-25388
 orderUrl http://www.scbt.com/datasheet-25388-zeb1-h-102-antibody.html
 lab Myers
 lots D2010
-targetId GeneCards:ZEB1
+targetId GeneCard:ZEB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZEB1
 validation Human_-_ZEB1_(SC-25388)(Western_blot,IP-MassSpec):human_ZEB1_SC-25388_validation_Myers.pdf
 label ZEB1 (sc-25388)
+
+term ZKSCAN1_(HPA006672)
+tag ZKSCAN1HPA006672
+type Antibody
+antibodyDescription Rabbit polyclonal, Immunogen: Zinc finger with KRAB and SCAN domain-containing protein 1 recombinant protein epitope signature tag (PrEST)
+target ZKSCAN1
+targetDescription The ZKSCAN1 gene encodes a transcriptional regulator of the KRAB (Kruppel-associated box) subfamily of zinc finger proteins, which contain repeated Cys2-His2 (C2H2) zinc finger domains that are connected by conserved sequences, called H/C links. Transcriptional regulatory proteins containing tandemly repeated zinc finger domains are thought to be involved in both normal and abnormal cellular proliferation and differentiation.
+vendorName Sigma-Aldrich
+vendorId HPA006672
+orderUrl http://www.sigmaaldrich.com/catalog/ProductDetail.do?D7=0&N5=SEARCH_CONCAT_PNO%7CBRAND_KEY&N4=HPA006672%7CSIGMA&N25=0&QS=ON&F=SPEC
+lab Snyder
+lots A44630
+targetId GeneCard:ZKSCAN1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZKSCAN1
+validation ZKSCAN1_(HPA006672)(Immunoprecipitation,IP-Mass_spec):human_ZKSCAN1_HPA006672_validation_Snyder.pdf
 
 term Znf143_(16618-1-AP)
 tag ZNF143
@@ -9032,7 +9300,7 @@ vendorName Proteintech
 vendorId 16618-1-AP
 orderUrl http://www.ptglab.com/Products/ZNF143-Antibody-16618-1-AP.htm
 lab Snyder
-targetId GeneCards:ZNF143
+targetId GeneCard:ZNF143
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
 validation Human_-_:missing
 label Znf143 (16618-1-AP)
@@ -9049,7 +9317,7 @@ vendorId ZNF217
 orderUrl http://stemcellcenter.berkeley.edu/PIs/yaswen.html
 lab Farnham
 lots N/A
-targetId GeneCards:ZNF217
+targetId GeneCard:ZNF217
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF217
 validation Human_-_ZNF217_(Western_blot,SiRNA):human_ZNF217_validation_Farnham.pdf
 label ZNF217 (ZNF217)
@@ -9120,6 +9388,20 @@ label ZZZ3
 ### These are all for the  experiments.
 ### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
 
+term CBP_(sc369)
+tag CBPSC369
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope mapping at the N-terminus of CBP of human origin
+target CBP
+targetDescription CBP is a histone acetyl transferase that promotes transcription.  CBP is recruited by a variety of transcription factors to promoters and enhancers.
+vendorName Santa Cruz Biotech
+vendorId sc369
+orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
+lab Struhl
+targetId GeneCard:CREBBP
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
+validation CBP_(sc369)(Western_Blot,ChIP):human_CBP_sc369_validation_Struhl.pdf
+
 term CBX3_(SC-101004)
 tag CBX3SC101004
 type Antibody
@@ -9146,7 +9428,7 @@ vendorName Millipore
 vendorId 05-689
 orderUrl http://www.millipore.com/catalogue/item/05-689
 lab Tenenbaum
-targetId GeneCards:CBX5
+targetId GeneCard:CBX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
 validation 
 label CBX5 (05-689)
@@ -9162,7 +9444,7 @@ vendorName Millipore
 vendorId 05-621
 orderUrl http://www.millipore.com/
 lab Tenenbaum
-targetId GeneCards:CELF1
+targetId GeneCard:CELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation Human_-_:missing
 label CELF1 (05-621)
@@ -9178,7 +9460,7 @@ vendorName Millipore
 vendorId 04-047
 orderUrl http://www.millipore.com/catalogue/item/04-047
 lab Tenenbaum
-targetId GeneCards:CELF2
+targetId GeneCard:CELF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
 validation 
 label CELF2 (04-047)
@@ -9328,6 +9610,20 @@ targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
 validation 
 label Hexim1 (07-955)
 
+term HMGN1
+tag HMGN1
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen= synthetic peptide derived from residues 50 to the C-terminus of Human HMGN1 / HMG14.
+target HMGN1
+targetDescription HMGN1 is one of four members of the high mobility group nucleosome binding proteins.  HMGN1 is ubiquitously expressed and has been implicated in promoting transcription.
+vendorName Abcam
+vendorId HMGN1
+orderUrl http://www.abcam.com/HMG14-antibody-ab5212.html
+lab Struhl
+targetId GeneCard:HMGN1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN1
+validation HMGN1(Western_Blot,Immunoprecipitation):human_HMGN1_validation_Struhl.pdf
+
 term HNRNPD
 tag HNRNPD
 type Antibody
@@ -9361,6 +9657,21 @@ validation
 label hnRNPM (05-620)
 # lots
 ##This does not appear in metaDb
+
+term hSpt5_(sc28678)
+tag HSPT5SC28678
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin
+target hSpt5
+targetDescription hSpt5 heterodimerizes with hSpt4 to form the DRB Sensitivity Inducing Factor (DSIF). DSIF play dual roles in elongation. First, in a conjunction with NELF, dephosphorylated state DSIF blocks RNA polymerase II (RNAPII) from shifting from early elongation to productive elongation.  Second, after phosphorylation DSIF continues to associate with elongating RNAPII to facilitate recruitment of factors required for processing of the mRNA.
+vendorName Santa Cruz Biotech
+vendorId sc28678
+orderUrl http://www.scbt.com/datasheet-28678-spt5-h-300-antibody.html
+lab Struhl
+targetId GeneCard:SUPT5H
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUPT5H
+validation hSpt5_(sc28678)(Western_Blot,Immunoprecipitation):human_hSpt5_sc28678_validation_Struhl.pdf
+
 
 term IGF2BP1
 tag IGF2BP1
@@ -9898,6 +10209,41 @@ tag CONTROL
 type control
 description This data represents a control being compared with the other tracks in the set.
 
+term Control_eGFP-BACH1
+tag CONTROLBACH1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-BACH1 PROVISIONAL
+
+term Control_eGFP-CCNE1
+tag CONTROLCCNE1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-CCNE1 PROVISIONAL
+
+term Control_eGFP-CDKN1B
+tag CONTROLCDKN1B
+type control
+description This data represents a control being compared to experiments using antibody eGFP-CDKN1B PROVISIONAL
+
+term Control_eGFP-E2F1
+tag CONTROLE2F1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-E2F1 PROVISIONAL
+
+term Control_eGFP-EKLF1
+tag CONTROLEKLF1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-EKLF1 PROVISIONAL
+
+term Control_eGFP-ELF1
+tag CONTROLELF1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-ELF1 PROVISIONAL
+
+term Control_eGFP-ESR
+tag CONTROLESR
+type control
+description This data represents a control being compared to experiments using antibody eGFP-ESR PROVISIONAL
+
 term Control_eGFP-FOS
 tag CONTROLFOS
 type control
@@ -9913,6 +10259,16 @@ tag CONTROLHDAC8
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HDAC8
 
+term Control_eGFP-HMGB1
+tag CONTROLHMGB1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-HMGB1 PROVISIONAL
+
+term Control_eGFP-ILF2
+tag CONTROLILF2
+type control
+description This data represents a control being compared to experiments using antibody eGFP-ILF2 PROVISIONAL
+
 term Control_eGFP-JunB
 tag CONTROLJUNB
 type control
@@ -9923,10 +10279,40 @@ tag CONTROLJUND
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunD
 
+term Control_eGFP-MLL5
+tag CONTROLMLL5
+type control
+description This data represents a control being compared to experiments using antibody eGFP-MLL5 PROVISIONAL
+
+term Control_eGFP-NCOR1
+tag CONTROLNCOR1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-NCOR1 PROVISIONAL
+
+term Control_eGFP-NF90
+tag CONTROLNF90
+type control
+description This data represents a control being compared to experiments using antibody eGFP-NF90 PROVISIONAL
+
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
+
+term Control_eGFP-SMARCA1
+tag CONTROLSMARCA1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-SMARCA1 PROVISIONAL
+
+term Control_eGFP-SMARCA2
+tag CONTROLSMARCA2
+type control
+description This data represents a control being compared to experiments using antibody eGFP-SMARCA2 PROVISIONAL
+
+term Control_eGFP-STAT1
+tag CONTROLSTAT1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-STAT1 PROVISIONAL
 
 term Control_32bp
 tag CNTRL32B
@@ -10850,7 +11236,7 @@ term Transfrags
 tag TRANSFRAGS
 type view
 label Transfrags
-description Transfrags
+description Transcribed fragments
 
 term TssGencV3c
 tag TssV3c
@@ -12049,6 +12435,17 @@ labPiFull David Gilbert
 grantPi Gilbert
 organism mouse
 
+term CSHL-m
+tag CSHLm
+type lab
+label Gingeras - CSHL
+description Gingeras - Cold Spring Harbor Laboratory
+labInst Cold Spring Harbor Laboratory
+labPi Gingeras
+labPiFull Thomas Gingeras
+grantPi Gingeras
+organism mouse
+
 ### AWG (DAC) Labs
 
 term DAC-Stanford
@@ -12639,7 +13036,7 @@ priority 430
 term level
 tag LEVEL
 type typeOfTerm
-label Gencode level
+label GENCODE level
 description GENCODE level of annotation.  Level 1: validated.  Level 2: manually annotated.  Level 3: automated annotation.
 searchable no
 cvDefined no

@@ -20,6 +20,7 @@ lab UW
 labExpId DS12374
 labVersion Bowtie 0.12.7
 md5sum 5b577bbefffc458f43f2c46bc71cf180,7a05df809365a74f1d45a39d3d578c22
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4883
@@ -41,6 +42,7 @@ lab UW
 labExpId DS12374
 labVersion Hotspot-v5.2
 md5sum 125b195e1862f5e6f78f5fa2db012d92
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4883
@@ -63,6 +65,7 @@ lab UW
 labExpId DS12374
 labVersion lmax-v1.0
 md5sum 4f1e3ce40f3fcd7d7c7406bd68642399
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4883
@@ -85,6 +88,7 @@ lab UW
 labExpId DS12374
 labVersion WindowDensity-bin20-win+/-75
 md5sum a74cdf99e7a9eb35c613f906cefed5bc
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4883
@@ -106,6 +110,7 @@ grant Stam
 lab UW
 labExpId DS12374
 md5sum a58f7773340cbb44c85a4c218c0bfb90
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4883
@@ -126,6 +131,7 @@ grant Stam
 lab UW
 labExpId DS12374
 md5sum 15adc5bee653dc66c579630974ec57b3
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4883
@@ -270,6 +276,7 @@ lab UW
 labExpId DS18208
 labVersion Bowtie 0.12.7
 md5sum c263852d93187fd68d55c71de77d2335,9d7fa85a3f64182e1af4984269634856
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4884
@@ -291,6 +298,7 @@ lab UW
 labExpId DS18208
 labVersion Hotspot-v5.2
 md5sum 8673ed021dd5354b6fbe6feb0fc97f7c
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4884
@@ -313,6 +321,7 @@ lab UW
 labExpId DS18208
 labVersion lmax-v1.0
 md5sum 1c3cec27868c51c090c4d7a68e9bdf38
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4884
@@ -335,6 +344,7 @@ lab UW
 labExpId DS18208
 labVersion WindowDensity-bin20-win+/-75
 md5sum 9efba09bf43bea4548343ab908b0b1f4
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4884
@@ -356,6 +366,7 @@ grant Stam
 lab UW
 labExpId DS18208
 md5sum 278c3cd20d1a6cf77981d12ae792fdc9
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4884
@@ -376,6 +387,7 @@ grant Stam
 lab UW
 labExpId DS18208
 md5sum c1f72311dab961a3edc77ee560866c94
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4884
@@ -531,6 +543,7 @@ lab UW
 labExpId DS12436
 labVersion Bowtie 0.12.7
 md5sum 0e54aef906e1e5a510a5b945944dd792,ae7be2dbebf1be0a0ea9201c0261334f
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4886
@@ -552,6 +565,7 @@ lab UW
 labExpId DS12436
 labVersion Hotspot-v5.2
 md5sum 697799f2163883f84b416ab28c006e49
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4886
@@ -574,6 +588,7 @@ lab UW
 labExpId DS12436
 labVersion lmax-v1.0
 md5sum d1ef1fec503b12406b76be7a37a2e6a0
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4886
@@ -596,6 +611,7 @@ lab UW
 labExpId DS12436
 labVersion WindowDensity-bin20-win+/-75
 md5sum 5891e966b245611fe2e289900b7970ad
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4886
@@ -617,6 +633,7 @@ grant Stam
 lab UW
 labExpId DS12436
 md5sum 706a28a39aba773da074e55141c40257
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4886
@@ -637,6 +654,7 @@ grant Stam
 lab UW
 labExpId DS12436
 md5sum d1fff94241c4df7839366c6b91e80cd7
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4886
@@ -917,6 +935,7 @@ lab UW
 labExpId DS15192
 labVersion Bowtie 0.12.7
 md5sum c3b9f2d9af141b8c572601f9bdfc4434,c0266f1c56d99ec33d88856c4c1409b3
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4895
@@ -938,6 +957,7 @@ lab UW
 labExpId DS15192
 labVersion Hotspot-v5.2
 md5sum f1dce9c8bd2a7820df6e1e878bfa06a5
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4895
@@ -960,6 +980,7 @@ lab UW
 labExpId DS15192
 labVersion lmax-v1.0
 md5sum 6850c38ddef7df3f814d8ece86faeb59
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4895
@@ -982,6 +1003,7 @@ lab UW
 labExpId DS15192
 labVersion WindowDensity-bin20-win+/-75
 md5sum 18e2203504712eef0de44e516a07b273
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4895
@@ -1003,6 +1025,7 @@ grant Stam
 lab UW
 labExpId DS15192
 md5sum 5b430babb6b091c8f8d01f911bf6a78a
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4895
@@ -1023,6 +1046,7 @@ grant Stam
 lab UW
 labExpId DS15192
 md5sum 4b262ad80329fca154ed7d2beceec053
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4895
@@ -1179,6 +1203,7 @@ lab UW
 labExpId DS12501
 labVersion Bowtie 0.12.7
 md5sum d91d14942bf3aa53653ddc7c4e2ec286,24979d2282903f42b1fcf2431c554ec4
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4887
@@ -1200,6 +1225,7 @@ lab UW
 labExpId DS12501
 labVersion Hotspot-v5.2
 md5sum d3396aa7bd5556b8c99186408f8cff82
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4887
@@ -1222,6 +1248,7 @@ lab UW
 labExpId DS12501
 labVersion lmax-v1.0
 md5sum a8dc8533bd75d40ef971cddc4db89853
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4887
@@ -1244,6 +1271,7 @@ lab UW
 labExpId DS12501
 labVersion WindowDensity-bin20-win+/-75
 md5sum 71ca2427d1baaa4ea058296efd1c8d38
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4887
@@ -1265,6 +1293,7 @@ grant Stam
 lab UW
 labExpId DS12501
 md5sum 2e7a1193e442fdbf0f1364e6b849b2b6
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4887
@@ -1285,6 +1314,7 @@ grant Stam
 lab UW
 labExpId DS12501
 md5sum 34214844566dcadccc6e823a0b8cb717
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4887
@@ -1307,6 +1337,7 @@ lab UW
 labExpId DS12599
 labVersion Bowtie 0.12.7
 md5sum fc59e2944f57a4c57d16a4af025bb046,4c752734d9732c5ecb9b70a24f0452ce
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4899
@@ -1328,6 +1359,7 @@ lab UW
 labExpId DS12599
 labVersion Hotspot-v5.2
 md5sum 04fba01e5120962c7af10b91a0a79422
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4899
@@ -1350,6 +1382,7 @@ lab UW
 labExpId DS12599
 labVersion lmax-v1.0
 md5sum 8de9ef75a13ef6d3772eb86ab01d5505
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4899
@@ -1372,6 +1405,7 @@ lab UW
 labExpId DS12599
 labVersion WindowDensity-bin20-win+/-75
 md5sum ccfc49bbf3166fce895155a28760067e
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4899
@@ -1393,6 +1427,7 @@ grant Stam
 lab UW
 labExpId DS12599
 md5sum af47fff04e5e327a78271f7f3df148ec
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4899
@@ -1413,6 +1448,7 @@ grant Stam
 lab UW
 labExpId DS12599
 md5sum 7faa24d536b0637245241d8a02d00afd
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4899
@@ -1564,6 +1600,7 @@ lab UW
 labExpId DS12763
 labVersion Bowtie 0.12.7
 md5sum 3f1237503653656b5553f96157384550,5d27fde9a6161f9c460b3a2a23f45293
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4898
@@ -1585,6 +1622,7 @@ lab UW
 labExpId DS12763
 labVersion Hotspot-v5.2
 md5sum d45e0b935a9c271533e4abefb7fd6b47
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4898
@@ -1607,6 +1645,7 @@ lab UW
 labExpId DS12763
 labVersion lmax-v1.0
 md5sum 82e5ea0660929bbfb91d1e7a355a71a5
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4898
@@ -1629,6 +1668,7 @@ lab UW
 labExpId DS12763
 labVersion WindowDensity-bin20-win+/-75
 md5sum bf6a971337673285de421ea0e07adaf8
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4898
@@ -1650,6 +1690,7 @@ grant Stam
 lab UW
 labExpId DS12763
 md5sum d8ea298573905f640502d0f6da9919db
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4898
@@ -1670,6 +1711,7 @@ grant Stam
 lab UW
 labExpId DS12763
 md5sum f6af76a2a7c73df1114ea32b48dc5f1f
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4898
@@ -1825,6 +1867,7 @@ lab UW
 labExpId DS15115
 labVersion Bowtie 0.12.7
 md5sum 29008329b33739c19c2f91ff61539ed6,f62c95d781a771c722e540e7f4d11943
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4892
@@ -1846,6 +1889,7 @@ lab UW
 labExpId DS15115
 labVersion Hotspot-v5.2
 md5sum 68b000029978962c9adecf47b06122f1
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4892
@@ -1868,6 +1912,7 @@ lab UW
 labExpId DS15115
 labVersion lmax-v1.0
 md5sum a9b2b27cf9b501eeaf594c55a539ea0c
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4892
@@ -1890,6 +1935,7 @@ lab UW
 labExpId DS15115
 labVersion WindowDensity-bin20-win+/-75
 md5sum 30791d5371a0e950dbe6d97bc9f1369f
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4892
@@ -1911,6 +1957,7 @@ grant Stam
 lab UW
 labExpId DS15115
 md5sum 9619e7e1cc42529f67ccf80ed1831555
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4892
@@ -1931,6 +1978,7 @@ grant Stam
 lab UW
 labExpId DS15115
 md5sum b059287933f1d5ce6b747f9cc519be82
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4892
@@ -1953,6 +2001,7 @@ lab UW
 labExpId DS12684
 labVersion Bowtie 0.12.7
 md5sum b3a8044fa56eb997dd20cb95b4b04706,b3c7f162e2d00237954d2d8446c64f65
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4888
@@ -1974,6 +2023,7 @@ lab UW
 labExpId DS12684
 labVersion Hotspot-v5.2
 md5sum 7a7ffe3b47f2a20bbe3e372cd58fc4b7
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4888
@@ -1996,6 +2046,7 @@ lab UW
 labExpId DS12684
 labVersion lmax-v1.0
 md5sum 2f5666d68357ee674c3bbcb9f2c49af3
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4888
@@ -2018,6 +2069,7 @@ lab UW
 labExpId DS12684
 labVersion WindowDensity-bin20-win+/-75
 md5sum 6470bd2708287dc48764222ae2b689f0
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4888
@@ -2039,6 +2091,7 @@ grant Stam
 lab UW
 labExpId DS12684
 md5sum da36fb3ab1448cba0bc46edf4b0ba613
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4888
@@ -2059,6 +2112,7 @@ grant Stam
 lab UW
 labExpId DS12684
 md5sum 77f0118c6e5727ab059fc289da30535e
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4888
@@ -2210,6 +2264,7 @@ lab UW
 labExpId DS13185
 labVersion Bowtie 0.12.7
 md5sum 9676365ad9d63d6e9dacc02695976fe4,50f8559dc31b43b850c02fff804ed940
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4891
@@ -2231,6 +2286,7 @@ lab UW
 labExpId DS13185
 labVersion Hotspot-v5.2
 md5sum 32ba3a774a69f9469f28583d8887d1b9
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4891
@@ -2253,6 +2309,7 @@ lab UW
 labExpId DS13185
 labVersion lmax-v1.0
 md5sum bb092ba1b9165e214d4c6414e56a52b0
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4891
@@ -2275,6 +2332,7 @@ lab UW
 labExpId DS13185
 labVersion WindowDensity-bin20-win+/-75
 md5sum a76618a5f8ccd38f9459cb4945b404c5
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4891
@@ -2296,6 +2354,7 @@ grant Stam
 lab UW
 labExpId DS13185
 md5sum e1fc5ca49b64a1e0201668f94b1ff28a
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4891
@@ -2316,6 +2375,7 @@ grant Stam
 lab UW
 labExpId DS13185
 md5sum 5943b9b81a66f71b82653e73c02ba2f5
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4891
@@ -2338,6 +2398,7 @@ lab UW
 labExpId DS13242
 labVersion Bowtie 0.12.7
 md5sum 976c73143e8488811018082cebd388cc,a92866bf5926fa71c753dc6270f480dd
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4890
@@ -2359,6 +2420,7 @@ lab UW
 labExpId DS13242
 labVersion Hotspot-v5.2
 md5sum 978af120d498971dacc7c84a63aa5e32
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4890
@@ -2381,6 +2443,7 @@ lab UW
 labExpId DS13242
 labVersion lmax-v1.0
 md5sum 9a04122a8076389600f7e5c01f21e10d
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4890
@@ -2403,6 +2466,7 @@ lab UW
 labExpId DS13242
 labVersion WindowDensity-bin20-win+/-75
 md5sum 4658e6c7b34f873001170b9dbfd244af
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4890
@@ -2424,6 +2488,7 @@ grant Stam
 lab UW
 labExpId DS13242
 md5sum b6ce40da713a51a212d0f76b30228de6
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4890
@@ -2444,6 +2509,7 @@ grant Stam
 lab UW
 labExpId DS13242
 md5sum 43065329caf184ea6fdd5b283092bbfd
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4890
@@ -2595,6 +2661,7 @@ lab UW
 labExpId DS13150
 labVersion Bowtie 0.12.7
 md5sum 7ee4c313bcec5cc5d20e3aeb12398cba,845cfa1401503b0c7c08fe742d8b88c0
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4889
@@ -2616,6 +2683,7 @@ lab UW
 labExpId DS13150
 labVersion Hotspot-v5.2
 md5sum 86dbe1571de0d73e25a12660a9c76bb2
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4889
@@ -2638,6 +2706,7 @@ lab UW
 labExpId DS13150
 labVersion lmax-v1.0
 md5sum 8e636926d6af056ee2859ef78ea7b02b
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4889
@@ -2660,6 +2729,7 @@ lab UW
 labExpId DS13150
 labVersion WindowDensity-bin20-win+/-75
 md5sum 124d4d69cf37becfc13bb263d516917e
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4889
@@ -2681,6 +2751,7 @@ grant Stam
 lab UW
 labExpId DS13150
 md5sum 6eb154d4e1629018926a3d38c913035b
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4889
@@ -2701,6 +2772,7 @@ grant Stam
 lab UW
 labExpId DS13150
 md5sum b75822c318efa21e5b16cd418b2250d1
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4889
@@ -3211,6 +3283,7 @@ lab UW
 labExpId DS14426
 labVersion Bowtie 0.12.7
 md5sum 70d2fabc2d337c8124d3fd3cc132a967,55e15e3232b0d9729a89bd7f51bfa83b
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4894
@@ -3232,6 +3305,7 @@ lab UW
 labExpId DS14426
 labVersion Hotspot-v5.2
 md5sum 96b27f46109bfbc4c5a35c08a4703b48
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4894
@@ -3254,6 +3328,7 @@ lab UW
 labExpId DS14426
 labVersion lmax-v1.0
 md5sum 0c9dd346668ab7c682bd786d1028d6e5
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4894
@@ -3276,6 +3351,7 @@ lab UW
 labExpId DS14426
 labVersion WindowDensity-bin20-win+/-75
 md5sum 36145f9642b04bdbed7e50c459ab2234
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4894
@@ -3297,6 +3373,7 @@ grant Stam
 lab UW
 labExpId DS14426
 md5sum e27a0b92fbb16f4f18fcbfae796d2e6c
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4894
@@ -3317,6 +3394,7 @@ grant Stam
 lab UW
 labExpId DS14426
 md5sum 6c0e90113543f2e0abca33cd870691b1
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4894
@@ -3473,6 +3551,7 @@ lab UW
 labExpId DS13981
 labVersion Bowtie 0.12.7
 md5sum 10fde1d5a8a5a0ffb9fc0a694c19ddd5,e40c2901563465e95eefd48cd73b890f
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4896
@@ -3494,6 +3573,7 @@ lab UW
 labExpId DS13981
 labVersion Hotspot-v5.2
 md5sum c00490f48233fb371a1e28171606f23a
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4896
@@ -3516,6 +3596,7 @@ lab UW
 labExpId DS13981
 labVersion lmax-v1.0
 md5sum 977dfd928a73a3c79546aa3381ea73c3
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4896
@@ -3538,6 +3619,7 @@ lab UW
 labExpId DS13981
 labVersion WindowDensity-bin20-win+/-75
 md5sum 4cbe82c502dd22620904333db7decbb7
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4896
@@ -3559,6 +3641,7 @@ grant Stam
 lab UW
 labExpId DS13981
 md5sum 758fc8f9b3940d16e26f727ea9ea8458
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4896
@@ -3579,6 +3662,7 @@ grant Stam
 lab UW
 labExpId DS13981
 md5sum fe2673b01de5b5520e1b5deac1de3c1b
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4896
@@ -3735,6 +3819,7 @@ labExpId DS16508
 labVersion Bowtie 0.12.7
 md5sum d306c5b911b489123ae2119938c98403,b47bf81dac1c83efeda1e8aff808652e
 objStatus revoked - lab requested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3757,6 +3842,7 @@ labExpId DS16508
 labVersion Hotspot-v5.2
 md5sum 1364a5057726cc7e95d82ba0b676ad8d
 objStatus revoked - lab requested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3780,6 +3866,7 @@ labExpId DS16508
 labVersion lmax-v1.0
 md5sum 6d58fd598e4ce586f27c9a07f95759df
 objStatus revoked - lab requested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3803,6 +3890,7 @@ labExpId DS16508
 labVersion WindowDensity-bin20-win+/-75
 md5sum 96058a73623ae4bfa267100fbccd21b9
 objStatus revoked - lab requested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3825,6 +3913,7 @@ lab UW
 labExpId DS16508
 md5sum 3ec589046d3697401c35f25e08342da5
 objStatus revoked - lab requested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3846,6 +3935,7 @@ lab UW
 labExpId DS16508
 md5sum 0059b3c242ebda0369978e8e99b595f5
 objStatus revoked - lab requested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3868,6 +3958,7 @@ lab UW
 labExpId DS12543
 labVersion Bowtie 0.12.7
 md5sum 9bc883c0df2cb5b84bdb3fd370609ab4,153f17fa4024ce6f51130507d610a000
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4893
@@ -3889,6 +3980,7 @@ lab UW
 labExpId DS12543
 labVersion Hotspot-v5.2
 md5sum de4f85cbbb6e368292f634bf7a2fdf2a
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4893
@@ -3911,6 +4003,7 @@ lab UW
 labExpId DS12543
 labVersion lmax-v1.0
 md5sum 396fc6acace061233b17baf7c5dbea26
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4893
@@ -3933,6 +4026,7 @@ lab UW
 labExpId DS12543
 labVersion WindowDensity-bin20-win+/-75
 md5sum 5eb3d12ca6cde972b5c67b864a085329
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4893
@@ -3954,6 +4048,7 @@ grant Stam
 lab UW
 labExpId DS12543
 md5sum 50f3920a5ff32ba8384e25f0bd03d0dc
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4893
@@ -3974,6 +4069,7 @@ grant Stam
 lab UW
 labExpId DS12543
 md5sum b7fd4e8f84bfeb40572acd0ce90c0f87
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4893
@@ -4247,6 +4343,7 @@ lab UW
 labExpId DS11923
 labVersion Bowtie 0.12.7
 md5sum 95f882096535c79c416dc026bdc8eaf2,626540f945adaf0796ddf89236883262
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4897
@@ -4268,6 +4365,7 @@ lab UW
 labExpId DS11923
 labVersion Hotspot-v5.2
 md5sum f143e8a1c1c10c752daa10dcd16b0603
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4897
@@ -4290,6 +4388,7 @@ lab UW
 labExpId DS11923
 labVersion lmax-v1.0
 md5sum 1664fed7863781614050d2a7490d669d
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4897
@@ -4312,6 +4411,7 @@ lab UW
 labExpId DS11923
 labVersion WindowDensity-bin20-win+/-75
 md5sum 22bb1638f278eb84f833a84d6a06b4dd
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4897
@@ -4333,6 +4433,7 @@ grant Stam
 lab UW
 labExpId DS11923
 md5sum b092ac69b352a1afbe3d01bf5ee27db5
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4897
@@ -4353,6 +4454,7 @@ grant Stam
 lab UW
 labExpId DS11923
 md5sum 7263c588356e79f658e4cb6c8385a841
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4897
@@ -4375,6 +4477,7 @@ lab UW
 labExpId DS12829
 labVersion Bowtie 0.12.7
 md5sum 4915c42845caab9e22a6c0ad296ccccf,e7ef7668c1c52965696418f05b98c870
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4900
@@ -4396,6 +4499,7 @@ lab UW
 labExpId DS12829
 labVersion Hotspot-v5.2
 md5sum 336e0a04a2ee43e94612e506f00b3efa
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4900
@@ -4418,6 +4522,7 @@ lab UW
 labExpId DS12829
 labVersion lmax-v1.0
 md5sum c76dd7ab2d3bc55d59aa56a24a56c22e
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4900
@@ -4440,6 +4545,7 @@ lab UW
 labExpId DS12829
 labVersion WindowDensity-bin20-win+/-75
 md5sum 929eba16a5247111c7a833675e73c020
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4900
@@ -4461,6 +4567,7 @@ grant Stam
 lab UW
 labExpId DS12829
 md5sum 0edd12dabcda954a115bafbf999a9830
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4900
@@ -4481,6 +4588,7 @@ grant Stam
 lab UW
 labExpId DS12829
 md5sum c39d4535ffc1496167aaf16f083afc23
+origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4900
@@ -5004,4 +5112,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: -1673629494
+# MAGIC: 1599535722
