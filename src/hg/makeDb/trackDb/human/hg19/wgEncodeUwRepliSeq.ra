@@ -4,7 +4,7 @@ shortLabel UW Repli-seq
 longLabel Replication Timing by Repli-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views 1PctSignal=Percentage-normalized_Signal 2Peaks=Peaks 3Valleys=Valleys 4WaveSignal=Wavelet-smoothed_Signal 5SumSignal=Summed_Densities
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HEPG2=HepG2&nbsp;(Tier_2) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) BJ=BJ BG02ES=BG02ES GM06990=GM06990 GM12801=GM12801 GM12812=GM12812 GM12813=GM12813 IMR90=IMR90 MCF7=MCF-7 NHEK=NHEK SKNSH=SK-N-SH
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) BG02ES=BG02ES BJ=BJ GM06990=GM06990 GM12801=GM12801 GM12812=GM12812 GM12813=GM12813 IMR90=IMR90 MCF7=MCF-7 NHEK=NHEK SKNSH=SK-N-SH
 subGroup3 phase Phase 1G1=G1 1G1B=G1b 2S1=S1 3S2=S2 4S3=S3 5S4=S4 6G2=G2 zNONE=None
 subGroup4 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=rep

@@ -15,11 +15,11 @@ track wgEncodeHaibRnaSeq
 compositeTrack on
 superTrack wgEncodeRnaSeqSuper dense
 shortLabel HAIB RNA-seq
-longLabel RNA-seq from ENCODE/HudsonAlpha
+longLabel RNA-seq from ENCODE/HAIB
 group expression
 subGroup1 view Views RawSignal=Signal Alignments=Alignments
-subGroup2 cellType Cell_Line 1GM12878=GM12878<BR>&nbsp;(Tier_1) 1H1hESC=H1-hESC<BR>&nbsp;(Tier_1) 1K562=K562<BR>&nbsp;(Tier_1) 2HELAS3=HeLa-S3<BR>&nbsp;(Tier_2) 2HEPG2=HepG2<BR>&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC BE2C=BE2C BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM ECC1=ECC1 GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn 2HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
-subGroup3 treatment Treatment  BPA14h=BPA_4hr_100nM DEX100NM=DEX_1hr_100nM DEX5NM=DEX_1hr_5nM DEX1NM=DEX_1hr_1nM DEX500PM=DEX_1hr_500pM DEX100PM=DEX_1hr_100pM DM002P4H=DMSO_4hr_0.02pct EST10NM4H=ESTRADIOL_4hr_10nM ETOH02=ETOH_1hr_0.02pct GEN4H=GENISTEIN_4hr_100nM None=None
+subGroup2 cellType Cell_Line 1GM12878=GM12878<BR>&nbsp;(Tier_1) 1H1hESC=H1-hESC<BR>&nbsp;(Tier_1) 1K562=K562<BR>&nbsp;(Tier_1) 2HELAS3=HeLa-S3<BR>&nbsp;(Tier_2) 2HEPG2=HepG2<BR>&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC BE2C=BE2C BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM ECC1=ECC1 GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn 2HUVEC=HUVEC IMR90=IMR90 JURKAT=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
+subGroup3 treatment Treatment  BPA14h=BPA_4hr_100nM DEX100NM=DEX_1hr_100nM DEX5NM=DEX_1hr_5nM DEX1NM=DEX_1hr_1nM DEX500PM=DEX_1hr_500pM DEX100PM=DEX_1hr_100pM DM002P4H=DMSO_4hr_0.02pct EST10NM4H=ESTRADIOL_4hr_10nM ETOH02=ETOH_1hr_0.02pct GEN4H=GENISTEIN_4hr_100nM zNONE=None
 subGroup4 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 
 dimensions dimensionY=cellType dimensionX=treatment dimensionZ=rep
 dimensionZchecked rep1
@@ -41,12 +41,12 @@ noInherit on
     bamColorMode off
     maxWindowToDraw 10000000
    
-        track wgEncodeHaibRnaSeqJurkatAlnRep1
-        parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel Jurkat 1
-        longLabel Jurkat RNA-seq Alignments Replicate 1 from ENCODE/HAIB 
-        subGroups view=Alignments cellType=Jurkat treatment=None rep=rep1
-        type bam
+        #track wgEncodeHaibRnaSeqJurkatAlnRep1
+        #parent wgEncodeHaibRnaSeqViewAlignments off
+        #shortLabel Jurkat 1
+        #longLabel Jurkat RNA-seq Alignments Replicate 1 from ENCODE/HAIB 
+        #subGroups view=Alignments cellType=JURKAT treatment=zNONE rep=rep1
+        #type bam
         # subId=3868 dateSubmitted=2011-04-05
         # was wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1 cricket Tue Dec 13 09:33:50 2011
 
@@ -54,7 +54,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel Jurkat 2
         longLabel Jurkat RNA-seq Alignments Replicate 2 from ENCODE/HAIB 
-        subGroups view=Alignments cellType=Jurkat treatment=None rep=rep2
+        subGroups view=Alignments cellType=JURKAT treatment=zNONE rep=rep2
         type bam
         # subId=3868 dateSubmitted=2011-04-05
         # was wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2 cricket Tue Dec 13 09:33:59 2011
@@ -337,7 +337,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel BE2_C Aln 1
         longLabel BE2_C RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=BE2C treatment=None rep=rep1
+        subGroups view=Alignments cellType=BE2C treatment=zNONE rep=rep1
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1 cricket Tue Dec 13 09:23:49 2011
@@ -346,7 +346,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel BE2_C Aln 2
         longLabel BE2_C RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=BE2C treatment=None rep=rep2
+        subGroups view=Alignments cellType=BE2C treatment=zNONE rep=rep2
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2 cricket Tue Dec 13 09:23:49 2011
@@ -355,7 +355,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel SK-N-SH Aln 1
         longLabel SK-N-SH RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=SKNSH treatment=None rep=rep1
+        subGroups view=Alignments cellType=SKNSH treatment=zNONE rep=rep1
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep1 wong Fri Jun  3 11:47:46 2011
@@ -365,7 +365,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel SK-N-SH Aln 2
         longLabel SK-N-SH RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=SKNSH treatment=None rep=rep2
+        subGroups view=Alignments cellType=SKNSH treatment=zNONE rep=rep2
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqHtb11ShortpolyaAlnRep2 wong Fri Jun  3 11:47:46 2011
@@ -375,7 +375,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel PANC-1 Aln 1
         longLabel PANC-1 RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=PANC1 treatment=None rep=rep1
+        subGroups view=Alignments cellType=PANC1 treatment=zNONE rep=rep1
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1 cricket Tue Dec 13 09:23:52 2011
@@ -384,7 +384,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel PANC-1 Aln 2
         longLabel PANC-1 RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=PANC1 treatment=None rep=rep2
+        subGroups view=Alignments cellType=PANC1 treatment=zNONE rep=rep2
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2 cricket Tue Dec 13 09:23:52 2011
@@ -393,7 +393,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel PFSK-1 Aln 1
         longLabel PFSK-1 RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=PFSK1 treatment=None rep=rep1
+        subGroups view=Alignments cellType=PFSK1 treatment=zNONE rep=rep1
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1 cricket Tue Dec 13 09:23:52 2011
@@ -402,28 +402,55 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel PFSK-1 Aln 2
         longLabel PFSK-1 RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=PFSK1 treatment=None rep=rep2
+        subGroups view=Alignments cellType=PFSK1 treatment=zNONE rep=rep2
         type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2 cricket Tue Dec 13 09:23:52 2011
 
-        track wgEncodeHaibRnaSeqU87AlnRep1
-        parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel U87 Aln 1
-        longLabel U87 RNA-seq Alignments Rep 1 from ENCODE/HAIB
-        subGroups view=Alignments cellType=U87 treatment=None rep=rep1
-        type bam
+        #track wgEncodeHaibRnaSeqU87AlnRep1
+        #parent wgEncodeHaibRnaSeqViewAlignments off
+        #shortLabel U87 Aln 1
+        #longLabel U87 RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        #subGroups view=Alignments cellType=U87 treatment=zNONE rep=rep1
+        #type bam
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1 cricket Tue Dec 13 09:23:56 2011
 
-        track wgEncodeHaibRnaSeqU87AlnRep2
+        #track wgEncodeHaibRnaSeqU87AlnRep2
+        #parent wgEncodeHaibRnaSeqViewAlignments off
+        #shortLabel U87 Aln 2
+        #longLabel U87 RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        #subGroups view=Alignments cellType=U87 treatment=zNONE rep=rep2
+        #type bam
+        # subId=3838 dateSubmitted=2011-03-31
+        # was wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2 cricket Tue Dec 13 09:23:56 2011
+
+        track wgEncodeHaibRnaSeqJurkatAlnRep1V2
+        parent wgEncodeHaibRnaSeqViewAlignments off
+        shortLabel Jurkat Aln 1
+        longLabel Jurkat RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=JURKAT treatment=zNONE rep=rep1
+        type bam
+        origAssembly hg18
+        # subId=5454 dateSubmitted=2012-01-24
+
+        track wgEncodeHaibRnaSeqU87AlnRep2V2
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel U87 Aln 2
         longLabel U87 RNA-seq Alignments Rep 2 from ENCODE/HAIB
-        subGroups view=Alignments cellType=U87 treatment=None rep=rep2
+        subGroups view=Alignments cellType=U87 treatment=zNONE rep=rep2
         type bam
-        # subId=3838 dateSubmitted=2011-03-31
-        # was wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2 cricket Tue Dec 13 09:23:56 2011
+        origAssembly hg18
+        # subId=5606 dateSubmitted=2012-02-10
+
+        track wgEncodeHaibRnaSeqU87AlnRep1V2
+        parent wgEncodeHaibRnaSeqViewAlignments off
+        shortLabel U87 Aln 1
+        longLabel U87 RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=U87 treatment=zNONE rep=rep1
+        type bam
+        origAssembly hg18
+        # subId=5606 dateSubmitted=2012-02-10
 
     track wgEncodeHaibRnaSeqViewSignal
     shortLabel Signal
@@ -715,7 +742,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel BE2_C Raw 1
         longLabel BE2_C RNA-seq Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=BE2C treatment=None rep=rep1
+        subGroups view=RawSignal cellType=BE2C treatment=zNONE rep=rep1
         type bigWig 0.231311 1122.900024
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqBe2cShortpolyaRawRep1 cricket Tue Dec 13 09:23:49 2011
@@ -724,7 +751,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel BE2_C Raw 2
         longLabel BE2_C RNA-seq Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=BE2C treatment=None rep=rep2
+        subGroups view=RawSignal cellType=BE2C treatment=zNONE rep=rep2
         type bigWig 0.145512 1134.989990
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqBe2cShortpolyaRawRep2 cricket Tue Dec 13 09:23:49 2011
@@ -733,7 +760,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel SK-N-SH Raw 1
         longLabel SK-N-SH RNA-seq Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=SKNSH treatment=None rep=rep1
+        subGroups view=RawSignal cellType=SKNSH treatment=zNONE rep=rep1
         type bigWig 0.139722 938.793030
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep1 wong Fri Jun  3 11:47:46 2011
@@ -743,7 +770,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel SK-N-SH Raw 2
         longLabel SK-N-SH RNA-seq Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=SKNSH treatment=None rep=rep2
+        subGroups view=RawSignal cellType=SKNSH treatment=zNONE rep=rep2
         type bigWig 0.149537 705.216003
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqHtb11ShortpolyaRawRep2 wong Fri Jun  3 11:47:46 2011
@@ -753,7 +780,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PANC-1 Raw 1
         longLabel PANC-1 RNA-seq Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=PANC1 treatment=None rep=rep1
+        subGroups view=RawSignal cellType=PANC1 treatment=zNONE rep=rep1
         type bigWig 0.137402 1973.189941
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep1 cricket Tue Dec 13 09:23:52 2011
@@ -762,7 +789,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PANC-1 Raw 2
         longLabel PANC-1 RNA-seq Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=PANC1 treatment=None rep=rep2
+        subGroups view=RawSignal cellType=PANC1 treatment=zNONE rep=rep2
         type bigWig 0.146817 2090.860107
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPanc1ShortpolyaRawRep2 cricket Tue Dec 13 09:23:52 2011
@@ -771,7 +798,7 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PFSK-1 Raw 1
         longLabel PFSK-1 RNA-seq Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=PFSK1 treatment=None rep=rep1
+        subGroups view=RawSignal cellType=PFSK1 treatment=zNONE rep=rep1
         type bigWig 0.149150 1066.459961
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep1 cricket Tue Dec 13 09:23:52 2011
@@ -780,26 +807,26 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel PFSK-1 Raw 2
         longLabel PFSK-1 RNA-seq Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=PFSK1 treatment=None rep=rep2
+        subGroups view=RawSignal cellType=PFSK1 treatment=zNONE rep=rep2
         type bigWig 0.178471 1536.329956
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqPfsk1ShortpolyaRawRep2 cricket Tue Dec 13 09:23:52 2011
 
-        track wgEncodeHaibRnaSeqU87RawRep1
-        parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel U87 Raw 1
-        longLabel U87 RNA-seq Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=U87 treatment=None rep=rep1
-        type bigWig 0.141237 1836.530029
+        #track wgEncodeHaibRnaSeqU87RawRep1
+        #parent wgEncodeHaibRnaSeqViewSignal off
+        #shortLabel U87 Raw 1
+        #longLabel U87 RNA-seq Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep1
+        #type bigWig 0.141237 1836.530029
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqU87ShortpolyaRawRep1 cricket Tue Dec 13 09:23:56 2011
 
-        track wgEncodeHaibRnaSeqU87RawRep2
-        parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel U87 Raw 2
-        longLabel U87 RNA-seq Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=U87 treatment=None rep=rep2
-        type bigWig 0.148672 2637.550049
+        #track wgEncodeHaibRnaSeqU87RawRep2
+        #parent wgEncodeHaibRnaSeqViewSignal off
+        #shortLabel U87 Raw 2
+        #longLabel U87 RNA-seq Signal Rep 2 from ENCODE/HAIB
+        #subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep2
+        #type bigWig 0.148672 2637.550049
         # subId=3838 dateSubmitted=2011-03-31
         # was wgEncodeHaibRnaSeqU87ShortpolyaRawRep2 cricket Tue Dec 13 09:23:56 2011
 
@@ -807,8 +834,35 @@ noInherit on
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel Jurkat Raw 2
         longLabel Jurkat RNA-seq Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal cellType=Jurkat treatment=None rep=rep2
+        subGroups view=RawSignal cellType=JURKAT treatment=zNONE rep=rep2
         type bigWig 0.579586 391.365997
         # subId=3868 dateSubmitted=2011-04-01
         # was wgEncodeHaibRnaSeqJurkatShortpolyaRawRep2 cricket Tue Dec 13 09:23:51 2011
+
+        track wgEncodeHaibRnaSeqJurkatRawRep1
+        parent wgEncodeHaibRnaSeqViewSignal off
+        shortLabel Jurkat Raw 1
+        longLabel Jurkat RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=JURKAT treatment=zNONE rep=rep1
+        type bigWig 0.244927 403.884003
+        origAssembly hg18
+        # subId=5478 dateSubmitted=2012-01-24
+
+        track wgEncodeHaibRnaSeqU87RawRep2V2
+        parent wgEncodeHaibRnaSeqViewSignal off
+        shortLabel U87 Raw 2
+        longLabel U87 RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep2
+        type bigWig 1.000000 70252.000000
+        origAssembly hg18
+        # subId=5606 dateSubmitted=2012-02-10
+
+        track wgEncodeHaibRnaSeqU87RawRep1V2
+        parent wgEncodeHaibRnaSeqViewSignal off
+        shortLabel U87 Raw 1
+        longLabel U87 RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep1
+        type bigWig 1.000000 52464.000000
+        origAssembly hg18
+        # subId=5606 dateSubmitted=2012-02-10
 

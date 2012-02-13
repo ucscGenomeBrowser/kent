@@ -2531,7 +2531,7 @@ subId 3342
 tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigs
+metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigsV2
 objType table
 bioRep 006C
 cell H1-hESC
@@ -2542,21 +2542,23 @@ dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001083
+dccInternalNotes subId=5587
 expId 1083
-fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigs.bedRnaElements.gz
+fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigsV2.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID20908
 labProtocolId 006Cs
 labVersion iIDR
 localization cytosol
-md5sum bcc5193eb29a521fac56d018f0d4c8da
+md5sum 7384e3635e8d94c72ad3874efdba4792
 project wgEncode
 protocol TAP-Only
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4495
-tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigs
+submittedDataVersion V2 - Changed . to -1 to represent NULL
+tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigsV2
 view Contigs
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapExonsGencV7
@@ -2704,7 +2706,7 @@ subId 3343
 tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigs
+metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigsV2
 objType table
 bioRep 006N
 cell H1-hESC
@@ -2715,21 +2717,23 @@ dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001084
+dccInternalNotes subId=5587
 expId 1084
-fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigs.bedRnaElements.gz
+fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigsV2.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID20907
 labProtocolId 006Ns
 labVersion iIDR
 localization nucleus
-md5sum 9e86022588bad43795e9e38f43e8aa70
+md5sum 4351f6c13d1808789b853cce67fa9a59
 project wgEncode
 protocol TAP-Only
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4496
-tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigs
+submittedDataVersion V2 - Changed . to -1 to represent NULL
+tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigsV2
 view Contigs
 
 metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapExonsGencV7
@@ -7666,7 +7670,8 @@ subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
-objType file
+objType table
+attic auxSup
 bioRep gen0154P
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -8864,7 +8869,8 @@ subId 3375
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
-objType file
+objType table
+attic auxSup
 bioRep gen0161WC
 cell prostate
 composite wgEncodeCshlShortRnaSeq
@@ -9295,4 +9301,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1094937805
+# MAGIC: 914963976
