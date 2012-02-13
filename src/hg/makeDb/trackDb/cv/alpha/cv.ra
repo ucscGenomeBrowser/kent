@@ -2558,6 +2558,7 @@ organism human
 description mammary epithelial cells
 tissue breast
 lineage ectoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2551
 orderUrl http://www.lonza.com/
