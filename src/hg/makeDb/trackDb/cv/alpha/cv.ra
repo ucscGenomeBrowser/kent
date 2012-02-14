@@ -11323,7 +11323,7 @@ dataGroup RNA Profiling
 
 term CHH_Signal
 tag CHHSIGNAL
-type dataType
+type view
 label CHH Signal
 description Provisional addition of CHH Signal dataType for Haib Bisulfate
 dataGroup Other
@@ -11361,7 +11361,7 @@ dataGroup Other
 
 term CpG_Signal
 tag CPGSIGNAL
-type dataType
+type view
 label CpG Signal
 description Provisional addition of CpG Signal dataType for Haib Bisulfate
 dataGroup Other
