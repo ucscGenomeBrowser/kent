@@ -31319,7 +31319,7 @@ tableName wgEncodeHaibTfbsHepg2Bhlhe40V0416101RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsHepg2CebpbV0416101AlnRep1
+metaObject wgEncodeHaibTfbsHepg2Cebpbsc150V0416101AlnRep1
 objType file
 antibody CEBPB_(SC-150)
 cell HepG2
@@ -31331,7 +31331,7 @@ dateSubmitted 2011-09-12
 dateUnrestricted 2012-06-12
 dccAccession wgEncodeEH002304
 expId 2304
-fileName wgEncodeHaibTfbsHepg2CebpbV0416101AlnRep1.bam,wgEncodeHaibTfbsHepg2CebpbV0416101AlnRep1.bam.bai
+fileName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101AlnRep1.bam,wgEncodeHaibTfbsHepg2Cebpbsc150V0416101AlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL4209
@@ -31344,7 +31344,7 @@ subId 4801
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibTfbsHepg2CebpbV0416101AlnRep2
+metaObject wgEncodeHaibTfbsHepg2Cebpbsc150V0416101AlnRep2
 objType file
 antibody CEBPB_(SC-150)
 cell HepG2
@@ -31356,7 +31356,7 @@ dateSubmitted 2011-09-12
 dateUnrestricted 2012-06-12
 dccAccession wgEncodeEH002304
 expId 2304
-fileName wgEncodeHaibTfbsHepg2CebpbV0416101AlnRep2.bam,wgEncodeHaibTfbsHepg2CebpbV0416101AlnRep2.bam.bai
+fileName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101AlnRep2.bam,wgEncodeHaibTfbsHepg2Cebpbsc150V0416101AlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL4939
@@ -31369,7 +31369,7 @@ subId 4801
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibTfbsHepg2CebpbV0416101PkRep1
+metaObject wgEncodeHaibTfbsHepg2Cebpbsc150V0416101PkRep1
 objType table
 antibody CEBPB_(SC-150)
 cell HepG2
@@ -31381,7 +31381,7 @@ dateSubmitted 2011-09-12
 dateUnrestricted 2012-06-12
 dccAccession wgEncodeEH002304
 expId 2304
-fileName wgEncodeHaibTfbsHepg2CebpbV0416101PkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL4209
@@ -31392,11 +31392,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 4801
-tableName wgEncodeHaibTfbsHepg2CebpbV0416101PkRep1
+tableName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101PkRep1
 treatment None
 view Peaks
 
-metaObject wgEncodeHaibTfbsHepg2CebpbV0416101PkRep2
+metaObject wgEncodeHaibTfbsHepg2Cebpbsc150V0416101PkRep2
 objType table
 antibody CEBPB_(SC-150)
 cell HepG2
@@ -31408,7 +31408,7 @@ dateSubmitted 2011-09-12
 dateUnrestricted 2012-06-12
 dccAccession wgEncodeEH002304
 expId 2304
-fileName wgEncodeHaibTfbsHepg2CebpbV0416101PkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL4939
@@ -31419,11 +31419,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 4801
-tableName wgEncodeHaibTfbsHepg2CebpbV0416101PkRep2
+tableName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101PkRep2
 treatment None
 view Peaks
 
-metaObject wgEncodeHaibTfbsHepg2CebpbV0416101RawDataRep1
+metaObject wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawDataRep1
 objType file
 antibody CEBPB_(SC-150)
 cell HepG2
@@ -31435,7 +31435,7 @@ dateSubmitted 2011-09-12
 dateUnrestricted 2012-06-12
 dccAccession wgEncodeEH002304
 expId 2304
-fileName wgEncodeHaibTfbsHepg2CebpbV0416101RawDataRep1.fastq.gz
+fileName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL4209
@@ -31448,7 +31448,7 @@ subId 4801
 treatment None
 view RawData
 
-metaObject wgEncodeHaibTfbsHepg2CebpbV0416101RawDataRep2
+metaObject wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawDataRep2
 objType file
 antibody CEBPB_(SC-150)
 cell HepG2
@@ -31460,7 +31460,7 @@ dateSubmitted 2011-09-12
 dateUnrestricted 2012-06-12
 dccAccession wgEncodeEH002304
 expId 2304
-fileName wgEncodeHaibTfbsHepg2CebpbV0416101RawDataRep2.fastq.gz
+fileName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL4939
@@ -31473,7 +31473,7 @@ subId 4801
 treatment None
 view RawData
 
-metaObject wgEncodeHaibTfbsHepg2CebpbV0416101RawRep1
+metaObject wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawRep1
 objType table
 antibody CEBPB_(SC-150)
 cell HepG2
@@ -31485,7 +31485,7 @@ dateSubmitted 2011-09-12
 dateUnrestricted 2012-06-12
 dccAccession wgEncodeEH002304
 expId 2304
-fileName wgEncodeHaibTfbsHepg2CebpbV0416101RawRep1.bigWig
+fileName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL4209
@@ -31495,11 +31495,11 @@ protocol v041610.1
 replicate 1
 setType exp
 subId 4801
-tableName wgEncodeHaibTfbsHepg2CebpbV0416101RawRep1
+tableName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawRep1
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsHepg2CebpbV0416101RawRep2
+metaObject wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawRep2
 objType table
 antibody CEBPB_(SC-150)
 cell HepG2
@@ -31511,7 +31511,7 @@ dateSubmitted 2011-09-12
 dateUnrestricted 2012-06-12
 dccAccession wgEncodeEH002304
 expId 2304
-fileName wgEncodeHaibTfbsHepg2CebpbV0416101RawRep2.bigWig
+fileName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL4939
@@ -31521,7 +31521,7 @@ protocol v041610.1
 replicate 2
 setType exp
 subId 4801
-tableName wgEncodeHaibTfbsHepg2CebpbV0416101RawRep2
+tableName wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawRep2
 treatment None
 view RawSignal
 
@@ -59396,4 +59396,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: 1407423254
+# MAGIC: -740052386
