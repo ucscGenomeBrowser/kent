@@ -1671,22 +1671,22 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=2720 dateSubmitted=2010-10-25
 
-        track wgEncodeHaibTfbsK562Yy1V0416101PkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 YY1 V101 2
-        longLabel K562 YY1 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
-        type broadPeak
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Yy1V0416101PkRep2
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 YY1 V101 2
+        #longLabel K562 YY1 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
+        #type broadPeak
+        #color 46,0,184
         # subId=2721 dateSubmitted=2010-10-25
 
-        track wgEncodeHaibTfbsK562Yy1V0416101PkRep1
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 YY1 V101 1
-        longLabel K562 YY1 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
-        type broadPeak
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Yy1V0416101PkRep1
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 YY1 V101 1
+        #longLabel K562 YY1 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
+        #type broadPeak
+        #color 46,0,184
         # subId=2721 dateSubmitted=2010-10-25
 
         track wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hPkRep2
@@ -4296,6 +4296,24 @@ html wgEncodeHaibTfbs.release2
         color 153,38,0
         # subId=5502 dateSubmitted=2012-02-02
 
+        track wgEncodeHaibTfbsK562Yy1sc281V0416101PkRep1
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 YY1 V101 1
+        longLabel K562 YY1 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=YY1SC281 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
+        type broadPeak
+        color 46,0,184
+        # subId=5676 dateSubmitted=2012-02-14
+
+        track wgEncodeHaibTfbsK562Yy1sc281V0416101PkRep2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 YY1 V101 2
+        longLabel K562 YY1 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=YY1SC281 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
+        type broadPeak
+        color 46,0,184
+        # subId=5676 dateSubmitted=2012-02-14
+
     #Raw Signal Track HAIB TFBS#
     #Short Labels for Raw Signal =Ra #
     track wgEncodeHaibTfbsViewRawSignal
@@ -5251,13 +5269,13 @@ html wgEncodeHaibTfbs.release2
         color 0,107,27
         # subId=3027 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsK562Yy1V0416101RawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 YY1 V101 1
-        longLabel K562 YY1 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
-        type bigWig 0.333504 1234.709961
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Yy1V0416101RawRep1
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 YY1 V101 1
+        #longLabel K562 YY1 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
+        #type bigWig 0.333504 1234.709961
+        #color 46,0,184
         # subId=3027 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsHepg2Atf3V0416101RawRep1
@@ -5432,13 +5450,13 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=3028 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsK562Yy1V0416101RawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 YY1 V101 2
-        longLabel K562 YY1 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
-        type bigWig 0.551376 986.961975
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Yy1V0416101RawRep2
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 YY1 V101 2
+        #longLabel K562 YY1 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
+        #type bigWig 0.551376 986.961975
+        #color 46,0,184
         # subId=3028 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsHepg2RxlchPcr2xRawRep2
@@ -9348,5 +9366,23 @@ html wgEncodeHaibTfbs.release2
         subGroups view=RawSignal factor=NRSF cellType=U87 protocol=PCR2X treatment=NONE rep=rep2
         type bigWig 0.190402 245.143005
         # subId=5456 dateSubmitted=2012-01-24
+
+        track wgEncodeHaibTfbsK562Yy1sc281V0416101RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 YY1 V101 1
+        longLabel K562 YY1 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal factor=YY1SC281 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
+        type bigWig 0.333504 1234.709961
+        color 46,0,184
+        # subId=5676 dateSubmitted=2012-02-14
+
+        track wgEncodeHaibTfbsK562Yy1sc281V0416101RawRep2
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 YY1 V101 2
+        longLabel K562 YY1 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal factor=YY1SC281 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
+        type bigWig 0.551376 986.961975
+        color 46,0,184
+        # subId=5676 dateSubmitted=2012-02-14
 
 
