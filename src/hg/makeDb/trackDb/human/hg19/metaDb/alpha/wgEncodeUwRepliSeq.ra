@@ -9,7 +9,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -32,7 +32,7 @@ objType table
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -56,7 +56,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -79,7 +79,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -102,7 +102,7 @@ objType table
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -126,7 +126,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -149,7 +149,7 @@ objType table
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -173,7 +173,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -196,7 +196,7 @@ objType table
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -220,7 +220,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -243,7 +243,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -266,7 +266,7 @@ objType table
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -290,7 +290,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -313,7 +313,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -336,7 +336,7 @@ objType table
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -360,7 +360,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -383,7 +383,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -406,7 +406,7 @@ objType table
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -430,7 +430,7 @@ objType file
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -453,7 +453,7 @@ objType table
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -477,7 +477,7 @@ objType table
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -501,7 +501,7 @@ objType table
 cell BG02ES
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
@@ -525,7 +525,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -547,7 +547,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -569,7 +569,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -592,7 +592,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -615,7 +615,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -637,7 +637,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -659,7 +659,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -681,7 +681,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -703,7 +703,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -726,7 +726,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -749,7 +749,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -771,7 +771,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -793,7 +793,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -816,7 +816,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -839,7 +839,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -861,7 +861,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -883,7 +883,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -906,7 +906,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -929,7 +929,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -951,7 +951,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -973,7 +973,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -995,7 +995,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1017,7 +1017,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1040,7 +1040,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1063,7 +1063,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1085,7 +1085,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1107,7 +1107,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1129,7 +1129,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1151,7 +1151,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1174,7 +1174,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1197,7 +1197,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1219,7 +1219,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1241,7 +1241,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1263,7 +1263,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1285,7 +1285,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1308,7 +1308,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1331,7 +1331,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1353,7 +1353,7 @@ objType file
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1375,7 +1375,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1398,7 +1398,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1421,7 +1421,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1444,7 +1444,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1467,7 +1467,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1490,7 +1490,7 @@ objType table
 cell BJ
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
@@ -1513,7 +1513,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1535,7 +1535,7 @@ objType table
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1558,7 +1558,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1580,7 +1580,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1602,7 +1602,7 @@ objType table
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1625,7 +1625,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1647,7 +1647,7 @@ objType table
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1670,7 +1670,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1692,7 +1692,7 @@ objType table
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1715,7 +1715,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1737,7 +1737,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1759,7 +1759,7 @@ objType table
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1782,7 +1782,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1804,7 +1804,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1826,7 +1826,7 @@ objType table
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1849,7 +1849,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1871,7 +1871,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1893,7 +1893,7 @@ objType table
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1916,7 +1916,7 @@ objType file
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1938,7 +1938,7 @@ objType table
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1961,7 +1961,7 @@ objType table
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -1984,7 +1984,7 @@ objType table
 cell GM06990
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
@@ -2007,7 +2007,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2029,7 +2029,7 @@ objType table
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2052,7 +2052,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2074,7 +2074,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2096,7 +2096,7 @@ objType table
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2119,7 +2119,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2141,7 +2141,7 @@ objType table
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2164,7 +2164,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2186,7 +2186,7 @@ objType table
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2209,7 +2209,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2231,7 +2231,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2253,7 +2253,7 @@ objType table
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2276,7 +2276,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2298,7 +2298,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2320,7 +2320,7 @@ objType table
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2343,7 +2343,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2365,7 +2365,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2387,7 +2387,7 @@ objType table
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2410,7 +2410,7 @@ objType file
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2432,7 +2432,7 @@ objType table
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2455,7 +2455,7 @@ objType table
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2478,7 +2478,7 @@ objType table
 cell GM12801
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002238
@@ -2501,7 +2501,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2523,7 +2523,7 @@ objType table
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2546,7 +2546,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2568,7 +2568,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2590,7 +2590,7 @@ objType table
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2613,7 +2613,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2635,7 +2635,7 @@ objType table
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2658,7 +2658,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2680,7 +2680,7 @@ objType table
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2703,7 +2703,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2725,7 +2725,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2747,7 +2747,7 @@ objType table
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2770,7 +2770,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2792,7 +2792,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2814,7 +2814,7 @@ objType table
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2837,7 +2837,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2859,7 +2859,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2881,7 +2881,7 @@ objType table
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2904,7 +2904,7 @@ objType file
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2926,7 +2926,7 @@ objType table
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2949,7 +2949,7 @@ objType table
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2972,7 +2972,7 @@ objType table
 cell GM12812
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002239
@@ -2995,7 +2995,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3017,7 +3017,7 @@ objType table
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3040,7 +3040,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3062,7 +3062,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3084,7 +3084,7 @@ objType table
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3107,7 +3107,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3129,7 +3129,7 @@ objType table
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3152,7 +3152,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3174,7 +3174,7 @@ objType table
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3197,7 +3197,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3219,7 +3219,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3241,7 +3241,7 @@ objType table
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3264,7 +3264,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3286,7 +3286,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3308,7 +3308,7 @@ objType table
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3331,7 +3331,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3353,7 +3353,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3375,7 +3375,7 @@ objType table
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3398,7 +3398,7 @@ objType file
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3420,7 +3420,7 @@ objType table
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3443,7 +3443,7 @@ objType table
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3466,7 +3466,7 @@ objType table
 cell GM12813
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002240
@@ -3489,7 +3489,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3511,7 +3511,7 @@ objType table
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3534,7 +3534,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3556,7 +3556,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3578,7 +3578,7 @@ objType table
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3601,7 +3601,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3623,7 +3623,7 @@ objType table
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3646,7 +3646,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3668,7 +3668,7 @@ objType table
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3691,7 +3691,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3713,7 +3713,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3735,7 +3735,7 @@ objType table
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3758,7 +3758,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3780,7 +3780,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3802,7 +3802,7 @@ objType table
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3825,7 +3825,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3847,7 +3847,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3869,7 +3869,7 @@ objType table
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3892,7 +3892,7 @@ objType file
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3914,7 +3914,7 @@ objType table
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3937,7 +3937,7 @@ objType table
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3960,7 +3960,7 @@ objType table
 cell GM12878
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002241
@@ -3983,7 +3983,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4005,7 +4005,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4028,7 +4028,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4050,7 +4050,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4072,7 +4072,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4095,7 +4095,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4117,7 +4117,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4140,7 +4140,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4162,7 +4162,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4185,7 +4185,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4207,7 +4207,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4229,7 +4229,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4252,7 +4252,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4274,7 +4274,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4296,7 +4296,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4319,7 +4319,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4341,7 +4341,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4363,7 +4363,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4386,7 +4386,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4408,7 +4408,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4431,7 +4431,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4454,7 +4454,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002243
@@ -4477,7 +4477,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4499,7 +4499,7 @@ objType table
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4522,7 +4522,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4544,7 +4544,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4566,7 +4566,7 @@ objType table
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4589,7 +4589,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4611,7 +4611,7 @@ objType table
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4634,7 +4634,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4656,7 +4656,7 @@ objType table
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4679,7 +4679,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4701,7 +4701,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4723,7 +4723,7 @@ objType table
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4746,7 +4746,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4768,7 +4768,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4790,7 +4790,7 @@ objType table
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4813,7 +4813,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4835,7 +4835,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4857,7 +4857,7 @@ objType table
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4880,7 +4880,7 @@ objType file
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4902,7 +4902,7 @@ objType table
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4925,7 +4925,7 @@ objType table
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4948,7 +4948,7 @@ objType table
 cell HepG2
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002244
@@ -4971,7 +4971,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -4993,7 +4993,7 @@ objType table
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5016,7 +5016,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5038,7 +5038,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5060,7 +5060,7 @@ objType table
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5083,7 +5083,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5105,7 +5105,7 @@ objType table
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5128,7 +5128,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5150,7 +5150,7 @@ objType table
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5173,7 +5173,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5195,7 +5195,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5217,7 +5217,7 @@ objType table
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5240,7 +5240,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5262,7 +5262,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5284,7 +5284,7 @@ objType table
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5307,7 +5307,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5329,7 +5329,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5351,7 +5351,7 @@ objType table
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5374,7 +5374,7 @@ objType file
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5396,7 +5396,7 @@ objType table
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5419,7 +5419,7 @@ objType table
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5442,7 +5442,7 @@ objType table
 cell HUVEC
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002242
@@ -5465,7 +5465,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5487,7 +5487,7 @@ objType table
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5510,7 +5510,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5532,7 +5532,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5554,7 +5554,7 @@ objType table
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5577,7 +5577,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5599,7 +5599,7 @@ objType table
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5622,7 +5622,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5644,7 +5644,7 @@ objType table
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5667,7 +5667,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5689,7 +5689,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5711,7 +5711,7 @@ objType table
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5734,7 +5734,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5756,7 +5756,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5778,7 +5778,7 @@ objType table
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5801,7 +5801,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5823,7 +5823,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5845,7 +5845,7 @@ objType table
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5868,7 +5868,7 @@ objType file
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5890,7 +5890,7 @@ objType table
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5913,7 +5913,7 @@ objType table
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5936,7 +5936,7 @@ objType table
 cell IMR90
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002245
@@ -5959,7 +5959,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -5981,7 +5981,7 @@ objType table
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6004,7 +6004,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6026,7 +6026,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6048,7 +6048,7 @@ objType table
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6071,7 +6071,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6093,7 +6093,7 @@ objType table
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6116,7 +6116,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6138,7 +6138,7 @@ objType table
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6161,7 +6161,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6183,7 +6183,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6205,7 +6205,7 @@ objType table
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6228,7 +6228,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6250,7 +6250,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6272,7 +6272,7 @@ objType table
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6295,7 +6295,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6317,7 +6317,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6339,7 +6339,7 @@ objType table
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6362,7 +6362,7 @@ objType file
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6384,7 +6384,7 @@ objType table
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6407,7 +6407,7 @@ objType table
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6430,7 +6430,7 @@ objType table
 cell K562
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
@@ -6453,7 +6453,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6475,7 +6475,7 @@ objType table
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6498,7 +6498,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6520,7 +6520,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6542,7 +6542,7 @@ objType table
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6565,7 +6565,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6587,7 +6587,7 @@ objType table
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6610,7 +6610,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6632,7 +6632,7 @@ objType table
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6655,7 +6655,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6677,7 +6677,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6699,7 +6699,7 @@ objType table
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6722,7 +6722,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6744,7 +6744,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6766,7 +6766,7 @@ objType table
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6789,7 +6789,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6811,7 +6811,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6833,7 +6833,7 @@ objType table
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6856,7 +6856,7 @@ objType file
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6878,7 +6878,7 @@ objType table
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6901,7 +6901,7 @@ objType table
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6924,7 +6924,7 @@ objType table
 cell MCF-7
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002247
@@ -6947,7 +6947,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -6970,7 +6970,7 @@ objType table
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -6994,7 +6994,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7017,7 +7017,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7040,7 +7040,7 @@ objType table
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7064,7 +7064,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7087,7 +7087,7 @@ objType table
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7111,7 +7111,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7134,7 +7134,7 @@ objType table
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7158,7 +7158,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7181,7 +7181,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7204,7 +7204,7 @@ objType table
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7228,7 +7228,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7251,7 +7251,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7274,7 +7274,7 @@ objType table
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7298,7 +7298,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7321,7 +7321,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7344,7 +7344,7 @@ objType table
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7368,7 +7368,7 @@ objType file
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7391,7 +7391,7 @@ objType table
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7415,7 +7415,7 @@ objType table
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7439,7 +7439,7 @@ objType table
 cell NHEK
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002249
@@ -7463,7 +7463,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7485,7 +7485,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7508,7 +7508,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7530,7 +7530,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7552,7 +7552,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7575,7 +7575,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7597,7 +7597,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7620,7 +7620,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7642,7 +7642,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7665,7 +7665,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7687,7 +7687,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7709,7 +7709,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7732,7 +7732,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7754,7 +7754,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7776,7 +7776,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7799,7 +7799,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7821,7 +7821,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7843,7 +7843,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7866,7 +7866,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7888,7 +7888,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7911,7 +7911,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7934,7 +7934,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002384
@@ -7952,4 +7952,4 @@ subId 4862
 tableName wgEncodeUwRepliSeqSknshWaveSignalRep1
 view WaveSignal
 
-# MAGIC: -1256423704
+# MAGIC: 896658856
