@@ -70,7 +70,7 @@ char* sectionList = makeSqlMarkerList();
 safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet, section SEPARATOR ' (...) ') FROM %s JOIN %s USING (articleId) WHERE markerId='%s' GROUP by articleId LIMIT %d", markerTable, articleTable, item, itemLimit);
 //safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet SEPARATOR ' (...) ') FROM t2gElsevierMarker JOIN t2gElsevierArticle USING (articleId) WHERE markerId='%s' AND section IN (%s) GROUP by articleId LIMIT %d", item, sectionList, itemLimit);
 
-printf(sectionList);
+//printf(sectionList);
 freeMem(sectionList);
 
 struct sqlResult *sr = sqlGetResult(conn, query);

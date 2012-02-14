@@ -17,7 +17,7 @@ set res = `cat ./logs/hgNear-v${BRANCHNN}.log | egrep "Total" | egrep "0 soft er
 set res2 = `cat ./logs/hgNear-v${BRANCHNN}.log | egrep "Total"`
 
 set wc = `echo "$res" | wc -w` 
-if ( "$wc" == "0" ) then
+if ( "$wc" != "0" ) then
  echo "errs found:"
  echo "$res2"
  echo "$res2" | mail -s "Errors in hgNearTestRobot on $HOST" $USER galt kent browser-qa
