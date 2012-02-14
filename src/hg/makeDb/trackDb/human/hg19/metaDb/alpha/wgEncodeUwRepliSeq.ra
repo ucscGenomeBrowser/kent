@@ -23,7 +23,6 @@ origAssembly hg19
 phase G1b
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view Alignments
 
@@ -46,7 +45,6 @@ origAssembly hg19
 phase G1b
 project wgEncode
 replicate 1
-sex M
 subId 5040
 tableName wgEncodeUwRepliSeqBg02esG1bPctSignalRep1
 view PctSignal
@@ -70,7 +68,6 @@ origAssembly hg19
 phase G1b
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view RawData
 
@@ -93,7 +90,6 @@ origAssembly hg19
 phase G2
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view Alignments
 
@@ -116,7 +112,6 @@ origAssembly hg19
 phase G2
 project wgEncode
 replicate 1
-sex M
 subId 5040
 tableName wgEncodeUwRepliSeqBg02esG2PctSignalRep1
 view PctSignal
@@ -140,7 +135,6 @@ origAssembly hg19
 phase G2
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view RawData
 
@@ -163,7 +157,6 @@ origAssembly hg19
 phase None
 project wgEncode
 replicate 1
-sex M
 subId 5040
 tableName wgEncodeUwRepliSeqBg02esPkRep1
 view Peaks
@@ -187,7 +180,6 @@ origAssembly hg19
 phase S1
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view Alignments
 
@@ -210,7 +202,6 @@ origAssembly hg19
 phase S1
 project wgEncode
 replicate 1
-sex M
 subId 5040
 tableName wgEncodeUwRepliSeqBg02esS1PctSignalRep1
 view PctSignal
@@ -234,7 +225,6 @@ origAssembly hg19
 phase S1
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view RawData
 
@@ -257,7 +247,6 @@ origAssembly hg19
 phase S2
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view Alignments
 
@@ -280,7 +269,6 @@ origAssembly hg19
 phase S2
 project wgEncode
 replicate 1
-sex M
 subId 5040
 tableName wgEncodeUwRepliSeqBg02esS2PctSignalRep1
 view PctSignal
@@ -304,7 +292,6 @@ origAssembly hg19
 phase S2
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view RawData
 
@@ -327,7 +314,6 @@ origAssembly hg19
 phase S3
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view Alignments
 
@@ -350,7 +336,6 @@ origAssembly hg19
 phase S3
 project wgEncode
 replicate 1
-sex M
 subId 5040
 tableName wgEncodeUwRepliSeqBg02esS3PctSignalRep1
 view PctSignal
@@ -374,7 +359,6 @@ origAssembly hg19
 phase S3
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view RawData
 
@@ -397,7 +381,6 @@ origAssembly hg19
 phase S4
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view Alignments
 
@@ -420,7 +403,6 @@ origAssembly hg19
 phase S4
 project wgEncode
 replicate 1
-sex M
 subId 5040
 tableName wgEncodeUwRepliSeqBg02esS4PctSignalRep1
 view PctSignal
@@ -444,7 +426,6 @@ origAssembly hg19
 phase S4
 project wgEncode
 replicate 1
-sex M
 subId 5040
 view RawData
 
@@ -467,7 +448,6 @@ origAssembly hg19
 phase None
 project wgEncode
 replicate 1
-sex M
 subId 5040
 tableName wgEncodeUwRepliSeqBg02esSumSignalRep1
 view SumSignal
@@ -491,7 +471,6 @@ origAssembly hg19
 phase None
 project wgEncode
 replicate 1
-sex M
 subId 5040
 tableName wgEncodeUwRepliSeqBg02esValleysRep1
 view Valleys
@@ -515,7 +494,6 @@ origAssembly hg19
 phase None
 project wgEncode
 replicate 1
-sex M
 subId 5040
 tableName wgEncodeUwRepliSeqBg02esWaveSignalRep1
 view WaveSignal
@@ -7952,4 +7930,4 @@ subId 4862
 tableName wgEncodeUwRepliSeqSknshWaveSignalRep1
 view WaveSignal
 
-# MAGIC: 896658856
+# MAGIC: 896596068
