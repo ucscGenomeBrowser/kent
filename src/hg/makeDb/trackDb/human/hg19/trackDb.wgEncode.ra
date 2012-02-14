@@ -20,7 +20,7 @@ include wgEncodeReg.new.ra alpha
 
 
 # UW Repli-Seq track (wrangler: venkat)
-include wgEncodeUwRepliSeq.ra alpha,beta
+include wgEncodeUwRepliSeq.ra
 
 #include wgEncodeRegNorm.ra alpha
 

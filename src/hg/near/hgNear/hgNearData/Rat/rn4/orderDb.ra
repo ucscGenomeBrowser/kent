@@ -25,3 +25,5 @@ longLabel Difference in Expression Ratio with Selected Gene
 type pair affyExonTissuesGsMedianDistRgdGene2 query target distance 1
 priority 2.15
 
+name abc
+type abc rgdGene2ToUniProt name value
