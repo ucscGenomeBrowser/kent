@@ -10930,6 +10930,18 @@ type view
 label Contigs
 description Contigs represent continuous regions of the genome that are covered by several overlapping RNA-seq reads. The score represents the logarithm of the expression level (read coverage depth).
 
+term CpG
+tag CPG 
+type view
+label CpG Sites
+description CpG Methylation Sites Provisional
+
+term NonCpG
+tag NONCPG 
+type view
+label Non-CpG Sites
+description Non-CpG Methylation Sites Provisional
+
 term Excludable
 tag EXCLU
 type view
@@ -11451,6 +11463,13 @@ tag METHYLRRBS
 type dataType
 label Methyl RRBS
 description DNA Methylation Reduced Representation Bisulfite Sequencing
+dataGroup DNA Methylation
+
+term MethylWgbs
+tag METHYLWGBS
+type dataType
+label Methyl WGBS
+description DNA Methylation Whole Genome Bisulfite Sequencing Provisonal
 dataGroup DNA Methylation
 
 term NRE
