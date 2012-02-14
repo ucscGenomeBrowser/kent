@@ -11,21 +11,26 @@
 #define ANNOGRATOR_H
 
 #include "asParse.h"
+#include "hash.h"
 #include "options.h"
 
 struct annoRow
-/* Representation of a row from a database table or file. Purposefully left vague so
- * that different data types can use the most suitable representation, e.g. a struct bed3
+/* Representation of a row from a database table or file.  The chrom, chromStart and chromEnd
+ * facilitate intersection by position.  The rest of the row data is purposefully left vague so
+ * that different data types can use the most suitable representation, e.g. a struct bed4
  * or a char *row[] or a struct that contains a genePred and a functionPred. */
     {
     struct annoRow *next;
+    char *chrom;
+    uint chromStart;
+    uint chromEnd;
     void *data;
     };
 
 enum annoFilterOp
 /* Types of filtering actions; most use a value defined elsewhere in annoFilterSpec. */
-{
-    afNop,		// Don't do anything (any column value passes filter)
+    {
+    afNoFilter,		// Any column value passes filter
     afMatch,		// Stringish column value must match given value(s)
     afNotMatch,		// Stringish column value must not match given value(s)
     afLT,		// Numeric column value is less than a given value
@@ -35,19 +40,19 @@ enum annoFilterOp
     afGTE,		// Numeric column value is greater than or equal to a given value
     afGT,		// Numeric column value is greater than a given value
     afInRange,		// Numeric column value falls within fully-closed [given min, given max]
-};
+    };
 
 union aNumber 
-{
+    {
     long long anInt;
     long double aDouble;
-};
+    };
 
 struct annoFilterSpec
 /* A filter on a column of data: operand and value(s). This info can tell the UI what
  * filtering options to offer and what their current values are; and it tells the
  * annoStreamer what filters to apply. */
-{
+    {
     struct annoFilterSpec *next;
     struct asColumn *column;	// Lots of info about the column: name, type, type-hints, ...
     char *label;		// Option label for UI (if NULL, see column->comment)
@@ -57,10 +62,10 @@ struct annoFilterSpec
 				// so e.g. UI can enforce limits
     union aNumber min;		// Lowest valid threshold value
     union aNumber max;		// Highest valid threshold value
-};
+    };
 
 struct annoOutputSpec
-/* A column and whether it is currently set to be included in output. */
+/* A column as defined by autoSql and whether it is currently set to be included in output. */
     {
     struct annoOutputSpec *next;
     struct asColumn *column;
@@ -73,6 +78,7 @@ struct annoStreamer
  * will do all the actual work. */
     {
     struct annoStreamer *next;
+    struct annoGratorQuery *query;	// The query object that owns this streamer.
     // Public methods
     // Get autoSql representation
     struct asObject *(*getAutoSqlObject)(struct annoStreamer *self);
@@ -92,7 +98,7 @@ struct annoStreamer
 struct annoGrator
 /* Generic interface to an annoStreamer and a method to integrate that annoStreamer's
  * data with data from a primary source. */
-{
+    {
     struct annoGrator *next;
     struct annoStreamer *source;
     // Public methods
@@ -103,21 +109,22 @@ struct annoGrator
 				 struct annoRow *primaryRow, boolean *retFilterFailed);
     // Close connection to source and free self.
     void (*close)(struct annoGrator **pSelf);
-};
+    };
 
 struct annoOutputOption
 /* A named and typed option and its value. */
-{
+    {
     struct annoOutputOption *next;
     struct optionSpec spec;
     void *value;
-};
+    };
 
 struct annoFormatter
 /* Generic interface to aggregate data fields from multiple sources and write
  * output. */
-{
+    {
     struct annoFormatter *next;
+    struct annoGratorQuery *query;	// The query object that owns this formatter.
     // Public methods
     // Get and set output options
     struct annoOutputOption *(*getOptions)(struct annoFormatter *self);
@@ -129,13 +136,15 @@ struct annoFormatter
     void (*formatOne)(struct annoFormatter *self);
     // End of input; finish output, close connection/handle and free self.
     void (*close)(struct annoFormatter **pSelf);
-};
+    };
 
 
 struct annoGratorQuery
 /* Representation of a complex query: multiple sources, each with its own filters,
  * output data and means of integration, aggregated and output by a formatter. */
     {
+    char *assemblyName;
+    struct hash *chromSizes;
     struct annoStreamer *primarySource;
     struct annoGrator *integrators;
     struct annoFormatter *formatters;

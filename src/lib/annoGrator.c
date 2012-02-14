@@ -38,16 +38,18 @@ void annoGratorQueryFree(struct annoGratorQuery **pQuery)
 {
 if (pQuery == NULL)
     return;
-struct annoStreamer *primarySrc = (*pQuery)->primarySource;
-primarySrc->close(&primarySrc);
+struct annoGratorQuery *query = *pQuery;
+freez(&(query->assemblyName));
+hashFree(&(query->chromSizes));
+query->primarySource->close(&(query->primarySource));
 struct annoGrator *grator, *nextGrator;
-for (grator = (*pQuery)->integrators;  grator != NULL;  grator = nextGrator)
+for (grator = query->integrators;  grator != NULL;  grator = nextGrator)
     {
     nextGrator = grator->next;
     grator->close(&grator);
     }
 struct annoFormatter *formatter, *nextFormatter;
-for (formatter = (*pQuery)->formatters;  formatter != NULL;  formatter = formatter->next)
+for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
     {
     nextFormatter = formatter->next;
     formatter->close(&formatter);
