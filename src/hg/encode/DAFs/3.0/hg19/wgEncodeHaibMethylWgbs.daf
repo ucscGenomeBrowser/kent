@@ -26,12 +26,12 @@ assembly        hg19
 validationSettings none
 
 # Track/view definition
-view             CpG  
+view             CpG_Sites
 type             bigBed
 hasReplicates    no 
 required         no
 
-view             nonCpG
+view             NonCpG_Sites
 type             bigBed
 hasReplicates    no 
 required         no

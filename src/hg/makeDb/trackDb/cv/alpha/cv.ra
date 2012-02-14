@@ -10930,13 +10930,13 @@ type view
 label Contigs
 description Contigs represent continuous regions of the genome that are covered by several overlapping RNA-seq reads. The score represents the logarithm of the expression level (read coverage depth).
 
-term CpG
+term CpG_Sites
 tag CPG 
 type view
 label CpG Sites
 description CpG Methylation Sites Provisional
 
-term NonCpG
+term NonCpG_Sites
 tag NONCPG 
 type view
 label Non-CpG Sites
