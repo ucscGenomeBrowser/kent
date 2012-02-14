@@ -77,7 +77,7 @@ LI {		line-height: 1.5;
 	}
 
 
-/*** used by CCDS details page in hgc *** */
+/*** used by CCDS, GENCODE, and other details page in hgc *** */
 
 /* give the tables some breathing room and a consistent width */
 TABLE.hgcCcds {
@@ -90,6 +90,8 @@ TABLE.hgcCcds, TABLE.hgcCcds TH, TABLE.hgcCcds TD {
     border-collapse: collapse;
     text-align: left;
     vertical-align: top;
+    padding-left: 2px;
+    padding-right: 4px
 }
 TABLE.hgcCcds TH {
     white-space: nowrap;
@@ -99,6 +101,10 @@ TABLE.hgcCcds TD {
 }
 TABLE.hgcCcds THEAD {
     background-color: #2636D1;
+    color: #ffffff;
+}
+TABLE.hgcCcds TR.hgcCcdsSub {
+    background-color: #606ce2;
     color: #ffffff;
 }
 TABLE.hgcCcds TBODY {

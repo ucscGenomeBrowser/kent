@@ -11,12 +11,18 @@ def parseHtml(fileset, basepath, conn, subdirpath=None):
     r1 = conn.getresponse()
     r1lines = r1.read()
     lines = r1lines.split("\n")
-    p = re.compile('.*a href.*(wgEncode\S+)\<\/a\>')
-    p2 = re.compile ('\<a href.*\>(.*\/)\<\/a\>')
+    p = re.compile('.*a href.*\>(\S+[^/])\<\/a\>')
+    p2 = re.compile('\<a href.*\>(.*\/)\<\/a\>')
+    p3 = re.compile('Parent Directory')
     subdirs = set()
-
+    grab = 0
 
     for i in lines:
+        if p3.search(i):
+            grab = 1
+            continue
+        if not grab:
+            continue
         if p.search(i):
             file = subdirpath + p.search(i).group(1)
             fileset.add(file)
@@ -61,6 +67,7 @@ encodeQaCheckHgdownloadFiles hg18 wgEncodeHudsonalphaChipSeq checkPushFilesList
     print server
     conn = httplib.HTTPConnection("%s.cse.ucsc.edu" % args.server)
     basepath =  "/goldenPath/%s/encodeDCC/%s/" % (args.database, args.composite)
+    print basepath
     sys.stderr.write("Getting index of files\n")
     conn.request("GET", basepath)
     r1 = conn.getresponse()
@@ -81,6 +88,8 @@ encodeQaCheckHgdownloadFiles hg18 wgEncodeHudsonalphaChipSeq checkPushFilesList
 
     missingFromRR = DevFiles - RRFiles
     missingFromDev = RRFiles - DevFiles
+
+    missingFromRR.discard("README.txt")
 
     print ""
     if missingFromRR:

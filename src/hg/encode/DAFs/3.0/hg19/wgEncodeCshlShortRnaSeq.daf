@@ -39,7 +39,6 @@ validationSettings validateFiles.bam:mismatches=10,nMatch
 
 #Pooled replicates
 view             Contigs
-longLabelPrefix  CSHL RNA-seq Contigs   
 type             bedRnaElements
 sql		 bedRnaElements
 hasReplicates    no

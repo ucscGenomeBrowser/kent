@@ -200,9 +200,9 @@ def checkLabels(trackDb):
 	seenlabel = dict()
 	output = []
 	toolong = list()
-	p1 = re.compile('^\s+longLabel\s+(.*)$')
-	p2 = re.compile('^\s+shortLabel\s+(.*)$')
-	p3 = re.compile('^\s+#.*$')
+	p1 = re.compile('^\s*longLabel\s+(.*)$')
+	p2 = re.compile('^\s*shortLabel\s+(.*)$')
+	p3 = re.compile('^\s*#.*$')
 	for i in lines:
 		m1 = p1.match(i)
 		m2 = p2.match(i)

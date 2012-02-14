@@ -1,0 +1,252 @@
+track elsDens
+shortLabel Publication Density
+longLabel Publication Density
+group x
+compositeTrack on
+viewLimits 0:20
+type bigWig 20
+maxHeightPixels 100:40:10  
+release alpha
+
+        track elsDens1989
+        parent elsDens
+        shortLabel Publication Density 1989
+        longLabel Publication Density 1989
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens1990
+        parent elsDens
+        shortLabel Publication Density 1990
+        longLabel Publication Density 1990
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens1991
+        parent elsDens
+        shortLabel Publication Density 1991
+        longLabel Publication Density 1991
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens1992
+        parent elsDens
+        shortLabel Publication Density 1992
+        longLabel Publication Density 1992
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens1993
+        parent elsDens
+        shortLabel Publication Density 1993
+        longLabel Publication Density 1993
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens1994
+        parent elsDens
+        shortLabel Publication Density 1994
+        longLabel Publication Density 1994
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens1995
+        parent elsDens
+        shortLabel Publication Density 1995
+        longLabel Publication Density 1995
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens1996
+        parent elsDens
+        shortLabel Publication Density 1996
+        longLabel Publication Density 1996
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens1997
+        parent elsDens
+        shortLabel Publication Density 1997
+        longLabel Publication Density 1997
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens1998
+        parent elsDens
+        shortLabel Publication Density 1998
+        longLabel Publication Density 1998
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens1999
+        parent elsDens
+        shortLabel Publication Density 1999
+        longLabel Publication Density 1999
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens2000
+        parent elsDens
+        shortLabel Publication Density 2000
+        longLabel Publication Density 2000
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens2001
+        parent elsDens
+        shortLabel Publication Density 2001
+        longLabel Publication Density 2001
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens2002
+        parent elsDens
+        shortLabel Publication Density 2002
+        longLabel Publication Density 2002
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens2003
+        parent elsDens
+        shortLabel Publication Density 2003
+        longLabel Publication Density 2003
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens2004
+        parent elsDens
+        shortLabel Publication Density 2004
+        longLabel Publication Density 2004
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens2005
+        parent elsDens
+        shortLabel Publication Density 2005
+        longLabel Publication Density 2005
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens2006
+        parent elsDens
+        shortLabel Publication Density 2006
+        longLabel Publication Density 2006
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens2007
+        parent elsDens
+        shortLabel Publication Density 2007
+        longLabel Publication Density 2007
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens2008
+        parent elsDens
+        shortLabel Publication Density 2008
+        longLabel Publication Density 2008
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDens2009
+        parent elsDens
+        shortLabel Publication Density 2009
+        longLabel Publication Density 2009
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+
+        track elsDensall
+        parent elsDens
+        shortLabel Publication Density all
+        longLabel Publication Density all
+        group x
+        visibility hide
+        autoScale On
+        viewLimits 0:30
+        type bigWig 30
+        release alpha
+

@@ -10,10 +10,9 @@ include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV10.ra alpha,beta
 
-# UNC/BSU Proteogenomics (wrangler: cline,cricket)
+# UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
-include wgEncodeUncBsuProt.new.ra alpha
-include wgEncodeUncBsuProtFasp.ra alpha
+include wgEncodeUncBsuProt.release2.ra alpha
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra beta,public
@@ -72,11 +71,10 @@ include wgEncodeOpenChromFaire.new.ra alpha
 include wgEncodeOpenChromFaire.ra beta,public
 
 #Open Chrom Synth (wrangler: Matt)
-include wgEncodeOpenChromSynth.release2.ra alpha,beta
-include wgEncodeOpenChromSynth.ra public
+include wgEncodeOpenChromSynth.release2.ra
 
 #Duke DNaseI HS (wrangler: Matt)
-include wgEncodeOpenChromDnase.new.ra alpha
+include wgEncodeOpenChromDnase.release2.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
@@ -84,8 +82,7 @@ include wgEncodeUwDnase.release3.ra beta,public
 include wgEncodeUwDnase.release4.ra alpha
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.release3.ra alpha
-include wgEncodeUwDgf.ra beta,public
+include wgEncodeUwDgf.release3.ra
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
@@ -169,9 +166,9 @@ include wgEncodeOpenChromChip.release2.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra beta,public
+include wgEncodeHaibTfbs.ra public
 #include wgEncodeHaibTfbs.patch.ra beta
-include wgEncodeHaibTfbs.release2.ra alpha
+include wgEncodeHaibTfbs.release2.ra alpha,beta
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
 include wgEncodeSydhTfbs.new.ra alpha

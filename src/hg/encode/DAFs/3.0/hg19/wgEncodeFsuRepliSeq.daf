@@ -4,7 +4,7 @@
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated DDF should look like this:
-#files	view	cell	phase	replicate labExpId origAssembly	seqPlatform	labVersion
+#files	view	cell replicate labExpId	platform	labVersion
 
 #Explanation of DDF terms
 #files: The name of the files to be associated with this data
