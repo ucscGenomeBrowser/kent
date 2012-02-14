@@ -1415,6 +1415,7 @@ wgEncode 1
 	parent wgEncodeUwRepliSeq
 	windowingFunction mean+whiskers
 	viewLimits -10:100
+	maxHeightPixels 128:64:11
 
         track wgEncodeUwRepliSeqGm12878WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal

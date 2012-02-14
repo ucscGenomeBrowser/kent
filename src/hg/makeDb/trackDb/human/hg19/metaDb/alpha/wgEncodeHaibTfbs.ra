@@ -31321,7 +31321,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2CebpbV0416101AlnRep1
 objType file
-antibody CEBPB
+antibody CEBPB_(SC-150)
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -31346,7 +31346,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2CebpbV0416101AlnRep2
 objType file
-antibody CEBPB
+antibody CEBPB_(SC-150)
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -31371,7 +31371,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsHepg2CebpbV0416101PkRep1
 objType table
-antibody CEBPB
+antibody CEBPB_(SC-150)
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -31398,7 +31398,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsHepg2CebpbV0416101PkRep2
 objType table
-antibody CEBPB
+antibody CEBPB_(SC-150)
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -31425,7 +31425,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsHepg2CebpbV0416101RawDataRep1
 objType file
-antibody CEBPB
+antibody CEBPB_(SC-150)
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -31450,7 +31450,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2CebpbV0416101RawDataRep2
 objType file
-antibody CEBPB
+antibody CEBPB_(SC-150)
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -31475,7 +31475,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsHepg2CebpbV0416101RawRep1
 objType table
-antibody CEBPB
+antibody CEBPB_(SC-150)
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -31501,7 +31501,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsHepg2CebpbV0416101RawRep2
 objType table
-antibody CEBPB
+antibody CEBPB_(SC-150)
 cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL3976
@@ -49073,7 +49073,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562Yy1V0416101AlnRep1
 objType file
-antibody YY1
+antibody YY1_(SC-281)
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -49099,7 +49099,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562Yy1V0416101AlnRep2
 objType file
-antibody YY1
+antibody YY1_(SC-281)
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -49125,7 +49125,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsK562Yy1V0416101PkRep1
 objType table
-antibody YY1
+antibody YY1_(SC-281)
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -49153,7 +49153,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsK562Yy1V0416101PkRep2
 objType table
-antibody YY1
+antibody YY1_(SC-281)
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -49181,7 +49181,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsK562Yy1V0416101RawDataRep1
 objType file
-antibody YY1
+antibody YY1_(SC-281)
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -49207,7 +49207,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562Yy1V0416101RawDataRep2
 objType file
-antibody YY1
+antibody YY1_(SC-281)
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -49233,7 +49233,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562Yy1V0416101RawRep1
 objType table
-antibody YY1
+antibody YY1_(SC-281)
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -49260,7 +49260,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562Yy1V0416101RawRep2
 objType table
-antibody YY1
+antibody YY1_(SC-281)
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
@@ -59396,4 +59396,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: 739172198
+# MAGIC: 1407423254
