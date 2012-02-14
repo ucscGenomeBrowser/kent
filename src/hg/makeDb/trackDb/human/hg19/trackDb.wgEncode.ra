@@ -20,7 +20,7 @@ include wgEncodeReg.new.ra alpha
 
 
 # UW Repli-Seq track (wrangler: venkat)
-include wgEncodeUwRepliSeq.ra alpha,beta
+include wgEncodeUwRepliSeq.ra
 
 #include wgEncodeRegNorm.ra alpha
 
@@ -82,8 +82,7 @@ include wgEncodeUwDnase.release3.ra beta,public
 include wgEncodeUwDnase.release4.ra alpha
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.release3.ra alpha,beta
-include wgEncodeUwDgf.ra public
+include wgEncodeUwDgf.release3.ra
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 

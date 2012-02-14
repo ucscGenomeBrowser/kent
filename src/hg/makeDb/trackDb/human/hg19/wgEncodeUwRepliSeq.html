@@ -7,17 +7,17 @@ using the sequencing-based "Repli-seq" methodology (see below).
 Replication timing is known to be an important feature for 
 epigenetic control of gene expression that usually operates at a 
 higher-order level than at the level of specific genes. 
-For each experiment (<i>cell line</i>; <i>replicate)</i>, 
+For each experiment (<i>cell line</i>, <i>replicate)</i>, 
 replication timing was ascertained by the isolation and 
 sequencing of newly replicated DNA from six cell cycle 
-fractions, G1/G1b, S1, S2, S3, S4, G2, (six fraction profile). 
+fractions: G1/G1b, S1, S2, S3, S4, G2 (six fraction profile). 
 Replication patterns are visualized as a continuous 
-function based on sequencing tag density (<i>Percentage-normalized Signal</i>), 
+function based on sequencing tag density (<i>Percentage-normalized Signal</i>) 
 and as a wavelet-smoothed transform of the 
 six fraction profile (<i>Wavelet-smoothed Signal</i>). 
 Replication peaks corresponding to replication initiation 
-zones (<i>Peaks</i>), and valleys corresponding to 
-replication termination zones (<i>Valleys</i>), were 
+zones (<i>Peaks</i>) and valleys corresponding to 
+replication termination zones (<i>Valleys</i>) were 
 determined from local maxima and minima, respectively, 
 in the wavelet-smoothed signal data. A measure of relative copy 
 number at each genomic location (<i>Summed Densities</i>) was 
@@ -38,7 +38,7 @@ For each cell type, this track contains the following views:
 <DD> Replication signal at 1 kb intervals as a percentage of normalized 
 +/-25 kb tag densities for all cell cycle fractions (G1/G1b, S1, S2, S3, S4, G2).</DD>
 <DT><I>Wavelet-smoothed Signal</I></DT>
-<DD>Wavelet-smoothed transform of the six fraction profile that is a weighted-average of the percentage-normalized signals such that earlier replication has higher values.</DD>
+<DD>Wavelet-smoothed transform of the six fraction profile that is a weighted average of the percentage-normalized signals such that earlier replication has higher values.</DD>
 <DT><I>Peaks</I></DT>
 <DD>Local maxima in the wavelet-smoothed signal data corresponding to replication initiation (replication origin) zones.</DD>
 <DT><I>Valleys</I></DT>
@@ -56,11 +56,11 @@ For each cell type, this track contains the following views:
 <p>
 Cells were grown according to the approved
 <A TARGET=_BLANK HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
-Repli-seq was performed as described by Hansen <em>et al.</em> (2010); 
-briefly, newly replicated DNA was labeled in vivo with a pulse of 5-bromo-2-deoxyuridine (BrdU), 
+Repli-seq was performed as described by Hansen <em>et al.</em> (2010). 
+Briefly, newly replicated DNA was labeled <i>in vivo</i> with a pulse of 5-bromo-2-deoxyuridine (BrdU), 
 cells were fractionated into six different parts of the cell cycle by 
 flow cytometry according to DNA content, cell cycle fractionated DNA was sonicated and 
-an anti-BrdU monoclonal antibody was used to isolate the newly replicating DNA; fragment ends 
+an anti-BrdU monoclonal antibody was used to isolate the newly replicating DNA. Fragment ends 
 were sequenced using the Illumina Genome Analyzer II or HiSeq platforms (36 bp reads). 
 Some experiments (BJ, K562, BG02ES, GM06990) were originally performed and mapped to an 
 earlier version of the human reference genome <B>NCBI36/hg18</B> (Hansen <em>et al.</em>, 2010) and were 
@@ -92,7 +92,7 @@ Replication initiation zones were flagged by determining local maxima in the wav
 <p>
 The sum of the 4 million normalized replication tag densities 
 correspond to replication of one genome and can, therefore, be used as a 
-measure of relative genomic copy number (<i>Summed Densities</i>) and is useful 
+measure of relative genomic copy number (<i>Summed Densities</i>). This is useful 
 for evaluation of unusual replication patterns, such as "biphasic"
 ones where replication has both early and late components [as described by Hansen <em>et al.</em> (2010)].
 </p>
@@ -113,12 +113,14 @@ Richard Sandstrom</A>
 <H2>References</H2>
 
 <p>Hansen RS, Thomas S, Sandstrom R, Canfield TK, Thurman RE, Weaver M, Dorschner MO, Gartler SM, Stamatoyannopoulos JA.
-<A TARGET=_BLANK HREF="http://www.pnas.org/content/107/1/139.abstract">
+<A TARGET=_BLANK HREF="http://www.ncbi.nlm.nih.gov/pubmed/19966280"
+rel="nofollow" target="_blank">
 Sequencing newly replicated DNA reveals widespread plasticity in human replication timing</A>.
 <EM>PNAS</EM>. 2010 Jan 5;107(1):139-44.</p>
 
 <p>Thurman RE, Day N, Noble WS, Stamatoyannopoulos JA.
-<A TARGET=_BLANK HREF="http://genome.cshlp.org/content/17/6/917.abstract">
+<A TARGET=_BLANK HREF="http://www.ncbi.nlm.nih.gov/pubmed/17568007"
+rel="nofollow" target="_blank">
 Identification of higher-order functional domains in the human ENCODE regions</A>.
 <EM>Genome Res</EM>. 2007 Jun;17(6):917-27.</p>
 
