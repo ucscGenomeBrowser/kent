@@ -11333,14 +11333,6 @@ label CAGE
 description CAGE
 dataGroup RNA Profiling
 
-term CHH_Signal
-tag CHHSIGNAL
-type view
-label CHH Signal
-description Provisional addition of CHH Signal dataType for Haib Bisulfate
-dataGroup Other
-#test/provisional - Don't push to beta
-
 term ChipSeq
 tag CHIPSEQ
 type dataType
@@ -11370,14 +11362,6 @@ label Combined
 description Synthesis of multiple types of data
 dataGroup Other
 # Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType (01/14/2011)
-
-term CpG_Signal
-tag CPGSIGNAL
-type view
-label CpG Signal
-description Provisional addition of CpG Signal dataType for Haib Bisulfate
-dataGroup Other
-#test/provisional - Don't push to beta
 
 term DnaseDgf
 tag DGF
