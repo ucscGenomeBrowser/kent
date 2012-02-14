@@ -132,7 +132,7 @@ include wgEncodeHaibMethyl450.ra
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
 include wgEncodeHaibMethylRrbs.ra
 #HAIB Bisulfite test track
-include wgEncodeHaibBisulfate.ra
+include wgEncodeHaibBisulfate.ra alpha
 
 
 
