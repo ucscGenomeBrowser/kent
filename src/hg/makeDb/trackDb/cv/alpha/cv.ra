@@ -9215,7 +9215,7 @@ validation Human_-_:missing
 label YY1 (sc-1703)
 
 term YY1_(SC-281)
-tag YY1c
+tag YY1SC281
 type Antibody
 target YY1
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of YY1 of human origin. Antibody Target: YY1
