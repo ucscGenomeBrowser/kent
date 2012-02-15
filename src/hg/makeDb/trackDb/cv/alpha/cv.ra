@@ -6115,7 +6115,7 @@ tag BACH1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1
 target eGFP-BACH1
-targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex,tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members
+targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-BACH1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6130,7 +6130,7 @@ tag CCNE1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CCNE1
 target eGFP-CCNE1
-targetDescription The protein encoded by this gene belongs to the highly conserved cyclin family,whose members are characterized by a dramatic periodicity in protein abundance through the cell cycle. Cyclins function as regulators of CDK kinases.Different cyclins exhibit distinct expression and degradation patterns which contribute to the temporal coordination of each mitotic event.
+targetDescription The protein encoded by this gene belongs to the highly conserved cyclin family, whose members are characterized by a dramatic periodicity in protein abundance through the cell cycle. Cyclins function as regulators of CDK kinases. Different cyclins exhibit distinct expression and degradation patterns which contribute to the temporal coordination of each mitotic event.
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-CCNE1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6145,7 +6145,7 @@ tag CDKN1B
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CDKN1B
 target eGFP-CDKN1B
-targetDescription This gene encodes a cyclin-dependent kinase inhibitor, which shares a limited similarity with CDK inhibitor CDKN1A/p21.The encoded protein binds to and prevents the activation of cyclin E-CDK2 or cyclin D-CDK4 complexes, and thus controls the cell cycle progression at G1
+targetDescription This gene encodes a cyclin-dependent kinase inhibitor, which shares a limited similarity with CDK inhibitor CDKN1A/p21. The encoded protein binds to and prevents the activation of cyclin E-CDK2 or cyclin D-CDK4 complexes, and thus controls the cell cycle progression at G1
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-CDKN1B
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6268,7 +6268,7 @@ tag HMGB1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGB1
 target eGFP-HMGB1
-targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA.Involved in V(D)J recombination by acting as a cofactor of the  RAG complex.
+targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA. Involved in V(D)J recombination by acting as a cofactor of the RAG complex.
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-HMGB1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6283,7 +6283,7 @@ tag ILF2
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ILF2
 target eGFP-ILF2
-targetDescription Nuclear factor of activated T-cells (NFAT) is a transcription factor required for T-cell expression of the interleukin 2 gene. NFAT binds to a sequence in the interleukin 2 gene enhancer known as the antigen receptor response element 2.In addition, NFAT can bind RNA and is an essential component for encapsidation and protein priming of hepatitis B viral polymerase.
+targetDescription Nuclear factor of activated T-cells (NFAT) is a transcription factor required for T-cell expression of the interleukin 2 gene. NFAT binds to a sequence in the interleukin 2 gene enhancer known as the antigen receptor response element 2. In addition, NFAT can bind RNA and is an essential component for encapsidation and protein priming of hepatitis B viral polymerase.
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-ILF2
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6358,7 +6358,8 @@ validation missing
 term eGFP-NF90
 tag NF90
 type Antibody
-antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NF90target eGFP-NF90
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NF90
+target eGFP-NF90
 targetDescription NF90 (nuclear factor of activated T cells 90 kDa), also known as NFAR is a ubiquitously expressed nuclear protein that exists in a heterodimer with NF45.
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-NF90 
@@ -6420,7 +6421,8 @@ term eGFP-STAT1
 tag STAT1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor STAT1
-target eGFP-STAT1targetDescription The protein encoded by this gene is a member of the STAT protein family.In response to cytokines and growth factors,STAT family members are phosphorylated by the receptor associated kinases, and then form homo-or heterodimers that translocate to the cell nucleus where they act as transcription activators.This protein can be activated by various ligands including interferon-alpha, interferon-gamma, EGF, PDGF and IL6
+target eGFP-STAT1
+targetDescription The protein encoded by this gene is a member of the STAT protein family. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo-or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein can be activated by various ligands including interferon-alpha, interferon-gamma, EGF, PDGF and IL6
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-STAT1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6655,7 +6657,7 @@ tag FOXM1SC502
 type Antibody
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of FOXM1 of human origin.
 target FOXM1
-targetDescription The protein encoded by this gene is a transcriptional activator involved in cell proliferation. The encoded protein is phosphorylated in M phase and regulates the expression of several cell cycle genes, such as cyclin B1 and cyclin D1. Several transcript variants encoding different isoforms have been found for this gene. [provided by RefSeq, Jul 2011]
+targetDescription The protein encoded by this gene is a transcriptional activator involved in cell proliferation. The encoded protein is phosphorylated in M phase and regulates the expression of several cell cycle genes, such as cyclin B1 and cyclin D1. Several transcript variants encoding different isoforms have been found for this gene. (provided by RefSeq, Jul 2011)
 vendorName Santa Cruz Biotech
 vendorId sc-502
 orderUrl http://www.scbt.com/datasheet-502-foxm1-c-20-antibody.html
@@ -7915,7 +7917,7 @@ orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
 lab Snyder
 targetId GeneCard:NFKB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1
-validation Human_-_NFKB1(Immunoprecipitation,Motif_EnrichmenImmunoprecipitation,Motif_Enrichment):human_NFKB_p65_validation_Snyder.pdf
+validation Human_-_NFKB1(Immunoprecipitation,Motif_Enrichment):human_NFKB_p65_validation_Snyder.pdf
 label NFKB (sc-372)
 
 term NF-YA
@@ -8795,7 +8797,7 @@ targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basi
 targetId GeneCard:Tal1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
 lab Hardison
-validation Human_-_TAL1(Immunoprecipitaiton,IP-Mass_spec):human_TAL1_validation_Snyder.pdf Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
+validation Human_-_TAL1(Immunoprecipitation,IP-Mass_spec):human_TAL1_validation_Snyder.pdf Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
 label TAL1 (sc-12984)
 
 #term TAF-II
@@ -9050,8 +9052,7 @@ tag TRIM28SC81411
 type Antibody
 antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of TRIM28 of human origin.
 target TRIM28
-targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors.  The protein localizes to the nucleus and is thought to associate with specific chromatin regions.  The protein is a member of the tripartite motif family.  This tripartite motif includes three zinc-binding domains
-, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
+targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors.  The protein localizes to the nucleus and is thought to associate with specific chromatin regions.  The protein is a member of the tripartite motif family.  This tripartite motif includes three zinc-binding domains, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-81411
 orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.htmllab Myerslots L0309
