@@ -2,7 +2,6 @@ metaObject wgEncodeUwHistone
 objType composite
 composite wgEncodeUwHistone
 expVars lab,dataType,cell,antibody,treatment
-treatment None
 
 metaObject wgEncodeUwHistoneA549H3k04me3StdAlnRep1
 objType file
@@ -3628,6 +3627,7 @@ setType input
 subId 1283
 tableName wgEncodeUwHistoneBjInputStdRawRep1
 treatment None
+view RawSignal
 
 metaObject wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1
 objType file
@@ -30538,4 +30538,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -1718080584
+# MAGIC: -1720528647
