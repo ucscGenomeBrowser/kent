@@ -8844,22 +8844,23 @@ metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalTapProtocolRep1
 objType file
 bioRep 007WC
 cell NHEK
-dateUnrestricted 2011-10-19
-dccAccession wgEncodeEH001091
-expId 1091
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001091
+dccRep 1
+expId 1091
 fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20999
 localization cell
+md5sum ab75165337336b4f6b502d77f51d370c
 project wgEncode
 protocol TAP-Only
 readType 1x36
-dccRep 1
 replicate 1
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
@@ -10099,4 +10100,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1617404381
+# MAGIC: -2130763691
