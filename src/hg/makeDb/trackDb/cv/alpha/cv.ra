@@ -6115,7 +6115,7 @@ tag BACH1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1
 target eGFP-BACH1
-targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members
+targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-BACH1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6130,7 +6130,7 @@ tag CCNE1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CCNE1
 target eGFP-CCNE1
-targetDescription The protein encoded by this gene belongs to the highly conserved cyclin family, whose members are characterized by a dramatic periodicity in protein abundance through the cell cycle. Cyclins function as regulators of CDK kinases. Different cyclins exhibit distinct expression and degradation patterns which contribute to the temporal coordination of each mitotic event.
+targetDescription The protein encoded by this gene belongs to the highly conserved cyclin family, whose members are characterized by a dramatic periodicity in protein abundance through the cell cycle. Cyclins function as regulators of CDK kinases. Different cyclins exhibit distinct expression and degradation patterns which contribute to the temporal coordination of each mitotic event. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-CCNE1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6145,7 +6145,7 @@ tag CDKN1B
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CDKN1B
 target eGFP-CDKN1B
-targetDescription This gene encodes a cyclin-dependent kinase inhibitor, which shares a limited similarity with CDK inhibitor CDKN1A/p21. The encoded protein binds to and prevents the activation of cyclin E-CDK2 or cyclin D-CDK4 complexes, and thus controls the cell cycle progression at G1
+targetDescription This gene encodes a cyclin-dependent kinase inhibitor, which shares a limited similarity with CDK inhibitor CDKN1A/p21. The encoded protein binds to and prevents the activation of cyclin E-CDK2 or cyclin D-CDK4 complexes, and thus controls the cell cycle progression at G1 (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-CDKN1B
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6160,7 +6160,7 @@ tag E2F1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor E2F1
 target eGFP-E2F1
-targetDescription The protein encoded by this gene is a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses
+targetDescription The protein encoded by this gene is a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-E2F1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6175,7 +6175,7 @@ tag EKLF1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor EKLF1
 target eGFP-EKLF1
-targetDescription This gene encodes a hematopoietic-specific transcription factor that induces high-level expression of adult beta-globin and other erythroid genes. The zinc-finger protein binds to the DNA sequence CCACACCCT found in the beta hemoglobin promoter. Heterozygous loss-of-function mutations in this gene result in the dominant In(Lu) blood phenotype.
+targetDescription This gene encodes a hematopoietic-specific transcription factor that induces high-level expression of adult beta-globin and other erythroid genes. The zinc-finger protein binds to the DNA sequence CCACACCCT found in the beta hemoglobin promoter. Heterozygous loss-of-function mutations in this gene result in the dominant In(Lu) blood phenotype. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-EKLF1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6190,7 +6190,7 @@ tag ELF1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ELF1
 target eGFP-ELF1
-targetDescription This gene encodes an E26 transformation-specific related transcription factor.The encoded protein is primarily expressed in lymphoid cells and acts as both an enhancer and a repressor to regulate transcription of various genes.Alternative splicing results in multiple transcript variants
+targetDescription This gene encodes an E26 transformation-specific related transcription factor. The encoded protein is primarily expressed in lymphoid cells and acts as both an enhancer and a repressor to regulate transcription of various genes. Alternative splicing results in multiple transcript variants (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-ELF1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6205,7 +6205,7 @@ tag ESR
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ESRA
 target eGFP-ESR
-targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2.
+targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-ESR
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6268,7 +6268,7 @@ tag HMGB1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGB1
 target eGFP-HMGB1
-targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA. Involved in V(D)J recombination by acting as a cofactor of the RAG complex.
+targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA. Involved in V(D)J recombination by acting as a cofactor of the RAG complex. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-HMGB1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6283,7 +6283,7 @@ tag ILF2
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ILF2
 target eGFP-ILF2
-targetDescription Nuclear factor of activated T-cells (NFAT) is a transcription factor required for T-cell expression of the interleukin 2 gene. NFAT binds to a sequence in the interleukin 2 gene enhancer known as the antigen receptor response element 2. In addition, NFAT can bind RNA and is an essential component for encapsidation and protein priming of hepatitis B viral polymerase.
+targetDescription Nuclear factor of activated T-cells (NFAT) is a transcription factor required for T-cell expression of the interleukin 2 gene. NFAT binds to a sequence in the interleukin 2 gene enhancer known as the antigen receptor response element 2. In addition, NFAT can bind RNA and is an essential component for encapsidation and protein priming of hepatitis B viral polymerase. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-ILF2
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6330,7 +6330,7 @@ tag MLL5
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor MLL5
 target eGFP-MLL5
-targetDescription This gene is a member of the myeloid/lymphoid or mixed-lineage leukemia (MLL) family and encodes a protein with an N-terminal PHD zinc finger and a central SET domain. Overexpression of the protein inhibits cell cycle progression.
+targetDescription This gene is a member of the myeloid/lymphoid or mixed-lineage leukemia (MLL) family and encodes a protein with an N-terminal PHD zinc finger and a central SET domain. Overexpression of the protein inhibits cell cycle progression. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-MLL5
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6345,7 +6345,7 @@ tag NCOR1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NCOR1
 target eGFP-NCOR1
-targetDescription This gene encodes a protein that mediates ligand-independent transcription repression of thyroid-hormone and retinoic-acid receptors by promoting chromatin condensation and preventing access of the transcription machinery. It is part of a complex which also includes histone deacetylases and transcriptional regulators similar to the yeast protein Sin3p. This gene is located between the Charcot-Marie-Tooth and Smith-Magenis syndrome critical regions on chromosome 17
+targetDescription This gene encodes a protein that mediates ligand-independent transcription repression of thyroid-hormone and retinoic-acid receptors by promoting chromatin condensation and preventing access of the transcription machinery. It is part of a complex which also includes histone deacetylases and transcriptional regulators similar to the yeast protein Sin3p. This gene is located between the Charcot-Marie-Tooth and Smith-Magenis syndrome critical regions on chromosome 17 (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-NCOR1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6360,7 +6360,7 @@ tag NF90
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NF90
 target eGFP-NF90
-targetDescription NF90 (nuclear factor of activated T cells 90 kDa), also known as NFAR is a ubiquitously expressed nuclear protein that exists in a heterodimer with NF45.
+targetDescription NF90 (nuclear factor of activated T cells 90 kDa), also known as NFAR is a ubiquitously expressed nuclear protein that exists in a heterodimer with NF45. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-NF90 
 orderUrl http://www.igsb.org/labs/kevin-white/ 
@@ -6392,7 +6392,7 @@ tag SMARCA1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor SMARCA1
 target eGFP-SMARCA1
-targetDescription This gene encodes a member of the SWI/SNF family of proteins. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes.
+targetDescription This gene encodes a member of the SWI/SNF family of proteins. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-SMARCA1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6407,7 +6407,7 @@ tag SMARCA2
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor SMARCA2
 target eGFP-SMARCA2
-targetDescription The protein encoded by this gene is a member of the SWI/SNF family of proteins and is highly similar to the brahma protein of Drosophila. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes
+targetDescription The protein encoded by this gene is a member of the SWI/SNF family of proteins and is highly similar to the brahma protein of Drosophila. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-SMARCA2
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6422,7 +6422,7 @@ tag STAT1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor STAT1
 target eGFP-STAT1
-targetDescription The protein encoded by this gene is a member of the STAT protein family. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo-or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein can be activated by various ligands including interferon-alpha, interferon-gamma, EGF, PDGF and IL6
+targetDescription The protein encoded by this gene is a member of the STAT protein family. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo-or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein can be activated by various ligands including interferon-alpha, interferon-gamma, EGF, PDGF and IL6 (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-STAT1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6453,7 +6453,7 @@ tag ELK4
 type Antibody
 target ELK4
 antibodyDescription Rabbit polyclonal IgG. Antibody Target: ELK4
-targetDescription This gene is a member of the Ets family of transcription factors and of the ternary complex factor (TCF) subfamily.
+targetDescription This gene is a member of the Ets family of transcription factors and of the ternary complex factor (TCF) subfamily. (provided by RefSeq)
 orderUrl http://datasheets.scbt.com/sc-13030.pdf
 vendorName Santa Cruz Biotech
 vendorId sc-13030
