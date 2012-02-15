@@ -11659,6 +11659,196 @@ tableName wgEncodeHaibTfbsGm12878Ets1Pcr1xRawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsGm12878Foxm1sc502V0422111AlnRep1
+objType file
+antibody FOXM1_(SC-502)
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL6022
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111AlnRep1.bam,wgEncodeHaibTfbsGm12878Foxm1sc502V0422111AlnRep1.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL7551
+md5sum 2aeaa3b8c8f9c098dc2d8b8d6b72c4a9,238ce6d8f43338febd295516515fe433
+project wgEncode
+protocol v042211.1
+replicate 1
+setType exp
+subId 5132
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsGm12878Foxm1sc502V0422111AlnRep2
+objType file
+antibody FOXM1_(SC-502)
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL6022
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111AlnRep2.bam,wgEncodeHaibTfbsGm12878Foxm1sc502V0422111AlnRep2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL7834
+md5sum 1193f583a762384e5e2671b514bd6e03,6bde943ef6a1037d4f1f6e4f0a01168a
+project wgEncode
+protocol v042211.1
+replicate 2
+setType exp
+subId 5132
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsGm12878Foxm1sc502V0422111PkRep1
+objType table
+antibody FOXM1_(SC-502)
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL6022
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111PkRep1.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL7551
+md5sum b6feb750b2a7e22a6f450a12e24210ad
+project wgEncode
+protocol v042211.1
+replicate 1
+setType exp
+softwareVersion MACS
+subId 5132
+tableName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsGm12878Foxm1sc502V0422111PkRep2
+objType table
+antibody FOXM1_(SC-502)
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL6022
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111PkRep2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL7834
+md5sum f6fe34b941892f51e9ffd3ed12e05576
+project wgEncode
+protocol v042211.1
+replicate 2
+setType exp
+softwareVersion MACS
+subId 5132
+tableName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111PkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawDataRep1
+objType file
+antibody FOXM1_(SC-502)
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL6022
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL7551
+md5sum 85223d6aeadf23b5653712f58aab97b6
+project wgEncode
+protocol v042211.1
+replicate 1
+setType exp
+subId 5132
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawDataRep2
+objType file
+antibody FOXM1_(SC-502)
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL6022
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawDataRep2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL7834
+md5sum 36fbbabde4e661d10b14ab1f4f3c08ad
+project wgEncode
+protocol v042211.1
+replicate 2
+setType exp
+subId 5132
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawRep1
+objType table
+antibody FOXM1_(SC-502)
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL6022
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawRep1.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL7551
+md5sum 198247014ca2093fc385e4af999a8274
+project wgEncode
+protocol v042211.1
+replicate 1
+setType exp
+subId 5132
+tableName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawRep2
+objType table
+antibody FOXM1_(SC-502)
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL6022
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-21
+dateUnrestricted 2012-09-21
+fileName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawRep2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL7834
+md5sum e838744dfecbfa136437772423177be7
+project wgEncode
+protocol v042211.1
+replicate 2
+setType exp
+subId 5132
+tableName wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawRep2
+treatment None
+view RawSignal
+
 metaObject wgEncodeHaibTfbsGm12878GabpPcr2xAlnRep1
 objType file
 antibody GABP
@@ -49521,6 +49711,7 @@ fileName wgEncodeHaibTfbsK562Yy1sc281V0416101AlnRep1.bam,wgEncodeHaibTfbsK562Yy1
 grant Myers
 lab HudsonAlpha
 labExpId SL2203
+md5sum b421f68480e06961bfc95efd8ec9557b,5082c2f4b3908506b7b958faff969058
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -49543,6 +49734,7 @@ fileName wgEncodeHaibTfbsK562Yy1sc281V0416101AlnRep2.bam,wgEncodeHaibTfbsK562Yy1
 grant Myers
 lab HudsonAlpha
 labExpId SL2944
+md5sum e0837fec24ce66b8170987618c2f3212,966e1654d55383fa26ed3ed0c40fd1dc
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -49565,6 +49757,7 @@ fileName wgEncodeHaibTfbsK562Yy1sc281V0416101PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2203
+md5sum a641d0c9442ee638959ced57f9d70505
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -49589,6 +49782,7 @@ fileName wgEncodeHaibTfbsK562Yy1sc281V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2944
+md5sum 4bc69141517c0674aefaba36f00a23ac
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -49613,6 +49807,7 @@ fileName wgEncodeHaibTfbsK562Yy1sc281V0416101RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2203
+md5sum aaa7eea030794bf48026c2bca9ef70a8
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -49635,6 +49830,7 @@ fileName wgEncodeHaibTfbsK562Yy1sc281V0416101RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2944
+md5sum 414dcd1b608e410513eec844fbf226af
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -49657,6 +49853,7 @@ fileName wgEncodeHaibTfbsK562Yy1sc281V0416101RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2203
+md5sum 8c353db96c88331df83bd2c5831cd1d7
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -49680,6 +49877,7 @@ fileName wgEncodeHaibTfbsK562Yy1sc281V0416101RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2944
+md5sum 7d1424ec500c2406e16aeda1a6dfa9fa
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -59586,4 +59784,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: -1215102607
+# MAGIC: -1198673048

@@ -520,12 +520,14 @@ if ($opt{'md5'}) {
     %md5sums = %{$md5return[1]};
 
     # process only if there are files to process
+    $db->disconnect;
     if (@md5files) {
         # this launches a subroutine at the bottom, because threadstatus must be encountered
         #by the interpreter before it is seen in a sub
         %md5sums = %{&doMd5Threads(\%md5sums, \@md5files, \%opt)};
     }
-    
+    $db = HgDb->new(DB => $assm) or die "die: Can't connect to DB: $assm\n";   
+ 
     open MDF, ">md5sum.txt" or die "die: can't open md5sum.txt file to write\n";
     if ($opt{'verbose'} >= 1) {
         print STDERR "\n";
