@@ -3627,6 +3627,7 @@ setType input
 subId 1283
 tableName wgEncodeUwHistoneBjInputStdRawRep1
 treatment None
+view RawSignal
 
 metaObject wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1
 objType file
@@ -6359,6 +6360,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 5149
+treatment None
 view Alignments
 
 metaObject wgEncodeUwHistoneGm12865H3k04me3StdHotspotsRep1
@@ -6414,6 +6416,7 @@ replicate 2
 setType exp
 subId 5149
 tableName wgEncodeUwHistoneGm12865H3k04me3StdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwHistoneGm12865H3k04me3StdPkRep1
@@ -6469,6 +6472,7 @@ replicate 2
 setType exp
 subId 5149
 tableName wgEncodeUwHistoneGm12865H3k04me3StdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwHistoneGm12865H3k04me3StdRawDataRep1
@@ -6520,6 +6524,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 5149
+treatment None
 view RawData
 
 metaObject wgEncodeUwHistoneGm12865H3k04me3StdRawRep1
@@ -6575,6 +6580,7 @@ replicate 2
 setType exp
 subId 5149
 tableName wgEncodeUwHistoneGm12865H3k04me3StdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwHistoneGm12865InputStdAlnRep1
@@ -7859,6 +7865,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-11
+dccAccession wgEncodeEH002531
+expId 2531
 fileName wgEncodeUwHistoneH7esH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneH7esH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -7884,6 +7892,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
 fileName wgEncodeUwHistoneH7esH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneH7esH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -7909,6 +7919,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep1.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -7934,6 +7946,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -7960,6 +7974,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -7986,6 +8002,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -8010,6 +8028,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep1.bigWig
 grant Stam
 lab UW
@@ -8036,6 +8056,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dAlnRep1.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa2dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -8061,6 +8083,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dAlnRep2.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa2dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -8086,6 +8110,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -8112,6 +8138,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -8138,6 +8166,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -8164,6 +8194,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -8190,6 +8222,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -8214,6 +8248,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -8238,6 +8274,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep1.bigWig
 grant Stam
 lab UW
@@ -8264,6 +8302,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep2.bigWig
 grant Stam
 lab UW
@@ -8290,6 +8330,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002531
+expId 2531
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep2.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -8315,6 +8357,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002531
+expId 2531
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -8341,6 +8385,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002531
+expId 2531
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -8367,6 +8413,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002531
+expId 2531
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -8391,6 +8439,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002531
+expId 2531
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep2.bigWig
 grant Stam
 lab UW
@@ -8417,6 +8467,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dAlnRep1.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa9dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -8442,6 +8494,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dAlnRep2.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa9dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -8467,6 +8521,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -8493,6 +8549,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -8519,6 +8577,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -8545,6 +8605,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -8571,6 +8633,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -8595,6 +8659,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawDataRep2.fastq.tgz
 grant Stam
 lab UW
@@ -8619,6 +8685,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawRep1.bigWig
 grant Stam
 lab UW
@@ -8645,6 +8713,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
 fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawRep2.bigWig
 grant Stam
 lab UW
@@ -8671,6 +8741,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-11
+dccAccession wgEncodeEH002531
+expId 2531
 fileName wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -8697,6 +8769,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
 fileName wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -8723,6 +8797,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-11
+dccAccession wgEncodeEH002531
+expId 2531
 fileName wgEncodeUwHistoneH7esH3k04me3StdPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -8749,6 +8825,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
 fileName wgEncodeUwHistoneH7esH3k04me3StdPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -8775,6 +8853,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-11
+dccAccession wgEncodeEH002531
+expId 2531
 fileName wgEncodeUwHistoneH7esH3k04me3StdRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -8799,6 +8879,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
 fileName wgEncodeUwHistoneH7esH3k04me3StdRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -8823,6 +8905,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-11
+dccAccession wgEncodeEH002531
+expId 2531
 fileName wgEncodeUwHistoneH7esH3k04me3StdRawRep1.bigWig
 grant Stam
 lab UW
@@ -8849,6 +8933,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
 fileName wgEncodeUwHistoneH7esH3k04me3StdRawRep2.bigWig
 grant Stam
 lab UW
@@ -8927,6 +9013,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dAlnRep1.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa14dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -8952,6 +9040,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dAlnRep2.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa14dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -8977,6 +9067,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -9003,6 +9095,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -9029,6 +9123,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -9055,6 +9151,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -9081,6 +9179,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -9105,6 +9205,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -9129,6 +9231,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawRep1.bigWig
 grant Stam
 lab UW
@@ -9155,6 +9259,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawRep2.bigWig
 grant Stam
 lab UW
@@ -9181,6 +9287,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dAlnRep1.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa2dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -9206,6 +9314,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dAlnRep2.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa2dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -9231,6 +9341,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -9257,6 +9369,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -9283,6 +9397,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -9309,6 +9425,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -9335,6 +9453,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -9359,6 +9479,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -9383,6 +9505,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawRep1.bigWig
 grant Stam
 lab UW
@@ -9409,6 +9533,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawRep2.bigWig
 grant Stam
 lab UW
@@ -9435,6 +9561,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dAlnRep1.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa5dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -9460,6 +9588,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dAlnRep2.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa5dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -9485,6 +9615,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -9511,6 +9643,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -9537,6 +9671,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -9563,6 +9699,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -9589,6 +9727,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -9613,6 +9753,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -9637,6 +9779,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawRep1.bigWig
 grant Stam
 lab UW
@@ -9663,6 +9807,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawRep2.bigWig
 grant Stam
 lab UW
@@ -9689,6 +9835,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dAlnRep1.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa9dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -9714,6 +9862,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dAlnRep2.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa9dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -9739,6 +9889,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -9765,6 +9917,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -9791,6 +9945,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -9817,6 +9973,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -9843,6 +10001,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -9867,6 +10027,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -9891,6 +10053,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawRep1.bigWig
 grant Stam
 lab UW
@@ -9917,6 +10081,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
 fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawRep2.bigWig
 grant Stam
 lab UW
@@ -10207,6 +10373,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dAlnRep1.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa14dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -10232,6 +10400,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dAlnRep2.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa14dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -10257,6 +10427,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -10283,6 +10455,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -10309,6 +10483,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -10335,6 +10511,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -10361,6 +10539,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -10385,6 +10565,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -10409,6 +10591,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawRep1.bigWig
 grant Stam
 lab UW
@@ -10435,6 +10619,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawRep2.bigWig
 grant Stam
 lab UW
@@ -10461,6 +10647,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dAlnRep1.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa2dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -10486,6 +10674,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dAlnRep2.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa2dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -10511,6 +10701,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -10537,6 +10729,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -10563,6 +10757,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -10589,6 +10785,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -10615,6 +10813,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -10639,6 +10839,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -10663,6 +10865,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawRep1.bigWig
 grant Stam
 lab UW
@@ -10689,6 +10893,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawRep2.bigWig
 grant Stam
 lab UW
@@ -10715,6 +10921,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dAlnRep1.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa5dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -10740,6 +10948,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dAlnRep2.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa5dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -10765,6 +10975,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -10791,6 +11003,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -10817,6 +11031,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -10843,6 +11059,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -10869,6 +11087,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -10893,6 +11113,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -10917,6 +11139,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawRep1.bigWig
 grant Stam
 lab UW
@@ -10943,6 +11167,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawRep2.bigWig
 grant Stam
 lab UW
@@ -10969,6 +11195,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dAlnRep1.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa9dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -10994,6 +11222,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dAlnRep2.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa9dAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -11019,6 +11249,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
@@ -11045,6 +11277,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
@@ -11071,6 +11305,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dPkRep1.narrowPeak.gz
 grant Stam
 lab UW
@@ -11097,6 +11333,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dPkRep2.narrowPeak.gz
 grant Stam
 lab UW
@@ -11123,6 +11361,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -11147,6 +11387,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -11171,6 +11413,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawRep1.bigWig
 grant Stam
 lab UW
@@ -11197,6 +11441,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
 fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawRep2.bigWig
 grant Stam
 lab UW
@@ -11725,6 +11971,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002532
+expId 2532
 fileName wgEncodeUwHistoneH7esInputStdDiffa14dAlnRep1.bam,wgEncodeUwHistoneH7esInputStdDiffa14dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -11750,6 +11998,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002532
+expId 2532
 fileName wgEncodeUwHistoneH7esInputStdDiffa14dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -11774,6 +12024,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002532
+expId 2532
 fileName wgEncodeUwHistoneH7esInputStdDiffa14dRawRep1.bigWig
 grant Stam
 lab UW
@@ -11800,6 +12052,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002543
+expId 2543
 fileName wgEncodeUwHistoneH7esInputStdDiffa2dAlnRep1.bam,wgEncodeUwHistoneH7esInputStdDiffa2dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -11825,6 +12079,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002543
+expId 2543
 fileName wgEncodeUwHistoneH7esInputStdDiffa2dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -11849,6 +12105,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002543
+expId 2543
 fileName wgEncodeUwHistoneH7esInputStdDiffa2dRawRep1.bigWig
 grant Stam
 lab UW
@@ -11875,6 +12133,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002544
+expId 2544
 fileName wgEncodeUwHistoneH7esInputStdDiffa5dAlnRep1.bam,wgEncodeUwHistoneH7esInputStdDiffa5dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -11900,6 +12160,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002544
+expId 2544
 fileName wgEncodeUwHistoneH7esInputStdDiffa5dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -11924,6 +12186,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002544
+expId 2544
 fileName wgEncodeUwHistoneH7esInputStdDiffa5dRawRep1.bigWig
 grant Stam
 lab UW
@@ -11950,6 +12214,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002545
+expId 2545
 fileName wgEncodeUwHistoneH7esInputStdDiffa9dAlnRep1.bam,wgEncodeUwHistoneH7esInputStdDiffa9dAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -11975,6 +12241,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002545
+expId 2545
 fileName wgEncodeUwHistoneH7esInputStdDiffa9dRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -11999,6 +12267,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002545
+expId 2545
 fileName wgEncodeUwHistoneH7esInputStdDiffa9dRawRep1.bigWig
 grant Stam
 lab UW
@@ -30268,4 +30538,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 1431615168
+# MAGIC: -1720528647
