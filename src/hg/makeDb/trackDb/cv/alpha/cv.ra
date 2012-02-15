@@ -4273,7 +4273,7 @@ tissue adrenal gland
 category Tissue
 age ageUnknown
 strain Unknown 
-description Adrenal gland PROVISIONAL
+description Adrenal gland 
 vendorName CSHL lab
 vendorId Adrenal
 orderUrl http://gingeraslab.cshl.edu/
@@ -4327,7 +4327,7 @@ tissue urinary bladder
 category Tissue
 age ageUnknown
 strain Unknown 
-description Urinary Bladder PROVISIONAL
+description Urinary Bladder 
 vendorName CSHL lab
 vendorId Bladder
 orderUrl http://gingeraslab.cshl.edu/
@@ -4827,7 +4827,7 @@ tissue mammary
 category Tissue
 age ageUnknown
 strain Unknown
-description Mammary Gland PROVISIONAL
+description Mammary Gland 
 vendorName CSHL lab
 vendorId Mammary Gland
 orderUrl http://gingeraslab.cshl.edu/
@@ -4986,7 +4986,7 @@ tissue ovary
 category Tissue
 age ageUnknown
 strain Unknown
-description OVARY PROVISIONAL
+description OVARY 
 vendorName CSHL lab
 vendorId Ovary
 orderUrl http://gingeraslab.cshl.edu/
@@ -5899,7 +5899,7 @@ tag CREB106863
 type Antibody
 antibodyDescription Rabbit polyclonal, immunogen= KLH-conjugated, synthetic peptide (CSGAENQ QSGDAAVTEAENQQ) corresponding to a.a. 5-24 of human CREB. The immunizing sequence is identical in pig, shares 19 of 20 residues with mouse and bovine and 18 of 20 residues with rat.
 target CREB1
-targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in  neurite outgrowth and neuronal differentiation.
+targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in neurite outgrowth and neuronal differentiation.
 vendorName Millipore
 vendorId 06-863
 orderUrl http://www.millipore.com/catalogue/item/06-863
@@ -5908,13 +5908,12 @@ targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
 validation CREB1_(06-863)(Western_Blot,ChIP):human_CREB1_06-863_Millipore_06-863_validation_Struhl.pdf
 
-
 term CREB1_pS133
 tag CREB1PS133
 type Antibody
 antibodyDescription Rabbit monoclonal antibody is produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Ser133 of human CREB.
 target CREB1
-targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in  neurite outgrowth and neuronal differentiation.
+targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in neurite outgrowth and neuronal differentiation.
 vendorName Cell Signaling
 vendorId 9198
 orderUrl http://www.cellsignal.com/pdf/9198.pdf
@@ -7698,7 +7697,6 @@ targetId GeneCard:Med26
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26&search=Med26
 validation Med26_(sc48776)(Western_Blot,Immunoprecipitation):human_Med26_sc48776_validation_Struhl.pdf
 
-
 term MEF2A
 tag MEF2A
 type Antibody
@@ -8847,7 +8845,7 @@ tag TBPSC273
 type Antibody
 antibodyDescription Rabbit polyclonal, raised against full length TFIID of human origin
 target TBP
-targetDescription TBP is an integral subunit of the TFIID complex.  TBP recognizes the TATA box and helps to recruit and orient the RNA poymerase II initiation complex and RNA polymerase III.
+targetDescription TBP is an integral subunit of the TFIID complex. TBP recognizes the TATA box and helps to recruit and orient the RNA poymerase II initiation complex and RNA polymerase III.
 vendorName Santa Cruz Biotech
 vendorId sc273
 orderUrl http://www.scbt.com/datasheet-273-tfiid-tbp-si-1-antibody.html
@@ -10214,37 +10212,37 @@ description This data represents a control being compared with the other tracks 
 term Control_eGFP-BACH1
 tag CONTROLBACH1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-BACH1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-BACH1 
 
 term Control_eGFP-CCNE1
 tag CONTROLCCNE1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-CCNE1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-CCNE1
 
 term Control_eGFP-CDKN1B
 tag CONTROLCDKN1B
 type control
-description This data represents a control being compared to experiments using antibody eGFP-CDKN1B PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-CDKN1B 
 
 term Control_eGFP-E2F1
 tag CONTROLE2F1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-E2F1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-E2F1 
 
 term Control_eGFP-EKLF1
 tag CONTROLEKLF1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-EKLF1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-EKLF1 
 
 term Control_eGFP-ELF1
 tag CONTROLELF1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-ELF1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-ELF1 
 
 term Control_eGFP-ESR
 tag CONTROLESR
 type control
-description This data represents a control being compared to experiments using antibody eGFP-ESR PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-ESR 
 
 term Control_eGFP-FOS
 tag CONTROLFOS
@@ -10264,12 +10262,12 @@ description This data represents a control being compared to experiments using a
 term Control_eGFP-HMGB1
 tag CONTROLHMGB1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-HMGB1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-HMGB1 
 
 term Control_eGFP-ILF2
 tag CONTROLILF2
 type control
-description This data represents a control being compared to experiments using antibody eGFP-ILF2 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-ILF2 
 
 term Control_eGFP-JunB
 tag CONTROLJUNB
@@ -10284,17 +10282,17 @@ description This data represents a control being compared to experiments using a
 term Control_eGFP-MLL5
 tag CONTROLMLL5
 type control
-description This data represents a control being compared to experiments using antibody eGFP-MLL5 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-MLL5
 
 term Control_eGFP-NCOR1
 tag CONTROLNCOR1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-NCOR1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-NCOR1 
 
 term Control_eGFP-NF90
 tag CONTROLNF90
 type control
-description This data represents a control being compared to experiments using antibody eGFP-NF90 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-NF90 
 
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
@@ -10304,17 +10302,17 @@ description This data represents a control being compared to experiments using a
 term Control_eGFP-SMARCA1
 tag CONTROLSMARCA1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-SMARCA1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-SMARCA1 
 
 term Control_eGFP-SMARCA2
 tag CONTROLSMARCA2
 type control
-description This data represents a control being compared to experiments using antibody eGFP-SMARCA2 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-SMARCA2
 
 term Control_eGFP-STAT1
 tag CONTROLSTAT1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-STAT1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-STAT1 
 
 term Control_32bp
 tag CNTRL32B
@@ -10696,13 +10694,13 @@ label serum-stimulated media
 
 term 4OHTAM_1uM_4hr
 tag TAM14H
-description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) 
 type treatment
 label 4-OHTAM_1uM_4hr
 
 term 4OHTAM_1uM_12hr
 tag TAM112H
-description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
 type treatment
 label 4-OHTAM_1uM_12hr
 
@@ -10935,13 +10933,13 @@ term CpG_Sites
 tag CPG 
 type view
 label CpG Sites
-description CpG Methylation Sites Provisional
+description CpG Methylation Sites 
 
 term NonCpG_Sites
 tag NONCPG 
 type view
 label Non-CpG Sites
-description Non-CpG Methylation Sites Provisional
+description Non-CpG Methylation Sites 
 
 term Excludable
 tag EXCLU
@@ -11087,7 +11085,7 @@ term PrimerPeaks
 tag PRIMEPKS
 type view
 label Primer Peaks
-description Regions of enriched signal for a given Primer Set PROVISIONAL 
+description Regions of enriched signal for a given Primer Set 
 
 term PeptideMapping
 tag PEPTIDEMAP
@@ -11958,19 +11956,19 @@ term GPL13190
 tag GPL13190 
 geo NimbleGen Human CGH 2.1M Whole-Genome Tiling Array [080131_HG18_WG_CGH_v2D_HX1]
 type platform
-description Human CGH 2.1M Whole-Genome Tiling v2.0D Array PROVISIONAL
+description Human CGH 2.1M Whole-Genome Tiling v2.0D Array 
 
 term GPL14965 
 tag GPL14965 
 geo NimbleGen Human 3x720k Whole Genome CGH [100718_HG18_WG_CGH_v3.1_HX3]
 type platform
-description Human 3x720k Whole Genome CGH PROVISIONAL
+description Human 3x720k Whole Genome CGH 
 
 term GPL9156 
 tag GPL9156 
 geo FSU NimbleGen Mouse 385K Whole Genome Tiling
 type platform
-description FSU NimbleGen Mouse 385K Whole Genome Tiling PROVISIONAL
+description FSU NimbleGen Mouse 385K Whole Genome Tiling 
 
 #LABS          This is the CV for naming the labs.
 #term:
@@ -13157,7 +13155,7 @@ term platform
 tag PLATFORM
 type typeOfTerm
 label Platform
-description Platform used in experiment. PROVISIONAL
+description Platform used in experiment. 
 searchable multiSelect
 cvDefined yes
 validate cv
