@@ -4273,7 +4273,7 @@ tissue adrenal gland
 category Tissue
 age ageUnknown
 strain Unknown 
-description Adrenal gland PROVISIONAL
+description Adrenal gland 
 vendorName CSHL lab
 vendorId Adrenal
 orderUrl http://gingeraslab.cshl.edu/
@@ -4327,7 +4327,7 @@ tissue urinary bladder
 category Tissue
 age ageUnknown
 strain Unknown 
-description Urinary Bladder PROVISIONAL
+description Urinary Bladder 
 vendorName CSHL lab
 vendorId Bladder
 orderUrl http://gingeraslab.cshl.edu/
@@ -4827,7 +4827,7 @@ tissue mammary
 category Tissue
 age ageUnknown
 strain Unknown
-description Mammary Gland PROVISIONAL
+description Mammary Gland 
 vendorName CSHL lab
 vendorId Mammary Gland
 orderUrl http://gingeraslab.cshl.edu/
@@ -4986,7 +4986,7 @@ tissue ovary
 category Tissue
 age ageUnknown
 strain Unknown
-description OVARY PROVISIONAL
+description OVARY 
 vendorName CSHL lab
 vendorId Ovary
 orderUrl http://gingeraslab.cshl.edu/
@@ -5899,7 +5899,7 @@ tag CREB106863
 type Antibody
 antibodyDescription Rabbit polyclonal, immunogen= KLH-conjugated, synthetic peptide (CSGAENQ QSGDAAVTEAENQQ) corresponding to a.a. 5-24 of human CREB. The immunizing sequence is identical in pig, shares 19 of 20 residues with mouse and bovine and 18 of 20 residues with rat.
 target CREB1
-targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in  neurite outgrowth and neuronal differentiation.
+targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in neurite outgrowth and neuronal differentiation.
 vendorName Millipore
 vendorId 06-863
 orderUrl http://www.millipore.com/catalogue/item/06-863
@@ -5908,13 +5908,12 @@ targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
 validation CREB1_(06-863)(Western_Blot,ChIP):human_CREB1_06-863_Millipore_06-863_validation_Struhl.pdf
 
-
 term CREB1_pS133
 tag CREB1PS133
 type Antibody
 antibodyDescription Rabbit monoclonal antibody is produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Ser133 of human CREB.
 target CREB1
-targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in  neurite outgrowth and neuronal differentiation.
+targetDescription CREB is a basic leucine zipper transcription factor. CREB is activated by phosphorylation of Ser133 in response to a range of stimuli by including a number of transcription factors PKA, CAMK and MAPKs. CREB is ubiquitously expressed, but has been specifically implicated in the development in neurite outgrowth and neuronal differentiation.
 vendorName Cell Signaling
 vendorId 9198
 orderUrl http://www.cellsignal.com/pdf/9198.pdf
@@ -6115,7 +6114,7 @@ tag BACH1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor BACH1
 target eGFP-BACH1
-targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex,tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members
+targetDescription This gene encodes a transcription factor that belongs to the cap'n'collar type of basic region leucine zipper factor family (CNC-bZip). The encoded protein contains broad complex, tramtrack, bric-a-brac/poxvirus and zinc finger (BTB/POZ) domains, which is atypical of CNC-bZip family members (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-BACH1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6130,7 +6129,7 @@ tag CCNE1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CCNE1
 target eGFP-CCNE1
-targetDescription The protein encoded by this gene belongs to the highly conserved cyclin family,whose members are characterized by a dramatic periodicity in protein abundance through the cell cycle. Cyclins function as regulators of CDK kinases.Different cyclins exhibit distinct expression and degradation patterns which contribute to the temporal coordination of each mitotic event.
+targetDescription The protein encoded by this gene belongs to the highly conserved cyclin family, whose members are characterized by a dramatic periodicity in protein abundance through the cell cycle. Cyclins function as regulators of CDK kinases. Different cyclins exhibit distinct expression and degradation patterns which contribute to the temporal coordination of each mitotic event. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-CCNE1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6145,7 +6144,7 @@ tag CDKN1B
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor CDKN1B
 target eGFP-CDKN1B
-targetDescription This gene encodes a cyclin-dependent kinase inhibitor, which shares a limited similarity with CDK inhibitor CDKN1A/p21.The encoded protein binds to and prevents the activation of cyclin E-CDK2 or cyclin D-CDK4 complexes, and thus controls the cell cycle progression at G1
+targetDescription This gene encodes a cyclin-dependent kinase inhibitor, which shares a limited similarity with CDK inhibitor CDKN1A/p21. The encoded protein binds to and prevents the activation of cyclin E-CDK2 or cyclin D-CDK4 complexes, and thus controls the cell cycle progression at G1 (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-CDKN1B
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6160,7 +6159,7 @@ tag E2F1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor E2F1
 target eGFP-E2F1
-targetDescription The protein encoded by this gene is a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses
+targetDescription The protein encoded by this gene is a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-E2F1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6175,7 +6174,7 @@ tag EKLF1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor EKLF1
 target eGFP-EKLF1
-targetDescription This gene encodes a hematopoietic-specific transcription factor that induces high-level expression of adult beta-globin and other erythroid genes. The zinc-finger protein binds to the DNA sequence CCACACCCT found in the beta hemoglobin promoter. Heterozygous loss-of-function mutations in this gene result in the dominant In(Lu) blood phenotype.
+targetDescription This gene encodes a hematopoietic-specific transcription factor that induces high-level expression of adult beta-globin and other erythroid genes. The zinc-finger protein binds to the DNA sequence CCACACCCT found in the beta hemoglobin promoter. Heterozygous loss-of-function mutations in this gene result in the dominant In(Lu) blood phenotype. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-EKLF1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6190,7 +6189,7 @@ tag ELF1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ELF1
 target eGFP-ELF1
-targetDescription This gene encodes an E26 transformation-specific related transcription factor.The encoded protein is primarily expressed in lymphoid cells and acts as both an enhancer and a repressor to regulate transcription of various genes.Alternative splicing results in multiple transcript variants
+targetDescription This gene encodes an E26 transformation-specific related transcription factor. The encoded protein is primarily expressed in lymphoid cells and acts as both an enhancer and a repressor to regulate transcription of various genes. Alternative splicing results in multiple transcript variants (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-ELF1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6205,7 +6204,7 @@ tag ESR
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ESRA
 target eGFP-ESR
-targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2.
+targetDescription This gene encodes an estrogen receptor, a ligand-activated transcription factor composed of several domains important for hormone binding, DNA binding, and activation of transcription. The protein localizes to the nucleus where it may form a homodimer or a heterodimer with estrogen receptor 2. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-ESR
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6268,7 +6267,7 @@ tag HMGB1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGB1
 target eGFP-HMGB1
-targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA.Involved in V(D)J recombination by acting as a cofactor of the  RAG complex.
+targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA. Involved in V(D)J recombination by acting as a cofactor of the RAG complex. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-HMGB1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6283,7 +6282,7 @@ tag ILF2
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor ILF2
 target eGFP-ILF2
-targetDescription Nuclear factor of activated T-cells (NFAT) is a transcription factor required for T-cell expression of the interleukin 2 gene. NFAT binds to a sequence in the interleukin 2 gene enhancer known as the antigen receptor response element 2.In addition, NFAT can bind RNA and is an essential component for encapsidation and protein priming of hepatitis B viral polymerase.
+targetDescription Nuclear factor of activated T-cells (NFAT) is a transcription factor required for T-cell expression of the interleukin 2 gene. NFAT binds to a sequence in the interleukin 2 gene enhancer known as the antigen receptor response element 2. In addition, NFAT can bind RNA and is an essential component for encapsidation and protein priming of hepatitis B viral polymerase. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-ILF2
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6330,7 +6329,7 @@ tag MLL5
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor MLL5
 target eGFP-MLL5
-targetDescription This gene is a member of the myeloid/lymphoid or mixed-lineage leukemia (MLL) family and encodes a protein with an N-terminal PHD zinc finger and a central SET domain. Overexpression of the protein inhibits cell cycle progression.
+targetDescription This gene is a member of the myeloid/lymphoid or mixed-lineage leukemia (MLL) family and encodes a protein with an N-terminal PHD zinc finger and a central SET domain. Overexpression of the protein inhibits cell cycle progression. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-MLL5
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6345,7 +6344,7 @@ tag NCOR1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NCOR1
 target eGFP-NCOR1
-targetDescription This gene encodes a protein that mediates ligand-independent transcription repression of thyroid-hormone and retinoic-acid receptors by promoting chromatin condensation and preventing access of the transcription machinery. It is part of a complex which also includes histone deacetylases and transcriptional regulators similar to the yeast protein Sin3p. This gene is located between the Charcot-Marie-Tooth and Smith-Magenis syndrome critical regions on chromosome 17
+targetDescription This gene encodes a protein that mediates ligand-independent transcription repression of thyroid-hormone and retinoic-acid receptors by promoting chromatin condensation and preventing access of the transcription machinery. It is part of a complex which also includes histone deacetylases and transcriptional regulators similar to the yeast protein Sin3p. This gene is located between the Charcot-Marie-Tooth and Smith-Magenis syndrome critical regions on chromosome 17 (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-NCOR1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6358,8 +6357,9 @@ validation missing
 term eGFP-NF90
 tag NF90
 type Antibody
-antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NF90target eGFP-NF90
-targetDescription NF90 (nuclear factor of activated T cells 90 kDa), also known as NFAR is a ubiquitously expressed nuclear protein that exists in a heterodimer with NF45.
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor NF90
+target eGFP-NF90
+targetDescription NF90 (nuclear factor of activated T cells 90 kDa), also known as NFAR is a ubiquitously expressed nuclear protein that exists in a heterodimer with NF45. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-NF90 
 orderUrl http://www.igsb.org/labs/kevin-white/ 
@@ -6391,7 +6391,7 @@ tag SMARCA1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor SMARCA1
 target eGFP-SMARCA1
-targetDescription This gene encodes a member of the SWI/SNF family of proteins. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes.
+targetDescription This gene encodes a member of the SWI/SNF family of proteins. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes. (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-SMARCA1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6406,7 +6406,7 @@ tag SMARCA2
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor SMARCA2
 target eGFP-SMARCA2
-targetDescription The protein encoded by this gene is a member of the SWI/SNF family of proteins and is highly similar to the brahma protein of Drosophila. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes
+targetDescription The protein encoded by this gene is a member of the SWI/SNF family of proteins and is highly similar to the brahma protein of Drosophila. Members of this family have helicase and ATPase activities and are thought to regulate transcription of certain genes by altering the chromatin structure around those genes (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-SMARCA2
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6420,7 +6420,8 @@ term eGFP-STAT1
 tag STAT1
 type Antibody
 antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor STAT1
-target eGFP-STAT1targetDescription The protein encoded by this gene is a member of the STAT protein family.In response to cytokines and growth factors,STAT family members are phosphorylated by the receptor associated kinases, and then form homo-or heterodimers that translocate to the cell nucleus where they act as transcription activators.This protein can be activated by various ligands including interferon-alpha, interferon-gamma, EGF, PDGF and IL6
+target eGFP-STAT1
+targetDescription The protein encoded by this gene is a member of the STAT protein family. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo-or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein can be activated by various ligands including interferon-alpha, interferon-gamma, EGF, PDGF and IL6 (provided by RefSeq)
 vendorName Kevin White Lab, University of Chicago
 vendorId eGFP-STAT1
 orderUrl http://www.igsb.org/labs/kevin-white/
@@ -6451,7 +6452,7 @@ tag ELK4
 type Antibody
 target ELK4
 antibodyDescription Rabbit polyclonal IgG. Antibody Target: ELK4
-targetDescription This gene is a member of the Ets family of transcription factors and of the ternary complex factor (TCF) subfamily.
+targetDescription This gene is a member of the Ets family of transcription factors and of the ternary complex factor (TCF) subfamily. (provided by RefSeq)
 orderUrl http://datasheets.scbt.com/sc-13030.pdf
 vendorName Santa Cruz Biotech
 vendorId sc-13030
@@ -6655,7 +6656,7 @@ tag FOXM1SC502
 type Antibody
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of FOXM1 of human origin.
 target FOXM1
-targetDescription The protein encoded by this gene is a transcriptional activator involved in cell proliferation. The encoded protein is phosphorylated in M phase and regulates the expression of several cell cycle genes, such as cyclin B1 and cyclin D1. Several transcript variants encoding different isoforms have been found for this gene. [provided by RefSeq, Jul 2011]
+targetDescription The protein encoded by this gene is a transcriptional activator involved in cell proliferation. The encoded protein is phosphorylated in M phase and regulates the expression of several cell cycle genes, such as cyclin B1 and cyclin D1. Several transcript variants encoding different isoforms have been found for this gene. (provided by RefSeq, Jul 2011)
 vendorName Santa Cruz Biotech
 vendorId sc-502
 orderUrl http://www.scbt.com/datasheet-502-foxm1-c-20-antibody.html
@@ -7696,7 +7697,6 @@ targetId GeneCard:Med26
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26&search=Med26
 validation Med26_(sc48776)(Western_Blot,Immunoprecipitation):human_Med26_sc48776_validation_Struhl.pdf
 
-
 term MEF2A
 tag MEF2A
 type Antibody
@@ -7915,7 +7915,7 @@ orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
 lab Snyder
 targetId GeneCard:NFKB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1
-validation Human_-_NFKB1(Immunoprecipitation,Motif_EnrichmenImmunoprecipitation,Motif_Enrichment):human_NFKB_p65_validation_Snyder.pdf
+validation Human_-_NFKB1(Immunoprecipitation,Motif_Enrichment):human_NFKB_p65_validation_Snyder.pdf
 label NFKB (sc-372)
 
 term NF-YA
@@ -8795,7 +8795,7 @@ targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basi
 targetId GeneCard:Tal1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
 lab Hardison
-validation Human_-_TAL1(Immunoprecipitaiton,IP-Mass_spec):human_TAL1_validation_Snyder.pdf Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
+validation Human_-_TAL1(Immunoprecipitation,IP-Mass_spec):human_TAL1_validation_Snyder.pdf Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
 label TAL1 (sc-12984)
 
 #term TAF-II
@@ -8845,7 +8845,7 @@ tag TBPSC273
 type Antibody
 antibodyDescription Rabbit polyclonal, raised against full length TFIID of human origin
 target TBP
-targetDescription TBP is an integral subunit of the TFIID complex.  TBP recognizes the TATA box and helps to recruit and orient the RNA poymerase II initiation complex and RNA polymerase III.
+targetDescription TBP is an integral subunit of the TFIID complex. TBP recognizes the TATA box and helps to recruit and orient the RNA poymerase II initiation complex and RNA polymerase III.
 vendorName Santa Cruz Biotech
 vendorId sc273
 orderUrl http://www.scbt.com/datasheet-273-tfiid-tbp-si-1-antibody.html
@@ -9050,8 +9050,7 @@ tag TRIM28SC81411
 type Antibody
 antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of TRIM28 of human origin.
 target TRIM28
-targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors.  The protein localizes to the nucleus and is thought to associate with specific chromatin regions.  The protein is a member of the tripartite motif family.  This tripartite motif includes three zinc-binding domains
-, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
+targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors.  The protein localizes to the nucleus and is thought to associate with specific chromatin regions.  The protein is a member of the tripartite motif family.  This tripartite motif includes three zinc-binding domains, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-81411
 orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.htmllab Myerslots L0309
@@ -10213,37 +10212,37 @@ description This data represents a control being compared with the other tracks 
 term Control_eGFP-BACH1
 tag CONTROLBACH1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-BACH1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-BACH1 
 
 term Control_eGFP-CCNE1
 tag CONTROLCCNE1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-CCNE1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-CCNE1
 
 term Control_eGFP-CDKN1B
 tag CONTROLCDKN1B
 type control
-description This data represents a control being compared to experiments using antibody eGFP-CDKN1B PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-CDKN1B 
 
 term Control_eGFP-E2F1
 tag CONTROLE2F1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-E2F1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-E2F1 
 
 term Control_eGFP-EKLF1
 tag CONTROLEKLF1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-EKLF1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-EKLF1 
 
 term Control_eGFP-ELF1
 tag CONTROLELF1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-ELF1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-ELF1 
 
 term Control_eGFP-ESR
 tag CONTROLESR
 type control
-description This data represents a control being compared to experiments using antibody eGFP-ESR PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-ESR 
 
 term Control_eGFP-FOS
 tag CONTROLFOS
@@ -10263,12 +10262,12 @@ description This data represents a control being compared to experiments using a
 term Control_eGFP-HMGB1
 tag CONTROLHMGB1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-HMGB1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-HMGB1 
 
 term Control_eGFP-ILF2
 tag CONTROLILF2
 type control
-description This data represents a control being compared to experiments using antibody eGFP-ILF2 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-ILF2 
 
 term Control_eGFP-JunB
 tag CONTROLJUNB
@@ -10283,17 +10282,17 @@ description This data represents a control being compared to experiments using a
 term Control_eGFP-MLL5
 tag CONTROLMLL5
 type control
-description This data represents a control being compared to experiments using antibody eGFP-MLL5 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-MLL5
 
 term Control_eGFP-NCOR1
 tag CONTROLNCOR1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-NCOR1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-NCOR1 
 
 term Control_eGFP-NF90
 tag CONTROLNF90
 type control
-description This data represents a control being compared to experiments using antibody eGFP-NF90 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-NF90 
 
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
@@ -10303,17 +10302,17 @@ description This data represents a control being compared to experiments using a
 term Control_eGFP-SMARCA1
 tag CONTROLSMARCA1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-SMARCA1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-SMARCA1 
 
 term Control_eGFP-SMARCA2
 tag CONTROLSMARCA2
 type control
-description This data represents a control being compared to experiments using antibody eGFP-SMARCA2 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-SMARCA2
 
 term Control_eGFP-STAT1
 tag CONTROLSTAT1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-STAT1 PROVISIONAL
+description This data represents a control being compared to experiments using antibody eGFP-STAT1 
 
 term Control_32bp
 tag CNTRL32B
@@ -10695,13 +10694,13 @@ label serum-stimulated media
 
 term 4OHTAM_1uM_4hr
 tag TAM14H
-description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) 
 type treatment
 label 4-OHTAM_1uM_4hr
 
 term 4OHTAM_1uM_12hr
 tag TAM112H
-description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
 type treatment
 label 4-OHTAM_1uM_12hr
 
@@ -10934,13 +10933,13 @@ term CpG_Sites
 tag CPG 
 type view
 label CpG Sites
-description CpG Methylation Sites Provisional
+description CpG Methylation Sites 
 
 term NonCpG_Sites
 tag NONCPG 
 type view
 label Non-CpG Sites
-description Non-CpG Methylation Sites Provisional
+description Non-CpG Methylation Sites 
 
 term Excludable
 tag EXCLU
@@ -11086,7 +11085,7 @@ term PrimerPeaks
 tag PRIMEPKS
 type view
 label Primer Peaks
-description Regions of enriched signal for a given Primer Set PROVISIONAL 
+description Regions of enriched signal for a given Primer Set 
 
 term PeptideMapping
 tag PEPTIDEMAP
@@ -11957,19 +11956,19 @@ term GPL13190
 tag GPL13190 
 geo NimbleGen Human CGH 2.1M Whole-Genome Tiling Array [080131_HG18_WG_CGH_v2D_HX1]
 type platform
-description Human CGH 2.1M Whole-Genome Tiling v2.0D Array PROVISIONAL
+description Human CGH 2.1M Whole-Genome Tiling v2.0D Array 
 
 term GPL14965 
 tag GPL14965 
 geo NimbleGen Human 3x720k Whole Genome CGH [100718_HG18_WG_CGH_v3.1_HX3]
 type platform
-description Human 3x720k Whole Genome CGH PROVISIONAL
+description Human 3x720k Whole Genome CGH 
 
 term GPL9156 
 tag GPL9156 
 geo FSU NimbleGen Mouse 385K Whole Genome Tiling
 type platform
-description FSU NimbleGen Mouse 385K Whole Genome Tiling PROVISIONAL
+description FSU NimbleGen Mouse 385K Whole Genome Tiling 
 
 #LABS          This is the CV for naming the labs.
 #term:
@@ -13156,7 +13155,7 @@ term platform
 tag PLATFORM
 type typeOfTerm
 label Platform
-description Platform used in experiment. PROVISIONAL
+description Platform used in experiment. 
 searchable multiSelect
 cvDefined yes
 validate cv

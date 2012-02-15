@@ -461,7 +461,7 @@ noInherit on
     maxHeightPixels 100:24:16
     windowingFunction mean+whiskers
     transformFunc NONE
-    viewLimits 0:10
+    viewLimits 0:5
     autoScale off
 
         track wgEncodeHaibRnaSeqA549Etoh02RawRep3
