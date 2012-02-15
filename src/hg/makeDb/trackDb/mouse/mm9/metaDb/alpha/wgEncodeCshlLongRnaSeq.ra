@@ -1,7 +1,7 @@
 metaObject wgEncodeCshlLongRnaSeq
 objType composite
 composite wgEncodeCshlLongRnaSeq
-expVars lab,dataType,cell,age,strain
+expVars lab,dataType,cell,age
 
 metaObject wgEncodeCshlLongRnaSeqAdrenalAdult8wksAlnRep1
 objType table
@@ -6644,4 +6644,4 @@ strain C57BL/6J
 subId 5582
 view TranscriptDeNovo
 
-# MAGIC: -745779956
+# MAGIC: 48506046
