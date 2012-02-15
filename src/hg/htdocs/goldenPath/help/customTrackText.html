@@ -646,7 +646,12 @@ Genome Browser:</P>
 	<LI><B>group=<<I>group</I>></B> - Defines the annotation track group
 	in which the custom track will display in the Genome Browser window.
 	By default, <em>group</em> is set to &quot;user&quot;, which causes
-	custom tracks to display at the top of the window.
+	custom tracks to display at the top of the track listing in the group "Custom Tracks".
+	The value for "group" <strong>must</strong> be the "name" of one of the predefined track groups. 
+	To get a list of allowable group names for an assembly, go to the table browser and select 
+	"group: All Tables", "table: grp", and "get output. Entries in the "name" column may be used
+	.<br>
+	(Note that mirrors may define other group names in the grp table.)
 	<LI><B>priority=<<I>priority</I>></B> - When the <em>group</em>
 	attribute is set, defines the display position of the track relative 
 	to other tracks within the same group in the Genome Browser window. 

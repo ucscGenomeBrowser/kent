@@ -9215,7 +9215,7 @@ validation Human_-_:missing
 label YY1 (sc-1703)
 
 term YY1_(SC-281)
-tag YY1c
+tag YY1SC281
 type Antibody
 target YY1
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of YY1 of human origin. Antibody Target: YY1
@@ -10930,13 +10930,13 @@ type view
 label Contigs
 description Contigs represent continuous regions of the genome that are covered by several overlapping RNA-seq reads. The score represents the logarithm of the expression level (read coverage depth).
 
-term CpG
+term CpG_Sites
 tag CPG 
 type view
 label CpG Sites
 description CpG Methylation Sites Provisional
 
-term NonCpG
+term NonCpG_Sites
 tag NONCPG 
 type view
 label Non-CpG Sites
