@@ -17,7 +17,7 @@ dimensionBchecked NONE
 dimensionCchecked rep1
 #dimensionXchecked GM12878,H1hESC,K562
 #dimensionYchecked NRSF,POL2,POL24H8,SIX5,TAF1
-filterComposite dimB=one dimC=one
+filterComposite dimB=all dimC=one
 sortOrder cellType=+ factor=+ treatment=+ protocol=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target protocol=Protocol treatment=Treatment replicate=Rep view=View labExpId=Lab_ID controlId=Control_ID setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
