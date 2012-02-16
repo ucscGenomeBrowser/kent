@@ -133,6 +133,25 @@ subId 4177
 tableName wgEncodeUncBsuProtGm12878NucleusSig
 view Signal
 
+metaObject wgEncodeUncBsuProtK562CellIngelModifiedPeptideMapping
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-16
+fileName wgEncodeUncBsuProtK562CellIngelModifiedPeptideMapping.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 5557
+tableName wgEncodeUncBsuProtK562CellIngelModifiedPeptideMapping
+view ModifiedPeptideMapping
+
 metaObject wgEncodeUncBsuProtK562CellIngelSig
 objType table
 cell K562
@@ -364,4 +383,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: -1456555341
+# MAGIC: -1118370930
