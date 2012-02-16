@@ -146,13 +146,13 @@ html wgEncodeSydhTfbs.new
 		color 86,180,233
 		# subId=1865 dateSubmitted=2010-07-08
 
-		track wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyalePk
-		parent wgEncodeSydhTfbsViewPeaks off 
-		shortLabel MEL CTCF D Pk
-		longLabel MEL CTCF DMSO 2% TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
-		subGroups view=Peaks factor=CTCFb cellType=MEL control=IGGYALE treatment=DM2P5D
-		type narrowPeak
-		color 86,180,233
+		#track wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyalePk
+		#parent wgEncodeSydhTfbsViewPeaks off 
+		#shortLabel MEL CTCF D Pk
+		#longLabel MEL CTCF DMSO 2% TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
+		#subGroups view=Peaks factor=CTCFb cellType=MEL control=IGGYALE treatment=DM2P5D
+		#type narrowPeak
+		#color 86,180,233
 		# subId=3502 dateSubmitted=2011-02-03
 		# was wgEncodeSydhTfbsMelCtcfDmso20IggyalePk cricket Tue Apr 19 11:41:12 2011
 		# was wgEncodeSydhTfbsMelCtcfsc15914Dmso20IggyalePk wong Thu Jun  9 10:56:14 2011
@@ -714,13 +714,13 @@ html wgEncodeSydhTfbs.new
 		color 86,180,233
 		# subId=1865 dateSubmitted=2010-07-08
 
-		track wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleSig
-		parent wgEncodeSydhTfbsViewSig off
-		shortLabel MEL CTCF D Sg
-		longLabel MEL CTCF DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
-		subGroups view=Signal factor=CTCFb cellType=MEL control=IGGYALE treatment=DM2P5D
-		type bigWig 1.000000 93856.000000
-		color 86,180,233
+		#track wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleSig
+		#parent wgEncodeSydhTfbsViewSig off
+		#shortLabel MEL CTCF D Sg
+		#longLabel MEL CTCF DMSO 2% TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
+		#subGroups view=Signal factor=CTCFb cellType=MEL control=IGGYALE treatment=DM2P5D
+		#type bigWig 1.000000 93856.000000
+		#color 86,180,233
 		# subId=1857 dateSubmitted=2010-07-09
 		# was wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig cricket Tue Apr 19 11:41:12 2011
 		# was wgEncodeSydhTfbsMelCtcfsc15914Dmso20IggyaleSig wong Thu Jun  9 10:56:15 2011
