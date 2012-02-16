@@ -459,28 +459,30 @@ release alpha
 nextExonText Next Match
 prevExonText Prev Match
 
-    track t2gPmc
-    shortLabel Sequences (PMC)
-    longLabel Sequences from PubmedCentral Articles (Open-access)
+    track t2gBlat
+    shortLabel Sequences
+    longLabel Sequences in Articles: PubmedCentral (OA subset) and Elsevier
     parent t2g
     type bed 12 .
-    t2gArticleTable hgFixed.t2gPmcArticle
-    t2gSequenceTable hgFixed.t2gPmcSequence
+    visibility pack
     priority 1
     color 0,0,100
+    t2gArticleTable hgFixed.t2gArticle
+    t2gSequenceTable hgFixed.t2gSequenceAnnot
     release alpha
 
-    track t2gElsevier
-    shortLabel Sequences (Elsevier)
-    longLabel Sequences from Elsevier Articles
-    parent t2g
-    priority 2
-    t2gArticleTable hgFixed.t2gElsevierArticle
-    t2gSequenceTable hgFixed.t2gElsevierSequence
-    type bed 12 .
-    release alpha
-    color 0,100,0
-    maxItems 300
+    #track t2gElsevier
+    #shortLabel Sequences (Elsevier)
+    #longLabel Sequences from Elsevier Articles
+    #parent t2g
+    #priority 2
+    #visibility hide
+    #type bed 12 .
+    #release alpha
+    #color 0,100,0
+    #t2gArticleTable hgFixed.t2gElsevierArticle
+    #t2gSequenceTable hgFixed.t2gElsevierSequence
+    #maxItems 300
 
     track t2gMarkerSnp
     shortLabel SNPs
@@ -488,8 +490,9 @@ prevExonText Prev Match
     parent t2g
     visibility pack
     priority 3
-    #t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
     type bed 4 +
+    t2gArticleTable hgFixed.t2gArticle
+    t2gMarkerTable hgFixed.t2gMarkerAnnot
     release alpha
 
     track t2gMarkerBand
@@ -498,8 +501,9 @@ prevExonText Prev Match
     parent t2g
     visibility pack
     priority 3
-    #t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
     type bed 4 +
+    t2gArticleTable hgFixed.t2gArticle
+    t2gMarkerTable hgFixed.t2gMarkerAnnot
     release alpha
 
     track t2gMarkerGene
@@ -508,10 +512,10 @@ prevExonText Prev Match
     parent t2g
     priority 3
     visibility pack
-    ##t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
     type bed 4 +
+    t2gArticleTable hgFixed.t2gArticle
+    t2gMarkerTable hgFixed.t2gMarkerAnnot
     release alpha
-
 
 track transMap
 superTrack on

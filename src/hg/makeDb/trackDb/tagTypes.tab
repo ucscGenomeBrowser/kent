@@ -30,7 +30,7 @@ baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
 bedNameLabel bed
-bigDataUrl customTracks
+bigDataUrl customTracks bigBed bigWig bam
 blastRef psl
 boxedCfg *
 browserLines customTracks
