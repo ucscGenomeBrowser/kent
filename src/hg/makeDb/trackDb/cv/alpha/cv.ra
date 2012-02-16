@@ -11488,7 +11488,7 @@ dataGroup DNA Methylation
 term MethylSeq
 tag METHYLSEQ
 type dataType
-label Methyl-Seq
+label Methyl-seq
 description DNA Methylation Sequencing
 dataGroup DNA Methylation
 

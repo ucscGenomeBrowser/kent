@@ -96,8 +96,8 @@ include wgEncodeRikenCage.ra beta,public
 include wgEncodeRikenCage.release3.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
-include wgEncodeCshlShortRnaSeq.ra beta,public
-include wgEncodeCshlShortRnaSeq.release2.ra alpha
+include wgEncodeCshlShortRnaSeq.ra public
+include wgEncodeCshlShortRnaSeq.release2.ra alpha,beta
 
 # GIS RNA Seq (wrangler: cricket)
 include wgEncodeGisRnaSeq.ra
