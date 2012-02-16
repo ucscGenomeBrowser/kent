@@ -356,8 +356,8 @@ identifier ncbiTaxon
 
 identifier tRNAsId
 "ID of tRNAs"
-    $tRNAsDbs.tRNAs.name dupeOk
-    hg19.kgXref.tRnaName
+    hg19.tRNAs.name 
+    hg19.kgXref.tRnaName exclude= minCheck=0.50
 
 # CGAP SAGE track Stuff
 
@@ -1737,8 +1737,8 @@ identifier knownXref
 
 identifier tRNAName
 "tRNA track name"
-    $kgDb3.kgXref.tRnaName dupeOk
-    $tRNAsDbs.tRNAs.name
+    hg19.kgXref.tRnaName exclude=
+    hg19.tRNAs.name minCheck=0.50
 
 identifier ccdsGeneId
 "CCDS Gene ID"
