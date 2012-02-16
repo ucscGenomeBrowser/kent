@@ -7,26 +7,26 @@ shortLabel UNC/BSU ProtGeno
 longLabel Proteogenomics from ENCODE/Univ. North Carolina/Boise State Univ.
 group expression
 subGroup1 view Views Signal=Signal Modified_Signal=Modified_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)
-subGroup3 localization Localization cytosol=cytosol membraneFraction=membrane mito=mitochondria nucleus=nucleus
-subGroup4 protocol Protocol FASP=FASP SDS-Page=SDS-Page
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) HIHESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)
+subGroup3 localization Localization CELL=Whole_Cell cytosol=Cytosol membraneFraction=Membrane mito=Mitochondria nucleus=Nucleus
+subGroup4 protocol Protocol FASP=FASP INGEL=In_gel  
 dimensions dimensionX=cellType dimensionY=localization
 sortOrder cellType=+ localization=+ protocol=+
-fileSortOrder cell=Cell_Line localization=Localization protocol=Protocol view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
+fileSortOrder cell=Cell_Line localization=Localization protocol=Protocol view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
 controlledVocabulary encode/cv.ra cellType=cell localization=localization protocol=protocol
 dragAndDrop subTracks
 priority 0
 type bed 6 +
 noInherit on
-useScore 1
 wgEncode 1
-scoreFilter 200
-scoreFilterLimits 200:1000
 visibility hide
 
     track wgEncodeUncBsuProtViewSignal
     shortLabel Signal
     view Signal
+    useScore 1
+    scoreFilter 200
+    scoreFilterLimits 200:1000
     visibility full  
     parent wgEncodeUncBsuProt
 
@@ -43,7 +43,7 @@ visibility hide
         parent wgEncodeUncBsuProtViewSignal
         shortLabel GM12878 nucleus
         longLabel GM12878 nucleus Proteogenomic Mapping Hits from ENCODE/UNC/BSU
-        subGroups view=Signal cellType=GM12878 localization=nucleus protocol=SDS-Page
+        subGroups view=Signal cellType=GM12878 localization=nucleus protocol=INGEL
         visibility full
         type peptideMapping
         color 153,38,0
@@ -53,7 +53,7 @@ visibility hide
         parent wgEncodeUncBsuProtViewSignal
         shortLabel K562 cytosol
         longLabel K562 cytosol Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-        subGroups view=Signal cellType=K562 localization=cytosol protocol=SDS-Page
+        subGroups view=Signal cellType=K562 localization=cytosol protocol=INGEL
         visibility full
         type peptideMapping
         color 46,0,184
@@ -63,7 +63,7 @@ visibility hide
         parent wgEncodeUncBsuProtViewSignal
         shortLabel K562 membrane
         longLabel K562 membrane Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-        subGroups view=Signal cellType=K562 localization=membraneFraction protocol=SDS-Page
+        subGroups view=Signal cellType=K562 localization=membraneFraction protocol=INGEL
         visibility full
         type peptideMapping
         color 46,0,184
@@ -73,7 +73,7 @@ visibility hide
         parent wgEncodeUncBsuProtViewSignal
         shortLabel K562 mitochondria
         longLabel K562 mitochondria Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-        subGroups view=Signal cellType=K562 localization=mito protocol=SDS-Page
+        subGroups view=Signal cellType=K562 localization=mito protocol=INGEL
         visibility full
         type peptideMapping
         color 46,0,184
@@ -83,7 +83,7 @@ visibility hide
         parent wgEncodeUncBsuProtViewSignal
         shortLabel K562 nucleus
         longLabel K562 nucleus Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-        subGroups view=Signal cellType=K562 localization=nucleus protocol=SDS-Page
+        subGroups view=Signal cellType=K562 localization=nucleus protocol=INGEL
         visibility full
         type peptideMapping
         color 46,0,184
@@ -93,7 +93,7 @@ visibility hide
         parent wgEncodeUncBsuProtViewSignal
         shortLabel GM12878 mito
         longLabel GM12878 mitochondria Proteogenomic Mapping Hits from ENCODE/UNC/BSU
-        subGroups view=Signal cellType=GM12878 localization=mito protocol=SDS-Page
+        subGroups view=Signal cellType=GM12878 localization=mito protocol=INGEL
         visibility full
         type peptideMapping
         color 153,38,0
@@ -103,8 +103,38 @@ visibility hide
        parent wgEncodeUncBsuProtViewSignal
        shortLabel GM12878 membrane
        longLabel GM12878 membrane Proteogenomic Mapping Hits from ENCODE/UNC/BSU
-       subGroups view=Signal cellType=GM12878 localization=membraneFraction protocol=SDS-Page
+       subGroups view=Signal cellType=GM12878 localization=membraneFraction protocol=INGEL
        visibility full
        type peptideMapping
        color 153,38,0
        # subId=4773 dateSubmitted=2011-08-11
+
+        track wgEncodeUncBsuProtK562CellIngelSig
+        parent wgEncodeUncBsuProtViewSignal
+        shortLabel K562 cell
+        longLabel K562 whole cell Proteogenomic Mapping Hits from ENCODE/UNC/BSU
+        subGroups view=Signal cellType=K562 localization=CELL protocol=INGEL
+        type peptideMapping
+        color 46,0,184
+        # subId=5558 dateSubmitted=2012-02-16
+
+    track wgEncodeUncBsuProtViewModified
+    shortLabel Modified
+    view Modified_Signal
+    visibility full  
+    parent wgEncodeUncBsuProt
+    useScore 1
+    scoreFilter 200
+    scoreFilterLimits 200:1000
+
+
+     #  track wgEncodeUncBsuProtK562CellMod
+     #  parent wgEncodeUncBsuProtViewModified
+     #  bigDataUrl http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/sampleBigBeds/K562_WCL_mod_dcc.bigbed
+     #  shortLabel K562 cell 
+     #  longLabel Sample Modified
+     #  subGroups view=Modified_Signal cellType=K562 localization=CELL protocol=INGEL
+     #  visibility full
+     #  type bigBed          
+     #  color 46,0,184
+      
