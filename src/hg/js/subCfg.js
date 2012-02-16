@@ -847,7 +847,8 @@ var subCfg = { // subtrack config module.
         // NOTE: excluding sortOrder and showCfg which are special cases we don't care about in subCfg
         // Excluding views and subCBs because a {composite}_{subtrack} naming scheme may be used
         var compObjs = $('select,input').filter("[name^='"+subCfg.compositeName+"\\.'],[name^='"+subCfg.compositeName+"_']");
-        compObjs = $(compObjs).not(".viewDD,.subCB,.matCB");  // viewDD, subCB already done. matCB not needed!
+        // viewDD, subCB already done. non-abc matCBs not needed, as they shouldn't go to the cart.!
+        compObjs = $(compObjs).not(".viewDD,.subCB,.matCB:not(.abc)");
         if (compObjs.length > 0) {
             $(compObjs).each(function (i) {
                 if (this.type != 'hidden') {
