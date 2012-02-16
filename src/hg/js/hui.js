@@ -46,14 +46,14 @@ function _matSelectViewForSubTracks(obj,view)
                 var classesAbcChecked = new Array();
                 matCBs.filter(".abc").each( function (i) {
                     var classList = $( this ).attr("class").split(" ");
-                    classesAbcChecked.push( aryRemove(classList,["matCB","disabled","abc"]) );
+                    classesAbcChecked.push( aryRemove(classList,["matCB","changed","disabled","abc"]) );
                 });
 
                 // Walk through checked non-ABC matCBs and sheck related subCBs
                 var subCBs = $("input.subCB").filter("."+view).not(":checked");
                 matCBs.not(".abc").each( function (i) {
                     var classList = $( this ).attr("class").split(" ");
-                    classList = aryRemove(classList,["matCB","disabled"]);
+                    classList = aryRemove(classList,["matCB","changed","disabled"]);
                     var subCBsMatching = objsFilterByClasses(subCBs,"and",classList);
                     if (classesAbcChecked.length>0)
                         subCBsMatching = objsFilterByClasses(subCBsMatching,"or",classesAbcChecked);
@@ -145,7 +145,7 @@ function matCbClick(matCB)
 
     var classList = $( matCB ).attr("class").split(" ");
     var isABC = (aryFind(classList,"abc") != -1);
-    classList = aryRemove(classList,["matCB","disabled","abc"]);
+    classList = aryRemove(classList,["matCB","changed","disabled","abc"]);
     if(classList.length == 0 )
        matSubCBsCheck(matCB.checked);
     else if(classList.length == 1 )
@@ -268,7 +268,7 @@ function matSubCBsCheck(state)
             matXY = $( matXY ).filter(":checked");
             for(var mIx=0;mIx<matXY.length;mIx++) {
                 var classes = $(matXY[mIx]).attr("class").split(' ');
-                classes = aryRemove(classes,["matCB","disabled"]);
+                classes = aryRemove(classes,["matCB","changed","disabled"]);
                 $( subCBs ).filter('.'+classes.join(".")).each( function (i) { matSubCBcheckOne(this,state); });
             }
         }
@@ -349,7 +349,7 @@ function matChkBoxNormalize(matCB)
     var isABC = (aryFind(classList,"abc") != -1);
     if(isABC)
         alert("ASSERT: matChkBoxNormalize() called for dim ABC!");
-    classList = aryRemove(classList,["matCB","disabled"]);
+    classList = aryRemove(classList,["matCB","changed","disabled"]);
 
     var classes = '.' + classList.join(".");// created string filter of classes converting "matCB K562 H3K4me1" as ".K562.H3K4me1"
     var subCBs = $("input.subCB").filter(classes); // All subtrack CBs that match matrix CB
@@ -483,7 +483,7 @@ function matAbcCBclasses(wantSelected)
         }
         $(abcCBs).each( function (i) {
             var classList = $( this ).attr("class").split(" ");
-            classList = aryRemove(classList,["matCB","abc"]);
+            classList = aryRemove(classList,["matCB","changed","disabled","abc"]);
             classes.push( classList[0] );
         });
     } else { // No abcCBs so look for filterBox classes
@@ -799,7 +799,7 @@ function matCbFilterClasses(matCb,joinThem)
 { // returns the var associated with a filterComp
 
     var classes = $( matCb ).attr("class").split(" ");
-    classes = aryRemove(classes,["matCB","disabled","abc"]);
+    classes = aryRemove(classes,["matCB","changed","disabled","abc"]);
     if (joinThem)
         return '.' + classes.join('.');
     return classes;
