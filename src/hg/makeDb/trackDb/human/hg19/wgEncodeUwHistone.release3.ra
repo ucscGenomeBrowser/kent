@@ -60,8 +60,9 @@ subGroup3 treatment Treatment aNone=None DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_
 subGroup4 factor Factor H3K04ME3=H3K4me3 H3K27ME3=H3K27ME3 H3K36ME3=H3K36ME3 zInput=Input
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
-dimensionZchecked rep1,rep2
+#dimensionZchecked rep1,rep2
 sortOrder cellType=+ factor=+ rep=+ view=+
+filterComposite dimZ=multi
 fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View controlId=Control_ID origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
