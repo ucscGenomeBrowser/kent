@@ -1587,6 +1587,11 @@ identifier kgOldId
     hg17.kgOld.name dupeOk
     hg17.kgXrefOld.kgId  minCheck=.95
 
+identifier rn4KgPrevious
+"rn4 knownGenePrevious was knownGene"
+    rn4.knownGenePrevious.name dupeOk
+    rn4.kgXrefPrevious.kgId
+
 identifier knownGeneId dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
