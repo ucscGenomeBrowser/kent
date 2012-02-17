@@ -17,7 +17,6 @@ use DBI;
 use File::Basename;
 use vars qw(@ISA @EXPORT_OK);
 use Exporter;
-use FileHandle;
 
 
 @ISA = qw(Exporter);
@@ -26,7 +25,7 @@ sub processInclude {
 
     my $include = $_[0];
     my $ref = $_[1];
-    my $profile = $_[0];
+    my $profile = $_[2];
     my $currentDir = `pwd`;
     chomp $currentDir;
     my($filename, $newDir) = fileparse($include);
