@@ -2583,6 +2583,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-24
 dateUnrestricted 2012-10-24
+dccAccession wgEncodeEH000315
+expId 315
 fileName wgEncodeHaibRnaSeqJurkatAlnRep1V2.bam,wgEncodeHaibRnaSeqJurkatAlnRep1V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -2688,6 +2690,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-24
 dateUnrestricted 2012-10-24
+dccAccession wgEncodeEH000315
+expId 315
 fileName wgEncodeHaibRnaSeqJurkatRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -4305,6 +4309,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-10
 dateUnrestricted 2012-11-09
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87AlnRep1V2.bam,wgEncodeHaibRnaSeqU87AlnRep1V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -4360,6 +4366,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-10
 dateUnrestricted 2012-11-09
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87AlnRep2V2.bam,wgEncodeHaibRnaSeqU87AlnRep2V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -4414,6 +4422,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-21
 dateUnrestricted 2012-10-20
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87RawDataRep1V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -4467,6 +4477,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-21
 dateUnrestricted 2012-10-20
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87RawDataRep2V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -4521,6 +4533,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-10
 dateUnrestricted 2012-11-09
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87RawRep1V2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -4576,6 +4590,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-10
 dateUnrestricted 2012-11-09
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87RawRep2V2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -4630,6 +4646,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-21
 dateUnrestricted 2012-10-20
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87TranscriptGencV7Rep1V2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -4683,6 +4701,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-21
 dateUnrestricted 2012-10-20
+dccAccession wgEncodeEH001253
+expId 1253
 fileName wgEncodeHaibRnaSeqU87TranscriptGencV7Rep2V2.gtf.gz
 grant Myers
 lab HudsonAlpha
@@ -4700,4 +4720,4 @@ submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex original
 treatment None
 view TranscriptGencV7
 
-# MAGIC: -538448064
+# MAGIC: 1886456366
