@@ -4,6 +4,7 @@ composite wgEncodeCshlShortRnaSeq
 expVars lab,dataType,cell,localization,protocol,rnaExtract
 geoSeriesAccession GSE24565
 origAssembly hg19
+readType 1x36
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1
 objType table
@@ -85,6 +86,7 @@ md5sum 132c9f971c96da17baf3ea7000ccb7fe
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4478
@@ -112,6 +114,7 @@ md5sum 47c72ed0cdab185322dcb5319eddfbcf
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4478
@@ -251,6 +254,7 @@ lab CSHL
 labExpId LID20749
 localization cell
 md5sum 056f6f8db8c5ca943b165959073d71e5
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -278,6 +282,7 @@ lab CSHL
 labExpId LID20750
 localization cell
 md5sum 12ffe7ecfbc7905f7cc5998666e3bceb
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -423,6 +428,7 @@ md5sum 991f8ebf67ccd5c4a0d3b8835266106f
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4488
@@ -450,6 +456,7 @@ md5sum d6e76e3be0c10faacc3ce69d167f3952
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4488
@@ -589,6 +596,7 @@ lab CSHL
 labExpId LID20745
 localization cell
 md5sum 2bdc75489eac5f2e7dea7c1024a3d031
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -616,6 +624,7 @@ lab CSHL
 labExpId LID20746
 localization cell
 md5sum 005d7914d595585c39e205d92e326c5f
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -761,6 +770,7 @@ md5sum 9aeea081cb023a364989bb2fd3944aed
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4474
@@ -788,6 +798,7 @@ md5sum 93e865c8d5babba78f233ad73fed851d
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4474
@@ -927,6 +938,7 @@ lab CSHL
 labExpId LID20909
 localization cell
 md5sum 72901d5d6411427c566c57f653f75898
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -954,6 +966,7 @@ lab CSHL
 labExpId LID20910
 localization cell
 md5sum 90644f5245674b449c7df27b28c9350e
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -1241,6 +1254,7 @@ md5sum 82317bda303c278337deaa46715bb166
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4482
@@ -1268,6 +1282,7 @@ md5sum ecb360155d1dcd894b8cefaa78652bf3
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4482
@@ -1407,6 +1422,7 @@ lab CSHL
 labExpId LID20899
 localization cell
 md5sum ab3276ec86aa6974d8656d40a7c7ef02
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -1434,6 +1450,7 @@ lab CSHL
 labExpId LID20902
 localization cell
 md5sum 46aabee1a87d338b2f7581f1260b73d9
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -1727,6 +1744,7 @@ md5sum 8767b294072074498488045c881058ce
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4489
@@ -1754,6 +1772,7 @@ md5sum b3e4bf177ec4d02b548464a4f2e3d45f
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4489
@@ -1893,6 +1912,7 @@ lab CSHL
 labExpId LID20901
 localization cytosol
 md5sum 815de8d674105a09ee4b126db350d3b5
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -1920,6 +1940,7 @@ lab CSHL
 labExpId LID20904
 localization cytosol
 md5sum c153d5a3c0fa9b56e17f1065d5cd3da7
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -2213,6 +2234,7 @@ md5sum 5a0210832fb59ea929b588eefb276672
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4477
@@ -2240,6 +2262,7 @@ md5sum 1f9ac70bbb56b4836f727535934e1975
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4477
@@ -2379,6 +2402,7 @@ lab CSHL
 labExpId LID20900
 localization nucleus
 md5sum 9a7631dfa386f86a5ac443bfbfa138b8
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -2406,6 +2430,7 @@ lab CSHL
 labExpId LID20903
 localization nucleus
 md5sum 7e64919241ec856776a45951e37ca1f7
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -2551,6 +2576,7 @@ md5sum 58e33cc66e8ff9414f92fdaf58781885
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4485
@@ -2578,6 +2604,7 @@ md5sum b7915f6c1f4f1832bbc23715c888d01f
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4485
@@ -2717,6 +2744,7 @@ lab CSHL
 labExpId LID20905
 localization cell
 md5sum b6575c80c5f694912261bedb10a1ec21
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -2744,6 +2772,7 @@ lab CSHL
 labExpId LID20906
 localization cell
 md5sum 97f2034c4c3d57c7abe4ce72fba75651
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -2861,6 +2890,7 @@ md5sum f3ec5c1af5742e8c68b6a73ecdebfa4c
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4495
@@ -2889,6 +2919,7 @@ md5sum 3f17c0c427a08e4308e314655d037ccb
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4495
@@ -3032,6 +3063,7 @@ md5sum 1fc71d7535e93b09b16d8ed675ebc2f0
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4496
@@ -3060,6 +3092,7 @@ md5sum 6fd7e6b3c821057ec1f2c159f6eb845f
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4496
@@ -3141,6 +3174,7 @@ lab CSHL
 labExpId LID20907
 localization nucleus
 md5sum 51daca410714ecb7423e60fbd1a7c090
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3258,6 +3292,7 @@ md5sum fa92606bb88a35030ad5c7d760232e65
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4486
@@ -3285,6 +3320,7 @@ md5sum dec20cad92d74f7c44ed4d6ea4ba80f3
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4486
@@ -3424,6 +3460,7 @@ lab CSHL
 labExpId LID21143
 localization cell
 md5sum 898e443771f88df2800e63a93c5cfb0a
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3451,6 +3488,7 @@ lab CSHL
 labExpId LID21146
 localization cell
 md5sum 79a434aa03ef698ee661aebfb5a45a1b
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3596,6 +3634,7 @@ md5sum 88afb3b1799e36557547c9f43c6f8eb2
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4487
@@ -3623,6 +3662,7 @@ md5sum 8720b5fa41a309297deb9cc539dbcc7a
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4487
@@ -3762,6 +3802,7 @@ lab CSHL
 labExpId LID21145
 localization cytosol
 md5sum 97a388e1ce60be1945a7abae630c88e3
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3789,6 +3830,7 @@ lab CSHL
 labExpId LID21148
 localization cytosol
 md5sum ba8502e48be3c7823bc327084864505b
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -3934,6 +3976,7 @@ md5sum 60e84fbd8031bd215e7d8103b2197dec
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4470
@@ -3961,6 +4004,7 @@ md5sum d801e25952c2bbaa88f79a6f2ee95b6d
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4470
@@ -4100,6 +4144,7 @@ lab CSHL
 labExpId LID21144
 localization nucleus
 md5sum bcf25fe06918736cf99458fd6ce5e03d
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4127,6 +4172,7 @@ lab CSHL
 labExpId LID21147
 localization nucleus
 md5sum 4869b33064efb54ae8d3c9b6aa90aba4
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -4272,6 +4318,7 @@ md5sum e0c22ab8dfd7c994e939be5e6c6fb633
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4479
@@ -4299,6 +4346,7 @@ md5sum 11308f834bc398b2796c05d84f5e0917
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4479
@@ -4497,6 +4545,7 @@ md5sum 69c21e124de6a69cfb235e6d5aeac352,f8e7923c6fdf1c566c4d8f2fab5f22d9
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 4061
@@ -4554,6 +4603,7 @@ md5sum e3ba859e03d02e26bde7abd8219c695f
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4484
@@ -4581,6 +4631,7 @@ md5sum 71b0fe60cf3d5e604f6c97ad1e44ab72
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4484
@@ -4607,6 +4658,7 @@ md5sum 4628897166af37d289a406149a948623
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 4061
@@ -4663,6 +4715,7 @@ md5sum e9ef426eecda2c6a0be73caea68c25e5
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 4061
@@ -4719,6 +4772,7 @@ md5sum 88abb3392192592ea8ce04dabd9eb221
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 4061
@@ -4832,6 +4886,7 @@ md5sum f1243aee2df502cd7ec8b177ba94e5c0
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4480
@@ -4859,6 +4914,7 @@ md5sum 9d4e5af3ce150589f057ec364acd3a7f
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4480
@@ -5116,6 +5172,7 @@ md5sum 9e2a283ebb77a8685de4a3b0cea95c75
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4475
@@ -5143,6 +5200,7 @@ md5sum 672a54c83780a160aa72362283199787
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4475
@@ -5282,6 +5340,7 @@ lab CSHL
 labExpId LID21056
 localization nucleus
 md5sum e572f81f55c3ca0419a023bd438bc6c4
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5309,6 +5368,7 @@ lab CSHL
 labExpId LID21058
 localization nucleus
 md5sum 64068fd361ad8d0d2169f3b43dbed7bb
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5770,6 +5830,7 @@ lab CSHL
 labExpId LID10567
 localization cell
 md5sum 7c62b99d1f374488238f3705f8103f18
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5797,6 +5858,7 @@ lab CSHL
 labExpId LID10568
 localization cell
 md5sum 75422d1590238057aed56e639e4e423b
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6090,6 +6152,7 @@ md5sum fc52c70a1136cf55987080e026468551
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4476
@@ -6117,6 +6180,7 @@ md5sum 3b56c3b4f10c128458c0bda30438597f
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4476
@@ -6522,6 +6586,7 @@ md5sum 9209ff689d1f62487a6210afc0bed839
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4493
@@ -6549,6 +6614,7 @@ md5sum 8faebd571ecacaea9a8ebafd6f8824f9
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4493
@@ -6688,6 +6754,7 @@ lab CSHL
 labExpId LID10572
 localization cytosol
 md5sum 725654f55054db59a620c61392020e17
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -6715,6 +6782,7 @@ lab CSHL
 labExpId LID10571
 localization cytosol
 md5sum 13d393cadd13f2ddae9d9f664c5589ff
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -7008,6 +7076,7 @@ md5sum 6e39fecf670f81058fe63c4dac7941d8
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4481
@@ -7035,6 +7104,7 @@ md5sum 16e37beddb6a8d43426a1d646d95bb9e
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4481
@@ -7440,6 +7510,7 @@ md5sum 8d9bcf4f8c0a71d8a136a1f481e13bd9
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4494
@@ -7467,6 +7538,7 @@ md5sum fa3c27ef7846dae19b90a3642c2cb600
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4494
@@ -7872,6 +7944,7 @@ md5sum 7b80f1ac3518f3664d4cc1e5c283a4e0
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4490
@@ -7899,6 +7972,7 @@ md5sum ee64e445a0f98c4b6a8391d6cd9a9aa3
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4490
@@ -8038,6 +8112,7 @@ lab CSHL
 labExpId LID10570
 localization nucleus
 md5sum 8f77463de47ac2d3afefc8aef66540fa
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8065,6 +8140,7 @@ lab CSHL
 labExpId LID10569
 localization nucleus
 md5sum 6adb3566110ad25a8442b7470b6ab93d
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8295,6 +8371,7 @@ md5sum 5c5c105b1f11a73199337f0aa0495964
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4491
@@ -8380,6 +8457,7 @@ md5sum bb9edaf056aa0c5c412c7284ffd28a9f
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4491
@@ -8520,6 +8598,7 @@ lab CSHL
 labExpId LID20743
 localization cell
 md5sum af4c1f86cd8e1853103cc79f6c975887
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8547,6 +8626,7 @@ lab CSHL
 labExpId LID20744
 localization cell
 md5sum 991aa559ccec29b6d3a23407b5add05e
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8692,6 +8772,7 @@ md5sum d0af9d62c5690158f7fc413a50d3e121
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4472
@@ -8719,6 +8800,7 @@ md5sum 86221a4263bc19708058ec39e990ff9b
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4472
@@ -8858,6 +8940,7 @@ lab CSHL
 labExpId LID20999
 localization cell
 md5sum 41b637907fedafb918a7f289fe13107b
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -8885,6 +8968,7 @@ lab CSHL
 labExpId LID21000
 localization cell
 md5sum e066dc37eae75a0c293044fbe878b599
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9030,6 +9114,7 @@ md5sum 0aa2ccb251b6b8daa3c0f9c0b936f4c6
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4469
@@ -9057,6 +9142,7 @@ md5sum dc206f3ab00485e7fd9659c376981e8b
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4469
@@ -9196,6 +9282,7 @@ lab CSHL
 labExpId LID21002
 localization cytosol
 md5sum 62b5d06ed893cfd5bf2b70e565f317e8
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9223,6 +9310,7 @@ lab CSHL
 labExpId LID21004
 localization cytosol
 md5sum 45ca9ad813b9c291ebeb31589d7d6fb1
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9368,6 +9456,7 @@ md5sum 1dd783bbfcf1dc60bab89f72ba90f9f6
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4492
@@ -9395,6 +9484,7 @@ md5sum 7c4ab7c6178ec276264cc459ae2c0558
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4492
@@ -9534,6 +9624,7 @@ lab CSHL
 labExpId LID21001
 localization nucleus
 md5sum 0fbb145eec88cbe6028ae6f787dd9b15
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9561,6 +9652,7 @@ lab CSHL
 labExpId LID21003
 localization nucleus
 md5sum 9c80675c45ec42866dfae3ef6d252929
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -9791,6 +9883,7 @@ md5sum 5cadbe1fc66d9ae3f761c1d790f02d15,f0b7aa64a574189b47c640142d077b30
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 3376
@@ -9848,6 +9941,7 @@ md5sum cfc763c1c3e0733e4b198094d1b31438
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4471
@@ -9875,6 +9969,7 @@ md5sum bdf7c62de15dd40edeaafc705ea498f3
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4471
@@ -9901,6 +9996,7 @@ md5sum 82c83d331341e068b130f7e142ee1a69
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 3376
@@ -9957,6 +10053,7 @@ md5sum b1f6556ea8d2922511c5a3e2126787ef
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 3376
@@ -10010,6 +10107,7 @@ lab CSHL
 labExpId LID20747
 localization cell
 md5sum 10a126dd3b95b8011132005d2b3c205c
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -10037,6 +10135,7 @@ lab CSHL
 labExpId LID20748
 localization cell
 md5sum 4c08caaef8a04cbda0c569b21dd7c666
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -10067,6 +10166,7 @@ md5sum aca2e59982611d4a7dff78c742e72301
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 3376
@@ -10100,4 +10200,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1120002267
+# MAGIC: -280036314
