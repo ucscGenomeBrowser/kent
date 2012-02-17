@@ -81,51 +81,8 @@ foreach my $id (@ids){
 		$id =~ s/PMC//;
 	}
 	my $url = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=$db&id=$id";
-	#&retmode=$retmode";
 	my $response = $browser->get($url, 'Accept-Charset' => 'utf8');
 	my $wwwget = $response->content;
-	#$wwwget = decode('utf8', $wwwget);
-# 	$wwwget =~ m/(at the.*Exons)/;
-# 	my @letters = split(//,$1);
-# 	foreach my $letter (@letters){
-# 		my $ord = codepoint_hex($letter);
-# 		
-# 		print "$letter = $ord\n";
-# 	}
-	
-	
-	
-	#$wwwget =~ s/\x{8242}/AF/g;
-	#$wwwget = encode('utf8', $wwwget);
-	
-#	my @lines = split /</, $wwwget;
-# 	my $tabcount = 0;
-# 	shift @lines;
-# 	my $tabs = "";
-# 	foreach my $line (@lines) {
-# 		$line = "<". $line;
-# 		chomp $line;
-# #		print "line = $line\n";
-# 		
-# 		if ($line =~ m/^<[^\/]/){
-# 			$tabcount++;
-# 			$line =~ s/\>/\>\n$tabs   \t/;
-# 		}
-# 		$tabs = "";
-# 		for (my $i = 0; $i < $tabcount; $i++) {
-# 			$tabs = $tabs . " ";
-# 		
-# 		}
-# 		
-# 		
-# 		while (chomp $line){};
-# 		print "$tabs". "$line\n";
-# 		#print "tabcount = $tabcount\n";
-# 		if ($line =~ m/^<\//){
-# 			$tabcount--;
-# 		}
-# 	}
-	#print "wwwget = $wwwget\n";
 	unless ($wwwget) {
 		print "Can't find pubmed ID: $id\n";
 		next
@@ -137,22 +94,12 @@ foreach my $id (@ids){
 	my $ref;
 
 	if ($db eq "Pubmed"){
-		#print "here1\n";
 		$ref = &getPubMedInfo($wwwget, $id);
 	}
 	else {
-		#print "here2\n";
 		$ref = &getPubMedCentralInfo($wwwget, $id);
 	}
 	my $writestr = $ref->[1];
-	#my $octets = decode("utf", $ref->[1]);
-	#print "octets = $octets\n";
-	#from_to($octets, "iso-8859-1", "utf-8");
-	#$octets = encode("iso-8859-1", $ref->[1]);
-	#my $is;
-	#if ($ref->[1] =~ m/ä/){$is = 1};
-	#print "is = $is\n";
-	#print "octets2 = $octets\n";
 	
 	foreach my $char (keys %htmlconv){
 		$writestr =~ s/$char/$htmlconv{$char}/g;
@@ -165,12 +112,6 @@ foreach my $id (@ids){
 foreach my $key (sort {$a cmp $b} keys %articles){
 	print "$articles{$key}\n";
 
-}
-#my @listenc = Encode->encodings();
-#browse(\@listenc);
-
-sub codepoint_hex {
-    sprintf "%04x", ord Encode::decode("UTF-8", shift);
 }
 
 sub filterChars{
@@ -185,7 +126,7 @@ sub filterChars{
 
 
 }
-my $authorcount = 0;
+
 sub getPubMedInfo {
 
 
