@@ -4299,6 +4299,7 @@ fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep1.bam,wgEncodeSydhTfbs
 grant Snyder
 lab Yale-m
 md5sum 51ad9018735826652a01cbd9a672cb12,9751e3baa0bb432022c93197c43ac64e
+objStatus replaced - This experiment has been replaced with experiment wgEncodeEMXXXXX
 project wgEncode
 replicate 1
 setType exp
@@ -4326,6 +4327,7 @@ fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleAlnRep2.bam,wgEncodeSydhTfbs
 grant Snyder
 lab Yale-m
 md5sum 5d9477681b74ce084cdc988bd9bf285d,571e7467a2fa8db0069f522173079b37
+objStatus replaced - This experiment has been replaced with experiment wgEncodeEMXXXXX
 project wgEncode
 replicate 2
 setType exp
@@ -4355,6 +4357,7 @@ grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
 md5sum b7dd0d00ac1544d8e544efab311a9b23
+objStatus replaced - This experiment has been replaced with experiment wgEncodeEMXXXXX
 project wgEncode
 setType exp
 sex M
@@ -4382,6 +4385,7 @@ fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleRawDataRep1.fastq.gz
 grant Snyder
 lab Yale-m
 md5sum d252e261caeb8f30071e10a99c846eee
+objStatus replaced - This experiment has been replaced with experiment wgEncodeEMXXXXX
 project wgEncode
 replicate 1
 setType exp
@@ -4409,6 +4413,7 @@ fileName wgEncodeSydhTfbsMelCtcfsc15914Dm2p5dIggyaleRawDataRep2.fastq.gz
 grant Snyder
 lab Yale-m
 md5sum 79e9f85d895dd27c4e8d442d53153324
+objStatus replaced - This experiment has been replaced with experiment wgEncodeEMXXXXX
 project wgEncode
 replicate 2
 setType exp
@@ -4437,6 +4442,7 @@ grant Snyder
 lab Yale-m
 labVersion PeakSeq1.0
 md5sum 7ca7e8b2432436ffdbd393adf63239e0
+objStatus replaced - This experiment has been replaced with experiment wgEncodeEMXXXXX
 project wgEncode
 setType exp
 sex M
@@ -8753,4 +8759,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggrabSig
 treatment None
 view Signal
 
-# MAGIC: -1491653952
+# MAGIC: 1746094798
