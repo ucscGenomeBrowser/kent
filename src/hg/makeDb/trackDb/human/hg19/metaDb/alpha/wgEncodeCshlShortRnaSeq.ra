@@ -4,6 +4,7 @@ composite wgEncodeCshlShortRnaSeq
 expVars lab,dataType,cell,localization,protocol,rnaExtract
 geoSeriesAccession GSE24565
 origAssembly hg19
+readType 1x36
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1
 objType table
@@ -11,7 +12,7 @@ bioRep 021WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH001740
@@ -21,7 +22,6 @@ fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep1.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID20749
-labProtocolId 021WCs
 localization cell
 md5sum d7e227b6da65127a37e13f4d00954bbe,b22fbec2d35b687588ae84ea1d238c4b
 origAssembly hg19
@@ -41,7 +41,7 @@ bioRep 022WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001740
@@ -51,7 +51,6 @@ fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapAlnRep2.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID20750
-labProtocolId 022WCs
 localization cell
 md5sum c5e1089ebbc3813538b430c870abab5c,c71a9d8f35612a85f5d75a62554a38a7
 origAssembly hg19
@@ -71,7 +70,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -81,12 +80,13 @@ fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID20749,LID20750
-labProtocolId 021WCs,022WCs
 labVersion iIDR
 localization cell
-md5sum 2c0cb1adc8649efc28ccf363de07ec95
+md5sum 132c9f971c96da17baf3ea7000ccb7fe
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4478
@@ -99,7 +99,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001740
@@ -108,12 +108,13 @@ fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20749,LID20750
-labProtocolId 021WCs,022WCs
 labVersion iIDR
 localization cell
-md5sum e7a31e4926c91e9da101a023a484770c
+md5sum 47c72ed0cdab185322dcb5319eddfbcf
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4478
@@ -125,7 +126,7 @@ bioRep 021WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH001740
@@ -135,7 +136,6 @@ fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20749
-labProtocolId 021WCs
 localization cell
 md5sum 078889d783147b1967c91983268f18e7
 origAssembly hg19
@@ -155,7 +155,7 @@ bioRep 022WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001740
@@ -165,7 +165,6 @@ fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20750
-labProtocolId 022WCs
 localization cell
 md5sum 8d79aaa994c670e1cfeebf6acb3e6d09
 origAssembly hg19
@@ -185,7 +184,7 @@ bioRep 021WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH001740
@@ -195,7 +194,6 @@ fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20749
-labProtocolId 021WCs
 localization cell
 md5sum aa6e2314d0bcbaee8dbfb5160525ba67
 origAssembly hg19
@@ -215,7 +213,7 @@ bioRep 022WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001740
@@ -225,7 +223,6 @@ fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20750
-labProtocolId 022WCs
 localization cell
 md5sum e0f8ca4ba5a4ca6df43badf72be2563f
 origAssembly hg19
@@ -239,13 +236,69 @@ subId 4059
 tableName wgEncodeCshlShortRnaSeqA549CellShorttotalTapPlusRawRep2
 view PlusRawSignal
 
+metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep1
+objType file
+bioRep 021WC
+cell A549
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-02-09
+dccAccession wgEncodeEH001740
+dccRep 1
+expId 1740
+fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20749
+localization cell
+md5sum 056f6f8db8c5ca943b165959073d71e5
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5703
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep2
+objType file
+bioRep 022WC
+cell A549
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-02-11
+dccAccession wgEncodeEH001740
+dccRep 2
+expId 1740
+fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20750
+localization cell
+md5sum 12ffe7ecfbc7905f7cc5998666e3bceb
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5690
+view Protocol
+
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalTapRawDataRep1
 objType file
 bioRep 021WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-09
 dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH001740
@@ -255,9 +308,8 @@ fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20749
-labProtocolId 021WCs
 localization cell
-md5sum c187c7a9eabc41a1ab6e6cb248ec41f9
+md5sum c46483d72ea1793d613c7ddb829648f2
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -274,7 +326,7 @@ bioRep 022WC
 cell A549
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001740
@@ -284,9 +336,8 @@ fileName wgEncodeCshlShortRnaSeqA549CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20750
-labProtocolId 022WCs
 localization cell
-md5sum 871f17431b64fcd2944995e01db1ba56
+md5sum e80075b80e37905285234d584ca256b8
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -313,7 +364,6 @@ fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep1.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID20745
-labProtocolId 017WCs
 localization cell
 md5sum 037b138f43f920f809ad501447d1d3d8,40f01c0d6853a85013477664a43b519e
 origAssembly hg19
@@ -343,7 +393,6 @@ fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapAlnRep2.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID20746
-labProtocolId 018WCs
 localization cell
 md5sum 52e5e21990c255f31ca59085bfc9d449,b8877b581864cf7b082f5bb5b2931714
 origAssembly hg19
@@ -363,7 +412,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -373,12 +422,13 @@ fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapContigs.bedRnaElements.g
 grant Gingeras
 lab CSHL
 labExpId LID20745,LID20746
-labProtocolId 017WCs,018WCs
 labVersion iIDR
 localization cell
-md5sum b10dfe6f6ca0b0cc1bc064e709979086
+md5sum 991f8ebf67ccd5c4a0d3b8835266106f
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4488
@@ -391,7 +441,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001081
@@ -400,12 +450,13 @@ fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20745,LID20746
-labProtocolId 017WCs,018WCs
 labVersion iIDR
 localization cell
-md5sum 054d32f8bb429cd23645407c617d0e8e
+md5sum d6e76e3be0c10faacc3ce69d167f3952
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4488
@@ -427,7 +478,6 @@ fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20745
-labProtocolId 017WCs
 localization cell
 md5sum 209d292b3f189583c4c3a766e0cfb3cc
 origAssembly hg19
@@ -457,7 +507,6 @@ fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20746
-labProtocolId 018WCs
 localization cell
 md5sum 74d77389d610696cf9ccf093c5df921e
 origAssembly hg19
@@ -487,7 +536,6 @@ fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20745
-labProtocolId 017WCs
 localization cell
 md5sum edfa6744c8883f22aebf9e3eb950b21e
 origAssembly hg19
@@ -517,7 +565,6 @@ fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20746
-labProtocolId 018WCs
 localization cell
 md5sum 3359dba672da5f6fad1cd2d33045a372
 origAssembly hg19
@@ -530,6 +577,62 @@ seqPlatform Illumina_GA2x
 subId 3336
 tableName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapProtocolRep1
+objType file
+bioRep 017WC
+cell AG04450
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001081
+dccRep 1
+expId 1081
+fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20745
+localization cell
+md5sum 2bdc75489eac5f2e7dea7c1024a3d031
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5715
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapProtocolRep2
+objType file
+bioRep 018WC
+cell AG04450
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001081
+dccRep 2
+expId 1081
+fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20746
+localization cell
+md5sum 005d7914d595585c39e205d92e326c5f
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5707
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapRawDataRep1
 objType file
@@ -547,9 +650,8 @@ fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20745
-labProtocolId 017WCs
 localization cell
-md5sum 932512f3a720a394be55d4751585a4b8
+md5sum 01b2f0206db86547eccddbdcead616f4
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -576,9 +678,8 @@ fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20746
-labProtocolId 018WCs
 localization cell
-md5sum 4da84f2cec6c9987d116f42f94839809
+md5sum 706d39a25612e65f3d97ec671d47c1eb
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -605,7 +706,6 @@ fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep1.bam,wgEncodeCshlShort
 grant Gingeras
 lab CSHL
 labExpId LID20909
-labProtocolId 037WCs
 localization cell
 md5sum 37b9f5f7941794ae15d5d77bb928c3f7,e763a2872fcb77584ea602ba852a5890
 origAssembly hg19
@@ -635,7 +735,6 @@ fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapAlnRep2.bam,wgEncodeCshlShort
 grant Gingeras
 lab CSHL
 labExpId LID20910
-labProtocolId 038WCs
 localization cell
 md5sum c2ae5eab4f1100b16b035f771d7c89c4,b7dc6f376373490ce27dbc0fcdd7b81e
 origAssembly hg19
@@ -655,7 +754,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -665,12 +764,13 @@ fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID20909,LID20910
-labProtocolId 037WCs,038WCs
 labVersion iIDR
 localization cell
-md5sum 07421fd007df817e19f7ba67c31fef07
+md5sum 9aeea081cb023a364989bb2fd3944aed
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4474
@@ -683,7 +783,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001079
@@ -692,12 +792,13 @@ fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20909,LID20910
-labProtocolId 037WCs,038WCs
 labVersion iIDR
 localization cell
-md5sum 3edda97c80b3f9149dc5db6678c03727
+md5sum 93e865c8d5babba78f233ad73fed851d
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4474
@@ -719,7 +820,6 @@ fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20909
-labProtocolId 037WCs
 localization cell
 md5sum 48256f7699401a458862fb4070737029
 origAssembly hg19
@@ -749,7 +849,6 @@ fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20910
-labProtocolId 038WCs
 localization cell
 md5sum 9404df46696fe113bab5fe0949a92732
 origAssembly hg19
@@ -779,7 +878,6 @@ fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20909
-labProtocolId 037WCs
 localization cell
 md5sum 9b8fbd762726e01b7d8b9c6665331133
 origAssembly hg19
@@ -809,7 +907,6 @@ fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20910
-labProtocolId 038WCs
 localization cell
 md5sum cace71c4c83f23b7a79e93fb26d9afa1
 origAssembly hg19
@@ -822,6 +919,62 @@ seqPlatform Illumina_GA2x
 subId 3293
 tableName wgEncodeCshlShortRnaSeqBjCellShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapProtocolRep1
+objType file
+bioRep 037WC
+cell BJ
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001079
+dccRep 1
+expId 1079
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20909
+localization cell
+md5sum 72901d5d6411427c566c57f653f75898
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5717
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapProtocolRep2
+objType file
+bioRep 038WC
+cell BJ
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001079
+dccRep 2
+expId 1079
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20910
+localization cell
+md5sum 90644f5245674b449c7df27b28c9350e
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5685
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalTapRawDataRep1
 objType file
@@ -839,9 +992,8 @@ fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20909
-labProtocolId 037WCs
 localization cell
-md5sum 092693a7a89182398f70093f3e43c820
+md5sum ab3568167cb4ce3d28d77f7ceafb6d98
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -868,9 +1020,8 @@ fileName wgEncodeCshlShortRnaSeqBjCellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20910
-labProtocolId 038WCs
 localization cell
-md5sum 8d8b3c9d6c68584d0f9d0b205f591d3c
+md5sum 5e9eb2745e344a3cde79f9fcdcf1bb3e
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -924,7 +1075,6 @@ geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
 labExpId crg-2
-labProtocolId gen0101WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum 03df08790fe81801c7e4fea90777a788,2dbd19bdf1c4eb1cd79c48b6cfee3d6a
@@ -955,7 +1105,6 @@ geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
 labExpId crg-2
-labProtocolId gen0101WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum d7c07abdb1583cec226fa9902f26bdb2
@@ -986,7 +1135,6 @@ geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
 labExpId crg-2
-labProtocolId gen0101WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum e5461d01f6fc6ee96199bc861f75c30b
@@ -1016,7 +1164,6 @@ geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
 labExpId crg-2
-labProtocolId gen0101WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum 91cc9e599518719f89ecf51edd360954
@@ -1043,7 +1190,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapAlnRep1.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID20899
-labProtocolId 003WCs
 localization cell
 md5sum 26935ba53a77022957bb761f98a7791c,9fe72c813cbde82341860ce19aee4c4e
 origAssembly hg19
@@ -1073,7 +1219,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapAlnRep2.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID20902
-labProtocolId 004WCs
 localization cell
 md5sum 689d64234d0da419adb9f0471ce50950,a20e51205ec82a4aeb21527d48ed259f
 origAssembly hg19
@@ -1093,7 +1238,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -1103,12 +1248,13 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapContigs.bedRnaElements.g
 grant Gingeras
 lab CSHL
 labExpId LID20899,LID20902
-labProtocolId 003WCs,004WCs
 labVersion iIDR
 localization cell
-md5sum c0ead87e86d74524e04ee5f45b30e8ae
+md5sum 82317bda303c278337deaa46715bb166
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4482
@@ -1121,7 +1267,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000212
@@ -1130,12 +1276,13 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20899,LID20902
-labProtocolId 003WCs,004WCs
 labVersion iIDR
 localization cell
-md5sum 03eeeb27ff3cb27767426eaf4bdabac5
+md5sum ecb360155d1dcd894b8cefaa78652bf3
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4482
@@ -1157,7 +1304,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20899
-labProtocolId 003WCs
 localization cell
 md5sum 24710829d03156539f323530e398e0a3
 origAssembly hg19
@@ -1187,7 +1333,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20902
-labProtocolId 004WCs
 localization cell
 md5sum 143a411477be39cc3dda77db040b5191
 origAssembly hg19
@@ -1217,7 +1362,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20899
-labProtocolId 003WCs
 localization cell
 md5sum 2a38ce6feaf3e172f20dbd08a7ed41eb
 origAssembly hg19
@@ -1247,7 +1391,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20902
-labProtocolId 004WCs
 localization cell
 md5sum 1aba1dae749ba1eac22245c0486ba6ae
 origAssembly hg19
@@ -1260,6 +1403,62 @@ seqPlatform Illumina_GA2x
 subId 3304
 tableName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapProtocolRep1
+objType file
+bioRep 003WC
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000212
+dccRep 1
+expId 212
+fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20899
+localization cell
+md5sum ab3276ec86aa6974d8656d40a7c7ef02
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5698
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapProtocolRep2
+objType file
+bioRep 004WC
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000212
+dccRep 2
+expId 212
+fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20902
+localization cell
+md5sum 46aabee1a87d338b2f7581f1260b73d9
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5697
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapRawDataRep1
 objType file
@@ -1277,9 +1476,8 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20899
-labProtocolId 003WCs
 localization cell
-md5sum 021d7569bf160dcdda8c903a3bedb1b5
+md5sum b3e5e650aeca8f1050d16ca9525da622
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -1306,9 +1504,8 @@ fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20902
-labProtocolId 004WCs
 localization cell
-md5sum 24c7c2ff6fcdfeb3283ca7189ec6e696
+md5sum f7402929d9a8377b295171c22f33742e
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -1338,7 +1535,6 @@ geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
 labExpId crg-4
-labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 md5sum 5290526e35e0d92d9659e230324d9699,88c9193ef535b92265ba2c5a52cfbb95
@@ -1369,7 +1565,6 @@ geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
 labExpId crg-4
-labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 md5sum 32c9332abad1e6949d590e7f978fda74
@@ -1400,7 +1595,6 @@ geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
 labExpId crg-4
-labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 md5sum 7debeac04170a03e3e9f72d21a121b9d
@@ -1430,7 +1624,6 @@ geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
 labExpId crg-4
-labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 md5sum 91eb0b8e8e26d5b83cbd4af2d8312c46
@@ -1460,7 +1653,6 @@ geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
 labExpId crg-4
-labProtocolId gen0108Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 md5sum 95feaeb4c61dfc1c76c97d961425138b
@@ -1488,7 +1680,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapAlnRep1.bam,wgEncodeC
 grant Gingeras
 lab CSHL
 labExpId LID20901
-labProtocolId 003Cs
 localization cytosol
 md5sum 32e18ca6acd794dbbb9ce8cc1f986f10,2d3d34079adf8051249e50d1c025ebe8
 origAssembly hg19
@@ -1518,7 +1709,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapAlnRep2.bam,wgEncodeC
 grant Gingeras
 lab CSHL
 labExpId LID20904
-labProtocolId 004Cs
 localization cytosol
 md5sum e41f8dd0aaf9c019f6f1f055c8ea9952,f92da2727205c0a9135ae50a1953be59
 origAssembly hg19
@@ -1538,7 +1728,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -1548,12 +1738,13 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapContigs.bedRnaElement
 grant Gingeras
 lab CSHL
 labExpId LID20901,LID20904
-labProtocolId 003Cs,004Cs
 labVersion iIDR
 localization cytosol
-md5sum dd66a6a53746c73174e6c041bfc77b66
+md5sum 8767b294072074498488045c881058ce
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4489
@@ -1566,7 +1757,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000203
@@ -1575,12 +1766,13 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20901,LID20904
-labProtocolId 003Cs,004Cs
 labVersion iIDR
 localization cytosol
-md5sum 01ba4b69df9dc29b7d790d6da7b9691e
+md5sum b3e4bf177ec4d02b548464a4f2e3d45f
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4489
@@ -1602,7 +1794,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20901
-labProtocolId 003Cs
 localization cytosol
 md5sum 1b692145fbefb07ff3d2265dea52cd7b
 origAssembly hg19
@@ -1632,7 +1823,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20904
-labProtocolId 004Cs
 localization cytosol
 md5sum 9bd53d6a6b7fd37604a8161d6ee013a8
 origAssembly hg19
@@ -1662,7 +1852,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20901
-labProtocolId 003Cs
 localization cytosol
 md5sum 8af9e35cc9dc0c90df759ab5b64ecc0a
 origAssembly hg19
@@ -1692,7 +1881,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20904
-labProtocolId 004Cs
 localization cytosol
 md5sum 34b5b31fccea887efdc370650f481b0f
 origAssembly hg19
@@ -1705,6 +1893,62 @@ seqPlatform Illumina_GA2x
 subId 3307
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapProtocolRep1
+objType file
+bioRep 003C
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000203
+dccRep 1
+expId 203
+fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20901
+localization cytosol
+md5sum 815de8d674105a09ee4b126db350d3b5
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5682
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapProtocolRep2
+objType file
+bioRep 004C
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000203
+dccRep 2
+expId 203
+fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20904
+localization cytosol
+md5sum c153d5a3c0fa9b56e17f1065d5cd3da7
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5695
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapRawDataRep1
 objType file
@@ -1722,9 +1966,8 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20901
-labProtocolId 003Cs
 localization cytosol
-md5sum e8091229691cfa93165fe032e9c47e5f
+md5sum 53d0fa4292dbe046e2c471ea4261f94e
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -1751,9 +1994,8 @@ fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20904
-labProtocolId 004Cs
 localization cytosol
-md5sum 6c9fe6a32c762cb54a236969eacff364
+md5sum bff82a306cc96cb35dd764cd7f1b3b09
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -1783,7 +2025,6 @@ geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
 labExpId crg-6
-labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 md5sum d710bdf4ab5e03a5309e1783fb75c0df,94e066bc51ed7d73499ad8c63405557a
@@ -1814,7 +2055,6 @@ geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
 labExpId crg-6
-labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 md5sum 6663326e3102cf17b0d9ba4b08084512
@@ -1845,7 +2085,6 @@ geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
 labExpId crg-6
-labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 md5sum 2549445d3289d3666cf5f4c0adafd79c
@@ -1875,7 +2114,6 @@ geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
 labExpId crg-6
-labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 md5sum dc95979eb6e3937a47511cd7cb9b035a
@@ -1905,7 +2143,6 @@ geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
 labExpId crg-6
-labProtocolId gen0112Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 md5sum 35df1ca77cff34683b9baa6b2426b182
@@ -1933,7 +2170,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapAlnRep1.bam,wgEncodeC
 grant Gingeras
 lab CSHL
 labExpId LID20900
-labProtocolId 003Ns
 localization nucleus
 md5sum 302ca6e4b1ea53fbe1d3e68cf0a59670,eb0df8cc04baf79ed269e99a4d9bc972
 origAssembly hg19
@@ -1963,7 +2199,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapAlnRep2.bam,wgEncodeC
 grant Gingeras
 lab CSHL
 labExpId LID20903
-labProtocolId 004Ns
 localization nucleus
 md5sum 23650e6de625f0de1148522020e302c9,68df2dc58a3e36daf7ea15dce9fd97f9
 origAssembly hg19
@@ -1983,7 +2218,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -1993,12 +2228,13 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapContigs.bedRnaElement
 grant Gingeras
 lab CSHL
 labExpId LID20900,LID20903
-labProtocolId 003Ns,004Ns
 labVersion iIDR
 localization nucleus
-md5sum de0db382fa6e3d4e80d8eebf7f736817
+md5sum 5a0210832fb59ea929b588eefb276672
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4477
@@ -2011,7 +2247,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000204
@@ -2020,12 +2256,13 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20900,LID20903
-labProtocolId 003Ns,004Ns
 labVersion iIDR
 localization nucleus
-md5sum 4ca7d36d22fd1fdd2a950e283eeacfb6
+md5sum 1f9ac70bbb56b4836f727535934e1975
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4477
@@ -2047,7 +2284,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20900
-labProtocolId 003Ns
 localization nucleus
 md5sum ca6b72d62e5f9dfa415ce1f537fa7dd3
 origAssembly hg19
@@ -2077,7 +2313,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20903
-labProtocolId 004Ns
 localization nucleus
 md5sum e74bcdc8965d96a1de75625692083d13
 origAssembly hg19
@@ -2107,7 +2342,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20900
-labProtocolId 003Ns
 localization nucleus
 md5sum f7a6b19f4d7f77116c43692c6a16ade7
 origAssembly hg19
@@ -2137,7 +2371,6 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20903
-labProtocolId 004Ns
 localization nucleus
 md5sum 471ecceaac3018f1bd7cfabe77837878
 origAssembly hg19
@@ -2150,6 +2383,62 @@ seqPlatform Illumina_GA2x
 subId 3338
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapProtocolRep1
+objType file
+bioRep 003N
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000204
+dccRep 1
+expId 204
+fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20900
+localization nucleus
+md5sum 9a7631dfa386f86a5ac443bfbfa138b8
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5709
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapProtocolRep2
+objType file
+bioRep 004N
+cell GM12878
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH000204
+dccRep 2
+expId 204
+fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20903
+localization nucleus
+md5sum 7e64919241ec856776a45951e37ca1f7
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5696
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapRawDataRep1
 objType file
@@ -2167,9 +2456,8 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20900
-labProtocolId 003Ns
 localization nucleus
-md5sum 9e40acf9cb3c21a612db02c68c0ddd9a
+md5sum bc98249bb02a5e7e6fe6c6a2a608b197
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -2196,9 +2484,8 @@ fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20903
-labProtocolId 004Ns
 localization nucleus
-md5sum e2752fae40fd29384256239618902c25
+md5sum 1645e1c4b3ae9c3647b94d8e0d77efba
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -2225,7 +2512,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapAlnRep1.bam,wgEncodeCshlS
 grant Gingeras
 lab CSHL
 labExpId LID20905
-labProtocolId 005WCs
 localization cell
 md5sum f2599972fca418b1ce0ab702f38aebb0,20b8d76b4be3fe2735e77c3dd0469b35
 origAssembly hg19
@@ -2255,7 +2541,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapAlnRep2.bam,wgEncodeCshlS
 grant Gingeras
 lab CSHL
 labExpId LID20906
-labProtocolId 006WCs
 localization cell
 md5sum cc23a429bfe42213ae82c221514457b8,192a92b922959e8f9ddfe49c436aec7a
 origAssembly hg19
@@ -2275,7 +2560,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -2285,12 +2570,13 @@ fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID20905,LID20906
-labProtocolId 005WCs,006WCs
 labVersion iIDR
 localization cell
-md5sum 86bdcaf950e8d0d7ed549b1014fd444c
+md5sum 58e33cc66e8ff9414f92fdaf58781885
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4485
@@ -2303,7 +2589,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001082
@@ -2312,12 +2598,13 @@ fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20905,LID20906
-labProtocolId 005WCs,006WCs
 labVersion iIDR
 localization cell
-md5sum 8d43da7eb0d17dc8ea35e92135b0cf61
+md5sum b7915f6c1f4f1832bbc23715c888d01f
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4485
@@ -2339,7 +2626,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20905
-labProtocolId 005WCs
 localization cell
 md5sum 381ec3bdde95cf32cc2ef48dc2fe158d
 origAssembly hg19
@@ -2369,7 +2655,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20906
-labProtocolId 006WCs
 localization cell
 md5sum fd9ee3f60e44bffb35696496e7234bf8
 origAssembly hg19
@@ -2399,7 +2684,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20905
-labProtocolId 005WCs
 localization cell
 md5sum 876438b671af7d900f9d6c5351fdb7af
 origAssembly hg19
@@ -2429,7 +2713,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20906
-labProtocolId 006WCs
 localization cell
 md5sum f1761d3d65f33865bb86849a81cc5594
 origAssembly hg19
@@ -2442,6 +2725,62 @@ seqPlatform Illumina_GA2x
 subId 3341
 tableName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapProtocolRep1
+objType file
+bioRep 005WC
+cell H1-hESC
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001082
+dccRep 1
+expId 1082
+fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20905
+localization cell
+md5sum b6575c80c5f694912261bedb10a1ec21
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5714
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapProtocolRep2
+objType file
+bioRep 006WC
+cell H1-hESC
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001082
+dccRep 2
+expId 1082
+fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20906
+localization cell
+md5sum 97f2034c4c3d57c7abe4ce72fba75651
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5704
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapRawDataRep1
 objType file
@@ -2459,9 +2798,8 @@ fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20905
-labProtocolId 005WCs
 localization cell
-md5sum 528f2c585658352e58ab095c532eb701
+md5sum 1dce5cd6d0e7f7db15d2a24c7b302773
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -2488,9 +2826,8 @@ fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20906
-labProtocolId 006WCs
 localization cell
-md5sum b3de5669132be7433d739c2c7ef2ceaf
+md5sum 6a25b6692785467ed6d4f07b650c981d
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -2517,7 +2854,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2.bam,wgEncodeCs
 grant Gingeras
 lab CSHL
 labExpId LID20908
-labProtocolId 006Cs
 localization cytosol
 md5sum fd572bffc038fe6b7943623867cb8250,32343ad3ad52bfa64847cd11f5441739
 origAssembly hg19
@@ -2531,32 +2867,35 @@ subId 3342
 tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigs
+metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigsV2
 objType table
 bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001083
+dccInternalNotes subId=5587
 expId 1083
-fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigs.bedRnaElements.gz
+fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigsV2.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID20908
-labProtocolId 006Cs
 labVersion iIDR
 localization cytosol
-md5sum bcc5193eb29a521fac56d018f0d4c8da
+md5sum f3ec5c1af5742e8c68b6a73ecdebfa4c
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4495
-tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigs
+submittedDataVersion V2 - Changed . to -1 to represent NULL
+tableName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapContigsV2
 view Contigs
 
 metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapExonsGencV7
@@ -2565,7 +2904,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001083
@@ -2574,12 +2913,13 @@ fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20908
-labProtocolId 006Cs
 labVersion iIDR
 localization cytosol
-md5sum 5b79eca89682431b5240a1c95919e724
+md5sum 3f17c0c427a08e4308e314655d037ccb
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4495
@@ -2601,7 +2941,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20908
-labProtocolId 006Cs
 localization cytosol
 md5sum 05f4e9214c02870fa6f7b0e807cbaffd
 origAssembly hg19
@@ -2631,7 +2970,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20908
-labProtocolId 006Cs
 localization cytosol
 md5sum dcde810070f32fbdaf722c425cd2e7d5
 origAssembly hg19
@@ -2661,9 +2999,8 @@ fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20908
-labProtocolId 006Cs
 localization cytosol
-md5sum fd043b740c87492d052adf894b101dd6
+md5sum 9c717d33ac5a9ff3b954d35dd914cf29
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -2690,7 +3027,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2.bam,wgEncodeCs
 grant Gingeras
 lab CSHL
 labExpId LID20907
-labProtocolId 006Ns
 localization nucleus
 md5sum 773fae1c64130b176774ed9f69aef8e6,4c42e9f1a7adeb5cac1766a85e782698
 origAssembly hg19
@@ -2704,32 +3040,35 @@ subId 3343
 tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapAlnRep2
 view Alignments
 
-metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigs
+metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigsV2
 objType table
 bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001084
+dccInternalNotes subId=5587
 expId 1084
-fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigs.bedRnaElements.gz
+fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigsV2.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID20907
-labProtocolId 006Ns
 labVersion iIDR
 localization nucleus
-md5sum 9e86022588bad43795e9e38f43e8aa70
+md5sum 1fc71d7535e93b09b16d8ed675ebc2f0
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4496
-tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigs
+submittedDataVersion V2 - Changed . to -1 to represent NULL
+tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapContigsV2
 view Contigs
 
 metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapExonsGencV7
@@ -2738,7 +3077,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001084
@@ -2747,12 +3086,13 @@ fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20907
-labProtocolId 006Ns
 labVersion iIDR
 localization nucleus
-md5sum 9a13371652f56f510a33a5526103d718
+md5sum 6fd7e6b3c821057ec1f2c159f6eb845f
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4496
@@ -2774,7 +3114,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20907
-labProtocolId 006Ns
 localization nucleus
 md5sum 34b0ee01cf0202a92ca5c8900898f79b
 origAssembly hg19
@@ -2804,7 +3143,6 @@ fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20907
-labProtocolId 006Ns
 localization nucleus
 md5sum 813df911b2f3c04b72beed6f888b7749
 origAssembly hg19
@@ -2817,6 +3155,34 @@ seqPlatform Illumina_GA2x
 subId 3343
 tableName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapProtocolRep2
+objType file
+bioRep 006N
+cell H1-hESC
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001084
+dccRep 2
+expId 1084
+fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20907
+localization nucleus
+md5sum 51daca410714ecb7423e60fbd1a7c090
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5687
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapRawDataRep2
 objType file
@@ -2834,9 +3200,8 @@ fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20907
-labProtocolId 006Ns
 localization nucleus
-md5sum 482ebcffebdea7e77aa63ebb8c45028e
+md5sum 45ac3325433a21ac411e8dcf0f5dbbd9
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -2863,7 +3228,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep1.bam,wgEncodeCshlS
 grant Gingeras
 lab CSHL
 labExpId LID21143
-labProtocolId 011WCs
 localization cell
 md5sum bb601ea89be697303c2148860ddd9ec1,d65f50a8660a9665df78bcb1f3d016fe
 origAssembly hg19
@@ -2893,7 +3257,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapAlnRep2.bam,wgEncodeCshlS
 grant Gingeras
 lab CSHL
 labExpId LID21146
-labProtocolId 012WCs
 localization cell
 md5sum 1027f7e402f98a0ac1dae6125ce2a445,0ffbdd41a73dd17f7672ccccd428f770
 origAssembly hg19
@@ -2913,7 +3276,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -2923,12 +3286,13 @@ fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID21143,LID21146
-labProtocolId 011WCs,012WCs
 labVersion iIDR
 localization cell
-md5sum 5e40d1e2a7abd441a1b9dba2ec4e2d22
+md5sum fa92606bb88a35030ad5c7d760232e65
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4486
@@ -2941,7 +3305,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001089
@@ -2950,12 +3314,13 @@ fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21143,LID21146
-labProtocolId 011WCs,012WCs
 labVersion iIDR
 localization cell
-md5sum f29d3a7fa0775a00783eae6baa03af9e
+md5sum dec20cad92d74f7c44ed4d6ea4ba80f3
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4486
@@ -2977,7 +3342,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21143
-labProtocolId 011WCs
 localization cell
 md5sum 8260224488a6271a85b6498e185c0bc3
 origAssembly hg19
@@ -3007,7 +3371,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21146
-labProtocolId 012WCs
 localization cell
 md5sum e5f7015c0722d153965d38ee1063a1ed
 origAssembly hg19
@@ -3037,7 +3400,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21143
-labProtocolId 011WCs
 localization cell
 md5sum 4280926f2f48b85d793af36bcc26c494
 origAssembly hg19
@@ -3067,7 +3429,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21146
-labProtocolId 012WCs
 localization cell
 md5sum 38240c3ed165bf6124fa05d7efd7861a
 origAssembly hg19
@@ -3080,6 +3441,62 @@ seqPlatform Illumina_GA2x
 subId 3345
 tableName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapProtocolRep1
+objType file
+bioRep 011WC
+cell HeLa-S3
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001089
+dccRep 1
+expId 1089
+fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21143
+localization cell
+md5sum 898e443771f88df2800e63a93c5cfb0a
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5699
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapProtocolRep2
+objType file
+bioRep 012WC
+cell HeLa-S3
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001089
+dccRep 2
+expId 1089
+fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21146
+localization cell
+md5sum 79a434aa03ef698ee661aebfb5a45a1b
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5710
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapRawDataRep1
 objType file
@@ -3097,9 +3514,8 @@ fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21143
-labProtocolId 011WCs
 localization cell
-md5sum 3984c585c88118fed210ffede78a85bc
+md5sum 4b95560edc2f405c0d40021d9558ded4
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -3126,9 +3542,8 @@ fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21146
-labProtocolId 012WCs
 localization cell
-md5sum 49b9736f399a49631f3df0efb541608c
+md5sum 2250920043dafed0e4513e23e1c76be7
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -3155,7 +3570,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapAlnRep1.bam,wgEncodeCs
 grant Gingeras
 lab CSHL
 labExpId LID21145
-labProtocolId 011Cs
 localization cytosol
 md5sum 10a1ec54fb3bdf40a29a4163cc5e9995,6b7c0a42ff436233dbf9eb254acf24e7
 origAssembly hg19
@@ -3185,7 +3599,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapAlnRep2.bam,wgEncodeCs
 grant Gingeras
 lab CSHL
 labExpId LID21148
-labProtocolId 012Cs
 localization cytosol
 md5sum 7eddb273e507a3a79df0173ff42e05f2,14548ff52156047ee27635a9af5b9af5
 origAssembly hg19
@@ -3205,7 +3618,7 @@ bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -3215,12 +3628,13 @@ fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapContigs.bedRnaElements
 grant Gingeras
 lab CSHL
 labExpId LID21145,LID21148
-labProtocolId 011Cs,012Cs
 labVersion iIDR
 localization cytosol
-md5sum c701271654217fbd720dd57b7c658a59
+md5sum 88afb3b1799e36557547c9f43c6f8eb2
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4487
@@ -3233,7 +3647,7 @@ bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001087
@@ -3242,12 +3656,13 @@ fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21145,LID21148
-labProtocolId 011Cs,012Cs
 labVersion iIDR
 localization cytosol
-md5sum 2ab7500e4835eeacbf30f802b6c1d2ba
+md5sum 8720b5fa41a309297deb9cc539dbcc7a
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4487
@@ -3269,7 +3684,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21145
-labProtocolId 011Cs
 localization cytosol
 md5sum 4293962ed61b5edb5c726b6ef9975c58
 origAssembly hg19
@@ -3299,7 +3713,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21148
-labProtocolId 012Cs
 localization cytosol
 md5sum f5dd66f0c73b1f5c8ea4665a692e0c4d
 origAssembly hg19
@@ -3329,7 +3742,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21145
-labProtocolId 011Cs
 localization cytosol
 md5sum 89987d9f0be770f7223b90256d7bd340
 origAssembly hg19
@@ -3359,7 +3771,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21148
-labProtocolId 012Cs
 localization cytosol
 md5sum 14d80597887629f040093d3bda26ecd8
 origAssembly hg19
@@ -3372,6 +3783,62 @@ seqPlatform Illumina_GA2x
 subId 3347
 tableName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapProtocolRep1
+objType file
+bioRep 011C
+cell HeLa-S3
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001087
+dccRep 1
+expId 1087
+fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21145
+localization cytosol
+md5sum 97a388e1ce60be1945a7abae630c88e3
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5680
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapProtocolRep2
+objType file
+bioRep 012C
+cell HeLa-S3
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001087
+dccRep 2
+expId 1087
+fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21148
+localization cytosol
+md5sum ba8502e48be3c7823bc327084864505b
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5693
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapRawDataRep1
 objType file
@@ -3389,9 +3856,8 @@ fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21145
-labProtocolId 011Cs
 localization cytosol
-md5sum a459e532c40b062983ab2d05f51ab6e4
+md5sum 71ab9acadfe6ae1cc5cb64ebcf9e965c
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -3418,9 +3884,8 @@ fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21148
-labProtocolId 012Cs
 localization cytosol
-md5sum 7e1d2b887827647c90f2eba2da0395b2
+md5sum 3d1698c7c3f0671c0dc81ed639cdae29
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -3447,7 +3912,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapAlnRep1.bam,wgEncodeCs
 grant Gingeras
 lab CSHL
 labExpId LID21144
-labProtocolId 011Ns
 localization nucleus
 md5sum edd0a9021247c896f5346bbb3f707c33,8648c674337cfabe90d0e7d4a6a2b683
 origAssembly hg19
@@ -3477,7 +3941,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapAlnRep2.bam,wgEncodeCs
 grant Gingeras
 lab CSHL
 labExpId LID21147
-labProtocolId 012Ns
 localization nucleus
 md5sum bc3384ce4c6994a844333c3f5a712d8c,dc00f5567cf02840987016f5fdd9e9cf
 origAssembly hg19
@@ -3497,7 +3960,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -3507,12 +3970,13 @@ fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapContigs.bedRnaElements
 grant Gingeras
 lab CSHL
 labExpId LID21144,LID21147
-labProtocolId 011Ns,012Ns
 labVersion iIDR
 localization nucleus
-md5sum cd705bd0110d6a1ddec2ec7d33d10341
+md5sum 60e84fbd8031bd215e7d8103b2197dec
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4470
@@ -3525,7 +3989,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001088
@@ -3534,12 +3998,13 @@ fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21144,LID21147
-labProtocolId 011Ns,012Ns
 labVersion iIDR
 localization nucleus
-md5sum 697be9c55fa0110f2834aeabc112c4b0
+md5sum d801e25952c2bbaa88f79a6f2ee95b6d
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4470
@@ -3561,7 +4026,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21144
-labProtocolId 011Ns
 localization nucleus
 md5sum 87fbaea5961f1983d8b01aab3b2d96ab
 origAssembly hg19
@@ -3591,7 +4055,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21147
-labProtocolId 012Ns
 localization nucleus
 md5sum 10473c0215e9a1481597846efb597ce4
 origAssembly hg19
@@ -3621,7 +4084,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21144
-labProtocolId 011Ns
 localization nucleus
 md5sum 9a1de511d5522bf3ad92fd76c7c4c9cc
 origAssembly hg19
@@ -3651,7 +4113,6 @@ fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21147
-labProtocolId 012Ns
 localization nucleus
 md5sum 57b97f38feea7d5255133ec475a6c99c
 origAssembly hg19
@@ -3664,6 +4125,62 @@ seqPlatform Illumina_GA2x
 subId 3349
 tableName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapProtocolRep1
+objType file
+bioRep 011N
+cell HeLa-S3
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001088
+dccRep 1
+expId 1088
+fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21144
+localization nucleus
+md5sum bcf25fe06918736cf99458fd6ce5e03d
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5706
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapProtocolRep2
+objType file
+bioRep 012N
+cell HeLa-S3
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001088
+dccRep 2
+expId 1088
+fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21147
+localization nucleus
+md5sum 4869b33064efb54ae8d3c9b6aa90aba4
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5700
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapRawDataRep1
 objType file
@@ -3681,9 +4198,8 @@ fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21144
-labProtocolId 011Ns
 localization nucleus
-md5sum 34187297e118b36bd912c14eec74f258
+md5sum 5b2587944b679f1be4f9400e5a79c240
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -3710,9 +4226,8 @@ fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21147
-labProtocolId 012Ns
 localization nucleus
-md5sum 5577ece8e67a741daa782e0bd0a566aa
+md5sum a2a472e72f2e505814c5fbb4b6679f0c
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -3729,7 +4244,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
@@ -3739,7 +4254,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapAlnRep1.bam,wgEncodeCshlSh
 grant Gingeras
 lab CSHL
 labExpId LID44460
-labProtocolId 013WCs
 localization cell
 md5sum 2c351dc6f0523f40fc7e86dba023ba48,00d2403ee824ae186bca827b5122c50e
 origAssembly hg19
@@ -3759,7 +4273,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
@@ -3769,7 +4283,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapAlnRep2.bam,wgEncodeCshlSh
 grant Gingeras
 lab CSHL
 labExpId LID44461
-labProtocolId 014WCs
 localization cell
 md5sum 8cefbe45153562f2f273ae51ea7091d7,8c7fbcc72da910f50cf19a8f7ccc5966
 origAssembly hg19
@@ -3789,7 +4302,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -3799,12 +4312,13 @@ fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID44460,LID44461
-labProtocolId 013WCs,014WCs
 labVersion iIDR
 localization cell
-md5sum bc878e781b1315ff789561922ac91f98
+md5sum e0c22ab8dfd7c994e939be5e6c6fb633
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4479
@@ -3817,7 +4331,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001741
@@ -3826,12 +4340,13 @@ fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44460,LID44461
-labProtocolId 013WCs,014WCs
 labVersion iIDR
 localization cell
-md5sum 04c589358a52eb7b37b8637dc7e19687
+md5sum 11308f834bc398b2796c05d84f5e0917
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4479
@@ -3843,7 +4358,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
@@ -3853,7 +4368,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44460
-labProtocolId 013WCs
 localization cell
 md5sum a5cb40841ef1432aa986919792cab224
 origAssembly hg19
@@ -3873,7 +4387,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
@@ -3883,7 +4397,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44461
-labProtocolId 014WCs
 localization cell
 md5sum f1f4063da30b2e9aa28fd3ffe9f128de
 origAssembly hg19
@@ -3903,7 +4416,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
@@ -3913,7 +4426,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44460
-labProtocolId 013WCs
 localization cell
 md5sum 94d57ceaed92102ff2999ae71fae9d0a
 origAssembly hg19
@@ -3933,7 +4445,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
@@ -3943,7 +4455,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44461
-labProtocolId 014WCs
 localization cell
 md5sum 0825aa29ea183af2270f2ac76f23e749
 origAssembly hg19
@@ -3963,7 +4474,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
@@ -3973,9 +4484,8 @@ fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44460
-labProtocolId 013WCs
 localization cell
-md5sum 7fc2064afeb73bb292c911bf67cf3cb7
+md5sum 4daa2f0023cb9e468b6be00aad2b048b
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -3992,7 +4502,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
@@ -4002,9 +4512,8 @@ fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44461
-labProtocolId 014WCs
 localization cell
-md5sum c4c09faf9758aa21920ab787a534418d
+md5sum 8bdbad322d9ee8dc0467006ff1c02e1b
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -4024,15 +4533,19 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH001743
+dccRep 1
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID44464
-labProtocolId 013Cs
 localization cytosol
 md5sum 69c21e124de6a69cfb235e6d5aeac352,f8e7923c6fdf1c566c4d8f2fab5f22d9
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 4061
@@ -4045,7 +4558,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001743
@@ -4055,7 +4568,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep2.bam,wgEncodeCsh
 grant Gingeras
 lab CSHL
 labExpId LID44465
-labProtocolId 014Cs
 localization cytosol
 md5sum 09ddd4ebe294058bdee825d659c6e76d,35c3406a03eacd66aaf75fc99e006a13
 origAssembly hg19
@@ -4075,7 +4587,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -4085,12 +4597,13 @@ fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapContigs.bedRnaElements.
 grant Gingeras
 lab CSHL
 labExpId LID44464,LID44465
-labProtocolId 013Cs,014Cs
 labVersion iIDR
 localization cytosol
-md5sum 5e17219c6146722f46266302bda1465f
+md5sum e3ba859e03d02e26bde7abd8219c695f
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4484
@@ -4103,7 +4616,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001743
@@ -4112,12 +4625,13 @@ fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44464,LID44465
-labProtocolId 013Cs,014Cs
 labVersion iIDR
 localization cytosol
-md5sum a3e497112880a227205e79456321c53e
+md5sum 71b0fe60cf3d5e604f6c97ad1e44ab72
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4484
@@ -4132,15 +4646,19 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH001743
+dccRep 1
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44464
-labProtocolId 013Cs
 localization cytosol
 md5sum 4628897166af37d289a406149a948623
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 4061
@@ -4153,7 +4671,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001743
@@ -4163,7 +4681,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44465
-labProtocolId 014Cs
 localization cytosol
 md5sum 1b54aac3b8151f98100163b6526520b7
 origAssembly hg19
@@ -4186,15 +4703,19 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH001743
+dccRep 1
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44464
-labProtocolId 013Cs
 localization cytosol
 md5sum e9ef426eecda2c6a0be73caea68c25e5
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 4061
@@ -4207,7 +4728,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001743
@@ -4217,7 +4738,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44465
-labProtocolId 014Cs
 localization cytosol
 md5sum 2feb41f0343a89875d9ee47cdca3bf24
 origAssembly hg19
@@ -4240,15 +4760,19 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH001743
+dccRep 1
+expId 1743
 fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44464
-labProtocolId 013Cs
 localization cytosol
-md5sum e76b7832874aaefd19c7abf70609bdee
+md5sum 88abb3392192592ea8ce04dabd9eb221
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 4061
@@ -4260,7 +4784,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001743
@@ -4270,9 +4794,8 @@ fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44465
-labProtocolId 014Cs
 localization cytosol
-md5sum b132de96c29d188629be335f083907fb
+md5sum 0372280ee4eb82e8bb753b44c4abba35
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -4289,7 +4812,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
@@ -4299,7 +4822,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep1.bam,wgEncodeCsh
 grant Gingeras
 lab CSHL
 labExpId LID44462
-labProtocolId 013Ns
 localization nucleus
 md5sum 2a8762293f390f29085bb94f0e159d49,c295404effc2bab97c0db00fbb7124a1
 origAssembly hg19
@@ -4319,7 +4841,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
@@ -4329,7 +4851,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapAlnRep2.bam,wgEncodeCsh
 grant Gingeras
 lab CSHL
 labExpId LID44463
-labProtocolId 014Ns
 localization nucleus
 md5sum d65830bc54ac0f261b7ec07a8e88c387,f3d2fc0a6479e1f260cbc1e12054974d
 origAssembly hg19
@@ -4349,7 +4870,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -4359,12 +4880,13 @@ fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapContigs.bedRnaElements.
 grant Gingeras
 lab CSHL
 labExpId LID44462,LID44463
-labProtocolId 013Ns,014Ns
 labVersion iIDR
 localization nucleus
-md5sum f7aaab47ccad00d42d5a5b6a644decb0
+md5sum f1243aee2df502cd7ec8b177ba94e5c0
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4480
@@ -4377,7 +4899,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001742
@@ -4386,12 +4908,13 @@ fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID44462,LID44463
-labProtocolId 013Ns,014Ns
 labVersion iIDR
 localization nucleus
-md5sum 67847f3af62d9e063f7a63d68f5732c0
+md5sum 9d4e5af3ce150589f057ec364acd3a7f
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4480
@@ -4403,7 +4926,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
@@ -4413,7 +4936,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44462
-labProtocolId 013Ns
 localization nucleus
 md5sum 87689296b73fc06cd51a39ed3e13fb94
 origAssembly hg19
@@ -4433,7 +4955,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
@@ -4443,7 +4965,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44463
-labProtocolId 014Ns
 localization nucleus
 md5sum 1b5cbf9623e430913ce6c94db289678b
 origAssembly hg19
@@ -4463,7 +4984,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
@@ -4473,7 +4994,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44462
-labProtocolId 013Ns
 localization nucleus
 md5sum 632aac93ee1e44aecbabc12d776d26e8
 origAssembly hg19
@@ -4493,7 +5013,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
@@ -4503,7 +5023,6 @@ fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID44463
-labProtocolId 014Ns
 localization nucleus
 md5sum e8ef9d3c0e235ab7a474942ea84a98fa
 origAssembly hg19
@@ -4523,7 +5042,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
@@ -4533,9 +5052,8 @@ fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44462
-labProtocolId 013Ns
 localization nucleus
-md5sum c175b4820906d5397952fa02521f0ff1
+md5sum fd75364af617356e54ee4dbe7cba2538
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -4552,7 +5070,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
@@ -4562,9 +5080,8 @@ fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID44463
-labProtocolId 014Ns
 localization nucleus
-md5sum 19843e3cb071eb38a25a06cb9f377748
+md5sum ba8f88267ed0a03db07ffcd1b8f7d68c
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -4591,7 +5108,6 @@ fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep3.bam,wgEncodeCsh
 grant Gingeras
 lab CSHL
 labExpId LID21056
-labProtocolId 029Ns
 localization nucleus
 md5sum ff04ccf2cac390a81fc9f7c1275a96b8,0f947831315ddd98fb5cc331d0c861bf
 origAssembly hg19
@@ -4621,7 +5137,6 @@ fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapAlnRep4.bam,wgEncodeCsh
 grant Gingeras
 lab CSHL
 labExpId LID21058
-labProtocolId 030Ns
 localization nucleus
 md5sum b6a9fba1306499191fe7e562b833c210,932c7e5c98573a9b47b6a770f595adfb
 origAssembly hg19
@@ -4641,7 +5156,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -4651,12 +5166,13 @@ fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapContigs.bedRnaElements.
 grant Gingeras
 lab CSHL
 labExpId LID21056,LID21058
-labProtocolId 029Ns,030Ns
 labVersion iIDR
 localization nucleus
-md5sum ab01df7fafa8be24fdbbf147af3b8f5b
+md5sum 9e2a283ebb77a8685de4a3b0cea95c75
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4475
@@ -4669,7 +5185,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001080
@@ -4678,12 +5194,13 @@ fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21056,LID21058
-labProtocolId 029Ns,030Ns
 labVersion iIDR
 localization nucleus
-md5sum 43123a2eab6128cc6666505f71ee16f7
+md5sum 672a54c83780a160aa72362283199787
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4475
@@ -4705,7 +5222,6 @@ fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapMinusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21056
-labProtocolId 029Ns
 localization nucleus
 md5sum 913765bad3c1e58374276d7d92df8b9d
 origAssembly hg19
@@ -4735,7 +5251,6 @@ fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapMinusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21058
-labProtocolId 030Ns
 localization nucleus
 md5sum 6f39e198619849b089e6b55c0148216d
 origAssembly hg19
@@ -4765,7 +5280,6 @@ fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21056
-labProtocolId 029Ns
 localization nucleus
 md5sum d8f28309df9602dfc7ee609aab5cdeb8
 origAssembly hg19
@@ -4795,7 +5309,6 @@ fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21058
-labProtocolId 030Ns
 localization nucleus
 md5sum c47a34ff4661284ee45b9251d607ba1b
 origAssembly hg19
@@ -4808,6 +5321,62 @@ seqPlatform Illumina_GA2x
 subId 3295
 tableName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapPlusRawRep4
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapProtocolRep3
+objType file
+bioRep 029N
+cell HUVEC
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001080
+dccRep 1
+expId 1080
+fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapProtocolRep3.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21056
+localization nucleus
+md5sum e572f81f55c3ca0419a023bd438bc6c4
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 3
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5702
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapProtocolRep4
+objType file
+bioRep 030N
+cell HUVEC
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH001080
+dccRep 2
+expId 1080
+fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapProtocolRep4.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21058
+localization nucleus
+md5sum 64068fd361ad8d0d2169f3b43dbed7bb
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 4
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5694
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapRawDataRep3
 objType file
@@ -4825,9 +5394,8 @@ fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapRawDataRep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21056
-labProtocolId 029Ns
 localization nucleus
-md5sum 846e8f67d9e99d381c8197fca92b6ed3
+md5sum 0d6d12b60fc88da597f8f014403b4305
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -4854,9 +5422,8 @@ fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalTapRawDataRep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21058
-labProtocolId 030Ns
 localization nucleus
-md5sum 9f290be37c246cc8e955146acf03257a
+md5sum 8b41b3ed8cc82e0b580024787b734b5b
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -4886,7 +5453,6 @@ geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
 labExpId crg-31
-labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum b8b6d993a31cda4827f9cd23a9a4d618,2bd965ce0f4530b9f8871e0bb5527302
@@ -4917,7 +5483,6 @@ geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
 labExpId crg-31
-labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum 73ed2cc27b31565e7d403faa3ebd8231
@@ -4948,7 +5513,6 @@ geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
 labExpId crg-31
-labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum f7c0d7ad646646320eaccc2e050b9123
@@ -4978,7 +5542,6 @@ geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
 labExpId crg-31
-labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum 27bd048de5ac571a226bbd3d83e529ff
@@ -5008,7 +5571,6 @@ geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
 labExpId crg-31
-labProtocolId gen0130WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum 4c1639afd2d6bfc017fb2acee07b60bf
@@ -5036,7 +5598,6 @@ fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapAlnRep1.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID10567
-labProtocolId 001WCs
 localization cell
 md5sum d43bf7295915a91092026ad2c0a8c2d2,90d2326e515e8e0b882c4bb39b295ecc
 origAssembly hg19
@@ -5066,7 +5627,6 @@ fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapAlnRep2.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID10568
-labProtocolId 002WCs
 localization cell
 md5sum 5d4da451d8fc41bf2c806919caa4815d,9d5d82bc2a78122abef85683d433c199
 origAssembly hg19
@@ -5086,7 +5646,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -5096,10 +5656,10 @@ fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID10567,LID10568
-labProtocolId 001WCs,002WCs
 labVersion iIDR
 localization cell
-md5sum 47149835f107ca1788e3e7ec10631476
+md5sum 6b0e3670644af6daca8f6c2e57e336c8
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5115,7 +5675,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000213
@@ -5124,10 +5684,10 @@ fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID10567,LID10568
-labProtocolId 001WCs,002WCs
 labVersion iIDR
 localization cell
-md5sum 387eb1176813cd71f1b49d67221b825c
+md5sum 773dcf0d4702edfb17f2923a9a4afa33
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
 readType 1x36
@@ -5152,7 +5712,6 @@ fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10567
-labProtocolId 001WCs
 localization cell
 md5sum 18de869c0d45d10cf2be39b5736874d1
 origAssembly hg19
@@ -5182,7 +5741,6 @@ fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10568
-labProtocolId 002WCs
 localization cell
 md5sum 7ac3602b798a6d75ae6d9d0c8769a58b
 origAssembly hg19
@@ -5212,7 +5770,6 @@ fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10567
-labProtocolId 001WCs
 localization cell
 md5sum f27465fd0c8028c871e1fac627391a7c
 origAssembly hg19
@@ -5242,7 +5799,6 @@ fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10568
-labProtocolId 002WCs
 localization cell
 md5sum db0c5a6c5f60bc3125c55fa7bae88a13
 origAssembly hg19
@@ -5255,6 +5811,62 @@ seqPlatform Illumina_GA2x
 subId 3363
 tableName wgEncodeCshlShortRnaSeqK562CellShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapProtocolRep1
+objType file
+bioRep 001WC
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000213
+dccRep 1
+expId 213
+fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID10567
+localization cell
+md5sum 7c62b99d1f374488238f3705f8103f18
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5705
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapProtocolRep2
+objType file
+bioRep 002WC
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH000213
+dccRep 2
+expId 213
+fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID10568
+localization cell
+md5sum 75422d1590238057aed56e639e4e423b
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5689
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalTapRawDataRep1
 objType file
@@ -5272,9 +5884,8 @@ fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID10567
-labProtocolId 001WCs
 localization cell
-md5sum f8e44d87b2fb29d0e121534c10e4d34a
+md5sum 4b96def5b0732d53b7ff30e611e42a97
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -5301,9 +5912,8 @@ fileName wgEncodeCshlShortRnaSeqK562CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID10568
-labProtocolId 002WCs
 localization cell
-md5sum f8bfffd9bc78899f5a92a07074b723da
+md5sum 49871ebb05bc2e786784ef8bd3062c9f
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -5333,7 +5943,6 @@ geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
 labExpId crg-32
-labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
 md5sum 99a96758feefaa37e4810bcfb268eaf8,e9d6d908381a831eefa0948ebfd53c8a
@@ -5364,7 +5973,6 @@ geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
 labExpId crg-32
-labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
 md5sum 7ee072c90986f00e2e9b9eafdfffb9dc
@@ -5395,7 +6003,6 @@ geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
 labExpId crg-32
-labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
 md5sum 069a44a560ff4a5a6c80ba22c6062f28
@@ -5425,7 +6032,6 @@ geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
 labExpId crg-32
-labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
 md5sum 2b37ae3eaaf4352318fdc75e3fef3f70
@@ -5455,7 +6061,6 @@ geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
 labExpId crg-32
-labProtocolId gen0133CHs
 labVersion Produced by Hannon Lab
 localization chromatin
 md5sum b10a237146847867ff5794dd5ba1fa65
@@ -5483,7 +6088,6 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapAlnRep3.bam,wgEncodeCs
 grant Gingeras
 lab CSHL
 labExpId LID8930
-labProtocolId 025CHs
 localization chromatin
 md5sum 44588996b7c1830a145ea17d8e3a52d1,e6ab6fd7b2ecd3fe843c04a481628711
 origAssembly hg19
@@ -5513,7 +6117,6 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapAlnRep4.bam,wgEncodeCs
 grant Gingeras
 lab CSHL
 labExpId LID18560
-labProtocolId 026CHs
 localization chromatin
 md5sum 1f818c6d6b7b4dbc36da9632d2635ec8,23ada0b4fc26df82da7abe7be17b3f6f
 origAssembly hg19
@@ -5533,7 +6136,7 @@ bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -5543,12 +6146,13 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapContigs.bedRnaElements
 grant Gingeras
 lab CSHL
 labExpId LID8930,LID18560
-labProtocolId 025CHs,026CHs
 labVersion iIDR
 localization chromatin
-md5sum 45cfbe2714fd07bf61437dfea6a59ed0
+md5sum fc52c70a1136cf55987080e026468551
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4476
@@ -5561,7 +6165,7 @@ bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000205
@@ -5570,12 +6174,13 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID8930,LID18560
-labProtocolId 025CHs,026CHs
 labVersion iIDR
 localization chromatin
-md5sum 88b454a2d3b2ab2c6c6a607b5f457804
+md5sum 3b56c3b4f10c128458c0bda30438597f
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4476
@@ -5597,7 +6202,6 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapMinusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID8930
-labProtocolId 025CHs
 localization chromatin
 md5sum 8cfc54d326127c6e517d67231c6803a2
 origAssembly hg19
@@ -5627,7 +6231,6 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapMinusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID18560
-labProtocolId 026CHs
 localization chromatin
 md5sum 37de1632c73a3d657e1ab5838e50fa09
 origAssembly hg19
@@ -5657,7 +6260,6 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapPlusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID8930
-labProtocolId 025CHs
 localization chromatin
 md5sum 4bac393e86441779fcfd6445f57a113f
 origAssembly hg19
@@ -5687,7 +6289,6 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapPlusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID18560
-labProtocolId 026CHs
 localization chromatin
 md5sum 57b1b816a606f3435f415938d4340b6a
 origAssembly hg19
@@ -5717,9 +6318,8 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapRawDataRep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID8930
-labProtocolId 025CHs
 localization chromatin
-md5sum cedd8bda61fea4967c978c91cbe50a07
+md5sum 9b470a4c3577bd40a3afed33d5fbb089
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -5746,9 +6346,8 @@ fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalTapRawDataRep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID18560
-labProtocolId 026CHs
 localization chromatin
-md5sum bac369cbd10f66dec9875a9bb1352b8d
+md5sum 333136c9d2e699973dc704ee59e5eebc
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -5778,7 +6377,6 @@ geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
 labExpId crg-36
-labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 md5sum 0cc50ede720498592566740908ac669f,9ca3a421bd96e0d077fc14e54273c4b1
@@ -5809,7 +6407,6 @@ geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
 labExpId crg-36
-labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 md5sum 5cbb3aedfb442f3dd1bc3410dadfd518
@@ -5840,7 +6437,6 @@ geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
 labExpId crg-36
-labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 md5sum 3b0808e187cc32007d31b25ea91cece1
@@ -5870,7 +6466,6 @@ geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
 labExpId crg-36
-labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 md5sum e41db398bcbdb1abed3230b37ed2c195
@@ -5900,7 +6495,6 @@ geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
 labExpId crg-36
-labProtocolId gen0142Cs
 labVersion Produced by Hannon Lab
 localization cytosol
 md5sum ec554ecc914e06e8ed784472cc7f5565
@@ -5928,7 +6522,6 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapAlnRep1.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID10572
-labProtocolId 001Cs
 localization cytosol
 md5sum 45fedb7b863fab34cc9a1864eefe58d0,d8e7a114b29ea72a699cffc43bcc1a7a
 origAssembly hg19
@@ -5958,7 +6551,6 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapAlnRep2.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID10571
-labProtocolId 002Cs
 localization cytosol
 md5sum 1dd42d818027c74149a30b341be8a9ea,9f8ac7373accb45b041183b864af8a96
 origAssembly hg19
@@ -5978,7 +6570,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -5988,12 +6580,13 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapContigs.bedRnaElements.g
 grant Gingeras
 lab CSHL
 labExpId LID10572,LID10571
-labProtocolId 001Cs,002Cs
 labVersion iIDR
 localization cytosol
-md5sum 659f72c2f3366c9722313425a5963c79
+md5sum 9209ff689d1f62487a6210afc0bed839
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4493
@@ -6006,7 +6599,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000206
@@ -6015,12 +6608,13 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID10572,LID10571
-labProtocolId 001Cs,002Cs
 labVersion iIDR
 localization cytosol
-md5sum 85c190deff6bb42e28dcbe3b8c7939d8
+md5sum 8faebd571ecacaea9a8ebafd6f8824f9
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4493
@@ -6042,7 +6636,6 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10572
-labProtocolId 001Cs
 localization cytosol
 md5sum 561d398f0b543ed94d5a9079cfd93f4f
 origAssembly hg19
@@ -6072,7 +6665,6 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10571
-labProtocolId 002Cs
 localization cytosol
 md5sum 97f175810838a38fc4a9f6e7941a7c39
 origAssembly hg19
@@ -6102,7 +6694,6 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10572
-labProtocolId 001Cs
 localization cytosol
 md5sum 7a403e4fc6c5bc7699d04a7ad01bb13d
 origAssembly hg19
@@ -6132,7 +6723,6 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10571
-labProtocolId 002Cs
 localization cytosol
 md5sum a8a864882059a8bc5a8983fecae17da2
 origAssembly hg19
@@ -6145,6 +6735,62 @@ seqPlatform Illumina_GA2x
 subId 3298
 tableName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapProtocolRep1
+objType file
+bioRep 001C
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000206
+dccRep 1
+expId 206
+fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID10572
+localization cytosol
+md5sum 725654f55054db59a620c61392020e17
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5684
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapProtocolRep2
+objType file
+bioRep 002C
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000206
+dccRep 2
+expId 206
+fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID10571
+localization cytosol
+md5sum 13d393cadd13f2ddae9d9f664c5589ff
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5711
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapRawDataRep1
 objType file
@@ -6162,9 +6808,8 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID10572
-labProtocolId 001Cs
 localization cytosol
-md5sum e642df4382adf3568eb969c7178f8da1
+md5sum 9d48f1ef3da7b8ab1286b53bf350c064
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -6191,9 +6836,8 @@ fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID10571
-labProtocolId 002Cs
 localization cytosol
-md5sum 659f50bef2a33d3689f3e192a54fbbff
+md5sum d1975ef6efba87c8821f901af53eabc4
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -6223,7 +6867,6 @@ geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
 labExpId crg-37
-labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
 md5sum 92bc993126f0a9034a9396a1caf5f36b,bf9af5435daaf488b35e7623d9fa99aa
@@ -6254,7 +6897,6 @@ geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
 labExpId crg-37
-labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
 md5sum 001f287c628c3e66ab546930f00ab81f
@@ -6285,7 +6927,6 @@ geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
 labExpId crg-37
-labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
 md5sum 4389273c52e0e7a5bc4146d4c0c2ee00
@@ -6315,7 +6956,6 @@ geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
 labExpId crg-37
-labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
 md5sum 79bcdc9187199406e6638d03173164fe
@@ -6345,7 +6985,6 @@ geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
 labExpId crg-37
-labProtocolId gen0143NLs
 labVersion Produced by Hannon Lab
 localization nucleolus
 md5sum 499f8b948c6329c62c2aa0aafd514570
@@ -6373,7 +7012,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapAlnRep3.bam,wgEncodeCs
 grant Gingeras
 lab CSHL
 labExpId LID8928
-labProtocolId 025NLs
 localization nucleolus
 md5sum 63fb0bb9ad9c1a7bbcb9cc2cd44be86d,1b941e63297d5f451091797bb6814c9a
 origAssembly hg19
@@ -6403,7 +7041,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapAlnRep4.bam,wgEncodeCs
 grant Gingeras
 lab CSHL
 labExpId LID18558
-labProtocolId 026NLs
 localization nucleolus
 md5sum 4166bbab0e923c0f407861b9d230cd63,39451aad620cabf2605017dfdd08cf45
 origAssembly hg19
@@ -6423,7 +7060,7 @@ bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -6433,12 +7070,13 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapContigs.bedRnaElements
 grant Gingeras
 lab CSHL
 labExpId LID8928,LID18558
-labProtocolId 025NLs,026NLs
 labVersion iIDR
 localization nucleolus
-md5sum df66b270e8d9dafd2428c1171fe50ae3
+md5sum 6e39fecf670f81058fe63c4dac7941d8
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4481
@@ -6451,7 +7089,7 @@ bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000207
@@ -6460,12 +7098,13 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID8928,LID18558
-labProtocolId 025NLs,026NLs
 labVersion iIDR
 localization nucleolus
-md5sum b11ed8e7ddf66b331580f0f7d854d0b0
+md5sum 16e37beddb6a8d43426a1d646d95bb9e
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4481
@@ -6487,7 +7126,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapMinusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID8928
-labProtocolId 025NLs
 localization nucleolus
 md5sum 81ac50814794826209a74b836b8c0819
 origAssembly hg19
@@ -6517,7 +7155,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapMinusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID18558
-labProtocolId 026NLs
 localization nucleolus
 md5sum be54c86ef9b4b615a9ed0828537c0270
 origAssembly hg19
@@ -6547,7 +7184,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapPlusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID8928
-labProtocolId 025NLs
 localization nucleolus
 md5sum 5b4f8a64dcf8efb943c90e21570d2826
 origAssembly hg19
@@ -6577,7 +7213,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapPlusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID18558
-labProtocolId 026NLs
 localization nucleolus
 md5sum 91a25d4462f68dbe7c3dbaac3675e2c0
 origAssembly hg19
@@ -6607,9 +7242,8 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapRawDataRep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID8928
-labProtocolId 025NLs
 localization nucleolus
-md5sum da032e88519d98c08ec4963a2c3cbd9c
+md5sum f96e4e47e52b37d978eef27adf7df636
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -6636,9 +7270,8 @@ fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalTapRawDataRep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID18558
-labProtocolId 026NLs
 localization nucleolus
-md5sum d2274721671ff5f8ae49a22bca39c680
+md5sum 1be1fa8860e592135bba9e01ee0c4b19
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -6668,7 +7301,6 @@ geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
 labExpId crg-39
-labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
 md5sum 55f429d4f6b1d49fc7794a3277473cd4,a65f37ad014019833c6e8cdf0368aa2a
@@ -6699,7 +7331,6 @@ geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
 labExpId crg-39
-labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
 md5sum 304e95f4f0fd3770e05ee3e77afe5a23
@@ -6730,7 +7361,6 @@ geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
 labExpId crg-39
-labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
 md5sum f3c9ab8009d30d29e4d8744f62dd7ab6
@@ -6760,7 +7390,6 @@ geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
 labExpId crg-39
-labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
 md5sum 4fa23b0b2b4429814f7fb6e151dd31bc
@@ -6790,7 +7419,6 @@ geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
 labExpId crg-39
-labProtocolId gen0146NPs
 labVersion Produced by Hannon Lab
 localization nucleoplasm
 md5sum 135787d24694f7999dd87a0ae4b98c54
@@ -6818,7 +7446,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep3.bam,wgEncode
 grant Gingeras
 lab CSHL
 labExpId LID8929
-labProtocolId 025NPs
 localization nucleoplasm
 md5sum 9810e20cb34749352426228fe22f2fe0,a8cb8ee02041cc431bdd6556489ec42f
 origAssembly hg19
@@ -6848,7 +7475,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapAlnRep4.bam,wgEncode
 grant Gingeras
 lab CSHL
 labExpId LID18559
-labProtocolId 026NPs
 localization nucleoplasm
 md5sum 4e180551cf0af4c72d4687e3a3f4a0be,7eec99bf1310b714b26f6f52840e98e8
 origAssembly hg19
@@ -6868,7 +7494,7 @@ bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -6878,12 +7504,13 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapContigs.bedRnaElemen
 grant Gingeras
 lab CSHL
 labExpId LID8929,LID18559
-labProtocolId 025NPs,026NPs
 labVersion iIDR
 localization nucleoplasm
-md5sum c6750175fb529c2afe663362f25ced61
+md5sum 8d9bcf4f8c0a71d8a136a1f481e13bd9
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4494
@@ -6896,7 +7523,7 @@ bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000208
@@ -6905,12 +7532,13 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID8929,LID18559
-labProtocolId 025NPs,026NPs
 labVersion iIDR
 localization nucleoplasm
-md5sum 5cd70b895a3ebbbcd86f4426b265fb7e
+md5sum fa3c27ef7846dae19b90a3642c2cb600
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4494
@@ -6932,7 +7560,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapMinusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID8929
-labProtocolId 025NPs
 localization nucleoplasm
 md5sum e6054ab6e5ef0109e7e4d9031734c5e9
 origAssembly hg19
@@ -6962,7 +7589,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapMinusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID18559
-labProtocolId 026NPs
 localization nucleoplasm
 md5sum c22342750e8a7d444f17f756816aef1c
 origAssembly hg19
@@ -6992,7 +7618,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapPlusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID8929
-labProtocolId 025NPs
 localization nucleoplasm
 md5sum 5e021cf32cf5d735d4ee1ece911d2491
 origAssembly hg19
@@ -7022,7 +7647,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapPlusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID18559
-labProtocolId 026NPs
 localization nucleoplasm
 md5sum 592a4196ebc8283f27f9d4b4c3364b2c
 origAssembly hg19
@@ -7052,9 +7676,8 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapRawDataRep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID8929
-labProtocolId 025NPs
 localization nucleoplasm
-md5sum 3e6665d55334ea549f27c269a0d98e3e
+md5sum 5d015dc471ccf8cd33abe038bdef4714
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -7081,9 +7704,8 @@ fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalTapRawDataRep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID18559
-labProtocolId 026NPs
 localization nucleoplasm
-md5sum f9474e89db63a652435d0870734a3557
+md5sum 798b7bc9f941fadedc9d5027fc1f06f4
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -7113,7 +7735,6 @@ geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
 labExpId crg-42
-labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 md5sum fa47b4158cfa85da47bdfb92aa292110,e6a521aa8435252f4660f573b8a96bf0
@@ -7144,7 +7765,6 @@ geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
 labExpId crg-42
-labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 md5sum f010b65dccf6e1f03578f1158728e2be
@@ -7175,7 +7795,6 @@ geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
 labExpId crg-42
-labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 md5sum 808368bb38471e7a2422429257ac72ef
@@ -7205,7 +7824,6 @@ geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
 labExpId crg-42
-labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 md5sum 47f0dc881271463933dd1ace317e18ff
@@ -7235,7 +7853,6 @@ geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
 labExpId crg-42
-labProtocolId gen0151Ns
 labVersion Produced by Hannon Lab
 localization nucleus
 md5sum b846c25f354c246db00c65f16a379c72
@@ -7263,7 +7880,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapAlnRep1.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID10570
-labProtocolId 001Ns
 localization nucleus
 md5sum 938a80d561e144724d05d72faeee629a,452593789b1044809eacd46b91ab9989
 origAssembly hg19
@@ -7293,7 +7909,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapAlnRep2.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID10569
-labProtocolId 002Ns
 localization nucleus
 md5sum 770d18aceac7c6dbce6c09fbd7169650,a4e2f0a4355c19a2507f121d58ecb6ad
 origAssembly hg19
@@ -7313,7 +7928,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -7323,12 +7938,13 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapContigs.bedRnaElements.g
 grant Gingeras
 lab CSHL
 labExpId LID10570,LID10569
-labProtocolId 001Ns,002Ns
 labVersion iIDR
 localization nucleus
-md5sum 4bae6adfcb788c1924e10ebb7d761a58
+md5sum 7b80f1ac3518f3664d4cc1e5c283a4e0
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4490
@@ -7341,7 +7957,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000209
@@ -7350,12 +7966,13 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID10570,LID10569
-labProtocolId 001Ns,002Ns
 labVersion iIDR
 localization nucleus
-md5sum 3cd3b6130338cce50d4aceda105bd302
+md5sum ee64e445a0f98c4b6a8391d6cd9a9aa3
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4490
@@ -7377,7 +7994,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10570
-labProtocolId 001Ns
 localization nucleus
 md5sum 2ae269e5e5422a9dc7ddeb4de88526da
 origAssembly hg19
@@ -7407,7 +8023,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10569
-labProtocolId 002Ns
 localization nucleus
 md5sum 1836a0ae8ee33ac6cb55508809dacbc1
 origAssembly hg19
@@ -7437,7 +8052,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10570
-labProtocolId 001Ns
 localization nucleus
 md5sum d33b7dfb19f123ffbe91e909494cbdfa
 origAssembly hg19
@@ -7467,7 +8081,6 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID10569
-labProtocolId 002Ns
 localization nucleus
 md5sum 8b5ca5b6923b1f7175bb643a7c59572e
 origAssembly hg19
@@ -7480,6 +8093,62 @@ seqPlatform Illumina_GA2x
 subId 3301
 tableName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapProtocolRep1
+objType file
+bioRep 001N
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000209
+dccRep 1
+expId 209
+fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID10570
+localization nucleus
+md5sum 8f77463de47ac2d3afefc8aef66540fa
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5708
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapProtocolRep2
+objType file
+bioRep 002N
+cell K562
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000209
+dccRep 2
+expId 209
+fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID10569
+localization nucleus
+md5sum 6adb3566110ad25a8442b7470b6ab93d
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5716
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapRawDataRep1
 objType file
@@ -7497,9 +8166,8 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID10570
-labProtocolId 001Ns
 localization nucleus
-md5sum 8d5fe4bd293e5a1766c68420ca349e09
+md5sum 7857ffa8cf4b9892b8dbc2522be6b89c
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -7526,9 +8194,8 @@ fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID10569
-labProtocolId 002Ns
 localization nucleus
-md5sum be9ff730914d84bbfefe51df15e670e2
+md5sum 02685eb72683978c71ef658a35056631
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -7557,7 +8224,6 @@ geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
 labExpId crg-44
-labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
 md5sum 1d6729a0e7ef60365ef0c12627666b41,5b32aca4a321202ab1903d7eb482bfab
@@ -7587,7 +8253,6 @@ geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
 labExpId crg-44
-labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
 md5sum 4cd0855c5b328c169d0dbb06a4531336
@@ -7617,7 +8282,6 @@ geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
 labExpId crg-44
-labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
 md5sum 36c98037c3852b824e1da0efa2ac3090
@@ -7646,7 +8310,6 @@ geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
 labExpId crg-44
-labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
 md5sum 7916e2647309884d4dc586790fb04222
@@ -7658,7 +8321,8 @@ subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
-objType file
+objType table
+attic auxSup
 bioRep gen0154P
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -7675,7 +8339,6 @@ geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
 labExpId crg-44
-labProtocolId gen0154Ps
 labVersion Produced by Hannon Lab
 localization polysome
 md5sum 7af2e4e15b34c58e1eabf798cfe2fca5
@@ -7693,7 +8356,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001090
@@ -7702,12 +8365,13 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20743,LID20744
-labProtocolId 015WCs,016WCs
 labVersion iIDR
 localization cell
 md5sum 5c5c105b1f11a73199337f0aa0495964
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4491
@@ -7729,7 +8393,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep1.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID20743
-labProtocolId 015WCs
 localization cell
 md5sum 9d25c9ec6d8159c490ca1faa9e95b014,d9cffb4ecaa8877df5433fb8781d808a
 origAssembly hg19
@@ -7759,7 +8422,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapAlnRep2.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID20744
-labProtocolId 016WCs
 localization cell
 md5sum cf84774a08bbe3fa3cff37dbe8853645,6e0a7b365572442adb418b0e8ce8b7c5
 origAssembly hg19
@@ -7779,7 +8441,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -7789,12 +8451,13 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID20743,LID20744
-labProtocolId 015WCs,016WCs
 labVersion iIDR
 localization cell
-md5sum bf626648300bd252f54ef5544b641709
+md5sum bb9edaf056aa0c5c412c7284ffd28a9f
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4491
@@ -7817,7 +8480,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20743
-labProtocolId 015WCs
 localization cell
 md5sum 8dba39a523ccab75ef08d696ca113371
 origAssembly hg19
@@ -7847,7 +8509,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20744
-labProtocolId 016WCs
 localization cell
 md5sum 681fc49d3c18c1140b5e66c0a3109fba
 origAssembly hg19
@@ -7877,7 +8538,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20743
-labProtocolId 015WCs
 localization cell
 md5sum dc70a86afe2d597bb52e5e6597e4f1e1
 origAssembly hg19
@@ -7907,7 +8567,6 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20744
-labProtocolId 016WCs
 localization cell
 md5sum 0a2c85c2f554272619a85e7a665e69a2
 origAssembly hg19
@@ -7920,6 +8579,62 @@ seqPlatform Illumina_GA2x
 subId 3370
 tableName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep1
+objType file
+bioRep 015WC
+cell MCF-7
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001090
+dccRep 1
+expId 1090
+fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20743
+localization cell
+md5sum af4c1f86cd8e1853103cc79f6c975887
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5712
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep2
+objType file
+bioRep 016WC
+cell MCF-7
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001090
+dccRep 2
+expId 1090
+fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20744
+localization cell
+md5sum 991aa559ccec29b6d3a23407b5add05e
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5691
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapRawDataRep1
 objType file
@@ -7937,9 +8652,8 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20743
-labProtocolId 015WCs
 localization cell
-md5sum a8f9cec0d06eb475ef21d74210ef386c
+md5sum edab552c9bd6494c8919c1d2012e1a68
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -7966,9 +8680,8 @@ fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20744
-labProtocolId 016WCs
 localization cell
-md5sum 0bc45e1f5e1d77be3184ef4b02d1da7b
+md5sum 8fde5c5bcea9add127e8f6416b523577
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -7995,7 +8708,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapAlnRep1.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID20999
-labProtocolId 007WCs
 localization cell
 md5sum 3f6f90b587214ce0e8a2bbafe80b025e,1c71f337d97f1300a8a4d511aa72f533
 origAssembly hg19
@@ -8025,7 +8737,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapAlnRep2.bam,wgEncodeCshlSho
 grant Gingeras
 lab CSHL
 labExpId LID21000
-labProtocolId 008WCs
 localization cell
 md5sum ab6ac9d935ef9c2c9538512946c5f4ac,331637cf83a20d6dcc671e4b3e01a6a5
 origAssembly hg19
@@ -8045,7 +8756,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -8055,12 +8766,13 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapContigs.bedRnaElements.gz
 grant Gingeras
 lab CSHL
 labExpId LID20999,LID21000
-labProtocolId 007WCs,008WCs
 labVersion iIDR
 localization cell
-md5sum 89cb4d0e79d6da02553c0d94e975e985
+md5sum d0af9d62c5690158f7fc413a50d3e121
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4472
@@ -8073,7 +8785,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001091
@@ -8082,12 +8794,13 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20999,LID21000
-labProtocolId 007WCs,008WCs
 labVersion iIDR
 localization cell
-md5sum c79554e3a83af6b63623b2ab10ba9910
+md5sum 86221a4263bc19708058ec39e990ff9b
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4472
@@ -8109,7 +8822,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20999
-labProtocolId 007WCs
 localization cell
 md5sum 043440435b36ce61bd34fdfdb8d7662a
 origAssembly hg19
@@ -8139,7 +8851,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21000
-labProtocolId 008WCs
 localization cell
 md5sum ba9944c70d4a8de032b5657ef455273a
 origAssembly hg19
@@ -8169,7 +8880,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20999
-labProtocolId 007WCs
 localization cell
 md5sum 6cfbb025bc9c9a37094ce106b5f5421d
 origAssembly hg19
@@ -8199,7 +8909,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21000
-labProtocolId 008WCs
 localization cell
 md5sum 2f0ccdb07ccffc9addc89b7c5a42eb0a
 origAssembly hg19
@@ -8212,6 +8921,62 @@ seqPlatform Illumina_GA2x
 subId 3372
 tableName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalTapProtocolRep1
+objType file
+bioRep 007WC
+cell NHEK
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001091
+dccRep 1
+expId 1091
+fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20999
+localization cell
+md5sum 41b637907fedafb918a7f289fe13107b
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5718
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalTapProtocolRep2
+objType file
+bioRep 008WC
+cell NHEK
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001091
+dccRep 2
+expId 1091
+fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21000
+localization cell
+md5sum e066dc37eae75a0c293044fbe878b599
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5688
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalTapRawDataRep1
 objType file
@@ -8229,9 +8994,8 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20999
-labProtocolId 007WCs
 localization cell
-md5sum d2b9a20fa9702cd0091c7a563da7c265
+md5sum 254f04a88e62aecacf37f1de096a5979
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -8258,9 +9022,8 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21000
-labProtocolId 008WCs
 localization cell
-md5sum 0d2013eefa52a6649287cc2a28fbe1ba
+md5sum e045eb3939932f6afaa7cb024f8f5758
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -8287,7 +9050,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapAlnRep3.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID21002
-labProtocolId 027Cs
 localization cytosol
 md5sum 22df271f2e055ac3a6ba4f82f411bb29,a901cfd4ed7fcb7ff1d532abb64170d8
 origAssembly hg19
@@ -8317,7 +9079,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapAlnRep4.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID21004
-labProtocolId 028Cs
 localization cytosol
 md5sum 72345303233f9f492d7b40a7ad3d8872,299c73516e46504512a79fc44dceb25c
 origAssembly hg19
@@ -8337,7 +9098,7 @@ bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -8347,12 +9108,13 @@ fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapContigs.bedRnaElements.g
 grant Gingeras
 lab CSHL
 labExpId LID21002,LID21004
-labProtocolId 027Cs,028Cs
 labVersion iIDR
 localization cytosol
-md5sum 323278dac53227c86bf50ce13143a798
+md5sum 0aa2ccb251b6b8daa3c0f9c0b936f4c6
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4469
@@ -8365,7 +9127,7 @@ bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001092
@@ -8374,12 +9136,13 @@ fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21002,LID21004
-labProtocolId 027Cs,028Cs
 labVersion iIDR
 localization cytosol
-md5sum fc6ea68ca9f478f163e2f69e51fd7834
+md5sum dc206f3ab00485e7fd9659c376981e8b
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4469
@@ -8401,7 +9164,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapMinusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21002
-labProtocolId 027Cs
 localization cytosol
 md5sum eff824d26e69a9053d8dddbb0684dd9c
 origAssembly hg19
@@ -8431,7 +9193,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapMinusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21004
-labProtocolId 028Cs
 localization cytosol
 md5sum c1e524f323d185200277800248d1e1e5
 origAssembly hg19
@@ -8461,7 +9222,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21002
-labProtocolId 027Cs
 localization cytosol
 md5sum cc831581083bd473b41f7cd427fffb11
 origAssembly hg19
@@ -8491,7 +9251,6 @@ fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21004
-labProtocolId 028Cs
 localization cytosol
 md5sum b6ec92eb7fa88e200e046ab169ab0610
 origAssembly hg19
@@ -8504,6 +9263,62 @@ seqPlatform Illumina_GA2x
 subId 3374
 tableName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapPlusRawRep4
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapProtocolRep3
+objType file
+bioRep 027C
+cell NHEK
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001092
+dccRep 1
+expId 1092
+fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapProtocolRep3.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21002
+localization cytosol
+md5sum 62b5d06ed893cfd5bf2b70e565f317e8
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 3
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5686
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapProtocolRep4
+objType file
+bioRep 028C
+cell NHEK
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001092
+dccRep 2
+expId 1092
+fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapProtocolRep4.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21004
+localization cytosol
+md5sum 45ca9ad813b9c291ebeb31589d7d6fb1
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 4
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5713
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapRawDataRep3
 objType file
@@ -8521,9 +9336,8 @@ fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapRawDataRep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21002
-labProtocolId 027Cs
 localization cytosol
-md5sum 3f24c5df8524bf812a9f5eb23f4122dd
+md5sum 8815f0827d4783aa21a5dd280641b0a2
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -8550,9 +9364,8 @@ fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalTapRawDataRep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21004
-labProtocolId 028Cs
 localization cytosol
-md5sum 7c3b6351e30c767b844238e63b10083f
+md5sum ead145e114537185482da76f2f6c2400
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -8579,7 +9392,6 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapAlnRep3.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID21001
-labProtocolId 027Ns
 localization nucleus
 md5sum 86dfffadc9e67c5f19870f957198ce4d,44fbb70c74744a372f8e867ccc874fce
 origAssembly hg19
@@ -8609,7 +9421,6 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapAlnRep4.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID21003
-labProtocolId 028Ns
 localization nucleus
 md5sum 055e5581e306819524a51f19749eaa58,11b532bec87b6284b8f0d102fe1d02d8
 origAssembly hg19
@@ -8629,7 +9440,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -8639,12 +9450,13 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapContigs.bedRnaElements.g
 grant Gingeras
 lab CSHL
 labExpId LID21001,LID21003
-labProtocolId 027Ns,028Ns
 labVersion iIDR
 localization nucleus
-md5sum b113947bdf75f77f894a9c1471bfd467
+md5sum 1dd783bbfcf1dc60bab89f72ba90f9f6
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4492
@@ -8657,7 +9469,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001093
@@ -8666,12 +9478,13 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID21001,LID21003
-labProtocolId 027Ns,028Ns
 labVersion iIDR
 localization nucleus
-md5sum 2708789c2280f99014b881045d8a3891
+md5sum 7c4ab7c6178ec276264cc459ae2c0558
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4492
@@ -8693,7 +9506,6 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapMinusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21001
-labProtocolId 027Ns
 localization nucleus
 md5sum f1aed5ec40443beee05d7f80307ad2cb
 origAssembly hg19
@@ -8723,7 +9535,6 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapMinusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21003
-labProtocolId 028Ns
 localization nucleus
 md5sum d0c13d4a419eee2a3390fea8f807bc11
 origAssembly hg19
@@ -8753,7 +9564,6 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21001
-labProtocolId 027Ns
 localization nucleus
 md5sum 8ed219b83cd0f36a4d0495e6642427c7
 origAssembly hg19
@@ -8783,7 +9593,6 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID21003
-labProtocolId 028Ns
 localization nucleus
 md5sum 61e3ab67bd0e1f27649dbc901e419a22
 origAssembly hg19
@@ -8796,6 +9605,62 @@ seqPlatform Illumina_GA2x
 subId 3375
 tableName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapPlusRawRep4
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapProtocolRep3
+objType file
+bioRep 027N
+cell NHEK
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001093
+dccRep 1
+expId 1093
+fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapProtocolRep3.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21001
+localization nucleus
+md5sum 0fbb145eec88cbe6028ae6f787dd9b15
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 3
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5701
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapProtocolRep4
+objType file
+bioRep 028N
+cell NHEK
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001093
+dccRep 2
+expId 1093
+fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapProtocolRep4.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID21003
+localization nucleus
+md5sum 9c80675c45ec42866dfae3ef6d252929
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 4
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5683
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapRawDataRep3
 objType file
@@ -8813,9 +9678,8 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapRawDataRep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21001
-labProtocolId 027Ns
 localization nucleus
-md5sum b732438b3b7079e84db5e8eaa484c676
+md5sum a32508dc782736896419d2939422c387
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -8842,9 +9706,8 @@ fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalTapRawDataRep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID21003
-labProtocolId 028Ns
 localization nucleus
-md5sum b7938aa6d803eff7260ae5c1834c196d
+md5sum 5d296705dea53646051ca6e752bede15
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -8856,7 +9719,8 @@ subId 3375
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
-objType file
+objType table
+attic auxSup
 bioRep gen0161WC
 cell prostate
 composite wgEncodeCshlShortRnaSeq
@@ -8873,7 +9737,6 @@ geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
 labExpId crg-61
-labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum b6f38dbc11f6820eef4cfbc456373e45
@@ -8903,7 +9766,6 @@ geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
 labExpId crg-61
-labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum 8ee9ea5b2f0854fcacda49f88725baf6,c3b0190ef41a3178226e64aab0e129cb
@@ -8933,7 +9795,6 @@ geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
 labExpId crg-61
-labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum e759d7207450fd4bd88007ba2b6e14b7
@@ -8963,7 +9824,6 @@ geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
 labExpId crg-61
-labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum 16fe0adb8bae85a625f9b391dc0a17a2
@@ -8992,7 +9852,6 @@ geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
 labExpId crg-61
-labProtocolId gen0161WCs
 labVersion Produced by Hannon Lab
 localization cell
 md5sum cc247f23a9a364e8a763b65e3819e1fe
@@ -9019,12 +9878,12 @@ fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep1.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID20747
-labProtocolId 019WCs
 localization cell
 md5sum 5cadbe1fc66d9ae3f761c1d790f02d15,f0b7aa64a574189b47c640142d077b30
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 3376
@@ -9047,7 +9906,6 @@ fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep2.bam,wgEncodeCshl
 grant Gingeras
 lab CSHL
 labExpId LID20748
-labProtocolId 020WCs
 localization cell
 md5sum 913ee61cd5a672cd3a549a233ae2b156,101fc9a22f36362cffbb19f030c12b29
 origAssembly hg19
@@ -9067,7 +9925,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-07
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
@@ -9077,12 +9935,13 @@ fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapContigs.bedRnaElements.g
 grant Gingeras
 lab CSHL
 labExpId LID20747,LID20748
-labProtocolId 019WCs,020WCs
 labVersion iIDR
 localization cell
-md5sum 4b03cdc363f714306c0e4334e557430d
+md5sum cfc763c1c3e0733e4b198094d1b31438
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4471
@@ -9095,7 +9954,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001094
@@ -9104,12 +9963,13 @@ fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapExonsGencV7.gtf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20747,LID20748
-labProtocolId 019WCs,020WCs
 labVersion iIDR
 localization cell
-md5sum aa196c31475f154e24cfb86c112757f8
+md5sum bdf7c62de15dd40edeaafc705ea498f3
+origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 4471
@@ -9131,12 +9991,12 @@ fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20747
-labProtocolId 019WCs
 localization cell
 md5sum 82c83d331341e068b130f7e142ee1a69
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 3376
@@ -9159,7 +10019,6 @@ fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20748
-labProtocolId 020WCs
 localization cell
 md5sum 5566d962153a68b78fb351c5d69aef13
 origAssembly hg19
@@ -9189,12 +10048,12 @@ fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20747
-labProtocolId 019WCs
 localization cell
 md5sum b1f6556ea8d2922511c5a3e2126787ef
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 3376
@@ -9217,7 +10076,6 @@ fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID20748
-labProtocolId 020WCs
 localization cell
 md5sum 1c598500a448a72b8b514b855baaba7d
 origAssembly hg19
@@ -9230,6 +10088,62 @@ seqPlatform Illumina_GA2x
 subId 3377
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapProtocolRep1
+objType file
+bioRep 019WC
+cell SK-N-SH_RA
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001094
+dccRep 1
+expId 1094
+fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapProtocolRep1.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20747
+localization cell
+md5sum 10a126dd3b95b8011132005d2b3c205c
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 1
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5679
+view Protocol
+
+metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapProtocolRep2
+objType file
+bioRep 020WC
+cell SK-N-SH_RA
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2011-10-19
+dccAccession wgEncodeEH001094
+dccRep 2
+expId 1094
+fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapProtocolRep2.pdf.gz
+grant Gingeras
+lab CSHL
+labExpId LID20748
+localization cell
+md5sum 4c08caaef8a04cbda0c569b21dd7c666
+origAssembly hg19
+project wgEncode
+protocol TAP-Only
+readType 1x36
+replicate 2
+rnaExtract shortTotal
+seqPlatform Illumina_GA2x
+subId 5692
+view Protocol
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapRawDataRep1
 objType file
@@ -9247,12 +10161,12 @@ fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20747
-labProtocolId 019WCs
 localization cell
-md5sum 26885950a085547a93fb2e873faf4034
+md5sum aca2e59982611d4a7dff78c742e72301
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
+readType 1x36
 replicate 1
 rnaExtract shortTotal
 subId 3376
@@ -9274,9 +10188,8 @@ fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID20748
-labProtocolId 020WCs
 localization cell
-md5sum 28f99970b29edbbbfd9613891e317bb4
+md5sum 9e4f1246736d063a896c3172acc04a09
 origAssembly hg19
 project wgEncode
 protocol TAP-Only
@@ -9287,4 +10200,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1842959713
+# MAGIC: -280036314

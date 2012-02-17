@@ -40,10 +40,6 @@
 #include "regexHelper.h"
 #include "chromInfo.h"
 
-// CHECK_BAM_BIG_CHROM_SIZES turns on chrom size checking (which is currently disabled because so many users have invalid 
-// data in their big* files); see #2572 for details
-// #define CHECK_BAM_BIG_CHROM_SIZES
-
 static boolean doExtraChecking = FALSE;
 
 /*** Utility routines used by many factories. ***/
@@ -1901,25 +1897,6 @@ static struct customFactory wigFactory =
     wigLoader,
     };
 
-#ifdef CHECK_BAM_BIG_CHROM_SIZES
-
-static void checkBigChromList(struct customTrack *track)
-{
-// check for inconsistency between chromList in the big* file and the target assembly (see redmine #2572).
-struct bbiChromInfo *chrom, *chromList = bbiChromList(track->bbiFile);
-char *db = ctGenomeOrCurrent(track);
-for (chrom=chromList; chrom != NULL; chrom = chrom->next)
-    {
-    int chromSize = hChromSize(db, chrom->name);
-    if (chrom->size != chromSize)
-        errAbort("%s data does not match assembly (%s) - chromSize for %s in %s (%d) does not match assembly chromSize (%d)",
-                 track->tdb->type, db, chrom->name, track->tdb->type, chrom->size, chromSize);
-    }
-bbiChromInfoFreeList(&chromList);
-}
-
-#endif
-
 /*** Big Wig Factory - for big client-side wiggle tracks ***/
 
 static boolean bigWigRecognizer(struct customFactory *fac,
@@ -1977,9 +1954,6 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     track->bbiFile = bigWigFileOpen(bigDataUrl);
-#ifdef CHECK_BAM_BIG_CHROM_SIZES
-    checkBigChromList(track);
-#endif
     setBbiViewLimits(track);
     }
 errCatchEnd(errCatch);
@@ -2028,9 +2002,6 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     track->bbiFile = bigBedFileOpen(bigDataUrl);
-#ifdef CHECK_BAM_BIG_CHROM_SIZES
-    checkBigChromList(track);
-#endif
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -2081,64 +2052,12 @@ if (doExtraChecking)
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
-#ifdef CHECK_BAM_BIG_CHROM_SIZES
-	if (bamFileExists(bigDataUrl))
-            {
-            // Make sure bams have matching chromosomes (redmine #2572).
-            samfile_t *fh = bamOpen(bigDataUrl, NULL);
-            if(fh == NULL)
-                errAbort("Cannot open bam file");
-            struct bamChromInfo *chrom, *chromList = bamChromList(fh);
-            if(chromList == NULL)
-                errAbort("Can't loader header from bam file");
-            char *db = ctGenomeOrCurrent(track);
-            int count = 0;
-            for (chrom=chromList; chrom != NULL; chrom = chrom->next)
-                {
-                struct chromInfo *ci = hGetChromInfo(db, chrom->name);
-                if(ci == NULL)
-                    {
-                    // Deal with (some) non-UCSC chromosome naming conventions
-                    if(sameString(chrom->name, "MT"))
-                        ci = hGetChromInfo(db, "chrM");
-                    else
-                        {
-                        // Allow 1 == chr1, X == chrX, IV == chrIV etc.
-                        char buf[512];
-                        safef(buf, sizeof(buf), "chr%s", chrom->name);
-                        ci = hGetChromInfo(db, buf);
-                        }
-                    }
-                if(ci)
-                    {
-                    if (ci->size == chrom->size)
-                        count++;
-                    else
-                        errAbort("%s data does not match assembly (%s) - chromSize for chrom '%s' in %s (%d) does not match assembly chromSize (%d)",
-                                 track->tdb->type, db, chrom->name, track->tdb->type, chrom->size, ci->size);
-                    }
-                }
-            bamChromInfoFreeList(&chromList);
-            if(!count)
-                // We tolerate non-matching chromosomes in bams (e.g. I've seen contigs used for reads that we would put on random),
-                // but we require at least one matching chrom.
-                errAbort("No matching chromosomes found in bam file");
-            bamClose(&fh);
-            }
-        else
-	    {
-            dyStringPrintf(dyErr,
-		       "Can't access %s's bigDataUrl %s and/or the associated index file %s.bai",
-			   track->tdb->shortLabel, bigDataUrl, bigDataUrl);
-	    }
-#else
         if (!bamFileExists(bigDataUrl))
 	    {
             dyStringPrintf(dyErr,
 		       "Can't access %s's bigDataUrl %s and/or the associated index file %s.bai",
 			   track->tdb->shortLabel, bigDataUrl, bigDataUrl);
 	    }
-#endif
 	}
     errCatchEnd(errCatch);
     if (isNotEmpty(errCatch->message->string))

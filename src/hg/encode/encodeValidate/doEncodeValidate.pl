@@ -367,7 +367,7 @@ our %formatCheckers = (
     bedRnaElements => \&validateBed,
     bedRrbs => \&validateBed,
     txt  => \&validateFreepass,
-    doc => \&validateFreepass,
+    pdf => \&validateFreepass,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";

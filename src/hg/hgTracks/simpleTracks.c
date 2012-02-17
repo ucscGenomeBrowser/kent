@@ -12229,6 +12229,7 @@ hFreeConn(&conn);
 static void t2gMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
+/* create mouse overs with titles for t2g bed features */
 {
 if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     {
@@ -12248,10 +12249,50 @@ if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     }
 }
 
+char* t2gLastMarkerName;
+
+char *t2gMarkerItemName(struct track *tg, void *item)
+/* retrieve article count from extra field, and return
+ * side effect: save original name in global var for mapItem
+ * Is this too hacky? No idea where I could save the original name otherwise... */
+{
+struct bed *bed = item;
+char query[256];
+char *escName = sqlEscapeString(bed->name);
+safef(query, sizeof(query), "select matchCount from %s where name = '%s'", tg->table, escName);
+
+char *articleCount = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+articleCount = sqlQuickString(conn, query);
+char* newName = catTwoStrings(articleCount, " articles");
+freeMem(articleCount);
+hFreeConn(&conn);
+t2gLastMarkerName = bed->name;
+return newName;
+}
+
+static void t2gMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+				char *itemName, char *mapItemName, int start, int end,
+				int x, int y, int width, int height)
+/* use previously saved itemName for the mouseOver */
+{
+genericMapItem(tg, hvg, item,
+		    t2gLastMarkerName, mapItemName, start, end,
+		    x, y, width, height);
+}
+
 static void t2gMethods(struct track *tg)
 {
-tg->loadItems = t2gLoadItems;
-tg->mapItem = t2gMapItem;
+if (startsWith("t2gMarker", tg->table))
+{
+    tg->mapItem = t2gMarkerMapItem;
+    tg->itemName = t2gMarkerItemName;
+}
+else
+{
+    tg->loadItems = t2gLoadItems;
+    tg->mapItem = t2gMapItem;
+}
 }
 
 
@@ -12275,7 +12316,8 @@ if (sameWord(type, "bed"))
        settings. */
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
-    if (startsWith("t2g", track->table))
+
+    if (startsWith("t2g", track->table) )
         t2gMethods(track);
     }
 /*
@@ -12394,7 +12436,7 @@ else if (sameWord(type, "encodePeak") || sameWord(type, "narrowPeak") ||
     encodePeakMethods(track);
     }
 else if (sameWord(type, "bed5FloatScore") ||
-         sameWord(type, "bedFloatScoreWithFdr"))
+         sameWord(type, "bed5FloatScoreWithFdr"))
     {
     track->bedSize = 5;
     bedMethods(track);

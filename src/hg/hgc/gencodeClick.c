@@ -194,7 +194,7 @@ static void writeBasicInfoHtml(struct trackDb *tdb, char *gencodeId, struct gene
  */
 
 // basic gene and transcript information
-printf("<table class=\"hgcCcds\"><thead>\n");
+printf("<table class=\"hgcCcds\" style=\"white-space: nowrap;\"><thead>\n");
 printf("<tr><th><th>Transcript<th>Gene</tr>\n");
 printf("</thead><tbody>\n");
 
@@ -208,12 +208,10 @@ prTdExtIdAnchor(tdb, transAttrs->havanaTranscriptId, "vegaTranscriptIdUrl");
 prTdExtIdAnchor(tdb, transAttrs->havanaGeneId, "vegaGeneIdUrl");
 printf("</tr>\n");
 
-// FIXME: white-space style should be in CCS, but don't want to risk breaking
-// other things.
 printf("<tr><th>Position");
-printf("<td style=\"white-space: nowrap;\">");
+printf("<td>");
 writePosLink(transAnno->chrom, transAnno->txStart, transAnno->txEnd);
-printf("<td style=\"white-space: nowrap;\">");
+printf("<td>");
 writePosLink(transAnno->chrom, geneChromStart, geneChromEnd);
 printf("</tr>\n");
 
@@ -244,19 +242,19 @@ printf("</thead><tbody>\n");
 if (transAnno->cdsStart < transAnno->cdsEnd)
     {
     // protein coding
-    printf("<tr><td>");
+    printf("<tr><td width=\"50%%\">");
     hgcAnchorSomewhere("htcGeneMrna", gencodeId, tdb->table, seqName);
     printf("Predicted mRNA</a>");
-    printf("<td>");
+    printf("<td width=\"50%%\">");
     hgcAnchorSomewhere("htcTranslatedPredMRna", gencodeId, "translate", seqName);
     printf("Predicted protein</a></tr>\n");
     }
 else
     {
     // non-protein coding
-    printf("<tr><td>");
+    printf("<tr><td width=\"50%%\">");
     hgcAnchorSomewhere("htcGeneMrna", gencodeId, tdb->table, seqName);
-    printf("Predicted mRNA</a><td></tr>\n");
+    printf("Predicted mRNA</a><td width=\"50%%\"></tr>\n");
     }
 printf("</tbody></table>\n");
 }
@@ -267,6 +265,9 @@ static void writeAnnotationRemarkHtml(struct wgEncodeGencodeAnnotationRemark *re
 printf("<table class=\"hgcCcds\"><thead>\n");
 printf("<tr><th colspan=\"1\">Annotation Remarks</tr>\n");
 printf("</thead><tbody>\n");
+// make sure at least one empty row in printed
+if (remarks == NULL)
+    printf("<tr><td></td></tr>\n");
 struct wgEncodeGencodeAnnotationRemark *remark;
 for (remark = remarks; remark != NULL; remark = remark->next)
     {
@@ -290,7 +291,7 @@ while ((pdb != NULL) || (rowCnt == 0))
     printf("<tr>");
     for (i = 0; i < 3; i++)
         {
-        printf("<td>");
+        printf("<td width=\"33.33%%\">");
         if (pdb != NULL)
             {
             printf("<a href=\"http://www.rcsb.org/pdb/cgi/explore.cgi?job=graphics&pdbId=%s\" target=_blank>%s</a>", pdb->pdbId, pdb->pdbId);
@@ -306,7 +307,7 @@ printf("</tbody></table>\n");
 static void writePubMedEntry(struct wgEncodeGencodePubMed *pubMed)
 /* write HTML table entry for a pubMed */
 {
-printf("<td><a href=\"");
+printf("<td width=\"33.33%%\"><a href=\"");
 printEntrezPubMedUidUrl(stdout, pubMed->pubMedId);
 printf("\" target=_blank>%d</a>", pubMed->pubMedId);
 }
@@ -330,7 +331,7 @@ while ((pubMed != NULL) || (rowCnt == 0))
             pubMed = pubMed->next;
             }
         else
-            printf("<td>");
+            printf("<td width=\"33.33%%\">");
         }
     printf("</tr>\n");
     rowCnt++;
@@ -341,10 +342,10 @@ printf("</tbody></table>\n");
 static void writeRefSeqEntry(struct wgEncodeGencodeRefSeq *refSeq)
 /* write HTML table entry for a RefSeq */
 {
-printf("<td><a href=\"");
+printf("<td width=\"50%%\"><a href=\"");
 printEntrezNucleotideUrl(stdout, refSeq->rnaAcc);
 printf("\" target=_blank>%s</a>", refSeq->rnaAcc);
-printf("<td>");
+printf("<td width=\"50%%\">");
 if (!isEmpty(refSeq->pepAcc))
     {
     printf("<a href=\"");
@@ -358,7 +359,7 @@ static void writeRefSeqLinkHtml(struct wgEncodeGencodeRefSeq *refSeqs)
 {
 printf("<table class=\"hgcCcds\"><thead>\n");
 printf("<tr><th colspan=\"2\">RefSeq</tr>\n");
-printf("<tr><th>RNA<th>Protein</tr>\n");
+printf("<tr class=\"hgcCcdsSub\"><th>RNA<th>Protein</tr>\n");
 printf("</thead><tbody>\n");
 struct wgEncodeGencodeRefSeq *refSeq = refSeqs;
 int rowCnt = 0;
@@ -371,7 +372,7 @@ while ((refSeq != NULL) || (rowCnt == 0))
         refSeq = refSeq->next;
         }
     else
-        printf("<td><td>");
+        printf("<td width=\"50%%\"><td width=\"50%%\">");
     printf("</tr>\n");
     rowCnt++;
     }
@@ -381,11 +382,11 @@ printf("</tbody></table>\n");
 static void writeUniProtEntry(struct wgEncodeGencodeUniProt *uniProt)
 /* write HTML table entry for a UniProt */
 {
-printf("<td>%s", (uniProt->dataset == wgEncodeGencodeUniProtSwissProt) ? "SwissProt" : "TrEMBL");
-printf("<td><a href=\"");
+printf("<td width=\"15%%\">%s", (uniProt->dataset == wgEncodeGencodeUniProtSwissProt) ? "SwissProt" : "TrEMBL");
+printf("<td width=\"15%%\"><a href=\"");
 printSwissProtAccUrl(stdout, uniProt->acc);
 printf("\" target=_blank>%s</a>", uniProt->acc);
-printf("<td><a href=\"");
+printf("<td width=\"20%%\"><a href=\"");
 printSwissProtAccUrl(stdout, uniProt->name);
 printf("\" target=_blank>%s</a>", uniProt->name);
 }
@@ -395,7 +396,7 @@ static void writeUniProtLinkHtml(struct wgEncodeGencodeUniProt *uniProts)
 {
 printf("<table class=\"hgcCcds\"><thead>\n");
 printf("<tr><th colspan=\"6\">UniProt</tr>\n");
-printf("<tr><th>Data set<th>Accession<th>Name<th>Data set<th>Accession<th>Name</tr>\n");
+printf("<tr class=\"hgcCcdsSub\"><th>Data set<th>Accession<th>Name<th>Data set<th>Accession<th>Name</tr>\n");
 printf("</thead><tbody>\n");
 int i, rowCnt = 0;
 struct wgEncodeGencodeUniProt *uniProt = uniProts;
@@ -410,7 +411,7 @@ while ((uniProt != NULL) || (rowCnt == 0))
             uniProt = uniProt->next;
             }
         else
-            printf("<td colspan=3>");
+            printf("<td width=\"50%%\" colspan=3>");
         }
     printf("</tr>\n");
     rowCnt++;
@@ -497,8 +498,8 @@ static void writeSupportExidenceEntry(struct supportEvid *supportEvid)
 /* write HTML table entry  for a supporting evidence */
 {
 // FIXME: should link to sources when possible
-printf("<td>%s", supportEvid->seqSrc);
-printf("<td>%s", supportEvid->seqId);
+printf("<td width=\"25%%\">%s", supportEvid->seqSrc);
+printf("<td width=\"25%%\">%s", supportEvid->seqId);
 }
 
 static void writeSupportingEvidenceLinkHtml(struct wgEncodeGencodeTranscriptSupport *transcriptSupports,
@@ -509,7 +510,7 @@ struct supportEvid *supportEvids = loadSupportEvid(transcriptSupports, exonSuppo
 
 printf("<table class=\"hgcCcds\"><thead>\n");
 printf("<tr><th colspan=\"4\">Supporting Evidence</tr>\n");
-printf("<tr><th>Source<th>Sequence<th>Source<th>Sequence</tr>\n");
+printf("<tr class=\"hgcCcdsSub\"><th>Source<th>Sequence<th>Source<th>Sequence</tr>\n");
 printf("</thead><tbody>\n");
 struct supportEvid *supportEvid = supportEvids;
 int i, rowCnt = 0;
@@ -524,7 +525,7 @@ while ((supportEvid != NULL) || (rowCnt == 0))
             supportEvid = supportEvid->next;
             }
         else
-            printf("<td colspan=\"2\">");
+            printf("<td colspan=\"2\" width=\"50%%\">");
         }
     printf("</tr>\n");
     rowCnt++;
@@ -536,8 +537,8 @@ slFreeList(&supportEvids);
 static void writeTagEntry(struct wgEncodeGencodeTag *tag)
 /* write HTML table entry for a Tag */
 {
-// FIXME: link to help
-printf("<td>%s", tag->tag);
+// FIXME: link to help once gencodegenes.org has it
+printf("<td width=\"33.33%%\">%s", tag->tag);
 }
 
 static void writeTagLinkHtml(struct wgEncodeGencodeTag *tags)
@@ -559,7 +560,7 @@ while ((tag != NULL) || (rowCnt == 0))
             tag = tag->next;
             }
         else
-            printf("<td>");
+            printf("<td width=\"33.33%%\">");
         }
     printf("</tr>\n");
     rowCnt++;
@@ -598,7 +599,7 @@ if (!isEmpty(transAttrs->geneName))
 else
     safef(header, sizeof(header), "%s %s", title, gencodeId);
 cartWebStart(cart, database, "%s", header);
-printf("<H2> %s</H2>\n", header);
+printf("<H2>%s</H2>\n", header);
 
 writeBasicInfoHtml(tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource, haveTsl, tsl);
 writeTagLinkHtml(tags);

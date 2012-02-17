@@ -14,11 +14,40 @@ use strict;
 
 use Carp;
 use DBI;
-
+use File::Basename;
 use vars qw(@ISA @EXPORT_OK);
 use Exporter;
 
+
 @ISA = qw(Exporter);
+
+sub processInclude {
+
+    my $include = $_[0];
+    my $ref = $_[1];
+    my $profile = $_[2];
+    my $currentDir = `pwd`;
+    chomp $currentDir;
+    my($filename, $newDir) = fileparse($include);
+    chdir($newDir);
+    open (my $fh, "./$filename") or die "can't open $newDir/$filename\n";
+    while (<$fh>) {
+        my $line = $_;
+        chomp $line;
+        next if $line =~ m/^#/;
+        unless($line) {next};
+        if ($line =~ m/^include\s+(.*)$/) {
+            $ref = &processInclude($1, $ref, $profile);
+        }
+        for my $name (qw(host user password)) {
+            if ($line =~ m/^$profile\.$name\s*=\s*(.+)/) {
+                $ref->{uc($name)} = $1;
+            }
+        }
+    }
+    chdir($currentDir);
+    return $ref;
+}
 
 sub new
 {
@@ -45,10 +74,14 @@ sub new
     open(CONF, $confFile);
     for (<CONF>) {
         next if /^#/;
-        if(/^include/) {
+        if(/^include\s+(.*)$/) {
             # XXXX TODO: support "include ../cgi-bin/hg.conf"
-            die "include ... syntax not currently supported";
+            #die "include ... syntax not currently supported";
+            $ref = &processInclude($1, $ref, $profile);
+            next
         }
+
+
         for my $name (qw(host user password)) {
             if(/^$profile\.$name\s*=\s*(.+)/) {
                 $ref->{uc($name)} = $1;

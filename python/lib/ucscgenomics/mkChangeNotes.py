@@ -118,7 +118,7 @@ class makeNotes(object):
                 errors.append("table: %s table not found in Db called by %s" % (i, status))
 
 
-
+        
         return (mdbtableset, revokedtableset, missingFromDb, errors)
 
     def __checkGbdbFileStatus(self, i, set, errors, state):
@@ -296,7 +296,6 @@ class makeNotes(object):
                 output.append("These %s objects exist in both new and revoked %s:" % (len(intersect), title))
                 for i in intersect:
                     output.append("%s" % i)
-            
         if all and not summary:
             output.append("")
             output.append("New %s (%s):" % (title.title(), len(new)))
@@ -401,7 +400,7 @@ class makeNotes(object):
         removedOther = oldAdditionalList - additionalList
 
         output.extend(self.__qaHeader(output, newTableSet, filesNoRevoke, newGbdbSet, newSupp, additionalList, revokedTableSet, revokedFiles, revokedGbdbs, pushFiles, pushGbdbs, args, c))
-
+ 
         output.extend(self.__printSection(pushTables, untouchedTables, revokedTableSet, allTables, "tables", 0, args['summary']))
         output.extend(self.__printSection(pushFiles, untouchedFiles, revokedFiles, allFiles, "download", self.releasePath, args['summary']))
         output.extend(self.__printSection(pushGbdbs, untouchedGbdbs, revokedGbdbs, allGbdbs, "gbdbs", self.gbdbPath, args['summary']))
@@ -428,11 +427,18 @@ class makeNotes(object):
         output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePathOld))
         output.append("\n")
         output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
-        output.extend("\n")
+        output.append("\n")
         if self.atticSet:
-            output.append("Attic Objects")
-            output.extend(ucscUtils.printIter((self.atticSet), self.releasePath))
-
+            if self.newInAttic:
+                output.append("New Attic Objects (%s):" % len(self.newInAttic))
+                output.extend(ucscUtils.printIter((self.newInAttic)))
+            if self.stillInAttic:
+                output.append("Untouched Attic Objects (%s):" % len(self.stillInAttic))
+                output.extend(ucscUtils.printIter((self.stillInAttic)))
+            if self.noMoreAttic:
+                output.append("Untouched Attic Objects (%s):" % len(self.noMoreAttic))
+                output.extend(ucscUtils.printIter((self.noMoreAttic))) 
+            output.append("\n")
         if not args['ignore']:
             output.append("No Errors")
         else:
@@ -565,7 +571,7 @@ class makeNotes(object):
                 sys.stderr.write("Scanning and parsing release directories\n")
             #check if all files listed in release directories have associated metaDb entries
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
-            (self.oldMdb, spam, eggs, ham, self.oldSupplementalSet, oldFileErrors) = self.checkMetaDbForFiles("public metaDb", "old")
+            (self.oldMdb, spam, eggs, self.oldAtticSet, self.oldSupplementalSet, oldFileErrors) = self.checkMetaDbForFiles("public metaDb", "old")
 
             self.expIds = set(self.newMdb.filter(lambda s: 'expId' in s, lambda s: s['expId']))
 
@@ -591,6 +597,16 @@ class makeNotes(object):
             (self.newTableSet, self.revokedTableSet, self.newMissingTables, newTableError) = self.checkTableStatus("alpha metaDb", "new")
             (self.oldTableSet, spam, self.droppedTables, oldTableError) = self.checkTableStatus("public metaDb", "old")
 
+            
+
+            self.newInAttic = self.atticSet - self.oldAtticSet
+            self.stillInAttic = self.oldAtticSet & self.atticSet
+            self.oldTableSet = self.oldTableSet - self.atticSet
+            self.noMoreAttic = self.oldAtticSet - self.atticSet
+
+            self.changedTables = self.oldTableSet - self.newTableSet - self.revokedTableSet
+
+
             #same as above except for gbdbs
             if self.verbose >= 1:
                 sys.stderr.write("Checking GBDB status\n")
@@ -598,6 +614,8 @@ class makeNotes(object):
             (self.oldGbdbSet, eggs, oldGbdbError) = self.getGbdbFiles("old")
             #remove missing files from gbdbs
             self.oldGbdbSet = self.oldGbdbSet - self.missingFiles
+            self.oldGbdbSet = self.oldGbdbSet - self.atticSet
+            self.changedGbdbs = self.oldGbdbSet - self.newGbdbSet
             for i in self.missingFiles:
                 if i in self.oldReleaseFiles:
                     del self.oldReleaseFiles[i]
@@ -609,6 +627,13 @@ class makeNotes(object):
             errors.extend(oldTableError)
             errors.extend(newGbdbError)
             errors.extend(oldGbdbError)
+
+            if self.changedTables:
+                errors.append("These tables were tables in the old release, but are no longer tables in the new release:"
+                errors.extend(list(self.changedTables))
+            if self.changedGbdbs:
+                errors.append("These GBDBs were GBDB tables in the old release, but are no longer GBDB tables in the new release:"
+                errors.extend(list(self.changedGbdbs)) 
 
             #for ease of typing
             totalFiles = set(self.newReleaseFiles)

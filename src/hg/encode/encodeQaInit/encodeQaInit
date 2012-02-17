@@ -410,10 +410,20 @@ def writeCheckList(files, filename, qaDir):
 	return
 
 def changeStatus(subIds):
+	errors = list()
 	for i in subIds:
 		cmd = "encodeStatus.pl %s reviewing 2>&1" % (i)
 		p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
 		output = p.stdout.read()
+		lines = output.split("\n")[0]
+		if re.search("ERROR.*reviewing.*displayed", lines) or re.search("ERROR.*reviewing.*loaded", lines):
+			errors.append(i)
+	if errors:
+		print "The following subIds had errors while setting to 'reviewing':"
+		for i in errors:
+			print i
+		print "\n\n\nFATAL ERROR: SubIds are not set correctly to proceed with QA, please ask your wrangler to properly set the subIds to approved\n\n\n"
+		sys.exit()
 	return
 
 def checkWithMkNotes(ourset, mkNotesSet, status):
@@ -543,7 +553,7 @@ encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 
 	initDate = lastInitDate(qaDir + "/release.sql")
 	if not initDate:
-		initdate = d
+		initDate = d
 	writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir, initDate)
 
 	if not args.test:

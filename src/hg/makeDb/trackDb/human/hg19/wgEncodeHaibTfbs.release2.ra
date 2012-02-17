@@ -7,7 +7,7 @@ longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/HAIB
 group regulation
 subGroup1 view Views Peaks=Peaks  RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 BE2C=BE2_C ECC1=ECC-1 GM12891=GM12891 GM12892=GM12892 HCT116=HCT-116 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87
-subGroup3 factor Factor ATF2SC81188=ATF2_(SC81188) ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF101388=BCLAF1_(SC-101388) BHLHE40=BHLHE40 CBX3SC101004=CBX3_(SC-101004) CEBPB=CEBPB CEBPDSC636=CEBPD_(SC-636) CREB1SC240=CREB1_(SC-240) CTCF=CTCF CTCFSC5916=CTCF_(SC-5916) CTCFLSC98982=CTCFL_(SC-98982) E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) EGR1=Egr-1 ELF1SC631=ELF1_(SC-631) ERAA=ER&alpha;_a ETS1=ETS1 FOSL1SC183=FOSL1_(SC-183) FOSL2=FOSL2 FOXA1SC6553=FOXA1_(SC-6553) FOXA1SC101058=FOXA1_(SC-101058) FOXA2SC6554=FOXA2_(SC-6554) FOXP2=FOXP2 GABP=GABP GATA2=GATA2 GATA2SC267=GATA2_(SC-267) GATA3SC268=GATA3_(SC-268) GR=GR HDAC2SC6296=HDAC2_(SC-6296) HNF4ASC8987=HNF4A_(SC-8987) HNF4GSC6558=HNF4G_(SC-6558) IRF4SC6059=IRF4_(SC-6059) JUND=JunD LEF1SC8592=LEF1_(SC-8592) MAX=Max MBD4SC271530=MBD4_(SC-271530) MEF2A=MEF2A MEF2CSC13268=MEF2C_(SC-13268) MTA3SC81325=MTA3_(SC-81325) MYBL2SC81192=MYBL2_(SC-81192) NANOGSC33759=NANOG_(SC-33759) NFATC1SC17834=NFATC1_(SC-17834) NFICSC81335=NFIC_(SC-81335) NR2F2SC271940=NR2F2_(SC-271940) NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 PMLSC71910=PML_(SC-71910) POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 POU5F1SC9081=POU5F1_(SC-9081) PU1=PU.1 RAD21=RAD21 RUNX3SC101553=RUNX3_(SC-101553) RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SP2SC643=SP2_(SC-643) SP4V20=SP4_(V-20) SRF=SRF STAT5ASC74442=STAT5A_(SC-74442) TAF1=TAF1 TAF7SC101167=TAF7_(SC-101167) TCF3=TCF3 TCF12=TCF12 TEAD4SC101184=TEAD4_(SC-101184) THAP1SC98174=THAP1_(SC-98174) USF1=USF-1 USF1SC8983=USF1_(SC-8983) YY1=YY1 YY1SC281=YY1_(SC-281) ZBTB33=ZBTB33 ZBTB7ASC34508=ZBTB7A_(SC-34508) ZEB1SC25388=ZEB1_(SC-25388) zRXLCH=RevXlinkChromatin
+subGroup3 factor Factor ATF2SC81188=ATF2_(SC81188) ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF101388=BCLAF1_(SC-101388) BHLHE40=BHLHE40 CBX3SC101004=CBX3_(SC-101004) CEBPB=CEBPB CEBPDSC636=CEBPD_(SC-636) CREB1SC240=CREB1_(SC-240) CTCF=CTCF CTCFSC5916=CTCF_(SC-5916) CTCFLSC98982=CTCFL_(SC-98982) E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) EGR1=Egr-1 ELF1SC631=ELF1_(SC-631) ERAA=ER&alpha;_a ETS1=ETS1 FOSL1SC183=FOSL1_(SC-183) FOSL2=FOSL2 FOXA1SC6553=FOXA1_(SC-6553) FOXA1SC101058=FOXA1_(SC-101058) FOXA2SC6554=FOXA2_(SC-6554) FOXM1SC502=FOXM1_(SC-502) FOXP2=FOXP2 GABP=GABP GATA2=GATA2 GATA2SC267=GATA2_(SC-267) GATA3SC268=GATA3_(SC-268) GR=GR HDAC2SC6296=HDAC2_(SC-6296) HNF4ASC8987=HNF4A_(SC-8987) HNF4GSC6558=HNF4G_(SC-6558) IRF4SC6059=IRF4_(SC-6059) JUND=JunD LEF1SC8592=LEF1_(SC-8592) MAX=Max MBD4SC271530=MBD4_(SC-271530) MEF2A=MEF2A MEF2CSC13268=MEF2C_(SC-13268) MTA3SC81325=MTA3_(SC-81325) MYBL2SC81192=MYBL2_(SC-81192) NANOGSC33759=NANOG_(SC-33759) NFATC1SC17834=NFATC1_(SC-17834) NFICSC81335=NFIC_(SC-81335) NR2F2SC271940=NR2F2_(SC-271940) NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 PMLSC71910=PML_(SC-71910) POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 POU5F1SC9081=POU5F1_(SC-9081) PU1=PU.1 RAD21=RAD21 RUNX3SC101553=RUNX3_(SC-101553) RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SP2SC643=SP2_(SC-643) SP4V20=SP4_(V-20) SRF=SRF STAT5ASC74442=STAT5A_(SC-74442) TAF1=TAF1 TAF7SC101167=TAF7_(SC-101167) TCF3=TCF3 TCF12=TCF12 TEAD4SC101184=TEAD4_(SC-101184) THAP1SC98174=THAP1_(SC-98174) USF1=USF-1 USF1SC8983=USF1_(SC-8983) YY1=YY1 YY1SC281=YY1_(SC-281) ZBTB33=ZBTB33 ZBTB7ASC34508=ZBTB7A_(SC-34508) ZEB1SC25388=ZEB1_(SC-25388) zRXLCH=RevXlinkChromatin
 subGroup4 protocol Protocol PCR1X=PCR1x PCR2X=PCR2x V0416101=v041610.1 V0416102=v041610.2 V0422111=v042211.1
 subGroup5 treatment Treatment BPA1H=BPA_1h DEX500PM=DEX_500pM DEX5NM=DEX_5nM DEX50NM=DEX_50nM DEX100NM=DEX_100nM DM002P1H=DMSO_0.02pct EST10NM1H=Estradiol_10nM ETOH02=EtOH_0.02pct GEN1H=Genistein_100nM NONE=None
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
@@ -17,11 +17,11 @@ dimensionBchecked NONE
 dimensionCchecked rep1
 #dimensionXchecked GM12878,H1hESC,K562
 #dimensionYchecked NRSF,POL2,POL24H8,SIX5,TAF1
-filterComposite dimB=one dimC=one
+filterComposite dimB=all dimC=one
 sortOrder cellType=+ factor=+ treatment=+ protocol=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target protocol=Protocol treatment=Treatment replicate=Rep view=View labExpId=Lab_ID controlId=Control_ID setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
-controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protocol treatment=treatment rep=replicate i]
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protocol treatment=treatment rep=replicate
 priority 0
 type bed 3
 wgEncode 1
@@ -45,7 +45,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC TCF1 PCR1 2
+        shortLabel HESC TCF12 PCR1 2
         longLabel H1-hESC TCF12 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=TCF12 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -53,7 +53,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC TCF1 PCR1 1
+        shortLabel HESC TCF12 PCR1 1
         longLabel H1-hESC TCF12 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=TCF12 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -77,7 +77,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC SIN3 PCR1 2
+        shortLabel HESC SIN3A PCR1 2
         longLabel H1-hESC Sin3Ak-20 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -85,7 +85,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC SIN3 PCR1 1
+        shortLabel HESC SIN3A PCR1 1
         longLabel H1-hESC Sin3Ak-20 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -211,7 +211,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12891Pol24h8Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM91 POL24 PCR1 2
+        shortLabel GM91 POL2 PCR1 2
         longLabel GM12891 Pol2-4H8 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -235,7 +235,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12891Pol24h8Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM91 POL24 PCR1 1
+        shortLabel GM91 POL2 PCR1 1
         longLabel GM12891 Pol2-4H8 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -315,7 +315,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb33Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG ZBT3 PCR1 2
+        shortLabel HEPG ZBT33 PCR1 2
         longLabel HepG2 ZBTB33 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -342,7 +342,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb33Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG ZBT3 PCR1 1
+        shortLabel HEPG ZBT33 PCR1 1
         longLabel HepG2 ZBTB33 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -351,7 +351,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG SIN3 PCR1 2
+        shortLabel HEPG SIN3A PCR1 2
         longLabel HepG2 Sin3Ak-20 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -378,7 +378,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Fosl2V0416101PkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG FOS2 V101 1
+        shortLabel HEPG FOSL2 V101 1
         longLabel HepG2 FOSL2 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOSL2 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -450,7 +450,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Tcf12Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 TCF1 PCR1 2
+        shortLabel GM78 TCF12 PCR1 2
         longLabel GM12878 TCF12 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=TCF12 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -532,7 +532,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Bcl11aPcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 BCL1 PCR1 1
+        shortLabel GM78 BCL11A 1
         longLabel GM12878 BCL11A PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=BCL11A cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -541,7 +541,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Tcf12Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 TCF1 PCR1 1
+        shortLabel GM78 TCF12 PCR1 1
         longLabel GM12878 TCF12 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=TCF12 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -588,7 +588,7 @@ html wgEncodeHaibTfbs.release2
         #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks on
-        shortLabel GM78 POL24 PCR1 1
+        shortLabel GM78 POL2 PCR1 1
         longLabel GM12878 Pol2-4H8 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -597,7 +597,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Zbtb33Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 ZBT3 PCR1 1
+        shortLabel GM78 ZBT33 PCR1 1
         longLabel GM12878 ZBTB33 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -624,7 +624,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks on
-        shortLabel GM78 POL24 PCR1 2
+        shortLabel GM78 POL2 PCR1 2
         longLabel GM12878 Pol2-4H8 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -642,7 +642,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Zbtb33Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 ZBT3 PCR1 2
+        shortLabel GM78 ZBT33 PCR1 2
         longLabel GM12878 ZBTB33 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -661,7 +661,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Bcl11aPcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 BCL1 PCR1 2
+        shortLabel GM78 BCL11A 2
         longLabel GM12878 BCL11A PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=BCL11A cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -708,7 +708,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Tcf12Pcr1xPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG TCF1 PCR1 2
+        shortLabel HEPG TCF12 PCR1 2
         longLabel HepG2 TCF12 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=TCF12 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -717,7 +717,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex500pmPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 GR Dx.5 2
+        shortLabel A549 GR DX.5 2
         longLabel A549 GR DEX 500pM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX500PM rep=rep2
         type broadPeak
@@ -727,7 +727,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex500pmPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 GR Dx.5 1
+        shortLabel A549 GR DX.5 1
         longLabel A549 GR DEX 500pM PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX500PM rep=rep1
         type broadPeak
@@ -737,7 +737,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex50nmPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 GR Dx50 2
+        shortLabel A549 GR DX50 2
         longLabel A549 GR DEX 50nM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX50NM rep=rep2
         type broadPeak
@@ -747,7 +747,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex50nmPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 GR Dx50 1
+        shortLabel A549 GR DX50 1
         longLabel A549 GR DEX 50nM PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX50NM rep=rep1
         type broadPeak
@@ -757,7 +757,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 GR Dx5 1
+        shortLabel A549 GR DX5 1
         longLabel A549 GR DEX 5nM PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX5NM rep=rep1
         type broadPeak
@@ -767,7 +767,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsEcc1GrV0416102Dex100nmPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel ECC1 GR Dx100 2
+        shortLabel ECC1 GR DX100 2
         longLabel ECC-1 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=ECC1 protocol=PCR2X treatment=DEX100NM rep=rep2
         type broadPeak
@@ -776,7 +776,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsEcc1GrV0416102Dex100nmPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel ECC1 GR Dx100 1
+        shortLabel ECC1 GR DX100 1
         longLabel ECC-1 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=ECC1 protocol=PCR2X treatment=DEX100NM rep=rep1
         type broadPeak
@@ -813,7 +813,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 GR Dx5 2
+        shortLabel A549 GR DX5 2
         longLabel A549 GR DEX 5nM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR1X treatment=DEX5NM rep=rep2
         type broadPeak
@@ -841,7 +841,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG SIN3 PCR1 1
+        shortLabel HEPG SIN3A PCR1 1
         longLabel HepG2 Sin3Ak-20 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -1079,7 +1079,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 POL2 Dx100 1
+        shortLabel A549 POL2 DX100 1
         longLabel A549 Pol2 DEX 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep1
         type broadPeak
@@ -1088,7 +1088,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 POL2 Dx100 2
+        shortLabel A549 POL2 DX100 2
         longLabel A549 Pol2 DEX 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL2 cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep2
         type broadPeak
@@ -1113,7 +1113,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 GR Dx100 1
+        shortLabel A549 GR DX100 1
         longLabel A549 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep1
         type broadPeak
@@ -1122,7 +1122,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr2xDex100nmPkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 GR Dx100 2
+        shortLabel A549 GR DX100 2
         longLabel A549 GR DEX 100nM PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep2
         type broadPeak
@@ -1147,7 +1147,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Fosl2V0416101PkRep2
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG FOS2 V101 2
+        shortLabel HEPG FOSL2 V101 2
         longLabel HepG2 FOSL2 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOSL2 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -1156,7 +1156,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Bhlhe40V0416101PkRep1
         subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG BHLH V101 1
+        shortLabel HEPG BHLHE40 1
         longLabel HepG2 BHLHE40 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=BHLHE40 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -1235,7 +1235,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Bclaf101388V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 BCLA V101 2
+        shortLabel GM78 BCLAF1 2
         longLabel GM12878 BCLAF1 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=BCLAF101388 cellType=1GM12878 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -1245,7 +1245,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Bclaf101388V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 BCLA V101 1
+        shortLabel GM78 BCLAF1 1
         longLabel GM12878 BCLAF1 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=BCLAF101388 cellType=1GM12878 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -1273,7 +1273,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Mef2aPcr1xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 MEFA PCR1 2
+        shortLabel GM78 MEF2A PCR1 2
         longLabel GM12878 MEF2A PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=MEF2A cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -1282,7 +1282,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Mef2aPcr1xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 MEFA PCR1 1
+        shortLabel GM78 MEF2A PCR1 1
         longLabel GM12878 MEF2A PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=MEF2A cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -1383,7 +1383,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Zbtb33Pcr1xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 ZBT3 PCR1 2
+        shortLabel K562 ZBT33 PCR1 2
         longLabel K562 ZBTB33 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -1392,7 +1392,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Zbtb33Pcr1xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 ZBT3 PCR1 1
+        shortLabel K562 ZBT33 PCR1 1
         longLabel K562 ZBTB33 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -1489,7 +1489,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Bclaf101388Pcr1xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 BCLA PCR1 2
+        shortLabel K562 BCLAF1 2
         longLabel K562 BCLAF1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=BCLAF101388 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -1499,7 +1499,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Bclaf101388Pcr1xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 BCLA PCR1 1
+        shortLabel K562 BCLAF1 1
         longLabel K562 BCLAF1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=BCLAF101388 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -1509,7 +1509,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Gata2sc267Pcr1xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 GAT2 PCR1 2
+        shortLabel K562 GATA2 PCR1 2
         longLabel K562 GATA2 267 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GATA2SC267 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
         type broadPeak
@@ -1519,7 +1519,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Gata2sc267Pcr1xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 GAT2 PCR1 1
+        shortLabel K562 GATA2 PCR1 1
         longLabel K562 GATA2 267 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=GATA2SC267 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -1601,7 +1601,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Rad21V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 RAD2 V102 2
+        shortLabel K562 RAD21 V102 2
         longLabel K562 RAD21 v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=RAD21 cellType=1K562 protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -1610,7 +1610,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Rad21V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 RAD2 V102 1
+        shortLabel K562 RAD21 V102 1
         longLabel K562 RAD21 v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=RAD21 cellType=1K562 protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
@@ -1619,7 +1619,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks on
-        shortLabel K562 POL24 V101 2
+        shortLabel K562 POL2 V101 2
         longLabel K562 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -1628,7 +1628,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks on
-        shortLabel K562 POL24 V101 1
+        shortLabel K562 POL2 V101 1
         longLabel K562 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -1671,27 +1671,27 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=2720 dateSubmitted=2010-10-25
 
-        track wgEncodeHaibTfbsK562Yy1V0416101PkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 YY1 V101 2
-        longLabel K562 YY1 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
-        type broadPeak
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Yy1V0416101PkRep2
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 YY1 V101 2
+        #longLabel K562 YY1 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
+        #type broadPeak
+        #color 46,0,184
         # subId=2721 dateSubmitted=2010-10-25
 
-        track wgEncodeHaibTfbsK562Yy1V0416101PkRep1
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 YY1 V101 1
-        longLabel K562 YY1 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
-        type broadPeak
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Yy1V0416101PkRep1
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 YY1 V101 1
+        #longLabel K562 YY1 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
+        #type broadPeak
+        #color 46,0,184
         # subId=2721 dateSubmitted=2010-10-25
 
         track wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel T47D FOX1 DMSO 2
+        shortLabel T47D FOXA1 DMSO 2
         longLabel T-47D FOXA1 6553 DMSO 0.02% v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type broadPeak
@@ -1701,7 +1701,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel T47D FOX1 DMSO 1
+        shortLabel T47D FOXA1 DMSO 1
         longLabel T-47D FOXA1 6553 DMSO 0.02% v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type broadPeak
@@ -1711,7 +1711,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel ECC1 FOX1 DMSO 2
+        shortLabel ECC1 FOXA1 DMSO 2
         longLabel ECC-1 FOXA1 6553 DMSO 0.02% v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep2
         type broadPeak
@@ -1721,7 +1721,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel ECC1 FOX1 DMSO 1
+        shortLabel ECC1 FOXA1 DMSO 1
         longLabel ECC-1 FOXA1 6553 DMSO 0.02% v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep1
         type broadPeak
@@ -1731,7 +1731,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Sin3ak20V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 SIN3 V101 2
+        shortLabel K562 SIN3A V101 2
         longLabel K562 Sin3Ak-20 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -1740,7 +1740,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Sin3ak20V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 SIN3 V101 1
+        shortLabel K562 SIN3A V101 1
         longLabel K562 Sin3Ak-20 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -1773,7 +1773,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG RAD2 V101 2
+        shortLabel HEPG RAD21 V101 2
         longLabel HepG2 RAD21 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=RAD21 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -1782,7 +1782,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG RAD2 V101 1
+        shortLabel HEPG RAD21 V101 1
         longLabel HepG2 RAD21 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=RAD21 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -1899,7 +1899,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshraRad21V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKRA RAD2 V102 2
+        shortLabel SKRA RAD21 V102 2
         longLabel SK-N-SH_RA RAD21 v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=RAD21 cellType=SKNSHRA protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -1907,7 +1907,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshraRad21V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKRA RAD2 V102 1
+        shortLabel SKRA RAD21 V102 1
         longLabel SK-N-SH_RA RAD21 v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=RAD21 cellType=SKNSHRA protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
@@ -1931,7 +1931,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hdac2sc6296V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG HDAC V101 2
+        shortLabel HEPG HDAC2 V101 2
         longLabel HepG2 HDAC2 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=HDAC2SC6296 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -1940,7 +1940,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hdac2sc6296V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG HDAC V101 1
+        shortLabel HEPG HDAC2 V101 1
         longLabel HepG2 HDAC2 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=HDAC2SC6296 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -1967,7 +1967,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Zbtb7asc34508V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 ZBT7 V101 2
+        shortLabel K562 ZBT7A V101 2
         longLabel K562 ZBTB7A v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB7ASC34508 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -1976,7 +1976,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Zbtb7asc34508V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 ZBT7 V101 1
+        shortLabel K562 ZBT7A V101 1
         longLabel K562 ZBTB7A v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB7ASC34508 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2037,7 +2037,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Hdac2sc6296V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 HDAC V102 2
+        shortLabel K562 HDAC2 V102 2
         longLabel K562 HDAC2 v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=HDAC2SC6296 cellType=1K562 protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -2046,7 +2046,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Hdac2sc6296V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 HDAC V102 1
+        shortLabel K562 HDAC2 V102 1
         longLabel K562 HDAC2 v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=HDAC2SC6296 cellType=1K562 protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
@@ -2073,7 +2073,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa1sc101058V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG FOX1 V101 2
+        shortLabel HEPG FOXA1 V101 2
         longLabel HepG2 FOXA1 101058 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC101058 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2082,7 +2082,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa1sc101058V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG FOX1 V101 1
+        shortLabel HEPG FOXA1 V101 1
         longLabel HepG2 FOXA1 101058 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC101058 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2109,7 +2109,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHct116Pol24h8V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HCT POL24 V101 2
+        shortLabel HCT POL2 V101 2
         longLabel HCT-116 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=HCT116 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2117,7 +2117,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHct116Pol24h8V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HCT POL24 V101 1
+        shortLabel HCT POL2 V101 1
         longLabel HCT-116 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=HCT116 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2179,7 +2179,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Fosl1sc183V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 FOS1 V101 2
+        shortLabel K562 FOSL1 V101 2
         longLabel K562 FOSL1 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOSL1SC183 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2188,7 +2188,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Fosl1sc183V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 FOS1 V101 1
+        shortLabel K562 FOSL1 V101 1
         longLabel K562 FOSL1 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOSL1SC183 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2197,7 +2197,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel T47D GAT3 DMSO 2
+        shortLabel T47D GATA3 DMSO 2
         longLabel T-47D GATA3 DMSO 0.02% v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type broadPeak
@@ -2206,7 +2206,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel T47D GAT3 DMSO 1
+        shortLabel T47D GATA3 DMSO 1
         longLabel T-47D GATA3 DMSO 0.02% v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type broadPeak
@@ -2215,7 +2215,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescNanogsc33759V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC NANO V102 2
+        shortLabel HESC NANOG V102 2
         longLabel H1-hESC NANOG v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=NANOGSC33759 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -2224,7 +2224,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescNanogsc33759V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC NANO V102 1
+        shortLabel HESC NANOG V102 1
         longLabel H1-hESC NANOG v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=NANOGSC33759 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
@@ -2251,7 +2251,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Rad21V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 RAD2 V101 2
+        shortLabel GM78 RAD21 V101 2
         longLabel GM12878 RAD21 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=RAD21 cellType=1GM12878 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2260,7 +2260,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Rad21V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 RAD2 V101 1
+        shortLabel GM78 RAD21 V101 1
         longLabel GM12878 RAD21 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=RAD21 cellType=1GM12878 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2269,7 +2269,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb33V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG ZBT3 V101 2
+        shortLabel HEPG ZBT33 V101 2
         longLabel HepG2 ZBTB33 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2278,7 +2278,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb33V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG ZBT3 V101 1
+        shortLabel HEPG ZBT33 V101 1
         longLabel HepG2 ZBTB33 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2323,7 +2323,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG HNFA V101 2
+        shortLabel HEPG HNF4A V101 2
         longLabel HepG2 HNF4A v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=HNF4ASC8987 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2333,7 +2333,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG HNFA V101 1
+        shortLabel HEPG HNF4A V101 1
         longLabel HepG2 HNF4A v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=HNF4ASC8987 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2397,7 +2397,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hnf4gsc6558V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG HNFG V101 2
+        shortLabel HEPG HNF4G V101 2
         longLabel HepG2 HNF4G v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=HNF4GSC6558 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2406,7 +2406,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hnf4gsc6558V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG HNFG V101 1
+        shortLabel HEPG HNF4G V101 1
         longLabel HepG2 HNF4G v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=HNF4GSC6558 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2444,7 +2444,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa2sc6554V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG FOX2 V101 2
+        shortLabel HEPG FOXA2 V101 2
         longLabel HepG2 FOXA2 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA2SC6554 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2453,7 +2453,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa2sc6554V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG FOX2 V101 1
+        shortLabel HEPG FOXA2 V101 1
         longLabel HepG2 FOXA2 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA2SC6554 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2462,7 +2462,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Thap1sc98174V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 THAP V101 2
+        shortLabel K562 THAP1 V101 2
         longLabel K562 THAP1 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=THAP1SC98174 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2471,7 +2471,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Thap1sc98174V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 THAP V101 1
+        shortLabel K562 THAP1 V101 1
         longLabel K562 THAP1 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=THAP1SC98174 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2534,7 +2534,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescHdac2sc6296V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC HDAC V102 2
+        shortLabel HESC HDAC2 V102 2
         longLabel H1-hESC HDAC2 v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=HDAC2SC6296 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -2635,7 +2635,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescHdac2sc6296V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC HDAC V102 1
+        shortLabel HESC HDAC2 V102 1
         longLabel H1-hESC HDAC2 v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=HDAC2SC6296 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
@@ -2644,7 +2644,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescBcl11aPcr1xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC BCL1 PCR1 1
+        shortLabel HESC BCL11A 1
         longLabel H1-hESC BCL11A PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=BCL11A cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -2698,7 +2698,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Bhlhe40V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG BHLH V101 2
+        shortLabel HEPG BHLHE40 2
         longLabel HepG2 BHLHE40 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=BHLHE40 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2707,7 +2707,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescBcl11aV0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC BCL1 V102 2
+        shortLabel HESC BCL11A 2
         longLabel H1-hESC BCL11A v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=BCL11A cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -2750,7 +2750,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Tcf12Pcr1xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG TCF1 PCR1 1
+        shortLabel HEPG TCF12 PCR1 1
         longLabel HepG2 TCF12 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=TCF12 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type broadPeak
@@ -2775,7 +2775,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 CTCF Dx100 1
+        shortLabel A549 CTCF DX100 1
         longLabel A549 CTCF 5916 DEX 100nM PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=CTCFSC5916 cellType=A549 protocol=PCR1X treatment=DEX100NM rep=rep1
         type broadPeak
@@ -2783,7 +2783,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 CTCF Dx100 2
+        shortLabel A549 CTCF DX100 2
         longLabel A549 CTCF 5916 DEX 100nM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=CTCFSC5916 cellType=A549 protocol=PCR1X treatment=DEX100NM rep=rep2
         type broadPeak
@@ -2807,7 +2807,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescPol24h8V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks on
-        shortLabel HESC POL24 V102 2
+        shortLabel HESC POL2 V102 2
         longLabel H1-hESC Pol2-4H8 v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -2816,7 +2816,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12892Pol24h8V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM92 POL24 V102 1
+        shortLabel GM92 POL2 V102 1
         longLabel GM12892 Pol2-4H8 v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=GM12892 protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
@@ -2824,7 +2824,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12892Pol24h8V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM92 POL24 V102 2
+        shortLabel GM92 POL2 V102 2
         longLabel GM12892 Pol2-4H8 v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=GM12892 protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -2832,7 +2832,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescPol24h8V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks on
-        shortLabel HESC POL24 V102 1
+        shortLabel HESC POL2 V102 1
         longLabel H1-hESC Pol2-4H8 v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
@@ -2857,7 +2857,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 USF1 Dx100 1
+        shortLabel A549 USF1 DX100 1
         longLabel A549 USF-1 DEX 100nM PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=USF1 cellType=A549 protocol=PCR1X treatment=DEX100NM rep=rep1
         type broadPeak
@@ -2865,7 +2865,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 USF1 Dx100 2
+        shortLabel A549 USF1 DX100 2
         longLabel A549 USF-1 DEX 100nM PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=USF1 cellType=A549 protocol=PCR1X treatment=DEX100NM rep=rep2
         type broadPeak
@@ -2909,7 +2909,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Mef2aV0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 MEFA V101 2
+        shortLabel K562 MEF2A V101 2
         longLabel K562 MEF2A v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=MEF2A cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -2918,7 +2918,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Mef2aV0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 MEFA V101 1
+        shortLabel K562 MEF2A V101 1
         longLabel K562 MEF2A v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=MEF2A cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -2972,7 +2972,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescFosl1sc183V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC FOS1 V102 2
+        shortLabel HESC FOSL1 V102 2
         longLabel H1-hESC FOSL1 v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOSL1SC183 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -2981,7 +2981,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescFosl1sc183V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC FOS1 V102 1
+        shortLabel HESC FOSL1 V102 1
         longLabel H1-hESC FOSL1 v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOSL1SC183 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
@@ -2990,7 +2990,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa1sc6553V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG FOX1 V101 2
+        shortLabel HEPG FOXA1 V101 2
         longLabel HepG2 FOXA1 6553 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC6553 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3000,7 +3000,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa1sc6553V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG FOX1 V101 1
+        shortLabel HEPG FOXA1 V101 1
         longLabel HepG2 FOXA1 6553 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC6553 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3026,7 +3026,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescRad21V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC RAD2 V102 2
+        shortLabel HESC RAD21 V102 2
         longLabel H1-hESC RAD21 v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=RAD21 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -3035,7 +3035,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescRad21V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC RAD2 V102 1
+        shortLabel HESC RAD21 V102 1
         longLabel H1-hESC RAD21 v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=RAD21 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
@@ -3053,7 +3053,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Foxp2Pcr2xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel PFSK FOXP PCR2 2
+        shortLabel PFSK FOXP2 PCR2 2
         longLabel PFSK-1 FOXP2 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXP2 cellType=PFSK1 protocol=PCR2X treatment=NONE rep=rep2
         type broadPeak
@@ -3061,7 +3061,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknmcFoxp2Pcr2xPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKMC FOXP PCR2 2
+        shortLabel SKMC FOXP2 PCR2 2
         longLabel SK-N-MC FOXP2 PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXP2 cellType=SKNMC protocol=PCR2X treatment=NONE rep=rep2
         type broadPeak
@@ -3101,7 +3101,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHct116Zbtb33V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HCT ZBT3 V101 2
+        shortLabel HCT ZBT33 V101 2
         longLabel HCT-116 ZBTB33 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=HCT116 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3109,7 +3109,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHct116Zbtb33V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HCT ZBT3 V101 1
+        shortLabel HCT ZBT33 V101 1
         longLabel HCT-116 ZBTB33 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=HCT116 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3117,7 +3117,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknmcFoxp2Pcr2xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKMC FOXP PCR2 1
+        shortLabel SKMC FOXP2 PCR2 1
         longLabel SK-N-MC FOXP2 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXP2 cellType=SKNMC protocol=PCR2X treatment=NONE rep=rep1
         type broadPeak
@@ -3125,7 +3125,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Foxp2Pcr2xPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel PFSK FOXP PCR2 1
+        shortLabel PFSK FOXP2 PCR2 1
         longLabel PFSK-1 FOXP2 PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXP2 cellType=PFSK1 protocol=PCR2X treatment=NONE rep=rep1
         type broadPeak
@@ -3133,7 +3133,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPanc1Pol24h8V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel PANC POL24 V101 1
+        shortLabel PANC POL2 V101 1
         longLabel PANC-1 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3141,7 +3141,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPanc1Pol24h8V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel PANC POL24 V101 2
+        shortLabel PANC POL2 V101 2
         longLabel PANC-1 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3149,7 +3149,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknmcPol24h8V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKMC POL24 V101 1
+        shortLabel SKMC POL2 V101 1
         longLabel SK-N-MC Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=SKNMC protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3157,7 +3157,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknmcPol24h8V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKMC POL24 V101 2
+        shortLabel SKMC POL2 V101 2
         longLabel SK-N-MC Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=SKNMC protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3181,7 +3181,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshSin3ak20V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKSH SIN3 V101 1
+        shortLabel SKSH SIN3A V101 1
         longLabel SK-N-SH Sin3Ak-20 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3189,7 +3189,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshSin3ak20V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKSH SIN3 V101 2
+        shortLabel SKSH SIN3A V101 2
         longLabel SK-N-SH Sin3Ak-20 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3263,7 +3263,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Pol24h8V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel PFSK POL24 V101 1
+        shortLabel PFSK POL2 V101 1
         longLabel PFSK-1 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=PFSK1 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3271,7 +3271,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Pol24h8V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel PFSK POL24 V101 2
+        shortLabel PFSK POL2 V101 2
         longLabel PFSK-1 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=PFSK1 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3279,7 +3279,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Pol24h8V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG POL24 V102 2
+        shortLabel HEPG POL2 V102 2
         longLabel HepG2 Pol2-4H8 v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=2HEPG2 protocol=V0416102 treatment=NONE rep=rep2
         type broadPeak
@@ -3288,7 +3288,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Pol24h8V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG POL24 V102 1
+        shortLabel HEPG POL2 V102 1
         longLabel HepG2 Pol2-4H8 v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=2HEPG2 protocol=V0416102 treatment=NONE rep=rep1
         type broadPeak
@@ -3315,7 +3315,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Sp2V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG SP2 V111 1
+        shortLabel HEPG SP2 V11 1
         longLabel HepG2 SP2 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SP2SC643 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -3324,7 +3324,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Sp2V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG SP2 V111 2
+        shortLabel HEPG SP2 V11 2
         longLabel HepG2 SP2 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=SP2SC643 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -3349,7 +3349,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPanc1Sin3ak20V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel PANC SIN3 V101 1
+        shortLabel PANC SIN3A V101 1
         longLabel PANC-1 Sin3Ak-20 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3357,7 +3357,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPanc1Sin3ak20V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel PANC SIN3 V101 2
+        shortLabel PANC SIN3A V101 2
         longLabel PANC-1 Sin3Ak-20 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3381,7 +3381,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Sin3ak20V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel PFSK SIN3 V101 1
+        shortLabel PFSK SIN3A V101 1
         longLabel PFSK-1 Sin3Ak-20 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=PFSK1 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3389,7 +3389,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Sin3ak20V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel PFSK SIN3 V101 2
+        shortLabel PFSK SIN3A V101 2
         longLabel PFSK-1 Sin3Ak-20 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=PFSK1 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3413,7 +3413,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Pmlsc71910V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 PML V111 2
+        shortLabel GM78 PML V11 2
         longLabel GM12878 PML v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=PMLSC71910 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -3422,7 +3422,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Pmlsc71910V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 PML V111 1
+        shortLabel GM78 PML V11 1
         longLabel GM12878 PML v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=PMLSC71910 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -3431,7 +3431,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Nfatc1sc17834V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 NFAT V111 2
+        shortLabel GM78 NFATC1 V11 2
         longLabel GM12878 NFATC1 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=NFATC1SC17834 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -3440,7 +3440,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Nfatc1sc17834V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 NFAT V111 1
+        shortLabel GM78 NFATC1 V11 1
         longLabel GM12878 NFATC1 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=NFATC1SC17834 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -3449,7 +3449,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Atf2sc81188V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 ATF2 V111 2
+        shortLabel GM78 ATF2 V11 2
         longLabel GM12878 ATF2 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ATF2SC81188 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -3458,7 +3458,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Atf2sc81188V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 ATF2 V111 1
+        shortLabel GM78 ATF2 V11 1
         longLabel GM12878 ATF2 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ATF2SC81188 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -3499,7 +3499,7 @@ html wgEncodeHaibTfbs.release2
         type broadPeak
         # subId=4785 dateSubmitted=2011-09-12
 
-        track wgEncodeHaibTfbsHepg2CebpbV0416101PkRep2
+        track wgEncodeHaibTfbsHepg2Cebpbsc150V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HEPG CEBPB V101 2
         longLabel HepG2 CEBPB v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
@@ -3507,8 +3507,9 @@ html wgEncodeHaibTfbs.release2
         type broadPeak
         color 189,0,157
         # subId=4801 dateSubmitted=2011-09-12
+        # was wgEncodeHaibTfbsHepg2CebpbV0416101PkRep2 wong Tue Feb 14 15:07:42 2012
 
-        track wgEncodeHaibTfbsHepg2CebpbV0416101PkRep1
+        track wgEncodeHaibTfbsHepg2Cebpbsc150V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HEPG CEBPB V101 1
         longLabel HepG2 CEBPB v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
@@ -3516,10 +3517,11 @@ html wgEncodeHaibTfbs.release2
         type broadPeak
         color 189,0,157
         # subId=4801 dateSubmitted=2011-09-12
+        # was wgEncodeHaibTfbsHepg2CebpbV0416101PkRep1 wong Tue Feb 14 15:02:33 2012
 
         track wgEncodeHaibTfbsH1hescSp2V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC SP2 V111 2
+        shortLabel HESC SP2 V11 2
         longLabel H1-hESC SP2 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=SP2SC643 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -3528,7 +3530,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescSp2V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC SP2 V111 1
+        shortLabel HESC SP2 V11 1
         longLabel H1-hESC SP2 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SP2SC643 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -3585,7 +3587,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHuvecPol24h8V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HUVEC POL24 2
+        shortLabel HUVEC POL2 V101 2
         longLabel HUVEC Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=2HUVEC protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3594,7 +3596,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHuvecPol24h8V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HUVEC POL24 1
+        shortLabel HUVEC POL2 V101 1
         longLabel HUVEC Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=2HUVEC protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3621,7 +3623,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb7aV0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG ZBT7 V101 2
+        shortLabel HEPG ZBT7A V101 2
         longLabel HepG2 ZBTB7A v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB7ASC34508 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3630,7 +3632,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb7aV0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG ZBT7 V101 1
+        shortLabel HEPG ZBT7A V101 1
         longLabel HepG2 ZBTB7A v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB7ASC34508 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3639,7 +3641,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Zbtb33V0422111Etoh02PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 ZBT3 ETOH 2
+        shortLabel A549 ZBT33 ETOH 2
         longLabel A549 ZBTB33 EtOH .02% v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep2
         type broadPeak
@@ -3647,7 +3649,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Zbtb33V0422111Etoh02PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 ZBT3 ETOH 1
+        shortLabel A549 ZBT33 ETOH 1
         longLabel A549 ZBTB33 EtOH .02% v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ZBTB33 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
         type broadPeak
@@ -3671,7 +3673,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Foxa1V0416102Dex100nmPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 FOX1 Dx100 2
+        shortLabel A549 FOXA1 D100 2
         longLabel A549 FOXA1 101058 DEX 100nM v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC101058 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep2
         type broadPeak
@@ -3679,7 +3681,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Foxa1V0416102Dex100nmPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 FOX1 Dx100 1
+        shortLabel A549 FOXA1 D100 1
         longLabel A549 FOXA1 101058 DEX 100nM v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOXA1SC101058 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep1
         type broadPeak
@@ -3767,7 +3769,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshPol24h8V0416101PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKSH POL24 V101 1
+        shortLabel SKSH POL2 V101 1
         longLabel SK-N-SH Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -3775,7 +3777,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshPol24h8V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel SKSH POL24 V101 2
+        shortLabel SKSH POL2 V101 2
         longLabel SK-N-SH Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -3783,7 +3785,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Fosl2V0422111Etoh02PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 FOS2 ETOH 2
+        shortLabel A549 FOSL2 ETOH 2
         longLabel A549 FOSL2 EtOH .02% v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=FOSL2 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep2
         type broadPeak
@@ -3791,7 +3793,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Fosl2V0422111Etoh02PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 FOS2 ETOH 1
+        shortLabel A549 FOSL2 ETOH 1
         longLabel A549 FOSL2 EtOH .02% v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=FOSL2 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
         type broadPeak
@@ -3815,7 +3817,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Tcf12V0422111Etoh02PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 TCF1 ETOH 2
+        shortLabel A549 TCF12 ETOH 2
         longLabel A549 TCF12 EtOH .02% v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=TCF12 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep2
         type broadPeak
@@ -3823,7 +3825,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Tcf12V0422111Etoh02PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 TCF1 ETOH 1
+        shortLabel A549 TCF12 ETOH 1
         longLabel A549 TCF12 EtOH .02% v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=TCF12 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
         type broadPeak
@@ -3865,7 +3867,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Nficsc81335V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG NFIC V111 2
+        shortLabel HEPG NFIC V11 2
         longLabel HepG2 NFIC v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=NFICSC81335 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -3874,7 +3876,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Nficsc81335V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG NFIC V111 1
+        shortLabel HEPG NFIC V11 1
         longLabel HepG2 NFIC v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=NFICSC81335 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -3901,7 +3903,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Mbd4sc271530V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG MBD4 V111 2
+        shortLabel HEPG MBD4 V11 2
         longLabel HepG2 MBD4 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=MBD4SC271530 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -3910,7 +3912,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Mbd4sc271530V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG MBD4 V111 1
+        shortLabel HEPG MBD4 V11 1
         longLabel HepG2 MBD4 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=MBD4SC271530 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -3919,7 +3921,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescSp4v20V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC SP4 V111 2
+        shortLabel HESC SP4 V11 2
         longLabel H1-hESC SP4 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=SP4V20 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -3928,7 +3930,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescSp4v20V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC SP4 V111 1
+        shortLabel HESC SP4 V11 1
         longLabel H1-hESC SP4 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SP4V20 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -3937,7 +3939,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescAtf2sc81188V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC ATF2 V111 2
+        shortLabel HESC ATF2 V11 2
         longLabel H1-hESC ATF2 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=ATF2SC81188 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -3946,7 +3948,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescAtf2sc81188V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HESC ATF2 V111 1
+        shortLabel HESC ATF2 V11 1
         longLabel H1-hESC ATF2 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=ATF2SC81188 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -3955,7 +3957,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Pmlsc71910V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 PML V111 2
+        shortLabel K562 PML V11 2
         longLabel K562 PML v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=PMLSC71910 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -3964,7 +3966,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Pmlsc71910V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 PML V111 1
+        shortLabel K562 PML V11 1
         longLabel K562 PML v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=PMLSC71910 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4000,7 +4002,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Creb1sc240V0416102Dex100nmPkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 CREB Dx100 2
+        shortLabel A549 CREB1 D100 2
         longLabel A549 CREB1 DEX 100nM v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=CREB1SC240 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep2
         type broadPeak
@@ -4008,7 +4010,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Creb1sc240V0416102Dex100nmPkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 CREB Dx100 1
+        shortLabel A549 CREB1 D100 1
         longLabel A549 CREB1 DEX 100nM v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=CREB1SC240 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep1
         type broadPeak
@@ -4016,7 +4018,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Stat5asc74442V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 STAT V111 2
+        shortLabel GM78 STAT5A V11 2
         longLabel GM12878 STAT5A v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=STAT5ASC74442 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4025,7 +4027,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Stat5asc74442V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 STAT V111 1
+        shortLabel GM78 STAT5A V11 1
         longLabel GM12878 STAT5A v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=STAT5ASC74442 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4034,7 +4036,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Mta3sc81325V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 MTA3 V111 2
+        shortLabel GM78 MTA3 V11 2
         longLabel GM12878 MTA3 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=MTA3SC81325 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4043,7 +4045,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Mta3sc81325V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 MTA3 V111 1
+        shortLabel GM78 MTA3 V11 1
         longLabel GM12878 MTA3 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=MTA3SC81325 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4052,7 +4054,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Tead4sc101184V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 TEAD V111 2
+        shortLabel K562 TEAD4 V11 2
         longLabel K562 TEAD4 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=TEAD4SC101184 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4061,7 +4063,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Tead4sc101184V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 TEAD V111 1
+        shortLabel K562 TEAD4 V11 1
         longLabel K562 TEAD4 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=TEAD4SC101184 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4070,7 +4072,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Runx3sc101553V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 RUNX V111 2
+        shortLabel GM78 RUNX3 V11 2
         longLabel GM12878 RUNX3 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=RUNX3SC101553 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4079,7 +4081,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Runx3sc101553V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 RUNX V111 1
+        shortLabel GM78 RUNX3 V11 1
         longLabel GM12878 RUNX3 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=RUNX3SC101553 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4104,7 +4106,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Sin3ak20V0422111Etoh02PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 SIN3 ETOH 2
+        shortLabel A549 SIN3A ETOH 2
         longLabel A549 Sin3Ak-20 EtOH .02% v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep2
         type broadPeak
@@ -4112,7 +4114,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Sin3ak20V0422111Etoh02PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel A549 SIN3 ETOH 1
+        shortLabel A549 SIN3A ETOH 1
         longLabel A549 Sin3Ak-20 EtOH .02% v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=SIN3AK20 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
         type broadPeak
@@ -4120,7 +4122,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Nficsc81335V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 NFIC V111 2
+        shortLabel GM78 NFIC V11 2
         longLabel GM12878 NFIC v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=NFICSC81335 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4129,7 +4131,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Nficsc81335V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 NFIC V111 1
+        shortLabel GM78 NFIC V11 1
         longLabel GM12878 NFIC v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=NFICSC81335 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4138,7 +4140,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Mybl2sc81192V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG MYBL V111 2
+        shortLabel HEPG MYBL2 V11 2
         longLabel HepG2 MYBL2 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=MYBL2SC81192 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4147,7 +4149,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Mybl2sc81192V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG MYBL V111 1
+        shortLabel HEPG MYBL2 V11 1
         longLabel HepG2 MYBL2 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=MYBL2SC81192 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4156,7 +4158,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Tead4sc101184V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG TEAD V111 1
+        shortLabel HEPG TEAD4 V11 1
         longLabel HepG2 TEAD4 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=TEAD4SC101184 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4165,7 +4167,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Tead4sc101184V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG TEAD V111 2
+        shortLabel HEPG TEAD4 V11 2
         longLabel HepG2 TEAD4 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=TEAD4SC101184 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4174,7 +4176,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Cebpbsc150V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 CEBPB V111 1
+        shortLabel K562 CEBPB V11 1
         longLabel K562 CEBPB v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=CEBPB cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4183,7 +4185,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Cebpbsc150V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 CEBPB V111 2
+        shortLabel K562 CEBPB V11 2
         longLabel K562 CEBPB v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=CEBPB cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4192,7 +4194,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Stat5asc74442V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 STAT V111 2
+        shortLabel K562 STAT5A V11 2
         longLabel K562 STAT5A v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=STAT5ASC74442 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4201,7 +4203,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Stat5asc74442V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 STAT V111 1
+        shortLabel K562 STAT5A V11 1
         longLabel K562 STAT5A v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=STAT5ASC74442 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4210,7 +4212,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Nr2f2sc271940V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 NR2F V111 2
+        shortLabel K562 NR2F2 V11 2
         longLabel K562 NR2F2 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=NR2F2SC271940 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4219,7 +4221,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Nr2f2sc271940V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 NR2F V111 1
+        shortLabel K562 NR2F2 V11 1
         longLabel K562 NR2F2 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=NR2F2SC271940 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4228,7 +4230,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Cbx3sc101004V0422111PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 CBX3 V111 1
+        shortLabel K562 CBX3 V11 1
         longLabel K562 CBX3 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=CBX3SC101004 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type broadPeak
@@ -4237,7 +4239,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Cbx3sc101004V0422111PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 CBX3 V111 2
+        shortLabel K562 CBX3 V11 2
         longLabel K562 CBX3 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=CBX3SC101004 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type broadPeak
@@ -4246,7 +4248,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1V2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel U87 POL24 V101 1
+        shortLabel U87 POL2 V101 1
         longLabel U87 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=U87 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -4254,7 +4256,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2V2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel U87 POL24 V101 2
+        shortLabel U87 POL2 V101 2
         longLabel U87 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=U87 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -4293,6 +4295,42 @@ html wgEncodeHaibTfbs.release2
         type broadPeak
         color 153,38,0
         # subId=5502 dateSubmitted=2012-02-02
+
+        track wgEncodeHaibTfbsK562Yy1sc281V0416101PkRep1
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 YY1 V101 1
+        longLabel K562 YY1 281 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=YY1SC281 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
+        type broadPeak
+        color 46,0,184
+        # subId=5676 dateSubmitted=2012-02-14
+
+        track wgEncodeHaibTfbsK562Yy1sc281V0416101PkRep2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 YY1 V101 2
+        longLabel K562 YY1 281 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=YY1SC281 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
+        type broadPeak
+        color 46,0,184
+        # subId=5676 dateSubmitted=2012-02-14
+
+        track wgEncodeHaibTfbsGm12878Foxm1sc502V0422111PkRep1
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 FOXM1 V11 1
+        longLabel GM12878 FOXM1 v042211.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=FOXM1SC502 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=5132 dateSubmitted=2011-12-21
+
+        track wgEncodeHaibTfbsGm12878Foxm1sc502V0422111PkRep2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 FOXM1 V11 2
+        longLabel GM12878 FOXM1 v042211.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        subGroups view=Peaks factor=FOXM1SC502 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
+        type broadPeak
+        color 153,38,0
+        # subId=5132 dateSubmitted=2011-12-21
 
     #Raw Signal Track HAIB TFBS#
     #Short Labels for Raw Signal =Ra #
@@ -4337,7 +4375,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Bclaf101388Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 BCLA PCR1 1
+        shortLabel K562 BCLAF1 1
         longLabel K562 BCLAF1 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=BCLAF101388 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.271154 76.736504
@@ -4347,7 +4385,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Bclaf101388V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 BCLA V101 1
+        shortLabel GM78 BCLAF1 1
         longLabel GM12878 BCLAF1 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=BCLAF101388 cellType=1GM12878 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.183709 124.371002
@@ -4357,7 +4395,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Bclaf101388Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 BCLA PCR1 2
+        shortLabel K562 BCLAF1 2
         longLabel K562 BCLAF1 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=BCLAF101388 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.284958 110.990997
@@ -4367,7 +4405,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Bhlhe40V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG BHLH V101 1
+        shortLabel HEPG BHLHE40 1
         longLabel HepG2 BHLHE40 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=BHLHE40 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.154140 285.968994
@@ -4435,7 +4473,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Fosl2V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG FOS2 V101 2
+        shortLabel HEPG FOSL2 V101 2
         longLabel HepG2 FOSL2 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOSL2 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.194797 145.464996
@@ -4444,7 +4482,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel T47D FOX1 DMSO 1
+        shortLabel T47D FOXA1 DMSO 1
         longLabel T-47D FOXA1 6553 DMSO 0.02% v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.292482 169.054993
@@ -4454,7 +4492,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel ECC1 FOX1 DMSO 1
+        shortLabel ECC1 FOXA1 DMSO 1
         longLabel ECC-1 FOXA1 6553 DMSO 0.02% v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.214719 212.035004
@@ -4464,7 +4502,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsEcc1Foxa1sc6553V0416102Dm002p1hRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel ECC1 FOX1 DMSO 2
+        shortLabel ECC1 FOXA1 DMSO 2
         longLabel ECC-1 FOXA1 6553 DMSO 0.02% v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC6553 cellType=ECC1 protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.221521 202.138000
@@ -4474,7 +4512,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsT47dFoxa1sc6553V0416102Dm002p1hRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel T47D FOX1 DMSO 2
+        shortLabel T47D FOXA1 DMSO 2
         longLabel T-47D FOXA1 6553 DMSO 0.02% v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC6553 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.201189 168.798004
@@ -4484,7 +4522,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa1sc6553V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG FOX1 V101 2
+        shortLabel HEPG FOXA1 V101 2
         longLabel HepG2 FOXA1 6553 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC6553 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.227945 147.936005
@@ -4521,7 +4559,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel ECC1 GR Dx100 1
+        shortLabel ECC1 GR DX100 1
         longLabel ECC-1 GR DEX 100nM v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=ECC1 protocol=V0416102 treatment=DEX100NM rep=rep1
         type bigWig 0.393211 166.720993
@@ -4530,7 +4568,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsEcc1GrV0416102Dex100nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel ECC1 GR Dx100 2
+        shortLabel ECC1 GR DX100 2
         longLabel ECC-1 GR DEX 100nM v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=ECC1 protocol=V0416102 treatment=DEX100NM rep=rep2
         type bigWig 0.162726 146.371994
@@ -4549,7 +4587,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG HNFA V101 1
+        shortLabel HEPG HNF4A V101 1
         longLabel HepG2 HNF4A v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=HNF4ASC8987 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.422290 325.691010
@@ -4672,7 +4710,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescPol24h8V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal on
-        shortLabel HESC POL24 V102 2
+        shortLabel HESC POL2 V102 2
         longLabel H1-hESC Pol2-4H8 v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.135589 820.411987
@@ -4780,7 +4818,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Tcf12Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 TCF1 PCR1 2
+        shortLabel GM78 TCF12 PCR1 2
         longLabel GM12878 TCF12 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=TCF12 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.186031 172.636993
@@ -4789,7 +4827,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Tcf12Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG TCF1 PCR1 1
+        shortLabel HEPG TCF12 PCR1 1
         longLabel HepG2 TCF12 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=TCF12 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.148113 105.494003
@@ -4798,7 +4836,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescTcf12Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC TCF1 PCR1 1
+        shortLabel HESC TCF12 PCR1 1
         longLabel H1-hESC TCF12 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=TCF12 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.334427 204.669006
@@ -4807,7 +4845,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescTcf12Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC TCF1 PCR1 2
+        shortLabel HESC TCF12 PCR1 2
         longLabel H1-hESC TCF12 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=TCF12 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.306516 188.354004
@@ -4832,7 +4870,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb33Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG ZBT3 PCR1 2
+        shortLabel HEPG ZBT33 PCR1 2
         longLabel HepG2 ZBTB33 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.144435 400.373993
@@ -4841,7 +4879,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Zbtb33Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 ZBT3 PCR1 1
+        shortLabel K562 ZBT33 PCR1 1
         longLabel K562 ZBTB33 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.115212 149.660004
@@ -4850,7 +4888,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Zbtb33Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 ZBT3 PCR1 2
+        shortLabel K562 ZBT33 PCR1 2
         longLabel K562 ZBTB33 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.186033 227.192993
@@ -4904,7 +4942,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Mef2aPcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 MEFA PCR1 1
+        shortLabel GM78 MEF2A PCR1 1
         longLabel GM12878 MEF2A PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=MEF2A cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.357467 789.643982
@@ -4922,7 +4960,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC SIN3 PCR1 2
+        shortLabel HESC SIN3A PCR1 2
         longLabel H1-hESC Sin3Ak-20 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.245489 212.654999
@@ -4949,7 +4987,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Tcf12Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG TCF1 PCR1 2
+        shortLabel HEPG TCF12 PCR1 2
         longLabel HepG2 TCF12 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=TCF12 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.147578 148.205994
@@ -4967,7 +5005,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC SIN3 PCR1 1
+        shortLabel HESC SIN3A PCR1 1
         longLabel H1-hESC Sin3Ak-20 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.310000 224.750000
@@ -5102,7 +5140,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Bclaf101388V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 BCLA V101 2
+        shortLabel GM78 BCLAF1 2
         longLabel GM12878 BCLAF1 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=BCLAF101388 cellType=1GM12878 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.150221 104.178001
@@ -5179,7 +5217,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa1sc6553V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG FOX1 V101 1
+        shortLabel HEPG FOXA1 V101 1
         longLabel HepG2 FOXA1 6553 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC6553 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.169883 73.262001
@@ -5189,7 +5227,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hnf4asc8987V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG HNFA V101 2
+        shortLabel HEPG HNF4A V101 2
         longLabel HepG2 HNF4A v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=HNF4ASC8987 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.420062 350.752014
@@ -5199,7 +5237,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Mef2aPcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 MEFA PCR1 2
+        shortLabel GM78 MEF2A PCR1 2
         longLabel GM12878 MEF2A PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=MEF2A cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.208574 219.733002
@@ -5249,13 +5287,13 @@ html wgEncodeHaibTfbs.release2
         color 0,107,27
         # subId=3027 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsK562Yy1V0416101RawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 YY1 V101 1
-        longLabel K562 YY1 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
-        type bigWig 0.333504 1234.709961
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Yy1V0416101RawRep1
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 YY1 V101 1
+        #longLabel K562 YY1 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
+        #type bigWig 0.333504 1234.709961
+        #color 46,0,184
         # subId=3027 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsHepg2Atf3V0416101RawRep1
@@ -5307,7 +5345,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr2xDex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 GR Dx100 1
+        shortLabel A549 GR DX100 1
         longLabel A549 GR DEX 100nM PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep1
         type bigWig 0.178638 530.018005
@@ -5351,7 +5389,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 POL2 Dx100 1
+        shortLabel A549 POL2 DX100 1
         longLabel A549 Pol2 DEX 100nM PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL2 cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep1
         type bigWig 0.206788 585.054016
@@ -5360,7 +5398,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal on
-        shortLabel K562 POL24 V101 2
+        shortLabel K562 POL2 V101 2
         longLabel K562 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.184111 363.113007
@@ -5369,7 +5407,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal on
-        shortLabel K562 POL24 V101 1
+        shortLabel K562 POL2 V101 1
         longLabel K562 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.423911 306.488007
@@ -5378,7 +5416,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Rad21V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 RAD2 V102 1
+        shortLabel K562 RAD21 V102 1
         longLabel K562 RAD21 v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=RAD21 cellType=1K562 protocol=V0416102 treatment=NONE rep=rep1
         type bigWig 0.420938 304.022003
@@ -5387,7 +5425,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescRad21V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC RAD2 V102 1
+        shortLabel HESC RAD21 V102 1
         longLabel H1-hESC RAD21 v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=RAD21 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type bigWig 0.251183 126.785004
@@ -5430,13 +5468,13 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=3028 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsK562Yy1V0416101RawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 YY1 V101 2
-        longLabel K562 YY1 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
-        type bigWig 0.551376 986.961975
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Yy1V0416101RawRep2
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 YY1 V101 2
+        #longLabel K562 YY1 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=YY1 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
+        #type bigWig 0.551376 986.961975
+        #color 46,0,184
         # subId=3028 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsHepg2RxlchPcr2xRawRep2
@@ -5460,7 +5498,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549RxlchPcr2xDex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 RvXL Dx100 1
+        shortLabel A549 RvXL DX100 1
         longLabel A549 Control DEX 100nM PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep1
         type bigWig 0.145188 133.645004
@@ -5491,7 +5529,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr2xDex100nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 GR Dx100 2
+        shortLabel A549 GR DX100 2
         longLabel A549 GR DEX 100nM PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep2
         type bigWig 0.159649 105.927002
@@ -5534,7 +5572,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Rad21V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 RAD2 V102 2
+        shortLabel K562 RAD21 V102 2
         longLabel K562 RAD21 v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=RAD21 cellType=1K562 protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.412112 143.723999
@@ -5543,7 +5581,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescRad21V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC RAD2 V102 2
+        shortLabel HESC RAD21 V102 2
         longLabel H1-hESC RAD21 v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=RAD21 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.076561 154.078995
@@ -5613,7 +5651,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Zbtb33Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 ZBT3 PCR1 2
+        shortLabel GM78 ZBT33 PCR1 2
         longLabel GM12878 ZBTB33 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.206141 160.584000
@@ -5622,7 +5660,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12891Pol24h8Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM91 POL24 PCR1 2
+        shortLabel GM91 POL2 PCR1 2
         longLabel GM12891 Pol2-4H8 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.173227 200.164001
@@ -5654,7 +5692,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12891Pol24h8Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM91 POL24 PCR1 1
+        shortLabel GM91 POL2 PCR1 1
         longLabel GM12891 Pol2-4H8 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=GM12891 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.209765 439.770996
@@ -5678,7 +5716,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex500pmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 GR Dx.5 2
+        shortLabel A549 GR DX.5 2
         longLabel A549 GR DEX 500pM PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1X treatment=DEX500PM rep=rep2
         type bigWig 0.201001 188.690002
@@ -5687,7 +5725,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex500pmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 GR Dx.5 1
+        shortLabel A549 GR DX.5 1
         longLabel A549 GR DEX 500pM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1X treatment=DEX500PM rep=rep1
         type bigWig 0.153989 215.815002
@@ -5696,7 +5734,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex50nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 GR Dx50 2
+        shortLabel A549 GR DX50 2
         longLabel A549 GR DEX 50nM PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1X treatment=DEX50NM rep=rep2
         type bigWig 0.185807 165.692993
@@ -5705,7 +5743,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex50nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 GR Dx50 1
+        shortLabel A549 GR DX50 1
         longLabel A549 GR DEX 50nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1X treatment=DEX50NM rep=rep1
         type bigWig 0.159708 203.427994
@@ -5714,7 +5752,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex5nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 GR Dx5 2
+        shortLabel A549 GR DX5 2
         longLabel A549 GR DEX 5nM PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1X treatment=DEX5NM rep=rep2
         type bigWig 0.148563 218.201996
@@ -5723,7 +5761,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549GrPcr1xDex5nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 GR Dx5 1
+        shortLabel A549 GR DX5 1
         longLabel A549 GR DEX 5nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1X treatment=DEX5NM rep=rep1
         type bigWig 0.150640 241.927002
@@ -5797,7 +5835,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Zbtb33Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 ZBT3 PCR1 1
+        shortLabel GM78 ZBT33 PCR1 1
         longLabel GM12878 ZBTB33 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.176821 148.970993
@@ -5822,7 +5860,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal on
-        shortLabel GM78 POL24 PCR1 1
+        shortLabel GM78 POL2 PCR1 1
         longLabel GM12878 Pol2-4H8 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.106921 267.355011
@@ -5924,7 +5962,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb33Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG ZBT3 PCR1 1
+        shortLabel HEPG ZBT33 PCR1 1
         longLabel HepG2 ZBTB33 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.179863 183.729996
@@ -5942,7 +5980,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescPol24h8V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal on
-        shortLabel HESC POL24 V102 1
+        shortLabel HESC POL2 V102 1
         longLabel H1-hESC Pol2-4H8 v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type bigWig 0.167542 258.097992
@@ -5968,7 +6006,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Bcl11aPcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 BCL1 PCR1 2
+        shortLabel GM78 BCL11A 2
         longLabel GM12878 BCL11A PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=BCL11A cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.159611 359.764008
@@ -5994,7 +6032,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Sin3ak20V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 SIN3 V101 2
+        shortLabel K562 SIN3A V101 2
         longLabel K562 Sin3Ak-20 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.130746 436.070007
@@ -6003,7 +6041,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Sin3ak20V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 SIN3 V101 1
+        shortLabel K562 SIN3A V101 1
         longLabel K562 Sin3Ak-20 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.158863 235.634003
@@ -6024,7 +6062,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG RAD2 V101 2
+        shortLabel HEPG RAD21 V101 2
         longLabel HepG2 RAD21 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=RAD21 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.149907 105.571999
@@ -6033,7 +6071,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG RAD2 V101 1
+        shortLabel HEPG RAD21 V101 1
         longLabel HepG2 RAD21 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=RAD21 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.163920 126.054001
@@ -6132,7 +6170,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshraRad21V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKRA RAD2 V102 2
+        shortLabel SKRA RAD21 V102 2
         longLabel SK-N-SH_RA RAD21 v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=RAD21 cellType=SKNSHRA protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.147741 98.284599
@@ -6140,7 +6178,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshraRad21V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKRA RAD2 V102 1
+        shortLabel SKRA RAD21 V102 1
         longLabel SK-N-SH_RA RAD21 v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=RAD21 cellType=SKNSHRA protocol=V0416102 treatment=NONE rep=rep1
         type bigWig 0.157146 77.119499
@@ -6164,7 +6202,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hdac2sc6296V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG HDAC V101 2
+        shortLabel HEPG HDAC2 V101 2
         longLabel HepG2 HDAC2 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=HDAC2SC6296 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.184255 118.522003
@@ -6173,7 +6211,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hdac2sc6296V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG HDAC V101 1
+        shortLabel HEPG HDAC2 V101 1
         longLabel HepG2 HDAC2 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=HDAC2SC6296 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.140889 121.269997
@@ -6200,7 +6238,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Zbtb7asc34508V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 ZBT7 V101 2
+        shortLabel K562 ZBT7A V101 2
         longLabel K562 ZBTB7A v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB7ASC34508 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.174720 48.222698
@@ -6209,7 +6247,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Zbtb7asc34508V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 ZBT7 V101 1
+        shortLabel K562 ZBT7A V101 1
         longLabel K562 ZBTB7A v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB7ASC34508 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.256452 123.482002
@@ -6252,7 +6290,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Hdac2sc6296V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 HDAC V102 2
+        shortLabel K562 HDAC2 V102 2
         longLabel K562 HDAC2 v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=HDAC2SC6296 cellType=1K562 protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.140410 281.487000
@@ -6261,7 +6299,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Hdac2sc6296V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 HDAC V102 1
+        shortLabel K562 HDAC2 V102 1
         longLabel K562 HDAC2 v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=HDAC2SC6296 cellType=1K562 protocol=V0416102 treatment=NONE rep=rep1
         type bigWig 0.368010 175.541000
@@ -6288,7 +6326,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa1sc101058V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG FOX1 V101 2
+        shortLabel HEPG FOXA1 V101 2
         longLabel HepG2 FOXA1 101058 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC101058 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.377871 100.230003
@@ -6297,7 +6335,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa1sc101058V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG FOX1 V101 1
+        shortLabel HEPG FOXA1 V101 1
         longLabel HepG2 FOXA1 101058 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC101058 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.154560 76.507401
@@ -6324,7 +6362,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHct116Pol24h8V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HCT POL24 V101 2
+        shortLabel HCT POL2 V101 2
         longLabel HCT-116 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=HCT116 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.155121 194.289001
@@ -6332,7 +6370,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHct116Pol24h8V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HCT POL24 V101 1
+        shortLabel HCT POL2 V101 1
         longLabel HCT-116 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=HCT116 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.234700 237.751007
@@ -6394,7 +6432,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Fosl1sc183V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 FOS1 V101 2
+        shortLabel K562 FOSL1 V101 2
         longLabel K562 FOSL1 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOSL1SC183 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.189531 237.341003
@@ -6403,7 +6441,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Fosl1sc183V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 FOS1 V101 1
+        shortLabel K562 FOSL1 V101 1
         longLabel K562 FOSL1 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOSL1SC183 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.235398 123.112999
@@ -6412,7 +6450,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel T47D GAT3 DMSO 2
+        shortLabel T47D GATA3 DMSO 2
         longLabel T-47D GATA3 DMSO 0.02% v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep2
         type bigWig 0.163613 185.701004
@@ -6421,7 +6459,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsT47dGata3sc268V0416102Dm002p1hRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel T47D GAT3 DMSO 1
+        shortLabel T47D GATA3 DMSO 1
         longLabel T-47D GATA3 DMSO 0.02% v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GATA3SC268 cellType=T47D protocol=V0416102 treatment=DM002P1H rep=rep1
         type bigWig 0.173697 208.783005
@@ -6430,7 +6468,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescNanogsc33759V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC NANO V102 2
+        shortLabel HESC NANOG V102 2
         longLabel H1-hESC NANOG v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=NANOGSC33759 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.136390 690.064026
@@ -6439,7 +6477,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescNanogsc33759V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC NANO V102 1
+        shortLabel HESC NANOG V102 1
         longLabel H1-hESC NANOG v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=NANOGSC33759 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type bigWig 0.337010 227.987000
@@ -6466,7 +6504,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Rad21V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 RAD2 V101 2
+        shortLabel GM78 RAD21 V101 2
         longLabel GM12878 RAD21 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=RAD21 cellType=1GM12878 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.183488 92.707603
@@ -6475,7 +6513,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Rad21V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 RAD2 V101 1
+        shortLabel GM78 RAD21 V101 1
         longLabel GM12878 RAD21 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=RAD21 cellType=1GM12878 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.344315 157.352005
@@ -6484,7 +6522,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb33V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG ZBT3 V101 2
+        shortLabel HEPG ZBT33 V101 2
         longLabel HepG2 ZBTB33 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.190733 205.705002
@@ -6503,7 +6541,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb33V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG ZBT3 V101 1
+        shortLabel HEPG ZBT33 V101 1
         longLabel HepG2 ZBTB33 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.228820 144.899994
@@ -6649,7 +6687,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Tcf12Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 TCF1 PCR1 1
+        shortLabel GM78 TCF12 PCR1 1
         longLabel GM12878 TCF12 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=TCF12 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.180535 142.848007
@@ -6667,7 +6705,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Bcl11aPcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 BCL1 PCR1 1
+        shortLabel GM78 BCL11A 1
         longLabel GM12878 BCL11A PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=BCL11A cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.181856 137.847000
@@ -6712,7 +6750,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG SIN3 PCR1 2
+        shortLabel HEPG SIN3A PCR1 2
         longLabel HepG2 Sin3Ak-20 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.106626 301.246002
@@ -6739,7 +6777,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Fosl2V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG FOS2 V101 1
+        shortLabel HEPG FOSL2 V101 1
         longLabel HepG2 FOSL2 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOSL2 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.092749 412.317993
@@ -6820,7 +6858,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG SIN3 PCR1 1
+        shortLabel HEPG SIN3A PCR1 1
         longLabel HepG2 Sin3Ak-20 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=2HEPG2 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.192791 165.270004
@@ -6883,7 +6921,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hnf4gsc6558V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG HNFG V101 2
+        shortLabel HEPG HNF4G V101 2
         longLabel HepG2 HNF4G v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=HNF4GSC6558 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.175353 205.294006
@@ -6892,7 +6930,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Hnf4gsc6558V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG HNFG V101 1
+        shortLabel HEPG HNF4G V101 1
         longLabel HepG2 HNF4G v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=HNF4GSC6558 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.150012 130.809998
@@ -6940,7 +6978,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa2sc6554V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG FOX2 V101 2
+        shortLabel HEPG FOXA2 V101 2
         longLabel HepG2 FOXA2 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA2SC6554 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.124503 128.580994
@@ -6949,7 +6987,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Foxa2sc6554V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG FOX2 V101 1
+        shortLabel HEPG FOXA2 V101 1
         longLabel HepG2 FOXA2 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA2SC6554 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.254102 56.537701
@@ -6958,7 +6996,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Thap1sc98174V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 THAP V101 2
+        shortLabel K562 THAP1 V101 2
         longLabel K562 THAP1 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=THAP1SC98174 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.244118 195.598999
@@ -6967,7 +7005,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Thap1sc98174V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 THAP V101 1
+        shortLabel K562 THAP1 V101 1
         longLabel K562 THAP1 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=THAP1SC98174 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.306795 56.373501
@@ -7040,7 +7078,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescHdac2sc6296V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC HDAC V102 2
+        shortLabel HESC HDAC2 V102 2
         longLabel H1-hESC HDAC2 v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=HDAC2SC6296 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.160348 214.785995
@@ -7205,7 +7243,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549RxlchPcr1xDex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 RvXL Dx100 1
+        shortLabel A549 RvXL DX100 1
         longLabel A549 Control DEX 100nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=PCR1X treatment=DEX100NM rep=rep1
         type bigWig 0.216637 169.572006
@@ -7289,7 +7327,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescHdac2sc6296V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC HDAC V102 1
+        shortLabel HESC HDAC2 V102 1
         longLabel H1-hESC HDAC2 v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=HDAC2SC6296 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type bigWig 0.183528 244.552002
@@ -7359,7 +7397,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12892Pol24h8V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM92 POL24 V102 1
+        shortLabel GM92 POL2 V102 1
         longLabel GM12892 Pol2-4H8 v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=GM12892 protocol=V0416102 treatment=NONE rep=rep1
         type bigWig 0.212062 289.304993
@@ -7367,7 +7405,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12892Pol24h8V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM92 POL24 V102 2
+        shortLabel GM92 POL2 V102 2
         longLabel GM12892 Pol2-4H8 v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=GM12892 protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.166554 187.289993
@@ -7473,7 +7511,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescBcl11aPcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC BCL1 PCR1 1
+        shortLabel HESC BCL11A 1
         longLabel H1-hESC BCL11A PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=BCL11A cellType=1H1hESC protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.258894 318.244995
@@ -7519,7 +7557,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Bhlhe40V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG BHLH V101 2
+        shortLabel HEPG BHLHE40 2
         longLabel HepG2 BHLHE40 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=BHLHE40 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.189026 240.016006
@@ -7528,7 +7566,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescBcl11aV0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC BCL1 V102 2
+        shortLabel HESC BCL11A 2
         longLabel H1-hESC BCL11A v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=BCL11A cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.285161 239.250000
@@ -7546,7 +7584,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 CTCF Dx100 1
+        shortLabel A549 CTCF DX100 1
         longLabel A549 CTCF 5916 DEX 100nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=CTCFSC5916 cellType=A549 protocol=PCR1X treatment=DEX100NM rep=rep1
         type bigWig 0.133454 115.070999
@@ -7562,7 +7600,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Ctcfsc5916Pcr1xDex100nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 CTCF Dx100 2
+        shortLabel A549 CTCF DX100 2
         longLabel A549 CTCF 5916 DEX 100nM PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=CTCFSC5916 cellType=A549 protocol=PCR1X treatment=DEX100NM rep=rep2
         type bigWig 0.210514 117.781998
@@ -7605,7 +7643,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Gata2sc267Pcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 GAT2 PCR1 1
+        shortLabel K562 GATA2 PCR1 1
         longLabel K562 GATA2 267 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=GATA2SC267 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
         type bigWig 0.118607 86.167999
@@ -7614,7 +7652,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Gata2sc267Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 GAT2 PCR1 2
+        shortLabel K562 GATA2 PCR1 2
         longLabel K562 GATA2 267 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=GATA2SC267 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.189153 220.173996
@@ -7640,7 +7678,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 USF1 Dx100 1
+        shortLabel A549 USF1 DX100 1
         longLabel A549 USF-1 DEX 100nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=USF1 cellType=A549 protocol=PCR1X treatment=DEX100NM rep=rep1
         type bigWig 0.145761 139.164993
@@ -7648,7 +7686,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Usf1Pcr1xDex100nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 USF1 Dx100 2
+        shortLabel A549 USF1 DX100 2
         longLabel A549 USF-1 DEX 100nM PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=USF1 cellType=A549 protocol=PCR1X treatment=DEX100NM rep=rep2
         type bigWig 0.262763 148.395996
@@ -7717,7 +7755,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Mef2aV0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 MEFA V101 2
+        shortLabel K562 MEF2A V101 2
         longLabel K562 MEF2A v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=MEF2A cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.186546 484.506989
@@ -7726,7 +7764,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Mef2aV0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 MEFA V101 1
+        shortLabel K562 MEF2A V101 1
         longLabel K562 MEF2A v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=MEF2A cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.176177 145.037994
@@ -7771,7 +7809,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescFosl1sc183V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC FOS1 V102 2
+        shortLabel HESC FOSL1 V102 2
         longLabel H1-hESC FOSL1 v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOSL1SC183 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.245718 232.817993
@@ -7780,7 +7818,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescFosl1sc183V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC FOS1 V102 1
+        shortLabel HESC FOSL1 V102 1
         longLabel H1-hESC FOSL1 v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOSL1SC183 cellType=1H1hESC protocol=V0416102 treatment=NONE rep=rep1
         type bigWig 0.318537 227.912994
@@ -7798,7 +7836,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal on
-        shortLabel GM78 POL24 PCR1 2
+        shortLabel GM78 POL2 PCR1 2
         longLabel GM12878 Pol2-4H8 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
         type bigWig 0.025339 193.464005
@@ -7832,7 +7870,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Foxp2Pcr2xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel PFSK FOXP PCR2 2
+        shortLabel PFSK FOXP2 PCR2 2
         longLabel PFSK-1 FOXP2 PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXP2 cellType=PFSK1 protocol=PCR2X treatment=NONE rep=rep2
         type bigWig 0.673525 35.191700
@@ -7840,7 +7878,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknmcFoxp2Pcr2xRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKMC FOXP PCR2 2
+        shortLabel SKMC FOXP2 PCR2 2
         longLabel SK-N-MC FOXP2 PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXP2 cellType=SKNMC protocol=PCR2X treatment=NONE rep=rep2
         type bigWig 0.296521 84.879204
@@ -7857,7 +7895,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Pol2Pcr2xDex100nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 POL2 Dx100 2
+        shortLabel A549 POL2 DX100 2
         longLabel A549 Pol2 DEX 100nM PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL2 cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep2
         type bigWig 0.162130 1033.780029
@@ -7897,7 +7935,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHct116Zbtb33V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HCT ZBT3 V101 2
+        shortLabel HCT ZBT33 V101 2
         longLabel HCT-116 ZBTB33 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=HCT116 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.525499 2486.929932
@@ -7905,7 +7943,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHct116Zbtb33V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HCT ZBT3 V101 1
+        shortLabel HCT ZBT33 V101 1
         longLabel HCT-116 ZBTB33 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=HCT116 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.169927 168.567993
@@ -7913,7 +7951,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Foxp2Pcr2xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel PFSK FOXP PCR2 1
+        shortLabel PFSK FOXP2 PCR2 1
         longLabel PFSK-1 FOXP2 PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXP2 cellType=PFSK1 protocol=PCR2X treatment=NONE rep=rep1
         type bigWig 0.401856 89.714302
@@ -7930,7 +7968,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknmcFoxp2Pcr2xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKMC FOXP PCR2 1
+        shortLabel SKMC FOXP2 PCR2 1
         longLabel SK-N-MC FOXP2 PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXP2 cellType=SKNMC protocol=PCR2X treatment=NONE rep=rep1
         type bigWig 0.231010 1273.040039
@@ -7975,7 +8013,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPanc1Pol24h8V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel PANC POL24 V101 1
+        shortLabel PANC POL2 V101 1
         longLabel PANC-1 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.197972 109.279999
@@ -7983,7 +8021,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPanc1Pol24h8V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel PANC POL24 V101 2
+        shortLabel PANC POL2 V101 2
         longLabel PANC-1 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.106907 171.184006
@@ -7991,7 +8029,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknmcPol24h8V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKMC POL24 V101 1
+        shortLabel SKMC POL2 V101 1
         longLabel SK-N-MC Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=SKNMC protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.221962 161.089005
@@ -7999,7 +8037,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknmcPol24h8V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKMC POL24 V101 2
+        shortLabel SKMC POL2 V101 2
         longLabel SK-N-MC Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=SKNMC protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.093291 164.285995
@@ -8023,7 +8061,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshSin3ak20V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKSH SIN3 V101 1
+        shortLabel SKSH SIN3A V101 1
         longLabel SK-N-SH Sin3Ak-20 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.119705 1108.650024
@@ -8031,7 +8069,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshSin3ak20V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKSH SIN3 V101 2
+        shortLabel SKSH SIN3A V101 2
         longLabel SK-N-SH Sin3Ak-20 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.133128 1445.709961
@@ -8105,7 +8143,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Pol24h8V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel PFSK POL24 V101 1
+        shortLabel PFSK POL2 V101 1
         longLabel PFSK-1 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=PFSK1 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.159681 201.518005
@@ -8113,7 +8151,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Pol24h8V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel PFSK POL24 V101 2
+        shortLabel PFSK POL2 V101 2
         longLabel PFSK-1 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=PFSK1 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.182412 224.822006
@@ -8121,7 +8159,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Pol24h8V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG POL24 V102 2
+        shortLabel HEPG POL2 V102 2
         longLabel HepG2 Pol2-4H8 v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=2HEPG2 protocol=V0416102 treatment=NONE rep=rep2
         type bigWig 0.100880 389.243988
@@ -8130,7 +8168,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Pol24h8V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG POL24 V102 1
+        shortLabel HEPG POL2 V102 1
         longLabel HepG2 Pol2-4H8 v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=2HEPG2 protocol=V0416102 treatment=NONE rep=rep1
         type bigWig 0.184621 449.414001
@@ -8157,7 +8195,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Sp2V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG SP2 V111 1
+        shortLabel HEPG SP2 V11 1
         longLabel HepG2 SP2 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SP2SC643 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.107159 278.317993
@@ -8166,7 +8204,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Sp2V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG SP2 V111 2
+        shortLabel HEPG SP2 V11 2
         longLabel HepG2 SP2 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=SP2SC643 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.121723 136.177994
@@ -8191,7 +8229,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPanc1Sin3ak20V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel PANC SIN3 V101 1
+        shortLabel PANC SIN3A V101 1
         longLabel PANC-1 Sin3Ak-20 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.380534 1574.359985
@@ -8199,7 +8237,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPanc1Sin3ak20V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel PANC SIN3 V101 2
+        shortLabel PANC SIN3A V101 2
         longLabel PANC-1 Sin3Ak-20 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.173385 357.173004
@@ -8223,7 +8261,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Sin3ak20V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel PFSK SIN3 V101 1
+        shortLabel PFSK SIN3A V101 1
         longLabel PFSK-1 Sin3Ak-20 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=PFSK1 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.348907 3017.699951
@@ -8231,7 +8269,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsPfsk1Sin3ak20V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel PFSK SIN3 V101 2
+        shortLabel PFSK SIN3A V101 2
         longLabel PFSK-1 Sin3Ak-20 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=PFSK1 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.153717 694.495972
@@ -8255,7 +8293,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Pmlsc71910V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 PML V111 2
+        shortLabel GM78 PML V11 2
         longLabel GM12878 PML v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=PMLSC71910 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.153088 143.903000
@@ -8264,7 +8302,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Pmlsc71910V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 PML V111 1
+        shortLabel GM78 PML V11 1
         longLabel GM12878 PML v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=PMLSC71910 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.152215 190.192001
@@ -8273,7 +8311,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Nfatc1sc17834V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 NFAT V111 2
+        shortLabel GM78 NFATC1 V11 2
         longLabel GM12878 NFATC1 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=NFATC1SC17834 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.152496 124.818001
@@ -8282,7 +8320,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Nfatc1sc17834V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 NFAT V111 1
+        shortLabel GM78 NFATC1 V11 1
         longLabel GM12878 NFATC1 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=NFATC1SC17834 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.134567 119.528999
@@ -8291,7 +8329,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Atf2sc81188V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 ATF2 V111 2
+        shortLabel GM78 ATF2 V11 2
         longLabel GM12878 ATF2 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ATF2SC81188 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.142408 126.814003
@@ -8300,7 +8338,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Atf2sc81188V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 ATF2 V111 1
+        shortLabel GM78 ATF2 V11 1
         longLabel GM12878 ATF2 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ATF2SC81188 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.161893 158.330994
@@ -8341,7 +8379,7 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.164964 211.401993
         # subId=4785 dateSubmitted=2011-09-12
 
-        track wgEncodeHaibTfbsHepg2CebpbV0416101RawRep2
+        track wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HEPG CEBPB V101 2
         longLabel HepG2 CEBPB v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
@@ -8349,8 +8387,9 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.208219 165.324997
         color 189,0,157
         # subId=4801 dateSubmitted=2011-09-12
+        # was wgEncodeHaibTfbsHepg2CebpbV0416101RawRep2 wong Tue Feb 14 15:07:43 2012
 
-        track wgEncodeHaibTfbsHepg2CebpbV0416101RawRep1
+        track wgEncodeHaibTfbsHepg2Cebpbsc150V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HEPG CEBPB V101 1
         longLabel HepG2 CEBPB v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
@@ -8358,10 +8397,11 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.268039 190.710007
         color 189,0,157
         # subId=4801 dateSubmitted=2011-09-12
+        # was wgEncodeHaibTfbsHepg2CebpbV0416101RawRep1 wong Tue Feb 14 15:07:41 2012
 
         track wgEncodeHaibTfbsH1hescSp2V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC SP2 V111 2
+        shortLabel HESC SP2 V11 2
         longLabel H1-hESC SP2 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=SP2SC643 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.157829 285.355011
@@ -8370,7 +8410,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescSp2V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC SP2 V111 1
+        shortLabel HESC SP2 V11 1
         longLabel H1-hESC SP2 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SP2SC643 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.146891 213.798996
@@ -8427,7 +8467,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHuvecPol24h8V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HUVEC POL24 2
+        shortLabel HUVEC POL2 V101 2
         longLabel HUVEC Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=2HUVEC protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.401810 219.789993
@@ -8436,7 +8476,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHuvecPol24h8V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HUVEC POL24 1
+        shortLabel HUVEC POL2 V101 1
         longLabel HUVEC Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=2HUVEC protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.305485 239.653000
@@ -8463,7 +8503,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb7aV0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG ZBT7 V101 2
+        shortLabel HEPG ZBT7A V101 2
         longLabel HepG2 ZBTB7A v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB7ASC34508 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.169342 172.220993
@@ -8472,7 +8512,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Zbtb7aV0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG ZBT7 V101 1
+        shortLabel HEPG ZBT7A V101 1
         longLabel HepG2 ZBTB7A v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB7ASC34508 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.222750 139.218994
@@ -8481,7 +8521,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Zbtb33V0422111Etoh02RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 ZBT3 ETOH 2
+        shortLabel A549 ZBT33 ETOH 2
         longLabel A549 ZBTB33 EtOH .02% v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep2
         type bigWig 0.137460 193.164993
@@ -8489,7 +8529,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Zbtb33V0422111Etoh02RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 ZBT3 ETOH 1
+        shortLabel A549 ZBT33 ETOH 1
         longLabel A549 ZBTB33 EtOH .02% v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ZBTB33 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
         type bigWig 0.139512 281.221008
@@ -8513,7 +8553,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Foxa1V0416102Dex100nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 FOX1 Dx100 2
+        shortLabel A549 FOXA1 D100 2
         longLabel A549 FOXA1 101058 DEX 100nM v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC101058 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep2
         type bigWig 0.243970 255.070999
@@ -8521,7 +8561,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Foxa1V0416102Dex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 FOX1 Dx100 1
+        shortLabel A549 FOXA1 D100 1
         longLabel A549 FOXA1 101058 DEX 100nM v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC101058 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep1
         type bigWig 0.176500 288.842010
@@ -8672,7 +8712,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescRxlchV0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC RvXL V111 1
+        shortLabel HESC RvXL V11 1
         longLabel H1-hESC Control v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.081923 204.009003
@@ -8682,7 +8722,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2RxlchV0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG RvXL V111 1
+        shortLabel HEPG RvXL V11 1
         longLabel HepG2 Control v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.084620 145.080002
@@ -8692,7 +8732,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 RvXL Dx100 1
+        shortLabel A549 RvXL DX100 1
         longLabel A549 Control DEX 100nM v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=V0422111 treatment=DEX100NM rep=rep1
         type bigWig 0.082165 233.000000
@@ -8710,7 +8750,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshPol24h8V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKSH POL24 V101 1
+        shortLabel SKSH POL2 V101 1
         longLabel SK-N-SH Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.220326 220.104996
@@ -8718,7 +8758,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsSknshPol24h8V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel SKSH POL24 V101 2
+        shortLabel SKSH POL2 V101 2
         longLabel SK-N-SH Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.100500 144.744995
@@ -8726,7 +8766,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Fosl2V0422111Etoh02RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 FOS2 ETOH 2
+        shortLabel A549 FOSL2 ETOH 2
         longLabel A549 FOSL2 EtOH .02% v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOSL2 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep2
         type bigWig 0.148945 368.973999
@@ -8734,7 +8774,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Fosl2V0422111Etoh02RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 FOS2 ETOH 1
+        shortLabel A549 FOSL2 ETOH 1
         longLabel A549 FOSL2 EtOH .02% v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOSL2 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
         type bigWig 0.136940 214.380005
@@ -8758,7 +8798,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Tcf12V0422111Etoh02RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 TCF1 ETOH 2
+        shortLabel A549 TCF12 ETOH 2
         longLabel A549 TCF12 EtOH .02% v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=TCF12 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep2
         type bigWig 0.155434 282.113007
@@ -8766,7 +8806,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Tcf12V0422111Etoh02RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 TCF1 ETOH 1
+        shortLabel A549 TCF12 ETOH 1
         longLabel A549 TCF12 EtOH .02% v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=TCF12 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
         type bigWig 0.178147 165.320999
@@ -8808,7 +8848,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Nficsc81335V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG NFIC V111 2
+        shortLabel HEPG NFIC V11 2
         longLabel HepG2 NFIC v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=NFICSC81335 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.161799 373.916992
@@ -8817,7 +8857,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Nficsc81335V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG NFIC V111 1
+        shortLabel HEPG NFIC V11 1
         longLabel HepG2 NFIC v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=NFICSC81335 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.148403 192.442001
@@ -8844,7 +8884,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Mbd4sc271530V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG MBD4 V111 2
+        shortLabel HEPG MBD4 V11 2
         longLabel HepG2 MBD4 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=MBD4SC271530 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.120725 143.602005
@@ -8853,7 +8893,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Mbd4sc271530V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG MBD4 V111 1
+        shortLabel HEPG MBD4 V11 1
         longLabel HepG2 MBD4 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=MBD4SC271530 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.144811 565.125000
@@ -8862,7 +8902,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescSp4v20V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC SP4 V111 2
+        shortLabel HESC SP4 V11 2
         longLabel H1-hESC SP4 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=SP4V20 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.180899 381.740997
@@ -8871,7 +8911,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescSp4v20V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC SP4 V111 1
+        shortLabel HESC SP4 V11 1
         longLabel H1-hESC SP4 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SP4V20 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.173845 333.260986
@@ -8880,7 +8920,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescAtf2sc81188V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC ATF2 V111 2
+        shortLabel HESC ATF2 V11 2
         longLabel H1-hESC ATF2 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=ATF2SC81188 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.135458 124.824997
@@ -8889,7 +8929,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsH1hescAtf2sc81188V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HESC ATF2 V111 1
+        shortLabel HESC ATF2 V11 1
         longLabel H1-hESC ATF2 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=ATF2SC81188 cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.149202 182.287003
@@ -8898,7 +8938,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Pmlsc71910V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 PML V111 2
+        shortLabel K562 PML V11 2
         longLabel K562 PML v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=PMLSC71910 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.169934 737.216980
@@ -8907,7 +8947,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Pmlsc71910V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 PML V111 1
+        shortLabel K562 PML V11 1
         longLabel K562 PML v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=PMLSC71910 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.173781 168.481003
@@ -8943,7 +8983,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Creb1sc240V0416102Dex100nmRawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 CREB Dx100 2
+        shortLabel A549 CREB1 D100 2
         longLabel A549 CREB1 DEX 100nM v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=CREB1SC240 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep2
         type bigWig 0.258863 313.613007
@@ -8951,7 +8991,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Creb1sc240V0416102Dex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 CREB Dx100 1
+        shortLabel A549 CREB1 D100 1
         longLabel A549 CREB1 DEX 100nM v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=CREB1SC240 cellType=A549 protocol=V0416102 treatment=DEX100NM rep=rep1
         type bigWig 0.169944 126.098999
@@ -8959,7 +8999,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Stat5asc74442V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 STAT V111 2
+        shortLabel GM78 STAT5A V11 2
         longLabel GM12878 STAT5A v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=STAT5ASC74442 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.143053 134.505997
@@ -8968,7 +9008,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Stat5asc74442V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 STAT V111 1
+        shortLabel GM78 STAT5A V11 1
         longLabel GM12878 STAT5A v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=STAT5ASC74442 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.141727 102.539001
@@ -8977,7 +9017,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Mta3sc81325V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 MTA3 V111 2
+        shortLabel GM78 MTA3 V11 2
         longLabel GM12878 MTA3 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=MTA3SC81325 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.124979 102.202003
@@ -8986,7 +9026,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Mta3sc81325V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 MTA3 V111 1
+        shortLabel GM78 MTA3 V11 1
         longLabel GM12878 MTA3 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=MTA3SC81325 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.124447 108.705002
@@ -8995,7 +9035,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Tead4sc101184V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 TEAD V111 2
+        shortLabel K562 TEAD4 V11 2
         longLabel K562 TEAD4 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=TEAD4SC101184 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.115014 174.505005
@@ -9004,7 +9044,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Tead4sc101184V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 TEAD V111 1
+        shortLabel K562 TEAD4 V11 1
         longLabel K562 TEAD4 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=TEAD4SC101184 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.131648 171.766998
@@ -9013,7 +9053,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Runx3sc101553V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 RUNX V111 2
+        shortLabel GM78 RUNX3 V11 2
         longLabel GM12878 RUNX3 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=RUNX3SC101553 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.120723 85.230202
@@ -9022,7 +9062,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Runx3sc101553V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 RUNX V111 1
+        shortLabel GM78 RUNX3 V11 1
         longLabel GM12878 RUNX3 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=RUNX3SC101553 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.117621 100.154999
@@ -9041,7 +9081,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Creb1sc240Pcr1xEtoh02RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 CREB ETOH 1
+        shortLabel A549 CREB1 ETOH 1
         longLabel A549 CREB1 EtOH .02% PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=CREB1SC240 cellType=A549 protocol=PCR1X treatment=ETOH02 rep=rep1
         type bigWig 0.250408 180.606995
@@ -9049,7 +9089,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Foxa1V0416102Etoh02RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 FOX1 ETOH 1
+        shortLabel A549 FOXA1 ETOH 1
         longLabel A549 FOXA1 101058 EtOH .02% v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC101058 cellType=A549 protocol=V0416102 treatment=ETOH02 rep=rep1
         type bigWig 0.179616 305.212006
@@ -9057,7 +9097,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Foxa2V0416102Etoh02RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 FOX2 ETOH 1
+        shortLabel A549 FOXA2 ETOH 1
         longLabel A549 FOXA2 EtOH .02% v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA2SC6554 cellType=A549 protocol=V0416102 treatment=ETOH02 rep=rep1
         type bigWig 0.159503 101.922997
@@ -9065,7 +9105,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Foxa1V0416102Etoh02RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 FOX1 ETOH 2
+        shortLabel A549 FOXA1 ETOH 2
         longLabel A549 FOXA1 101058 EtOH .02% v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA1SC101058 cellType=A549 protocol=V0416102 treatment=ETOH02 rep=rep2
         type bigWig 0.229060 259.983002
@@ -9073,7 +9113,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Foxa2V0416102Etoh02RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 FOX2 ETOH 2
+        shortLabel A549 FOXA2 ETOH 2
         longLabel A549 FOXA2 EtOH .02% v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=FOXA2SC6554 cellType=A549 protocol=V0416102 treatment=ETOH02 rep=rep2
         type bigWig 0.285267 181.929001
@@ -9081,7 +9121,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Creb1sc240V0416102Etoh02RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 CREB ETOH 2
+        shortLabel A549 CREB1 ETOH 2
         longLabel A549 CREB1 EtOH .02% v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=CREB1SC240 cellType=A549 protocol=V0416102 treatment=ETOH02 rep=rep2
         type bigWig 0.235316 332.088989
@@ -9105,7 +9145,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562RxlchV0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 RvXL V111 1
+        shortLabel K562 RvXL V11 1
         longLabel K562 Control v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.106519 131.205002
@@ -9131,7 +9171,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Sin3ak20V0422111Etoh02RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 SIN3 ETOH 2
+        shortLabel A549 SIN3A ETOH 2
         longLabel A549 Sin3Ak-20 EtOH .02% v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep2
         type bigWig 0.101356 491.144989
@@ -9139,7 +9179,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsA549Sin3ak20V0422111Etoh02RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel A549 SIN3 ETOH 1
+        shortLabel A549 SIN3A ETOH 1
         longLabel A549 Sin3Ak-20 EtOH .02% v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=SIN3AK20 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
         type bigWig 0.102443 491.776001
@@ -9147,7 +9187,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Nficsc81335V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 NFIC V111 2
+        shortLabel GM78 NFIC V11 2
         longLabel GM12878 NFIC v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=NFICSC81335 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.150112 255.979004
@@ -9156,7 +9196,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsGm12878Nficsc81335V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel GM78 NFIC V111 1
+        shortLabel GM78 NFIC V11 1
         longLabel GM12878 NFIC v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=NFICSC81335 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.137796 126.428001
@@ -9165,7 +9205,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Mybl2sc81192V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG MYBL V111 2
+        shortLabel HEPG MYBL2 V11 2
         longLabel HepG2 MYBL2 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=MYBL2SC81192 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.125000 390.812012
@@ -9174,7 +9214,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Mybl2sc81192V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG MYBL V111 1
+        shortLabel HEPG MYBL2 V11 1
         longLabel HepG2 MYBL2 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=MYBL2SC81192 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.105435 125.782997
@@ -9183,7 +9223,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Tead4sc101184V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG TEAD V111 1
+        shortLabel HEPG TEAD4 V11 1
         longLabel HepG2 TEAD4 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=TEAD4SC101184 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.108540 194.287003
@@ -9192,7 +9232,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsHepg2Tead4sc101184V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG TEAD V111 2
+        shortLabel HEPG TEAD4 V11 2
         longLabel HepG2 TEAD4 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=TEAD4SC101184 cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.690667 155.744995
@@ -9201,7 +9241,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Cebpbsc150V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 CEBPB V111 1
+        shortLabel K562 CEBPB V11 1
         longLabel K562 CEBPB v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=CEBPB cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.108888 173.078003
@@ -9210,7 +9250,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Cebpbsc150V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 CEBPB V111 2
+        shortLabel K562 CEBPB V11 2
         longLabel K562 CEBPB v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=CEBPB cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.607596 125.924004
@@ -9219,7 +9259,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Stat5asc74442V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 STAT V111 2
+        shortLabel K562 STAT5A V11 2
         longLabel K562 STAT5A v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=STAT5ASC74442 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.089175 231.899002
@@ -9228,7 +9268,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562RxlchV0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 RvXL V111 2
+        shortLabel K562 RvXL V11 2
         longLabel K562 Control v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.097815 216.807007
@@ -9238,7 +9278,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Stat5asc74442V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 STAT V111 1
+        shortLabel K562 STAT5A V11 1
         longLabel K562 STAT5A v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=STAT5ASC74442 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.097254 139.121994
@@ -9247,7 +9287,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Nr2f2sc271940V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 NR2F V111 2
+        shortLabel K562 NR2F2 V11 2
         longLabel K562 NR2F2 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=NR2F2SC271940 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.130904 300.653015
@@ -9256,7 +9296,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Nr2f2sc271940V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 NR2F V111 1
+        shortLabel K562 NR2F2 V11 1
         longLabel K562 NR2F2 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=NR2F2SC271940 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.091608 107.342003
@@ -9265,7 +9305,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Cbx3sc101004V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 CBX3 V111 1
+        shortLabel K562 CBX3 V11 1
         longLabel K562 CBX3 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=CBX3SC101004 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep1
         type bigWig 0.093755 107.912003
@@ -9274,7 +9314,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsK562Cbx3sc101004V0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 CBX3 V111 2
+        shortLabel K562 CBX3 V11 2
         longLabel K562 CBX3 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=CBX3SC101004 cellType=1K562 protocol=V0422111 treatment=NONE rep=rep2
         type bigWig 0.102840 197.350998
@@ -9283,7 +9323,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1V2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87 POL24 V101 1
+        shortLabel U87 POL2 V101 1
         longLabel U87 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=U87 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.264047 126.082001
@@ -9299,7 +9339,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2V2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87 POL24 V101 2
+        shortLabel U87 POL2 V101 2
         longLabel U87 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=U87 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.115622 132.242004
@@ -9344,5 +9384,41 @@ html wgEncodeHaibTfbs.release2
         subGroups view=RawSignal factor=NRSF cellType=U87 protocol=PCR2X treatment=NONE rep=rep2
         type bigWig 0.190402 245.143005
         # subId=5456 dateSubmitted=2012-01-24
+
+        track wgEncodeHaibTfbsK562Yy1sc281V0416101RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 YY1 V101 1
+        longLabel K562 YY1 281 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal factor=YY1SC281 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep1
+        type bigWig 0.333504 1234.709961
+        color 46,0,184
+        # subId=5676 dateSubmitted=2012-02-14
+
+        track wgEncodeHaibTfbsK562Yy1sc281V0416101RawRep2
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 YY1 V101 2
+        longLabel K562 YY1 281 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal factor=YY1SC281 cellType=1K562 protocol=V0416101 treatment=NONE rep=rep2
+        type bigWig 0.551376 986.961975
+        color 46,0,184
+        # subId=5676 dateSubmitted=2012-02-14
+
+        track wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM78 FOXM1 V11 1
+        longLabel GM12878 FOXM1 v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal factor=FOXM1SC502 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep1
+        type bigWig 0.107366 117.995003
+        color 153,38,0
+        # subId=5132 dateSubmitted=2011-12-21
+
+        track wgEncodeHaibTfbsGm12878Foxm1sc502V0422111RawRep2
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM78 FOXM1 V11 2
+        longLabel GM12878 FOXM1 v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal factor=FOXM1SC502 cellType=1GM12878 protocol=V0422111 treatment=NONE rep=rep2
+        type bigWig 0.187763 364.682007
+        color 153,38,0
+        # subId=5132 dateSubmitted=2011-12-21
 
 

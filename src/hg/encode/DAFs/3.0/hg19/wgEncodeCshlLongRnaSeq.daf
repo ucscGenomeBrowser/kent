@@ -4,7 +4,7 @@
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the related .ddf should look like this:
-# files view    cell    localization    rnaExtract      labProtocolId   labExpId        bioRep  origAssembly    replicate
+#files	view	bioRep	cell	labExpId	labProtocolId	labVersion	localization	replicate	rnaExtract	seqPlatform	spikeInPool
 #
 #files          a list of files that will be concatenated together
 #view           the view of the data as described below
@@ -33,6 +33,20 @@ assembly          hg19
 validationSettings validateFiles.bam:mismatches=10,nMatch,allowOther
 
 # Track/view definition
+#Pooled replicates
+view             Contigs
+type             bedRnaElements
+sql		 bedRnaElements
+hasReplicates    no
+required         no
+
+view             ExonsGencV7
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     yes 
+
+# Individual Replicates
 view             PlusRawSignal
 type             bigWig
 hasReplicates    yes
@@ -62,8 +76,14 @@ required         no
 downloadOnly     yes
 
 view             Spikeins
-longLabelPrefix  CSHL Long RNA-seq Spike-ins
-type             doc
+type             txt
 hasReplicates    yes
 required         no
 downloadOnly     yes
+
+view             Protocol 
+type             pdf
+hasReplicates    yes 
+required         no 
+downloadOnly     yes
+

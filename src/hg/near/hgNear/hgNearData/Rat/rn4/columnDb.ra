@@ -165,16 +165,16 @@ shortLabel Intron Size
 longLabel Size of biggest (or optionally smallest) intron
 priority 7.81
 
-name codingSnps
-shortLabel Coding SNPs
-longLabel Simple Nucleotide Polymorphisms in Coding Regions
-priority 7.5
-visibility off
-type association rgdGene2ToCdsSnp
-queryFull select name,value from rgdGene2ToCdsSnp
-queryOne select value,value from rgdGene2ToCdsSnp where name = '%s'
-invQueryOne select name from rgdGene2ToCdsSnp where value = '%s'
-itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
+# name codingSnps
+# shortLabel Coding SNPs
+# longLabel Simple Nucleotide Polymorphisms in Coding Regions
+# priority 7.5
+# visibility off
+# type association rgdGene2ToCdsSnp
+# queryFull select name,value from rgdGene2ToCdsSnp
+# queryOne select value,value from rgdGene2ToCdsSnp where name = '%s'
+# invQueryOne select name from rgdGene2ToCdsSnp where value = '%s'
+# itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 
 name affyExonTissuesGs
 shortLabel Affy Exons
