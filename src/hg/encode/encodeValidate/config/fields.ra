@@ -156,6 +156,12 @@ file ddf
 type string
 required no
 
+field platform
+file ddf
+type string
+required no
+
+
 field readType
 file ddf
 type string
