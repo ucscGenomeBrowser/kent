@@ -3695,58 +3695,6 @@ html wgEncodeCshlLongRnaSeq.release2
         color 0,107,27
         # subId=3614 dateSubmitted=2011-02-18
 
-        track wgEncodeCshlLongRnaSeqH1hescCytosolPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel H1ES cyto pA- C 
-        longLabel H1-hESC cytosol polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=1H1HESC localization=CYTOSOL rnaExtract=PAM
-        type bed 6 +
-        color 0,107,27
-        # subId=3615 dateSubmitted=2011-02-18
-
-        track wgEncodeCshlLongRnaSeqH1hescCytosolPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel H1ES cyto pA+ C 
-        longLabel H1-hESC cytosol polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=1H1HESC localization=CYTOSOL rnaExtract=PAP
-        type bed 6 +
-        color 0,107,27
-        # subId=3616 dateSubmitted=2011-02-18
-
-        track wgEncodeCshlLongRnaSeqH1hescNucleusPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel H1ES nucl pA- C 
-        longLabel H1-hESC nucleus polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=1H1HESC localization=NUCLEUS rnaExtract=PAM
-        type bed 6 +
-        color 0,107,27
-        # subId=3617 dateSubmitted=2011-02-18
-
-        track wgEncodeCshlLongRnaSeqH1hescNucleusPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel H1ES nucl pA+ C 
-        longLabel H1-hESC nucleus polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=1H1HESC localization=NUCLEUS rnaExtract=PAP
-        type bed 6 +
-        color 0,107,27
-        # subId=3618 dateSubmitted=2011-02-18
-
-        track wgEncodeCshlLongRnaSeqHmecCellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel HMEC cell pA- C 
-        longLabel HMEC whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=HMEC localization=CELL rnaExtract=PAM
-        type bed 6 +
-        # subId=3619 dateSubmitted=2011-02-18
-
-        track wgEncodeCshlLongRnaSeqHmecCellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel HMEC cell pA+ C 
-        longLabel HMEC whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=HMEC localization=CELL rnaExtract=PAP
-        type bed 6 +
-        # subId=3620 dateSubmitted=2011-02-18
-
         track wgEncodeCshlLongRnaSeqHsmmCellPamContigs
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel HSMM cell pA- C 
@@ -3762,15 +3710,6 @@ html wgEncodeCshlLongRnaSeq.release2
         subGroups view=Contigs rep=Pooled cellType=HSMM localization=CELL rnaExtract=PAP
         type bed 6 +
         # subId=3622 dateSubmitted=2011-02-18
-
-        track wgEncodeCshlLongRnaSeqHuvecCytosolPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel HUVE cyto pA- C 
-        longLabel HUVEC cytosol polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM
-        type bed 6 +
-        color 224,75,0
-        # subId=3623 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHuvecCytosolPapContigs
         parent wgEncodeCshlLongRnaSeqViewContigs off
@@ -3834,15 +3773,6 @@ html wgEncodeCshlLongRnaSeq.release2
         type bed 6 +
         color 0,119,158
         # subId=3630 dateSubmitted=2011-02-18
-
-        track wgEncodeCshlLongRnaSeqHelas3CytosolPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel HeLa cyto pA- C 
-        longLabel HeLa-S3 cytosol polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAM
-        type bed 6 +
-        color 0,119,158
-        # subId=3631 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHelas3CytosolPapContigs
         parent wgEncodeCshlLongRnaSeqViewContigs off
@@ -4022,15 +3952,6 @@ html wgEncodeCshlLongRnaSeq.release2
         type bed 6 +
         # subId=3651 dateSubmitted=2011-02-18
 
-        track wgEncodeCshlLongRnaSeqNhekCytosolPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel NHEK cyto pA- C 
-        longLabel NHEK cytosol polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=NHEK localization=CYTOSOL rnaExtract=PAM
-        type bed 6 +
-        color 179,0,134
-        # subId=3652 dateSubmitted=2011-02-18
-
         track wgEncodeCshlLongRnaSeqNhekCytosolPapContigs
         parent wgEncodeCshlLongRnaSeqViewContigs off
         shortLabel NHEK cyto pA+ C 
@@ -4057,24 +3978,6 @@ html wgEncodeCshlLongRnaSeq.release2
         type bed 6 +
         color 179,0,134
         # subId=3655 dateSubmitted=2011-02-18
-
-        track wgEncodeCshlLongRnaSeqNhekCellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel NHEK cell pA- C 
-        longLabel NHEK whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=NHEK localization=CELL rnaExtract=PAM
-        type bed 6 +
-        color 179,0,134
-        # subId=3656 dateSubmitted=2011-02-18
-
-        track wgEncodeCshlLongRnaSeqNhekCellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
-        shortLabel NHEK cell pA+ C 
-        longLabel NHEK whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
-        subGroups view=Contigs rep=Pooled cellType=NHEK localization=CELL rnaExtract=PAP
-        type bed 6 +
-        color 179,0,134
-        # subId=3658 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqNhlfCellPamContigs
         parent wgEncodeCshlLongRnaSeqViewContigs off
@@ -4107,6 +4010,114 @@ html wgEncodeCshlLongRnaSeq.release2
         subGroups view=Contigs rep=Pooled cellType=SKNSHRA localization=CELL rnaExtract=PAP
         type bed 6 +
         # subId=3663 dateSubmitted=2011-02-18
+
+        track wgEncodeCshlLongRnaSeqH1hescCytosolPamContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel H1-hESC cytosol longNonPolyA
+        longLabel H1-hESC cytosol polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=1H1HESC localization=CYTOSOL rnaExtract=PAM
+        type bed 6 +
+        origAssembly hg19
+        color 0,107,27
+        # subId=5612 dateSubmitted=2012-02-10
+
+        track wgEncodeCshlLongRnaSeqH1hescCytosolPapContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel H1-hESC cytosol longPolyA
+        longLabel H1-hESC cytosol polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=1H1HESC localization=CYTOSOL rnaExtract=PAP
+        type bed 6 +
+        origAssembly hg19
+        color 0,107,27
+        # subId=5612 dateSubmitted=2012-02-10
+
+        track wgEncodeCshlLongRnaSeqH1hescNucleusPamContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel H1-hESC nucleus longNonPolyA
+        longLabel H1-hESC nucleus polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=1H1HESC localization=NUCLEUS rnaExtract=PAM
+        type bed 6 +
+        origAssembly hg19
+        color 0,107,27
+        # subId=5612 dateSubmitted=2012-02-10
+
+        track wgEncodeCshlLongRnaSeqH1hescNucleusPapContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel H1-hESC nucleus longPolyA
+        longLabel H1-hESC nucleus polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=1H1HESC localization=NUCLEUS rnaExtract=PAP
+        type bed 6 +
+        origAssembly hg19
+        color 0,107,27
+        # subId=5612 dateSubmitted=2012-02-10
+
+        track wgEncodeCshlLongRnaSeqHelas3CytosolPamContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel HeLa-S3 cytosol longNonPolyA
+        longLabel HeLa-S3 cytosol polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAM
+        type bed 6 +
+        origAssembly hg19
+        color 0,119,158
+        # subId=5612 dateSubmitted=2012-02-10
+
+        track wgEncodeCshlLongRnaSeqHmecCellPamContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel HMEC cell longNonPolyA
+        longLabel HMEC whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=HMEC localization=CELL rnaExtract=PAM
+        type bed 6 +
+        origAssembly hg19
+        # subId=5612 dateSubmitted=2012-02-10
+
+        track wgEncodeCshlLongRnaSeqHmecCellPapContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel HMEC cell longPolyA
+        longLabel HMEC whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=HMEC localization=CELL rnaExtract=PAP
+        type bed 6 +
+        origAssembly hg19
+        # subId=5612 dateSubmitted=2012-02-10
+
+        track wgEncodeCshlLongRnaSeqHuvecCytosolPamContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel HUVEC cytosol longNonPolyA
+        longLabel HUVEC cytosol polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM
+        type bed 6 +
+        origAssembly hg19
+        color 224,75,0
+        # subId=5612 dateSubmitted=2012-02-10
+
+        track wgEncodeCshlLongRnaSeqNhekCellPamContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel NHEK cell longNonPolyA
+        longLabel NHEK whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=NHEK localization=CELL rnaExtract=PAM
+        type bed 6 +
+        origAssembly hg19
+        color 179,0,134
+        # subId=5612 dateSubmitted=2012-02-10
+
+        track wgEncodeCshlLongRnaSeqNhekCellPapContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel NHEK cell longPolyA
+        longLabel NHEK whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=NHEK localization=CELL rnaExtract=PAP
+        type bed 6 +
+        origAssembly hg19
+        color 179,0,134
+        # subId=5612 dateSubmitted=2012-02-10
+
+        track wgEncodeCshlLongRnaSeqNhekCytosolPamContigsV2
+        parent wgEncodeCshlLongRnaSeqViewContigs off
+        shortLabel NHEK cytosol longNonPolyA
+        longLabel NHEK cytosol polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
+        subGroups view=Contigs rep=Pooled cellType=NHEK localization=CYTOSOL rnaExtract=PAM
+        type bed 6 +
+        origAssembly hg19
+        color 179,0,134
+        # subId=5612 dateSubmitted=2012-02-10
 
     track wgEncodeCshlLongRnaSeqViewJunctions
     shortLabel Splice Junctions 
