@@ -271,10 +271,7 @@ class makeNotes(object):
         removeline = "Revoked/Replaced/Renamed"
         totaline = "Total (New + Untouched + Revoked/Replaced/Renamed)"
         caps = title.upper()
-        change = set()
-        if title == "tables":
-            change = self.changedTables
-        elif title == "supplemental":
+        if title == "supplemental":
             removeline = "Removed"
             totaline = "Total"
             title = title + " files"
@@ -282,7 +279,6 @@ class makeNotes(object):
         elif title == 'gbdbs':
             caps = "GBDBS"
             title = "gbdb files"
-            change = self.changedGbdbs
         elif title == "download":
             title = title + " files"
             caps = title.upper()
@@ -299,11 +295,6 @@ class makeNotes(object):
                 output.append("")
                 output.append("These %s objects exist in both new and revoked %s:" % (len(intersect), title))
                 for i in intersect:
-                    output.append("%s" % i)
-            if change:
-                output.append("")
-                output.append("These %s objects changed state between public and alpha" % len(change))
-                for i in change:
                     output.append("%s" % i)
         if all and not summary:
             output.append("")
@@ -636,6 +627,13 @@ class makeNotes(object):
             errors.extend(oldTableError)
             errors.extend(newGbdbError)
             errors.extend(oldGbdbError)
+
+            if self.changedTables:
+                errors.append("These tables were tables in the old release, but are no longer tables in the new release:"
+                errors.extend(list(self.changedTables))
+            if self.changedGbdbs:
+                errors.append("These GBDBs were GBDB tables in the old release, but are no longer GBDB tables in the new release:"
+                errors.extend(list(self.changedGbdbs)) 
 
             #for ease of typing
             totalFiles = set(self.newReleaseFiles)
