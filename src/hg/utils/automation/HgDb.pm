@@ -30,7 +30,6 @@ sub processInclude {
     chomp $currentDir;
     my($filename, $newDir) = fileparse($include);
     chdir($newDir);
-    my $pwd = `pwd`;
     open (my $fh, "./$filename") or die "can't open $newDir/$filename\n";
     while (<$fh>) {
         my $line = $_;
