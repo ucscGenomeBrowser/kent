@@ -1,11 +1,11 @@
 <h2>Description</h2>
 <p>
-This track contains chromatin interaction data generated using 5C (Chromatin Conformation Capture Carbon Copy)
+This track contains chromatin interaction data generated using the 5C (Chromatin Conformation Capture Carbon Copy)
 method by ENCODE group (PI: Job Dekker, Ph.D.) from the University of Massachusetts, Worcester, MA.
-These tracks show the significant looping interactions between transcriptional start sites (TSS)
+This track shows the significant looping interactions between transcriptional start sites (TSS)
 and distal regulatory elements in the context of the 44 ENCODE pilot regions spanning 1% of the human genome.
 
-Although the DNA is a linear sequence,the chromatin which is packed and organized inside the nucleus does not function in a linear fashion.
+Although the DNA is a linear sequence,the chromatin which is packed and organized inside the nucleus does not function linearly.
 in a linear fashion. This is most clearly illustrated by the fact that genes are
 often regulated by elements that are located hundreds of kilobases away in the linear genome.
 Imaging techniques have shown that regulatory elements can act over large genomic distances 
@@ -27,11 +27,11 @@ Specific ligation products can then be detected by PCR using specific primer pai
 </p>
 
 <p>
-To dramatically increase the 3C throughput, the 5C method was developed (Dostie <em>et al.</em>, 2006; Dostie and Dekker, 2007).
+The 5C method was developed to dramatically increase 3C throughput (Dostie <em>et al.</em>, 2006; Dostie and Dekker, 2007).
 The 5C method greatly increases the scale of chromatin interaction detection by replacing the PCR detection step of 3C with
-ligation-mediated amplification (LMA). The major advantage of LMA is that it can be performed at a very high level of multiplexing using
+ligation-mediated amplification (LMA). LMA is advantageous due to a much higher level of multiplexing by using
 thousands of primer in a single reaction to detect millions of chromatin interactions (ligation junctions) in parallel. 
-The LMA step effectively "copies" 3C ligation products into much smaller 5C ligation products that correspond precisely to ligation
+The LMA step effectively "copies" 3C ligation products into much smaller 5C ligation products that precisely correspond to ligation
 junctions formed during the 3C procedure. The products of the multiplexed LMA reaction constitute the 5C library.
 The composition of the 5C library is determined using high throughput DNA sequencing .
 </p>
@@ -40,8 +40,8 @@ The composition of the 5C library is determined using high throughput DNA sequen
 <p>
 In the graphical display, the significant looping interactions in cis i.e. from the same ENCODE pilot regions, 
 are represented by blocks and connected by a horizontal line. By default, significant looping interactions are 
-colored without shading, however users can opt to shade the significant looping interactions according to their 
-respective z-score (scaled to 0-1000), by using the built in genome browser display functionality/score threshold.
+colored without shading. However, users can opt to shade the significant looping interactions according to their 
+respective z-score (scaled to 0-1000) by using the built-in genome browser display functionality/score threshold.
 </p>
 
 <p>
@@ -55,7 +55,7 @@ The following types of data are available for download:
 <DL>
 <DT><I>Matrix</I></DT>
 <DD>
-Interaction files are in a matrix format indicating interaction strength,
+Interaction files are in a matrix format indicating interaction strength
 with "reverse primer name  | genome version | reverse HindIII fragment coordinates" in
 the top row and "forward primer name | genome version | forward primer fragment coordinates"
 in the first column.  The number of sequences mapped to each interaction fills the matrix.
@@ -69,17 +69,17 @@ Primer data files include the sequences of the primers used in the experiments.
 </dd>
 <dt><i>Raw Data</i></dt>
 <dd>
-Sequencing files are provided in fastQ format.</dd>
+Sequencing files provided in fastQ format.</dd>
 </dl>
 
 <h2>Methods</h2>
 <p>
-The aim of this pilot study is to generate a "connectivity map" between TSS and distal regulatory elements within the 44 ENCODE PILOT regions. 
+The aim of this pilot study is to generate a "connectivity map" between transcription start sites (TSS) and distal regulatory elements within the 44 ENCODE PILOT regions. 
 </p>
 
 <p>
 In the current scheme, 5C primers were designed for all HindIII restriction fragments. 
-Reverse primers were designed on fragments containing the transcription start (TSS) of annotated genes. Forward primers were designed on all other fragments. 
+Reverse primers were designed on fragments containing the TSS of annotated genes. Forward primers were designed on all other fragments. 
 This design allows for the interrogation of all TSS with all other restriction fragments, thus 
 generating an interaction map between TSS and regulatory elements. For gene desert ENCODE pilot regions (for example ENr313), 
 an altering scheme of forward and reverse primers were designed. 
@@ -88,7 +88,7 @@ an altering scheme of forward and reverse primers were designed.
 <p>
 Primers are selected for relative uniqueness using a custom 15-mer frequency table, as well as by BLAST. 
 A custom hexamer barcode was added to each primer to ensure the sequence was unique relative to the primer pool being used. 
-Primers were also selected for the appropriate melting temperature (Tm) and GC content and a universal tail sequence for amplification. 
+Primers were also selected for the appropriate melting temperature and GC content and a universal tail sequence for amplification. 
 </p>
 
 <p>
@@ -108,8 +108,8 @@ of all HindIII fragments in the 44 ENCODE regions).
 </p>
 
 <p>
-Currently data for two biological replicates have been generated for 
-ENCODE Tier I (GM12878 and K562), Tier II (HeLa-S3) and H1 human embryonic stem cells (H1-hESC), 
+Currently, data for two biological replicates have been generated for 
+ENCODE Tier I (GM12878 and K562), Tier II (HeLa-S3), and H1 human embryonic stem cells (H1-hESC), 
 spanning 14 ENCODE manual regions along with one random region (ENr313) as well as 
 30 random regions separately using high throughput paired end sequencing in the 
 Illumina GA2 platform. The looping interactions which are detected in both the biological replicates are considered significant.
@@ -152,7 +152,7 @@ Additiona information and/or vizualization tools can be found on the
 
 <h2>References</h2>
 <p>
-Baù D, Sanyal A, Lajoie BR, Capriotti E, Byron M, Lawrence JB, Dekker J, Marti-Renom MA
+Ba&#249, D, Sanyal A, Lajoie BR, Capriotti E, Byron M, Lawrence JB, Dekker J, Marti-Renom MA
 <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3056208"
  rel="nofollow" target="_blank">
 The three-dimensional folding of the α-globin gene domain reveals formation of chromatin globule</a>.
