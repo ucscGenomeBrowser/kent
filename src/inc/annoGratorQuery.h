@@ -12,7 +12,7 @@ struct annoGratorQuery
 /* Representation of a complex query: multiple sources, each with its own filters,
  * output data and means of integration, aggregated and output by a formatter. */
     {
-    // Private members -- you're on the honor system to leave these alone. Use functions below.
+    // Private members -- callers are on the honor system to leave these alone. Use functions below.
     char *assemblyName;			// Usually a UCSC db name like "hg19".
     struct hash *chromSizes;		// Assembly seq sizes, must be valid for all inputs
     struct twoBitFile *tbf;		// Assembly sequence, must be valid for all inputs

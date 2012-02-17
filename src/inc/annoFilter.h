@@ -8,6 +8,7 @@
 
 enum annoFilterOp
 /* Types of filtering actions; most use a value defined elsewhere in annoFilter. */
+// NOTE: would be nice to have set ops, afInSet & afNotInSet
     {
     afNoFilter,		// Any column value passes filter
     afMatch,		// Stringish column value must match given value(s)
@@ -47,6 +48,10 @@ struct annoFilter *annoFiltersFromAsObject(struct asObject *asObj);
 /* Translate a table's autoSql representation into a list of annoFilters that make
  * sense for the table's set of fields.
  * Callers: do not modify any filter's columnDef! */
+
+boolean annoFilterTestRow(struct annoFilter *filterList, char **row, int rowSize);
+/* Apply filters to row, using autoSql column definitions to interpret
+ * each word of row.  Return TRUE if any filter fails. */
 
 struct annoFilter *annoFilterCloneList(struct annoFilter *list);
 /* Shallow-copy a list of annoFilters.  Callers: do not modify any filter's columnDef! */

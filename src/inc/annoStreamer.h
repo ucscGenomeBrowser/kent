@@ -36,7 +36,7 @@ struct annoStreamer
     struct annoRow *(*nextRow)(struct annoStreamer *self, boolean *retFilterFailed);
     // Close connection to source and free self.
     void (*close)(struct annoStreamer **pSelf);
-    // Private members -- you're on the honor system to access these using only the methods above.
+    // Private members -- callers are on the honor system to access these using only methods above.
     boolean positionIsGenome;
     char *chrom;
     uint regionStart;
