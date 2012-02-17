@@ -613,7 +613,7 @@ class makeNotes(object):
             self.oldTableSet = self.oldTableSet - self.atticSet
             self.noMoreAttic = self.oldAtticSet - self.atticSet
 
-            self.changedTables = self.oldTableSet - self.newTableSet
+            self.changedTables = self.oldTableSet - self.newTableSet - self.revokedTableSet
 
 
             #same as above except for gbdbs

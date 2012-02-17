@@ -4,6 +4,8 @@ include max.trackDb.ra
 
 include trackDb.chainNet.ra
 include trackDb.nt.ra
+include trackDb.genbank.ra beta,public
+include trackDb.genbank.new.ra alpha
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
@@ -362,17 +364,6 @@ type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-track refGene
-shortLabel RefSeq Genes
-longLabel RefSeq Genes
-group genes
-priority 35
-visibility dense
-color 12,12,120
-type genePred refPep refMrna
-idXref refLink mrnaAcc name
-baseColorUseCds given
-
 track augustus
 shortLabel Augustus
 longLabel Augustus Gene Predictions
@@ -454,33 +445,6 @@ type bed 4 .
 otherDb rn4
 url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
 
-track xenoRefGene
-shortLabel Other RefSeq
-longLabel Non-$Organism RefSeq Genes
-group genes
-priority 35.1
-visibility dense
-color 12,12,120
-type genePred xenoRefPep xenoRefMrna
-
-track mgcFullMrna
-shortLabel MGC Genes
-longLabel Mammalian Gene Collection Full ORF mRNAs
-group genes
-priority 36
-visibility hide
-color 0,100,0
-type psl
-baseColorDefault diffCodons
-baseColorUseCds genbank
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-
 track t2g
 shortLabel Publications
 longLabel Publications: Sequences found in scientific articles
@@ -495,28 +459,30 @@ release alpha
 nextExonText Next Match
 prevExonText Prev Match
 
-    track t2gPmc
-    shortLabel Sequences (PMC)
-    longLabel Sequences from PubmedCentral Articles (Open-access)
+    track t2gBlat
+    shortLabel Sequences
+    longLabel Sequences in Articles: PubmedCentral (OA subset) and Elsevier
     parent t2g
     type bed 12 .
-    t2gArticleTable hgFixed.t2gPmcArticle
-    t2gSequenceTable hgFixed.t2gPmcSequence
+    visibility pack
     priority 1
     color 0,0,100
+    t2gArticleTable hgFixed.t2gArticle
+    t2gSequenceTable hgFixed.t2gSequenceAnnot
     release alpha
 
-    track t2gElsevier
-    shortLabel Sequences (Elsevier)
-    longLabel Sequences from Elsevier Articles
-    parent t2g
-    priority 2
-    t2gArticleTable hgFixed.t2gElsevierArticle
-    t2gSequenceTable hgFixed.t2gElsevierSequence
-    type bed 12 .
-    release alpha
-    color 0,100,0
-    maxItems 300
+    #track t2gElsevier
+    #shortLabel Sequences (Elsevier)
+    #longLabel Sequences from Elsevier Articles
+    #parent t2g
+    #priority 2
+    #visibility hide
+    #type bed 12 .
+    #release alpha
+    #color 0,100,0
+    #t2gArticleTable hgFixed.t2gElsevierArticle
+    #t2gSequenceTable hgFixed.t2gElsevierSequence
+    #maxItems 300
 
     track t2gMarkerSnp
     shortLabel SNPs
@@ -524,8 +490,9 @@ prevExonText Prev Match
     parent t2g
     visibility pack
     priority 3
-    #t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
     type bed 4 +
+    t2gArticleTable hgFixed.t2gArticle
+    t2gMarkerTable hgFixed.t2gMarkerAnnot
     release alpha
 
     track t2gMarkerBand
@@ -534,8 +501,9 @@ prevExonText Prev Match
     parent t2g
     visibility pack
     priority 3
-    #t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
     type bed 4 +
+    t2gArticleTable hgFixed.t2gArticle
+    t2gMarkerTable hgFixed.t2gMarkerAnnot
     release alpha
 
     track t2gMarkerGene
@@ -544,40 +512,10 @@ prevExonText Prev Match
     parent t2g
     priority 3
     visibility pack
-    ##t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
     type bed 4 +
+    t2gArticleTable hgFixed.t2gArticle
+    t2gMarkerTable hgFixed.t2gMarkerAnnot
     release alpha
-
-
-searchTable mgcFullMrna
-searchType psl
-searchPriority 25
-semiShortCircuit 1
-
-# keep adjacent to MGC
-track orfeomeMrna
-shortLabel ORFeome Clones
-longLabel ORFeome Collaboration Gene Clones
-group genes
-priority 36.1
-visibility hide
-color 34,139,34
-type psl
-baseColorDefault diffCodons
-baseColorUseCds genbank
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-
-searchTable orfeomeMrna
-searchType psl
-searchPriority 25
-semiShortCircuit 1
-
 
 track transMap
 superTrack on
@@ -945,68 +883,6 @@ priority 72.03
 visibility hide
 type bed 12
 
-track mrna
-table all_mrna
-shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from GenBank 
-group rna
-priority 54
-visibility pack
-type psl .
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
-
-track tightMrna
-shortLabel Tight mRNAS
-longLabel Tightly Filtered $Organism mRNAs from GenBank
-group rna
-priority 55
-visibility hide
-spectrum on
-type psl .
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
-
-track intronEst
-shortLabel Spliced ESTs
-longLabel $Organism ESTs That Have Been Spliced
-group rna
-priority 56
-visibility dense
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-maxItems 300
-
-track est
-table all_est
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-maxItems 300
-
 track interPro
 shortLabel InterPro
 longLabel InterPro Domains
@@ -1025,59 +901,6 @@ visibility hide
 color 0,100,0
 altColor 255,240,200
 type psl protein
-
-track tightEst
-shortLabel Tight ESTs
-longLabel Tightly Filtered $Organism ESTs Including Unspliced
-group rna
-priority 58
-visibility hide
-spectrum on
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-
-track xenoMrna
-shortLabel Other mRNAs
-longLabel Non-$Organism mRNAs from GenBank
-group rna
-priority 63
-visibility hide
-spectrum on
-type psl xeno
-baseColorUseCds genbank
-baseColorUseSequence genbank
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-
-track xenoBestMrna
-shortLabel Other Best mRNAs
-longLabel Non-$Organism mRNAs from GenBank Best in Genome Alignments
-group rna
-priority 64
-visibility hide
-spectrum on
-type psl xeno
-baseColorUseCds genbank
-baseColorUseSequence genbank
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-
-track xenoEst
-shortLabel Other ESTs
-longLabel Non-$Organism ESTs from GenBank 
-group rna
-priority 65
-visibility hide
-spectrum on
-type psl xeno
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track anyCovBed
 shortLabel mRNA/EST/Pseud
@@ -2646,23 +2469,6 @@ semiShortCircuit 1
 termRegex (uc[0-9]{3}[a-z]{3}(\.[0-9]+)?|N(M|R)_[0-9]{6}[0-9]*|[a-z][a-z0-9][0-9]{4}[0-9]*)
 searchPriority 9
 
-searchName refGeneAcc
-searchTable refGene
-searchMethod exact
-searchType genePred
-semiShortCircuit 1
-termRegex N(M|R)_[0-9]{6}[0-9]*
-searchPriority 9.5
-
-searchName mrnaAcc
-searchTable all_mrna
-searchMethod prefix
-searchType mrnaAcc
-shortCircuit 1
-semiShortCircuit 1
-termRegex [a-z][a-z0-9][0-9]+
-searchPriority 10
-
 searchName stsMapAliasMrnaAcc
 searchTable stsMap
 searchType bed
@@ -2935,17 +2741,6 @@ searchTable knownGene
 searchType knownGene
 searchPriority 1
 
-searchName refLink
-searchTable refGene
-searchType refGene
-searchPriority 2
-grepIndex genbankGrep/refLink.mrnaAccProduct
-
-searchTable xenoRefGene
-searchType refGene
-searchPriority 2.1
-grepIndex refLinkGrep/refLink.mrnaAccProduct
-
 searchTable pseudoYaleEncode
 searchType genePred
 searchMethod exact
@@ -3010,12 +2805,6 @@ termRegex [^[:space:]]+
 searchDescription Alias of STS Marker
 searchPriority 11
 padding 100000
-
-searchName mrnaKeyword
-searchTable all_mrna
-searchType mrnaKeyword
-searchPriority 15
-grepIndex genbankGrep
 
 searchName snpMapLong
 searchTable snpMap

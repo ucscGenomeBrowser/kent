@@ -20,7 +20,7 @@ include wgEncodeReg.new.ra alpha
 
 
 # UW Repli-Seq track (wrangler: venkat)
-include wgEncodeUwRepliSeq.ra alpha,beta
+include wgEncodeUwRepliSeq.ra
 
 #include wgEncodeRegNorm.ra alpha
 
@@ -82,8 +82,7 @@ include wgEncodeUwDnase.release3.ra beta,public
 include wgEncodeUwDnase.release4.ra alpha
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.release3.ra alpha,beta
-include wgEncodeUwDgf.ra public
+include wgEncodeUwDgf.release3.ra
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
@@ -97,8 +96,8 @@ include wgEncodeRikenCage.ra beta,public
 include wgEncodeRikenCage.release3.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
-include wgEncodeCshlShortRnaSeq.ra beta,public
-include wgEncodeCshlShortRnaSeq.release2.ra alpha
+include wgEncodeCshlShortRnaSeq.ra public
+include wgEncodeCshlShortRnaSeq.release2.ra alpha,beta
 
 # GIS RNA Seq (wrangler: cricket)
 include wgEncodeGisRnaSeq.ra
@@ -132,7 +131,8 @@ include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra 
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
 include wgEncodeHaibMethylRrbs.ra
-
+#HAIB Bisulfite test track
+include wgEncodeHaibBisulfate.ra alpha
 
 
 
@@ -150,8 +150,7 @@ include wgEncodeBroadHistone.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.release2.ra beta,public
-include wgEncodeUwHistone.release3.ra alpha
+include wgEncodeUwHistone.release3.ra
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra 
