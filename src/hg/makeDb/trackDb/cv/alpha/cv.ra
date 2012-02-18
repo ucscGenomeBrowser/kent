@@ -4354,6 +4354,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
 color 86,180,233
 sex U
 protocol Ren:BoneMarrow_Ren_protocol.pdf
+label Bone Marrow
 
 term C2C12
 tag C2C12
@@ -4551,6 +4552,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
 sex U
 protocol Hardison:Erythroblast__Hardison_protocol.pdf
+label Erythroblast
 
 term FatPad
 tag FAT
@@ -4569,6 +4571,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7108
 color 189,0,157
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf
+label Fat Pad
 
 term Fibroblast
 tag FIBROBLAST
@@ -4604,6 +4607,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3883
 color 102,50,200
 sex U
 protocol Stam:ForelimbBuds_Stam_protocol.pdf
+label Fore Limb Bud
 
 term FrontalLobe
 tag FLOBE
@@ -4622,7 +4626,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7003
 color 105,105,105
 sex U
 protocol Gingeras:FrontalLobe_Gingeras_protocol.pdf
-
+label Frontal Lobe
 
 term G1E
 tag G1E
@@ -4675,6 +4679,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=16230
 color 189,0,157
 sex U
 protocol Stam:GenitalFatPad_Stam_protocol.pdf Gingeras:GenitalFatPad_Gingeras_protocol.pdf
+label Genital Fat Pad
 
 term Heart
 tag HEART
@@ -4711,6 +4716,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3341
 color 65,105,225
 sex U
 protocol Stam:HeadlessEmbryo_Stam_protocol.pdf
+label Headless Embryo
 
 term HindlimbBud
 tag HLBUD
@@ -4729,6 +4735,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3891
 color 102,50,200
 sex U
 protocol Stam:HindlimbBuds_Stam_protocol.pdf
+label Hind Limb Bud
 
 term Kidney
 tag KIDNEY
@@ -4765,6 +4772,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6982
 color 230,159,0
 sex U
 protocol Stam:LargeIntestine_Stam_protocol.pdf Gingeras:LargeIntestine_Gingeras_protocol.pdf
+label Large Intestine
 
 term Limb
 tag LIMB
@@ -4836,6 +4844,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
 color 0,158,115
 sex U
 protocol Gingeras:MammaryGland_Gingeras_protocol.pdf
+label Mammary Gland
 
 term MEF
 tag MEF
@@ -4871,6 +4880,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 86,180,233
 sex U
 protocol Hardison:Megakaryocyte_Hardison_protocol.pdf
+label Megakaryocyte
 #Shortened Tem
 
 term MEL
@@ -4977,6 +4987,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 105,105,105
 sex U
 protocol Ren:OlfactoryBulb_Ren_protocol.pdf
+label Olfactory Bulb
 
 term Ovary
 tag OVARY
@@ -5087,6 +5098,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
 color 139,69,19
 sex U
 protocol Stam:SkeletalMuscle_Stam_protocol.pdf
+label Skeletal Muscle
 
 term SmIntestine
 tag SMINT
@@ -5105,6 +5117,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 230,159,0
 sex U
 protocol Ren:SmallIntestine_Ren_protocol.pdf Gingeras:SmallIntestine_Gingeras_protocol.pdf
+label Small Intestine
 #Shortened term
 
 term Spleen
@@ -5133,7 +5146,7 @@ tissue stomach
 category Tissue
 age ageUnknown
 strain Unknown
-description Stomach PROVISION
+description Stomach PROVISIONAL
 vendorName CSHL lab
 vendorId Stomach
 orderUrl http://gingeraslab.cshl.edu/
@@ -5151,7 +5164,7 @@ tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
-description Subcutaneous Adipose tissue PROVSIONAL
+description Subcutaneous Adipose tissue PROVISIONAL
 vendorName CSHL lab
 vendorId Subcutaneous Adipose tissue
 orderUrl http://gingeraslab.cshl.edu/
@@ -5160,6 +5173,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=17477
 color 189,0,157
 sex U
 protocol Gingeras:SubcutaneousFatPad_Gingeras_protocol.pdf
+label Subcutaneous Fat Pad
 
 term Testis
 tag TESTIS
@@ -5250,6 +5264,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 105,105,105
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf Gingeras:WholeBrain_Gingeras_protocol.pdf
+label Whole Brain
 
 term ZhBTc4
 tag ZHBTC4
@@ -6390,8 +6405,8 @@ lots 1
 targetId GeneCard:ILF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ILF3
 validation Human_-_:missing
-#NF90 is associated with ILF3 ~Jeff
 label NF90 (eGFP-NF90)
+#NF90 is associated with ILF3 ~Jeff
 
 term eGFP-NR4A1
 tag NR4A1e
