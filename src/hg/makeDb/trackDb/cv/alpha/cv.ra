@@ -6326,7 +6326,7 @@ lots N/A
 targetId GeneCard:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
 validation Human_-_eGFP-JunB:human_validation_White.pdf
-label (eGFP-JunB)
+label JunB (eGFP-JunB)
 
 term eGFP-JunD
 tag JUNDe
@@ -6342,7 +6342,7 @@ lots N/A
 targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation Human_-_eGFP-JunD:human_validation_White.pdf
-label JunB (eGFP-JunD)
+label JunD (eGFP-JunD)
 
 term eGFP-MLL5
 tag MLL5
