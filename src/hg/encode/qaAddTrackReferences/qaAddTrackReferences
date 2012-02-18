@@ -208,17 +208,24 @@ sub getPubMedInfo {
 		
 		
 		}
+		if ($collective) {
+			if ($authcount >= 10) {
+                                $authcount++;
+				my $trash = pop(@authors);
+			}
+			unshift(@authors, $collective);
+		}
 		$authorstr = join ", ", @authors;
-		if ($authcount == 11){
+		if ($authcount >= 11){
 			$authorstr = $authorstr . ' <em>et al</em>';
 		}
 		if ($authorstr) {$authorstr = &filterChars($authorstr, \%specialchars)}
-		if ($collective and not $authorstr){
-			$authorstr = $collective;
-		}
-		if ($authcount < 10 and $collective) {
-			$authorstr = $authorstr . ", $collective";
-		}
+#		if ($collective and not $authorstr){
+#			$authorstr = $collective;
+#		}
+#		if ($authcount < 10 and $collective) {
+#			$authorstr = $authorstr . ", $collective";
+#		}
 		$authorstr = $authorstr . ".";
 
 	
@@ -357,8 +364,6 @@ sub getPubMedCentralInfo {
 
 sub usage {
 
-	die "usage qaAddTrackReferences <html> <pubmed_id1> <pubmed_id2> ... <pubmed_idn>\n";
+	die "usage qaAddTrackReferences <pubmed_id1> <pubmed_id2> ... <pubmed_idn>\n";
 
 }
-__DATA__
-′
