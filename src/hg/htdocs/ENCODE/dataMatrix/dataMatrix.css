@@ -30,10 +30,6 @@ td {
     height: 180px;
 }
 
-.matrix {
-    background-color: #EEEEEE;
-}
-
 .verticalText {
     text-align: center;
     vertical-align: middle;
@@ -71,16 +67,14 @@ td {
     color: #004D99;
 }
 
-.matrixCell {
-    border: 1px solid darkgray;
-    background-color: white;
-}
-
 .experiment {
     background-color: #00994D;
     text-align: center;
-    #padding: 10px;
-    #display: block;
+    border: 1px solid darkgray;
+}
+
+.todoExperiment {
+    border: 1px solid darkgray;
 }
 
 .experiment:hover {
@@ -133,4 +127,7 @@ text-decoration: none;
     float: right;
 }
 
+.crossHair {
+    background-color: #EDEDED;
+}
 
