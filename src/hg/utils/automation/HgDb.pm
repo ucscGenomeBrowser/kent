@@ -17,7 +17,6 @@ use DBI;
 use File::Basename;
 use vars qw(@ISA @EXPORT_OK);
 use Exporter;
-use FileHandle;
 use Cwd;
 
 @ISA = qw(Exporter);
