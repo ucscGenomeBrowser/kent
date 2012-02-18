@@ -23988,11 +23988,10 @@ while ((row = sqlNextRow(sr)) != NULL)
           printf("<BR><B> GeneReview(s) available for %s:</B> (%s)<BR>",itemName,clickMsg);
           firstTime = FALSE;
           printf("<PRE><TT>");
-              // #1234567890123456789012345678901234567890
+              // #123456789-123456789-123456789-123456789-123456789-123456789-
           printf("Short name    Disease ID     GeneTests disease name<BR>");
-          printf("-----------------------------------------------------------");
-          printf("-----------------------------------------------------------");
-          printf("----------------------------------<BR>");
+          printf("------------------------------------------------------------");
+          printf("--------------------<BR>");
         }
         printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
         if (strlen(grShort) <= 15) {
