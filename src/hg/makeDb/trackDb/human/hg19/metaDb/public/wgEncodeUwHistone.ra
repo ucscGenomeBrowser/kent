@@ -11,7 +11,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
@@ -37,7 +37,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
@@ -63,7 +63,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
@@ -90,7 +90,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
@@ -117,7 +117,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
@@ -144,7 +144,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
@@ -171,7 +171,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
@@ -196,7 +196,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
@@ -221,7 +221,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
@@ -248,7 +248,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
@@ -275,7 +275,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH001904
@@ -301,7 +301,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH001904
@@ -326,7 +326,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001904
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH001904
@@ -2405,7 +2405,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
@@ -2431,7 +2431,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
@@ -2457,7 +2457,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
@@ -2484,7 +2484,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
@@ -2511,7 +2511,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
@@ -2538,7 +2538,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
@@ -2565,7 +2565,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
@@ -2590,7 +2590,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
@@ -2615,7 +2615,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
@@ -2642,7 +2642,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
@@ -2669,7 +2669,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001892
@@ -2695,7 +2695,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001892
@@ -2720,7 +2720,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001892
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001892
@@ -3627,6 +3627,7 @@ setType input
 subId 1283
 tableName wgEncodeUwHistoneBjInputStdRawRep1
 treatment None
+view RawSignal
 
 metaObject wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1
 objType file
@@ -4526,7 +4527,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002166
@@ -4553,7 +4554,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002166
@@ -4580,7 +4581,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002166
@@ -4608,7 +4609,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002166
@@ -4636,7 +4637,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002166
@@ -4664,7 +4665,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002166
@@ -4692,7 +4693,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002166
@@ -4718,7 +4719,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002166
@@ -4744,7 +4745,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002166
@@ -4772,7 +4773,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002166
@@ -4800,7 +4801,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-25
 dccAccession wgEncodeEH002170
@@ -4827,7 +4828,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-25
 dccAccession wgEncodeEH002170
@@ -4853,7 +4854,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002170
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-25
 dccAccession wgEncodeEH002170
@@ -4881,7 +4882,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002172
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002171
@@ -4908,7 +4909,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002172
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002171
@@ -4936,7 +4937,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002172
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002171
@@ -4964,7 +4965,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002172
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002171
@@ -4990,7 +4991,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002172
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002171
@@ -5018,7 +5019,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002172
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002172
@@ -5045,7 +5046,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002172
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002172
@@ -5071,7 +5072,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002172
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH002172
@@ -5989,7 +5990,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
@@ -6016,7 +6017,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
@@ -6043,7 +6044,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
@@ -6071,7 +6072,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
@@ -6099,7 +6100,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
@@ -6127,7 +6128,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
@@ -6155,7 +6156,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
@@ -6181,7 +6182,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
@@ -6207,7 +6208,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
@@ -6235,7 +6236,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
@@ -6263,7 +6264,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000457
@@ -6289,7 +6290,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000457
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000457
@@ -6316,7 +6317,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000458
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002039
@@ -6335,6 +6336,33 @@ subId 4649
 treatment None
 view Alignments
 
+metaObject wgEncodeUwHistoneGm12865H3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell GM12865
+composite wgEncodeUwHistone
+control std
+controlId GM12865/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002039
+expId 2039
+fileName wgEncodeUwHistoneGm12865H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneGm12865H3k04me3StdAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS20810
+labVersion Bowtie 0.12.7
+md5sum daa6848cad8872a481cb65fc01dd9c48,a8f859324d83b7290bbb4e7d89c31bda
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5149
+treatment None
+view Alignments
+
 metaObject wgEncodeUwHistoneGm12865H3k04me3StdHotspotsRep1
 objType table
 antibody H3K4me3
@@ -6343,7 +6371,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000458
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002039
@@ -6363,6 +6391,34 @@ tableName wgEncodeUwHistoneGm12865H3k04me3StdHotspotsRep1
 treatment None
 view Hotspots
 
+metaObject wgEncodeUwHistoneGm12865H3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell GM12865
+composite wgEncodeUwHistone
+control std
+controlId GM12865/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002039
+expId 2039
+fileName wgEncodeUwHistoneGm12865H3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS20810
+labVersion Hotspot-v5.2
+md5sum 5e07ffbbbc7be45f33590350ddad5821
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5149
+tableName wgEncodeUwHistoneGm12865H3k04me3StdHotspotsRep2
+treatment None
+view Hotspots
+
 metaObject wgEncodeUwHistoneGm12865H3k04me3StdPkRep1
 objType table
 antibody H3K4me3
@@ -6371,7 +6427,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000458
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002039
@@ -6391,6 +6447,34 @@ tableName wgEncodeUwHistoneGm12865H3k04me3StdPkRep1
 treatment None
 view Peaks
 
+metaObject wgEncodeUwHistoneGm12865H3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell GM12865
+composite wgEncodeUwHistone
+control std
+controlId GM12865/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002039
+expId 2039
+fileName wgEncodeUwHistoneGm12865H3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS20810
+labVersion lmax-v1.0
+md5sum e1c1faf71fe173ec8ec5e70d042e66de
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5149
+tableName wgEncodeUwHistoneGm12865H3k04me3StdPkRep2
+treatment None
+view Peaks
+
 metaObject wgEncodeUwHistoneGm12865H3k04me3StdRawDataRep1
 objType file
 antibody H3K4me3
@@ -6399,7 +6483,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000458
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002039
@@ -6417,6 +6501,32 @@ subId 4649
 treatment None
 view RawData
 
+metaObject wgEncodeUwHistoneGm12865H3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell GM12865
+composite wgEncodeUwHistone
+control std
+controlId GM12865/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002039
+expId 2039
+fileName wgEncodeUwHistoneGm12865H3k04me3StdRawDataRep2.fastq.tgz
+grant Stam
+lab UW
+labExpId DS20810
+md5sum 34fb8c55620dc98b9f50f9da8617447d
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5149
+treatment None
+view RawData
+
 metaObject wgEncodeUwHistoneGm12865H3k04me3StdRawRep1
 objType table
 antibody H3K4me3
@@ -6425,7 +6535,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000458
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002039
@@ -6445,6 +6555,34 @@ tableName wgEncodeUwHistoneGm12865H3k04me3StdRawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeUwHistoneGm12865H3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell GM12865
+composite wgEncodeUwHistone
+control std
+controlId GM12865/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002039
+expId 2039
+fileName wgEncodeUwHistoneGm12865H3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS20810
+labVersion WindowDensity-bin20-win+/-75
+md5sum 7f73750a0361a1c79a8fab7123a17214
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5149
+tableName wgEncodeUwHistoneGm12865H3k04me3StdRawRep2
+treatment None
+view RawSignal
+
 metaObject wgEncodeUwHistoneGm12865InputStdAlnRep1
 objType file
 antibody Input
@@ -6453,7 +6591,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000458
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000458
@@ -6479,7 +6617,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000458
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000458
@@ -6506,7 +6644,7 @@ composite wgEncodeUwHistone
 control std
 controlId GM12866/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002040
@@ -6533,7 +6671,7 @@ composite wgEncodeUwHistone
 control std
 controlId GM12866/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002040
@@ -6561,7 +6699,7 @@ composite wgEncodeUwHistone
 control std
 controlId GM12866/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002040
@@ -6589,7 +6727,7 @@ composite wgEncodeUwHistone
 control std
 controlId GM12866/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002040
@@ -6615,7 +6753,7 @@ composite wgEncodeUwHistone
 control std
 controlId GM12866/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002040
@@ -6643,7 +6781,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000462
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002041
@@ -6670,7 +6808,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000462
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002041
@@ -6698,7 +6836,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000462
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002041
@@ -6726,7 +6864,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000462
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002041
@@ -6752,7 +6890,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000462
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002041
@@ -6780,7 +6918,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000462
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000462
@@ -6806,7 +6944,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000462
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000462
@@ -7716,6 +7854,1102 @@ tableName wgEncodeUwHistoneGm12878InputStdRawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-11
+dccAccession wgEncodeEH002531
+expId 2531
+fileName wgEncodeUwHistoneH7esH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneH7esH3k04me3StdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS13777
+labVersion Bowtie 0.12.7
+md5sum 6a7b1df7c1cca3ecde1daad57edd74f6,c85ff4040ae3c2291921621113555d5d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5148
+treatment diffProtA_5d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
+fileName wgEncodeUwHistoneH7esH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneH7esH3k04me3StdAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14707
+labVersion Bowtie 0.12.7
+md5sum e2a18475998922eddbefa0335c901491,24e4dad3166d352faa2745b538c431f6
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5153
+treatment diffProtA_14d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep1.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14121
+labVersion Bowtie 0.12.7
+md5sum 8473ef5d3185e05d1fb64713c671b557,b74dd1f9f12df0f2898b500342485257
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5152
+treatment diffProtA_14d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14121
+labVersion Hotspot-v5.2
+md5sum c1cd032119396ae889742f40ca263d4d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5152
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep1
+treatment diffProtA_14d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14121
+labVersion lmax-v1.0
+md5sum 86f29eaebfcf078e7f99d6a516a0ffde
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5152
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep1
+treatment diffProtA_14d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawDataRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14121
+md5sum 6813d2b56da1e17c367c88ac74ec17b6
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5152
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14121
+labVersion WindowDensity-bin20-win+/-75
+md5sum 1f7dca0b204b6928a3ffb54ce342bac1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5152
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep1
+treatment diffProtA_14d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa2dAlnRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dAlnRep1.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa2dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14704
+labVersion Bowtie 0.12.7
+md5sum cc287354a3004dbac8fda3bf30eea0ca,2aa2585965b9991871c404daa684f8cb
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5170
+treatment diffProtA_2d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa2dAlnRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dAlnRep2.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa2dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14703
+labVersion Bowtie 0.12.7
+md5sum ddfdbc1d4b0225ad19d18d79d7c55ca4,eaa808fb3e255663e9c9c921955cea76
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5169
+treatment diffProtA_2d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa2dHotspotsRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14704
+labVersion Hotspot-v5.2
+md5sum 43810f6ec83249791637d7e78c39015d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5170
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dHotspotsRep1
+treatment diffProtA_2d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa2dHotspotsRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14703
+labVersion Hotspot-v5.2
+md5sum a05c25b36cf4456c17be8d3ac803ae8d
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5169
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dHotspotsRep2
+treatment diffProtA_2d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa2dPkRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14704
+labVersion lmax-v1.0
+md5sum 9ba543fe5542a636b63b040bdc52cd24
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5170
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dPkRep1
+treatment diffProtA_2d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa2dPkRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14703
+labVersion lmax-v1.0
+md5sum ffcab66cef897e896528ef2e4d10f53d
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5169
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dPkRep2
+treatment diffProtA_2d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawDataRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14704
+md5sum 13cf76cde5f8c84c0f8d9723256042db
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5170
+treatment diffProtA_2d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawDataRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14703
+md5sum a857a570ef4b9b6d81563fc3b574ca91
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5169
+treatment diffProtA_2d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14704
+labVersion WindowDensity-bin20-win+/-75
+md5sum 24dbc76f9d1c2fbb6d135d5ee96a630d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5170
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep1
+treatment diffProtA_2d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002541
+expId 2541
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14703
+labVersion WindowDensity-bin20-win+/-75
+md5sum 37d87d01945a7c07df3e50b6db241901
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5169
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep2
+treatment diffProtA_2d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002531
+expId 2531
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep2.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14116
+labVersion Bowtie 0.12.7
+md5sum b0ed8216d4de2c76ac305d7e11c2441f,56183d20cb03434acf47225668f6149e
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5158
+treatment diffProtA_5d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002531
+expId 2531
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14116
+labVersion Hotspot-v5.2
+md5sum 191001401aa5ecb639e1f7c2d2e1bfa2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5158
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep2
+treatment diffProtA_5d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002531
+expId 2531
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14116
+labVersion lmax-v1.0
+md5sum ec3c17a3be1c8204da8c4170f213fbdf
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5158
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep2
+treatment diffProtA_5d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawDataRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002531
+expId 2531
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14116
+md5sum dd6f8c44248f6d0c07a7df4edd83cb6d
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5158
+treatment diffProtA_5d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002531
+expId 2531
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14116
+labVersion WindowDensity-bin20-win+/-75
+md5sum 0d28e92f7c895ad395ec8011bbf666d6
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5158
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep2
+treatment diffProtA_5d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa9dAlnRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dAlnRep1.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa9dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14706
+labVersion Bowtie 0.12.7
+md5sum b9162fe6ff323751564c0f96edb8b967,7ca76d003e69ff4ae3c54e8231e032e7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5172
+treatment diffProtA_9d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa9dAlnRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dAlnRep2.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa9dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14705
+labVersion Bowtie 0.12.7
+md5sum a9f092090a6fc618e919f968b034000b,9e8dcc78c0ab6beacb5d72a4b3b5070e
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5171
+treatment diffProtA_9d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa9dHotspotsRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14706
+labVersion Hotspot-v5.2
+md5sum f6351e0be25c77fc43fdaf601df70335
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5172
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dHotspotsRep1
+treatment diffProtA_9d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa9dHotspotsRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14705
+labVersion Hotspot-v5.2
+md5sum 85f8a3ad85166717278f9558c00de0ff
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5171
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dHotspotsRep2
+treatment diffProtA_9d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa9dPkRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14706
+labVersion lmax-v1.0
+md5sum 20ac1cda25791a9629247b43ac360c4d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5172
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dPkRep1
+treatment diffProtA_9d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa9dPkRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14705
+labVersion lmax-v1.0
+md5sum 05a45d70f873d2cd4249bc142fba7af5
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5171
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dPkRep2
+treatment diffProtA_9d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawDataRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS14706
+md5sum 51103638a7e7c7c3a0e97dcbd3ee33c8
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5172
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawDataRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawDataRep2.fastq.tgz
+grant Stam
+lab UW
+labExpId DS14705
+md5sum b78171df610a8226a7a471bb6a5be7eb
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5171
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14706
+labVersion WindowDensity-bin20-win+/-75
+md5sum ac58ff982f5436675fc6323b5aa6f8be
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5172
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawRep1
+treatment diffProtA_9d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002542
+expId 2542
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14705
+labVersion WindowDensity-bin20-win+/-75
+md5sum b7574767ede9d1f5eefd2c075f84bca9
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5171
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawRep2
+treatment diffProtA_9d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-11
+dccAccession wgEncodeEH002531
+expId 2531
+fileName wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS13777
+labVersion Hotspot-v5.2
+md5sum 19b14a68243404d4f382c9843fa40f9d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5148
+tableName wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep1
+treatment diffProtA_5d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
+fileName wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14707
+labVersion Hotspot-v5.2
+md5sum 0a7169553c00b9e906d1e11c3544df9f
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5153
+tableName wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep2
+treatment diffProtA_14d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-11
+dccAccession wgEncodeEH002531
+expId 2531
+fileName wgEncodeUwHistoneH7esH3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS13777
+labVersion lmax-v1.0
+md5sum de9e3b75bc315e4500cfb6ad4f2bd398
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5148
+tableName wgEncodeUwHistoneH7esH3k04me3StdPkRep1
+treatment diffProtA_5d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
+fileName wgEncodeUwHistoneH7esH3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14707
+labVersion lmax-v1.0
+md5sum 3a9a0021ec2e8736c196e2714f782a22
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5153
+tableName wgEncodeUwHistoneH7esH3k04me3StdPkRep2
+treatment diffProtA_14d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-11
+dccAccession wgEncodeEH002531
+expId 2531
+fileName wgEncodeUwHistoneH7esH3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS13777
+md5sum b2b8cafb5c15ec233ba024dca3292eb5
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5148
+treatment diffProtA_5d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
+fileName wgEncodeUwHistoneH7esH3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14707
+md5sum 679de14b207cc23eddee131813a07c0f
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5153
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-11
+dccAccession wgEncodeEH002531
+expId 2531
+fileName wgEncodeUwHistoneH7esH3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS13777
+labVersion WindowDensity-bin20-win+/-75
+md5sum beb221f55b295ee7ba77fe86c5868ecb
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5148
+tableName wgEncodeUwHistoneH7esH3k04me3StdRawRep1
+treatment diffProtA_5d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002530
+expId 2530
+fileName wgEncodeUwHistoneH7esH3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14707
+labVersion WindowDensity-bin20-win+/-75
+md5sum 954a00a6685746ef731cc00453e5e85f
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5153
+tableName wgEncodeUwHistoneH7esH3k04me3StdRawRep2
+treatment diffProtA_14d
+view RawSignal
+
 metaObject wgEncodeUwHistoneH7esH3k27me3StdAlnRep1
 objType file
 antibody H3K27me3
@@ -7767,6 +9001,1102 @@ setType exp
 subId 2031
 treatment None
 view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa14dAlnRep1
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dAlnRep1.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa14dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14649
+labVersion Bowtie 0.12.7
+md5sum 7b3afa20e7713017e24fc04610f14db7,c1d8eb41e4907cad39746696e60fc433
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5167
+treatment diffProtA_14d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa14dAlnRep2
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dAlnRep2.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa14dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14122
+labVersion Bowtie 0.12.7
+md5sum f7d42a7a406874cb16ba3353ee65465c,95d1aeaaea5eb676731b00ae01c39c10
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5155
+treatment diffProtA_14d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa14dHotspotsRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14649
+labVersion Hotspot-v5.2
+md5sum ce0db594f1b538d09d3bba8069284b24
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5167
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dHotspotsRep1
+treatment diffProtA_14d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa14dHotspotsRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14122
+labVersion Hotspot-v5.2
+md5sum d178d7507b4e4f69a80ee35774422a60
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5155
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dHotspotsRep2
+treatment diffProtA_14d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa14dPkRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14649
+labVersion lmax-v1.0
+md5sum b5caa02bad2588d05b3657d7e2e7155b
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5167
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dPkRep1
+treatment diffProtA_14d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa14dPkRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14122
+labVersion lmax-v1.0
+md5sum 2a17f8640bcf0694564b79bc69cb5545
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5155
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dPkRep2
+treatment diffProtA_14d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawDataRep1
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14649
+md5sum 64def7c0c2f854420a73adfc21bbc1ea
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5167
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawDataRep2
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14122
+md5sum ca4e9a97be8506d7d20921cd047ca982
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5155
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14649
+labVersion WindowDensity-bin20-win+/-75
+md5sum 78eba3dc0c8f7facc4a367fe441bbd53
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5167
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawRep1
+treatment diffProtA_14d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002533
+expId 2533
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14122
+labVersion WindowDensity-bin20-win+/-75
+md5sum da8aa5ac4876580cb56d2a6ddc323349
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5155
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawRep2
+treatment diffProtA_14d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa2dAlnRep1
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dAlnRep1.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa2dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14645
+labVersion Bowtie 0.12.7
+md5sum f128b9c612808278cf91707fe05823e9,f260294bb8d4ffbe4d2561997957b317
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5163
+treatment diffProtA_2d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa2dAlnRep2
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dAlnRep2.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa2dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14708
+labVersion Bowtie 0.12.7
+md5sum 330c48e7c57cc387dba86d564d6a3831,f7a7b5e67cd489817eedc02a8eaeecee
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5173
+treatment diffProtA_2d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa2dHotspotsRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14645
+labVersion Hotspot-v5.2
+md5sum 73ae93221a21c1813d8fed5907f81c79
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5163
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dHotspotsRep1
+treatment diffProtA_2d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa2dHotspotsRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14708
+labVersion Hotspot-v5.2
+md5sum 6965a16e972fd70594515d024e0699ab
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5173
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dHotspotsRep2
+treatment diffProtA_2d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa2dPkRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14645
+labVersion lmax-v1.0
+md5sum ee8c916a2f159784ba2cf3321be26fdc
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5163
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dPkRep1
+treatment diffProtA_2d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa2dPkRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14708
+labVersion lmax-v1.0
+md5sum bce457917c46246d60dcc1e8972929f7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5173
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dPkRep2
+treatment diffProtA_2d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawDataRep1
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14645
+md5sum d95fc2e0434de93c1bc540a9769511f9
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5163
+treatment diffProtA_2d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawDataRep2
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14708
+md5sum c5498161534c6bb3b9bf3cd86031274b
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5173
+treatment diffProtA_2d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14645
+labVersion WindowDensity-bin20-win+/-75
+md5sum 51d6d984d3d22d6067a1a754102bfa98
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5163
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawRep1
+treatment diffProtA_2d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002534
+expId 2534
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14708
+labVersion WindowDensity-bin20-win+/-75
+md5sum 17cd4b04f81e9ff18f65ea9cf8e0d51c
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5173
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawRep2
+treatment diffProtA_2d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa5dAlnRep1
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dAlnRep1.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa5dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS13778
+labVersion Bowtie 0.12.7
+md5sum 9d907e3247f13a10d2f2216288d32606,67af7c7ad5d2e226cf7f3ac6c9134b82
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5156
+treatment diffProtA_5d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa5dAlnRep2
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dAlnRep2.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa5dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14118
+labVersion Bowtie 0.12.7
+md5sum 43ee6cbc6f1ad736de1e4f6e3c4e881a,69cc02a1f8795f2d954229cad645f420
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5159
+treatment diffProtA_5d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa5dHotspotsRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS13778
+labVersion Hotspot-v5.2
+md5sum c50e7bee2e5184f678d9dbf0d36b02b1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5156
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dHotspotsRep1
+treatment diffProtA_5d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa5dHotspotsRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14118
+labVersion Hotspot-v5.2
+md5sum 1c9fccaeeb7deeefb6f6e8ba22b1d253
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5159
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dHotspotsRep2
+treatment diffProtA_5d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa5dPkRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS13778
+labVersion lmax-v1.0
+md5sum 0898f765cb59845e491efc159d3e5b46
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5156
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dPkRep1
+treatment diffProtA_5d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa5dPkRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14118
+labVersion lmax-v1.0
+md5sum 4d6a8157db1dc327a749527d5cbcc2c8
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5159
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dPkRep2
+treatment diffProtA_5d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawDataRep1
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS13778
+md5sum 3a02f4c1f2d4faf7e59c43533d2c631f
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5156
+treatment diffProtA_5d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawDataRep2
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14118
+md5sum 913e83138b259c4c254a08a56fdb243a
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5159
+treatment diffProtA_5d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS13778
+labVersion WindowDensity-bin20-win+/-75
+md5sum 0f6f8636840cfea3a6d75ab8976efca6
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5156
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawRep1
+treatment diffProtA_5d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002535
+expId 2535
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14118
+labVersion WindowDensity-bin20-win+/-75
+md5sum 4c82156ac62a230ed9e0b0802edc8c58
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5159
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawRep2
+treatment diffProtA_5d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa9dAlnRep1
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dAlnRep1.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa9dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14647
+labVersion Bowtie 0.12.7
+md5sum 804f438eb46e3a08e910a98d6bc177da,6760e450fc030ba85d71223328bdcaec
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5165
+treatment diffProtA_9d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa9dAlnRep2
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dAlnRep2.bam,wgEncodeUwHistoneH7esH3k27me3StdDiffa9dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14709
+labVersion Bowtie 0.12.7
+md5sum ba3d7c867dd7826943bd475bdb0c507c,d9799b1c44a3599806fb5239d71c47d9
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5174
+treatment diffProtA_9d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa9dHotspotsRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14647
+labVersion Hotspot-v5.2
+md5sum b1e9e4d1abd13f6b505f3171ebb44aa1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5165
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dHotspotsRep1
+treatment diffProtA_9d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa9dHotspotsRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14709
+labVersion Hotspot-v5.2
+md5sum cc7ea8bf41bf8fa5503830eff267e3c4
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5174
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dHotspotsRep2
+treatment diffProtA_9d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa9dPkRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14647
+labVersion lmax-v1.0
+md5sum 766532e6a9a4a0c27b3e7d310156f903
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5165
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dPkRep1
+treatment diffProtA_9d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa9dPkRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14709
+labVersion lmax-v1.0
+md5sum 060b0f889c6cf56042ff90f9b7e0c2dc
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5174
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dPkRep2
+treatment diffProtA_9d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawDataRep1
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14647
+md5sum 39f84d541d1e5c7a217e2c23b7ca1ec1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5165
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawDataRep2
+objType file
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14709
+md5sum 5790bce3443119777cbdc49f5b257a60
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5174
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawRep1
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14647
+labVersion WindowDensity-bin20-win+/-75
+md5sum ba9f257414b910ede0f90d9d7e768389
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5165
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawRep1
+treatment diffProtA_9d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawRep2
+objType table
+antibody H3K27me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002536
+expId 2536
+fileName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14709
+labVersion WindowDensity-bin20-win+/-75
+md5sum 25abffd75e711076f717230a2d28e551
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5174
+tableName wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawRep2
+treatment diffProtA_9d
+view RawSignal
 
 metaObject wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep1
 objType table
@@ -8031,6 +10361,1102 @@ setType exp
 subId 2032
 treatment None
 view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa14dAlnRep1
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dAlnRep1.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa14dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14123
+labVersion Bowtie 0.12.7
+md5sum 34c75bbe229bf70895450a8dfa2213d1,51207499240a4b00ed0a181cee4cdba0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5162
+treatment diffProtA_14d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa14dAlnRep2
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dAlnRep2.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa14dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14650
+labVersion Bowtie 0.12.7
+md5sum 2e22b12fa352e36e6007fe9d7defea70,3d2faf6613fbda106ffa222bc91aa186
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5168
+treatment diffProtA_14d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa14dHotspotsRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14123
+labVersion Hotspot-v5.2
+md5sum 59419b4e5b3ee8f08a1bfe10b2216eee
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5162
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dHotspotsRep1
+treatment diffProtA_14d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa14dHotspotsRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14650
+labVersion Hotspot-v5.2
+md5sum 61ed6f3e459951f594819c2be264ad84
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5168
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dHotspotsRep2
+treatment diffProtA_14d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa14dPkRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14123
+labVersion lmax-v1.0
+md5sum 150b932629de34b42ac21ec92a1a278b
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5162
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dPkRep1
+treatment diffProtA_14d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa14dPkRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14650
+labVersion lmax-v1.0
+md5sum d316d38508a7a3d8eba511e9a24ea708
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5168
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dPkRep2
+treatment diffProtA_14d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawDataRep1
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14123
+md5sum 774739726e722c4e8886606ef3d0cedd
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5162
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawDataRep2
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14650
+md5sum 416a661fc2c36436a7ffb0b9a5016a3a
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5168
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14123
+labVersion WindowDensity-bin20-win+/-75
+md5sum db55d0eff6b867a86b383f2fe3cd54f6
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5162
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawRep1
+treatment diffProtA_14d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002537
+expId 2537
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14650
+labVersion WindowDensity-bin20-win+/-75
+md5sum 47b36e4b90668aeee53b1eb3a41897ca
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5168
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawRep2
+treatment diffProtA_14d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa2dAlnRep1
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dAlnRep1.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa2dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS15385
+labVersion Bowtie 0.12.7
+md5sum 66c2d659cfd04bc036932b69ccd989ac,3844a29e11423e2b2bdf012c3f741269
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5175
+treatment diffProtA_2d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa2dAlnRep2
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dAlnRep2.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa2dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14646
+labVersion Bowtie 0.12.7
+md5sum 021b1744a64c30a12e9cb7d0e125e844,f284132241701987186a9554a227ea0f
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5164
+treatment diffProtA_2d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa2dHotspotsRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS15385
+labVersion Hotspot-v5.2
+md5sum a7b7325147ae98a93ce69e186fdd40e6
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5175
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dHotspotsRep1
+treatment diffProtA_2d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa2dHotspotsRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14646
+labVersion Hotspot-v5.2
+md5sum 047f293719bdec62ce810aad9d8dd5f2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5164
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dHotspotsRep2
+treatment diffProtA_2d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa2dPkRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS15385
+labVersion lmax-v1.0
+md5sum a211c92931b091ff110cb2b00f6458c1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5175
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dPkRep1
+treatment diffProtA_2d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa2dPkRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14646
+labVersion lmax-v1.0
+md5sum 36ff0af4cf42628ed3b4777533bace08
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5164
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dPkRep2
+treatment diffProtA_2d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawDataRep1
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS15385
+md5sum f5d1e36d4324e6580a3da816c6a0f392
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5175
+treatment diffProtA_2d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawDataRep2
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14646
+md5sum 28da2b5d4c392f3a3f115c0abb23fd28
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5164
+treatment diffProtA_2d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS15385
+labVersion WindowDensity-bin20-win+/-75
+md5sum 9eba539dc2448c0e5606c1e040720bdc
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5175
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawRep1
+treatment diffProtA_2d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002538
+expId 2538
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14646
+labVersion WindowDensity-bin20-win+/-75
+md5sum bce15d2260a6094be1ddb2edb7ff989c
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5164
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawRep2
+treatment diffProtA_2d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa5dAlnRep1
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dAlnRep1.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa5dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14119
+labVersion Bowtie 0.12.7
+md5sum 33595e62da369ff1ddbc40d180cfea85,021ad96fa09047a0a9ebc39178925bd7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5160
+treatment diffProtA_5d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa5dAlnRep2
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dAlnRep2.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa5dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14120
+labVersion Bowtie 0.12.7
+md5sum 94318a32347f9ab9c3f3459974999944,cf0382231c1f37590f6058c7eecd6c11
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5161
+treatment diffProtA_5d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa5dHotspotsRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14119
+labVersion Hotspot-v5.2
+md5sum a32f1cb7e94c85bc436f2c93627bab96
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5160
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dHotspotsRep1
+treatment diffProtA_5d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa5dHotspotsRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14120
+labVersion Hotspot-v5.2
+md5sum 76c728d5c08f47ab41bb388aed57aba4
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5161
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dHotspotsRep2
+treatment diffProtA_5d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa5dPkRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14119
+labVersion lmax-v1.0
+md5sum b6526c782e8ea73d3f0d904d0a85288d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5160
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dPkRep1
+treatment diffProtA_5d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa5dPkRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14120
+labVersion lmax-v1.0
+md5sum 2b69c5df88879cada646633d47458df0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5161
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dPkRep2
+treatment diffProtA_5d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawDataRep1
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14119
+md5sum d8b4cc84e87053e77a2df018a6ab5977
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5160
+treatment diffProtA_5d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawDataRep2
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14120
+md5sum 82c6650a27ff3026d3330eb4e643184c
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5161
+treatment diffProtA_5d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14119
+labVersion WindowDensity-bin20-win+/-75
+md5sum b1a65c72acecd55817dc3ba10d3f521b
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5160
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawRep1
+treatment diffProtA_5d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002539
+expId 2539
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14120
+labVersion WindowDensity-bin20-win+/-75
+md5sum 627665bc40e04b4933007c72a307a1c4
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5161
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawRep2
+treatment diffProtA_5d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa9dAlnRep1
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dAlnRep1.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa9dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14648
+labVersion Bowtie 0.12.7
+md5sum da210e6cdf78eb0bc656a3d4d0c6661f,1d0b2c281caf2324efa417b60e03a109
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5166
+treatment diffProtA_9d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa9dAlnRep2
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dAlnRep2.bam,wgEncodeUwHistoneH7esH3k36me3StdDiffa9dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS15386
+labVersion Bowtie 0.12.7
+md5sum 0fd2b05c2ec37c78a04415727c196c75,31ec0d20611a8e24746aeb0684340ed9
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5176
+treatment diffProtA_9d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa9dHotspotsRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14648
+labVersion Hotspot-v5.2
+md5sum 81979315375466aa77b1f361357530f0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5166
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dHotspotsRep1
+treatment diffProtA_9d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa9dHotspotsRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS15386
+labVersion Hotspot-v5.2
+md5sum a1671469ad1883e1bfaa53a090ff6629
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5176
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dHotspotsRep2
+treatment diffProtA_9d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa9dPkRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14648
+labVersion lmax-v1.0
+md5sum d06759d73d182c577dcd2b171f18eaa7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5166
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dPkRep1
+treatment diffProtA_9d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa9dPkRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS15386
+labVersion lmax-v1.0
+md5sum df45911ae11cec744f38961f1fbb4a05
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5176
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dPkRep2
+treatment diffProtA_9d
+view Peaks
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawDataRep1
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14648
+md5sum d2fbc05cc487afa6e9c1796d917f856e
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5166
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawDataRep2
+objType file
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS15386
+md5sum 85acf456865158d4ee0e6568577c8d66
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5176
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawRep1
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14648
+labVersion WindowDensity-bin20-win+/-75
+md5sum 2e4754931f78aa37786605328e4b065d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5166
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawRep1
+treatment diffProtA_9d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawRep2
+objType table
+antibody H3K36me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002540
+expId 2540
+fileName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS15386
+labVersion WindowDensity-bin20-win+/-75
+md5sum f3ce51c1769a7211c72aaaac9ac0807e
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 5176
+tableName wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawRep2
+treatment diffProtA_9d
+view RawSignal
 
 metaObject wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep1
 objType table
@@ -8534,6 +11960,330 @@ subId 2033
 treatment None
 view Alignments
 
+metaObject wgEncodeUwHistoneH7esInputStdDiffa14dAlnRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002532
+expId 2532
+fileName wgEncodeUwHistoneH7esInputStdDiffa14dAlnRep1.bam,wgEncodeUwHistoneH7esInputStdDiffa14dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14111
+labVersion Bowtie 0.12.7
+md5sum 226bc38c6dfe637a9a4eb25e0c8c8551,5e0099ac64d81632d523ad6041e55afe
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5150
+treatment diffProtA_14d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa14dRawDataRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002532
+expId 2532
+fileName wgEncodeUwHistoneH7esInputStdDiffa14dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14111
+md5sum c4867a6cc9df611da856cd764c5a1272
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5150
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa14dRawRep1
+objType table
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002532
+expId 2532
+fileName wgEncodeUwHistoneH7esInputStdDiffa14dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14111
+labVersion WindowDensity-bin20-win+/-75
+md5sum 24b2b51da548dc2c76426c5936f4b7a5
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5150
+tableName wgEncodeUwHistoneH7esInputStdDiffa14dRawRep1
+treatment diffProtA_14d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa2dAlnRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002543
+expId 2543
+fileName wgEncodeUwHistoneH7esInputStdDiffa2dAlnRep1.bam,wgEncodeUwHistoneH7esInputStdDiffa2dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS15392
+labVersion Bowtie 0.12.7
+md5sum 47afc956562362b214a71b372bd1f5cb,cb3f85f47b71260e67d5ff54a8300d61
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5177
+treatment diffProtA_2d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa2dRawDataRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002543
+expId 2543
+fileName wgEncodeUwHistoneH7esInputStdDiffa2dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS15392
+md5sum 98a9df0797b233a5bef81cef08a1aaba
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5177
+treatment diffProtA_2d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa2dRawRep1
+objType table
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002543
+expId 2543
+fileName wgEncodeUwHistoneH7esInputStdDiffa2dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS15392
+labVersion WindowDensity-bin20-win+/-75
+md5sum 5abeed2d93aa8258306a3fd20250e1c3
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5177
+tableName wgEncodeUwHistoneH7esInputStdDiffa2dRawRep1
+treatment diffProtA_2d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa5dAlnRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002544
+expId 2544
+fileName wgEncodeUwHistoneH7esInputStdDiffa5dAlnRep1.bam,wgEncodeUwHistoneH7esInputStdDiffa5dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14110
+labVersion Bowtie 0.12.7
+md5sum e5786cf71baa6fc8dacfc02d2c4816c7,f512d19731d53c7245b1d21abc355948
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5157
+treatment diffProtA_5d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa5dRawDataRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002544
+expId 2544
+fileName wgEncodeUwHistoneH7esInputStdDiffa5dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14110
+md5sum 9baa6088334b71230cee62e1584c30d1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5157
+treatment diffProtA_5d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa5dRawRep1
+objType table
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002544
+expId 2544
+fileName wgEncodeUwHistoneH7esInputStdDiffa5dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14110
+labVersion WindowDensity-bin20-win+/-75
+md5sum d096b44fc7213b943b2b6c2676fc91d4
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5157
+tableName wgEncodeUwHistoneH7esInputStdDiffa5dRawRep1
+treatment diffProtA_5d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa9dAlnRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002545
+expId 2545
+fileName wgEncodeUwHistoneH7esInputStdDiffa9dAlnRep1.bam,wgEncodeUwHistoneH7esInputStdDiffa9dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS15393
+labVersion Bowtie 0.12.7
+md5sum 9aaa7fd5eb1c2368ce237f30d25886cd,b0cf75ff4c022b375d16a4e3b5bbceed
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5178
+treatment diffProtA_9d
+view Alignments
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa9dRawDataRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002545
+expId 2545
+fileName wgEncodeUwHistoneH7esInputStdDiffa9dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS15393
+md5sum 647184ce010333879bda47b9e3d57ea9
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5178
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esInputStdDiffa9dRawRep1
+objType table
+antibody Input
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002545
+expId 2545
+fileName wgEncodeUwHistoneH7esInputStdDiffa9dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS15393
+labVersion WindowDensity-bin20-win+/-75
+md5sum 92311ba1418c9e406ffe16a0da9262d2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5178
+tableName wgEncodeUwHistoneH7esInputStdDiffa9dRawRep1
+treatment diffProtA_9d
+view RawSignal
+
 metaObject wgEncodeUwHistoneH7esInputStdRawDataRep1
 objType file
 antibody Input
@@ -8594,7 +12344,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
@@ -8620,7 +12370,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
@@ -8646,7 +12396,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
@@ -8673,7 +12423,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
@@ -8700,7 +12450,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
@@ -8727,7 +12477,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
@@ -8754,7 +12504,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
@@ -8779,7 +12529,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
@@ -8804,7 +12554,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
@@ -8831,7 +12581,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
@@ -8858,7 +12608,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002165
@@ -8885,7 +12635,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002165
@@ -8911,7 +12661,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002165
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002165
@@ -13664,7 +17414,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002043
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002042
@@ -13691,7 +17441,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002043
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002042
@@ -13719,7 +17469,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002043
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002042
@@ -13747,7 +17497,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002043
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002042
@@ -13773,7 +17523,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002043
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002042
@@ -13801,7 +17551,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002043
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002043
@@ -13828,7 +17578,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002043
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002043
@@ -13854,7 +17604,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002043
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002043
@@ -13882,7 +17632,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
@@ -13908,7 +17658,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
@@ -13934,7 +17684,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
@@ -13961,7 +17711,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
@@ -13988,7 +17738,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
@@ -14015,7 +17765,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
@@ -14042,7 +17792,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
@@ -14067,7 +17817,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
@@ -14092,7 +17842,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
@@ -14119,7 +17869,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
@@ -14146,7 +17896,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001896
@@ -14172,7 +17922,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001896
@@ -14197,7 +17947,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001896
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001896
@@ -19779,7 +23529,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
@@ -19805,7 +23555,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
@@ -19831,7 +23581,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
@@ -19858,7 +23608,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
@@ -19885,7 +23635,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
@@ -19912,7 +23662,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
@@ -19939,7 +23689,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
@@ -19964,7 +23714,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
@@ -19989,7 +23739,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
@@ -20016,7 +23766,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
@@ -20043,7 +23793,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001897
@@ -20069,7 +23819,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001897
@@ -20094,7 +23844,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001897
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001897
@@ -20121,7 +23871,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000968
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH000967
@@ -20148,7 +23898,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000968
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH000967
@@ -20176,7 +23926,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000968
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH000967
@@ -20204,7 +23954,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000968
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH000967
@@ -20230,7 +23980,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000968
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH000967
@@ -20468,7 +24218,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002168
@@ -20495,7 +24245,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002168
@@ -20523,7 +24273,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002168
@@ -20551,7 +24301,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002168
@@ -20577,7 +24327,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002168
@@ -20605,7 +24355,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002167
@@ -20632,7 +24382,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002167
@@ -20660,7 +24410,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002167
@@ -20688,7 +24438,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002167
@@ -20714,7 +24464,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002167
@@ -20742,7 +24492,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002169
@@ -20769,7 +24519,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002169
@@ -20795,7 +24545,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002169
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH002169
@@ -22266,7 +26016,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
@@ -22292,7 +26042,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
@@ -22318,7 +26068,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
@@ -22345,7 +26095,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
@@ -22372,7 +26122,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
@@ -22399,7 +26149,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
@@ -22426,7 +26176,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
@@ -22451,7 +26201,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
@@ -22476,7 +26226,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
@@ -22503,7 +26253,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
@@ -22530,7 +26280,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001899
@@ -22556,7 +26306,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001899
@@ -22581,7 +26331,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001899
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001899
@@ -22608,7 +26358,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
@@ -22634,7 +26384,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
@@ -22660,7 +26410,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
@@ -22687,7 +26437,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
@@ -22714,7 +26464,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
@@ -22741,7 +26491,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
@@ -22768,7 +26518,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
@@ -22793,7 +26543,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
@@ -22818,7 +26568,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
@@ -22845,7 +26595,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
@@ -22872,7 +26622,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001900
@@ -22898,7 +26648,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001900
@@ -22923,7 +26673,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001900
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001900
@@ -22950,7 +26700,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
@@ -22977,7 +26727,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
@@ -23004,7 +26754,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
@@ -23032,7 +26782,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
@@ -23060,7 +26810,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
@@ -23088,7 +26838,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
@@ -23116,7 +26866,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
@@ -23142,7 +26892,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
@@ -23168,7 +26918,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
@@ -23196,7 +26946,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
@@ -23224,7 +26974,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002045
@@ -23251,7 +27001,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002045
@@ -23277,7 +27027,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002045
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002045
@@ -24195,7 +27945,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
@@ -24222,7 +27972,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
@@ -24249,7 +27999,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
@@ -24277,7 +28027,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
@@ -24305,7 +28055,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
@@ -24333,7 +28083,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
@@ -24361,7 +28111,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
@@ -24387,7 +28137,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
@@ -24413,7 +28163,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
@@ -24441,7 +28191,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
@@ -24469,7 +28219,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002173
@@ -24479,7 +28229,7 @@ grant Stam
 lab UW
 labExpId DS16208
 labVersion Bowtie 0.12.7
-md5sum 91ab42d3d35a9faaebe5b187a6e82998
+md5sum 91ab42d3d35a9faaebe5b187a6e82998,899a10c17815322e937481f99a5b7a0d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24496,7 +28246,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002173
@@ -24522,7 +28272,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002173
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002173
@@ -24550,7 +28300,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
@@ -24576,7 +28326,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
@@ -24602,7 +28352,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
@@ -24629,7 +28379,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
@@ -24656,7 +28406,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
@@ -24683,7 +28433,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
@@ -24710,7 +28460,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
@@ -24735,7 +28485,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
@@ -24760,7 +28510,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
@@ -24787,7 +28537,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
@@ -24814,7 +28564,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001901
@@ -24840,7 +28590,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001901
@@ -24865,7 +28615,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001901
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001901
@@ -25782,7 +29532,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
@@ -25808,7 +29558,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
@@ -25834,7 +29584,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
@@ -25861,7 +29611,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
@@ -25888,7 +29638,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
@@ -25915,7 +29665,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
@@ -25942,7 +29692,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
@@ -25967,7 +29717,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
@@ -25992,7 +29742,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
@@ -26019,7 +29769,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
@@ -26046,7 +29796,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH000475
@@ -26072,7 +29822,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH000475
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH000475
@@ -26099,7 +29849,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
@@ -26126,7 +29876,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
@@ -26153,7 +29903,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
@@ -26181,7 +29931,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
@@ -26209,7 +29959,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
@@ -26237,7 +29987,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
@@ -26265,7 +30015,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
@@ -26291,7 +30041,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
@@ -26317,7 +30067,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
@@ -26345,7 +30095,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
@@ -26373,7 +30123,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
@@ -26399,7 +30149,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
@@ -26425,7 +30175,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
@@ -26452,7 +30202,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
@@ -26479,7 +30229,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
@@ -26506,7 +30256,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
@@ -26533,7 +30283,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
@@ -26558,7 +30308,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
@@ -26583,7 +30333,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
@@ -26610,7 +30360,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
@@ -26637,7 +30387,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002048
@@ -26664,7 +30414,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002048
@@ -26690,7 +30440,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH002048
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002048
@@ -26718,7 +30468,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001903
@@ -26744,7 +30494,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001903
@@ -26769,7 +30519,7 @@ composite wgEncodeUwHistone
 control std
 controlId wgEncodeEH001903
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001903
@@ -26788,4 +30538,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -1755259958
+# MAGIC: -578216030
