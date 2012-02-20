@@ -191,12 +191,21 @@ $(function () {
         });
         $("body").append(table);
 
-        addFloatingHeader(table);
+        // NOTE: it may be possible to revive floating header functionality in IE using this plug-in,
+        // but I've timed out (not able to make it work in simple HTML either).
+        if (!$.browser.msie) {
+            addFloatingHeader(table);
+        }
         rotateCells(table);
 
         // column and row hover (cross-hair effect)
         // thanks to Chris Coyier, css-tricks.com
         // NOTE:  acts on colgroups declared at start of table
+        // NOTE: second table name is generated from floatheader plugin
+        // NOTE: too slow on IE, so skip 
+        if ($.browser.msie) {
+            return;
+        }
         $("#matrixTable, #matrixTableFloatHeaderClone").delegate('.matrixCell, .elementType','mouseover mouseleave', function(e) {
             if (!$(this).hasClass('experiment') && !$(this).hasClass('todoExperiment') &&
                 !$(this).hasClass('elementType') && !$(this).hasClass('groupType')) {
