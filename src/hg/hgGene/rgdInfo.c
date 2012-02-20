@@ -327,6 +327,6 @@ struct section *rgdGeneRawSection(struct sqlConnection *conn,
 	struct hash *sectionRa)
 /* Create RgdGene roles section. */
 {
-return rgdGeneInfoSection(conn, sectionRa, "rgdGeneRaw", "genes_rat");
+return rgdGeneInfoSection(conn, sectionRa, "rgdGeneRaw", "rgdGene2Raw");
 }
 

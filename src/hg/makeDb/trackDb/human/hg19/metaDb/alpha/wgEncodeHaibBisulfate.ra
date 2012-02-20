@@ -1,0 +1,229 @@
+metaObject wgEncodeHaibBisulfateA549HaibCHHSignalRep1
+objType table
+cell A549
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateA549HaibCHHSignalRep1.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 1
+subId 5674
+tableName wgEncodeHaibBisulfateA549HaibCHHSignalRep1
+treatment None
+view CHH_Signal
+
+metaObject wgEncodeHaibBisulfateA549HaibCHHSignalRep2
+objType table
+cell A549
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateA549HaibCHHSignalRep2.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 2
+subId 5674
+tableName wgEncodeHaibBisulfateA549HaibCHHSignalRep2
+treatment None
+view CHH_Signal
+
+metaObject wgEncodeHaibBisulfateA549HaibCpGSignalRep1
+objType table
+cell A549
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateA549HaibCpGSignalRep1.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 1
+subId 5673
+tableName wgEncodeHaibBisulfateA549HaibCpGSignalRep1
+treatment None
+view CpG_Signal
+
+metaObject wgEncodeHaibBisulfateA549HaibCpGSignalRep2
+objType table
+cell A549
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateA549HaibCpGSignalRep2.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 2
+subId 5673
+tableName wgEncodeHaibBisulfateA549HaibCpGSignalRep2
+treatment None
+view CpG_Signal
+
+metaObject wgEncodeHaibBisulfateGm12878HaibCHHSignalRep1
+objType table
+cell GM12878
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateGm12878HaibCHHSignalRep1.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 1
+subId 5674
+tableName wgEncodeHaibBisulfateGm12878HaibCHHSignalRep1
+treatment None
+view CHH_Signal
+
+metaObject wgEncodeHaibBisulfateGm12878HaibCHHSignalRep2
+objType table
+cell GM12878
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateGm12878HaibCHHSignalRep2.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 2
+subId 5674
+tableName wgEncodeHaibBisulfateGm12878HaibCHHSignalRep2
+treatment None
+view CHH_Signal
+
+metaObject wgEncodeHaibBisulfateGm12878HaibCpGSignalRep1
+objType table
+cell GM12878
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateGm12878HaibCpGSignalRep1.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 1
+subId 5673
+tableName wgEncodeHaibBisulfateGm12878HaibCpGSignalRep1
+treatment None
+view CpG_Signal
+
+metaObject wgEncodeHaibBisulfateGm12878HaibCpGSignalRep2
+objType table
+cell GM12878
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateGm12878HaibCpGSignalRep2.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 2
+subId 5673
+tableName wgEncodeHaibBisulfateGm12878HaibCpGSignalRep2
+treatment None
+view CpG_Signal
+
+metaObject wgEncodeHaibBisulfateHelas3HaibCHHSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateHelas3HaibCHHSignalRep1.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 1
+subId 5674
+tableName wgEncodeHaibBisulfateHelas3HaibCHHSignalRep1
+treatment None
+view CHH_Signal
+
+metaObject wgEncodeHaibBisulfateHelas3HaibCHHSignalRep2
+objType table
+cell HeLa-S3
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateHelas3HaibCHHSignalRep2.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 2
+subId 5674
+tableName wgEncodeHaibBisulfateHelas3HaibCHHSignalRep2
+treatment None
+view CHH_Signal
+
+metaObject wgEncodeHaibBisulfateHelas3HaibCpGSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateHelas3HaibCpGSignalRep1.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 1
+subId 5673
+tableName wgEncodeHaibBisulfateHelas3HaibCpGSignalRep1
+treatment None
+view CpG_Signal
+
+metaObject wgEncodeHaibBisulfateHelas3HaibCpGSignalRep2
+objType table
+cell HeLa-S3
+composite wgEncodeHaibBisulfate
+dataType MethylRrbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeHaibBisulfateHelas3HaibCpGSignalRep2.bigBed
+grant Myers
+lab HudsonAlpha
+obtainedBy HudsonAlpha
+project wgEncode
+replicate 2
+subId 5673
+tableName wgEncodeHaibBisulfateHelas3HaibCpGSignalRep2
+treatment None
+view CpG_Signal
+
+# MAGIC: 1910975330
