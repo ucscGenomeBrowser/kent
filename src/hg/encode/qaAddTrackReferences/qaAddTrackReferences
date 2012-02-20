@@ -1,0 +1,369 @@
+#!/usr/bin/perl
+
+
+use warnings;
+use strict;
+use Encode;
+
+use LWP::UserAgent;
+use Encode qw(decode encode from_to decode_utf8 encode_utf8 is_utf8);
+#use DataBrowser qw(browse);
+#my $html = $ARGV[0];
+my %htmlconv = (
+'á'=>'&#225;', 
+'â'=>'&#226;',  
+'ã'=>'&#227;',  
+'ä'=>'&#228;',  
+'å'=>'&#229;',  
+'æ'=>'&#230;',  
+'ç'=>'&#231;',  
+'è'=>'&#232;',  
+'é'=>'&#233;',  
+'ê'=>'&#234;',  
+'ë'=>'&#235;',  
+'ì'=>'&#236;',  
+'í'=>'&#237;',  
+'î'=>'&#238;',  
+'ï'=>'&#239;',  
+'ð'=>'&#240;',  
+'ñ'=>'&#241;',  
+'ò'=>'&#242;',  
+'ó'=>'&#243;',  
+'ô'=>'&#244;',  
+'õ'=>'&#245;',  
+'ö'=>'&#246;',  
+'ø'=>'&#248;',  
+'ù'=>'&#249;',  
+'ú'=>'&#250;',  
+'û'=>'&#251;',  
+'ü'=>'&#252;',  
+'ý'=>'&#253;',  
+'þ'=>'&#254;',  
+'ÿ'=>'&#255;',  
+'@'=>'&#64;'
+);
+
+my %specialchars = (
+"\'"=>'&#39;',
+'"'=>'&quot;',
+);
+
+#unless ($html =~ m/html$/i){usage()}
+
+#shift @ARGV;
+
+my @ids;
+
+unless(@ARGV){
+	&usage();
+}
+
+
+foreach my $id (@ARGV){
+	
+	push @ids, $id;
+
+}
+
+
+
+my %articles;
+my $browser = LWP::UserAgent->new;
+
+
+foreach my $id (@ids){
+
+
+	my $retmode = "xml";
+	my $db = "Pubmed";
+	if ($id =~ m/^PMC/){
+		$db="pmc";
+		$id =~ s/PMC//;
+	}
+	my $url = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=$db&id=$id";
+	my $response = $browser->get($url, 'Accept-Charset' => 'utf8');
+	my $wwwget = $response->content;
+	unless ($wwwget) {
+		print "Can't find pubmed ID: $id\n";
+		next
+	}
+	elsif ($wwwget =~ m/XML not found/ || $wwwget =~ m/ERROR/){
+		print "Can't find pubmed ID: $id\n";
+		next
+	}
+	my $ref;
+
+	if ($db eq "Pubmed"){
+		$ref = &getPubMedInfo($wwwget, $id);
+	}
+	else {
+		$ref = &getPubMedCentralInfo($wwwget, $id);
+	}
+	my $writestr = $ref->[1];
+	
+	foreach my $char (keys %htmlconv){
+		$writestr =~ s/$char/$htmlconv{$char}/g;
+	}
+	$articles{$ref->[0]} = $writestr;	
+
+
+
+}
+foreach my $key (sort {$a cmp $b} keys %articles){
+	print "$articles{$key}\n";
+
+}
+
+sub filterChars{
+	my $str = $_[0];
+	my %conv = %{$_[1]};
+	$str =~ s/\&/\&amp;/g;
+	foreach my $char (keys %conv){
+		$str =~ s/$char/$conv{$char}/g;
+	}
+	return $str
+	
+
+
+}
+
+sub getPubMedInfo {
+
+
+	my $parse = $_[0];
+	my $id = $_[1];
+	my %info;
+	my $journalstr;
+	#my $in = "";
+	#print "$parse\n";
+	if ($parse =~ m/<Item Name="Pages" Type="String">(.*?)<\/Item>/ms){
+		$info{'page'} = $1;
+		#print "$1\n";
+	}
+
+	if ($parse =~ m/\<Item Name="Volume" Type="String">(.*?)\<\/Item>/ms){
+		$info{'volume'} = &removeSpaces($1);
+	}
+	if ($parse =~ m/\<Item Name="Issue" Type="String">(.*?)<\/Item>/){
+		$info{'issue'} = &removeSpaces($1);
+	}
+	if ($parse =~ m/<Item Name="PubDate" Type="Date">(.*?)<\/Item>/){
+		$info{'date'} = &removeSpaces($1);
+	}
+	elsif ($parse =~ m/<Item Name="EPubDate" Type="Date">(.*?)<\/Item>/){
+		$info{'date'} = &removeSpaces($1);
+	}
+	if ($parse =~ m/<Item Name="Source" Type="String">(.*?)<\/Item>/){
+		$info{'journalname'} = &removeSpaces($1);
+	}
+	my $papername = '<em>' . &filterChars($info{'journalname'}, \%specialchars)  . '</em>.';
+        if ($info{'date'}){$papername = $papername . " $info{'date'}"}
+	if ($info{'volume'}){$journalstr = $journalstr . ";$info{'volume'}"}
+	if ($info{'issue'}){$journalstr = $journalstr . "($info{'issue'})"}
+	if ($info{'page'}){$journalstr = $journalstr . ":$info{'page'}"}
+	unless($journalstr =~ m/\.$/){
+		$journalstr = $journalstr . ".";
+	}
+	#$journalstr =~ s/\s+//g;
+	$journalstr = "$papername$journalstr";
+        #print "journalstr = $journalstr\n";
+
+	my $authorstr;
+	my $authorcount = 0;
+	if ($parse =~ m/<Item Name="AuthorList" Type="List">(.*)<Item Name="LastAuthor" Type="String">/ms){
+		#print "capture = $1\n";
+		my @prelist = split '<Item Name="Author" Type="String">', $1;
+		my @authors;
+		my $authcount = 0;
+		my $collective;
+		my @list;
+		foreach my $line (@prelist) {
+			my @lines = split "\n", $line;
+			foreach my $subline (@lines) {
+				push @list, $subline;
+			}
+		}
+ 		foreach my $line (@list){
+			
+			if ($authcount == 10){
+				$authcount++;
+				last
+			}
+			$line =~ s/<\/Item>//g;
+			$line =~ s/^\s+//g;
+			$line =~ s/\s+$//g;
+			if ($line){
+				#print "line = $line\n";
+				if ($line =~ m/Item Name="CollectiveName" Type="String"\>(.*)/){
+					$collective = $1;
+				}
+				if ($line =~ m/Item Name\=/) {
+				#	print "here\n";
+					next
+				}
+				$authcount++;
+				#print "put $line into authros array\n";
+				push @authors, $line;			
+			}
+		
+		
+		}
+		if ($collective) {
+			if ($authcount >= 10) {
+                                $authcount++;
+				my $trash = pop(@authors);
+			}
+			unshift(@authors, $collective);
+		}
+		$authorstr = join ", ", @authors;
+		if ($authcount >= 11){
+			$authorstr = $authorstr . ' <em>et al</em>';
+		}
+		if ($authorstr) {$authorstr = &filterChars($authorstr, \%specialchars)}
+#		if ($collective and not $authorstr){
+#			$authorstr = $collective;
+#		}
+#		if ($authcount < 10 and $collective) {
+#			$authorstr = $authorstr . ", $collective";
+#		}
+		$authorstr = $authorstr . ".";
+
+	
+	}
+	else {print STDERR "Can't find \<AuthorList\> tag\n"}
+	#print "authorstr = $authorstr\n";
+
+	my $titlestr;
+	if ($parse =~ m/<Item Name="Title" Type="String">(.*?)<\/Item>/){
+		my $title = $1;
+		$title =~ s/\.$//g;
+		if ($title){$title = &filterChars($title, \%specialchars)}
+		$titlestr = '<a href="' . "http://www.ncbi.nlm.nih.gov/pubmed/$id\"" . "\n" . ' rel="nofollow" target="_blank">';
+		$titlestr = $titlestr . "\n$title";
+		$titlestr = $titlestr . '</a>.'; 
+	}
+	else {print STDERR "Can't find \<ArticleTitle\> tag\n"} 
+	
+
+	my $retstr = '<p>' . "\n" . "$authorstr\n" . "$titlestr\n" . "$journalstr\n" . '</p>' . "\n";	
+	my @return;
+	push @return, $authorstr;
+	push @return, $retstr;
+	return(\@return);
+
+
+}
+
+sub removeSpaces {
+	my $line = $_[0];
+	$line =~ s/^\s+//g;
+	$line =~ s/\s+$//g;
+	return $line;
+
+}
+
+sub getPubMedCentralInfo {
+
+
+	my $parse = $_[0];
+	my $id = $_[1];
+	my %info;
+	my $journalstr;
+	#my $in = "";
+	#print "$parse\n";	
+	if ($parse =~ m/<Item Name="Pagination" Type="String">(.*?)<\/Item>/ms){
+		my $temp = $1;
+		$temp =~ s/\s+//g;
+		$info{'page'} = $temp;
+	}
+
+	if ($parse =~ m/\<Item Name="Volume" Type="String">(.*?)\<\/Item>/ms){
+		$info{'volume'} = &removeSpaces($1);
+	}
+	if ($parse =~ m/\<Item Name="Issue" Type="String">(.*?)<\/Item>/){
+		$info{'issue'} = &removeSpaces($1);
+	}
+	if ($parse =~ m/<Item Name="PubDate" Type="String">(.*?)<\/Item>/){
+		$info{'date'} = &removeSpaces($1);
+	}
+	if ($parse =~ m/<Item Name="Journal" Type="String">(.*?)<\/Item>/){
+		$info{'journalname'} = &removeSpaces($1);
+	}
+	if ($info{'journalname'}){$info{'journalname'} = &filterChars($info{'journalname'}, \%specialchars)}
+	my $papername = '<em>' . $info{'journalname'} . '</em>.';
+	$papername = $papername . " $info{'date'}";
+	if ($info{'volume'}){$journalstr = $journalstr . ";$info{'volume'}"}
+	if ($info{'issue'}){$journalstr = $journalstr . "($info{'issue'})"}
+	if ($info{'page'}){$journalstr = $journalstr . "$info{'page'}"}
+
+	unless ($journalstr =~ m/\.$/){
+		$journalstr = $journalstr . ".";
+	}
+        #$journalstr =~ s/\s+//g;
+	#print "journalstr = $journalstr\n";
+	$journalstr = "$papername$journalstr";
+
+	my $authorstr;
+	my $authorcount = 0;
+	if ($parse =~ m/<Item Name="Author" Type="String">(.*)<\/Item>/){
+		#print "capture = $1\n";
+		my @list = split ',', $1;
+		my @authors;
+		my $authcount = 0;
+		foreach my $line (@list){
+
+
+			if ($authcount == 10){
+				$authcount++;
+				last}
+			$line =~ s/<\/Item>//g;
+			$line =~ s/^\s+//g;
+			$line =~ s/\s+$//g;
+			if ($line){
+				$authcount++;
+				push @authors, $line;			
+			}
+		
+		
+		}
+		$authorstr = join ", ", @authors;
+		if ($authcount == 11){
+			$authorstr = $authorstr . ' <em>et al</em>';
+		}
+		if ($authorstr){$authorstr = &filterChars($authorstr, \%specialchars)}
+		$authorstr = $authorstr . ".";
+
+	
+	}
+	else {print STDERR "Can't find \<AuthorList\> tag\n"}
+	#print "authorstr = $authorstr\n";
+
+	my $titlestr;
+	if ($parse =~ m/<Item Name="Title" Type="String">(.*?)<\/Item>/){
+		my $title = $1;
+		$title =~ s/\.$//g;
+		if ($title){$title = &filterChars($title, \%specialchars)}
+		$titlestr = '<a href="' . "http://www.ncbi.nlm.nih.gov/pmc/articles/$id\"" . "\n" . ' rel="nofollow" target="_blank">';
+		$titlestr = $titlestr . "\n$title";
+		$titlestr = $titlestr . '</a>.'; 
+	}
+	else {print STDERR "Can't find \<ArticleTitle\> tag\n"} 
+
+	
+
+	my $retstr = '<p>' . "\n" . "$authorstr\n" . "$titlestr\n" . "$journalstr\n" . '</p>' . "\n";	
+	my @return;
+	push @return, $authorstr;
+	push @return, $retstr;
+	return(\@return);
+
+
+}
+
+
+
+sub usage {
+
+	die "usage qaAddTrackReferences <pubmed_id1> <pubmed_id2> ... <pubmed_idn>\n";
+
+}

@@ -52,6 +52,7 @@ grant Ren
 lab LICR-m
 labVersion 12/09/09 Lane 4
 md5sum e564577c31b50ec2d58371fbab025f0a,e708b7d22084ca37adac7d38f2ee171a
+objStatus replaced - Original file was incorrect and is replaced by an updated file.
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -61,6 +62,33 @@ softwareVersion ELAND
 strain C57BL/6
 subId 3157
 tissueSourceType Pooled
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2V2
+objType file
+age adult-8wks
+antibody CTCF
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2V2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 12/09/09 Lane 4
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 5146
+submittedDataVersion V2 - Replaced incorrect file submitted
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
@@ -352,6 +380,7 @@ grant Ren
 lab LICR-m
 labVersion 12/09/09 Lane 3
 md5sum e564577c31b50ec2d58371fbab025f0a,e708b7d22084ca37adac7d38f2ee171a
+objStatus replaced - Original file was incorrect and is replaced by an updated file.
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -361,6 +390,33 @@ softwareVersion ELAND
 strain C57BL/6
 subId 3391
 tissueSourceType Pooled
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1V2
+objType file
+age adult-8wks
+antibody Pol2
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1V2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 12/09/09 Lane 3
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 5146
+submittedDataVersion V2 - Replaced incorrect file submitted
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep2
@@ -382,6 +438,7 @@ grant Ren
 lab LICR-m
 labVersion 04/12/10 Lane 3
 md5sum 4ba6e837fc7f0b113a507698093018bd,94703918914327d79b99c6bcbfbe9159
+objStatus replaced - Original file was incorrect and is replaced by an updated file.
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -562,6 +619,7 @@ grant Ren
 lab LICR-m
 labVersion 02/11/10 Lane 3
 md5sum 4ba6e837fc7f0b113a507698093018bd,94703918914327d79b99c6bcbfbe9159
+objStatus replaced - Original file was incorrect and is replaced by an updated file.
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -571,6 +629,33 @@ softwareVersion ELAND
 strain C57BL/6
 subId 3393
 tissueSourceType Pooled
+view Alignments
+
+metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2V2
+objType file
+age adult-8wks
+antibody CTCF
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2V2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 02/11/10 Lane 3
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 5146
+submittedDataVersion V2 - Replaced incorrect file submitted
 view Alignments
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk
@@ -2502,6 +2587,33 @@ subId 2791
 tissueSourceType Pooled
 view Alignments
 
+metaObject wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdAlnRep1V2
+objType file
+age adult-8wks
+antibody Input
+cell Heart
+composite wgEncodeLicrTfbs
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdAlnRep1V2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 05/07/09 Lane 3
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 5146
+submittedDataVersion V2 - Replaced incorrect file submitted
+view Alignments
+
 metaObject wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdAlnRep2
 objType file
 age adult-8wks
@@ -3187,6 +3299,7 @@ grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 7
 md5sum ed951601654dfd168d95aa01b538fcb3,12be080d16e2f4aff20527c3772c4317
+objStatus replaced - Original file was incorrect and is replaced by an updated file.
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3196,6 +3309,33 @@ softwareVersion ELAND
 strain C57BL/6
 subId 3004
 tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep1V2
+objType file
+age adult-8wks
+antibody Input
+cell Kidney
+composite wgEncodeLicrTfbs
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep1V2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 05/07/09 Lane 7
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 5146
+submittedDataVersion V2 - Replaced incorrect file submitted
 view Alignments
 
 metaObject wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep2
@@ -7250,4 +7390,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 511986225
+# MAGIC: 37203451

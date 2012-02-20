@@ -4,7 +4,7 @@
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the related .ddf should look like this:
-# files view    cell    localization    rnaExtract      labProtocolId   labExpId        bioRep  origAssembly    replicate
+#files	view	bioRep	cell	labExpId	labProtocolId	labVersion	localization	replicate	rnaExtract	seqPlatform	spikeInPool
 #
 #files          a list of files that will be concatenated together
 #view           the view of the data as described below
@@ -76,7 +76,7 @@ required         no
 downloadOnly     yes
 
 view             Spikeins
-type             doc
+type             txt
 hasReplicates    yes
 required         no
 downloadOnly     yes

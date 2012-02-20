@@ -5,26 +5,16 @@ Disallow: //cgi-bin
 Disallow: /admin/
 Disallow: /qa/
 
+User-agent: msnbot Crawl-delay: 1200 Disallow: /
+
 User-agent: Googlebot
 Disallow: /admin/
 Disallow: /goldenPath/
 Disallow: /qa/
-Disallow: /cgi-bin/hgTracks
-Disallow: /cgi-bin/hgc
-Disallow: /cgi-bin/hgTrackUi
-Disallow: /cgi-bin/hgNear
-Disallow: /cgi-bin/hgBlat
-Disallow: /cgi-bin/hgLiftOver
-Disallow: /cgi-bin/hgPcr
-Disallow: /cgi-bin/hgTables
-Disallow: /cgi-bin/hgText
-Disallow: /cgi-bin/pbGateway
-Disallow: /cgi-bin/pbGlobal
+Disallow: /cgi-bin/
 
 User-agent: htdig
 Disallow: /admin/
 Disallow: /goldenPath/
 Disallow: /qa/
-Disallow: /cgi-bin/hgTracks 
-Disallow: /cgi-bin/hgTables
-Disallow: /cgi-bin/hgLiftOver
+Disallow: /cgi-bin/
