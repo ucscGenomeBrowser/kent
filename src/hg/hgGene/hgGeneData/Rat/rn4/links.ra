@@ -10,6 +10,13 @@ hgsid on
 dbInUrl on
 priority 1
 
+name rgdPrevious
+shortLabel RGDx
+tables kgXrefPrevious
+priority 10
+idSql select uniProt.extDbRef.extAcc1 from uniProt.extDbRef,uniProt.extDb,kgXrefPrevious where uniProt.extDb.val = 'RGD' and uniProt.extDb.id = uniProt.extDbRef.extDb and uniProt.extDbRef.acc = kgXrefPrevious.spID and kgXrefPrevious.kgID = '%s' 
+url http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=%s
+
 name rgd
 shortLabel RGD
 tables rgdGene2
