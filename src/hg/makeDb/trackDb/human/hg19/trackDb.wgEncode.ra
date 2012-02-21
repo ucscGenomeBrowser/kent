@@ -174,8 +174,8 @@ include wgEncodeSydhTfbs.ra beta,public
 include wgEncodeSydhTfbs.new.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
-include wgEncodeUchicagoTfbs.ra 
-
+include wgEncodeUchicagoTfbs.ra beta,public
+include wgEncodeUchicagoTfbs.release2.ra alpha
 
 # SUNY RBP -----------------------------------------
 
