@@ -8648,6 +8648,7 @@ labProtocolId 006C-
 labVersion iIDR
 localization cytosol
 md5sum 64729e3a52e43964b8814a5597ac3742
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -8655,6 +8656,30 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3615
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamContigsV2
+objType table
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000198
+expId 198
+fileName wgEncodeCshlLongRnaSeqH1hescCytosolPamContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID18549
+labProtocolId 006C-
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamExonsGencV7
@@ -8935,6 +8960,7 @@ labProtocolId 006C+
 labVersion iIDR
 localization cytosol
 md5sum 1f04425ae2bc49731463433b4e4f8f00
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -8942,6 +8968,30 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3616
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapContigsV2
+objType table
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000151
+expId 151
+fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID8536
+labProtocolId 006C+
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapExonsGencV7
@@ -9455,6 +9505,7 @@ labProtocolId 006N-
 labVersion iIDR
 localization nucleus
 md5sum 3fc46419a04be282e18a82a47ba119b6
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -9462,6 +9513,30 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3617
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamContigsV2
+objType table
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000199
+expId 199
+fileName wgEncodeCshlLongRnaSeqH1hescNucleusPamContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID9199
+labProtocolId 006N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamExonsGencV7
@@ -9742,6 +9817,7 @@ labProtocolId 006N+
 labVersion iIDR
 localization nucleus
 md5sum 36deddc56093445edf48667ef244ec15
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -9749,6 +9825,30 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3618
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapContigsV2
+objType table
+cell H1-hESC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000152
+expId 152
+fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID8558
+labProtocolId 006N+
+localization nucleus
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapExonsGencV7
@@ -11468,6 +11568,7 @@ labProtocolId 012C-
 labVersion iIDR
 localization cytosol
 md5sum 86b4ee2f5323ff857ddd2a799b2f5291
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -11475,6 +11576,30 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3631
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPamContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamContigsV2
+objType table
+cell HeLa-S3
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000201
+expId 201
+fileName wgEncodeCshlLongRnaSeqHelas3CytosolPamContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID18551
+labProtocolId 012C-
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqHelas3CytosolPamContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamExonsGencV7
@@ -17288,6 +17413,7 @@ labProtocolId 036WC-
 labVersion iIDR
 localization cell
 md5sum ee82beac3fd7bd49e7cb5ef4c1479f80
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -17295,6 +17421,30 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3619
 tableName wgEncodeCshlLongRnaSeqHmecCellPamContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqHmecCellPamContigsV2
+objType table
+cell HMEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000176
+expId 176
+fileName wgEncodeCshlLongRnaSeqHmecCellPamContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID8831
+labProtocolId 036WC-
+localization cell
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqHmecCellPamContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamExonsGencV7
@@ -17575,6 +17725,7 @@ labProtocolId 036WC+
 labVersion iIDR
 localization cell
 md5sum d4cc69f4acfab349520373b4a2ab813a
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -17582,6 +17733,30 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3620
 tableName wgEncodeCshlLongRnaSeqHmecCellPapContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqHmecCellPapContigsV2
+objType table
+cell HMEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000153
+expId 153
+fileName wgEncodeCshlLongRnaSeqHmecCellPapContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID8695
+labProtocolId 036WC+
+localization cell
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqHmecCellPapContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapExonsGencV7
@@ -20502,6 +20677,7 @@ labProtocolId 029C-
 labVersion iIDR
 localization cytosol
 md5sum 026cb2157ea5466df1171942b0ead3fa
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -20509,6 +20685,30 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3623
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamContigsV2
+objType table
+cell HUVEC
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000200
+expId 200
+fileName wgEncodeCshlLongRnaSeqHuvecCytosolPamContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID18556
+labProtocolId 029C-
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamExonsGencV7
@@ -29801,6 +30001,7 @@ labProtocolId 035WC-
 labVersion iIDR
 localization cell
 md5sum 5056155544db7223c2f4447aebded3f1
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -29808,6 +30009,30 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3657
 tableName wgEncodeCshlLongRnaSeqNhekCellPamContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPamContigsV2
+objType table
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000164
+expId 164
+fileName wgEncodeCshlLongRnaSeqNhekCellPamContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID8830
+labProtocolId 035WC-
+localization cell
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqNhekCellPamContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamExonsGencV7
@@ -30353,6 +30578,7 @@ labProtocolId 035WC+
 labVersion iIDR
 localization cell
 md5sum 1f74fdd50ff7a9aaa4eaae3f40e73fea
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -30360,6 +30586,30 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3659
 tableName wgEncodeCshlLongRnaSeqNhekCellPapContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqNhekCellPapContigsV2
+objType table
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000167
+expId 167
+fileName wgEncodeCshlLongRnaSeqNhekCellPapContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID8694
+labProtocolId 035WC+
+localization cell
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqNhekCellPapContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapExonsGencV7
@@ -31318,6 +31568,7 @@ labProtocolId 027C-
 labVersion iIDR
 localization cytosol
 md5sum 31e6d9969d3a2438eb078499b50b9084
+objStatus replaced
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -31325,6 +31576,30 @@ rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3652
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPamContigs
+view Contigs
+
+metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamContigsV2
+objType table
+cell NHEK
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+dccAccession wgEncodeEH000195
+expId 195
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPamContigsV2.bedRnaElements.gz
+grant Gingeras
+lab CSHL
+labExpId LID18554
+labProtocolId 027C-
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5612
+submittedDataVersion V2 - Replace . with -1 for missing data
+tableName wgEncodeCshlLongRnaSeqNhekCytosolPamContigsV2
 view Contigs
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamExonsGencV7
@@ -35699,4 +35974,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -629253436
+# MAGIC: -801089441

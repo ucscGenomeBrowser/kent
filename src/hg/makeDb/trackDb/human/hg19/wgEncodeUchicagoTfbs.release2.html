@@ -1,0 +1,185 @@
+<H2>Description:</H2>
+
+<P>This ENCODE track maps
+human transcription factor binding sites, 
+genome-wide using second generation 
+massively parallel sequencing.  
+This mapping uses expressed transcription factors 
+as GFP tagged fusion proteins after BAC 
+(Bacterial artificial chromosomes) recombineering. 
+
+<P>The U. of Chicago and Max Planck Institute
+(Dresden) pipeline generates
+recombineered (recombination-mediated genetic engineering) 
+BACs for the production of cell lines or animals that
+express fusion proteins from epitope tagged transgenes.  
+</P>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>). For each view, there are multiple subtracks that display
+individually on the browser. Instructions for configuring multi-view tracks
+are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+</P>
+<P>
+For each cell type, this track contains the following views:
+<DL>
+<DT><I>Peaks</I>
+<DD>Regions of signal enrichment based on processed data (usually normalized data from pooled replicates).
+<DT><I>Signal</I>
+<DD>Density graph (wiggle) of signal enrichment based on aligned read density.
+</DL>
+</P>
+<P>Peaks and signals displayed in this track are the results of pooled replicate
+sequence and alignment files for each replicate are available for
+<A HREF="/cgi-bin/hgFileUi?g=wgEncodeUchicagoTfbs">download</A>.
+</P>
+
+
+<H2>Methods</H2>
+<P>
+Cells were grown according to the approved
+<A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
+</P>
+
+<H3>Recombineering strategy:</H3>
+<P>To facilitate high-throughput production of the transgenic
+constructs, the program BACFinder (Crowe, Rana et al. 2002) automatically
+selects the most suitable BAC clone for any given human gene and
+generates the sets of PCR primers required for tagging and
+verification (Poser, Sarov et al. 2008). Recombineering
+is used for tagging cassettes at either the N or C terminus of the
+protein. The N-terminal cassette has a dual eukaryotic-prokaryotic
+promoter (PGK-gb2) driving a neomycin-kanamycin resistance gene
+within an artificial intron inside the tag coding sequence. The
+selection cassette is flanked by two loxP sites and can be permanently
+removed by Cre recombinase-mediated excision. The C-terminal cassette
+contains the sequence encoding the tag followed by an internal
+ribosome entry site (IRES) in front of the neomycin resistance
+gene. In addition, a short bacterial promoter (Gb3) drives the
+expression of the neomycin-kanamycin resistance gene in <i>E. coli</i>. 
+</P>
+
+<P>The tagging cassettes, containing 50 nucleotides of
+PCR-introduced homology arms are inserted into the BAC by recombineering, either
+behind the start codon (for the N-terminal tag) or in front of the
+stop codon (for the C-terminal tag) of the gene. <i>E. coli</i> cells that have
+successfully recombined the cassette are selected for kanamycin
+resistance in liquid culture.  Each saturated culture from a specific 
+recombineering reaction derived 10-200 independent recombination events.  
+</P>
+
+<P>Checking two independent clones for each PCR through
+the tag insertion point, 97% (85/88) yielded a PCR product of the expected
+size. Most of the clones that failed to grow were missing the targeted genomic
+region. An estimated 10% of the BACs used are
+chimeric, rearranged or wrongly mapped. Thus,
+initial results indicate that the necessary recombineering steps can
+be carried out with high fidelity. 
+</P>
+
+<P>The White lab produced all epitope
+tagged transcription and chromatin factor BACs, as well as the genome
+wide ChIP data and analysis.  An application
+of this approach to the analysis of closely related paralogs (RARa and
+RARg) yielded transcription factors, chromatin factors, cell lines, 
+ChIP chip data and ChIP-seq data
+(Hua, Kittler et al. Cell 2009). 
+Such paralogous transcription factors often can not otherwise 
+be distinguished by antibodies.  
+</P>
+    
+<H3>Sample Preparation</H3>
+
+<P>ChIP DNA from samples are sheared to &#126;800bp using a nebulizer. 
+The ends of the DNA are polished, and two unique adapters are ligated to the fragments. 
+Ligated fragments of 150-200bp are isolated by gel extraction 
+and amplified using limited cycles of PCR.
+</P>
+
+<H3>Sequencing System</H3>
+
+<P>Illumina GAIIx and HySeq next-generation sequencing produced all ChIP-seq data.
+</P>
+
+<H3>Processing and Analysis Software</H3>
+
+<P>Raw sequencing reads are aligned using Bowtie version 0.12.5
+(Langmead et al. 2009).  The &quot;-m 1&quot; parameter is applied to suppress alignments mapping more than once in the genome.  
+Reads are aligned to the UCSC hg19 assembly. 
+Wiggle format signal files are generated with SPP 2.7.1 for R 2.7.1.  
+Macs 1.3.7 is used to call peaks.  
+The Macs parameters used vary by experiment.
+</P>
+<P>
+The White lab used goat anti-GFP antibody to perform ChIP in untagged K562 cells as a background control. 
+The test IP was performed in the same way as the background control. Results are expressed as values 
+of the test normalized to the background.
+</P>
+
+<H2>Credits</H2>
+<p>These data and annotations were created by a collaboration of University of Chicago and Argonne National Laboratory:</p>
+<ul>
+
+<li><A HREF="mailto:&#107;p&#119;h&#105;&#116;&#101;&#64;&#117;c&#104;&#105;&#99;a&#103;&#111;.
+e&#100;&#117;">
+Kevin White</A> (Principal Investigator at University of Chicago),</li>
+<!-- above address is kpwhite at uchicago.edu -->
+
+<li><A HREF="mailto:&#115;&#117;&#98;&#104;ra&#100;&#105;&#112;&#64;&#117;&#99;h&#105;&#99;&#97;g&#111;.
+&#101;&#100;&#117;">
+Subhradip Karmakar</A> (Project in charge at University of Chicago),</li>
+<!-- above address is subhradip at uchicago.edu -->
+
+<li><A HREF="mailto:&#110;&#98;&#105;l&#100;&#64;&#98;&#115;&#100;.
+u&#99;h&#105;&#99;&#97;&#103;&#111;.
+&#101;&#100;&#117;">
+Nick Bild</A> (Data analysis at University of Chicago),</li>
+<!-- above address is nbild at bsd.uchicago.edu -->
+
+<li><A HREF="mailto:&#97;&#99;ho&#117;&#100;&#104;&#117;&#114;&#121;&#64;&#117;&#99;&#104;&#105;&#99;&#97;go.
+&#101;&#100;u">
+Alina Choudhury</A> (Laboratory Technician at University of Chicago), and</li>
+<!-- above address is achoudhury at uchicago.edu -->
+ 
+<li><A HREF="mailto:&#109;&#100;&#111;&#109;&#97;n&#117;s&#64;&#97;&#110;&#108;.
+&#103;&#111;v">
+Marc Domanus</A> (Sequencing Incharge at Argonne National Lab).</li>
+<!-- above address is mdomanus at anl.gov -->
+</ul>
+
+
+<H2>References</H2>
+<p>Crowe, M.L., Rana D., Fraser F., Bancroft I. and Trick M. 
+<A HREF="http://nar.oxfordjournals.org/content/30/21/e118.full?ijkey=KM3MpUg6KSVBo&keytype=ref&siteid=nar">
+BACFinder - genomic localisation of large insert genomic clones based on 
+restriction fingerprinting.</A> <em>Nucleic Acids Research.</em> 2002; 30(21), e118.</p>
+
+<p>Hua S, Kittler R, and White K.  
+<A HREF="http://www.sciencedirect.com/science?_ob=MImg&_imagekey=B6WSN-4WM10D8-K-9&_cdi=7051&_user=4428&_pii=S0092867409005042&_origin=browse&_zone=rslt_list_item&_coverDate=06%2F26%2F2009&_sk=998629992&wchp=dGLbVlb-zSkWb&md5=fb64e508af85a0a26177a091fd113eb5&ie=/sdarticle.pdf">
+Genomic antagonism between retinoic acid and estrogen signaling in breast cancer.</A>
+<em>Cell.</em> 2009 June 26;137(7):1259-1271.</p>
+
+<p>Langmead B, Trapnell C, Pop M and Salzberg S.  
+<A HREF="http://www.biomedcentral.com/content/pdf/gb-2009-10-3-r25.pdf">
+Ultrafast and memory-efficient alignment of short DNA sequences to the human
+genome.</A> 
+<em>Genome Biology.</em> 2009; 10:R25.</p>
+
+<p>Poser I, Sarov M, Hutchins JR, H&eacute;rich&eacute; JK, Toyoda Y, Pozniakovsky A, Weigl D, Nitzsche A, Hegemann B, Bird AW, Pelletier L, Kittler R, Hua S, Naumann R, Augsburg M et al. 
+<A HREF="http://www.nature.com/nmeth/journal/v5/n5/full/nmeth.1199.html">
+BAC TransgeneOmics: a high-throughput method for exploration of protein function in mammals.</A>
+<em>Nature Methods.</em> 2008 Aug;5(8):748.</p>
+
+<H2> Data Release Policy </H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column on the track configuration page and
+the download page.  The full data release policy for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
+
+
+

@@ -3670,6 +3670,7 @@ grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 3
 md5sum ed951601654dfd168d95aa01b538fcb3,12be080d16e2f4aff20527c3772c4317
+objStatus replaced - Original file was incorrect and is replaced by an updated file.
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3679,6 +3680,33 @@ softwareVersion ELAND
 strain C57BL/6
 subId 3931
 tissueSourceType Pooled
+view Alignments
+
+metaObject wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdAlnRep1V2
+objType file
+age adult-8wks
+antibody Input
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdAlnRep1V2.bam,wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdAlnRep1V2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 05/07/09 Lane 3
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 5625
+submittedDataVersion V2 - Replaced incorrect file submitted
 view Alignments
 
 metaObject wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdAlnRep2
@@ -4493,6 +4521,7 @@ grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 7
 md5sum ed951601654dfd168d95aa01b538fcb3,12be080d16e2f4aff20527c3772c4317
+objStatus replaced - Original file was incorrect and is replaced by an updated file.
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4502,6 +4531,33 @@ softwareVersion ELAND
 strain C57BL/6
 subId 3932
 tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrHistoneKidneyInputMAdult8wksC57bl6StdAlnRep1V2
+objType file
+age adult-8wks
+antibody Input
+cell Kidney
+composite wgEncodeLicrHistone
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrHistoneKidneyInputMAdult8wksC57bl6StdAlnRep1V2.bam,wgEncodeLicrHistoneKidneyInputMAdult8wksC57bl6StdAlnRep1V2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 05/07/09 Lane 7
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 5625
+submittedDataVersion V2 - Replaced incorrect file submitted
 view Alignments
 
 metaObject wgEncodeLicrHistoneKidneyInputMAdult8wksC57bl6StdAlnRep2
@@ -11231,4 +11287,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 971782185
+# MAGIC: -1486726222

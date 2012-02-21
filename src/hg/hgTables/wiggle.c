@@ -942,7 +942,10 @@ doOutWig(track, table, conn, wigOutBed);
 void doSummaryStatsWiggle(struct sqlConnection *conn)
 /* Put up page showing summary stats for wiggle track. */
 {
-struct trackDb *track = curTrack;
+// grab the right trackDb for the current table.  The curTrack variable
+// has the composite trackDb in it
+struct trackDb *track  = hTrackDbForTrack(database, curTable);
+
 char *table = curTable;
 struct region *region, *regionList = getRegions();
 char *regionName = getRegionName();
