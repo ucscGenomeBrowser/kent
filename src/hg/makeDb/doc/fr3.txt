@@ -920,23 +920,16 @@ TMPDIR=/scratch/tmp
 
     #	rearrange to get fr3 on top:
     cat << '_EOF_' > fr3.8way.nh
-(((((((fr3:0.008825,(hg19:0.006700,panTro3:0.006667):0.002250):0.009680,
-ponAbe2:0.018318):0.007000,nomLeu1:0.010000):0.007000,(rheMac2:0.007853,
-papHam1:0.007637):0.029618):0.021965,calJac3:0.066131):0.057590,
-tarSyr1:0.137823):0.08062,(micMur1:0.092749,otoGar1:0.129725):0.035463);
+(((((((fr3:0.203847,tetNig2:0.224159):0.097590,oreNil1:0.200000):0.097590,
+gasAcu1:0.316413):0.030000,oryLat2:0.511970):0.030000,
+gadMor1:0.350000):0.225640,danRer7:0.730752):0.147949,latCha1:1.166927);
 '_EOF_'
     # << happy emacs
 
     # convert to species names
     /cluster/bin/phast/tree_doctor --rename \
-"fr3->Gorilla; hg19->Human; panTro3->Chimp; ponAbe2->Orangutan; nomLeu1->Gibbon; rheMac2->Rhesus; papHam1->Baboon; calJac3->Marmoset; tarSyr1->Tarsier; micMur1->Mouse_lemur; otoGar1->Bushbaby" \
+"fr3->Fugu; tetNig2->Tetraodon; oreNil1->Nile_Tilapia; gasAcu1->Stickleback; oryLat2->Medaka; gadMor1->Atlantic_cod; danRer7->Zebrafish; latCha1->Coelacanth;" \
 fr3.8way.nh > fr3.commonNames.8way.nh
-
-# (((((((Gorilla:0.008825,(Human:0.006700,Chimp:0.006667):0.002250):0.009680,
-# Orangutan:0.018318):0.007000,Gibbon:0.010000):0.007000,
-# (Rhesus:0.007853,Baboon:0.007637):0.029618):0.021965,
-# Marmoset:0.066131):0.057590,Tarsier:0.137823):0.08062,
-# (Mouse_lemur:0.092749,Bushbaby:0.129725):0.035463);
 
     #	Use this specification in the phyloGif tool:
     #	http://genome.ucsc.edu/cgi-bin/phyloGif
@@ -957,18 +950,15 @@ fr3.8way.nh > fr3.commonNames.8way.nh
 #	the multiple alignment procedure
 
 #                         featureBits chainLink measures
-#                                        chainGorGor3Link  chain linearGap
-#    distance                    on fr3  on other     minScore
-#  1  0.018 - chimp panTro3      (% 89.04) (% 88.04)       5000     medium
-#  2  0.018 - human hg19         (% 91.8) (% 89.88)       5000     medium
-#  3  0.036 - gibbon nomLeu1     (% 83.48) (% 84.12)       5000     medium
-#  4  0.037 - orangutan ponAbe2  (% 86.35) (% 83.55)       5000     medium
-#  5  0.070 - baboon papHam1     (% 79.43) (% 80.87)       5000     medium
-#  6  0.070 - rhesus rheMac2     (% 79.24) (% 82.19)       5000     medium
-#  7  0.121 - marmoset calJac3   (% 68.51) (% 70.07)       5000     medium
-#  8  0.250 - tarsier tarSyr1    (% 19.48) (% 20.48)       5000     medium
-#  9  0.251 - mouse lemur micMur1(% 22.91) (% 34.56)       5000     medium
-# 10  0.288 - bushbaby otoGar1   (% 12.02) (% 17.08)       5000     medium
+#                                     chainFr3Link          chain  linearGap
+#    distance                           on fr3  on other   minScore
+#  1  0.428 - tetraodon tetNig2      (% 70.91) (% 80.67)     2000     medium
+#  2  0.501 - nile tilapia oreNil1   (% 57.24) (% 30.74)     2000     medium
+#  3  0.715 - stickleback gasAcu1    (% 55.53) (% 48.04)     2000     medium
+#  4  0.809 - altantic cod gadMor1   (% 30.33) (% 19.05)     2000     medium
+#  5  0.941 - medaka oryLat2         (% 43.86) (% 25.91)     2000     medium
+#  6  1.415 - zebrafish danRer7      (% 22.82) (%  7.37)     2000     medium
+#  7  2.000 - coelacanth latCha1     (% 13.74) (%  2.88)     2000     medium
 
 # None of this concern for distances matters in building the first step, the
 # maf files.
@@ -979,3 +969,132 @@ fr3.8way.nh > fr3.commonNames.8way.nh
     echo `cat tmp.nh` | sed 's/ //g; s/,/ /g' > tree.nh
     sed 's/[()]//g; s/,/ /g' tree.nh > species.list
 
+    # break up maf files into smaller pieces:
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/mafInputs
+    cd /hive/data/genomes/fr3/bed/multiz8way/mafInputs
+
+    for S in `cat ../species.list | sed -e "s/fr3 //"`
+do
+    echo $S
+    rm -fr ./${S}/
+    mkdir -p ./${S}/
+    netMaf="../../lastz.${S}/mafNet/fr3.${S}.net.maf.gz"
+    ls -l "${netMaf}"
+    mafSplit -byTarget -useHashedName=5 /dev/null ./${S}/ ${netMaf}
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 255
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 32 maf.list
+
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/splitRun
+    cd /hive/data/genomes/fr3/bed/multiz8way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = fr3
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/fr3/bed/multiz8way/mafInputs
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+	> /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/fr3/bed/multiz8way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafInputs/maf.list maf.list
+    ssh swarm
+    cd /hive/data/genomes/fr3/bed/multiz8way/splitRun/run
+    # the tac reverses the list to get the small jobs first
+    gensub2 maf.list single template stdout | tac > jobList
+    # the ram=8g will allow only one job on a node to slow them down
+    para -ram=8g create jobList
+# Completed: 32 of 32 jobs
+# CPU time in finished jobs:      22781s     379.69m     6.33h    0.26d  0.001 y
+# IO & Wait Time:                   967s      16.11m     0.27h    0.01d  0.000 y
+# Average job time:                 742s      12.37m     0.21h    0.01d
+# Longest finished job:            2113s      35.22m     0.59h    0.02d
+# Submission to last job:         17092s     284.87m     4.75h    0.20d
+
+    # assemble into a single maf file
+    cd /hive/data/genomes/fr3/bed/multiz8way
+    head -1 splitRun/maf/001.maf > multiz8way.maf
+    for F in splitRun/maf/*.maf
+do
+    egrep -v "^#" ${F}
+done >> multiz8way.maf
+    tail -1 splitRun/maf/001.maf >> multiz8way.maf
+
+# -rw-rw-r-- 1 2491426291 Feb 21 12:06 multiz8way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/fr3/bed/multiz8way
+    mkdir /gbdb/fr3/multiz8way
+    ln -s `pwd`/multiz8way.maf /gbdb/fr3/multiz8way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf fr3 multiz8way
+    #	Indexing and tabulating /gbdb/fr3/multiz8way/multiz8way.maf
+    #	Loaded 2735007 mafs in 1 files from /gbdb/fr3/multiz8way
+    #	real    1m48.011s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 fr3 multiz8waySummary \
+	/gbdb/fr3/multiz8way/multiz8way.maf
+    #	Created 179258 summary blocks from 8283246 components and 2735007 mafs
+    #	from /gbdb/fr3/multiz8way/multiz8way.maf
+
+    #	real    1m51.378s
+
+    wc -l multiz8way*.tab
+    #	2735007 multiz8way.tab
+    #	179258 multiz8waySummary.tab
+    #	2914265 total
+
+    rm multiz8way*.tab
+
+#######################################################################
