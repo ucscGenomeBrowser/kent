@@ -247,6 +247,13 @@ if (!anyFilter() && !anyIntersection())
 		minVal = sum.minVal;
 		maxVal = sum.maxVal;
 		}
+	    else
+	        {
+		if (sum.minVal < minVal)
+		    minVal = sum.minVal;
+		if (sum.maxVal > maxVal)
+		    maxVal = sum.maxVal;
+		}
 	    sumData += sum.sumData;
 	    sumSquares += sum.sumSquares;
 	    validCount += sum.validCount;
@@ -269,6 +276,13 @@ else
 	    double size = iv->end - iv->start;
 	    if (validCount == 0)
 		minVal = maxVal = val;
+	    else
+	        {
+		if (val < minVal)
+		    minVal = val;
+		if (val > maxVal)
+		    maxVal = val;
+		}
 	    sumData += size*val;
 	    sumSquares += size*val*val;
 	    validCount += size;
