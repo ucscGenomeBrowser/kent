@@ -63,7 +63,7 @@ include wgEncodeUwAffyExonArray.ra
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.ra beta,public
-include wgEncodeDukeAffyExon.new.ra alpha
+include wgEncodeDukeAffyExon.release3.ra alpha
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: Matt)
@@ -154,7 +154,7 @@ include wgEncodeUwHistone.release3.ra
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra beta,public
-include wgEncodesydhHistone.release3.ra alpha
+include wgEncodeSydhHistone.release3.ra alpha
 
 # ENCODE TFBS -------------------------------------------
 
