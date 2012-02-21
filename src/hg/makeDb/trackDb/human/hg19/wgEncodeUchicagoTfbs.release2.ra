@@ -31,10 +31,11 @@ longLabel Transcription Factor Binding Sites by Epitope-Tag ChIP-seq from ENCODE
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1)
-subGroup3 factor Factor eHDAC8=HDAC8 eNR4A1=NR4A1 eFOS=FOS eJunB=JunB eJunD=JunD eGATA2=GATA2
-subGroup4 control Control ControlGATA2=Control_eGFP-GATA2 ControlFOS=Control_eGFP-FOS Control=Control ControlHDAC8=Control_eGFP-HDAC8 ControlNR4A1=Control_eGFP-NR4A1 ControlJunD=Control_eGFP-JunD ControlJunB=Control_eGFP-JunB
-dimensions dimensionX=cellType dimensionY=factor 
-sortOrder cellType=+ factor=+ view=+
+subGroup3 factor Factor BACH1=BACH1 CCNE1=CCNE1 CDKN1B=CDKN1B ELF1=ELF1 ESR=ESR FOS=FOS GATA2=GATA2 HDAC8=HDAC8 ILF2=ILF2 JunB=JunB JunD=JunD MLL5=MLL5 NCOR1=NCOR1 NF90=NF90 NR4A1=NR4A1 STAT1=STAT1 zINPUTBACH1=Input_(<i>BACH1</i>) zINPUTCCNE1=Input_(<i>CCNE1</i>) zINPUTCDKN1B=Input_(<i>CDKN1B</i>) zINPUTELF1=Input_(<i>ELF1</i>) zINPUTESR=Input_(<i>ESR</i>) zINPUTILF2=Input_(<i>ILF2</i>) zINPUTMLL5=Input_(<i>MLL5</i>) zINPUTNCOR1=Input_(<i>COR1</i>) zINPUTNF90=Input_(<i>NF90</i>) zINPUTSTAT1=Input_(<i>STAT1</i>)
+subGroup4 control Control CONTROLBACH1=Control_eGFP-BACH1 CONTROLCCNE1=Control_eGFP-CCNE1 CONTROLCDKN1B=Control_eGFP-CDKN1B CONTROLELF1=Control_eGFP-E2F1 CONTROLESR=Control_eGFP-ESR ControlFOS=Control_eGFP-FOS ControlGATA2=Control_eGFP-GATA2 ControlHDAC8=Control_eGFP-HDAC8 CONTROLILF2=Control_eGFP-ILF2 ControlJunD=Control_eGFP-JunD ControlJunB=Control_eGFP-JunB CONTROLMLL5=Control_eGFP-MLL5 CONTROLNCOR1=Control_eGFP-NCOR1 CONTROLNF90=Control_eGFP-NF90 ControlNR4A1=Control_eGFP-NR4A1 CONTROLSTAT1=Control_eGFP-STAT1
+subGroup5 rep Replicate rep1=1 rep2=2 POOLED=Pooled
+dimensions dimensionX=rep dimensionY=factor 
+sortOrder cellType=+ factor=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control replicate=Rep view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
@@ -61,7 +62,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 FOS/GFP Pk
         longLabel K562 FOS TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago 
-        subGroups view=Peaks factor=eFOS cellType=1K562 control=ControlFOS
+        subGroups view=Peaks factor=FOS cellType=1K562 control=ControlFOS rep=POOLED
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -70,7 +71,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 GATA2/GFP Pk
         longLabel K562 GATA2 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
-        subGroups view=Peaks factor=eGATA2 cellType=1K562 control=ControlGATA2
+        subGroups view=Peaks factor=GATA2 cellType=1K562 control=ControlGATA2 rep=POOLED
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -79,7 +80,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 HDAC8/GFP Pk
         longLabel K562 HDAC8 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
-        subGroups view=Peaks factor=eHDAC8 cellType=1K562 control=ControlHDAC8
+        subGroups view=Peaks factor=HDAC8 cellType=1K562 control=ControlHDAC8 rep=POOLED
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -88,7 +89,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 JunB/GFP Pk
         longLabel K562 JunB TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
-        subGroups view=Peaks factor=eJunB cellType=1K562 control=ControlJunB
+        subGroups view=Peaks factor=JunB cellType=1K562 control=ControlJunB rep=POOLED
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -97,7 +98,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 JunD/GFP Pk
         longLabel K562 JunD TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
-        subGroups view=Peaks factor=eJunD cellType=1K562 control=ControlJunD
+        subGroups view=Peaks factor=JunD cellType=1K562 control=ControlJunD rep=POOLED
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -106,10 +107,190 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsPeaks 
         shortLabel K562 NR4A1/GFP Pk
         longLabel K562 NR4A1 TFBS GFP-tag ChIP-seq Peaks from ENCODE/UChicago
-        subGroups view=Peaks factor=eNR4A1 cellType=1K562 control=ControlNR4A1
+        subGroups view=Peaks factor=NR4A1 cellType=1K562 control=ControlNR4A1 rep=POOLED
         type narrowPeak
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562Bach1Controlbach1PkRep1
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-BACH1 Pk 1
+        longLabel K562 eGFP-BACH1 Control eGFP-BACH1 ChIP-seq Peaks Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=BACH1 cellType=1K562 control=CONTROLBACH1 rep=rep1
+        type narrowPeak
+        color 46,0,184
+        # subId=5795 dateSubmitted=2012-02-16
+
+        track wgEncodeUchicagoTfbsK562Bach1Controlbach1PkRep2
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-BACH1 Pk 2
+        longLabel K562 eGFP-BACH1 Control eGFP-BACH1 ChIP-seq Peaks Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=BACH1 cellType=1K562 control=CONTROLBACH1 rep=rep2
+        type narrowPeak
+        color 46,0,184
+        # subId=5795 dateSubmitted=2012-02-16
+
+        track wgEncodeUchicagoTfbsK562Ccne1Controlccne1PkRep1
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-CCNE1 Pk 1
+        longLabel K562 eGFP-CCNE1 Control eGFP-CCNE1 ChIP-seq Peaks Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=CCNE1 cellType=1K562 control=CONTROLCCNE1 rep=rep1
+        type narrowPeak
+        color 46,0,184
+        # subId=5853 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Ccne1Controlccne1PkRep2
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-CCNE1 Pk 2
+        longLabel K562 eGFP-CCNE1 Control eGFP-CCNE1 ChIP-seq Peaks Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=CCNE1 cellType=1K562 control=CONTROLCCNE1 rep=rep2
+        type narrowPeak
+        color 46,0,184
+        # subId=5853 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Stat1Controlstat1PkRep1
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-STAT1 Pk 1
+        longLabel K562 eGFP-STAT1 Control eGFP-STAT1 ChIP-seq Peaks Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=STAT1 cellType=1K562 control=CONTROLSTAT1 rep=rep1
+        type narrowPeak
+        color 46,0,184
+        # subId=5854 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Stat1Controlstat1PkRep2
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-STAT1 Pk 2
+        longLabel K562 eGFP-STAT1 Control eGFP-STAT1 ChIP-seq Peaks Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=STAT1 cellType=1K562 control=CONTROLSTAT1 rep=rep2
+        type narrowPeak
+        color 46,0,184
+        # subId=5854 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bPkRep1
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-CDKN1B Pk 1
+        longLabel K562 eGFP-CDKN1B Control eGFP-CDKN1B ChIP-seq Peaks Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=CDKN1B cellType=1K562 control=CONTROLCDKN1B rep=rep1
+        type narrowPeak
+        color 46,0,184
+        # subId=5855 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bPkRep2
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-CDKN1B Pk 2
+        longLabel K562 eGFP-CDKN1B Control eGFP-CDKN1B ChIP-seq Peaks Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=CDKN1B cellType=1K562 control=CONTROLCDKN1B rep=rep2
+        type narrowPeak
+        color 46,0,184
+        # subId=5855 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Ilf2Controlilf2PkRep1
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-ILF2 Pk 1
+        longLabel K562 eGFP-ILF2 Control eGFP-ILF2 ChIP-seq Peaks Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=ILF2 cellType=1K562 control=CONTROLILF2 rep=rep1
+        type narrowPeak
+        color 46,0,184
+        # subId=5859 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Ilf2Controlilf2PkRep2
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-ILF2 Pk 2
+        longLabel K562 eGFP-ILF2 Control eGFP-ILF2 ChIP-seq Peaks Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=ILF2 cellType=1K562 control=CONTROLILF2 rep=rep2
+        type narrowPeak
+        color 46,0,184
+        # subId=5859 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Ncor1Controlncor1PkRep1
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-NCOR1 Pk 1
+        longLabel K562 eGFP-NCOR1 Control eGFP-NCOR1 ChIP-seq Peaks Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=NCOR1 cellType=1K562 control=CONTROLNCOR1 rep=rep1
+        type narrowPeak
+        color 46,0,184
+        # subId=5857 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Ncor1Controlncor1PkRep2
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-NCOR1 Pk 2
+        longLabel K562 eGFP-NCOR1 Control eGFP-NCOR1 ChIP-seq Peaks Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=NCOR1 cellType=1K562 control=CONTROLNCOR1 rep=rep2
+        type narrowPeak
+        color 46,0,184
+        # subId=5857 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562EsrControlesrPkRep1
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-ESR Pk 1
+        longLabel K562 eGFP-ESR Control eGFP-ESR ChIP-seq Peaks Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=ESR cellType=1K562 control=CONTROLESR rep=rep1
+        type narrowPeak
+        color 46,0,184
+        # subId=5858 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562EsrControlesrPkRep2
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-ESR Pk 2
+        longLabel K562 eGFP-ESR Control eGFP-ESR ChIP-seq Peaks Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=ESR cellType=1K562 control=CONTROLESR rep=rep2
+        type narrowPeak
+        color 46,0,184
+        # subId=5858 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Elf1Controlelf1PkRep1
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-ELF1 Pk 1
+        longLabel K562 eGFP-ELF1 Control eGFP-ELF1 ChIP-seq Peaks Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=ELF1 cellType=1K562 control=CONTROLELF1 rep=rep1
+        type narrowPeak
+        color 46,0,184
+        # subId=5860 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Elf1Controlelf1PkRep2
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-ELF1 Pk 2
+        longLabel K562 eGFP-ELF1 Control eGFP-ELF1 ChIP-seq Peaks Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=ELF1 cellType=1K562 control=CONTROLELF1 rep=rep2
+        type narrowPeak
+        color 46,0,184
+        # subId=5860 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Mll5Controlmll5PkRep1
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-MLL5 Pk 1
+        longLabel K562 eGFP-MLL5 Control eGFP-MLL5 ChIP-seq Peaks Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=MLL5 cellType=1K562 control=CONTROLMLL5 rep=rep1
+        type narrowPeak
+        color 46,0,184
+        # subId=5861 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Mll5Controlmll5PkRep2
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-MLL5 Pk 2
+        longLabel K562 eGFP-MLL5 Control eGFP-MLL5 ChIP-seq Peaks Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=MLL5 cellType=1K562 control=CONTROLMLL5 rep=rep2
+        type narrowPeak
+        color 46,0,184
+        # subId=5861 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Nf90Controlnf90PkRep1
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-NF90 Pk 1
+        longLabel K562 eGFP-NF90 Control eGFP-NF90 ChIP-seq Peaks Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=NF90 cellType=1K562 control=CONTROLNF90 rep=rep1
+        type narrowPeak
+        color 46,0,184
+        # subId=5862 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Nf90Controlnf90PkRep2
+        parent wgEncodeUchicagoTfbsPeaks off
+        shortLabel K562 eGFP-NF90 Pk 2
+        longLabel K562 eGFP-NF90 Control eGFP-NF90 ChIP-seq Peaks Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Peaks factor=NF90 cellType=1K562 control=CONTROLNF90 rep=rep2
+        type narrowPeak
+        color 46,0,184
+        # subId=5862 dateSubmitted=2012-02-20
 	
 	
 	track wgEncodeUchicagoTfbsViewSignal
@@ -127,7 +308,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 FOS/GFP Sg
         longLabel K562 FOS TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eFOS cellType=1K562 control=ControlFOS
+        subGroups view=Signal factor=FOS cellType=1K562 control=ControlFOS rep=POOLED
         type bigWig -19284.970703 7497.709473
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -136,7 +317,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 GATA2/GFP Sg
         longLabel K562 GATA2 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eGATA2 cellType=1K562 control=ControlGATA2
+        subGroups view=Signal factor=GATA2 cellType=1K562 control=ControlGATA2 rep=POOLED
         type bigWig -3732.796387 6083.967285
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -145,7 +326,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 HDAC8/GFP Sg
         longLabel K562 HDAC8 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eHDAC8 cellType=1K562 control=ControlHDAC8
+        subGroups view=Signal factor=HDAC8 cellType=1K562 control=ControlHDAC8 rep=POOLED
         type bigWig -3635.416016 7391.409180
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -154,7 +335,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 JunB/GFP Sg
         longLabel K562 JunB TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eJunB cellType=1K562 control=ControlJunB
+        subGroups view=Signal factor=JunB cellType=1K562 control=ControlJunB rep=POOLED
         type bigWig -11520.261719 17224.816406
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -163,7 +344,7 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 JunD/GFP Sg
         longLabel K562 JunD TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eJunD cellType=1K562 control=ControlJunD
+        subGroups view=Signal factor=JunD cellType=1K562 control=ControlJunD rep=POOLED
         type bigWig -4305.450684 19676.619141
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
@@ -172,8 +353,278 @@ html wgEncodeUchicagoTfbs.release2
         parent wgEncodeUchicagoTfbsViewSignal 
         shortLabel K562 NR4A1/GFP Sg
         longLabel K562 NR4A1 TFBS GFP-tag ChIP-seq Signal from ENCODE/UChicago
-        subGroups view=Signal factor=eNR4A1 cellType=1K562 control=ControlNR4A1
+        subGroups view=Signal factor=NR4A1 cellType=1K562 control=ControlNR4A1 rep=POOLED
         type bigWig -2001.193604 1318.283081
         color 46,0,184
         # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562InputControlbach1SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 Input Sig 1
+        longLabel K562 Input Control eGFP-BACH1 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=zINPUTBACH1 cellType=1K562 control=CONTROLBACH1 rep=rep1
+        type bigWig 0.000000 3043.977295
+        color 46,0,184
+        # subId=5795 dateSubmitted=2012-02-16
+
+        track wgEncodeUchicagoTfbsK562Bach1Controlbach1SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-BACH1 Sig 1
+        longLabel K562 eGFP-BACH1 Control eGFP-BACH1 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=BACH1 cellType=1K562 control=CONTROLBACH1 rep=rep1
+        type bigWig 0.000000 7300.945312
+        color 46,0,184
+        # subId=5795 dateSubmitted=2012-02-16
+
+        track wgEncodeUchicagoTfbsK562Bach1Controlbach1SigRep2
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-BACH1 Sig 2
+        longLabel K562 eGFP-BACH1 Control eGFP-BACH1 ChIP-seq Signal Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=BACH1 cellType=1K562 control=CONTROLBACH1 rep=rep2
+        type bigWig 0.000000 6902.023926
+        color 46,0,184
+        # subId=5795 dateSubmitted=2012-02-16
+
+        track wgEncodeUchicagoTfbsK562Ccne1Controlccne1SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-CCNE1 Sig 1
+        longLabel K562 eGFP-CCNE1 Control eGFP-CCNE1 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=CCNE1 cellType=1K562 control=CONTROLCCNE1 rep=rep1
+        type bigWig 0.000000 4898.631836
+        color 46,0,184
+        # subId=5853 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Ccne1Controlccne1SigRep2
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-CCNE1 Sig 2
+        longLabel K562 eGFP-CCNE1 Control eGFP-CCNE1 ChIP-seq Signal Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=CCNE1 cellType=1K562 control=CONTROLCCNE1 rep=rep2
+        type bigWig 0.000000 1965.051392
+        color 46,0,184
+        # subId=5853 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562InputControlccne1SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 Input Sig 1
+        longLabel K562 Input Control eGFP-CCNE1 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=zINPUTCCNE1 cellType=1K562 control=CONTROLCCNE1 rep=rep1
+        type bigWig 0.000000 2885.748047
+        color 46,0,184
+        # subId=5853 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Stat1Controlstat1SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-STAT1 Sig 1
+        longLabel K562 eGFP-STAT1 Control eGFP-STAT1 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=STAT1 cellType=1K562 control=CONTROLSTAT1 rep=rep1
+        type bigWig 0.000000 2168.162354
+        color 46,0,184
+        # subId=5854 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Stat1Controlstat1SigRep2
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-STAT1 Sig 2
+        longLabel K562 eGFP-STAT1 Control eGFP-STAT1 ChIP-seq Signal Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=STAT1 cellType=1K562 control=CONTROLSTAT1 rep=rep2
+        type bigWig 0.000000 4112.297363
+        color 46,0,184
+        # subId=5854 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562InputControlstat1SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 Input Sig 1
+        longLabel K562 Input Control eGFP-STAT1 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=zINPUTSTAT1 cellType=1K562 control=CONTROLSTAT1 rep=rep1
+        type bigWig 0.000000 4601.861816
+        color 46,0,184
+        # subId=5854 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bSigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-CDKN1B Sig 1
+        longLabel K562 eGFP-CDKN1B Control eGFP-CDKN1B ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=CDKN1B cellType=1K562 control=CONTROLCDKN1B rep=rep1
+        type bigWig 0.000000 8759.412109
+        color 46,0,184
+        # subId=5855 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Cdkn1bControlcdkn1bSigRep2
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-CDKN1B Sig 2
+        longLabel K562 eGFP-CDKN1B Control eGFP-CDKN1B ChIP-seq Signal Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=CDKN1B cellType=1K562 control=CONTROLCDKN1B rep=rep2
+        type bigWig 0.000000 4513.652344
+        color 46,0,184
+        # subId=5855 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562InputControlcdkn1bSigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 Input Sig 1
+        longLabel K562 Input Control eGFP-CDKN1B ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=zINPUTCDKN1B cellType=1K562 control=CONTROLCDKN1B rep=rep1
+        type bigWig 0.000000 2978.743896
+        color 46,0,184
+        # subId=5855 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Ilf2Controlilf2SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-ILF2 Sig 1
+        longLabel K562 eGFP-ILF2 Control eGFP-ILF2 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=ILF2 cellType=1K562 control=CONTROLILF2 rep=rep1
+        type bigWig 0.000000 24315.562500
+        color 46,0,184
+        # subId=5859 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Ilf2Controlilf2SigRep2
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-ILF2 Sig 2
+        longLabel K562 eGFP-ILF2 Control eGFP-ILF2 ChIP-seq Signal Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=ILF2 cellType=1K562 control=CONTROLILF2 rep=rep2
+        type bigWig 0.000000 12078.078125
+        color 46,0,184
+        # subId=5859 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562InputControlilf2SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 Input Sig 1
+        longLabel K562 Input Control eGFP-ILF2 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=zINPUTILF2 cellType=1K562 control=CONTROLILF2 rep=rep1
+        type bigWig 0.000000 2649.656982
+        color 46,0,184
+        # subId=5859 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Ncor1Controlncor1SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-NCOR1 Sig 1
+        longLabel K562 eGFP-NCOR1 Control eGFP-NCOR1 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=NCOR1 cellType=1K562 control=CONTROLNCOR1 rep=rep1
+        type bigWig 0.000000 4757.939453
+        color 46,0,184
+        # subId=5857 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Ncor1Controlncor1SigRep2
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-NCOR1 Sig 2
+        longLabel K562 eGFP-NCOR1 Control eGFP-NCOR1 ChIP-seq Signal Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=NCOR1 cellType=1K562 control=CONTROLNCOR1 rep=rep2
+        type bigWig 0.000000 5353.922363
+        color 46,0,184
+        # subId=5857 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562InputControlncor1SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 Input Sig 1
+        longLabel K562 Input Control eGFP-NCOR1 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=zINPUTNCOR1 cellType=1K562 control=CONTROLNCOR1 rep=rep1
+        type bigWig 0.000000 4620.328613
+        color 46,0,184
+        # subId=5857 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562EsrControlesrSigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-ESR Sig 1
+        longLabel K562 eGFP-ESR Control eGFP-ESR ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=ESR cellType=1K562 control=CONTROLESR rep=rep1
+        type bigWig 0.000000 3927.312012
+        color 46,0,184
+        # subId=5858 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562EsrControlesrSigRep2
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-ESR Sig 2
+        longLabel K562 eGFP-ESR Control eGFP-ESR ChIP-seq Signal Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=ESR cellType=1K562 control=CONTROLESR rep=rep2
+        type bigWig 0.000000 5122.768066
+        color 46,0,184
+        # subId=5858 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562InputControlesrSigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 Input Sig 1
+        longLabel K562 Input Control eGFP-ESR ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=zINPUTESR cellType=1K562 control=CONTROLESR rep=rep1
+        type bigWig 0.000000 2649.656982
+        color 46,0,184
+        # subId=5858 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Elf1Controlelf1SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-ELF1 Sig 1
+        longLabel K562 eGFP-ELF1 Control eGFP-ELF1 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=ELF1 cellType=1K562 control=CONTROLELF1 rep=rep1
+        type bigWig 0.000000 4067.161865
+        color 46,0,184
+        # subId=5860 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Elf1Controlelf1SigRep2
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-ELF1 Sig 2
+        longLabel K562 eGFP-ELF1 Control eGFP-ELF1 ChIP-seq Signal Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=ELF1 cellType=1K562 control=CONTROLELF1 rep=rep2
+        type bigWig 0.000000 3796.797363
+        color 46,0,184
+        # subId=5860 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562InputControlelf1SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 Input Sig 1
+        longLabel K562 Input Control eGFP-ELF1 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=zINPUTELF1 cellType=1K562 control=CONTROLELF1 rep=rep1
+        type bigWig 0.000000 1307.438721
+        color 46,0,184
+        # subId=5860 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Mll5Controlmll5SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-MLL5 Sig 1
+        longLabel K562 eGFP-MLL5 Control eGFP-MLL5 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=MLL5 cellType=1K562 control=CONTROLMLL5 rep=rep1
+        type bigWig 0.000000 40862.906250
+        color 46,0,184
+        # subId=5861 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Mll5Controlmll5SigRep2
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-MLL5 Sig 2
+        longLabel K562 eGFP-MLL5 Control eGFP-MLL5 ChIP-seq Signal Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=MLL5 cellType=1K562 control=CONTROLMLL5 rep=rep2
+        type bigWig 0.000000 30561.669922
+        color 46,0,184
+        # subId=5861 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562InputControlmll5SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 Input Sig 1
+        longLabel K562 Input Control eGFP-MLL5 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=zINPUTMLL5 cellType=1K562 control=CONTROLMLL5 rep=rep1
+        type bigWig 0.000000 2649.656982
+        color 46,0,184
+        # subId=5861 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Nf90Controlnf90SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-NF90 Sig 1
+        longLabel K562 eGFP-NF90 Control eGFP-NF90 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=NF90 cellType=1K562 control=CONTROLNF90 rep=rep1
+        type bigWig 0.000000 39173.847656
+        color 46,0,184
+        # subId=5862 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562Nf90Controlnf90SigRep2
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 eGFP-NF90 Sig 2
+        longLabel K562 eGFP-NF90 Control eGFP-NF90 ChIP-seq Signal Rep 2 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=NF90 cellType=1K562 control=CONTROLNF90 rep=rep2
+        type bigWig 0.000000 245981.375000
+        color 46,0,184
+        # subId=5862 dateSubmitted=2012-02-20
+
+        track wgEncodeUchicagoTfbsK562InputControlnf90SigRep1
+        parent wgEncodeUchicagoTfbsViewSignal off
+        shortLabel K562 Input Sig 1
+        longLabel K562 Input Control eGFP-NF90 ChIP-seq Signal Rep 1 from ENCODE/UChicago #autogenerated
+        subGroups view=Signal factor=zINPUTNF90 cellType=1K562 control=CONTROLNF90 rep=rep1
+        type bigWig 0.000000 2649.656982
+        color 46,0,184
+        # subId=5862 dateSubmitted=2012-02-20
 
