@@ -1,0 +1,137 @@
+# Mapability is a multi-lab track (wrangler: Tim, assisted by Rachel)
+
+track wgEncodeMapability
+compositeTrack on
+shortLabel Mapability
+longLabel Mapability or Uniqueness of Reference Genome from ENCODE
+group map
+subGroup1 view Mapability ALN=Broad_Alignability CRGMAP=Alignability DUNIQ=Uniqueness RUNIQ=Rosetta_Uniqueness UUNIQ=UMass_Uniqueness XR=Blacklisted
+subGroup2 win Window_Size w015=15bp w020=20bp w024=24bp w035=35bp w036=36bp w040=40bp w050=50bp w075=75bp w100=100bp zNA=Varied
+subGroup3 lab Lab DAC=DAC DUKE=Duke CRG=CRG-Guigo
+#dimensions dimensionX=win
+#controlledVocabulary encode/cv.ra view win=size lab
+fileSortOrder grant=PI lab=Lab view=View size=Window_size dccAccession=UCSC_Accession fileSize=Size fileType=File_Type
+allButtonPair on
+sortOrder view=+ lab=+ win=+
+dragAndDrop subTracks
+priority 0
+noInherit on
+type bed 3
+visibility hide
+wgEncode 1
+html wgEncodeMapability.new
+
+    track wgEncodeMapabilityViewDuniq
+    shortLabel Duke Uniqueness
+    view DUNIQ
+    visibility full
+    subTrack wgEncodeMapability
+    #configurable on
+    viewLimits 0:1
+    autoScale off
+    windowingFunction mean+whiskers
+    maxHeightPixels 100:32:16
+
+        track wgEncodeDukeMapabilityUniqueness20bp
+        parent wgEncodeMapabilityViewDuniq off
+        shortLabel Duke Uniq 20
+        longLabel Uniqueness of 20bp Windows from ENCODE/OpenChrom(Duke)
+        subGroups view=DUNIQ win=w020 lab=DUKE
+        type bigWig 0.000000 1.000000
+        # subId=3840 dateSubmitted=2011-03-28
+
+        track wgEncodeDukeMapabilityUniqueness35bp
+        parent wgEncodeMapabilityViewDuniq
+        shortLabel Duke Uniq 35
+        longLabel Uniqueness of 35bp Windows from ENCODE/OpenChrom(Duke)
+        subGroups view=DUNIQ win=w035 lab=DUKE
+        type bigWig 0.000000 1.000000
+        # subId=3840 dateSubmitted=2011-03-28
+
+    track wgEncodeMapabilityViewXR
+    shortLabel Blacklisted Regions
+    view XR
+    visibility hide
+    subTrack wgEncodeMapability
+    noScoreFilter on
+
+        track wgEncodeDukeMapabilityRegionsExcludable
+        parent wgEncodeMapabilityViewXR off
+        shortLabel Duke Excluded
+        longLabel Duke Excluded Regions from ENCODE/OpenChrom(Duke)
+        subGroups view=XR win=zNA lab=DUKE
+        type bed 6
+        # subId=3840 dateSubmitted=2011-03-28
+
+        track wgEncodeDacMapabilityConsensusExcludable
+        parent wgEncodeMapabilityViewXR
+        shortLabel DAC Blacklist
+        longLabel DAC Blacklisted Regions from ENCODE/DAC(Kundaje)
+        subGroups view=XR win=zNA lab=DAC
+        type bed 6
+        # subId=4039 dateSubmitted=2011-05-04
+
+    track wgEncodeMapabilityViewCRGMAP
+    shortLabel CRG GEM Alignability
+    view CRGMAP
+    visibility hide
+    subTrack wgEncodeMapability
+    viewLimits 0:1
+    autoScale off
+    canPack  On
+    windowingFunction mean+whiskers
+    maxHeightPixels 100:32:16
+
+        track wgEncodeCrgMapabilityAlign24mer
+        subTrack wgEncodeMapabilityViewCRGMAP off
+        shortLabel CRG Align 24
+        longLabel Alignability of 24mers by GEM from ENCODE/CRG(Guigo)
+        subGroups view=CRGMAP win=w024 lab=CRG
+        color 0,100,0
+        type bigWig 0.00 1.00
+        origAssembly hg19
+
+        track wgEncodeCrgMapabilityAlign36mer
+        subTrack wgEncodeMapabilityViewCRGMAP
+        shortLabel CRG Align 36
+        longLabel Alignability of 36mers by GEM from ENCODE/CRG(Guigo)
+        subGroups view=CRGMAP win=w036 lab=CRG
+        color 0,100,0
+        type bigWig 0.00 1.00
+        origAssembly hg19
+
+        track wgEncodeCrgMapabilityAlign40mer
+        subTrack wgEncodeMapabilityViewCRGMAP off
+        shortLabel CRG Align 40
+        longLabel Alignability of 40mers by GEM from ENCODE/CRG(Guigo)
+        subGroups view=CRGMAP win=w040 lab=CRG
+        color 0,100,0
+        type bigWig 0.00 1.00
+        origAssembly hg19
+
+        track wgEncodeCrgMapabilityAlign50mer
+        subTrack wgEncodeMapabilityViewCRGMAP off
+        shortLabel CRG Align 50
+        longLabel Alignability of 50mers by GEM from ENCODE/CRG(Guigo)
+        subGroups view=CRGMAP win=w050 lab=CRG
+        color 0,100,0
+        type bigWig 0.00 1.00
+        origAssembly hg19
+
+        track wgEncodeCrgMapabilityAlign75mer
+        subTrack wgEncodeMapabilityViewCRGMAP off
+        shortLabel CRG Align 75
+        longLabel Alignability of 75mers by GEM from ENCODE/CRG(Guigo)
+        subGroups view=CRGMAP win=w075 lab=CRG
+        color 0,100,0
+        type bigWig 0.00 1.00
+        origAssembly hg19
+
+        track wgEncodeCrgMapabilityAlign100mer
+        subTrack wgEncodeMapabilityViewCRGMAP off
+        shortLabel CRG Align 100
+        longLabel Alignability of 100mers by GEM from ENCODE/CRG(Guigo)
+        subGroups view=CRGMAP win=w100 lab=CRG
+        color 0,100,0
+        type bigWig 0.00 1.00
+        origAssembly hg19
