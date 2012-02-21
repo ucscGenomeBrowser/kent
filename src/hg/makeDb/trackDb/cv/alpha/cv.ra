@@ -11882,21 +11882,23 @@ description Mouse
 
 ## Tiers (used by cell types)
 # Venkat, I am really worried about this having a term and tag as a numeral.  The git history is lost on this data.  What do you know about it?
+# I am removing this and seeing if there is any fall out.  Having a term "1" is a very dangerous idea.
+# 2/21/12  Erase this if it is still commentes out in April
 
-term 1
-tag 1
-type tier
-description tier 1
+#term 1
+#tag 1
+#type tier
+#description tier 1
 
-term 2
-tag 2
-type tier
-description tier 2
+#term 2
+#tag 2
+#type tier
+#description tier 2
 
-term 3
-tag 3
-type tier
-description tier 3
+#term 3
+#tag 3
+#type tier
+#description tier 3
 
 ## Tissue Sourced (Used for Mouse cell)
 
@@ -13431,6 +13433,15 @@ searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 180
+
+term tier
+tag TIER
+type typeOfTerm
+label Cell Tier
+description ENCODE Cell Tier
+cvDefined no
+validate integer
+priority 999
 
 term tissueSourceType
 tag TISSUESOURCETYPE
