@@ -26,11 +26,10 @@ struct annoFormatter
  * output. */
     {
     struct annoFormatter *next;
-    struct annoGratorQuery *query;	// The query object that owns this formatter.
     // Public methods
     // Get and set output options
     struct annoFormatterOption *(*getOptions)(struct annoFormatter *self);
-    void (*setOptions)(struct annoFormatter *self, struct annoFormatterOption *spec);
+    void (*setOptions)(struct annoFormatter *self, struct annoFormatterOption *options);
     // Collect data from one source
     void (*collect)(struct annoFormatter *self, struct annoStreamer *source, struct annoRow *rows,
 		    boolean filterFailed);
@@ -38,8 +37,21 @@ struct annoFormatter
     void (*formatOne)(struct annoFormatter *self);
     // End of input; finish output, close connection/handle and free self.
     void (*close)(struct annoFormatter **pSelf);
+    // Private members -- callers are on the honor system to access these using only methods above.
+    struct annoFormatterOption *options;
+    struct annoGratorQuery *query;
     };
 
 // ---------------------- annoFormatter default methods -----------------------
+
+struct annoFormatterOption *annoFormatterGetOptions(struct annoFormatter *self);
+/* Return supported options and current settings.  Callers can modify and free when done. */
+
+void annoFormatterSetOptions(struct annoFormatter *self, struct annoFormatterOption *newOptions);
+/* Free old options and use newOptions. */
+
+void annoFormatterFree(struct annoFormatter **pSelf);
+/* Free self. This should be called at the end of subclass close methods, after
+ * subclass-specific connections are closed and resources are freed. */
 
 #endif//ndef ANNOFORMATTER_H
