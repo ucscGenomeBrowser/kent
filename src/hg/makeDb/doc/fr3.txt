@@ -1204,3 +1204,106 @@ done >> fr3.8way.maf
     rm multiz8way*.tab
 
 #########################################################################
+# MULTIZ9WAY MAF FRAMES (DONE - 2012-02-21 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/frames
+    cd /hive/data/genomes/fr3/bed/multiz8way/frames
+    mkdir genes
+
+    #	we get more annotations using the ensGene on mm9 and hg19
+    #	instead of knownGene, so, using ensGene for hg19 and mm9
+fr3 - all_est - Fugu ESTs
+tetNig2 - ensGene
+oreNil1 - none
+gasAcu1 - ensGene
+oryLat2 - ensGene
+gadMor1 - none
+danRer7 - ensGene
+latCha1 - none
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using ensGene for:
+for qDB in tetNig2 gasAcu1 oryLat2 danRer7
+do
+  echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+      hgsql -N -e "select * from ensGene" ${qDB} | cut -f 2-11 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+    # xenoMrna
+     hgsql -N -e "select * from xenoMrna" fr3 | cut -f2- \
+	| pslToBed stdin stdout | bedToGenePred stdin stdout \
+	| genePredSingleCover stdin stdout | gzip -2c > genes/fr3.gp.gz
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/danRer7.gp.gz: 25919
+# genes/fr3.gp.gz: 29280
+# genes/gasAcu1.gp.gz: 20631
+# genes/oryLat2.gp.gz: 19576
+# genes/tetNig2.gp.gz: 19539
+
+    ssh hgwdev
+    cd /hive/data/genomes/fr3/bed/multiz8way/frames
+    time (cat ../anno/fr3.8way.maf \
+	| nice -n +19 genePredToMafFrames fr3 stdin stdout \
+	    `echo "fr3 tetNig2 gasAcu1 oryLat2 danRer7" | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g"` \
+		| gzip > multiz8way.mafFrames.gz)
+    #	real    2m22.546s
+    #	-rw-rw-r-- 1 17609757 Feb 21 14:29 multiz8way.mafFrames.gz
+
+    # verify there are frames on everything:
+    zcat multiz8way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #	352686 danRer7
+    #	233699 fr3
+    #	298187 gasAcu1
+    #	278448 oryLat2
+    #	273743 tetNig2
+
+    ssh hgwdev
+    cd /hive/data/genomes/fr3/bed/multiz8way/frames
+    time hgLoadMafFrames fr3 multiz8wayFrames multiz8way.mafFrames.gz
+    #	real    0m12.716s
+
+############################################################################
+# creating upstream mafs (STALLED - 2012-02-21 - Hiram)
+    # will need to wait until there are some ensGenes here
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/fr3/goldenPath/multiz8way
+    cd /hive/data/genomes/fr3/goldenPath/multiz8way
+    # run this bash script
+    cat << '_EOF_' > mkUpstream.sh
+DB=fr3
+GENE=ensGene
+NWAY=multiz8way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.${GENE}.maf"
+    echo "featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout"
+    featureBits ${DB} ${GENE}:upstreamAll:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | mafFrags ${DB} ${NWAY} stdin stdout \
+                -orgs=/hive/data/genomes/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.${GENE}.maf.gz
+    echo "done upstream${S}.${GENE}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkUpstream.sh
+    time ./mkUpstream.sh
+    #	real    17m4.037s
+
+    # FIXUP/VERIFY the genbank.conf file to indicate this gene choice for the
+    #	upstream automatic generation
+
+#########################################################################
