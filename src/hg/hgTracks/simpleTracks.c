@@ -12253,7 +12253,7 @@ char* t2gLastMarkerName;
 
 char *t2gMarkerItemName(struct track *tg, void *item)
 /* retrieve article count from extra field, and return
- * side effect: save original name in global var for mapItem 
+ * side effect: save original name in global var for mapItem
  * Is this too hacky? No idea where I could save the original name otherwise... */
 {
 struct bed *bed = item;
@@ -12273,13 +12273,13 @@ return newName;
 
 static void t2gMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
-				int x, int y, int width, int height) 
+				int x, int y, int width, int height)
 /* use previously saved itemName for the mouseOver */
 {
 genericMapItem(tg, hvg, item,
 		    t2gLastMarkerName, mapItemName, start, end,
 		    x, y, width, height);
-} 
+}
 
 static void t2gMethods(struct track *tg)
 {
@@ -12316,7 +12316,7 @@ if (sameWord(type, "bed"))
        settings. */
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
-    
+
     if (startsWith("t2g", track->table) )
         t2gMethods(track);
     }
@@ -12436,7 +12436,7 @@ else if (sameWord(type, "encodePeak") || sameWord(type, "narrowPeak") ||
     encodePeakMethods(track);
     }
 else if (sameWord(type, "bed5FloatScore") ||
-         sameWord(type, "bedFloatScoreWithFdr"))
+         sameWord(type, "bed5FloatScoreWithFdr"))
     {
     track->bedSize = 5;
     bedMethods(track);

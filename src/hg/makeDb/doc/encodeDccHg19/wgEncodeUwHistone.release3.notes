@@ -1,11 +1,11 @@
 mkChangeNotes v2
 hg19 wgEncodeUwHistone Release 3 vs Release 2
-2012-02-01
+2012-02-14
 
 QA Count Summaries for Release 3:
-Tables: 636
-Files: 1394
-Gbdbs: 254
+Tables: 633
+Files: 1388
+Gbdbs: 253
 Supplemental: 0
 Other: 3
 
@@ -15,28 +15,25 @@ Files: 0
 Gbdbs: 0
 
 Sizes of New:
-Table: 2665 MB (3 GB)
-Files: 53944 MB (53 GB)
-Gbdbs: 3742 MB (4 GB)
+Table: 2652 MB (3 GB)
+Files: 51260 MB (50 GB)
+Gbdbs: 3612 MB (4 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 60352 MB (59 GB)
+Total: 57525 MB (56 GB)
 
 
 TABLES:
-New: 82
+New: 79
 Untouched: 554
 Revoked/Replaced/Renamed: 0
-New + Untouched: 636
-Total (New + Untouched + Revoked/Replaced/Renamed): 636
+New + Untouched: 633
+Total (New + Untouched + Revoked/Replaced/Renamed): 633
 
-New Tables (82):
+New Tables (79):
 wgEncodeUwHistoneGm12865H3k04me3StdHotspotsRep2
 wgEncodeUwHistoneGm12865H3k04me3StdPkRep2
 wgEncodeUwHistoneGm12865H3k04me3StdRawRep2
-wgEncodeUwHistoneGm12866H3k04me3StdHotspotsRep1
-wgEncodeUwHistoneGm12866H3k04me3StdPkRep1
-wgEncodeUwHistoneGm12866H3k04me3StdRawRep1
 wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep1
 wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep1
 wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep1
@@ -674,25 +671,19 @@ Revoked/Replaced/Renamed Tables (0):
 
 
 DOWNLOAD FILES:
-New: 172
+New: 166
 Untouched: 1222
 Revoked/Replaced/Renamed: 0
-New + Untouched: 1394
-Total (New + Untouched + Revoked/Replaced/Renamed): 1394
+New + Untouched: 1388
+Total (New + Untouched + Revoked/Replaced/Renamed): 1388
 
-New Download Files (172):
+New Download Files (166):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12865H3k04me3StdAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12865H3k04me3StdAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12865H3k04me3StdHotspotsRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12865H3k04me3StdPkRep2.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12865H3k04me3StdRawDataRep2.fastq.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12865H3k04me3StdRawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12866H3k04me3StdHotspotsRep1.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12866H3k04me3StdPkRep1.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12866H3k04me3StdRawDataRep1.fastq.tgz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneGm12866H3k04me3StdRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneH7esH3k04me3StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneH7esH3k04me3StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release3/wgEncodeUwHistoneH7esH3k04me3StdAlnRep2.bam
@@ -2082,15 +2073,14 @@ Revoked/Replaced/Renamed Download Files (0):
 
 
 GBDBS:
-New: 30
+New: 29
 Untouched: 224
 Revoked/Replaced/Renamed: 0
-New + Untouched: 254
-Total (New + Untouched + Revoked/Replaced/Renamed): 254
+New + Untouched: 253
+Total (New + Untouched + Revoked/Replaced/Renamed): 253
 
-New Gbdb Files (30):
+New Gbdb Files (29):
 /gbdb/hg19/bbi/wgEncodeUwHistoneGm12865H3k04me3StdRawRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeUwHistoneGm12866H3k04me3StdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep2.bigWig

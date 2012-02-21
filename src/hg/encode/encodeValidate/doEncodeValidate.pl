@@ -367,7 +367,7 @@ our %formatCheckers = (
     bedRnaElements => \&validateBed,
     bedRrbs => \&validateBed,
     txt  => \&validateFreepass,
-    doc => \&validateFreepass,
+    document => \&validateFreepass,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -1443,7 +1443,7 @@ sub makeDownloadTargetFileName {
         $fileType = "bed" if ($type =~ /^bed /);
 
         if (@srcFiles > 1) {
-            if (($type eq "fastq") || ($type eq "doc")) {
+            if (($type eq "fastq") || ($type eq "document")) {
                 $target = "$tablename.$fileType.tgz"; # will want to tar these
             } else {
                 $target = "$tablename.$fileType.gz";  # will cat and gz these
@@ -1452,7 +1452,7 @@ sub makeDownloadTargetFileName {
             my $srcFile  = $srcFiles[0];
 
             # Special effort for single docs which will have the suffix they came in with
-            if ($type eq "doc") {
+            if ($type eq "document") {
                 my @fileNameParts = split(/\./,$srcFile);
                 if (@fileNameParts > 1) {
                     shift( @fileNameParts ); # Throw away the root
@@ -1469,7 +1469,7 @@ sub makeDownloadTargetFileName {
             } elsif (Encode::isZipped($srcFile) && Encode::isZipped(".$fileType")) {
                 $target = "$tablename.$fileType"; # $fileType includes .gz
             } else {
-                $target = "$tablename.$fileType.gz"; # default of single file will be gz (even for a doc or fastq)
+                $target = "$tablename.$fileType.gz"; # default of single file will be gz (even for a document or fastq)
             }
         }
     }
@@ -2277,7 +2277,7 @@ foreach my $ddfLine (@ddfLines) {
         $metadata .= " attic=auxValid";
     } elsif ($ddfLine->{display} && $ddfLine->{display} eq "no") {
         $metadata .= " attic=auxExp";
-    } elsif ($type eq "doc") {
+    } elsif ($type eq "document") {
         if ($daf->{TRACKS}{$view}{supplemental} && $daf->{TRACKS}{$view}{supplemental} eq "yes") {
             # FIXME: at this point, the pipeline is unprepared to deal with "sup" which is placed in "supplemental" subdir.
             $metadata .= " attic=sup";

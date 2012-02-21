@@ -1,4 +1,4 @@
-# Data Agreement File for FSU Replication Timing $Revision: 1.1 $
+# Data Agreement File for FSU Replication Timing $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -36,6 +36,6 @@ required         no
 hasReplicates    yes
 
 view             RawData
-type             doc
+type             document
 required         no
 hasReplicates    yes

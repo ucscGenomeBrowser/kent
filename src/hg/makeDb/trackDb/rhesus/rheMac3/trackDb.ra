@@ -6,3 +6,19 @@ html gold
 track gap override
 html gap
 
+track ctgPos2
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
+group map
+priority 10
+visibility hide
+type ctgPos
+
+searchTable ctgPos2
+searchMethod exact
+shortCircuit 1
+termRegex GJ0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+
+

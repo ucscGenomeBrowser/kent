@@ -920,13 +920,18 @@ void encodeExpUpdate(struct sqlConnection *conn, char *tableName,
 char *val = NULL;
 struct dyString *dy = NULL;
 
-/* verify new value is valid term in CV */
 char *type = (char *)cvTermNormalized(var);
 if (type == NULL)
     errAbort("Attempt to update encodeExp experiment with unknown CV type %s", var);
-if (!cvTermIsValid(type, newVal))
-    errAbort("Attempt to update encodeExp experiment with unknown CV term %s of type %s", 
-                newVal, var);
+
+if (cvTermIsCvDefined(type))
+    {
+    verbose(1, "     var %s is cv defined\n", type);
+    /* verify new value is valid term in CV */
+    if (!cvTermIsValid(type, newVal))
+        errAbort("Attempt to update encodeExp experiment with unknown CV term %s of type %s", 
+                    newVal, var);
+    }
 struct encodeExp *exp = encodeExpGetByIdFromTable(conn, tableName, id);
 if (exp == NULL)
     errAbort("Id %d not found in experiment table %s", id, tableName);

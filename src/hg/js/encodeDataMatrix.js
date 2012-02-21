@@ -21,106 +21,64 @@ $(function () {
     var karyotype;
     var spinner;
 
-    function tableOut(matrix, cellTiers, dataGroups) {
-        // create table with rows for each cell types and columns for each data type
-        var table, tableHeader, row, td;
+    function rowAddCells(row, dataGroups, matrix, cellType) {
+        // populate a row in the matrix with cells for data groups and data types
+        // null cellType indicates this is a row for a cell group (tier)
 
-        // fill in column headers from dataTypes returned by server
-        tableHeader = $('#columnHeaders');
         $.each(dataGroups, function (i, group) {
-            tableHeader.append('<th class="groupType"><div class="verticalText">' + 
-                                group.label + '</div></th>');
+            // skip group header
+            td = $('<td></td>');
+            td.addClass('matrixCell');
+            row.append(td);
+
             $.each(group.dataTypes, function (i, dataTypeLabel) {
                 dataType = dataTypeLabelHash[dataTypeLabel].term;
-                if (dataTypeLabelHash[dataTypeLabel].count !== undefined) {
-                    // prune out datatypes with no experiments
-                    tableHeader.append('<th class="elementType" title="' + 
-                                        dataTypeLabelHash[dataTypeLabel].description + 
-                                        '"><div class="verticalText">' + dataTypeLabel + 
-                                        '</div></th>');
-                }
-            });
-        });
-        // fill in matrix --
-        // add rows with cell type labels (column 1) and cells for experiments
-        table = $('#matrixTable');
-
-        // add sections for each Tier of cell type
-        $.each(cellTiers, function (i, tier) {
-            //skip bogus 4th tier (not my property ?)
-            if (tier === undefined) {
-                return true;
-            }
-            table.append($('<tr class="matrix"><th class="groupType">' + 
-                                "Tier " + tier.term + '</th></td></tr>'));
-            $.each(tier.cellTypes, function (i, cellType) {
-                if (!cellType) {
+                // prune out datatypes with no experiments
+                if (dataTypeLabelHash[dataTypeLabel].count === undefined) {
                     return true;
                 }
-                if (!matrix[cellType]) {
+                td = $('<td></td>');
+                td.addClass('matrixCell');
+                row.append(td);
+                if (cellType === null) {
                     return true;
                 }
-                karyotype = cellTypeHash[cellType].karyotype;
-                // TODO: recognize cancer*
-                // NOTE: coupled to CSS
-                if (karyotype !== 'cancer' && karyotype !== 'normal') {
-                    karyotype = 'unknown';
+                if (!matrix[cellType][dataType]) {
+                    td.addClass('todoExperiment');
+                    return true;
                 }
-                row = $('<tr><th class="elementType" title="' + 
-                        cellTypeHash[cellType].description + 
-                        '"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' + cellType 
-                        + '">' + cellType + '</a><span title="karyotype: ' + karyotype + 
-                        '" class="' + karyotype + '">&bull;</span></th>');
-
-                $.each(dataGroups, function (i, group) {
-                    // skip group header
-                    row.append('<td></td>');
-                    $.each(group.dataTypes, function (i, dataTypeLabel) {
-                        dataType = dataTypeLabelHash[dataTypeLabel].term;
-                        // prune out datatypes with no experiments
-                        if (dataTypeLabelHash[dataTypeLabel].count === undefined) {
-                            return true;
-                        }
-                        td = $('<td></td>');
-                        td.addClass('matrixCell');
-                        if (matrix[cellType][dataType]) {
-                            // fill in count, mouseover and selection by click
-                            td.addClass('experiment');
-                            td.text(matrix[cellType][dataType]);
-                            td.data({
-                                'dataType' : dataType,
-                                'cellType' : cellType
-                            });
-                            td.mouseover(function() {
-                                $(this).attr('title', 'Click to select: ' + 
-                                                dataTypeTermHash[$(this).data().dataType].label +
-                                                ' ' + ' in ' + 
-                                                $(this).data().cellType +' cells');
-                            });
-                            td.click(function() {
-                               // TODO: base on preview ?
-                                var url = encodeProject.getSearchUrl(assembly);
-
-                                // TODO: encapsulate var names
-                                url +=
-                                   ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + $(this).data().dataType +
-                                   '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
-                                   '&hgt_mdbVar3=view&hgt_mdbVal3=Any');
-                                // TODO: open search window 
-                                //window.open(url, "searchWindow");
-                                window.location = url;
-                            });
-                        }
-                        row.append(td);
-                    });
-                    table.append(row);
+                // this cell represents experiments that
+                // fill in count, mouseover and selection by click
+                td.addClass('experiment');
+                td.text(matrix[cellType][dataType]);
+                td.data({
+                    'dataType' : dataType,
+                    'cellType' : cellType
                 });
-                table.append(row);
+                td.mouseover(function() {
+                    $(this).attr('title', 'Click to select: ' + 
+                                    dataTypeTermHash[$(this).data().dataType].label +
+                                    ' ' + ' in ' + 
+                                    $(this).data().cellType +' cells');
+                });
+                td.click(function() {
+                   // TODO: base on preview ?
+                    var url = encodeProject.getSearchUrl(assembly);
+                    // TODO: encapsulate var names
+                    url +=
+                       ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + $(this).data().dataType +
+                       '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
+                       '&hgt_mdbVar3=view&hgt_mdbVal3=Any');
+                    // specifying window name limits open window glut
+                    window.open(url, "searchWindow");
+                });
             });
         });
-        $("body").append(table);
+    }
 
-        // callback for floating table header feature
+    function addFloatingHeader(table) {
+        // add callback for floating table header feature
+
         table.floatHeader({
             cbFadeIn: function (header) {
                 // hide axis labels -- a bit tricky to do so
@@ -134,6 +92,137 @@ $(function () {
                 // implementation (stop+fadeIn)
                 header.stop(true, true);
                 header.fadeIn(100);
+            }
+        });
+    }
+
+    function rotateCells(table) {
+       // plugin from David Votrubec, handles IE rotate
+       // TODO: restrict to IE
+       table.rotateTableCellContent({ className: 'verticalText'});
+       $(this).attr('disabled', 'disabled');
+    }
+
+    function tableOut(matrix, cellTiers, dataGroups) {
+        // create table with rows for each cell types and columns for each data type
+        var table, thead, tableHeader, row, td;
+        var maxLen = 0;
+
+        // fill in column headers from dataTypes returned by server
+        tableHeader = $('#columnHeaders');
+        table = $('#matrixTable');
+        thead = $('thead');
+
+        // 1st column is row headers
+        thead.before('<colgroup></colgroup>');
+
+        $.each(dataGroups, function (i, group) {
+            tableHeader.append('<th class="groupType"><div class="verticalText">' + 
+                                group.label + '</div></th>');
+            maxLen = Math.max(maxLen, group.label.length);
+
+            // add colgroup element to support cross-hair hover effect
+            thead.before('<colgroup></colgroup>');
+            $.each(group.dataTypes, function (i, dataTypeLabel) {
+                dataType = dataTypeLabelHash[dataTypeLabel].term;
+
+                // prune out datatypes with no experiments
+                if (dataTypeLabelHash[dataTypeLabel].count !== undefined) {
+                    tableHeader.append('<th class="elementType" title="' + 
+                                        dataTypeLabelHash[dataTypeLabel].description + 
+                                        '"><div class="verticalText">' + dataTypeLabel + 
+                                        '</div></th>');
+                    // add colgroup element to support cross-hair hover effect
+                    thead.before('<colgroup class="dataTypeCol"></colgroup>');
+                    maxLen = Math.max(maxLen, dataTypeLabel.length);
+                }
+            });
+        });
+
+        // adjust size of headers based on longest label length
+        // empirically len/2 em's is right
+        $('#columnHeaders th').css('height', (String((maxLen/2 + 2)).concat('em')));
+        $('#columnHeaders th').css('width', '1em');
+
+        // fill in matrix --
+        // add rows with cell type labels (column 1) and cells for experiments
+        // add sections for each Tier of cell type
+        $.each(cellTiers, function (i, tier) {
+            //skip bogus 4th tier (not my property ?)
+            if (tier === undefined) {
+                return true;
+            }
+            row = $('<tr class="matrix"><th class="groupType">' + 
+                                "Tier " + tier.term + '</th></td></tr>');
+            rowAddCells(row, dataGroups, matrix, null);
+            table.append(row);
+
+            maxLen = 0;
+            $.each(tier.cellTypes, function (i, cellType) {
+                if (!cellType) {
+                    return true;
+                }
+                if (!matrix[cellType]) {
+                    return true;
+                }
+                karyotype = cellTypeHash[cellType].karyotype;
+                // TODO: recognize cancer*
+                // NOTE: coupled to CSS
+                if (karyotype !== 'cancer' && karyotype !== 'normal') {
+                    karyotype = 'unknown';
+                }
+                // note karyotype bullet layout requires non-intuitive placement
+                // in code before the span that shows to it's left
+                row = $('<tr>' +
+                    '<th class="elementType">' +
+                    '<span style="float:right; text-align: right;" title="karyotype: ' + karyotype + '" class="karyotype ' + karyotype + '">&bull;</span>' + 
+                    '<span title="' + cellTypeHash[cellType].description + '"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' + cellType + '">' + cellType + '</a>' + 
+                    '</th>'
+                    );
+                maxLen = Math.max(maxLen, cellType.length);
+
+                rowAddCells(row, dataGroups, matrix, cellType);
+
+                table.append(row);
+            });
+            // adjust size of row headers based on longest label length
+            $('tbody th').css('height', '1em');
+            $('tbody th').css('width', (String((maxLen/2 + 2)).concat('em')));
+        });
+        $("body").append(table);
+
+        // NOTE: it may be possible to revive floating header functionality in IE using this plug-in,
+        // but I've timed out (not able to make it work in simple HTML either).
+        if (!$.browser.msie) {
+            addFloatingHeader(table);
+        }
+        rotateCells(table);
+
+        // column and row hover (cross-hair effect)
+        // thanks to Chris Coyier, css-tricks.com
+        // NOTE:  acts on colgroups declared at start of table
+        // NOTE: second table name is generated from floatheader plugin
+        // NOTE: too slow on IE, so skip 
+        if ($.browser.msie) {
+            return;
+        }
+        $("#matrixTable, #matrixTableFloatHeaderClone").delegate('.matrixCell, .elementType','mouseover mouseleave', function(e) {
+            if (!$(this).hasClass('experiment') && !$(this).hasClass('todoExperiment') &&
+                !$(this).hasClass('elementType') && !$(this).hasClass('groupType')) {
+                return;
+            }
+            if (e.type == 'mouseover') {
+                // refrain from highlighting header row
+                if (!$(this).parent().is("#columnHeaders")) {
+                    $(this).parent().addClass("crossHair");
+                }
+                col = $("colGroup").eq($(this).index());
+                if (col.hasClass("dataTypeCol")) {
+                    col.addClass("crossHair");
+                }
+            } else {
+                $(this).parent().removeClass("crossHair");
+                $("colGroup").eq($(this).index()).removeClass("crossHair");
             }
         });
     }

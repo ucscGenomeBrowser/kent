@@ -1,12 +1,12 @@
 # Data Agreement File for UW DNase DGF experiments for mm9
 
-#$Revision: 1.2 $
+#$Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated DDF should look like this:
-#files   view    cell   sex     age     strain  replicate   tissueSourceType      seqPlatform   labVersion
+#files   view    cell   sex     age     strain  replicate	treatment   tissueSourceType      seqPlatform   labVersion
 
 
 #Explanation of DDF terms
@@ -17,6 +17,7 @@
 #age: The age of the sample used. The age registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
 #strain: The strain that the sample originated from. the strain registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
 #replicate: The Replicate number. The replication number of a given experiment.
+#treatment: The treatment used to treat a specific cell.The treatment registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Treatments
 #tissueSourceType: The collection srouce of the tissue, either Pooled or Individual mice
 #seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
 #labVersion: Free text for the lab to keep track of any other data
@@ -30,7 +31,7 @@ lab               UW-m
 dataType          DnaseDgf 
 compositeSuffix   UwDgf
 group             regulation
-variables         cell,strain,sex,age
+variables         cell,strain,sex,age,treatment
 assembly          mm9
 
 validationSettings validateFiles.bam:mismatches=2

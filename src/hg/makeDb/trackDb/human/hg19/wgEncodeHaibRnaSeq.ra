@@ -1,10 +1,10 @@
 # Myers lab RNA-seq (wranglers: cricket and jeff)
 # shortLabel	longLabel
 # DEX100n	DEX 1h 100nM
-# DEX5n		DEX 1hr 5nM
-# DEX1n		DEX 1hr 1nM
-# DEX500p	DEX 1hr 500pM
-# DEX100p	DEX 1hr 100pM
+# DEX5nM		DEX 1hr 5nM
+# DEX1nM		DEX 1hr 1nM
+# DEX500pM	DEX 1hr 500pM
+# DEX100pM	DEX 1hr 100pM
 # EST		ESTRADIOL 4hr 10nM
 # BPA		BPA 4hr 100nM
 # GEN		GENISTEIN 4hr 100nM
@@ -70,7 +70,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex100pmAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel A549 DEX100p 1
+        shortLabel A549 DEX100pM 1
         longLabel A549 DEX 1 hr 100 pM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 treatment=DEX100PM rep=rep1
         type bam
@@ -79,7 +79,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex500pmAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel A549 DEX500p 1
+        shortLabel A549 DEX500pM 1
         longLabel A549 DEX 1 hr 500 pM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 treatment=DEX500PM rep=rep1
         type bam
@@ -88,7 +88,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex1nmAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel A549 DEX1n1
+        shortLabel A549 DEX1nM1
         longLabel A549 DEX 1 hr 1nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 treatment=DEX1NM rep=rep1
         type bam
@@ -97,7 +97,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex5nmAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel A549 DEX5n 1
+        shortLabel A549 DEX5nM 1
         longLabel A549 DEX 1 hr 5 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 treatment=DEX5NM rep=rep1
         type bam
@@ -115,7 +115,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex100pmAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel A549 DEX100p 2
+        shortLabel A549 DEX100pM 2
         longLabel A549 DEX 1 hr 100 pM RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 treatment=DEX100PM rep=rep2
         type bam
@@ -124,7 +124,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex500pmAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel A549 DEX500p 2
+        shortLabel A549 DEX500pM 2
         longLabel A549 DEX 1 hr 500 pM RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 treatment=DEX500PM rep=rep2
         type bam
@@ -133,7 +133,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex1nmAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel A549 DEX1n 2
+        shortLabel A549 DEX1nM 2
         longLabel A549 DEX 1 hr 1nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 treatment=DEX1NM rep=rep2
         type bam
@@ -142,7 +142,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex5nmAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel A549 DEX5n 2
+        shortLabel A549 DEX5nM 2
         longLabel A549 DEX 1 hr 5 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 treatment=DEX5NM rep=rep2
         type bam
@@ -335,7 +335,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqBe2cAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel BE2_C Aln 1
+        shortLabel BE2_C 1
         longLabel BE2_C RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=BE2C treatment=zNONE rep=rep1
         type bam
@@ -344,7 +344,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqBe2cAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel BE2_C Aln 2
+        shortLabel BE2_C 2
         longLabel BE2_C RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=BE2C treatment=zNONE rep=rep2
         type bam
@@ -353,7 +353,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqSknshAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel SK-N-SH Aln 1
+        shortLabel SK-N-SH 1
         longLabel SK-N-SH RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=SKNSH treatment=zNONE rep=rep1
         type bam
@@ -363,7 +363,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqSknshAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel SK-N-SH Aln 2
+        shortLabel SK-N-SH 2
         longLabel SK-N-SH RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=SKNSH treatment=zNONE rep=rep2
         type bam
@@ -373,7 +373,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqPanc1AlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel PANC-1 Aln 1
+        shortLabel PANC-1 1
         longLabel PANC-1 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=PANC1 treatment=zNONE rep=rep1
         type bam
@@ -382,7 +382,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqPanc1AlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel PANC-1 Aln 2
+        shortLabel PANC-1 2
         longLabel PANC-1 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=PANC1 treatment=zNONE rep=rep2
         type bam
@@ -391,7 +391,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqPfsk1AlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel PFSK-1 Aln 1
+        shortLabel PFSK-1 1
         longLabel PFSK-1 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=PFSK1 treatment=zNONE rep=rep1
         type bam
@@ -400,7 +400,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqPfsk1AlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel PFSK-1 Aln 2
+        shortLabel PFSK-1 2
         longLabel PFSK-1 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=PFSK1 treatment=zNONE rep=rep2
         type bam
@@ -409,7 +409,7 @@ noInherit on
 
         #track wgEncodeHaibRnaSeqU87AlnRep1
         #parent wgEncodeHaibRnaSeqViewAlignments off
-        #shortLabel U87 Aln 1
+        #shortLabel U87 1
         #longLabel U87 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         #subGroups view=Alignments cellType=U87 treatment=zNONE rep=rep1
         #type bam
@@ -418,7 +418,7 @@ noInherit on
 
         #track wgEncodeHaibRnaSeqU87AlnRep2
         #parent wgEncodeHaibRnaSeqViewAlignments off
-        #shortLabel U87 Aln 2
+        #shortLabel U87 2
         #longLabel U87 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         #subGroups view=Alignments cellType=U87 treatment=zNONE rep=rep2
         #type bam
@@ -427,7 +427,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqJurkatAlnRep1V2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel Jurkat Aln 1
+        shortLabel Jurkat 1
         longLabel Jurkat RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=JURKAT treatment=zNONE rep=rep1
         type bam
@@ -436,7 +436,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqU87AlnRep2V2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel U87 Aln 2
+        shortLabel U87 2
         longLabel U87 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=U87 treatment=zNONE rep=rep2
         type bam
@@ -445,7 +445,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqU87AlnRep1V2
         parent wgEncodeHaibRnaSeqViewAlignments off
-        shortLabel U87 Aln 1
+        shortLabel U87 1
         longLabel U87 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=U87 treatment=zNONE rep=rep1
         type bam
@@ -461,7 +461,7 @@ noInherit on
     maxHeightPixels 100:24:16
     windowingFunction mean+whiskers
     transformFunc NONE
-    viewLimits 0:10
+    viewLimits 0:5
     autoScale off
 
         track wgEncodeHaibRnaSeqA549Etoh02RawRep3
@@ -475,7 +475,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex100pmRawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
-        shortLabel A549 DEX100p 1
+        shortLabel A549 DEX100pM 1
         longLabel A549 DEX 1 hr 100 pM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX100PM rep=rep1
         type bigWig 0.122735 1558.979980
@@ -484,7 +484,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex500pmRawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
-        shortLabel A549 DEX500p 1
+        shortLabel A549 DEX500pM 1
         longLabel A549 DEX 1 hr 500 pM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX500PM rep=rep1
         type bigWig 0.117905 1144.349976
@@ -493,7 +493,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex1nmRawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
-        shortLabel A549 DEX1n 1
+        shortLabel A549 DEX1nM 1
         longLabel A549 DEX 1 hr 1nM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX1NM rep=rep1
         type bigWig 0.120431 1351.449951
@@ -502,7 +502,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex5nmRawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
-        shortLabel A549 DEX5n 1
+        shortLabel A549 DEX5nM 1
         longLabel A549 DEX 1 hr 5 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX5NM rep=rep1
         type bigWig 0.149512 1237.839966
@@ -520,7 +520,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex100pmRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel A549 DEX100p 2
+        shortLabel A549 DEX100pM 2
         longLabel A549 DEX 1 hr 100 pM RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX100PM rep=rep2
         type bigWig 0.140351 1194.630005
@@ -529,7 +529,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex500pmRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel A549 DEX500p 2
+        shortLabel A549 DEX500pM 2
         longLabel A549 DEX 1 hr 500 pM RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX500PM rep=rep2
         type bigWig 0.108844 1106.400024
@@ -538,7 +538,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex1nmRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel A549 DEX1n 2
+        shortLabel A549 DEX1nM 2
         longLabel A549 DEX 1 hr 1nM RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX1NM rep=rep2
         type bigWig 0.122421 1310.829956
@@ -547,7 +547,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqA549Dex5nmRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel A549 DEX5n 2
+        shortLabel A549 DEX5nM 2
         longLabel A549 DEX 1 hr 5 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX5NM rep=rep2
         type bigWig 0.157130 1170.689941
@@ -740,7 +740,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqBe2cRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel BE2_C Raw 1
+        shortLabel BE2_C 1
         longLabel BE2_C RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=BE2C treatment=zNONE rep=rep1
         type bigWig 0.231311 1122.900024
@@ -749,7 +749,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqBe2cRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel BE2_C Raw 2
+        shortLabel BE2_C 2
         longLabel BE2_C RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=BE2C treatment=zNONE rep=rep2
         type bigWig 0.145512 1134.989990
@@ -758,7 +758,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqSknshRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel SK-N-SH Raw 1
+        shortLabel SK-N-SH 1
         longLabel SK-N-SH RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=SKNSH treatment=zNONE rep=rep1
         type bigWig 0.139722 938.793030
@@ -768,7 +768,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqSknshRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel SK-N-SH Raw 2
+        shortLabel SK-N-SH 2
         longLabel SK-N-SH RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=SKNSH treatment=zNONE rep=rep2
         type bigWig 0.149537 705.216003
@@ -778,7 +778,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqPanc1RawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel PANC-1 Raw 1
+        shortLabel PANC-1 1
         longLabel PANC-1 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=PANC1 treatment=zNONE rep=rep1
         type bigWig 0.137402 1973.189941
@@ -787,7 +787,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqPanc1RawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel PANC-1 Raw 2
+        shortLabel PANC-1 2
         longLabel PANC-1 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=PANC1 treatment=zNONE rep=rep2
         type bigWig 0.146817 2090.860107
@@ -796,7 +796,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqPfsk1RawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel PFSK-1 Raw 1
+        shortLabel PFSK-1 1
         longLabel PFSK-1 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=PFSK1 treatment=zNONE rep=rep1
         type bigWig 0.149150 1066.459961
@@ -805,7 +805,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqPfsk1RawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel PFSK-1 Raw 2
+        shortLabel PFSK-1 2
         longLabel PFSK-1 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=PFSK1 treatment=zNONE rep=rep2
         type bigWig 0.178471 1536.329956
@@ -814,7 +814,7 @@ noInherit on
 
         #track wgEncodeHaibRnaSeqU87RawRep1
         #parent wgEncodeHaibRnaSeqViewSignal off
-        #shortLabel U87 Raw 1
+        #shortLabel U87 1
         #longLabel U87 RNA-seq Signal Rep 1 from ENCODE/HAIB
         #subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep1
         #type bigWig 0.141237 1836.530029
@@ -823,7 +823,7 @@ noInherit on
 
         #track wgEncodeHaibRnaSeqU87RawRep2
         #parent wgEncodeHaibRnaSeqViewSignal off
-        #shortLabel U87 Raw 2
+        #shortLabel U87 2
         #longLabel U87 RNA-seq Signal Rep 2 from ENCODE/HAIB
         #subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep2
         #type bigWig 0.148672 2637.550049
@@ -832,7 +832,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqJurkatRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel Jurkat Raw 2
+        shortLabel Jurkat 2
         longLabel Jurkat RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=JURKAT treatment=zNONE rep=rep2
         type bigWig 0.579586 391.365997
@@ -841,7 +841,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqJurkatRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel Jurkat Raw 1
+        shortLabel Jurkat 1
         longLabel Jurkat RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=JURKAT treatment=zNONE rep=rep1
         type bigWig 0.244927 403.884003
@@ -850,7 +850,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqU87RawRep2V2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel U87 Raw 2
+        shortLabel U87 2
         longLabel U87 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep2
         type bigWig 1.000000 70252.000000
@@ -859,7 +859,7 @@ noInherit on
 
         track wgEncodeHaibRnaSeqU87RawRep1V2
         parent wgEncodeHaibRnaSeqViewSignal off
-        shortLabel U87 Raw 1
+        shortLabel U87 1
         longLabel U87 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=U87 treatment=zNONE rep=rep1
         type bigWig 1.000000 52464.000000
