@@ -1,7 +1,7 @@
 metaObject wgEncodeUwDnase
 objType composite
 composite wgEncodeUwDnase
-expVars lab,dataType,cell,age
+expVars lab,dataType,cell,age,treatment
 
 metaObject wgEncodeUwDnase3134RiiiMImmortalAlnRep1
 objType file
@@ -4339,6 +4339,29 @@ subId 5215
 tissueSourceType Pooled
 view Alignments
 
+metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksAlnRep2
+objType file
+age adult-8wks
+cell LgIntestine
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLgintC57bl6MAdult8wksAlnRep2.bam,wgEncodeUwDnaseLgintC57bl6MAdult8wksAlnRep2.bam.bai
+grant Stam
+lab UW-m
+labExpId DS18784
+labVersion Bowtie 0.12.5
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 5604
+tissueSourceType Pooled
+treatment None
+view Alignments
+
 metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksHotspotsRep1
 objType table
 age adult-8wks
@@ -4361,6 +4384,30 @@ strain C57BL/6
 subId 5215
 tableName wgEncodeUwDnaseLgintC57bl6MAdult8wksHotspotsRep1
 tissueSourceType Pooled
+view Hotspots
+
+metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksHotspotsRep2
+objType table
+age adult-8wks
+cell LgIntestine
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLgintC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS18784
+labVersion Hotspot-v5.2
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 5604
+tableName wgEncodeUwDnaseLgintC57bl6MAdult8wksHotspotsRep2
+tissueSourceType Pooled
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksPkRep1
@@ -4387,6 +4434,30 @@ tableName wgEncodeUwDnaseLgintC57bl6MAdult8wksPkRep1
 tissueSourceType Pooled
 view Peaks
 
+metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksPkRep2
+objType table
+age adult-8wks
+cell LgIntestine
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLgintC57bl6MAdult8wksPkRep2.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS18784
+labVersion lmax-v1.1
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 5604
+tableName wgEncodeUwDnaseLgintC57bl6MAdult8wksPkRep2
+tissueSourceType Pooled
+treatment None
+view Peaks
+
 metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksRawDataRep1
 objType file
 age adult-8wks
@@ -4408,6 +4479,29 @@ sex M
 strain C57BL/6
 subId 5215
 tissueSourceType Pooled
+view RawData
+
+metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksRawDataRep2
+objType file
+age adult-8wks
+cell LgIntestine
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLgintC57bl6MAdult8wksRawDataRep2.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS18784
+labVersion 1
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 5604
+tissueSourceType Pooled
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksSigRep1
@@ -4432,6 +4526,30 @@ strain C57BL/6
 subId 5215
 tableName wgEncodeUwDnaseLgintC57bl6MAdult8wksSigRep1
 tissueSourceType Pooled
+view Signal
+
+metaObject wgEncodeUwDnaseLgintC57bl6MAdult8wksSigRep2
+objType table
+age adult-8wks
+cell LgIntestine
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLgintC57bl6MAdult8wksSigRep2.bigWig
+grant Stam
+lab UW-m
+labExpId DS18784
+labVersion WindowDensity-bin20-win+/-75
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 5604
+tableName wgEncodeUwDnaseLgintC57bl6MAdult8wksSigRep2
+tissueSourceType Pooled
+treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep1
@@ -4529,6 +4647,54 @@ sex M
 strain C57BL/6
 subId 5217
 tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep13
+objType file
+age adult-8wks
+attic auxExp
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep13.bam,wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep13.bam.bai
+grant Stam
+lab UW-m
+labExpId DS16858
+labVersion Bowtie 0.12.5
+project wgEncode
+replicate 13
+sex M
+strain C57BL/6
+subId 5600
+tissueSourceType Individual
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep14
+objType file
+age adult-8wks
+attic auxExp
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep14.bam,wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep14.bam.bai
+grant Stam
+lab UW-m
+labExpId DS19375
+labVersion Bowtie 0.12.5
+project wgEncode
+replicate 14
+sex M
+strain C57BL/6
+subId 5601
+tissueSourceType Pooled
+treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep2
@@ -4829,6 +4995,56 @@ strain C57BL/6
 subId 5217
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep12
 tissueSourceType Individual
+view Hotspots
+
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep13
+objType table
+age adult-8wks
+attic auxExp
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep13.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS16858
+labVersion Hotspot-v5.2
+project wgEncode
+replicate 13
+sex M
+strain C57BL/6
+subId 5600
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep13
+tissueSourceType Individual
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep14
+objType table
+age adult-8wks
+attic auxExp
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep14.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS19375
+labVersion Hotspot-v5.2
+project wgEncode
+replicate 14
+sex M
+strain C57BL/6
+subId 5601
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep14
+tissueSourceType Pooled
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep2
@@ -5139,6 +5355,56 @@ tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep12
 tissueSourceType Individual
 view Peaks
 
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep13
+objType table
+age adult-8wks
+attic auxExp
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep13.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS16858
+labVersion lmax-v1.1
+project wgEncode
+replicate 13
+sex M
+strain C57BL/6
+subId 5600
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep13
+tissueSourceType Individual
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep14
+objType table
+age adult-8wks
+attic auxExp
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep14.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS19375
+labVersion lmax-v1.1
+project wgEncode
+replicate 14
+sex M
+strain C57BL/6
+subId 5601
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep14
+tissueSourceType Pooled
+treatment None
+view Peaks
+
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep2
 objType table
 age adult-8wks
@@ -5443,6 +5709,54 @@ subId 5217
 tissueSourceType Individual
 view RawData
 
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep13
+objType file
+age adult-8wks
+attic auxExp
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep13.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS16858
+labVersion 1
+project wgEncode
+replicate 13
+sex M
+strain C57BL/6
+subId 5600
+tissueSourceType Individual
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep14
+objType file
+age adult-8wks
+attic auxExp
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep14.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS19375
+labVersion 1
+project wgEncode
+replicate 14
+sex M
+strain C57BL/6
+subId 5601
+tissueSourceType Pooled
+treatment None
+view RawData
+
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep2
 objType file
 age adult-8wks
@@ -5743,6 +6057,56 @@ tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep12
 tissueSourceType Individual
 view Signal
 
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep13
+objType table
+age adult-8wks
+attic auxExp
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep13.bigWig
+grant Stam
+lab UW-m
+labExpId DS16858
+labVersion WindowDensity-bin20-win+/-75
+project wgEncode
+replicate 13
+sex M
+strain C57BL/6
+subId 5600
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep13
+tissueSourceType Individual
+treatment None
+view Signal
+
+metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep14
+objType table
+age adult-8wks
+attic auxExp
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep14.bigWig
+grant Stam
+lab UW-m
+labExpId DS19375
+labVersion WindowDensity-bin20-win+/-75
+project wgEncode
+replicate 14
+sex M
+strain C57BL/6
+subId 5601
+tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep14
+tissueSourceType Pooled
+treatment None
+view Signal
+
 metaObject wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep2
 objType table
 age adult-8wks
@@ -5948,6 +6312,124 @@ strain C57BL/6
 subId 2010
 tableName wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep9
 tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeUwDnaseLiverC57bl6ME14halfAlnRep1
+objType file
+age E14.5
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6ME14halfAlnRep1.bam,wgEncodeUwDnaseLiverC57bl6ME14halfAlnRep1.bam.bai
+grant Stam
+lab UW-m
+labExpId DS20666
+labVersion Bowtie 0.12.5
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5603
+tissueSourceType Pooled
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseLiverC57bl6ME14halfHotspotsRep1
+objType table
+age E14.5
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6ME14halfHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS20666
+labVersion Hotspot-v5.2
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5603
+tableName wgEncodeUwDnaseLiverC57bl6ME14halfHotspotsRep1
+tissueSourceType Pooled
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseLiverC57bl6ME14halfPkRep1
+objType table
+age E14.5
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6ME14halfPkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS20666
+labVersion lmax-v1.1
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5603
+tableName wgEncodeUwDnaseLiverC57bl6ME14halfPkRep1
+tissueSourceType Pooled
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseLiverC57bl6ME14halfRawDataRep1
+objType file
+age E14.5
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6ME14halfRawDataRep1.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS20666
+labVersion 1
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5603
+tissueSourceType Pooled
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseLiverC57bl6ME14halfSigRep1
+objType table
+age E14.5
+cell Liver
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseLiverC57bl6ME14halfSigRep1.bigWig
+grant Stam
+lab UW-m
+labExpId DS20666
+labVersion WindowDensity-bin20-win+/-75
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5603
+tableName wgEncodeUwDnaseLiverC57bl6ME14halfSigRep1
+tissueSourceType Pooled
+treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep1
@@ -6916,6 +7398,7 @@ cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksAlnRep1.bam,wgEncodeUwDnaseNih3t3NihsMAdult8wksAlnRep1.bam.bai
@@ -6939,6 +7422,7 @@ cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksHotspotsRep1.broadPeak.gz
@@ -6963,6 +7447,7 @@ cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksPkRep1.narrowPeak.gz
@@ -6987,6 +7472,7 @@ cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksRawDataRep1.fastq.tgz
@@ -7010,6 +7496,7 @@ cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksSigRep1.bigWig
@@ -7393,6 +7880,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseRetinaC57bl6MAdult1wksAlnRep1.bam,wgEncodeUwDnaseRetinaC57bl6MAdult1wksAlnRep1.bam.bai
@@ -7416,6 +7904,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseRetinaC57bl6MAdult1wksHotspotsRep1.broadPeak.gz
@@ -7440,6 +7929,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseRetinaC57bl6MAdult1wksPkRep1.narrowPeak.gz
@@ -7464,6 +7954,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseRetinaC57bl6MAdult1wksRawDataRep1.fastq.tgz
@@ -7487,6 +7978,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseRetinaC57bl6MAdult1wksSigRep1.bigWig
@@ -7504,6 +7996,124 @@ tableName wgEncodeUwDnaseRetinaC57bl6MAdult1wksSigRep1
 tissueSourceType Pooled
 view Signal
 
+metaObject wgEncodeUwDnaseRetinaC57bl6MAdult8wksAlnRep1
+objType file
+age adult-8wks
+cell Retina
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseRetinaC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDnaseRetinaC57bl6MAdult8wksAlnRep1.bam.bai
+grant Stam
+lab UW-m
+labExpId DS19060
+labVersion Bowtie 0.12.5
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5589
+tissueSourceType Pooled
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseRetinaC57bl6MAdult8wksHotspotsRep1
+objType table
+age adult-8wks
+cell Retina
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseRetinaC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS19060
+labVersion Hotspot-v5.2
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5589
+tableName wgEncodeUwDnaseRetinaC57bl6MAdult8wksHotspotsRep1
+tissueSourceType Pooled
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseRetinaC57bl6MAdult8wksPkRep1
+objType table
+age adult-8wks
+cell Retina
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseRetinaC57bl6MAdult8wksPkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS19060
+labVersion lmax-v1.1
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5589
+tableName wgEncodeUwDnaseRetinaC57bl6MAdult8wksPkRep1
+tissueSourceType Pooled
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseRetinaC57bl6MAdult8wksRawDataRep1
+objType file
+age adult-8wks
+cell Retina
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseRetinaC57bl6MAdult8wksRawDataRep1.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS19060
+labVersion 1
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5589
+tissueSourceType Pooled
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseRetinaC57bl6MAdult8wksSigRep1
+objType table
+age adult-8wks
+cell Retina
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseRetinaC57bl6MAdult8wksSigRep1.bigWig
+grant Stam
+lab UW-m
+labExpId DS19060
+labVersion WindowDensity-bin20-win+/-75
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5589
+tableName wgEncodeUwDnaseRetinaC57bl6MAdult8wksSigRep1
+tissueSourceType Pooled
+treatment None
+view Signal
+
 metaObject wgEncodeUwDnaseRetinaC57bl6MNew1daysAlnRep1
 objType file
 age newborn-1days
@@ -7511,6 +8121,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-20
 dateUnrestricted 2012-09-20
 fileName wgEncodeUwDnaseRetinaC57bl6MNew1daysAlnRep1.bam,wgEncodeUwDnaseRetinaC57bl6MNew1daysAlnRep1.bam.bai
@@ -7534,6 +8145,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-20
 dateUnrestricted 2012-09-20
 fileName wgEncodeUwDnaseRetinaC57bl6MNew1daysHotspotsRep1.broadPeak.gz
@@ -7558,6 +8170,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-20
 dateUnrestricted 2012-09-20
 fileName wgEncodeUwDnaseRetinaC57bl6MNew1daysPkRep1.narrowPeak.gz
@@ -7582,6 +8195,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-20
 dateUnrestricted 2012-09-20
 fileName wgEncodeUwDnaseRetinaC57bl6MNew1daysRawDataRep1.fastq.tgz
@@ -7605,6 +8219,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-20
 dateUnrestricted 2012-09-20
 fileName wgEncodeUwDnaseRetinaC57bl6MNew1daysSigRep1.bigWig
@@ -7629,6 +8244,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksAlnRep1.bam.bai
@@ -7652,6 +8268,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksAlnRep2.bam,wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksAlnRep2.bam.bai
@@ -7675,6 +8292,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -7699,6 +8317,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
@@ -7723,6 +8342,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -7747,6 +8367,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksPkRep2.narrowPeak.gz
@@ -7771,6 +8392,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -7794,6 +8416,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksRawDataRep2.fastq.tgz
@@ -7817,6 +8440,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksSigRep1.bigWig
@@ -7841,6 +8465,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksSigRep2.bigWig
@@ -7865,6 +8490,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDnaseSpleenC57bl6MAdult8wksAlnRep1.bam.bai
@@ -7888,6 +8514,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksAlnRep2.bam,wgEncodeUwDnaseSpleenC57bl6MAdult8wksAlnRep2.bam.bai
@@ -7911,6 +8538,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -7935,6 +8563,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
@@ -7959,6 +8588,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -7983,6 +8613,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksPkRep2.narrowPeak.gz
@@ -8007,6 +8638,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -8030,6 +8662,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksRawDataRep2.fastq.tgz
@@ -8053,6 +8686,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksSigRep1.bigWig
@@ -8077,6 +8711,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksSigRep2.bigWig
@@ -8101,6 +8736,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDnaseThymusC57bl6MAdult8wksAlnRep1.bam.bai
@@ -8124,6 +8760,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksAlnRep2.bam,wgEncodeUwDnaseThymusC57bl6MAdult8wksAlnRep2.bam.bai
@@ -8147,6 +8784,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -8171,6 +8809,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
@@ -8195,6 +8834,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -8219,6 +8859,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksPkRep2.narrowPeak.gz
@@ -8243,6 +8884,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -8266,6 +8908,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksRawDataRep2.fastq.tgz
@@ -8289,6 +8932,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksSigRep1.bigWig
@@ -8313,6 +8957,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksSigRep2.bigWig
@@ -8386,6 +9031,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep3.bam,wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep3.bam.bai
@@ -8410,6 +9056,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep4.bam,wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep4.bam.bai
@@ -8484,6 +9131,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep3.broadPeak.gz
@@ -8509,6 +9157,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep4.broadPeak.gz
@@ -8584,6 +9233,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep3.narrowPeak.gz
@@ -8609,6 +9259,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep4.narrowPeak.gz
@@ -8682,6 +9333,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawDataRep3.fastq.tgz
@@ -8706,6 +9358,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawDataRep4.fastq.tgz
@@ -8780,6 +9433,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep3.bigWig
@@ -8805,6 +9459,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep4.bigWig
@@ -8876,6 +9531,7 @@ cell TReg
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTregC57bl6MAdult8wksAlnRep3.bam,wgEncodeUwDnaseTregC57bl6MAdult8wksAlnRep3.bam.bai
@@ -8948,6 +9604,7 @@ cell TReg
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTregC57bl6MAdult8wksHotspotsRep3.broadPeak.gz
@@ -9021,6 +9678,7 @@ cell TReg
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTregC57bl6MAdult8wksPkRep3.narrowPeak.gz
@@ -9092,6 +9750,7 @@ cell TReg
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTregC57bl6MAdult8wksRawDataRep3.fastq.tgz
@@ -9164,6 +9823,7 @@ cell TReg
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTregC57bl6MAdult8wksSigRep3.bigWig
@@ -10336,6 +10996,29 @@ subId 5230
 tissueSourceType Pooled
 view Alignments
 
+metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfAlnRep2
+objType file
+age E18.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseWbrainC57bl6ME18halfAlnRep2.bam,wgEncodeUwDnaseWbrainC57bl6ME18halfAlnRep2.bam.bai
+grant Stam
+lab UW-m
+labExpId DS15269
+labVersion Bowtie 0.12.5
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 5602
+tissueSourceType Pooled
+treatment None
+view Alignments
+
 metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfHotspotsRep1
 objType table
 age E18.5
@@ -10358,6 +11041,30 @@ strain C57BL/6
 subId 5230
 tableName wgEncodeUwDnaseWbrainC57bl6ME18halfHotspotsRep1
 tissueSourceType Pooled
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfHotspotsRep2
+objType table
+age E18.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseWbrainC57bl6ME18halfHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS15269
+labVersion Hotspot-v5.2
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 5602
+tableName wgEncodeUwDnaseWbrainC57bl6ME18halfHotspotsRep2
+tissueSourceType Pooled
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfPkRep1
@@ -10384,6 +11091,30 @@ tableName wgEncodeUwDnaseWbrainC57bl6ME18halfPkRep1
 tissueSourceType Pooled
 view Peaks
 
+metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfPkRep2
+objType table
+age E18.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseWbrainC57bl6ME18halfPkRep2.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS15269
+labVersion lmax-v1.1
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 5602
+tableName wgEncodeUwDnaseWbrainC57bl6ME18halfPkRep2
+tissueSourceType Pooled
+treatment None
+view Peaks
+
 metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfRawDataRep1
 objType file
 age E18.5
@@ -10405,6 +11136,29 @@ sex M
 strain C57BL/6
 subId 5230
 tissueSourceType Pooled
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfRawDataRep2
+objType file
+age E18.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseWbrainC57bl6ME18halfRawDataRep2.fastq.gz
+grant Stam
+lab UW-m
+labExpId DS15269
+labVersion 1
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 5602
+tissueSourceType Pooled
+treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfSigRep1
@@ -10429,6 +11183,30 @@ strain C57BL/6
 subId 5230
 tableName wgEncodeUwDnaseWbrainC57bl6ME18halfSigRep1
 tissueSourceType Pooled
+view Signal
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfSigRep2
+objType table
+age E18.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeUwDnaseWbrainC57bl6ME18halfSigRep2.bigWig
+grant Stam
+lab UW-m
+labExpId DS15269
+labVersion WindowDensity-bin20-win+/-75
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 5602
+tableName wgEncodeUwDnaseWbrainC57bl6ME18halfSigRep2
+tissueSourceType Pooled
+treatment None
 view Signal
 
 metaObject wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep1
@@ -11849,4 +12627,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 713822741
+# MAGIC: 510139639

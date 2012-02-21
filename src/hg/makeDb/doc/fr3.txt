@@ -1098,3 +1098,109 @@ done >> multiz8way.maf
     rm multiz8way*.tab
 
 #######################################################################
+# GAP ANNOTATE MULTIZ9WAY MAF AND LOAD TABLES (DONE - 2012-02-21 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.
+    mkdir -p /hive/data/genomes/fr3/bed/multiz8way/anno/mafSplit
+    cd /hive/data/genomes/fr3/bed/multiz8way/anno/mafSplit
+    time mafSplit -outDirDepth=2 -byTarget -useFullSequenceName \
+	/dev/null . ../../multiz8way.maf
+    #	real    1m58.310s
+
+    find . -type f | wc
+    #	6214 6214 117987
+
+    cd /hive/data/genomes/fr3/bed/multiz8way/anno
+    # a couple of these do not yet have an N.bed file
+    for DB in `cat ../species.list`
+do
+    cd /hive/data/genomes/${DB}
+    if [ ! -s "${DB}.N.bed" ]; then
+	twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+	ls -og ${DB}.2bit ${DB}.N.bed
+    fi
+done
+
+for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    ssh swarm
+    cd /hive/data/genomes/fr3/bed/multiz8way/anno
+    mkdir result
+    # NEXT TIME: this template should have a check out exists+ statement
+    cat << '_EOF_' > template
+#LOOP
+runOne $(path1) {check out exists+ result/$(path1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > runOne
+#!/bin/sh
+set -beEu -o pipefail
+D=`dirname $2`
+mkdir -p "${D}"
+mafAddIRows -nBeds=nBeds $1 /hive/data/genomes/fr3/fr3.2bit $2
+'_EOF_'
+    # << happy emacs
+
+    find ./mafSplit -type f | sed -e 's#^./##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs to one per node with the ram=8g requirement
+    para -ram=8g create jobList
+    para try ... check ... push ...
+# Completed: 6214 of 6214 jobs
+# CPU time in finished jobs:       1542s      25.70m     0.43h    0.02d  0.000 y
+# IO & Wait Time:                 16187s     269.78m     4.50h    0.19d  0.001 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              16s       0.27m     0.00h    0.00d
+# Submission to last job:           331s       5.52m     0.09h    0.00d
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+
+    # combine into one file
+    head -q -n 1 result/mafSplit/0/0/HE591688.maf > fr3.8way.maf
+    find ./result -type f | while read F
+do
+    grep -h -v "^#" ${F}
+done >> fr3.8way.maf
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/GL172637.maf >> fr3.8way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> fr3.8way.maf
+
+    # Load into database
+    rm /gbdb/fr3/multiz8way/multiz8way.maf   # remove old symlink
+    ln -s `pwd`/fr3.8way.maf /gbdb/fr3/multiz8way/multiz8way.maf
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf fr3 multiz8way
+    #	Loaded 2844956 mafs in 1 files from /gbdb/fr3/multiz8way
+    #	real    1m58.565s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 fr3 multiz8waySummary \
+	/gbdb/fr3/multiz8way/multiz8way.maf
+    #	Created 179258 summary blocks from 8283246 components and 2844956 mafs
+    #	from /gbdb/fr3/multiz8way/multiz8way.maf
+
+    #	real    2m26.270s
+
+    wc -l multiz8way*.tab
+    #	2844956 multiz8way.tab
+    #	179258 multiz8waySummary.tab
+    #	3024214 total
+
+    rm multiz8way*.tab
+
+#########################################################################
