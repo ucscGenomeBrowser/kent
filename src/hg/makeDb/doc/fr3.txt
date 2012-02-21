@@ -1307,3 +1307,145 @@ done
     #	upstream automatic generation
 
 #########################################################################
+# Phylogenetic tree from 8-way (DONE - 2012-02-21 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/4d
+    cd /hive/data/genomes/fr3/bed/multiz8way/4d
+
+    # the split annotated maf's are in:
+    ../anno/result/mafSplit/*/*/*.maf
+
+    cd /hive/data/genomes/fr3/bed/multiz8way/4d
+
+    # using all_est for fr3
+     hgsql -N -e "select * from all_est" fr3 | cut -f2- \
+	| pslToBed stdin stdout | bedToGenePred stdin allEst.gp
+
+    wc -l allEst.gp 
+    #	27112 allEst.gp
+
+    genePredSingleCover allEst.gp stdout | sort > allEstNR.gp
+    wc -l allEstNR.gp
+    #	  10085 alLEstNR.gp
+
+    ssh encodek
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/4d/run
+    cd /hive/data/genomes/fr3/bed/multiz8way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/fr3/bed/multiz8way"
+set c = $1
+set infile = $r/anno/result/mafSplit/$2
+set resultDir = $3
+mkdir -p ../mfa/$resultDir
+set outfile = $r/4d/mfa/$resultDir/$1.mfa
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+awk -v C=$c '$2 == C {print}' $r/4d/allEstNR.gp | sed -e "s/\t$c\t/\tfr3.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    find ../../anno/result/mafSplit -type f \
+	| sed -e "s#../../anno/result/mafSplit/##" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) $(dir1) {check out exists ../mfa/$(dir1)/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check
+    para -maxJob=5 push
+    para time
+    # some of the jobs can not complete
+# Completed: 6139 of 6214 jobs
+# Crashed: 30 jobs
+# Other count: 45 jobs
+# CPU time in finished jobs:        377s       6.28m     0.10h    0.00d  0.000 y
+# IO & Wait Time:                 15652s     260.87m     4.35h    0.18d  0.000 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:              19s       0.32m     0.01h    0.00d
+# Submission to last job:          1380s      23.00m     0.38h    0.02d
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/fr3/bed/multiz8way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # most interesting, this did not identify files of size 1:
+#    find ./mfa -type f -size 1
+    find ./mfa -type f | xargs ls -og | awk '$3 == 1' | awk '{print $NF}' \
+	> empty.list
+    cat empty.list | xargs rm
+
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" \
+	`find ./mfa -type f | xargs echo` | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #	>fr3
+    #	>tetNig2
+    #	>oreNil1
+    #	>gasAcu1
+    #	>oryLat2
+    #	>gadMor1
+    #	>danRer7
+    #	>latCha1
+
+    # tree-commas.nh:
+# (((((((fr3,tetNig2),oreNil1),gasAcu1),oryLat2),gadMor1),danRer7),latCha1)
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree-commas.nh 4d.all.mfa
+    #	real    0m6.111s
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+    # TREE:
+    # (((((((fr3:0.105225,tetNig2:0.121685):0.125205,oreNil1:0.162218):0.018693,gasAcu1:0.16287):0.0397944,oryLat2:0.199141):0.0823047,gadMor1:0.24958):0.121553,danRer7:0.285505):0.209906,latCha1:0.209906);
+
+    /cluster/bin/phast/all_dists new8way.nh | grep "^fr3"
+fr3     tetNig2 0.226910
+fr3     oreNil1 0.392648
+fr3     gasAcu1 0.411993
+fr3     oryLat2 0.488058
+fr3     gadMor1 0.620802
+fr3     danRer7 0.778280
+fr3     latCha1 0.912587
+
+    # existing distances from the 60-way prototype tree, with
+    # several branch lengths being pure guesses:
+(((((((fr3:0.203847,tetNig2:0.224159):0.09759,oreNil1:0.2):0.09759,
+gasAcu1:0.316413):0.03,oryLat2:0.511970):0.03,gadMor1:0.35):0.22564,
+danRer7:0.730752):0.147949,latCha1:0.855573);
+fr3     tetNig2 0.428006
+fr3     oreNil1 0.501437
+fr3     gasAcu1 0.715440
+fr3     gadMor1 0.809027
+fr3     oryLat2 0.940997
+fr3     danRer7 1.415419
+fr3     latCha1 1.688189
+
+#########################################################################
