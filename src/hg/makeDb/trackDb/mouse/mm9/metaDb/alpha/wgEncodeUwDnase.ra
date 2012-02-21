@@ -6916,6 +6916,7 @@ cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksAlnRep1.bam,wgEncodeUwDnaseNih3t3NihsMAdult8wksAlnRep1.bam.bai
@@ -6939,6 +6940,7 @@ cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksHotspotsRep1.broadPeak.gz
@@ -6963,6 +6965,7 @@ cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksPkRep1.narrowPeak.gz
@@ -6987,6 +6990,7 @@ cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksRawDataRep1.fastq.tgz
@@ -7010,6 +7014,7 @@ cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksSigRep1.bigWig
@@ -7393,6 +7398,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseRetinaC57bl6MAdult1wksAlnRep1.bam,wgEncodeUwDnaseRetinaC57bl6MAdult1wksAlnRep1.bam.bai
@@ -7416,6 +7422,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseRetinaC57bl6MAdult1wksHotspotsRep1.broadPeak.gz
@@ -7440,6 +7447,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseRetinaC57bl6MAdult1wksPkRep1.narrowPeak.gz
@@ -7464,6 +7472,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseRetinaC57bl6MAdult1wksRawDataRep1.fastq.tgz
@@ -7487,6 +7496,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseRetinaC57bl6MAdult1wksSigRep1.bigWig
@@ -7511,6 +7521,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-20
 dateUnrestricted 2012-09-20
 fileName wgEncodeUwDnaseRetinaC57bl6MNew1daysAlnRep1.bam,wgEncodeUwDnaseRetinaC57bl6MNew1daysAlnRep1.bam.bai
@@ -7534,6 +7545,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-20
 dateUnrestricted 2012-09-20
 fileName wgEncodeUwDnaseRetinaC57bl6MNew1daysHotspotsRep1.broadPeak.gz
@@ -7558,6 +7570,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-20
 dateUnrestricted 2012-09-20
 fileName wgEncodeUwDnaseRetinaC57bl6MNew1daysPkRep1.narrowPeak.gz
@@ -7582,6 +7595,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-20
 dateUnrestricted 2012-09-20
 fileName wgEncodeUwDnaseRetinaC57bl6MNew1daysRawDataRep1.fastq.tgz
@@ -7605,6 +7619,7 @@ cell Retina
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-20
 dateUnrestricted 2012-09-20
 fileName wgEncodeUwDnaseRetinaC57bl6MNew1daysSigRep1.bigWig
@@ -7629,6 +7644,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksAlnRep1.bam.bai
@@ -7652,6 +7668,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksAlnRep2.bam,wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksAlnRep2.bam.bai
@@ -7675,6 +7692,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -7699,6 +7717,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
@@ -7723,6 +7742,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -7747,6 +7767,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksPkRep2.narrowPeak.gz
@@ -7771,6 +7792,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -7794,6 +7816,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksRawDataRep2.fastq.tgz
@@ -7817,6 +7840,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksSigRep1.bigWig
@@ -7841,6 +7865,7 @@ cell SkMuscle
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-19
 fileName wgEncodeUwDnaseSkmuscleC57bl6MAdult8wksSigRep2.bigWig
@@ -7865,6 +7890,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDnaseSpleenC57bl6MAdult8wksAlnRep1.bam.bai
@@ -7888,6 +7914,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksAlnRep2.bam,wgEncodeUwDnaseSpleenC57bl6MAdult8wksAlnRep2.bam.bai
@@ -7911,6 +7938,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -7935,6 +7963,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
@@ -7959,6 +7988,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -7983,6 +8013,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksPkRep2.narrowPeak.gz
@@ -8007,6 +8038,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -8030,6 +8062,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksRawDataRep2.fastq.tgz
@@ -8053,6 +8086,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksSigRep1.bigWig
@@ -8077,6 +8111,7 @@ cell Spleen
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseSpleenC57bl6MAdult8wksSigRep2.bigWig
@@ -8101,6 +8136,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDnaseThymusC57bl6MAdult8wksAlnRep1.bam.bai
@@ -8124,6 +8160,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksAlnRep2.bam,wgEncodeUwDnaseThymusC57bl6MAdult8wksAlnRep2.bam.bai
@@ -8147,6 +8184,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -8171,6 +8209,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
@@ -8195,6 +8234,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -8219,6 +8259,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksPkRep2.narrowPeak.gz
@@ -8243,6 +8284,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -8266,6 +8308,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksRawDataRep2.fastq.tgz
@@ -8289,6 +8332,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksSigRep1.bigWig
@@ -8313,6 +8357,7 @@ cell Thymus
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseThymusC57bl6MAdult8wksSigRep2.bigWig
@@ -8386,6 +8431,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep3.bam,wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep3.bam.bai
@@ -8410,6 +8456,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep4.bam,wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep4.bam.bai
@@ -8484,6 +8531,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep3.broadPeak.gz
@@ -8509,6 +8557,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep4.broadPeak.gz
@@ -8584,6 +8633,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep3.narrowPeak.gz
@@ -8609,6 +8659,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep4.narrowPeak.gz
@@ -8682,6 +8733,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawDataRep3.fastq.tgz
@@ -8706,6 +8758,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawDataRep4.fastq.tgz
@@ -8780,6 +8833,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep3.bigWig
@@ -8805,6 +8859,7 @@ cell T-Naive
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep4.bigWig
@@ -8876,6 +8931,7 @@ cell TReg
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTregC57bl6MAdult8wksAlnRep3.bam,wgEncodeUwDnaseTregC57bl6MAdult8wksAlnRep3.bam.bai
@@ -8948,6 +9004,7 @@ cell TReg
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTregC57bl6MAdult8wksHotspotsRep3.broadPeak.gz
@@ -9021,6 +9078,7 @@ cell TReg
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTregC57bl6MAdult8wksPkRep3.narrowPeak.gz
@@ -9092,6 +9150,7 @@ cell TReg
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTregC57bl6MAdult8wksRawDataRep3.fastq.tgz
@@ -9164,6 +9223,7 @@ cell TReg
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
 fileName wgEncodeUwDnaseTregC57bl6MAdult8wksSigRep3.bigWig
@@ -11849,4 +11909,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 713822741
+# MAGIC: 695727785
