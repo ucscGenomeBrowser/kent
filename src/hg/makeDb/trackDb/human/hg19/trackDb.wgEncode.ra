@@ -130,7 +130,8 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra 
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra
+include wgEncodeHaibMethylRrbs.ra beta,public
+include wgEncodeHaibMethylRrbs.release3.ra alpha
 #HAIB Bisulfite test track
 include wgEncodeHaibMethylWgbs.ra alpha
 
@@ -197,5 +198,5 @@ include wgEncodeSunyRipSeq.ra
 
 # Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
 include wgEncodeMapability.ra beta,public
-include wgEncodeMapability.new.ra alpha
+include wgEncodeMapability.release4.ra alpha
 
