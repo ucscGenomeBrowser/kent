@@ -20,8 +20,7 @@ endif
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
-	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/js/${USER}; \
-		cp ${STATIC_FILES} ${DOCUMENTROOT}-${USER}/js; \
+	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/js; \
 	else \
 	    ${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}; \
 	fi
