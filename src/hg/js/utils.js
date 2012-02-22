@@ -1180,16 +1180,20 @@ var bindings = {
     }
 }
 
-function stripHgErrors(returnedHtml)
+function stripHgErrors(returnedHtml, whatWeDid)
 { // strips HGERROR style 'early errors' and shows them in the warnBox
+  // If whatWeDid != null, we use it to return info about what we stripped out and processed (current just warnMsg).
     var cleanHtml = returnedHtml;
     while(cleanHtml.length > 0) {
         var bounds = bindings.outside('<!-- HGERROR-START -->','<!-- HGERROR-END -->',cleanHtml);
         if (bounds.start == -1)
             break;
         var warnMsg = bindings.insideOut('<P>','</P>',cleanHtml,bounds.start,bounds.stop);
-        if (warnMsg.length > 0)
+        if (warnMsg.length > 0) {
             warn(warnMsg);
+            if(whatWeDid != null)
+                whatWeDid.warnMsg = warnMsg;
+        }
         cleanHtml = cleanHtml.slice(0,bounds.start) + cleanHtml.slice(bounds.stop);
     }
     return cleanHtml;
@@ -1249,7 +1253,7 @@ function stripJsEmbedded(returnedHtml, debug, whatWeDid)
         }
         cleanHtml = cleanHtml.slice(0,bounds.start) + cleanHtml.slice(bounds.stop);
     }
-    return stripHgErrors(cleanHtml); // Certain early errors are not called via warnBox
+    return stripHgErrors(cleanHtml, whatWeDid); // Certain early errors are not called via warnBox
 }
 
 function visTriggersHiddenSelect(obj)

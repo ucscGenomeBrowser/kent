@@ -5933,14 +5933,6 @@ hubCheckForNew(database, cart);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 }
 
-void ajaxWarnHandler(char *format, va_list args)
-{
-// When we are generating a response for ajax client and hit an error, put any warnings into hgTracks.err in the response.
-char buf[4096];
-vsnprintf(buf, sizeof(buf), format, args);
-jsonHashAddString(jsonForClient, "err", buf);
-}
-
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -5994,7 +5986,6 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     withNextItemArrows = FALSE;
     withNextExonArrows = FALSE;
     hgFindMatches = NULL;     // XXXX necessary ???
-    pushWarnHandler(ajaxWarnHandler);
     }
 
 jsonForClient = newJsonHash(newHash(8));
