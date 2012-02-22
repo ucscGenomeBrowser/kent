@@ -4535,6 +4535,21 @@ protocol Ren:ES-Bruce4_Ren_protocol.pdf
 #termId
 #termUrl
 
+term ES-E14
+tag ESE14
+type Cell Line
+organism mouse
+category primaryCells
+description E14 mouse ES line PROVISIONAL
+age E0
+strain 129/Ola
+vendorName Santos lab
+vendorId E14
+orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
+color 65,105,225
+sex M
+protocol Stam:ES-E14_Stam_protocol.pdf
+
 term Erythrobl
 tag ERYTHROBL
 type Cell Line
@@ -4918,6 +4933,22 @@ color 65,105,225
 sex U
 protocol Stam:Mesoderm_Stam_protocol.pdf
 
+term mG/ER
+tag MGER
+type Cell Line
+organism mouse
+category cellLine
+description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with β-estradiol treatment PROVISIONAL
+age immortalized
+strain Unknown
+tissue blood
+vendorName UW Lab
+vendorId mG/ER
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm 
+color 86,180,233
+sex M
+protocol Stam:mG/ER_Stam_protocol.pdf
+
 term Myocyte
 tag MYOCYTE
 type Cell Line
@@ -5211,6 +5242,24 @@ color 86,180,233
 sex U
 protocol Ren:Thymus_Ren_protocol.pdf Stam:Thymus_Stam_protocol.pdf
 
+term THelper-Activated
+tag THELPA
+type Cell Line
+organism mouse
+tissue blood
+age ageUnknown
+strain Unknown
+category primaryCells
+description Activated primary CD4 effector cells, isolated ex vivo PROVISIONAL
+vendorName UW lab
+vendorId THelper-Activated
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7060
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+color 86,180,233
+sex U
+protocol Stam:THelper-Activated_Stam_protocol.pdf
+
 term T-Naive
 tag TNAIVE
 type Cell Line
@@ -5228,6 +5277,24 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 86,180,233
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf
+
+term TReg-Activated
+tag TREGA
+type Cell Line
+organism mouse
+tissue blood
+age ageUnknown
+strain Unknown
+category primaryCells
+description Activated primary T regulatory cells, isolated ex vivo PROVISIONAL
+vendorName UW lab
+vendorId TReg-Activated
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7060
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+color 86,180,233
+sex U
+protocol Stam:TReg-Activated_Stam_protocol.pdf
 
 term TReg
 tag TREG
