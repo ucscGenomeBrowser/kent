@@ -4947,7 +4947,7 @@ vendorId mG/ER
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm 
 color 86,180,233
 sex M
-protocol Stam:mG/ER_Stam_protocol.pdf
+protocol Stam:mG-ER_Stam_protocol.pdf
 
 term Myocyte
 tag MYOCYTE
