@@ -8411,7 +8411,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 2/6/12 angie)
+# NHGRI GWAS CATALOG (DONE 2/21/12 angie)
+# Updated 2/21/12 (remove extra whitespace, translate non-ASCII to html), 2/6/12
 # Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
 # Updated 4/1/10, 3/1/10
@@ -8433,7 +8434,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 8561 elements of size 22
+#Loaded 8608 elements of size 22
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
     # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
@@ -8441,12 +8442,12 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # a way to resolve these. GWAS catalog folks aren't going to modify their
     # database to add a column for these cases.
     hgsql hg19 -NBe 'select snp.name,gc.riskAllele,snp.strand,snp.refNcbi,snp.observed \
-                     from gwasCatalog as gc, snp130 as snp \
+                     from gwasCatalog as gc, snp135 as snp \
                      where gc.riskAllele rlike "^rs[0-9]+-[ACGT]" and \
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt
-#752 ambigStrand.txt
+#758 ambigStrand.txt
 
 
 ######################################################################## 
