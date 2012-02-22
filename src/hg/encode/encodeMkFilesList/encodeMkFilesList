@@ -35,10 +35,11 @@ use HgDb;
 sub usage {
     # Usage statement
     print STDERR <<END;
-usage: encodeFilesList <db> [options]
+usage: encodeMkFilesList <db> [options]
 
 Creates files.txt and optionally md5sum.txt.
-The md5summing function will md5sum the internal contents of any gzipped file.
+The md5summing function will md5sum the internal contents of any gzipped file, 
+but stores the external md5sum in md5sum.txt and metaDb.
 
 options:
 
