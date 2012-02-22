@@ -187,7 +187,7 @@ $(function () {
     // show only spinner until data is retrieved
     $('#searchTypePanel').hide();
     $('.summaryTable').hide();
-    spinner = showLoadingImage("spinner");
+    spinner = showLoadingImage("spinner", true);
 
     // load data from server
     encodeProject.loadAllFromServer(requests, handleServerData);
