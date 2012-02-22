@@ -4220,7 +4220,7 @@ category cellLine
 description myeloid progenitor cells, CD34+
 age immortalized
 strain B6D2F1/J
-vendorName UW lab
+vendorName Stam lab
 vendorId 416B
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7043
@@ -4401,7 +4401,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Cerebrum
-vendorName UW Lab
+vendorName Stam lab
 vendorId Cerebrum
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 105,105,105
@@ -4436,7 +4436,7 @@ category primaryCells
 description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T. Genes Dev. 1993 Nov,7(11):2071-84.)
 age E0
 strain 129
-vendorName Uw lab
+vendorName Stam lab
 vendorId ES-CJ7
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 65,105,225
@@ -4509,7 +4509,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Duodenum PROVSIONAL
-vendorName CSHL Long
+vendorName CSHL lab
 vendorId Duodenum
 orderUrl  http://gingeraslab.cshl.edu/
 termId 6977
@@ -4534,6 +4534,21 @@ sex M
 protocol Ren:ES-Bruce4_Ren_protocol.pdf
 #termId
 #termUrl
+
+term ES-E14
+tag ESE14
+type Cell Line
+organism mouse
+category primaryCells
+description E14 mouse ES line PROVISIONAL
+age E0
+strain 129/Ola
+vendorName Santos lab
+vendorId E14
+orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
+color 65,105,225
+sex M
+protocol Stam:ES-E14_Stam_protocol.pdf
 
 term Erythrobl
 tag ERYTHROBL
@@ -4563,7 +4578,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Adipose tissue
-vendorName UW lab
+vendorName Stam lab
 vendorId FatPad
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7108
@@ -4582,7 +4597,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Fibroblast
-vendorName UW lab
+vendorName Stam lab
 vendorId Fibroblast
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 6948
@@ -4671,7 +4686,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Genital Adipose tissue
-vendorName 1)UW lab; 2)CSHL lab
+vendorName 1)Stam lab; 2)CSHL lab
 vendorId Genital Fat Pad; Gonadal Adipose Tissue
 orderUrl http://www.gs.washington.edu/faculty/stamj.html; http://gingeraslab.cshl.edu/
 termId 16230
@@ -4746,7 +4761,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Kidney
-vendorName UW lab
+vendorName Stam lab
 vendorId Kidney
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 color 204,121,167
@@ -4764,7 +4779,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Large Intestine
-vendorName 1)UW lab; 2)CSHL lab
+vendorName 1)Stam lab; 2)CSHL lab
 vendorId Large Intestine; Large Intestine
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 6982
@@ -4918,6 +4933,22 @@ color 65,105,225
 sex U
 protocol Stam:Mesoderm_Stam_protocol.pdf
 
+term mG/ER
+tag MGER
+type Cell Line
+organism mouse
+category cellLine
+description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with β-estradiol treatment PROVISIONAL
+age immortalized
+strain Unknown
+tissue blood
+vendorName Stam Lab
+vendorId mG/ER
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm 
+color 86,180,233
+sex M
+protocol Stam:mG-ER_Stam_protocol.pdf
+
 term Myocyte
 tag MYOCYTE
 type Cell Line
@@ -4927,7 +4958,7 @@ age ageUnknown
 strain Unknown
 category cellLine
 description Myocyte
-vendorName Hardison
+vendorName Hardison lab
 orderUrl http://bmb.psu.edu/directory/rch8
 color 139,69,19
 sex U
@@ -4997,7 +5028,7 @@ tissue ovary
 category Tissue
 age ageUnknown
 strain Unknown
-description OVARY
+description Ovary
 vendorName CSHL lab
 vendorId Ovary
 orderUrl http://gingeraslab.cshl.edu/
@@ -5072,7 +5103,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Retina
-vendorName UW lab
+vendorName Stam lab
 vendorId Retina
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 6944
@@ -5090,7 +5121,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Skeletal Muscle
-vendorName UW lab
+vendorName Stam lab
 vendorId Skeletal Muscle
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7125
@@ -5109,7 +5140,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Small Intestine
-vendorName 1)LICR lab; 2)CSHL Long
+vendorName 1)LICR lab; 2)CSHL lab
 vendorId Small Intestine; Small Intestine
 orderUrl http://www.bio.upenn.edu/faculty/ren/; http://gingeraslab.cshl.edu/
 termId 6978
@@ -5129,7 +5160,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Spleen
-vendorName 1) LICR lab; 2)UW Lab
+vendorName 1) LICR lab; 2)Stam Lab
 vendorId Spleen; Spleen
 orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm
 termId 7038
@@ -5211,6 +5242,24 @@ color 86,180,233
 sex U
 protocol Ren:Thymus_Ren_protocol.pdf Stam:Thymus_Stam_protocol.pdf
 
+term THelper-Activated
+tag THELPA
+type Cell Line
+organism mouse
+tissue blood
+age ageUnknown
+strain Unknown
+category primaryCells
+description Activated primary CD4 effector cells, isolated ex vivo PROVISIONAL
+vendorName Stam lab
+vendorId THelper-Activated
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7060
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+color 86,180,233
+sex U
+protocol Stam:THelper-Activated_Stam_protocol.pdf
+
 term T-Naive
 tag TNAIVE
 type Cell Line
@@ -5220,7 +5269,7 @@ age ageUnknown
 strain Unknown
 category primaryCells
 description Naive T cells: CD4+, CD25-
-vendorName UW lab
+vendorName Stam lab
 vendorId T-Naive
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
@@ -5228,6 +5277,24 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
 color 86,180,233
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf
+
+term TReg-Activated
+tag TREGA
+type Cell Line
+organism mouse
+tissue blood
+age ageUnknown
+strain Unknown
+category primaryCells
+description Activated primary T regulatory cells, isolated ex vivo PROVISIONAL
+vendorName Stam lab
+vendorId TReg-Activated
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7060
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+color 86,180,233
+sex U
+protocol Stam:TReg-Activated_Stam_protocol.pdf
 
 term TReg
 tag TREG
@@ -5238,7 +5305,7 @@ age ageUnknown
 strain Unknown
 category primaryCells
 description Regulatory T cells CD4+,CD25+
-vendorName UW lab
+vendorName Stam lab
 vendorId TReg
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
 termId 7060
@@ -5256,7 +5323,7 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Whole Brain
-vendorName 1)UW lab; 2)CSHL lab
+vendorName 1)Stam lab; 2)CSHL lab
 vendorId Whole Brain; Whole Brain
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 7005
