@@ -9342,6 +9342,7 @@ label  SETDB1 (sc-66884)
 
 term SIN3A_(NB600-1263)
 tag SIN3A NB6001263
+type Antibody
 antibodyDescription Rabbit polyclonal, Immunogen: Synthetic peptide: MKRRLDDQESDVYAAQQRR, corresponding to amino acids 1-19 of Mouse mSin3A. Antibody Target: SIN3A (NB600-1263)
 target SIN3A_(NB600-1263)
 targetDescription Mammalian Sin 3 (mSin 3) is closely related to the yeast SIN3 repressor protein involved in the transcriptional repression of many genes. Containing 4 paired amphipathic helix domains (PAH domains), mSin 3A and mSin 3B have been shown to directly interact with several other transcriptional repressor proteins including HDAC 1, HDAC 2, RbAp 46, the methyl CpG binding protein MeCP 2, the Mad/Max heterodimer, and the corepressors silencing mediator of retinoic acid &amp; thyroid hormone receptor (SMRT) and nuclear receptor corepressor (N-CoR).
