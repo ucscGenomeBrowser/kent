@@ -6894,7 +6894,7 @@ lab Struhl
 targetId GeneCard:CCNT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNT1
 validation CycT1(Western_Blot,Immunoprecipitation):human_CycT1_validation_Struhl.pdf
-label CycT1 (CycT1)
+label CycT1
 
 term E2F1
 tag E2F1
@@ -9344,7 +9344,7 @@ term SIN3A_(NB600-1263)
 tag SIN3A NB6001263
 type Antibody
 antibodyDescription Rabbit polyclonal, Immunogen: Synthetic peptide: MKRRLDDQESDVYAAQQRR, corresponding to amino acids 1-19 of Mouse mSin3A. Antibody Target: SIN3A (NB600-1263)
-target SIN3A_(NB600-1263)
+target SIN3A
 targetDescription Mammalian Sin 3 (mSin 3) is closely related to the yeast SIN3 repressor protein involved in the transcriptional repression of many genes. Containing 4 paired amphipathic helix domains (PAH domains), mSin 3A and mSin 3B have been shown to directly interact with several other transcriptional repressor proteins including HDAC 1, HDAC 2, RbAp 46, the methyl CpG binding protein MeCP 2, the Mad/Max heterodimer, and the corepressors silencing mediator of retinoic acid &amp; thyroid hormone receptor (SMRT) and nuclear receptor corepressor (N-CoR).
 vendorName Novus Biologicals
 vendorId NB600-1263
@@ -10344,7 +10344,7 @@ term COREST_(ab24166)
 tag CORESTAB24166
 type Antibody
 antibodyDescription Synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST.   Note: This antibody has since been discontinued.  Full product information is attached as part of validation document. Antibody Target: COREST_(ab24166)
-target COREST (ab24166)
+target COREST
 targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
 vendorName Abcam
 vendorId ab24166
@@ -10360,7 +10360,7 @@ term COREST_(sc30189)
 tag COREST SC30189
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 246-310 mapping within an internal region of CoREST of human origin recommended for detection of CoREST of mouse, rat and human origin. Antibody Target: COREST (sc30189)
-target COREST_(sc30189)
+target COREST
 targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
 vendorName Santa Cruz Biotech
 vendorId sc-30189
@@ -10501,7 +10501,7 @@ lab Struhl
 targetId GeneCard:HMGN1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN1
 validation Human_-_HMGN1(Western_Blot,Immunoprecipitation):human_HMGN1_validation_Struhl.pdf
-label HMGN1 (HMGN1)
+label HMGN1
 
 term HNRNPD
 tag HNRNPD
