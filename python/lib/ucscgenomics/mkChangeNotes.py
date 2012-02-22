@@ -629,10 +629,10 @@ class makeNotes(object):
             errors.extend(oldGbdbError)
 
             if self.changedTables:
-                errors.append("These tables were tables in the old release, but are no longer tables in the new release:"
+                errors.append("These tables were tables in the old release, but are no longer tables in the new release:")
                 errors.extend(list(self.changedTables))
             if self.changedGbdbs:
-                errors.append("These GBDBs were GBDB tables in the old release, but are no longer GBDB tables in the new release:"
+                errors.append("These GBDBs were GBDB tables in the old release, but are no longer GBDB tables in the new release:")
                 errors.extend(list(self.changedGbdbs)) 
 
             #for ease of typing
