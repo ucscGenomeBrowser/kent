@@ -224,8 +224,8 @@ query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
 track knownGenePrevious
-shortLabel Old UCSC Genes
-longLabel Previous Version of UCSC Genes
+shortLabel Old Known Genes
+longLabel Previous Version of Known Genes
 group genes
 priority 34.1
 visibility hide
