@@ -11978,7 +11978,7 @@ term ModifiedPeptideMapping
 tag MODPEPTIDEMAP
 type view
 label Modified Peptide Mapping
-description Modified Peptide Mapping Provisional
+description Modified Peptide Mapping 
 
 term PctSignal
 tag PCTSIG
