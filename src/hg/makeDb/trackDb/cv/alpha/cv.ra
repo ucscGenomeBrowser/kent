@@ -12765,70 +12765,70 @@ description Tissue obtained from pooling samples from various sample organisms
 
 term Illumina_GA
 tag ILLUMINAGA
-geo Illumina Genome Analyzer
+geoPlatformName Illumina Genome Analyzer
 type seqPlatform
 description Illumina Genome Analyzer
 # Matches GA that Kate initially indicated as the term
 
 term Illumina_GA2
 tag ILLUMINAGA2
-geo Illumina Genome Analyzer II
+geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer II
 
 term Illumina_GA2e
 tag ILLUMINAGA2E
-geo Illumina Genome Analyzer II
+geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
 tag ILLUMINAGA2X
-geo Illumina Genome Analyzer II
+geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIx
 # Matches GA2x that Kate initally indicated as the term
 
 term Illumina_HiSeq_2000
 tag ILLUMINAHISEQ2000
-geo Illumina HiSeq 2000
+geoPlatformName Illumina HiSeq 2000
 type seqPlatform
 description Illumina HiSeq 2000
 
 term 454_GS
 tag 454GS
-geo 454 GS
+geoPlatformName 454 GS
 type seqPlatform
 description Roche 454 Genome Sequencer
 
 term 454_GS_20
 tag 454GS20
-geo 454 GS 20
+geoPlatformName 454 GS 20
 type seqPlatform
 description Roche 454 Genome Sequencer 20
 
 term 454_GS_FLX
 tag 454GSFLX
-geo 454 GS FLX
+geoPlatformName 454 GS FLX
 type seqPlatform
 description Roche 454 Genome Sequencer FLX
 
 term AB_SOLiD
 tag ABSOLID
-geo AB SOLiD System
+geoPlatformName AB SOLiD System
 type seqPlatform
 description Applied Biosystems SOLiD System
 
 term AB_SOLiD_2.0
 tag ABSOLID2
-geo AB_SOLiD System 2.0
+geoPlatformName AB_SOLiD System 2.0
 type seqPlatform
 description Applied Biosystems SOLiD System 2.0
 
 term AB_SOLiD_3.5
 tag ABSOLID3PLUS
-geo AB SOLiD 3 Plus
+geoPlatformName AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
 
@@ -12843,19 +12843,19 @@ description Applied Biosystems SOLiD System 3.5
 
 term GPL13190
 tag GPL13190
-geo NimbleGen Human CGH 2.1M Whole-Genome Tiling Array [080131_HG18_WG_CGH_v2D_HX1]
+geoPlatformName NimbleGen Human CGH 2.1M Whole-Genome Tiling Array [080131_HG18_WG_CGH_v2D_HX1]
 type platform
 description Human CGH 2.1M Whole-Genome Tiling v2.0D Array
 
 term GPL14965
 tag GPL14965
-geo NimbleGen Human 3x720k Whole Genome CGH [100718_HG18_WG_CGH_v3.1_HX3]
+geoPlatformName NimbleGen Human 3x720k Whole Genome CGH [100718_HG18_WG_CGH_v3.1_HX3]
 type platform
 description Human 3x720k Whole Genome CGH
 
 term GPL9156
 tag GPL9156
-geo FSU NimbleGen Mouse 385K Whole Genome Tiling
+geoPlatformName FSU NimbleGen Mouse 385K Whole Genome Tiling
 type platform
 description FSU NimbleGen Mouse 385K Whole Genome Tiling
 
