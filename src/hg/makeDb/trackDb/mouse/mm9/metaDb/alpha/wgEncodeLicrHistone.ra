@@ -10185,6 +10185,32 @@ strain C57BL/6
 subId 5315
 view Alignments
 
+metaObject wgEncodeLicrHistoneThymusH3k04me1MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me1
+cell Thymus
+composite wgEncodeLicrHistone
+control std
+controlId Thymus/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneThymusH3k04me1MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5755
+tableName wgEncodeLicrHistoneThymusH3k04me1MAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneThymusH3k04me1MAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -11287,4 +11313,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1486726222
+# MAGIC: -855963893
