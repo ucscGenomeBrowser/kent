@@ -6099,14 +6099,14 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation Human_-_eGFP-HDAC8:human_validation_White.pdf
 label HDAC8 (eGFP-HDAC8)
 
-term eGFP-HMGBA1
-tag HMGBA1
+term eGFP-HMGB1
+tag HMGB1
 type Antibody
-antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGBA1
-target eGFP-HMGBA1
+antibodyDescription Goat polyclonal raised against e-GFP tagged transcription factor HMGB1
+target eGFP-HMGB1
 targetDescription DNA binding proteins that associates with chromatin and has the ability to bend DNA. Binds preferentially single-stranded DNA.Involved in V(D)J recombination by acting as a cofactor of the  RAG complex.
 vendorName Kevin White Lab, University of Chicago
-vendorId eGFP-HMGBA1
+vendorId eGFP-HMGB1
 orderUrl http://www.igsb.org/labs/kevin-white/
 lab White
 lots 1
@@ -6486,7 +6486,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA2
 validation Human_-_:missing
 label FOXA2 (sc-6554)
 
-term FOXM1_(sc-502)
+term FOXM1_(SC-502)
 tag FOXM1SC502
 type Antibody
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of FOXM1 of human origin.
@@ -8792,7 +8792,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=THAP1
 validation Human_-_:missing
 label THAP1 (sc-98174)
 
-term TP53_(sc-126)
+term TP53_(SC-126)
 tag TP53SC126
 type Antibody
 antibodyDescription Mouse monoclonal IgG, N-terminal epitope mapping between amino acids 11-25 of TP53 of human origin.
@@ -8822,7 +8822,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation Human_-_:missing Mouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
 label TR4
 
-term TRIM28_(sc-81411)
+term TRIM28_(SC-81411)
 tag TRIM28SC81411
 type Antibody
 antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of TRIM28 of human origin.
@@ -9898,6 +9898,41 @@ tag CONTROL
 type control
 description This data represents a control being compared with the other tracks in the set.
 
+term Control_eGFP-BACH1
+tag CONTROLBACH1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-BACH1 PROVISIONAL
+
+term Control_eGFP-CCNE1
+tag CONTROLCCNE1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-CCNE1 PROVISIONAL
+
+term Control_eGFP-CDKN1B
+tag CONTROLCDKN1B
+type control
+description This data represents a control being compared to experiments using antibody eGFP-CDKN1B PROVISIONAL
+
+term Control_eGFP-E2F1
+tag CONTROLE2F1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-E2F1 PROVISIONAL
+
+term Control_eGFP-EKLF1
+tag CONTROLEKLF1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-EKLF1 PROVISIONAL
+
+term Control_eGFP-ELF1
+tag CONTROLELF1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-ELF1 PROVISIONAL
+
+term Control_eGFP-ESR
+tag CONTROLESR
+type control
+description This data represents a control being compared to experiments using antibody eGFP-ESR PROVISIONAL
+
 term Control_eGFP-FOS
 tag CONTROLFOS
 type control
@@ -9913,6 +9948,16 @@ tag CONTROLHDAC8
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HDAC8
 
+term Control_eGFP-HMGB1
+tag CONTROLHMGB1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-HMGB1 PROVISIONAL
+
+term Control_eGFP-ILF2
+tag CONTROLILF2
+type control
+description This data represents a control being compared to experiments using antibody eGFP-ILF2 PROVISIONAL
+
 term Control_eGFP-JunB
 tag CONTROLJUNB
 type control
@@ -9923,10 +9968,40 @@ tag CONTROLJUND
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunD
 
+term Control_eGFP-MLL5
+tag CONTROLMLL5
+type control
+description This data represents a control being compared to experiments using antibody eGFP-MLL5 PROVISIONAL
+
+term Control_eGFP-NCOR1
+tag CONTROLNCOR1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-NCOR1 PROVISIONAL
+
+term Control_eGFP-NF90
+tag CONTROLNF90
+type control
+description This data represents a control being compared to experiments using antibody eGFP-NF90 PROVISIONAL
+
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
+
+term Control_eGFP-SMARCA1
+tag CONTROLSMARCA1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-SMARCA1 PROVISIONAL
+
+term Control_eGFP-SMARCA2
+tag CONTROLSMARCA2
+type control
+description This data represents a control being compared to experiments using antibody eGFP-SMARCA2 PROVISIONAL
+
+term Control_eGFP-STAT1
+tag CONTROLSTAT1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-STAT1 PROVISIONAL
 
 term Control_32bp
 tag CNTRL32B
@@ -11538,6 +11613,33 @@ geo AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
 
+#Uses the GEO terms to be conistent and help with GEO submissions
+### Platform
+# Expected fields:
+# ---------------
+# term (human-readable name)
+# tag (machine-readable name, no special characters. uppercase.)
+# type (informs pipeline code of stanza type, should be seqPlatform)
+# description: Working on inputing description from geo and product website
+
+term GPL13190  
+tag GPL13190 
+geo NimbleGen Human CGH 2.1M Whole-Genome Tiling Array [080131_HG18_WG_CGH_v2D_HX1]
+type platform
+description Human CGH 2.1M Whole-Genome Tiling v2.0D Array PROVISIONAL
+
+term GPL14965 
+tag GPL14965 
+geo NimbleGen Human 3x720k Whole Genome CGH [100718_HG18_WG_CGH_v3.1_HX3]
+type platform
+description Human 3x720k Whole Genome CGH PROVISIONAL
+
+term GPL9156 
+tag GPL9156 
+geo FSU NimbleGen Mouse 385K Whole Genome Tiling
+type platform
+description FSU NimbleGen Mouse 385K Whole Genome Tiling PROVISIONAL
+
 #LABS          This is the CV for naming the labs.
 #term:
 #tag:	       Short, uppercase, no special characters
@@ -11906,6 +12008,20 @@ labPiFull Kevin White
 grantPi White
 organism human
 
+### Gilbert lab
+###
+term FSU
+tag FSU
+type lab
+label Gilbert - FSU
+description Gilber - The Florida State University
+labInst The Florida State University
+labPi Gilbert
+labPiFull David Gilbert
+grantPi Gilbert
+organism human
+
+
 ### Mouse labs
 ###
 
@@ -11995,6 +12111,28 @@ labInst Yale
 labPi Weissman
 labPiFull Sherman Weissman
 grantPi Snyder
+organism mouse
+
+term FSU-m
+tag FSUm
+type lab
+label Gilbert - FSU
+description Gilber - The Florida State University
+labInst The Florida State University
+labPi Gilbert
+labPiFull David Gilbert
+grantPi Gilbert
+organism mouse
+
+term CSHL-m
+tag CSHLm
+type lab
+label Gingeras - CSHL
+description Gingeras - Cold Spring Harbor Laboratory
+labInst Cold Spring Harbor Laboratory
+labPi Gingeras
+labPiFull Thomas Gingeras
+grantPi Gingeras
 organism mouse
 
 ### AWG (DAC) Labs
@@ -12157,6 +12295,13 @@ description Giddings
 grantInst University of North Carolina
 projectName UNC-Giddings
 
+term Gilbert
+tag GILBERT
+type grant
+description Gilbert
+grantInst The Florida State University
+projectName FSU
+
 #################################################################################################################
 #############   Definition of all term types in cv.ra and most other terms that are in the metaDb   #############
 #################################################################################################################
@@ -12198,7 +12343,7 @@ projectName UNC-Giddings
 #	DCC descriptive:
 #  	  300s: origAssembly:305 dataVersion:310 dccAccession:312 dateSubmitted:315 dateResubmitted:320 dateUnrestricted:325 subId:335 geoSeriesAccession:340 geoSampleAccession:345 setType:350 controlId:355
 #	Lab descriptive:
-#  	  400s: labExpId:410 bioRep:415 labProtocolId:420 labVersion:430 mapAlgorithm:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
+#  	  400s: labExpId:410 bioRep:415 labProtocolId:420 labVersion:430 mapAlgorithm:430 platform:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
 #	Miscellaneous junk which will be put into the 500 pot which will sort near the end:
 #  	  500s: typeOfTerm:500 accession:500 expVars:500 obtainedBy:500 region:500 size:500 annotation:590 fragLength:590 fragSize:590 level:590 uniqueness:590
 #	At End:
@@ -12675,6 +12820,16 @@ validate cv or None
 priority 170
 # Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
 # We have talked about obsoleting this term, but thought there was more data like this coming (11/3/10)
+
+term platform
+tag PLATFORM
+type typeOfTerm
+label Platform
+description Platform used in experiment. PROVISIONAL
+searchable multiSelect
+cvDefined yes
+validate cv
+priority 430
 
 term privacy
 tag PRIVACY

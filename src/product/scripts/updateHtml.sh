@@ -33,11 +33,19 @@ else
     usage
 fi
 
+export errCount=0
 if [ ! -d "${BROWSERHOME}" ]; then
     echo "ERROR: BROWSERHOME directory does not exist: ${BROWSERHOME}" 1>&2
+    errCount=`echo $errCount | awk '{print $1+1}'`
 fi
 if [ ! -d "${CGI_BIN}" ]; then
     echo "ERROR: CGI_BIN directory does not exist: ${CGI_BIN}" 1>&2
+    errCount=`echo $errCount | awk '{print $1+1}'`
+fi
+
+if [ $errCount -gt 0 ]; then
+    echo "ERROR: check on the existence of the mentioned directories" 1>&2
+    exit 255
 fi
 
 export DS=`date "+%Y-%m-%d"`
@@ -45,7 +53,7 @@ export FETCHLOG="${LOGDIR}/htdocs/update.${DS}"
 mkdir -p "${LOGDIR}/htdocs"
 
 echo "#    ${RSYNC} --stats --exclude=\"trash\" --exclude=\"lost+found/\" ${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/" > ${FETCHLOG}
-${RSYNC} --stats --exclude="trash" \
+${RSYNC} --stats --exclude="trash" --exclude="visiGene" \
 	--exclude="lost+found/" \
 	${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/ >> ${FETCHLOG} 2>&1
 ${RSYNC} --stats --delete --max-delete=20 --exclude="trash" \

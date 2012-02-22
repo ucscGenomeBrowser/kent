@@ -34,13 +34,13 @@ name rat
 shortLabel Rat
 tables rnBlastTab 
 idSql select target from rnBlastTab where query = '%s'
-pepTable knownGenePep
-geneTable knownGene
+pepTable rgdGene2Pep
+geneTable rgdGene2
+geneUrl ../cgi-bin/hgGene?org=Rat&hgg_gene=%s&hgg_chrom=none
 genomeUrl ../cgi-bin/hgTracks?org=Rat&position=%s
 sorterUrl ../cgi-bin/hgNear?org=Rat&near_search=%s
 otherName RGD
 otherUrl http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=%s
-otherIdSql select uniProt.extDbRef.extAcc1 from uniProt.extDbRef,uniProt.extDb,kgXref where uniProt.extDb.val = 'RGD' and uniProt.extDb.id = uniProt.extDbRef.extDb and uniProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
 priority 25
 
 name zebrafish

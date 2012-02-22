@@ -69,6 +69,7 @@ set pteVam pteVam1
 set rheMac rheMac2,rheMac3
 set rn rn3,rn4
 set sacCer sacCer1,sacCer2,sacCer3
+set sarHar sarHar1
 set sorAra sorAra1
 set speTri speTri1
 set susScr susScr1,susScr2
@@ -82,14 +83,14 @@ set vicPac vicPac1
 set xenTro xenTro1,xenTro2,xenTro3
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,$hetGla,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caeAng,$caePb,$caeRem,$caeJap,$caeSp11,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,$dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$turTru,$vicPac,$tupBel
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,$hetGla,$sarHar,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caeAng,$caePb,$caeRem,$caeJap,$caeSp11,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,$dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$turTru,$vicPac,$tupBel
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
-set wgs $rn,$panTro,$galGal,$melGal,$myoLuc,$hetGla,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,$cioSav,$dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$tupBel,$turTru,$vicPac
+set wgs $rn,$panTro,$galGal,$melGal,$myoLuc,$hetGla,$sarHar,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,$cioSav,$dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$tupBel,$turTru,$vicPac
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $panTro,$galGal,$melGal,$myoLuc,$hetGla,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caeAng,$caePb,$caeRem,$caeJap,$caeSp11,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$oviAri,$loxAfr,$haeCon,$melInc,$melHap,$bruMal,$macEug,$gorGor
+set xrg $panTro,$galGal,$melGal,$myoLuc,$hetGla,$sarHar,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caeAng,$caePb,$caeRem,$caeJap,$caeSp11,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$oviAri,$loxAfr,$haeCon,$melInc,$melHap,$bruMal,$macEug,$gorGor
 
 # Ensembl gene track lists constructed from update procedure
 # set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,cavPor3,ci2,cioSav2,danRer7,dm3,equCab2,fr2,galGal3,gasAcu1,gorGor3,hg19,loxAfr3,melGal1,mm9,monDom5,nomLeu1,ornAna1,oryCun2,oryLat2,panTro2,ponAbe2,rheMac2,rn4,sacCer3,susScr1,susScr2,taeGut1,tetNig2
@@ -161,7 +162,7 @@ set ccdsDb hg19,hg18,hg17,mm8,mm9,mm10
 set split splitPrefix=chr%\_
 
 # Databases with the tRNAs track
-set tRNAsDbs hg18,hg19,mm9,mm10,rn4
+set tRNAsDbs hg18,hg19,mm9,mm10,rn4,ailMel1,caePb1,canFam2,danRer5,felCat3,gorGor3,ornAna1,panTro3,susScr2,anoCar2,caePb2,cavPor3,danRer6,felCat4,loxAfr3,oryCun2,petMar1,taeGut1,bosTau4,caeRem2,cb3,danRer7,fr2,melGal1,oryLat2,ponAbe2,tetNig2,bosTau6,caeRem3,ce4,equCab1,galGal3,monDom5,oviAri1,priPac1,xenTro3,caeJap1,calJac3,ce6,equCab2,gasAcu1,nomLeu1,panTro2,rheMac2,sarHar1
 
 # Databases with the CGAP SAGE track
 set cgapSageDbs hg18,hg19,mm8
@@ -356,8 +357,8 @@ identifier ncbiTaxon
 
 identifier tRNAsId
 "ID of tRNAs"
-    $tRNAsDbs.tRNAs.name dupeOk
-    hg19.kgXref.tRnaName
+    hg19.tRNAs.name 
+    hg19.kgXref.tRnaName exclude= minCheck=0.50
 
 # CGAP SAGE track Stuff
 
@@ -1586,6 +1587,11 @@ identifier kgOldId
     hg17.kgOld.name dupeOk
     hg17.kgXrefOld.kgId  minCheck=.95
 
+identifier rn4KgPrevious
+"rn4 knownGenePrevious was knownGene"
+    rn4.knownGenePrevious.name dupeOk
+    rn4.kgXrefPrevious.kgId
+
 identifier knownGeneId dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
@@ -1679,6 +1685,7 @@ identifier knownGeneOld5Id dependency
 "Previous UCSC Gene build"
     $kgDb.knownGeneOld5.name
     $kgDb.kg5ToKg6.oldId full
+    $kgDb.kgXrefOld5.kgID full
 
 identifier knownGeneOldId dependency
 "Still-previous UCSC Genes build"
@@ -1737,8 +1744,8 @@ identifier knownXref
 
 identifier tRNAName
 "tRNA track name"
-    $kgDb3.kgXref.tRnaName dupeOk
-    $tRNAsDbs.tRNAs.name
+    hg19.kgXref.tRnaName exclude=
+    hg19.tRNAs.name minCheck=0.50
 
 identifier ccdsGeneId
 "CCDS Gene ID"

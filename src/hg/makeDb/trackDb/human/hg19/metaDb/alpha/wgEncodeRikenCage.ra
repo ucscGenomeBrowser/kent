@@ -242,14 +242,14 @@ subId 4517
 view TssGencV7
 
 metaObject wgEncodeRikenCageA549CellPapTssHmm
-objType file
+objType table
 bioRep 021WC,022WC
 cell A549
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001158
 expId 1158
 fileName wgEncodeRikenCageA549CellPapTssHmm.bedRnaElements.gz
@@ -263,7 +263,8 @@ md5sum c981394be73310954d2bbc10aead335a
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5067
+subId 5610
+tableName wgEncodeRikenCageA549CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageAg04450CellPapAlnRep1
@@ -505,14 +506,14 @@ subId 4520
 view TssGencV7
 
 metaObject wgEncodeRikenCageAg04450CellPapTssHmm
-objType file
+objType table
 bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001159
 expId 1159
 fileName wgEncodeRikenCageAg04450CellPapTssHmm.bedRnaElements.gz
@@ -526,7 +527,8 @@ md5sum 8793e7cbf5647cf03206a8175fdcda92
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5070
+subId 5610
+tableName wgEncodeRikenCageAg04450CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageBjCellPapAlnRep1
@@ -768,14 +770,14 @@ subId 4498
 view TssGencV7
 
 metaObject wgEncodeRikenCageBjCellPapTssHmm
-objType file
+objType table
 bioRep 037WC,038WC
 cell BJ
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001160
 expId 1160
 fileName wgEncodeRikenCageBjCellPapTssHmm.bedRnaElements.gz
@@ -789,7 +791,8 @@ md5sum a93ed798789b511066e6c4ae5b3c90c1
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5048
+subId 5610
+tableName wgEncodeRikenCageBjCellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageGm12878CellPapAlnRep1
@@ -1031,14 +1034,14 @@ subId 4531
 view TssGencV7
 
 metaObject wgEncodeRikenCageGm12878CellPapTssHmm
-objType file
+objType table
 bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001680
 expId 1680
 fileName wgEncodeRikenCageGm12878CellPapTssHmm.bedRnaElements.gz
@@ -1052,7 +1055,8 @@ md5sum 1e1b751b9ccf739f426cc00ac7b582c4
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5082
+subId 5610
+tableName wgEncodeRikenCageGm12878CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageGm12878CytosolLongnonpolyaAln
@@ -1324,6 +1328,28 @@ rnaExtract longNonPolyA
 subId 5075
 view TssHmm
 
+metaObject wgEncodeRikenCageGm12878CytosolPamTssHmmV2
+objType table
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageGm12878CytosolPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I27
+labProtocolId gen0104C-cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageGm12878CytosolPamTssHmmV2
+view TssHmm
+
 metaObject wgEncodeRikenCageGm12878CytosolPapAlnRep1
 objType table
 bioRep 003C
@@ -1563,14 +1589,14 @@ subId 4508
 view TssGencV7
 
 metaObject wgEncodeRikenCageGm12878CytosolPapTssHmm
-objType file
+objType table
 bioRep 003C,004C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001679
 expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapTssHmm.bedRnaElements.gz
@@ -1584,7 +1610,8 @@ md5sum 65495d5e51fb2a19fd802209d6841540
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5058
+subId 5610
+tableName wgEncodeRikenCageGm12878CytosolPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageGm12878NucleolusTotalAln
@@ -1796,6 +1823,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5057
+view TssHmm
+
+metaObject wgEncodeRikenCageGm12878NucleolusTotalTssHmmV2
+objType table
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageGm12878NucleolusTotalTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I69
+labProtocolId gen0109NLtcage
+localization nucleolus
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageGm12878NucleolusTotalTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1
@@ -2055,6 +2104,28 @@ rnaExtract longNonPolyA
 subId 5059
 view TssHmm
 
+metaObject wgEncodeRikenCageGm12878NucleusPamTssHmmV2
+objType table
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageGm12878NucleusPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J59
+labProtocolId gen0110N-cage
+localization nucleus
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageGm12878NucleusPamTssHmmV2
+view TssHmm
+
 metaObject wgEncodeRikenCageGm12878NucleusPapAlnRep1
 objType table
 bioRep 003N
@@ -2294,14 +2365,14 @@ subId 4536
 view TssGencV7
 
 metaObject wgEncodeRikenCageGm12878NucleusPapTssHmm
-objType file
+objType table
 bioRep 003N,004N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001678
 expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapTssHmm.bedRnaElements.gz
@@ -2315,7 +2386,8 @@ md5sum 7cb292e449dc50f0baeb6975b7397d50
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5086
+subId 5610
+tableName wgEncodeRikenCageGm12878NucleusPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageH1hescCellLongnonpolyaAln
@@ -2585,6 +2657,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5080
+view TssHmm
+
+metaObject wgEncodeRikenCageH1hescCellPamTssHmmV2
+objType table
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageH1hescCellPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I67
+labProtocolId gen0113WC-cage
+localization cell
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageH1hescCellPamTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageH1hescCellPapAlnRep1
@@ -2938,14 +3032,14 @@ subId 4505
 view TssGencV7
 
 metaObject wgEncodeRikenCageH1hescCellPapTssHmm
-objType file
+objType table
 bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001138
 expId 1138
 fileName wgEncodeRikenCageH1hescCellPapTssHmm.bedRnaElements.gz
@@ -2959,7 +3053,8 @@ md5sum e39512569cd08fd8778687476c2df0ce
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5055
+subId 5610
+tableName wgEncodeRikenCageH1hescCellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageH1hescCytosolPapAlnRep2
@@ -3639,14 +3734,14 @@ subId 4504
 view TssGencV7
 
 metaObject wgEncodeRikenCageHelas3CellPapTssHmm
-objType file
+objType table
 bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001146
 expId 1146
 fileName wgEncodeRikenCageHelas3CellPapTssHmm.bedRnaElements.gz
@@ -3660,7 +3755,8 @@ md5sum 2c8b37394850124c84e208644852cdeb
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5054
+subId 5610
+tableName wgEncodeRikenCageHelas3CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaAln
@@ -3926,6 +4022,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5085
+view TssHmm
+
+metaObject wgEncodeRikenCageHelas3CytosolPamTssHmmV2
+objType table
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageHelas3CytosolPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J56
+labProtocolId gen0121C-cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageHelas3CytosolPamTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageHelas3CytosolPapAlnRep1
@@ -4279,14 +4397,14 @@ subId 4527
 view TssGencV7
 
 metaObject wgEncodeRikenCageHelas3CytosolPapTssHmm
-objType file
+objType table
 bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001144
 expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapTssHmm.bedRnaElements.gz
@@ -4300,7 +4418,8 @@ md5sum db7055e2a48aa72184fddb2d819a509a
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5079
+subId 5610
+tableName wgEncodeRikenCageHelas3CytosolPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalAln
@@ -4511,6 +4630,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5083
+view TssHmm
+
+metaObject wgEncodeRikenCageHelas3NucleolusTotalTssHmmV2
+objType table
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageHelas3NucleolusTotalTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId J58
+labProtocolId gen0123NLtcage
+localization nucleolus
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageHelas3NucleolusTotalTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageHelas3NucleusPapAlnRep1
@@ -4864,14 +5005,14 @@ subId 4522
 view TssGencV7
 
 metaObject wgEncodeRikenCageHelas3NucleusPapTssHmm
-objType file
+objType table
 bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001145
 expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapTssHmm.bedRnaElements.gz
@@ -4885,7 +5026,8 @@ md5sum d89593d4ac0c43172acfc4e735bdb940
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5072
+subId 5610
+tableName wgEncodeRikenCageHelas3NucleusPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CellPapAlnRep1
@@ -5239,14 +5381,14 @@ subId 4539
 view TssGencV7
 
 metaObject wgEncodeRikenCageHepg2CellPapTssHmm
-objType file
+objType table
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001149
 expId 1149
 fileName wgEncodeRikenCageHepg2CellPapTssHmm.bedRnaElements.gz
@@ -5261,7 +5403,8 @@ objStatus replaced - this version has scores that exceed chromosome lengths
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5060
+subId 5610
+tableName wgEncodeRikenCageHepg2CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CellPapTssHmmV2
@@ -5557,6 +5700,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5064
+view TssHmm
+
+metaObject wgEncodeRikenCageHepg2CytosolPamTssHmmV2
+objType table
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageHepg2CytosolPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I42
+labProtocolId gen0125C-cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageHepg2CytosolPamTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CytosolPapAlnRep1
@@ -5910,14 +6075,14 @@ subId 4513
 view TssGencV7
 
 metaObject wgEncodeRikenCageHepg2CytosolPapTssHmm
-objType file
+objType table
 bioRep 013C,014C
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001147
 expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapTssHmm.bedRnaElements.gz
@@ -5931,7 +6096,8 @@ md5sum 27ddb2e1292d99fd91152f2416af800f
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5063
+subId 5610
+tableName wgEncodeRikenCageHepg2CytosolPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2NucleolusTotalAln
@@ -6170,6 +6336,28 @@ project wgEncode
 rnaExtract total
 subId 5147
 submittedDataVersion V2 - Filtered out the off end of chromosome reads
+view TssHmm
+
+metaObject wgEncodeRikenCageHepg2NucleolusTotalTssHmmV3
+objType table
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageHepg2NucleolusTotalTssHmmV3.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I68
+labProtocolId gen0127NLtcage
+localization nucleolus
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 5611
+submittedDataVersion V3 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageHepg2NucleolusTotalTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2NucleusLongnonpolyaAln
@@ -6439,6 +6627,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5061
+view TssHmm
+
+metaObject wgEncodeRikenCageHepg2NucleusPamTssHmmV2
+objType table
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageHepg2NucleusPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I44
+labProtocolId gen0128N-cage
+localization nucleus
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageHepg2NucleusPamTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2NucleusPapAlnRep1
@@ -6792,14 +7002,14 @@ subId 4528
 view TssGencV7
 
 metaObject wgEncodeRikenCageHepg2NucleusPapTssHmm
-objType file
+objType table
 bioRep 013N,014N
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001148
 expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapTssHmm.bedRnaElements.gz
@@ -6813,7 +7023,8 @@ md5sum ca6ebdfada6059bcd6c987dbf904b666
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5077
+subId 5610
+tableName wgEncodeRikenCageHepg2NucleusPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHuvecCellPapAlnRep1
@@ -7167,14 +7378,14 @@ subId 4503
 view TssGencV7
 
 metaObject wgEncodeRikenCageHuvecCellPapTssHmm
-objType file
+objType table
 bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001141
 expId 1141
 fileName wgEncodeRikenCageHuvecCellPapTssHmm.bedRnaElements.gz
@@ -7188,7 +7399,8 @@ md5sum ae957ee987c2f92d9fc3f6711679ade2
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5053
+subId 5610
+tableName wgEncodeRikenCageHuvecCellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHuvecCytosolLongnonpolyaAln
@@ -7458,6 +7670,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5073
+view TssHmm
+
+metaObject wgEncodeRikenCageHuvecCytosolPamTssHmmV2
+objType table
+cell HUVEC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageHuvecCytosolPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I72
+labProtocolId gen0116C-cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageHuvecCytosolPamTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageHuvecCytosolPapAlnRep3
@@ -7811,14 +8045,14 @@ subId 4515
 view TssGencV7
 
 metaObject wgEncodeRikenCageHuvecCytosolPapTssHmm
-objType file
+objType table
 bioRep 029C,030C
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001142
 expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapTssHmm.bedRnaElements.gz
@@ -7832,7 +8066,8 @@ md5sum 8b61e7f5f2b909587a11ff7cf7235287
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5066
+subId 5610
+tableName wgEncodeRikenCageHuvecCytosolPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHuvecNucleusPapAlnRep3
@@ -8186,14 +8421,14 @@ subId 4497
 view TssGencV7
 
 metaObject wgEncodeRikenCageHuvecNucleusPapTssHmm
-objType file
+objType table
 bioRep 029N,030N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001143
 expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapTssHmm.bedRnaElements.gz
@@ -8207,7 +8442,8 @@ md5sum 70a90c63421dcd1a0de9a470db421dd3
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5030
+subId 5610
+tableName wgEncodeRikenCageHuvecNucleusPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageK562CellPapAlnRep1
@@ -8561,14 +8797,14 @@ subId 4532
 view TssGencV7
 
 metaObject wgEncodeRikenCageK562CellPapTssHmm
-objType file
+objType table
 bioRep 001WC,002WC
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001150
 expId 1150
 fileName wgEncodeRikenCageK562CellPapTssHmm.bedRnaElements.gz
@@ -8582,7 +8818,8 @@ md5sum b1aeb3a48f7bfb645394aa0947e85e81
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5081
+subId 5610
+tableName wgEncodeRikenCageK562CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageK562ChromatinTotalAln
@@ -8826,6 +9063,28 @@ project wgEncode
 rnaExtract total
 subId 5147
 submittedDataVersion V2 - Filtered out the off end of chromosome reads
+view TssHmm
+
+metaObject wgEncodeRikenCageK562ChromatinTotalTssHmmV3
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageK562ChromatinTotalTssHmmV3.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I35
+labProtocolId gen0134CHtcage
+localization chromatin
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 5611
+submittedDataVersion V3 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageK562ChromatinTotalTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageK562CytosolLongnonpolyaAln
@@ -9149,6 +9408,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5051
+view TssHmm
+
+metaObject wgEncodeRikenCageK562CytosolPamTssHmmV2
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageK562CytosolPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I22
+labProtocolId gen0136C-cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageK562CytosolPamTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageK562CytosolPapAln
@@ -9669,14 +9950,14 @@ subId 4500
 view TssGencV7
 
 metaObject wgEncodeRikenCageK562CytosolPapTssHmm
-objType file
+objType table
 bioRep 001C,002C
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH000332
 expId 332
 fileName wgEncodeRikenCageK562CytosolPapTssHmm.bedRnaElements.gz
@@ -9690,7 +9971,8 @@ md5sum 3d43f20a26352f125ed54bc42ecf93f2
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5050
+subId 5610
+tableName wgEncodeRikenCageK562CytosolPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageK562NucleolusTotalAln
@@ -9872,6 +10154,28 @@ project wgEncode
 rnaExtract total
 subId 5147
 submittedDataVersion V2 - Filtered out the off end of chromosome reads
+view TssHmm
+
+metaObject wgEncodeRikenCageK562NucleolusTotalTssHmmV3
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageK562NucleolusTotalTssHmmV3.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I33
+labProtocolId gen0144NLtcage
+localization nucleolus
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 5611
+submittedDataVersion V3 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageK562NucleolusTotalTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageK562NucleoplasmTotalAln
@@ -10115,6 +10419,28 @@ project wgEncode
 rnaExtract total
 subId 5147
 submittedDataVersion V2 - Filtered out the off end of chromosome reads
+view TssHmm
+
+metaObject wgEncodeRikenCageK562NucleoplasmTotalTssHmmV3
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageK562NucleoplasmTotalTssHmmV3.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I34
+labProtocolId gen0147NPtcage
+localization nucleoplasm
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 5611
+submittedDataVersion V3 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageK562NucleoplasmTotalTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageK562NucleusLongnonpolyaAln
@@ -10432,6 +10758,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5087
+view TssHmm
+
+metaObject wgEncodeRikenCageK562NucleusPamTssHmmV2
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageK562NucleusPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I23
+labProtocolId gen0149N-cage
+localization nucleus
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageK562NucleusPamTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageK562NucleusPapAlnRep1
@@ -10785,14 +11133,14 @@ subId 4518
 view TssGencV7
 
 metaObject wgEncodeRikenCageK562NucleusPapTssHmm
-objType file
+objType table
 bioRep 001N,002N
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH000333
 expId 333
 fileName wgEncodeRikenCageK562NucleusPapTssHmm.bedRnaElements.gz
@@ -10806,7 +11154,8 @@ md5sum 6a4bb813bee7fa3207812fd64262ba04
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5068
+subId 5610
+tableName wgEncodeRikenCageK562NucleusPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageK562PolysomeLongnonpolyaAln
@@ -11076,6 +11425,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5062
+view TssHmm
+
+metaObject wgEncodeRikenCageK562PolysomePamTssHmmV2
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageK562PolysomePamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I32
+labProtocolId gen0152P-cage
+localization polysome
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageK562PolysomePamTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageMcf7CellPapAlnRep1
@@ -11373,14 +11744,14 @@ subId 4521
 view TssGencV7
 
 metaObject wgEncodeRikenCageMcf7CellPapTssHmm
-objType file
+objType table
 bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001151
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapTssHmm.bedRnaElements.gz
@@ -11394,7 +11765,8 @@ md5sum aa87ad4ec6b54026d83ab8e82b3c1dea
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5071
+subId 5610
+tableName wgEncodeRikenCageMcf7CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageNhekCellPapAlnRep1
@@ -11748,14 +12120,14 @@ subId 4499
 view TssGencV7
 
 metaObject wgEncodeRikenCageNhekCellPapTssHmm
-objType file
+objType table
 bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001152
 expId 1152
 fileName wgEncodeRikenCageNhekCellPapTssHmm.bedRnaElements.gz
@@ -11769,7 +12141,8 @@ md5sum 3721faf6d9c6d1c6951ce2cb051ca694
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5049
+subId 5610
+tableName wgEncodeRikenCageNhekCellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageNhekCytosolLongnonpolyaAln
@@ -12039,6 +12412,28 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5084
+view TssHmm
+
+metaObject wgEncodeRikenCageNhekCytosolPamTssHmmV2
+objType table
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageNhekCytosolPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I70
+labProtocolId gen0155C-cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageNhekCytosolPamTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageNhekCytosolPapAlnRep3
@@ -12336,14 +12731,14 @@ subId 4502
 view TssGencV7
 
 metaObject wgEncodeRikenCageNhekCytosolPapTssHmm
-objType file
+objType table
 bioRep 027C,028C
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001153
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapTssHmm.bedRnaElements.gz
@@ -12357,7 +12752,8 @@ md5sum 95a52b5cf4c4cf9ebb422fa7b4212d89
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5052
+subId 5610
+tableName wgEncodeRikenCageNhekCytosolPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageNhekNucleusLongnonpolyaAln
@@ -12629,6 +13025,28 @@ rnaExtract longNonPolyA
 subId 5088
 view TssHmm
 
+metaObject wgEncodeRikenCageNhekNucleusPamTssHmmV2
+objType table
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageNhekNucleusPamTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I71
+labProtocolId gen0157N-cage
+localization nucleus
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 5609
+submittedDataVersion V2 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageNhekNucleusPamTssHmmV2
+view TssHmm
+
 metaObject wgEncodeRikenCageNhekNucleusPapAlnRep3
 objType table
 bioRep 027N
@@ -12868,6 +13286,28 @@ project wgEncode
 rnaExtract longPolyA
 subId 5147
 submittedDataVersion V2 - Filtered out the off end of chromosome reads
+view TssHmm
+
+metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV3
+objType table
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
+fileName wgEncodeRikenCageNhekNucleusPapTssHmmV3.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId K09
+labProtocolId 027N+cage
+localization nucleus
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 5611
+submittedDataVersion V3 - Repacing . with -1 for missing data
+tableName wgEncodeRikenCageNhekNucleusPapTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageProstateCellLongnonpolyaAln
@@ -13381,14 +13821,14 @@ subId 4524
 view TssGencV7
 
 metaObject wgEncodeRikenCageSknshraCellPapTssHmm
-objType file
+objType table
 bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
+dateSubmitted 2012-02-10
+dateUnrestricted 2012-11-10
 dccAccession wgEncodeEH001157
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapTssHmm.bedRnaElements.gz
@@ -13402,7 +13842,8 @@ md5sum 0ca0d6d5149405dc2703b0a013d1a7e6
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
-subId 5074
+subId 5610
+tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -1019563239
+# MAGIC: -1050897160

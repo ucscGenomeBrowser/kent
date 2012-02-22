@@ -17,6 +17,7 @@ wgEncodeGisRnaSeq.ra \
 wgEncodeHaibGenotype.ra \
 wgEncodeHaibMethyl450.ra \
 wgEncodeHaibMethylRrbs.ra \
+wgEncodeHaibRnaSeq.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeMapability.ra \
 wgEncodeOpenChromChip.ra \

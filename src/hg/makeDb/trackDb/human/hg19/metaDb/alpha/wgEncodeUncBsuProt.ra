@@ -133,6 +133,44 @@ subId 4177
 tableName wgEncodeUncBsuProtGm12878NucleusSig
 view Signal
 
+metaObject wgEncodeUncBsuProtK562CellIngelModifiedPeptideMapping
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-16
+fileName wgEncodeUncBsuProtK562CellIngelModifiedPeptideMapping.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 5557
+tableName wgEncodeUncBsuProtK562CellIngelModifiedPeptideMapping
+view ModifiedPeptideMapping
+
+metaObject wgEncodeUncBsuProtK562CellIngelSig
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-16
+fileName wgEncodeUncBsuProtK562CellIngelSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 5558
+tableName wgEncodeUncBsuProtK562CellIngelSig
+view Signal
+
 metaObject wgEncodeUncBsuProtK562CytosolRaw
 objType file
 cell K562
@@ -182,9 +220,9 @@ cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-08
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-dateResubmitted 2012-02-08
 fileName wgEncodeUncBsuProtK562MembranefractionFaspRaw.peptideMapping.gz
 grant Giddings
 lab UNC/BSU
@@ -201,9 +239,9 @@ cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-08
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
-dateResubmitted 2012-02-08
 fileName wgEncodeUncBsuProtK562MembranefractionFaspSig.peptideMapping.gz
 grant Giddings
 lab UNC/BSU
@@ -345,4 +383,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: -907339946
+# MAGIC: -1118370930

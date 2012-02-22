@@ -241,7 +241,7 @@ $(function () {
 
     // show only spinner until data is retrieved
     $('#matrixTable').hide();
-    spinner = showLoadingImage("spinner");
+    spinner = showLoadingImage("spinner", true);
 
     // add radio buttons for search type to specified div on page
     encodeProject.addSearchPanel('#searchTypePanel');

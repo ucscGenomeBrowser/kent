@@ -112,7 +112,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     }
 
 printf("insert into %s (hubUrl,shortLabel,longLabel,registrationTime,dbCount,dbList) values (\"%s\",\"%s\", \"%s\",now(),%d, \"%s\");\n",
-    table, url, tHub->shortLabel, tHub->shortLabel, dbCount, dy->string); 
+    table, url, tHub->shortLabel, tHub->longLabel, dbCount, dy->string); 
 
 return 0;
 }

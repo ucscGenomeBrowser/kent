@@ -43,6 +43,7 @@ var subCfg = { // subtrack config module.
       // Note this is often called directly as the onchange event function
         if (obj == undefined || $.type(obj) === "string")
             obj = this;
+
         $(obj).addClass('changed');
 
         // checkboxes have hidden boolshads which should be marked when unchecked
@@ -845,7 +846,9 @@ var subCfg = { // subtrack config module.
         // DO THIS AFTER Views
         // NOTE: excluding sortOrder and showCfg which are special cases we don't care about in subCfg
         // Excluding views and subCBs because a {composite}_{subtrack} naming scheme may be used
-        var compObjs = $('select,input').filter("[name^='"+subCfg.compositeName+"\\.'],[name^='"+subCfg.compositeName+"_']").not(".viewDD,.subCB");
+        var compObjs = $('select,input').filter("[name^='"+subCfg.compositeName+"\\.'],[name^='"+subCfg.compositeName+"_']");
+        // viewDD, subCB already done. non-abc matCBs not needed, as they shouldn't go to the cart.!
+        compObjs = $(compObjs).not(".viewDD,.subCB,.matCB:not(.abc)");
         if (compObjs.length > 0) {
             $(compObjs).each(function (i) {
                 if (this.type != 'hidden') {

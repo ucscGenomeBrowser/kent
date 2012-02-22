@@ -35,10 +35,11 @@ use HgDb;
 sub usage {
     # Usage statement
     print STDERR <<END;
-usage: encodeFilesList <db> [options]
+usage: encodeMkFilesList <db> [options]
 
 Creates files.txt and optionally md5sum.txt.
-The md5summing function will md5sum the internal contents of any gzipped file.
+The md5summing function will md5sum the internal contents of any gzipped file, 
+but stores the external md5sum in md5sum.txt and metaDb.
 
 options:
 
@@ -188,6 +189,7 @@ sub getMd5Files {
     my $md5hist = $_[2];
     my @statlist = @{$_[3]};
     my %opt = %{$_[4]};
+    my %gzmd5sums;
     my %lastmod;
     my %tempmd5;
     my %files;
@@ -215,7 +217,11 @@ sub getMd5Files {
             my $file = $line[0];
             my $md5 = $line[1];
             my $lastmod = $line[2];
-            
+            my $gzmd5;
+            if ($md5 =~ m/(\S+),(\S+)/) {
+                $md5 = $1;
+                $gzmd5 = $2;
+            }
             # make sure file exists, not deleted, etc....
             unless (-e $file) {
                 next;
@@ -224,6 +230,9 @@ sub getMd5Files {
                 next;
             }
             $md5sums{$file} = $md5;
+            if ($gzmd5) {
+                $gzmd5sums{$file} = $gzmd5;
+            }
             if ($lastmod) {
                 $lastmod{$file} = $lastmod;
             } else {
@@ -265,6 +274,7 @@ sub getMd5Files {
     my @return;
     push @return, \@md5files;
     push @return, \%md5sums;
+    push @return, \%gzmd5sums;
     return (\@return);
 }
 
@@ -478,6 +488,7 @@ unless (exists $tables{$metadb}) {
 
 my %md5sums;
 my %seenmd5s;
+my %gzmd5sums;
 
 # structure {fileInfo}->{filename}->{key}
 my %fileInfo;
@@ -518,14 +529,19 @@ if ($opt{'md5'}) {
     my @md5return = @{&getMd5Files(\@files, \%md5sums, $md5hist, \@statlist, \%opt)};
     my @md5files = @{$md5return[0]};
     %md5sums = %{$md5return[1]};
+    %gzmd5sums = %{$md5return[2]};
 
     # process only if there are files to process
+    $db->disconnect;
     if (@md5files) {
         # this launches a subroutine at the bottom, because threadstatus must be encountered
         #by the interpreter before it is seen in a sub
-        %md5sums = %{&doMd5Threads(\%md5sums, \@md5files, \%opt)};
+        my @return = @{&doMd5Threads(\%md5sums, \@md5files, \%opt, \%gzmd5sums)};
+        %md5sums = %{$return[0]};
+        %gzmd5sums = %{$return[1]};
     }
-    
+    $db = HgDb->new(DB => $assm) or die "die: Can't connect to DB: $assm\n";   
+ 
     open MDF, ">md5sum.txt" or die "die: can't open md5sum.txt file to write\n";
     if ($opt{'verbose'} >= 1) {
         print STDERR "\n";
@@ -543,7 +559,11 @@ if ($opt{'md5'}) {
     }
     foreach my $file (sort { $a cmp $b } keys %md5sums) {
         my @stat = stat("$file");
-        print MDF "$file $md5sums{$file} $stat[9]\n";
+        my $sum = $md5sums{$file};
+        if (exists $gzmd5sums{$file}) {
+            $sum = "$sum,$gzmd5sums{$file}";
+        }
+        print MDF "$file $sum $stat[9]\n";
     }
     close MDF;
 } else {
@@ -657,16 +677,27 @@ foreach my $file (@fileMask) {
     $fileInfo{$file} = \%fileHash;
 }
 
-for my $file (sort { $a cmp $b } keys %md5sums) {
+
+my %comparemd5;
+foreach my $file (keys %md5sums) {
+    if (exists $gzmd5sums{$file}) {
+        $comparemd5{$file} = $gzmd5sums{$file};
+    } else {
+        $comparemd5{$file} = $md5sums{$file};
+    }
+
+}
+
+for my $file (sort { $a cmp $b } keys %comparemd5) {
     if (exists $fileInfo{$file} and exists ${$fileInfo{$file}}{'objStatus'} and ${$fileInfo{$file}}{'objStatus'} =~ m/re.*/) {
         next
     }
-    unless (exists $seenmd5s{$md5sums{$file}}) {
-        $seenmd5s{$md5sums{$file}} = $file;
+    unless (exists $seenmd5s{$comparemd5{$file}}) {
+        $seenmd5s{$comparemd5{$file}} = $file;
     } else {
         unless ($opt{'quiet'}) {
-            print STDERR "$file and $seenmd5s{$md5sums{$file}}".
-                     " have the same md5sum: $md5sums{$file}\n";
+            print STDERR "$file and $seenmd5s{$comparemd5{$file}}".
+                     " have the same md5sum: $comparemd5{$file}\n";
         }
     }
 }
@@ -737,6 +768,7 @@ sub doMd5Threads {
     my %md5sums = %{$_[0]};
     my @md5files = sort @{$_[1]};
     my %opt = %{$_[2]};
+    my %gzmd5sums = %{$_[3]};
     my %threadContainer;
     # only 2 threads allowed, filesystem limitation, ~ 125 MB/s from disk only
     my $threads = 2;
@@ -771,9 +803,16 @@ sub doMd5Threads {
 
                 #join result back to main
                 my $sum = $threadContainer{$thrid}->join();
-
+                my $gzsum;
+                if ($sum =~ m/(\S+),(\S+)/) {
+                    $sum = $1;
+                    $gzsum = $2;
+                }
                 #thread stat, name of file is the return status
                 $md5sums{$threadStatus{$thrid}} = $sum;
+                if ($gzsum){
+                    $gzmd5sums{$threadStatus{$thrid}} = $gzsum;
+                }
                 delete $threadContainer{$thrid};
                 delete $threadStatus{$thrid};
                 #if file list is still populated
@@ -799,9 +838,23 @@ sub doMd5Threads {
 
     #clean up the remaining threads
     foreach my $thrid (keys %threadContainer) {
-        $md5sums{$threadStatus{$thrid}} = $threadContainer{$thrid}->join();
+        my $sum = $threadContainer{$thrid}->join();
+        my $gzsum;
+        if ($sum =~ m/(\S+),(\S+)/) {
+            $sum = $1;
+            $gzsum = $2;
+        }
+        #thread stat, name of file is the return status
+        $md5sums{$threadStatus{$thrid}} = $sum;
+        if ($gzsum){
+            $gzmd5sums{$threadStatus{$thrid}} = $gzsum;
+        }    
+
     }
-    return (\%md5sums);
+    my @return;
+    push @return, \%md5sums;
+    push @return, \%gzmd5sums;
+    return (\@return);
 }
 
 sub md5sum {
@@ -812,11 +865,13 @@ sub md5sum {
     my $file = $_[0];
     my $id = $_[1];
     my $sum = "";
+    my $gzsum;
     if ($file =~ m/\.gz$/) {
-        $sum = `zcat $file | md5sum`;
-    } else {
-        $sum = `cat $file | md5sum`;
+        $gzsum = `zcat $file | md5sum`;
+        chomp $gzsum;
+        $gzsum =~ s/[^0-9a-f]//g;
     }
+    $sum = `cat $file | md5sum`;
     chomp $sum;
     $sum =~ s/[^0-9a-f]//g;
 
@@ -827,5 +882,9 @@ sub md5sum {
     # lock shared threadstatus variable for thread-safeness
     lock(%threadStatus);
     $threadStatus{$id} = $file;
+    if ($gzsum) {
+        my $return = "$sum,$gzsum";
+        return ($return);
+    }
     return ($sum);
 }
