@@ -1,5 +1,6 @@
-/* encodeProject - javascript utilities for ENCODE-specific things 
- such as controlled vocabulary and experiment table
+/* encodeProject - 
+        javascript utilities for ENCODE-specific things 
+        such as controlled vocabulary and experiment table
 
  Formatted: jsbeautify.py -j -k
  Syntax checked: jslint --indent=4 --plusplus=true --strict=false --browser=true
@@ -7,30 +8,21 @@
 /*global $ */
 
 var encodeProject = (function () {
+
+    // Configurable variables - change with setup function below
+
     var server = "genome.ucsc.edu",
         assembly = "hg19",
         cgi = "/cgi-bin/hgApi?";
 
     var accessionPrefix = 'wgEncodeE?';
 
-
-    // TODO: modularize by extending Array.sort ?
-
-    function cmpCV(a, b) {
-        // Helper function for case-insensitive sort of CV objects
-        //  Use label if any, otherwise the term
-        A = (a.label !== undefined ? a.label.toUpperCase() : a.term.toUpperCase());
-        B = (b.label !== undefined ? b.label.toUpperCase() : b.term.toUpperCase());
-        if (A < B) {
-            return -1;
-        }
-        if (A > B) {
-            return 1;
-        }
-        return 0;
-    }
+    // Functions
 
     return {
+
+        // Configuration
+
         setup: function (settings) {
             // Change defaults
             if (settings.server) {
@@ -41,20 +33,54 @@ var encodeProject = (function () {
             }
         },
 
-        cmpNoCase: function (a, b) {
-        // Helper function for case-insensitive sort - belongs in
-        // more generic lib
-            var A, B;
-            A = a.toUpperCase();
-            B = b.toUpperCase();
-            if (A < B) {
-                return -1;
-            }
-            if (A > B) {
-                return 1;
-            }
-            return 0;
+        getServer: function () {
+            // Get currently set server 
+            return server;
         },
+
+        // Server interaction
+
+        serverRequests: {
+            // Requests for data from server API
+            experiment: "cmd=encodeExperiments",
+            expId: "cmd=encodeExpId",
+            dataType: "cmd=cv&type=dataType",
+            cellType: "cmd=cv&type=cellType",
+            antibody: "cmd=cv&type=antibody"
+        },
+
+        loadAllFromServer: function (requests, handler) {
+            // Execute requests to server via ajax
+            var serverData = [],
+                count = requests.length;
+            $.each(requests, function (i, request) {
+                $.getJSON("http://" + server + cgi + "db=" + assembly + "&" + request, 
+                    function (data) {
+                        serverData[i] = data;
+                        if (--count === 0) {
+                            handler(serverData);
+                        }
+                });
+            });
+        },
+
+        // Utility
+
+        cmpNoCase: function (a, b) {
+            // Case-insensitive sort.  
+            // Should be in a generic lib
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        },
+
+        cmpCV: function (a, b) {
+            // Case-insensitive sort of CV objects
+            //  Use label if any, otherwise the term
+            return ((a.label !== undefined && b.label !== undefined) ? 
+                a.label.toLowerCase().localeCompare(b.label.toLowerCase()) : 
+                a.term.toLowerCase().localeCompare(b.term.toLowerCase()));
+        },
+
+        // User interface
 
         addSearchPanel: function (divId) {
             // Create panel of radio buttons for user to select search type
@@ -82,9 +108,19 @@ var encodeProject = (function () {
             return $('input:radio[name=searchType]:checked').val();
         },
 
-        getServer: function () {
-            // Get currently set server 
-            return server;
+        // Experiments, data types and cell types
+
+        expIdFromAccession: function(accession) {
+            return accession.slice(accessionPrefix.length);
+        },
+
+        getExpIdHash: function (expIds) {
+            // Return hash of experiment ID's
+            var expIdHash = {};
+            $.each(expIds, function (i, expId) {
+                expIdHash[expId.expId] = true;
+            });
+            return expIdHash;
         },
 
         getDataGroups: function (dataTypes) {
@@ -114,7 +150,7 @@ var encodeProject = (function () {
                     dataGroups.push(item);
                 }
             });
-            dataGroups.sort(cmpCV);
+            dataGroups.sort(encodeProject.cmpCV);
             dataGroups.push(otherGroup);
             $.each(dataGroups, function (i, group) {
                 if (!dataGroups[i]) {
@@ -146,7 +182,7 @@ var encodeProject = (function () {
                 }
                 cellTiers[tier].cellTypes.push(cellType.term);
             });
-            cellTiers.sort(cmpCV);
+            cellTiers.sort(encodeProject.cmpCV);
             $.each(cellTiers, function (i, tier) {
                 if (!cellTiers[i]) {
                     // for some reason there's  __ element here (not my property)
@@ -157,13 +193,7 @@ var encodeProject = (function () {
             return cellTiers;
         },
 
-        isHistone: function (target) {
-            // Helper function, returns true if antibody target histone modification
-            if (target === undefined) {
-               return false;
-            }
-            return target.match(/^H[234]/);
-        },
+        // Antibodies
 
         antibodyFromExp: function (experiment) {
             // Get antibody from expVars field of experiment
@@ -180,6 +210,14 @@ var encodeProject = (function () {
             }
         },
 
+        isHistone: function (target) {
+            // Helper function, returns true if antibody target histone modification
+            if (target === undefined) {
+               return false;
+            }
+            return target.match(/^H[234]/);
+        },
+
         getAntibodyGroups: function (antibodies) {
             // Return sorted array of antibodyGroup objects each having a .label
             // with group name (Histone Modification or Transcription Factor), 
@@ -188,7 +226,8 @@ var encodeProject = (function () {
                 antibodyGroupHash = {},
                 group, target;
             $.each(antibodies, function (i, antibody) {
-                group = encodeProject.isHistone(antibody.target) ? "Histone Modification" : "Transcription Factor";
+                group = encodeProject.isHistone(antibody.target) ? 
+                        "Histone Modification" : "Transcription Factor";
                 if (!antibodyGroupHash[group]) {
                     antibodyGroupHash[group] = {
                         label: group,
@@ -200,7 +239,7 @@ var encodeProject = (function () {
             $.each(antibodyGroupHash, function (key, item) {
                 antibodyGroups.push(item);
             });
-            antibodyGroups.sort(cmpCV);
+            antibodyGroups.sort(encodeProject.cmpCV);
             $.each(antibodyGroups, function (i, group) {
                 if (!antibodyGroups[i]) {
                     // for some reason there's  __ element here (not my property)
@@ -209,44 +248,6 @@ var encodeProject = (function () {
                 antibodyGroups[i].targets.sort(encodeProject.cmpNoCase);
             });
             return antibodyGroups;
-        },
-
-        getExpIdHash: function (expIds) {
-            // Return hash of experiment ID's
-            var expIdHash = {};
-            $.each(expIds, function (i, expId) {
-                expIdHash[expId.expId] = true;
-            });
-            return expIdHash;
-        },
-
-        // UNTESTED
-        expIdFromAccession: function(accession) {
-            return accession.slice(accessionPrefix.length);
-        },
-
-        serverRequests: {
-            // Requests for data from server API
-            experiment: "cmd=encodeExperiments",
-            expId: "cmd=encodeExpId",
-            dataType: "cmd=cv&type=dataType",
-            cellType: "cmd=cv&type=cellType",
-            antibody: "cmd=cv&type=antibody"
-        },
-
-        loadAllFromServer: function (requests, handler) {
-            // Execute requests to server via ajax
-            var serverData = [],
-                count = requests.length;
-
-            $.each(requests, function (i, request) {
-                $.getJSON("http://" + server + cgi + "db=" + assembly + "&" + request, function (data) {
-                    serverData[i] = data;
-                    if (--count === 0) {
-                        handler(serverData);
-                    }
-                });
-            });
         }
     };
 }());

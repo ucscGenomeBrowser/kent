@@ -1743,7 +1743,6 @@ see doc/builds.txt for specific details.
     cat fb.fr2.chainTetNig2Link.txt 
     #	248984008 bases of 393312790 (63.304%) in intersection
 
-#########################################################################
 ############################################################################
 # TRANSMAP vertebrate.2009-09-13 build  (2009-09-20 markd)
 
@@ -1752,4 +1751,24 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# construct liftOver to fr3 (DONE - 2012-02-22 - Hiram) 
+    screen	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/fr2/bed/blat.fr3.2012-02-22
+    cd /hive/data/genomes/fr2/bed/blat.fr3.2012-02-22
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/fr2/11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev fr2 fr3 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/fr2/11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev fr2 fr3 > do.log 2>&1
+    #	real    17m59.258s
+
+    # verify this file exists:
+    #	/gbdb/fr2/liftOver/fr2ToFr3.over.chain.gz
+    # and try out the conversion on genome-test from fr2 to fr3 
+
 ############################################################################
