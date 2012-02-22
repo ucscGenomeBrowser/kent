@@ -2622,7 +2622,10 @@ var imageV2 = {
         var oldTrackDb = hgTracks.trackDb;
         var valid = false;
         if(json == undefined) {
-            showWarning("hgTracks object is missing from the response");
+            var stripped = new Object();
+            stripJsEmbedded(response, true, stripped);
+            if(stripped.warnMsg == null)
+                showWarning("hgTracks object is missing from the response");
         } else if (json.err) {
             showWarning("Request failed; error: " + json.err);
         } else {
