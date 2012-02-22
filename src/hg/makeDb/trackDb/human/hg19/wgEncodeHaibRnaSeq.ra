@@ -23,6 +23,7 @@ subGroup3 treatment Treatment  BPA14h=BPA_4hr_100nM DEX100NM=DEX_1hr_100nM DEX5N
 subGroup4 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 
 dimensions dimensionY=cellType dimensionX=treatment dimensionZ=rep
 dimensionZchecked rep1
+boxedCfg on
 sortOrder cellType=+ treatment=+ rep=+ view=-
 fileSortOrder cell=Cell_Line treatment=Treatment view=View replicate=Rep labExpId=Lab_Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileType=File_Type fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment obtainedBy=obtainedBy
@@ -38,6 +39,7 @@ noInherit on
     visibility hide
     parent wgEncodeHaibRnaSeq
     type bam
+    showNames off
     bamColorMode off
     maxWindowToDraw 10000000
    
