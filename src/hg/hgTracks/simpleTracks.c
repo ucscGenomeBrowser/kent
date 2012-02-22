@@ -12164,7 +12164,7 @@ char* t2gArticleTable(struct track *tg)
  * the value from the trackDb statement 'articleTable'
  * or the default value: <trackName>Article */
 {
-char *articleTable = trackDbSetting(tg->tdb, "articleTable");
+char *articleTable = trackDbSetting(tg->tdb, "t2gArticleTable");
 if (articleTable == NULL)
     {
     char buf[256];
