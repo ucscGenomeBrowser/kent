@@ -19,7 +19,6 @@ var browser;              // browser ("msie", "safari" etc.) // move to utils.js
  * int imgBox*            // various drag-scroll values
  * boolean measureTiming  // true if measureTiming is on
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
- * string err             // error message (present only when hgTracks has hit a fatal berror).
  */
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
@@ -2626,8 +2625,6 @@ var imageV2 = {
             stripJsEmbedded(response, true, stripped);
             if(stripped.warnMsg == null)
                 showWarning("hgTracks object is missing from the response");
-        } else if (json.err) {
-            showWarning("Request failed; error: " + json.err);
         } else {
             if(this.id != null) {
                 if(json.trackDb[this.id]) {
