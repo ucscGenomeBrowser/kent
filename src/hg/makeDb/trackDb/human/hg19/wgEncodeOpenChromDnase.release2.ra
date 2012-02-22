@@ -1378,12 +1378,13 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 341.000000
         # subId=1654 dateSubmitted=2010-06-19
 
-        track wgEncodeOpenChromDnaseMyometrBaseOverlapSignal
-        parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel Myometr OS
-        longLabel Myometr DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=MYOMETR treatment=AANONE
-        type bigWig 0.000000 209.000000
+        #revoked because of bad bigwigs
+        #track wgEncodeOpenChromDnaseMyometrBaseOverlapSignal
+        #parent wgEncodeOpenChromDnaseViewSigBo off
+        #shortLabel Myometr OS
+        #longLabel Myometr DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIGBO cellType=MYOMETR treatment=AANONE
+        #type bigWig 0.000000 209.000000
         # subId=1655 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnasePanisletsBaseOverlapSignal
