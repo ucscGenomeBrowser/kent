@@ -409,7 +409,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000770
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000734
@@ -616,7 +616,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000728
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-06-16
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
@@ -642,7 +642,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000728
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH000705
@@ -744,7 +744,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002025
@@ -770,7 +770,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002025
@@ -796,7 +796,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002025
@@ -823,7 +823,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002025
@@ -849,7 +849,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002025
@@ -875,7 +875,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002025
@@ -1210,7 +1210,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000622
@@ -1920,7 +1920,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId GM12878/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdAlnRep1.bam,wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdAlnRep1.bam.bai
@@ -1942,7 +1942,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId GM12878/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdAlnRep2.bam,wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdAlnRep2.bam.bai
@@ -1964,7 +1964,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId GM12878/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdPk.narrowPeak.gz
@@ -1987,7 +1987,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId GM12878/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdRawDataRep1.fastq.tgz
@@ -2009,7 +2009,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId GM12878/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdRawDataRep2.fastq.tgz
@@ -2031,7 +2031,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId GM12878/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdSig.bigWig
@@ -2133,7 +2133,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000771
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-07-27
 dateUnrestricted 2012-04-27
 dccAccession wgEncodeEH000771
@@ -2158,7 +2158,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000771
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-07-27
 dateUnrestricted 2012-04-27
 dccAccession wgEncodeEH000771
@@ -2183,7 +2183,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000771
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-07-27
 dateUnrestricted 2012-04-27
 dccAccession wgEncodeEH000771
@@ -2670,7 +2670,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000639
@@ -2720,7 +2720,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878MaxIggmusAlnRep1.bam,wgEncodeSydhTfbsGm12878MaxIggmusAlnRep1.bam.bai
@@ -2743,7 +2743,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878MaxIggmusAlnRep2.bam,wgEncodeSydhTfbsGm12878MaxIggmusAlnRep2.bam.bai
@@ -2766,7 +2766,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878MaxIggmusPk.narrowPeak.gz
@@ -2789,7 +2789,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878MaxIggmusRawDataRep1.fastq.tgz
@@ -2812,7 +2812,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878MaxIggmusRawDataRep2.fastq.tgz
@@ -2835,7 +2835,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsGm12878MaxIggmusSig.bigWig
@@ -2966,7 +2966,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000623
@@ -3018,7 +3018,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002026
@@ -3044,7 +3044,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002026
@@ -3070,7 +3070,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002026
@@ -3097,7 +3097,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002026
@@ -3123,7 +3123,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002026
@@ -3149,7 +3149,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002026
@@ -3438,7 +3438,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH002034
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000690
@@ -3590,7 +3590,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002064
@@ -3615,7 +3615,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002064
@@ -3640,7 +3640,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002064
@@ -3666,7 +3666,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002064
@@ -3691,7 +3691,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002064
@@ -3716,7 +3716,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002064
@@ -3742,7 +3742,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002065
@@ -3767,7 +3767,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002065
@@ -3792,7 +3792,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002065
@@ -3818,7 +3818,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002065
@@ -3843,7 +3843,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002065
@@ -3868,7 +3868,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002065
@@ -4046,7 +4046,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002037
@@ -4071,7 +4071,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002037
@@ -4096,7 +4096,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002037
@@ -4122,7 +4122,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002037
@@ -4147,7 +4147,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002037
@@ -4172,7 +4172,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002037
@@ -4485,7 +4485,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2012-01-11
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
@@ -4539,7 +4539,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000708
@@ -4850,7 +4850,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2012-01-11
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -4877,7 +4877,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000626
@@ -4927,7 +4927,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001858
@@ -4952,7 +4952,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001858
@@ -4977,7 +4977,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001858
@@ -5003,7 +5003,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001858
@@ -5028,7 +5028,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001858
@@ -5053,7 +5053,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000706
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001858
@@ -5185,7 +5185,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000645
@@ -5289,7 +5289,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000771
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000749
@@ -6407,7 +6407,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000697
@@ -6870,7 +6870,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000695
@@ -7072,7 +7072,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-14
 dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001756
@@ -7097,7 +7097,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-06-14
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
@@ -7331,7 +7331,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000625
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000698
@@ -7720,7 +7720,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000772
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000735
@@ -8010,7 +8010,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000709
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000710
@@ -8559,7 +8559,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000773
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000712
@@ -8768,7 +8768,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000711
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000729
@@ -9293,7 +9293,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000774
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000736
@@ -9554,7 +9554,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000713
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000714
@@ -10079,7 +10079,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000775
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000715
@@ -10367,7 +10367,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000730
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH000731
@@ -10917,7 +10917,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000776
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000716
@@ -11125,7 +11125,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000732
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000733
@@ -11568,7 +11568,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000777
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000738
@@ -11829,7 +11829,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000737
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000739
@@ -12323,7 +12323,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000778
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000717
@@ -12531,7 +12531,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000740
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000741
@@ -13000,7 +13000,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000779
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000718
@@ -13236,7 +13236,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000742
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000743
@@ -13390,7 +13390,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescBrca1StdAlnRep1.bam,wgEncodeSydhTfbsH1hescBrca1StdAlnRep1.bam.bai
@@ -13412,7 +13412,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescBrca1StdAlnRep2.bam,wgEncodeSydhTfbsH1hescBrca1StdAlnRep2.bam.bai
@@ -13434,7 +13434,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescBrca1StdPk.narrowPeak.gz
@@ -13457,7 +13457,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescBrca1StdRawDataRep1.fastq.tgz
@@ -13479,7 +13479,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescBrca1StdRawDataRep2.fastq.tgz
@@ -13501,7 +13501,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescBrca1StdSig.bigWig
@@ -13676,7 +13676,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescCmycStdAlnRep1.bam,wgEncodeSydhTfbsH1hescCmycStdAlnRep1.bam.bai
@@ -13698,7 +13698,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescCmycStdAlnRep2.bam,wgEncodeSydhTfbsH1hescCmycStdAlnRep2.bam.bai
@@ -13720,7 +13720,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescCmycStdPk.narrowPeak.gz
@@ -13743,7 +13743,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescCmycStdRawDataRep1.fastq.tgz
@@ -13765,7 +13765,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescCmycStdRawDataRep2.fastq.tgz
@@ -13787,7 +13787,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescCmycStdSig.bigWig
@@ -14111,7 +14111,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002023
@@ -14136,7 +14136,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002023
@@ -14161,7 +14161,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002023
@@ -14187,7 +14187,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002023
@@ -14212,7 +14212,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002023
@@ -14237,7 +14237,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001834
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002023
@@ -15329,7 +15329,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescZnf143StdAlnRep1.bam,wgEncodeSydhTfbsH1hescZnf143StdAlnRep1.bam.bai
@@ -15351,7 +15351,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescZnf143StdAlnRep2.bam,wgEncodeSydhTfbsH1hescZnf143StdAlnRep2.bam.bai
@@ -15373,7 +15373,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescZnf143StdPk.narrowPeak.gz
@@ -15396,7 +15396,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescZnf143StdRawDataRep1.fastq.tgz
@@ -15418,7 +15418,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescZnf143StdRawDataRep2.fastq.tgz
@@ -15440,7 +15440,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId H1-hESC/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsH1hescZnf143StdSig.bigWig
@@ -15645,7 +15645,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000627
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000651
@@ -15807,7 +15807,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000627
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000629
@@ -16469,7 +16469,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000631
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000632
@@ -16519,7 +16519,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001777
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
@@ -16545,7 +16545,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001777
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
@@ -16571,7 +16571,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001777
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
@@ -16598,7 +16598,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001777
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
@@ -16625,7 +16625,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001777
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
@@ -16652,7 +16652,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001777
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
@@ -17015,7 +17015,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000685
@@ -17173,7 +17173,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000686
@@ -17304,7 +17304,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000720
@@ -17513,7 +17513,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000721
@@ -17747,7 +17747,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000763
@@ -18053,7 +18053,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000764
@@ -18207,7 +18207,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000765
@@ -18338,7 +18338,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000781
@@ -18724,7 +18724,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000647
@@ -18774,7 +18774,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002027
@@ -18800,7 +18800,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002027
@@ -18826,7 +18826,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002027
@@ -18853,7 +18853,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002027
@@ -18879,7 +18879,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002027
@@ -18905,7 +18905,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002027
@@ -18986,7 +18986,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000746
@@ -19192,7 +19192,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000648
@@ -19350,7 +19350,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000699
@@ -19508,7 +19508,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000689
@@ -19666,7 +19666,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000692
@@ -20280,7 +20280,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000688
@@ -20411,7 +20411,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000722
@@ -21343,7 +21343,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000745
@@ -21599,7 +21599,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000646
@@ -21976,7 +21976,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002066
@@ -22001,7 +22001,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002066
@@ -22026,7 +22026,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002066
@@ -22052,7 +22052,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002066
@@ -22077,7 +22077,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002066
@@ -22102,7 +22102,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002066
@@ -22128,7 +22128,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002067
@@ -22153,7 +22153,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002067
@@ -22178,7 +22178,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002067
@@ -22204,7 +22204,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002067
@@ -22229,7 +22229,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002067
@@ -22254,7 +22254,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 dccAccession wgEncodeEH002067
@@ -22334,7 +22334,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000633
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000723
@@ -22747,7 +22747,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000613
@@ -23535,7 +23535,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000766
@@ -23943,7 +23943,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000611
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000614
@@ -24297,7 +24297,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001754
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
@@ -24322,7 +24322,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001754
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
@@ -24347,7 +24347,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001754
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
@@ -24373,7 +24373,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001754
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
@@ -24398,7 +24398,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001754
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
@@ -24423,7 +24423,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001754
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
@@ -24449,7 +24449,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsHelas3Tcf7l2c9b92565UcdAlnRep1.bam,wgEncodeSydhTfbsHelas3Tcf7l2c9b92565UcdAlnRep1.bam.bai
@@ -24471,7 +24471,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsHelas3Tcf7l2c9b92565UcdAlnRep2.bam,wgEncodeSydhTfbsHelas3Tcf7l2c9b92565UcdAlnRep2.bam.bai
@@ -24493,7 +24493,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsHelas3Tcf7l2c9b92565UcdPk.narrowPeak.gz
@@ -24516,7 +24516,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsHelas3Tcf7l2c9b92565UcdRawDataRep1.fastq.tgz
@@ -24538,7 +24538,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsHelas3Tcf7l2c9b92565UcdRawDataRep2.fastq.tgz
@@ -24560,7 +24560,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-19
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsHelas3Tcf7l2c9b92565UcdSig.bigWig
@@ -24637,7 +24637,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000747
@@ -24845,7 +24845,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000687
@@ -25047,7 +25047,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002028
@@ -25073,7 +25073,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002028
@@ -25099,7 +25099,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002028
@@ -25126,7 +25126,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002028
@@ -25152,7 +25152,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002028
@@ -25178,7 +25178,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH000744
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002028
@@ -25590,7 +25590,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002032
@@ -25616,7 +25616,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002032
@@ -25642,7 +25642,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002032
@@ -25669,7 +25669,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002032
@@ -25695,7 +25695,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002032
@@ -25721,7 +25721,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002032
@@ -25748,7 +25748,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001859
@@ -25773,7 +25773,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001859
@@ -25798,7 +25798,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001859
@@ -25824,7 +25824,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001859
@@ -25849,7 +25849,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001859
@@ -25874,7 +25874,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001859
@@ -26006,7 +26006,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000755
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000750
@@ -26056,7 +26056,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
@@ -26082,7 +26082,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
@@ -26108,7 +26108,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
@@ -26135,7 +26135,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
@@ -26161,7 +26161,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
@@ -26187,7 +26187,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-04-04
 dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
@@ -26728,7 +26728,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000755
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000751
@@ -26884,7 +26884,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000755
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000752
@@ -27040,7 +27040,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000755
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000753
@@ -27196,7 +27196,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000755
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000754
@@ -27325,7 +27325,7 @@ composite wgEncodeSydhTfbs
 control IgG-goat
 controlId HepG2/None/Input/IgG-goat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsHepg2InputIgggoatAlnRep1.bam,wgEncodeSydhTfbsHepg2InputIgggoatAlnRep1.bam.bai
@@ -27347,7 +27347,7 @@ composite wgEncodeSydhTfbs
 control IgG-goat
 controlId HepG2/None/Input/IgG-goat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsHepg2InputIgggoatRawDataRep1.fastq.tgz
@@ -27369,7 +27369,7 @@ composite wgEncodeSydhTfbs
 control IgG-goat
 controlId HepG2/None/Input/IgG-goat
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsHepg2InputIgggoatSig.bigWig
@@ -28562,7 +28562,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsHepg2MaxIggrabAlnRep1.bam,wgEncodeSydhTfbsHepg2MaxIggrabAlnRep1.bam.bai
@@ -28584,7 +28584,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsHepg2MaxIggrabAlnRep2.bam,wgEncodeSydhTfbsHepg2MaxIggrabAlnRep2.bam.bai
@@ -28606,7 +28606,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsHepg2MaxIggrabPk.narrowPeak.gz
@@ -28629,7 +28629,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsHepg2MaxIggrabRawDataRep1.fastq.tgz
@@ -28651,7 +28651,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsHepg2MaxIggrabRawDataRep2.fastq.tgz
@@ -28673,7 +28673,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HepG2/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsHepg2MaxIggrabSig.bigWig
@@ -28696,7 +28696,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId HepG2/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002029
@@ -28722,7 +28722,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId HepG2/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002029
@@ -28748,7 +28748,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId HepG2/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002029
@@ -28774,7 +28774,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId HepG2/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002029
@@ -28801,7 +28801,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId HepG2/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002029
@@ -28827,7 +28827,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId HepG2/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002029
@@ -28853,7 +28853,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId HepG2/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002029
@@ -28879,7 +28879,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId HepG2/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002029
@@ -29058,7 +29058,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001862
@@ -29083,7 +29083,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001862
@@ -29108,7 +29108,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001862
@@ -29134,7 +29134,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001862
@@ -29159,7 +29159,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001862
@@ -29184,7 +29184,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001862
@@ -29316,7 +29316,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000755
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000757
@@ -29472,7 +29472,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000755
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000758
@@ -29755,7 +29755,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000640
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000641
@@ -29880,7 +29880,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001860
@@ -29905,7 +29905,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001860
@@ -29930,7 +29930,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001860
@@ -29956,7 +29956,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001860
@@ -29981,7 +29981,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001860
@@ -30006,7 +30006,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001860
@@ -30336,7 +30336,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001861
@@ -30361,7 +30361,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001861
@@ -30386,7 +30386,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001861
@@ -30412,7 +30412,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001861
@@ -30437,7 +30437,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001861
@@ -30462,7 +30462,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001791
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001861
@@ -30569,7 +30569,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000756
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000759
@@ -30700,7 +30700,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000640
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000642
@@ -30984,7 +30984,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000640
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000643
@@ -31261,7 +31261,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000674
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -31288,7 +31288,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000674
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -31315,7 +31315,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000674
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -31343,7 +31343,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000674
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -31370,7 +31370,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000674
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -31397,7 +31397,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000674
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2001-06-27
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -31532,7 +31532,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000674
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000675
@@ -32146,7 +32146,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000780
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000719
@@ -32479,7 +32479,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001759
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-06-14
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
@@ -32661,7 +32661,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000780
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000768
@@ -32867,7 +32867,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000780
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000702
@@ -32917,7 +32917,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90CebpbIggrabAlnRep1.bam,wgEncodeSydhTfbsImr90CebpbIggrabAlnRep1.bam.bai
@@ -32939,7 +32939,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90CebpbIggrabAlnRep2.bam,wgEncodeSydhTfbsImr90CebpbIggrabAlnRep2.bam.bai
@@ -32961,7 +32961,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90CebpbIggrabPk.narrowPeak.gz
@@ -32984,7 +32984,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90CebpbIggrabRawDataRep1.fastq.tgz
@@ -33006,7 +33006,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90CebpbIggrabRawDataRep2.fastq.tgz
@@ -33028,7 +33028,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90CebpbIggrabSig.bigWig
@@ -33051,7 +33051,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90InputIggrabAlnRep1.bam,wgEncodeSydhTfbsImr90InputIggrabAlnRep1.bam.bai
@@ -33073,7 +33073,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90InputIggrabRawDataRep1.fastq.tgz
@@ -33095,7 +33095,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90InputIggrabSig.bigWig
@@ -33118,7 +33118,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Pol2IggrabAlnRep1.bam,wgEncodeSydhTfbsImr90Pol2IggrabAlnRep1.bam.bai
@@ -33140,7 +33140,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Pol2IggrabAlnRep2.bam,wgEncodeSydhTfbsImr90Pol2IggrabAlnRep2.bam.bai
@@ -33162,7 +33162,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Pol2IggrabPk.narrowPeak.gz
@@ -33185,7 +33185,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Pol2IggrabRawDataRep1.fastq.tgz
@@ -33207,7 +33207,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Pol2IggrabRawDataRep2.fastq.tgz
@@ -33229,7 +33229,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Pol2IggrabSig.bigWig
@@ -33252,7 +33252,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Rad21IggrabAlnRep1.bam,wgEncodeSydhTfbsImr90Rad21IggrabAlnRep1.bam.bai
@@ -33274,7 +33274,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Rad21IggrabAlnRep2.bam,wgEncodeSydhTfbsImr90Rad21IggrabAlnRep2.bam.bai
@@ -33296,7 +33296,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Rad21IggrabPk.narrowPeak.gz
@@ -33319,7 +33319,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Rad21IggrabRawDataRep1.fastq.tgz
@@ -33341,7 +33341,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Rad21IggrabRawDataRep2.fastq.tgz
@@ -33363,7 +33363,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId IMR90/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsImr90Rad21IggrabSig.bigWig
@@ -33490,7 +33490,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000700
@@ -33699,7 +33699,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000678
@@ -33749,7 +33749,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEH001857
@@ -33774,7 +33774,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEH001857
@@ -33799,7 +33799,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEH001857
@@ -33825,7 +33825,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEH001857
@@ -33850,7 +33850,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEH001857
@@ -33875,7 +33875,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-02-25
 dateUnrestricted 2011-11-25
 dccAccession wgEncodeEH001857
@@ -34060,7 +34060,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000679
@@ -34266,7 +34266,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000767
@@ -34370,7 +34370,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000726
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000724
@@ -34932,7 +34932,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH000619
@@ -35134,7 +35134,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 fileName wgEncodeSydhTfbsK562CjunIfna30StdAlnRep1.bam,wgEncodeSydhTfbsK562CjunIfna30StdAlnRep1.bam.bai
@@ -35156,7 +35156,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 fileName wgEncodeSydhTfbsK562CjunIfna30StdAlnRep2.bam,wgEncodeSydhTfbsK562CjunIfna30StdAlnRep2.bam.bai
@@ -35178,7 +35178,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 fileName wgEncodeSydhTfbsK562CjunIfna30StdPk.narrowPeak.gz
@@ -35201,7 +35201,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 fileName wgEncodeSydhTfbsK562CjunIfna30StdRawDataRep1.fastq.tgz
@@ -35223,7 +35223,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 fileName wgEncodeSydhTfbsK562CjunIfna30StdRawDataRep2.fastq.tgz
@@ -35245,7 +35245,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 fileName wgEncodeSydhTfbsK562CjunIfna30StdSig.bigWig
@@ -35322,7 +35322,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000656
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000667
@@ -35426,7 +35426,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000657
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000673
@@ -35530,7 +35530,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000658
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000668
@@ -35684,7 +35684,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000620
@@ -35788,7 +35788,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000655
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000659
@@ -35892,7 +35892,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000656
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000669
@@ -36148,7 +36148,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000658
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000670
@@ -36198,7 +36198,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CmycIggrabAlnRep1.bam,wgEncodeSydhTfbsK562CmycIggrabAlnRep1.bam.bai
@@ -36220,7 +36220,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CmycIggrabAlnRep2.bam,wgEncodeSydhTfbsK562CmycIggrabAlnRep2.bam.bai
@@ -36242,7 +36242,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CmycIggrabPk.narrowPeak.gz
@@ -36265,7 +36265,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CmycIggrabRawDataRep1.fastq.tgz
@@ -36287,7 +36287,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CmycIggrabRawDataRep2.fastq.tgz
@@ -36309,7 +36309,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CmycIggrabSig.bigWig
@@ -36436,7 +36436,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000621
@@ -36486,7 +36486,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CtcfbIggrabAlnRep1.bam,wgEncodeSydhTfbsK562CtcfbIggrabAlnRep1.bam.bai
@@ -36508,7 +36508,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CtcfbIggrabAlnRep2.bam,wgEncodeSydhTfbsK562CtcfbIggrabAlnRep2.bam.bai
@@ -36530,7 +36530,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CtcfbIggrabPk.narrowPeak.gz
@@ -36553,7 +36553,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CtcfbIggrabRawDataRep1.fastq.tgz
@@ -36575,7 +36575,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CtcfbIggrabRawDataRep2.fastq.tgz
@@ -36597,7 +36597,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562CtcfbIggrabSig.bigWig
@@ -36726,7 +36726,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000671
@@ -36883,7 +36883,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000676
@@ -37041,7 +37041,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000638
@@ -37199,7 +37199,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000683
@@ -38622,7 +38622,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000726
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000725
@@ -39449,7 +39449,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa6h/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifna6hStdAlnRep1.bam,wgEncodeSydhTfbsK562Irf1Ifna6hStdAlnRep1.bam.bai
@@ -39471,7 +39471,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa6h/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifna6hStdAlnRep2.bam,wgEncodeSydhTfbsK562Irf1Ifna6hStdAlnRep2.bam.bai
@@ -39493,7 +39493,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa6h/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifna6hStdPk.narrowPeak.gz
@@ -39516,7 +39516,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa6h/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifna6hStdRawDataRep1.fastq.tgz
@@ -39538,7 +39538,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa6h/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifna6hStdRawDataRep2.fastq.tgz
@@ -39560,7 +39560,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNa6h/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifna6hStdSig.bigWig
@@ -39583,7 +39583,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifng30StdAlnRep1.bam,wgEncodeSydhTfbsK562Irf1Ifng30StdAlnRep1.bam.bai
@@ -39605,7 +39605,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifng30StdAlnRep2.bam,wgEncodeSydhTfbsK562Irf1Ifng30StdAlnRep2.bam.bai
@@ -39627,7 +39627,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifng30StdPk.narrowPeak.gz
@@ -39650,7 +39650,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifng30StdRawDataRep1.fastq.tgz
@@ -39672,7 +39672,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifng30StdRawDataRep2.fastq.tgz
@@ -39694,7 +39694,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562Irf1Ifng30StdSig.bigWig
@@ -39870,7 +39870,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002164
@@ -39895,7 +39895,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002164
@@ -39920,7 +39920,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002164
@@ -39946,7 +39946,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002164
@@ -39971,7 +39971,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002164
@@ -39996,7 +39996,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 dccAccession wgEncodeEH002164
@@ -40176,7 +40176,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562MaffIggrabAlnRep1.bam,wgEncodeSydhTfbsK562MaffIggrabAlnRep1.bam.bai
@@ -40198,7 +40198,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562MaffIggrabAlnRep2.bam,wgEncodeSydhTfbsK562MaffIggrabAlnRep2.bam.bai
@@ -40220,7 +40220,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562MaffIggrabPk.narrowPeak.gz
@@ -40243,7 +40243,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562MaffIggrabRawDataRep1.fastq.tgz
@@ -40265,7 +40265,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562MaffIggrabRawDataRep2.fastq.tgz
@@ -40287,7 +40287,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562MaffIggrabSig.bigWig
@@ -40566,7 +40566,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000637
@@ -40872,7 +40872,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000701
@@ -41026,7 +41026,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000624
@@ -41076,7 +41076,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002021
@@ -41101,7 +41101,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002021
@@ -41126,7 +41126,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002021
@@ -41152,7 +41152,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002021
@@ -41177,7 +41177,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002021
@@ -41202,7 +41202,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002021
@@ -41228,7 +41228,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002024
@@ -41253,7 +41253,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002024
@@ -41278,7 +41278,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002024
@@ -41304,7 +41304,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002024
@@ -41329,7 +41329,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002024
@@ -41354,7 +41354,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-27
 dateUnrestricted 2012-03-27
 dccAccession wgEncodeEH002024
@@ -41738,7 +41738,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000655
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000660
@@ -41842,7 +41842,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000656
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000661
@@ -41946,7 +41946,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000657
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000704
@@ -42050,7 +42050,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000658
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000662
@@ -42154,7 +42154,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId wgEncodeEH000726
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000727
@@ -42360,7 +42360,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000616
@@ -42410,7 +42410,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-06-14
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
@@ -42436,7 +42436,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateResubmitted 2011-06-14
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
@@ -42672,7 +42672,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000694
@@ -42828,7 +42828,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000649
@@ -42878,7 +42878,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002033
@@ -42904,7 +42904,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002033
@@ -42930,7 +42930,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002033
@@ -42957,7 +42957,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002033
@@ -42983,7 +42983,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002033
@@ -43009,7 +43009,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-30
 dccAccession wgEncodeEH002033
@@ -43142,7 +43142,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000680
@@ -43248,7 +43248,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId K562/MNaseD/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000769
@@ -43464,7 +43464,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000677
@@ -43620,7 +43620,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000681
@@ -43876,7 +43876,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000655
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000663
@@ -43980,7 +43980,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000656
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000664
@@ -44134,7 +44134,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000657
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000760
@@ -44289,7 +44289,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000658
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000761
@@ -44393,7 +44393,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000655
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000665
@@ -44497,7 +44497,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000656
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000666
@@ -44932,7 +44932,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000748
@@ -45168,7 +45168,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000682
@@ -45476,7 +45476,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000615
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000650
@@ -45634,7 +45634,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000684
@@ -45684,7 +45684,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002030
@@ -45710,7 +45710,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002030
@@ -45736,7 +45736,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002030
@@ -45763,7 +45763,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002030
@@ -45789,7 +45789,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002030
@@ -45815,7 +45815,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId wgEncodeEH001795
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002030
@@ -45950,7 +45950,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000630
@@ -46108,7 +46108,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000696
@@ -46158,7 +46158,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002068
@@ -46183,7 +46183,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002068
@@ -46208,7 +46208,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002068
@@ -46234,7 +46234,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002068
@@ -46259,7 +46259,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002068
@@ -46284,7 +46284,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-14
 dateUnrestricted 2012-06-14
 dccAccession wgEncodeEH002068
@@ -47444,7 +47444,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002035
@@ -47469,7 +47469,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002035
@@ -47494,7 +47494,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002035
@@ -47520,7 +47520,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002035
@@ -47545,7 +47545,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002035
@@ -47570,7 +47570,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002035
@@ -47596,7 +47596,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId MCF-7/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsMcf7Gata3sc269UcdAlnRep1.bam,wgEncodeSydhTfbsMcf7Gata3sc269UcdAlnRep1.bam.bai
@@ -47618,7 +47618,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId MCF-7/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsMcf7Gata3sc269UcdAlnRep2.bam,wgEncodeSydhTfbsMcf7Gata3sc269UcdAlnRep2.bam.bai
@@ -47640,7 +47640,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId MCF-7/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsMcf7Gata3sc269UcdPk.narrowPeak.gz
@@ -47663,7 +47663,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId MCF-7/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsMcf7Gata3sc269UcdRawDataRep1.fastq.gz
@@ -47685,7 +47685,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId MCF-7/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsMcf7Gata3sc269UcdRawDataRep2.fastq.tgz
@@ -47707,7 +47707,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId MCF-7/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-18
 fileName wgEncodeSydhTfbsMcf7Gata3sc269UcdSig.bigWig
@@ -47838,7 +47838,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000693
@@ -48021,7 +48021,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
@@ -48046,7 +48046,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
@@ -48071,7 +48071,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
@@ -48097,7 +48097,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
@@ -48122,7 +48122,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
@@ -48147,7 +48147,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
@@ -48173,7 +48173,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002036
@@ -48198,7 +48198,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002036
@@ -48223,7 +48223,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002036
@@ -48249,7 +48249,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002036
@@ -48274,7 +48274,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002036
@@ -48299,7 +48299,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000762
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-03
 dateUnrestricted 2012-05-03
 dccAccession wgEncodeEH002036
@@ -48863,7 +48863,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId wgEncodeEH000617
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000618
@@ -49097,7 +49097,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000652
@@ -49255,7 +49255,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000653
@@ -49459,7 +49459,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002070
@@ -49484,7 +49484,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002070
@@ -49509,7 +49509,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002070
@@ -49535,7 +49535,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
@@ -49560,7 +49560,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
@@ -49585,7 +49585,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
@@ -49611,7 +49611,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
@@ -49636,7 +49636,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
@@ -49661,7 +49661,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
@@ -50069,7 +50069,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001785
@@ -50094,7 +50094,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001785
@@ -50119,7 +50119,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001785
@@ -50145,7 +50145,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001785
@@ -50170,7 +50170,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001785
@@ -50195,7 +50195,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001785
@@ -50221,7 +50221,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001786
@@ -50245,7 +50245,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001786
@@ -50269,7 +50269,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001786
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001786
@@ -50675,7 +50675,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001783
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002031
@@ -50700,7 +50700,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001783
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002031
@@ -50725,7 +50725,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001783
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002031
@@ -50751,7 +50751,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001783
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002031
@@ -50776,7 +50776,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001783
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002031
@@ -50801,7 +50801,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001783
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002031
@@ -51273,4 +51273,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1117754654
+# MAGIC: -1489751734
