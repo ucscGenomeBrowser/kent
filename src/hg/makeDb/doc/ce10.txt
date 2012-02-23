@@ -2403,3 +2403,20 @@ done
     hgsql qapushq < ce10.pushQ.sql
 
 ############################################################################
+# LIFTOVER TO ce6 (DONE - 2011-05-24 - Hiram )
+    mkdir /hive/data/genomes/ce10/bed/blat.ce6.2012-02-22
+    cd /hive/data/genomes/ce10/bed/blat.ce6.2012-02-22
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/ce10/jkStuff/ce10.11.ooc -debug ce10 ce6
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/ce10/jkStuff/ce10.11.ooc ce10 ce6 > do.log 2>&1
+    #	real    6m39.918s
+    # verify it works on genome-test
+
+#############################################################################
