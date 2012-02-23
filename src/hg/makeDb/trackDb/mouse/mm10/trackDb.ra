@@ -6,3 +6,7 @@ html gold
 track gap override
 html gap
 
+track ensGene override
+origAssembly mm9
+pennantIcon 9.jpg ../goldenPath/help/mm9ToMm10LiftOver.html "lifted from mm9"
+visibility pack

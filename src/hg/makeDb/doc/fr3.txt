@@ -1896,3 +1896,91 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# lifting ensGene track from fr2 (DONE - 2012-02-22 - Hiram)
+    # no gene tracks yet on fr3.  liftUp fr2 ensGenes to fr3
+    # history of fr2 ensGene indicates it has been the same there since
+    #	v60 of ensGene - thru today same as v65
+    mkdir /hive/data/genomes/fr3/bed/ensGene
+    cd /hive/data/genomes/fr3/bed/ensGene
+    hgsql -N -e "select * from ensGene;" fr2 | cut -f2- > fr2.ensGene.gp
+    liftOver -genePred fr2.ensGene.gp \
+	/gbdb/fr2/liftOver/fr2ToFr3.over.chain.gz \
+	fr3.lifted.ensGene.gp unmapped.ensGene.gp
+    ls -ogrt
+# -rw-rw-r-- 1 18680443 Feb 22 16:22 fr2.ensGene.gp
+# -rw-rw-r-- 1 15869141 Feb 22 16:22 fr3.lifted.ensGene.gp
+# -rw-rw-r-- 1   126578 Feb 22 16:22 unmapped.ensGene.gp
+
+    hgLoadGenePred -skipInvalid -genePredExt fr3 ensGene fr3.lifted.ensGene.gp
+    #	Warning: skipping 782 invalid genePreds
+
+    # make a list of what did get loaded:
+    hgsql -N -e "select name from ensGene;" fr3 | sort -u > fr3.name.ensGene.txt
+    wc -l fr3.name.ensGene.txt 
+    #	47702 fr3.name.ensGene.txt
+
+    hgsql -N -e "select * from ensPep;" fr2 | sort > fr2.ensPep.tab
+    hgsql -N -e "select * from ensGtp;" fr2 | sort -k2,2 > fr2.ensGtp.tab
+    hgsql -N -e "select * from ensemblSource;" fr2 | sort -k1,1 \
+	> fr2.ensemblSource.tab
+    hgsql -N -e "select * from ensemblToGeneName;" fr2 | sort -k1,1 \
+	> fr2.ensemblToGeneName.tab
+
+    # select out ensGtp records that match with the names in fr3 ensGene:
+    join -1 2 -2 1 -o "1.1,1.2,1.3" fr2.ensGtp.tab fr3.name.ensGene.txt \
+	| tr '[ ]' '[\t]' > fr3.ensGtp.tab
+    wc -l *.ensGtp.tab
+    #	48706 fr2.ensGtp.tab
+    #	47702 fr3.ensGtp.tab
+
+    # select out ensPep records that match with the names in fr3 ensGene:
+    join -1 1 -2 2 -o "1.1,1.2" fr2.ensPep.tab fr3.ensGtp.tab \
+	| tr '[ ]' '[\t]' > fr3.ensPep.tab
+
+    wc -l fr2.ensPep.tab fr3.ensPep.tab
+    #	47841 fr2.ensPep.tab
+    #	46842 fr3.ensPep.tab
+
+    # select out ensemblSource records that match the fr3 ensGene names:
+    join -1 1 -2 1 -o "1.1,1.2" fr2.ensemblSource.tab fr3.name.ensGene.txt \
+	| tr '[ ]' '[\t]' > fr3.ensemblSource.tab
+    wc -l fr2.ensemblSource.tab fr3.ensemblSource.tab 
+  48706 fr2.ensemblSource.tab
+  47702 fr3.ensemblSource.tab
+
+    # select out ensemblToGeneName records that match the fr3 ensGene names:
+    join -1 1 -2 1 -o "1.1,1.2" fr2.ensemblToGeneName.tab \
+	fr3.name.ensGene.txt | tr '[ ]' '[\t]' > fr3.ensemblToGeneName.tab
+    wc -l fr2.ensemblToGeneName.tab fr3.ensemblToGeneName.tab
+    #	40067 fr2.ensemblToGeneName.tab
+    #	39200 fr3.ensemblToGeneName.tab
+
+    hgPepPred fr3 tab ensPep fr3.ensPep.tab
+    hgLoadSqlTab fr3 ensGtp ~/kent/src/hg/lib/ensGtp.sql fr3.ensGtp.tab
+
+    # verify size of the names
+    cut -f1 fr3.ensemblSource.tab | awk '{print length($0)}' \
+	| sort | uniq -c | head
+    #	47702 18
+
+    sed -e "s/15/18/" ~/kent/src/hg/lib/ensemblSource.sql > ensemblSource.sql
+    hgLoadSqlTab fr3 ensemblSource ensemblSource.sql fr3.ensemblSource.tab
+
+    # find sizes for indexes
+  NL=`awk '{print length($1)}' fr3.ensemblToGeneName.tab | sort -rn | head -1`
+  VL=`awk '{print length($2)}' fr3.ensemblToGeneName.tab | sort -rn | head -1`
+    # construct sql definition with appropriate index sizes
+    sed -e "s/ knownTo / ensemblToGeneName /; s/known gene/ensGen/; s/INDEX(name(12)/PRIMARY KEY(name($NL)/; s/value(12)/value($VL)/" \
+	~/kent/src/hg/lib/knownTo.sql > ensemblToGeneName.sql
+
+    hgLoadSqlTab fr3 ensemblToGeneName ensemblToGeneName.sql \
+	fr3.ensemblToGeneName.tab
+
+    hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("fr3", "ensGene", "hiram", "65", now(), \
+        "lifted from mm9 ensGene 65", \
+        "lifted from mm9 ensGene 65", \
+        "dec2011" );' hgFixed
+
+#############################################################################
