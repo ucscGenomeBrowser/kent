@@ -21,6 +21,7 @@ lab CSHL-m
 labExpId LID20728
 labProtocolId 1A
 localization cell
+md5sum 91a501fe63306d15749a0003849f919c,a117f019f0b35f8d8bab60cae8de2f2e
 project wgEncode
 readType 2x76D
 replicate 1
@@ -51,6 +52,7 @@ lab CSHL-m
 labExpId LID20729
 labProtocolId 1B
 localization cell
+md5sum 0c653c2ce4ce05df6653bb460c3a2336,d0054667d050ad3f9ca1d22651d107b0
 project wgEncode
 readType 2x76D
 replicate 2
@@ -81,6 +83,7 @@ lab CSHL-m
 labExpId LID20728,LID20729
 labProtocolId 1A,1B
 localization cell
+md5sum 2ac3c88ca0352bab0b285b49655a643a
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -110,6 +113,7 @@ lab CSHL-m
 labExpId LID20728
 labProtocolId 1A
 localization cell
+md5sum 908a25228d4a87712872415abc1aedab
 project wgEncode
 readType 2x76D
 replicate 1
@@ -139,6 +143,7 @@ lab CSHL-m
 labExpId LID20729
 labProtocolId 1B
 localization cell
+md5sum 76a23160622969ee404e751f3ae29835
 project wgEncode
 readType 2x76D
 replicate 2
@@ -168,6 +173,7 @@ lab CSHL-m
 labExpId LID20728
 labProtocolId 1A
 localization cell
+md5sum 7722cc42211acbdaa18cdd1cd136b027
 project wgEncode
 readType 2x76D
 replicate 1
@@ -197,6 +203,7 @@ lab CSHL-m
 labExpId LID20729
 labProtocolId 1B
 localization cell
+md5sum 0429976b72ec275844944993b80b24e3
 project wgEncode
 readType 2x76D
 replicate 2
@@ -226,6 +233,7 @@ lab CSHL-m
 labExpId LID20728
 labProtocolId 1A
 localization cell
+md5sum 2e6d0b0d91abc884e7ec9f9b481b4eda
 project wgEncode
 readType 2x76D
 replicate 1
@@ -256,6 +264,7 @@ lab CSHL-m
 labExpId LID20729
 labProtocolId 1B
 localization cell
+md5sum ad94ee360d2cb11a4da4362b486fa74a
 project wgEncode
 readType 2x76D
 replicate 2
@@ -286,6 +295,7 @@ lab CSHL-m
 labExpId LID20728
 labProtocolId 1A
 localization cell
+md5sum b55ceb89b9161129ed59cdeffa28a221
 project wgEncode
 readType 2x76D
 replicate 1
@@ -316,6 +326,7 @@ lab CSHL-m
 labExpId LID20729
 labProtocolId 1B
 localization cell
+md5sum 98fa11287628128bbe42292eea6a6681
 project wgEncode
 readType 2x76D
 replicate 2
@@ -347,6 +358,7 @@ lab CSHL-m
 labExpId LID20728
 labProtocolId 1A
 localization cell
+md5sum 3bd94337b7e3b83d9a7ff389d85a6936
 project wgEncode
 readType 2x76D
 replicate 1
@@ -377,6 +389,7 @@ lab CSHL-m
 labExpId LID20729
 labProtocolId 1B
 localization cell
+md5sum 7a873c351b14d77dab922cd90499ff8c
 project wgEncode
 readType 2x76D
 replicate 2
@@ -406,6 +419,7 @@ lab CSHL-m
 labExpId LID20728,LID20729
 labProtocolId 1A,1B
 localization cell
+md5sum 8344d850cdfa6b76fa407f4d352f4b9f
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -496,6 +510,7 @@ lab CSHL-m
 labExpId LID21040,LID21041
 labProtocolId 14A,14B
 localization cell
+md5sum 20342a4b88687d3c7fdb8fc66512e1d3
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -831,6 +846,7 @@ lab CSHL-m
 labExpId LID21040,LID21041
 labProtocolId 14A,14B
 localization cell
+md5sum 3d0e1696fae631bf4f873f93c678ae8d
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -859,6 +875,7 @@ lab CSHL-m
 labExpId LID20730
 labProtocolId 2A
 localization cell
+md5sum 8a45f86e49c1639b6f7bbdeb457bcb5a,476a478dc2d11df3d51ec0186481a87c
 project wgEncode
 readType 2x76D
 replicate 1
@@ -889,6 +906,7 @@ lab CSHL-m
 labExpId LID20731
 labProtocolId 2B
 localization cell
+md5sum 782a44f19577aeebfdc0a8608bb73787,dc4fa9c62628754021cf4a00e196fb6a
 project wgEncode
 readType 2x76D
 replicate 2
@@ -919,6 +937,7 @@ lab CSHL-m
 labExpId LID20730,LID20731
 labProtocolId 2A,2B
 localization cell
+md5sum 0ec70db66a371fdcd72081e9bf8641c2
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -948,6 +967,7 @@ lab CSHL-m
 labExpId LID20730
 labProtocolId 2A
 localization cell
+md5sum 1d5a0d47b04fa316aa376c0284dfd83d
 project wgEncode
 readType 2x76D
 replicate 1
@@ -977,6 +997,7 @@ lab CSHL-m
 labExpId LID20731
 labProtocolId 2B
 localization cell
+md5sum 0615a98d2a6c78d7b7ace29054d678f5
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1006,6 +1027,7 @@ lab CSHL-m
 labExpId LID20730
 labProtocolId 2A
 localization cell
+md5sum 0fe65ea8158a10d7cb32999354201902
 project wgEncode
 readType 2x76D
 replicate 1
@@ -1035,6 +1057,7 @@ lab CSHL-m
 labExpId LID20731
 labProtocolId 2B
 localization cell
+md5sum a4657f8863de8c079174f5ac90e0303d
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1064,6 +1087,7 @@ lab CSHL-m
 labExpId LID20730
 labProtocolId 2A
 localization cell
+md5sum cdd06c024a50fda791f6a3c7bd0d857a
 project wgEncode
 readType 2x76D
 replicate 1
@@ -1094,6 +1118,7 @@ lab CSHL-m
 labExpId LID20731
 labProtocolId 2B
 localization cell
+md5sum 43721ac85d56a586b725d8e57cf2c3e7
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1124,6 +1149,7 @@ lab CSHL-m
 labExpId LID20730
 labProtocolId 2A
 localization cell
+md5sum 2d6fb3f394acffd36499cffc983bbdc5
 project wgEncode
 readType 2x76D
 replicate 1
@@ -1154,6 +1180,7 @@ lab CSHL-m
 labExpId LID20731
 labProtocolId 2B
 localization cell
+md5sum 6769183129211c19f85164a74796a643
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1185,6 +1212,7 @@ lab CSHL-m
 labExpId LID20730
 labProtocolId 2A
 localization cell
+md5sum 6d27bdbeed54b1caab76f1ff92f11cd6
 project wgEncode
 readType 2x76D
 replicate 1
@@ -1215,6 +1243,7 @@ lab CSHL-m
 labExpId LID20731
 labProtocolId 2B
 localization cell
+md5sum 658df86aa1f3bb2b3101adbc86b04318
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1244,6 +1273,7 @@ lab CSHL-m
 labExpId LID20730,LID20731
 labProtocolId 2A,2B
 localization cell
+md5sum 38d5a701541f99ad616305c4413063fc
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -1272,6 +1302,7 @@ lab CSHL-m
 labExpId LID21179
 labProtocolId 4A
 localization cell
+md5sum e8e3e5bf3fa08005e2fcd43ba97d4291,7ee61c80acb9d2a325c1898ca5c9a707
 project wgEncode
 readType 2x76D
 replicate 1
@@ -1302,6 +1333,7 @@ lab CSHL-m
 labExpId LID21180
 labProtocolId 4B
 localization cell
+md5sum aef46bb54edbb117ac262b15ba7c4b66,fa97c0b9449afa5e25621cbeeff0e04a
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1332,6 +1364,7 @@ lab CSHL-m
 labExpId LID21179,LID21180
 labProtocolId 4A,4B
 localization cell
+md5sum 8b79327eab7639c6ee68a0a74df5219c
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -1361,6 +1394,7 @@ lab CSHL-m
 labExpId LID21179
 labProtocolId 4A
 localization cell
+md5sum 8ff8360d026cbb28a2bea6708079d1db
 project wgEncode
 readType 2x76D
 replicate 1
@@ -1390,6 +1424,7 @@ lab CSHL-m
 labExpId LID21180
 labProtocolId 4B
 localization cell
+md5sum 92146cb9ee2a28aa42adfe472eb7c49c
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1419,6 +1454,7 @@ lab CSHL-m
 labExpId LID21179
 labProtocolId 4A
 localization cell
+md5sum 44ea5352cf1ffa57d670ab849a6eb806
 project wgEncode
 readType 2x76D
 replicate 1
@@ -1448,6 +1484,7 @@ lab CSHL-m
 labExpId LID21180
 labProtocolId 4B
 localization cell
+md5sum 258d05f8625abd6afda192ea8c99cc47
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1477,6 +1514,7 @@ lab CSHL-m
 labExpId LID21179
 labProtocolId 4A
 localization cell
+md5sum 99fa16bd5fdb26d9514b916dc38ee49f
 project wgEncode
 readType 2x76D
 replicate 1
@@ -1507,6 +1545,7 @@ lab CSHL-m
 labExpId LID21180
 labProtocolId 4B
 localization cell
+md5sum 3795087c89a3076b6d8cb5dd05a801ef
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1537,6 +1576,7 @@ lab CSHL-m
 labExpId LID21179
 labProtocolId 4A
 localization cell
+md5sum 3da1307ef55cc40ec9c6dbec6c9ff774
 project wgEncode
 readType 2x76D
 replicate 1
@@ -1567,6 +1607,7 @@ lab CSHL-m
 labExpId LID21180
 labProtocolId 4B
 localization cell
+md5sum 7e819d69ba8cee9679a89daa99bbb870
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1598,6 +1639,7 @@ lab CSHL-m
 labExpId LID21179
 labProtocolId 4A
 localization cell
+md5sum 5908a97d6f329355bf4a166069c333d2
 project wgEncode
 readType 2x76D
 replicate 1
@@ -1628,6 +1670,7 @@ lab CSHL-m
 labExpId LID21180
 labProtocolId 4B
 localization cell
+md5sum 6d90300b229ffe50b96b3dea136e6d5a
 project wgEncode
 readType 2x76D
 replicate 2
@@ -1657,6 +1700,7 @@ lab CSHL-m
 labExpId LID21179,LID21180
 labProtocolId 4A,4B
 localization cell
+md5sum 95cd9b855546297b7a11ffb2e450c5ec
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -1747,6 +1791,7 @@ lab CSHL-m
 labExpId LID20870,LID20871
 labProtocolId 16A,16B
 localization cell
+md5sum 4a9293e7a85115664e2c6e95f09293d6
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -2082,6 +2127,7 @@ lab CSHL-m
 labExpId LID20870,LID20871
 labProtocolId 16A,16B
 localization cell
+md5sum 8b247f8dd38c887b20df1bdfd832b86d
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -2172,6 +2218,7 @@ lab CSHL-m
 labExpId LID20872,LID20873
 labProtocolId 17A,17B
 localization cell
+md5sum 3c22f2812358f6eb7a5d7d8e91da8e09
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -2507,6 +2554,7 @@ lab CSHL-m
 labExpId LID20872,LID20873
 labProtocolId 17A,17B
 localization cell
+md5sum 3626cad061360b5058bbfacca1795f11
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -2535,6 +2583,7 @@ lab CSHL-m
 labExpId LID21183
 labProtocolId 8A
 localization cell
+md5sum 77473346742f6558ff7fd20fbe4645f7,6a02a4e4c8cfda817e2895e1fcaaf3b0
 project wgEncode
 readType 2x76D
 replicate 1
@@ -2565,6 +2614,7 @@ lab CSHL-m
 labExpId LID21184
 labProtocolId 8B
 localization cell
+md5sum 1d60beeaa912e58fabd40e1e0a5a74b2,4cbe0c6dbc2c66e870b5e4835072fc3a
 project wgEncode
 readType 2x76D
 replicate 2
@@ -2595,6 +2645,7 @@ lab CSHL-m
 labExpId LID21183,LID21184
 labProtocolId 8A,8B
 localization cell
+md5sum 8ca0277e072157c5f0cde745dc4144c1
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -2624,6 +2675,7 @@ lab CSHL-m
 labExpId LID21183
 labProtocolId 8A
 localization cell
+md5sum f33a333b55926cd6e3f0adffc9c4b6b6
 project wgEncode
 readType 2x76D
 replicate 1
@@ -2653,6 +2705,7 @@ lab CSHL-m
 labExpId LID21184
 labProtocolId 8B
 localization cell
+md5sum 48956b1af38ac25ffbe3a80293c87588
 project wgEncode
 readType 2x76D
 replicate 2
@@ -2682,6 +2735,7 @@ lab CSHL-m
 labExpId LID21183
 labProtocolId 8A
 localization cell
+md5sum 53b875acdd99c49036d45e34f0b3e0f7
 project wgEncode
 readType 2x76D
 replicate 1
@@ -2711,6 +2765,7 @@ lab CSHL-m
 labExpId LID21184
 labProtocolId 8B
 localization cell
+md5sum 2b222faea90e341b2f6229b5cb636a70
 project wgEncode
 readType 2x76D
 replicate 2
@@ -2740,6 +2795,7 @@ lab CSHL-m
 labExpId LID21183
 labProtocolId 8A
 localization cell
+md5sum 3a5ccc2e6841270ef2830abd723ba96c
 project wgEncode
 readType 2x76D
 replicate 1
@@ -2770,6 +2826,7 @@ lab CSHL-m
 labExpId LID21184
 labProtocolId 8B
 localization cell
+md5sum d095346ce6d5d3b0870441df00993a58
 project wgEncode
 readType 2x76D
 replicate 2
@@ -2800,6 +2857,7 @@ lab CSHL-m
 labExpId LID21183
 labProtocolId 8A
 localization cell
+md5sum 63b99bb0535d3a9f09eb83757fdad8fe
 project wgEncode
 readType 2x76D
 replicate 1
@@ -2830,6 +2888,7 @@ lab CSHL-m
 labExpId LID21184
 labProtocolId 8B
 localization cell
+md5sum 12100c43ec5b1d8797a5b8ba50488619
 project wgEncode
 readType 2x76D
 replicate 2
@@ -2861,6 +2920,7 @@ lab CSHL-m
 labExpId LID21183
 labProtocolId 8A
 localization cell
+md5sum 8a32f7832c7f0979b06bd2adee8864b6
 project wgEncode
 readType 2x76D
 replicate 1
@@ -2891,6 +2951,7 @@ lab CSHL-m
 labExpId LID21184
 labProtocolId 8B
 localization cell
+md5sum b30e68d2cff76dabedfe1ba179537670
 project wgEncode
 readType 2x76D
 replicate 2
@@ -2920,6 +2981,7 @@ lab CSHL-m
 labExpId LID21183,LID21184
 labProtocolId 8A,8B
 localization cell
+md5sum 9882762d255ba9f5e6ebeebd1a32410f
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -3010,6 +3072,7 @@ lab CSHL-m
 labExpId LID21042,LID21043
 labProtocolId 18A,18B
 localization cell
+md5sum cb1da6a2e0a77c24b32a86dd02f73c34
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -3345,6 +3408,7 @@ lab CSHL-m
 labExpId LID21042,LID21043
 labProtocolId 18A,18B
 localization cell
+md5sum aac71e120277dadebb43d4729abcac5f
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -3435,6 +3499,7 @@ lab CSHL-m
 labExpId LID20920,LID20921
 labProtocolId 15A,15B
 localization cell
+md5sum 42375f4b462455c08dcbd7f99a2281de
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -3770,6 +3835,7 @@ lab CSHL-m
 labExpId LID20920,LID20921
 labProtocolId 15A,15B
 localization cell
+md5sum 4582c09679fdba9383fb1c4f2d36d4b4
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -3798,6 +3864,7 @@ lab CSHL-m
 labExpId LID20924
 labProtocolId 22A
 localization cell
+md5sum 8b6c164f2cd78b694d6f2e4d93a7b8dc,6fd6b5ec6fdb9ef78152370663b52cce
 project wgEncode
 readType 2x76D
 replicate 1
@@ -3828,6 +3895,7 @@ lab CSHL-m
 labExpId LID20925
 labProtocolId 22B
 localization cell
+md5sum 1b960a005325019554f2a2b52eb0fbe5,4887ca148fecf47a84c1a857f46ebfa4
 project wgEncode
 readType 2x76D
 replicate 2
@@ -3858,6 +3926,7 @@ lab CSHL-m
 labExpId LID20924,LID20925
 labProtocolId 22A,22B
 localization cell
+md5sum 086b4e579b642a0ea6b629dcb0d0f7e7
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -3887,6 +3956,7 @@ lab CSHL-m
 labExpId LID20924
 labProtocolId 22A
 localization cell
+md5sum f0a9ef62e38a304dc487081e69a34be3
 project wgEncode
 readType 2x76D
 replicate 1
@@ -3916,6 +3986,7 @@ lab CSHL-m
 labExpId LID20925
 labProtocolId 22B
 localization cell
+md5sum e9400641931f4386d5b225c2488253d0
 project wgEncode
 readType 2x76D
 replicate 2
@@ -3945,6 +4016,7 @@ lab CSHL-m
 labExpId LID20924
 labProtocolId 22A
 localization cell
+md5sum 3ec56cd7fd1da369543fc4bfa43a6f45
 project wgEncode
 readType 2x76D
 replicate 1
@@ -3974,6 +4046,7 @@ lab CSHL-m
 labExpId LID20925
 labProtocolId 22B
 localization cell
+md5sum c080e0eb7091685e62202bf3f51606fc
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4003,6 +4076,7 @@ lab CSHL-m
 labExpId LID20924
 labProtocolId 22A
 localization cell
+md5sum ce7ca0045588cf75cd13af461ed8d8cb
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4033,6 +4107,7 @@ lab CSHL-m
 labExpId LID20925
 labProtocolId 22B
 localization cell
+md5sum 88569548b4bf34aa31f915921ade9406
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4063,6 +4138,7 @@ lab CSHL-m
 labExpId LID20924
 labProtocolId 22A
 localization cell
+md5sum aa162ebdcd7a14135323284c7dce6b7b
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4093,6 +4169,7 @@ lab CSHL-m
 labExpId LID20925
 labProtocolId 22B
 localization cell
+md5sum 2d078b58e0707686960488a876b033a7
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4124,6 +4201,7 @@ lab CSHL-m
 labExpId LID20924
 labProtocolId 22A
 localization cell
+md5sum af6fe719b660703cff82fdc1689c84e0
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4154,6 +4232,7 @@ lab CSHL-m
 labExpId LID20925
 labProtocolId 22B
 localization cell
+md5sum 3d3e2642d7cb87291a25feb3a2c1eed3
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4183,6 +4262,7 @@ lab CSHL-m
 labExpId LID20924,LID20925
 labProtocolId 22A,22B
 localization cell
+md5sum 832f15b6cd720f9dceeafecb16d2c25b
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -4211,6 +4291,7 @@ lab CSHL-m
 labExpId LID20821
 labProtocolId 11A
 localization cell
+md5sum d7b7246d45bdadd464f147786cda7a6d,5e927afc8c10b701bfb6a050f996358b
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4241,6 +4322,7 @@ lab CSHL-m
 labExpId LID20822
 labProtocolId 11B
 localization cell
+md5sum f66bdd3ea7a171c19a4da6ca4997cdd0,44d1e0f356351d19020b4481e97ee66a
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4271,6 +4353,7 @@ lab CSHL-m
 labExpId LID20821,LID20822
 labProtocolId 11A,11B
 localization cell
+md5sum 536c6627aeb9f8fe77e39e95eb5e181f
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -4300,6 +4383,7 @@ lab CSHL-m
 labExpId LID20821
 labProtocolId 11A
 localization cell
+md5sum 2695bca7fd28fd4226baff43374d6106
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4329,6 +4413,7 @@ lab CSHL-m
 labExpId LID20822
 labProtocolId 11B
 localization cell
+md5sum 83426609843ec018fa9c3f6fcbebf427
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4358,6 +4443,7 @@ lab CSHL-m
 labExpId LID20821
 labProtocolId 11A
 localization cell
+md5sum 027330c04b03415aa92b50e6fd913c85
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4387,6 +4473,7 @@ lab CSHL-m
 labExpId LID20822
 labProtocolId 11B
 localization cell
+md5sum be5b9ee8ee9ab85e3cc4f9293c87d871
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4416,6 +4503,7 @@ lab CSHL-m
 labExpId LID20821
 labProtocolId 11A
 localization cell
+md5sum a05f48c82d9d4c70863534f731f44e3f
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4446,6 +4534,7 @@ lab CSHL-m
 labExpId LID20822
 labProtocolId 11B
 localization cell
+md5sum 86943199416f48257ecfa02758687334
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4476,6 +4565,7 @@ lab CSHL-m
 labExpId LID20821
 labProtocolId 11A
 localization cell
+md5sum 493d9e1a1f38212935ae417a67a54cb7
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4506,6 +4596,7 @@ lab CSHL-m
 labExpId LID20822
 labProtocolId 11B
 localization cell
+md5sum f3a19a69f7c32232ba9add1c3f53e998
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4537,6 +4628,7 @@ lab CSHL-m
 labExpId LID20821
 labProtocolId 11A
 localization cell
+md5sum 508e725bb6677274b73a22f40c196d5f
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4567,6 +4659,7 @@ lab CSHL-m
 labExpId LID20822
 labProtocolId 11B
 localization cell
+md5sum 29579bcaca029781a284a09c8d8aaa63
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4596,6 +4689,7 @@ lab CSHL-m
 labExpId LID20821,LID20822
 labProtocolId 11A,11B
 localization cell
+md5sum cc14c2dfa07f50e45c5fa8b79374ab3f
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -4624,6 +4718,7 @@ lab CSHL-m
 labExpId LID21181
 labProtocolId 5A
 localization cell
+md5sum 2c3812d622a1753231d766a6f105747b,edc05633943351f74000281d4c393dc5
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4654,6 +4749,7 @@ lab CSHL-m
 labExpId LID21182
 labProtocolId 5B
 localization cell
+md5sum a8ef72d1f331879fac40b94e11234929,4a0beb1c46e2cef4551d4acdd5e568aa
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4684,6 +4780,7 @@ lab CSHL-m
 labExpId LID21181,LID21182
 labProtocolId 5A,5B
 localization cell
+md5sum 05ffb901871eee2052123f911251b46c
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -4713,6 +4810,7 @@ lab CSHL-m
 labExpId LID21181
 labProtocolId 5A
 localization cell
+md5sum e13acfd7dddca3508bad7c8499d103cc
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4742,6 +4840,7 @@ lab CSHL-m
 labExpId LID21182
 labProtocolId 5B
 localization cell
+md5sum 5f97576da298966073b76b8fef37c5d5
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4771,6 +4870,7 @@ lab CSHL-m
 labExpId LID21181
 labProtocolId 5A
 localization cell
+md5sum 99010a1a627743fd3ada2fda976a0294
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4800,6 +4900,7 @@ lab CSHL-m
 labExpId LID21182
 labProtocolId 5B
 localization cell
+md5sum 25b8608a7a600f32c93dd802460b7439
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4829,6 +4930,7 @@ lab CSHL-m
 labExpId LID21181
 labProtocolId 5A
 localization cell
+md5sum 24fc3b46b1e954a6f507faa15a84fc21
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4859,6 +4961,7 @@ lab CSHL-m
 labExpId LID21182
 labProtocolId 5B
 localization cell
+md5sum 9ed630b679008b5418388e2cc99e9f96
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4889,6 +4992,7 @@ lab CSHL-m
 labExpId LID21181
 labProtocolId 5A
 localization cell
+md5sum 67dd18e2e2170c923ef6b06ef3fc50a2
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4919,6 +5023,7 @@ lab CSHL-m
 labExpId LID21182
 labProtocolId 5B
 localization cell
+md5sum 9151ce8f2cd0bbc3a70c8ed5f29dab7a
 project wgEncode
 readType 2x76D
 replicate 2
@@ -4950,6 +5055,7 @@ lab CSHL-m
 labExpId LID21181
 labProtocolId 5A
 localization cell
+md5sum 12b85fe823b385655d283958933966ad
 project wgEncode
 readType 2x76D
 replicate 1
@@ -4980,6 +5086,7 @@ lab CSHL-m
 labExpId LID21182
 labProtocolId 5B
 localization cell
+md5sum edbabc32d2a0a92b0ce64e46203fc452
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5009,6 +5116,7 @@ lab CSHL-m
 labExpId LID21181,LID21182
 labProtocolId 5A,5B
 localization cell
+md5sum cf9f8fc5d610b28af6b6acd6877fcf69
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -5037,6 +5145,7 @@ lab CSHL-m
 labExpId LID20819
 labProtocolId 9A
 localization cell
+md5sum 656d4e6a42a0954f8d52857e1e9a88ac,82abc16de38af56d7b5a2e8f1d77b0fa
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5067,6 +5176,7 @@ lab CSHL-m
 labExpId LID20820
 labProtocolId 9B
 localization cell
+md5sum d80edf4731debd277cc5b93f6d33e431,ae2a731907d2b522b5acc8094bf030a2
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5097,6 +5207,7 @@ lab CSHL-m
 labExpId LID20819,LID20820
 labProtocolId 9A,9B
 localization cell
+md5sum ae10c6ea450b63e9b003e9392535265a
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -5126,6 +5237,7 @@ lab CSHL-m
 labExpId LID20819
 labProtocolId 9A
 localization cell
+md5sum f9fac1352238ff9054b3630bd8f8dff2
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5155,6 +5267,7 @@ lab CSHL-m
 labExpId LID20820
 labProtocolId 9B
 localization cell
+md5sum 86dbb2e73ffc338a5fdf2dc2a1817e29
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5184,6 +5297,7 @@ lab CSHL-m
 labExpId LID20819
 labProtocolId 9A
 localization cell
+md5sum 0967a253772ccf773419bdafe6602f28
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5213,6 +5327,7 @@ lab CSHL-m
 labExpId LID20820
 labProtocolId 9B
 localization cell
+md5sum b3df95b99be105facd1704313de9143e
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5242,6 +5357,7 @@ lab CSHL-m
 labExpId LID20819
 labProtocolId 9A
 localization cell
+md5sum dfe1fb36b5b18795530e2b529a1ab162
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5272,6 +5388,7 @@ lab CSHL-m
 labExpId LID20820
 labProtocolId 9B
 localization cell
+md5sum 397ec598661ccaa2f2c3eda82a5ed96f
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5302,6 +5419,7 @@ lab CSHL-m
 labExpId LID20819
 labProtocolId 9A
 localization cell
+md5sum 8fc472a270bc5f4cf51f0d4e71d2f3ce
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5332,6 +5450,7 @@ lab CSHL-m
 labExpId LID20820
 labProtocolId 9B
 localization cell
+md5sum b9edd94db03d72d74b8b0094e9fc62b7
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5363,6 +5482,7 @@ lab CSHL-m
 labExpId LID20819
 labProtocolId 9A
 localization cell
+md5sum 0dfd47d8aa94034fa93495906c3f1898
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5393,6 +5513,7 @@ lab CSHL-m
 labExpId LID20820
 labProtocolId 9B
 localization cell
+md5sum 1aeb3e44aeb8d1fc12c3b4201c9d6113
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5422,6 +5543,7 @@ lab CSHL-m
 labExpId LID20819,LID20820
 labProtocolId 9A,9B
 localization cell
+md5sum a513f9843370fcaa775f9facad007b9d
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -5512,6 +5634,7 @@ lab CSHL-m
 labExpId LID21038,LID21039
 labProtocolId 13A,13B
 localization cell
+md5sum 039d5d96313c1e1e900e40edf18d48a3
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -5847,6 +5970,7 @@ lab CSHL-m
 labExpId LID21038,LID21039
 labProtocolId 13A,13B
 localization cell
+md5sum c9f8fb0affc8b05836b0a6dc43acdf5b
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -5875,6 +5999,7 @@ lab CSHL-m
 labExpId LID20732
 labProtocolId 3A
 localization cell
+md5sum 9300d52a8d7342cb173bc2bd42832ac3,ee8b9eb126a2f35b11c5a6ed08516889
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5905,6 +6030,7 @@ lab CSHL-m
 labExpId LID20733
 labProtocolId 3B
 localization cell
+md5sum 309a02696e48b15db78519360a652835,5dac9c847e80f3726c34d1ff8427bf83
 project wgEncode
 readType 2x76D
 replicate 2
@@ -5935,6 +6061,7 @@ lab CSHL-m
 labExpId LID20732,LID20733
 labProtocolId 3A,3B
 localization cell
+md5sum 99abc6db2845dfb5a9bcb2ea127c2f26
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -5964,6 +6091,7 @@ lab CSHL-m
 labExpId LID20732
 labProtocolId 3A
 localization cell
+md5sum ef1a6862d32fa057029118776ba27c90
 project wgEncode
 readType 2x76D
 replicate 1
@@ -5993,6 +6121,7 @@ lab CSHL-m
 labExpId LID20733
 labProtocolId 3B
 localization cell
+md5sum dc7e73c21df9fb00870fa5585f45be78
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6022,6 +6151,7 @@ lab CSHL-m
 labExpId LID20732
 labProtocolId 3A
 localization cell
+md5sum 96a860fd4bb417b6aedf86eadcb4149f
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6051,6 +6181,7 @@ lab CSHL-m
 labExpId LID20733
 labProtocolId 3B
 localization cell
+md5sum da99cb490e6ca16c57810554623fc92a
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6080,6 +6211,7 @@ lab CSHL-m
 labExpId LID20732
 labProtocolId 3A
 localization cell
+md5sum 0126df3283b34395af24a0e3801c49e9
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6110,6 +6242,7 @@ lab CSHL-m
 labExpId LID20733
 labProtocolId 3B
 localization cell
+md5sum 9a1505b724d30b52778603bcbd0e3a43
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6140,6 +6273,7 @@ lab CSHL-m
 labExpId LID20732
 labProtocolId 3A
 localization cell
+md5sum a4148a8080a2553c1f7e54809e4278fd
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6170,6 +6304,7 @@ lab CSHL-m
 labExpId LID20733
 labProtocolId 3B
 localization cell
+md5sum ac0c03936c784fdc3724812f6dfc9205
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6201,6 +6336,7 @@ lab CSHL-m
 labExpId LID20732
 labProtocolId 3A
 localization cell
+md5sum a918549be179a4a0f5577b8f4feab5b7
 project wgEncode
 readType 2x76D
 replicate 1
@@ -6231,6 +6367,7 @@ lab CSHL-m
 labExpId LID20733
 labProtocolId 3B
 localization cell
+md5sum ad540df43e583a4e1f0589c427712d24
 project wgEncode
 readType 2x76D
 replicate 2
@@ -6260,6 +6397,7 @@ lab CSHL-m
 labExpId LID20732,LID20733
 labProtocolId 3A,3B
 localization cell
+md5sum a2b97627283ff604ebfda007bea73739
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -6350,6 +6488,7 @@ lab CSHL-m
 labExpId LID20868,LID20869
 labProtocolId 12A,12B
 localization cell
+md5sum a55e0be980231f22eb2efdc014ecb1b9
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -6685,6 +6824,7 @@ lab CSHL-m
 labExpId LID20868,LID20869
 labProtocolId 12A,12B
 localization cell
+md5sum 81795845bc2acf9eab930bac03d4e6d6
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -6775,6 +6915,7 @@ lab CSHL-m
 labExpId LID20922,LID20923
 labProtocolId 19A,19B
 localization cell
+md5sum 31437fad69c795caea65a3c511cb5907
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -7110,6 +7251,7 @@ lab CSHL-m
 labExpId LID20922,LID20923
 labProtocolId 19A,19B
 localization cell
+md5sum 88f255fc777f0d80f79bc6a3b2efb499
 project wgEncode
 readType 2x76D
 rnaExtract longPolyA
@@ -7120,4 +7262,4 @@ strain C57BL/6J
 subId 5582
 view TranscriptDeNovo
 
-# MAGIC: -1504238590
+# MAGIC: 1025678456
