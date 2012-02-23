@@ -4,6 +4,7 @@
 use warnings;
 use strict;
 use Encode;
+use Getopt::Long;
 
 use LWP::UserAgent;
 use Encode qw(decode encode from_to decode_utf8 encode_utf8 is_utf8);
@@ -53,6 +54,10 @@ my %specialchars = (
 #shift @ARGV;
 
 my @ids;
+my %opt;
+my $goodopts = GetOptions(\%opt,
+	"authors=i"
+);
 
 unless(@ARGV){
 	&usage();
@@ -60,7 +65,6 @@ unless(@ARGV){
 
 
 foreach my $id (@ARGV){
-	
 	push @ids, $id;
 
 }
@@ -185,7 +189,7 @@ sub getPubMedInfo {
 		}
  		foreach my $line (@list){
 			
-			if ($authcount == 10){
+			if ($authcount == $opt{'authors'}){
 				$authcount++;
 				last
 			}
@@ -209,14 +213,14 @@ sub getPubMedInfo {
 		
 		}
 		if ($collective) {
-			if ($authcount >= 10) {
+			if ($authcount >= $opt{'authors'}) {
                                 $authcount++;
 				my $trash = pop(@authors);
 			}
 			unshift(@authors, $collective);
 		}
 		$authorstr = join ", ", @authors;
-		if ($authcount >= 11){
+		if ($authcount >= ($opt{'authors'} + 1)){
 			$authorstr = $authorstr . ' <em>et al</em>';
 		}
 		if ($authorstr) {$authorstr = &filterChars($authorstr, \%specialchars)}
@@ -313,7 +317,7 @@ sub getPubMedCentralInfo {
 		foreach my $line (@list){
 
 
-			if ($authcount == 10){
+			if ($authcount == $opt{'authors'}){
 				$authcount++;
 				last}
 			$line =~ s/<\/Item>//g;
@@ -327,7 +331,7 @@ sub getPubMedCentralInfo {
 		
 		}
 		$authorstr = join ", ", @authors;
-		if ($authcount == 11){
+		if ($authcount == ($opt{'authors'} + 1)){
 			$authorstr = $authorstr . ' <em>et al</em>';
 		}
 		if ($authorstr){$authorstr = &filterChars($authorstr, \%specialchars)}
