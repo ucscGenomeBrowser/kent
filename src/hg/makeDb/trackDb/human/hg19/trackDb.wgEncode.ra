@@ -5,10 +5,11 @@ include wgEncodeSuper.ra
 # GENCODE genes (wrangler: braney,cricket)
 include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra
+
 #include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV9.ra alpha
-include wgEncodeGencodeV10.ra alpha,beta
+include wgEncodeGencodeV10.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
@@ -96,8 +97,8 @@ include wgEncodeRikenCage.ra beta,public
 include wgEncodeRikenCage.release3.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
-include wgEncodeCshlShortRnaSeq.ra public
-include wgEncodeCshlShortRnaSeq.release2.ra alpha,beta
+include wgEncodeCshlShortRnaSeq.release2.ra beta,public
+include wgEncodeCshlShortRnaSeq.release3.ra alpha
 
 # GIS RNA Seq (wrangler: cricket)
 include wgEncodeGisRnaSeq.ra
@@ -114,7 +115,7 @@ include wgEncodeCshlLongRnaSeq.release2.ra alpha
 include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
-include wgEncodeHaibRnaSeq.ra alpha,beta
+include wgEncodeHaibRnaSeq.ra
 #include wgEncodeHaibRnaSeq.release2.ra
 
 
@@ -144,8 +145,8 @@ include wgEncodeHaibMethylWgbs.ra alpha
 
 #Broad Histone (wrangler: Matt and Venkat)
 #include wgEncodeBroadHistone.release3.ra alpha
-include wgEncodeBroadHistone.release2.ra alpha
-include wgEncodeBroadHistone.ra beta,public
+include wgEncodeBroadHistone.release2.ra alpha,beta
+include wgEncodeBroadHistone.ra public
 
 #Broad HMM (wrangler: Matt)
 include wgEncodeBroadHmm.ra

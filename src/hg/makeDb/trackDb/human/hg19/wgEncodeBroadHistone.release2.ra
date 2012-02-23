@@ -61,12 +61,12 @@ shortLabel Broad Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/Broad Institute
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELAS3=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 DND41=Dnd41  HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube MONOCD14RO1746=Monocytes-CD14+&nbsp;(RO&nbsp;01794) NHA=NH-A NHDFAD=NHDF-Ad NHEK=NHEK NHLF=NHLF OSTEO=Osteoblast
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 DND41=Dnd41  HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube MONOCD14RO1746=Monocytes-CD14+&nbsp;(RO&nbsp;01794) NHA=NH-A NHDFAD=NHDF-Ad NHEK=NHEK NHLF=NHLF OSTEO=Osteoblast
 subGroup3 factor Antibody CHD1A301218A=CHD1_(A301-218A) CTCF=CTCF EZH239875=EZH2_(39875) JARID1AAB26049=JARID1A_(ab26049) H2AZ=H2A.Z H3K04ME1=H3K4me1 H3K04ME2=H3K4me2 H3K04ME3=H3K4me3 H3K09AC=H3K9ac H3K09me1=H3K9me1 H3K09ME3=H3K9me3 H3K27AC=H3K27ac H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 H3K79ME2=H3K79me2 H4K20ME1=H4K20me1 HDAC1SC6298=HDAC1_(SC-6298) HDAC2A300705A=HDAC2_(A300-705A) P300=P300 PHF8A301772A=PHF8_(A301-772A) PLU1=PLU1 POL2B=Pol2(b) RBBP5A300109A=RBBP5_(A300-109A) SAP3039731=SAP30_(39731) zCTRL=Input_Control
 subGroup4 treatment Treatment ETOH02=EtOH_0.02pct zNONE=None
 dimensions dimensionY=cellType dimensionX=factor
-sortOrder cellType=+ factor=+ treatment=+ view=+ 
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View replicate=Rep dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+sortOrder cellType=+ factor=+ view=+ 
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
@@ -97,7 +97,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1-hESC H3K4me1
         longLabel H1-hESC H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME1 cellType=H1 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME1 cellType=1H1 treatment=zNONE
         type broadPeak
         color 0,107,27
         #colorScheme2 0,110,0
@@ -107,7 +107,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 CTCF
         longLabel GM12878 CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=CTCF cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=CTCF cellType=1GM12878 treatment=zNONE
         type broadPeak
         color 153,38,0
         # subId=2800 dateSubmitted=2010-11-05
@@ -116,7 +116,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H3K27ac
         longLabel GM12878 H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27AC cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H3K27AC cellType=1GM12878 treatment=zNONE
         type broadPeak
         color 153,38,0
         # subId=2801 dateSubmitted=2010-11-05
@@ -125,7 +125,7 @@ html wgEncodeBroadHistone.release2
         #parent wgEncodeBroadHistoneViewPeaks off
         #shortLabel GM12878 H3K27me3
         #longLabel GM12878 H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        #subGroups view=Peaks factor=H3K27ME3 cellType=GM12878 treatment=zNONE
+        #subGroups view=Peaks factor=H3K27ME3 cellType=1GM12878 treatment=zNONE
         #type broadPeak
         #color 153,38,0
         #colorScheme2 255,0,0
@@ -135,7 +135,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H3K36me3
         longLabel GM12878 H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K36ME3 cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H3K36ME3 cellType=1GM12878 treatment=zNONE
         type broadPeak
         color 153,38,0
         #colorScheme2 0,0,150
@@ -145,7 +145,7 @@ html wgEncodeBroadHistone.release2
         #parent wgEncodeBroadHistoneViewPeaks off
         #shortLabel GM12878 H3K4me1
         #longLabel GM12878 H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        #subGroups view=Peaks factor=H3K04ME1 cellType=GM12878 treatment=zNONE
+        #subGroups view=Peaks factor=H3K04ME1 cellType=1GM12878 treatment=zNONE
         #type broadPeak
         #color 153,38,0
         #colorScheme2 0,110,0
@@ -155,7 +155,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H3K4me2
         longLabel GM12878 H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME2 cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME2 cellType=1GM12878 treatment=zNONE
         type broadPeak
         color 153,38,0
         #colorScheme2 0,130,0
@@ -165,7 +165,7 @@ html wgEncodeBroadHistone.release2
         #parent wgEncodeBroadHistoneViewPeaks off
         #shortLabel GM12878 H3K4me3
         #longLabel GM12878 H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        #subGroups view=Peaks factor=H3K04ME3 cellType=GM12878 treatment=zNONE
+        #subGroups view=Peaks factor=H3K04ME3 cellType=1GM12878 treatment=zNONE
         #type broadPeak
         #color 153,38,0
         #colorScheme2 0,150,0
@@ -175,7 +175,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H3K9ac
         longLabel GM12878 H3K9ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09AC cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H3K09AC cellType=1GM12878 treatment=zNONE
         type broadPeak
         color 153,38,0
         # subId=2807 dateSubmitted=2010-11-05
@@ -184,7 +184,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H4K20me1
         longLabel GM12878 H4K20me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H4K20ME1 cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H4K20ME1 cellType=1GM12878 treatment=zNONE
         type broadPeak
         color 153,38,0
         #colorScheme2 150,0,0
@@ -194,7 +194,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1-hESC CTCF
         longLabel H1-hESC CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=CTCF cellType=H1 treatment=zNONE
+        subGroups view=Peaks factor=CTCF cellType=1H1 treatment=zNONE
         type broadPeak
         color 0,107,27
         # subId=2810 dateSubmitted=2010-11-05
@@ -203,7 +203,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1-hESC H3K27ac
         longLabel H1-hESC H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27AC cellType=H1 treatment=zNONE
+        subGroups view=Peaks factor=H3K27AC cellType=1H1 treatment=zNONE
         type broadPeak
         color 0,107,27
         # subId=2811 dateSubmitted=2010-11-05
@@ -212,7 +212,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1-hESC H3K27me3
         longLabel H1-hESC H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27ME3 cellType=H1 treatment=zNONE
+        subGroups view=Peaks factor=H3K27ME3 cellType=1H1 treatment=zNONE
         type broadPeak
         color 0,107,27
         #colorScheme2 255,0,0
@@ -222,7 +222,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1-hESC H3K36me3
         longLabel H1-hESC H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K36ME3 cellType=H1 treatment=zNONE
+        subGroups view=Peaks factor=H3K36ME3 cellType=1H1 treatment=zNONE
         type broadPeak
         color 0,107,27
         #colorScheme2 0,0,150
@@ -232,7 +232,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1-hESC H3K4me2
         longLabel H1-hESC H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME2 cellType=H1 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME2 cellType=1H1 treatment=zNONE
         type broadPeak
         color 0,107,27
         #colorScheme2 0,130,0
@@ -242,7 +242,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1-hESC H3K4me3
         longLabel H1-hESC H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME3 cellType=H1 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME3 cellType=1H1 treatment=zNONE
         type broadPeak
         color 0,107,27
         #colorScheme2 0,150,0
@@ -252,7 +252,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1-hESC H3K9ac
         longLabel H1-hESC H3K9ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09AC cellType=H1 treatment=zNONE
+        subGroups view=Peaks factor=H3K09AC cellType=1H1 treatment=zNONE
         type broadPeak
         color 0,107,27
         # subId=2816 dateSubmitted=2010-11-05
@@ -261,7 +261,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1-hESC H4K20me1
         longLabel H1-hESC H4K20me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H4K20ME1 cellType=H1 treatment=zNONE
+        subGroups view=Peaks factor=H4K20ME1 cellType=1H1 treatment=zNONE
         type broadPeak
         color 0,107,27
         #colorScheme2 150,0,0
@@ -530,7 +530,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 CTCF
         longLabel HeLa-S3 CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=CTCF cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=CTCF cellType=2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         # subId=2852 dateSubmitted=2010-11-05
@@ -539,7 +539,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H3K27ac
         longLabel HeLa-S3 H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27AC cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H3K27AC cellType=2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         # subId=2853 dateSubmitted=2010-11-05
@@ -548,7 +548,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H3K36me3
         longLabel HeLa-S3 H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K36ME3 cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H3K36ME3 cellType=2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         #colorScheme2 0,0,150
@@ -558,7 +558,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H3K4me2
         longLabel HeLa-S3 H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME2 cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME2 cellType=2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         #colorScheme2 0,130,0
@@ -568,7 +568,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H3K4me3
         longLabel HeLa-S3 H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME3 cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME3 cellType=2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         #colorScheme2 0,150,0
@@ -578,7 +578,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H3K79me2
         longLabel HeLa-S3 H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K79ME2 cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H3K79ME2 cellType=2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         # subId=2857 dateSubmitted=2010-11-05
@@ -587,7 +587,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H3K9ac
         longLabel HeLa-S3 H3K9ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09AC cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H3K09AC cellType=2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         # subId=2858 dateSubmitted=2010-11-05
@@ -596,7 +596,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H4K20me1
         longLabel HeLa-S3 H4K20me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H4K20ME1 cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H4K20ME1 cellType=2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         #colorScheme2 150,0,0
@@ -606,7 +606,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 Pol2(b)
         longLabel HeLa-S3 Pol2(b) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=POL2B cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=POL2B cellType=2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         #colorScheme2 0,100,0
@@ -616,7 +616,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 CTCF
         longLabel HepG2 CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=CTCF cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=CTCF cellType=2HEPG2 treatment=zNONE
         type broadPeak
         color 189,0,157
         # subId=2862 dateSubmitted=2010-11-05
@@ -625,7 +625,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H2A.Z
         longLabel HepG2 H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H2AZ cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=H2AZ cellType=2HEPG2 treatment=zNONE
         type broadPeak
         color 189,0,157
         #colorScheme2 200,0,0
@@ -635,7 +635,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K27ac
         longLabel HepG2 H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27AC cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=H3K27AC cellType=2HEPG2 treatment=zNONE
         type broadPeak
         color 189,0,157
         # subId=2864 dateSubmitted=2010-11-05
@@ -644,7 +644,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K27me3
         longLabel HepG2 H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27ME3 cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=H3K27ME3 cellType=2HEPG2 treatment=zNONE
         type broadPeak
         color 189,0,157
         #colorScheme2 255,0,0
@@ -654,7 +654,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K36me3
         longLabel HepG2 H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K36ME3 cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=H3K36ME3 cellType=2HEPG2 treatment=zNONE
         type broadPeak
         color 189,0,157
         #colorScheme2 0,0,150
@@ -664,7 +664,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K4me2
         longLabel HepG2 H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME2 cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME2 cellType=2HEPG2 treatment=zNONE
         type broadPeak
         color 189,0,157
         #colorScheme2 0,130,0
@@ -674,7 +674,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K4me3
         longLabel HepG2 H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME3 cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME3 cellType=2HEPG2 treatment=zNONE
         type broadPeak
         color 189,0,157
         #colorScheme2 0,150,0
@@ -684,7 +684,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K79me2
         longLabel HepG2 H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K79ME2 cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=H3K79ME2 cellType=2HEPG2 treatment=zNONE
         type broadPeak
         color 189,0,157
         # subId=2869 dateSubmitted=2010-11-05
@@ -693,7 +693,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K9ac
         longLabel HepG2 H3K9ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09AC cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=H3K09AC cellType=2HEPG2 treatment=zNONE
         type broadPeak
         color 189,0,157
         # subId=2870 dateSubmitted=2010-11-05
@@ -702,7 +702,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H4K20me1
         longLabel HepG2 H4K20me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H4K20ME1 cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=H4K20ME1 cellType=2HEPG2 treatment=zNONE
         type broadPeak
         color 189,0,157
         #colorScheme2 150,0,0
@@ -712,7 +712,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC CTCF
         longLabel HUVEC CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=CTCF cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=CTCF cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         # subId=2873 dateSubmitted=2010-11-05
@@ -721,7 +721,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K27ac
         longLabel HUVEC H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27AC cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H3K27AC cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         # subId=2874 dateSubmitted=2010-11-05
@@ -730,7 +730,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K27me3
         longLabel HUVEC H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27ME3 cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H3K27ME3 cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         #colorScheme2 255,0,0
@@ -740,7 +740,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K4me1
         longLabel HUVEC H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME1 cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME1 cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         #colorScheme2 0,110,0
@@ -750,7 +750,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K4me2
         longLabel HUVEC H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME2 cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME2 cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         #colorScheme2 0,130,0
@@ -760,7 +760,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K4me3
         longLabel HUVEC H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME3 cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME3 cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         #colorScheme2 0,150,0
@@ -770,7 +770,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K9ac
         longLabel HUVEC H3K9ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09AC cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H3K09AC cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         # subId=2879 dateSubmitted=2010-11-05
@@ -779,7 +779,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K9me1
         longLabel HUVEC H3K9me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09me1 cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H3K09me1 cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         #colorScheme2 30,0,0
@@ -789,7 +789,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H4K20me1
         longLabel HUVEC H4K20me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H4K20ME1 cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H4K20ME1 cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         #colorScheme2 150,0,0
@@ -799,7 +799,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC Pol2(b)
         longLabel HUVEC Pol2(b) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=POL2B cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=POL2B cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         #colorScheme2 0,100,0
@@ -809,7 +809,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 CTCF
         longLabel K562 CTCF Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=CTCF cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=CTCF cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         # subId=2884 dateSubmitted=2010-11-05
@@ -818,7 +818,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K27ac
         longLabel K562 H3K27ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27AC cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H3K27AC cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         # subId=2885 dateSubmitted=2010-11-05
@@ -827,7 +827,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K27me3
         longLabel K562 H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27ME3 cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H3K27ME3 cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         #colorScheme2 255,0,0
@@ -837,7 +837,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K36me3
         longLabel K562 H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K36ME3 cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H3K36ME3 cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         #colorScheme2 0,0,150
@@ -847,7 +847,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K4me1
         longLabel K562 H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME1 cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME1 cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         #colorScheme2 0,110,0
@@ -857,7 +857,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K4me2
         longLabel K562 H3K4me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME2 cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME2 cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         #colorScheme2 0,130,0
@@ -867,7 +867,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K4me3
         longLabel K562 H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME3 cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME3 cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         #colorScheme2 0,150,0
@@ -877,7 +877,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K9ac
         longLabel K562 H3K9ac Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09AC cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H3K09AC cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         # subId=2891 dateSubmitted=2010-11-05
@@ -886,7 +886,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K9me1
         longLabel K562 H3K9me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09me1 cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H3K09me1 cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         #colorScheme2 30,0,0
@@ -896,7 +896,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H4K20me1
         longLabel K562 H4K20me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H4K20ME1 cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H4K20ME1 cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         #colorScheme2 150,0,0
@@ -906,7 +906,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 Pol2(b)
         longLabel K562 Pol2(b) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=POL2B cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=POL2B cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         #colorScheme2 0,100,0
@@ -1153,7 +1153,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H2A.Z
         longLabel GM12878 H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H2AZ cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H2AZ cellType=1GM12878 treatment=zNONE
         type broadPeak
         color 153,38,0
         #colorScheme2 200,0,0
@@ -1163,7 +1163,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H3K79me2
         longLabel GM12878 H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K79ME2 cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H3K79ME2 cellType=1GM12878 treatment=zNONE
         type broadPeak
         color 153,38,0
         # subId=2979 dateSubmitted=2010-11-16
@@ -1172,7 +1172,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H3K9me3
         longLabel GM12878 H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09ME3 cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H3K09ME3 cellType=1GM12878 treatment=zNONE
         type broadPeak
         color 153,38,0
         #colorScheme2 100,0,0
@@ -1182,7 +1182,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H3K27me3
         longLabel HeLa-S3 H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27ME3 cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H3K27ME3 cellType=2HELAS3 treatment=zNONE
         type broadPeak
         color 0,119,158
         #colorScheme2 255,0,0
@@ -1201,7 +1201,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K36me3
         longLabel HUVEC H3K36me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K36ME3 cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H3K36ME3 cellType=2HUVEC treatment=zNONE
         type broadPeak
         color 224,75,0
         #colorScheme2 0,0,150
@@ -1211,7 +1211,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H2A.Z
         longLabel K562 H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H2AZ cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H2AZ cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         #colorScheme2 200,0,0
@@ -1221,7 +1221,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K79me2
         longLabel K562 H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K79ME2 cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H3K79ME2 cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         # subId=2984 dateSubmitted=2010-11-16
@@ -1230,7 +1230,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K9me3
         longLabel K562 H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09ME3 cellType=K562 treatment=zNONE
+        subGroups view=Peaks factor=H3K09ME3 cellType=1K562 treatment=zNONE
         type broadPeak
         color 46,0,184
         #colorScheme2 100,0,0
@@ -1361,7 +1361,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H3K27me3
         longLabel GM12878 H3K27me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K27ME3 cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H3K27ME3 cellType=1GM12878 treatment=zNONE
         type broadPeak
         origAssembly hg18
         color 153,38,0
@@ -1371,7 +1371,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H3K4me1
         longLabel GM12878 H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME1 cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME1 cellType=1GM12878 treatment=zNONE
         type broadPeak
         origAssembly hg18
         color 153,38,0
@@ -1381,7 +1381,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H3K4me3
         longLabel GM12878 H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME3 cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME3 cellType=1GM12878 treatment=zNONE
         type broadPeak
         origAssembly hg18
         color 153,38,0
@@ -1391,7 +1391,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H3K4me1
         longLabel HeLa-S3 H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME1 cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME1 cellType=2HELAS3 treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 0,119,158
@@ -1401,7 +1401,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K4me1
         longLabel HepG2 H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K04ME1 cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=H3K04ME1 cellType=2HEPG2 treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 189,0,157
@@ -1411,7 +1411,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 p300
         longLabel K562 p300 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=P300 cellType=K562  treatment=zNONE
+        subGroups view=Peaks factor=P300 cellType=1K562  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 46,0,184
@@ -1421,7 +1421,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1-hESC H2A.Z
         longLabel H1-hESC H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H2AZ cellType=H1  treatment=zNONE
+        subGroups view=Peaks factor=H2AZ cellType=1H1  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 0,107,27
@@ -1431,7 +1431,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1-hESC H3K79me2
         longLabel H1-hESC H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K79ME2 cellType=H1  treatment=zNONE
+        subGroups view=Peaks factor=H3K79ME2 cellType=1H1  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 0,107,27
@@ -1441,7 +1441,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1-hESC H3K9me3
         longLabel H1-hESC H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09ME3 cellType=H1  treatment=zNONE
+        subGroups view=Peaks factor=H3K09ME3 cellType=1H1  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 0,107,27
@@ -1451,7 +1451,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1-hESC RBBP5
         longLabel H1-hESC RBBP5 (A300-109A) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=RBBP5A300109A cellType=H1  treatment=zNONE
+        subGroups view=Peaks factor=RBBP5A300109A cellType=1H1  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 0,107,27
@@ -1461,7 +1461,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 CHD1
         longLabel K562 CHD1 (A301-218A) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=CHD1A301218A cellType=K562  treatment=zNONE
+        subGroups view=Peaks factor=CHD1A301218A cellType=1K562  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 46,0,184
@@ -1471,7 +1471,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 EZH2
         longLabel K562 EZH2 (39875) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=EZH239875 cellType=K562  treatment=zNONE
+        subGroups view=Peaks factor=EZH239875 cellType=1K562  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 46,0,184
@@ -1481,7 +1481,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 HDAC1
         longLabel K562 HDAC1 (SC-6298) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=HDAC1SC6298 cellType=K562  treatment=zNONE
+        subGroups view=Peaks factor=HDAC1SC6298 cellType=1K562  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 46,0,184
@@ -1491,7 +1491,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 HDAC2
         longLabel K562 HDAC2 (A300-705A) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=HDAC2A300705A cellType=K562  treatment=zNONE
+        subGroups view=Peaks factor=HDAC2A300705A cellType=1K562  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 46,0,184
@@ -1501,7 +1501,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 PHF8
         longLabel K562 PHF8 (A301-772A) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=PHF8A301772A cellType=K562  treatment=zNONE
+        subGroups view=Peaks factor=PHF8A301772A cellType=1K562  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 46,0,184
@@ -1511,7 +1511,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 PLU1
         longLabel K562 PLU1 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=PLU1 cellType=K562  treatment=zNONE
+        subGroups view=Peaks factor=PLU1 cellType=1K562  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 46,0,184
@@ -1521,7 +1521,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 RBBP5
         longLabel K562 RBBP5 (A300-109A) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=RBBP5A300109A cellType=K562  treatment=zNONE
+        subGroups view=Peaks factor=RBBP5A300109A cellType=1K562  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 46,0,184
@@ -1531,7 +1531,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 SAP30
         longLabel K562 SAP30 (39731) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=SAP3039731 cellType=K562  treatment=zNONE
+        subGroups view=Peaks factor=SAP3039731 cellType=1K562  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 46,0,184
@@ -1541,7 +1541,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1-hESC JARID1A
         longLabel H1-hESC JARID1A (ab26049) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=JARID1AAB26049 cellType=H1  treatment=zNONE
+        subGroups view=Peaks factor=JARID1AAB26049 cellType=1H1  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 0,107,27
@@ -1551,7 +1551,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1-hESC CHD1
         longLabel H1-hESC CHD1 (A301-218A) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=CHD1A301218A cellType=H1  treatment=zNONE
+        subGroups view=Peaks factor=CHD1A301218A cellType=1H1  treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 0,107,27
@@ -1570,7 +1570,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K79me2
         longLabel HUVEC H3K79me2 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K79ME2 cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H3K79ME2 cellType=2HUVEC treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 224,75,0
@@ -1598,7 +1598,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H2A.Z
         longLabel HUVEC H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H2AZ cellType=HUVEC treatment=zNONE
+        subGroups view=Peaks factor=H2AZ cellType=2HUVEC treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 224,75,0
@@ -1636,7 +1636,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H2A.Z
         longLabel HeLa-S3 H2A.Z Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H2AZ cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H2AZ cellType=2HELAS3 treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 0,119,158
@@ -1782,7 +1782,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLa-S3 H3K9me3
         longLabel HeLa-S3 H3K9me3 Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=H3K09ME3 cellType=HELAS3 treatment=zNONE
+        subGroups view=Peaks factor=H3K09ME3 cellType=2HELAS3 treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 0,119,158
@@ -1811,7 +1811,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 EZH2
         longLabel GM12878 EZH2 (39875) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=EZH239875 cellType=GM12878 treatment=zNONE
+        subGroups view=Peaks factor=EZH239875 cellType=1GM12878 treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 153,38,0
@@ -1866,7 +1866,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 EZH2
         longLabel HepG2 EZH2 (39875) Histone Mods by ChIP-seq Peaks from ENCODE/Broad
-        subGroups view=Peaks factor=EZH239875 cellType=HEPG2 treatment=zNONE
+        subGroups view=Peaks factor=EZH239875 cellType=2HEPG2 treatment=zNONE
         type broadPeak
         origAssembly hg19
         color 189,0,157
@@ -2017,7 +2017,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K36me3
         longLabel HepG2 H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K36ME3 cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=H3K36ME3 cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 5547.879883
         color 189,0,157
         #colorScheme2 0,0,150
@@ -2064,7 +2064,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K27me3
         longLabel HUVEC H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27ME3 cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H3K27ME3 cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 6214.319824
         color 224,75,0
         #colorScheme2 255,0,0
@@ -2092,7 +2092,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K9ac
         longLabel HUVEC H3K9ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09AC cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H3K09AC cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 3125.959961
         color 224,75,0
         # subId=1692 dateSubmitted=2010-06-21
@@ -2109,7 +2109,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H3K27ac
         longLabel HeLa-S3 H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27AC cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H3K27AC cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 23354.720703
         color 0,119,158
         # subId=1694 dateSubmitted=2010-06-21
@@ -2118,7 +2118,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K4me3
         longLabel HUVEC H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME3 cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H3K04ME3 cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 8289.919922
         color 224,75,0
         #colorScheme2 0,150,0
@@ -2128,7 +2128,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K4me3
         longLabel K562 H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME3 cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME3 cellType=1K562 treatment=zNONE
         type bigWig 0.040000 13314.719727
         color 46,0,184
         #colorScheme2 0,150,0
@@ -2148,7 +2148,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC Input
         longLabel HUVEC Input Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=zCTRL cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=zCTRL cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 13452.160156
         color 224,75,0
         #colorScheme2 0,0,0
@@ -2167,7 +2167,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H4K20me1
         longLabel K562 H4K20me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H4K20ME1 cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H4K20ME1 cellType=1K562 treatment=zNONE
         type bigWig 0.040000 12717.959961
         color 46,0,184
         #colorScheme2 150,0,0
@@ -2177,7 +2177,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K27ac
         longLabel K562 H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27AC cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H3K27AC cellType=1K562 treatment=zNONE
         type bigWig 0.040000 8162.640137
         color 46,0,184
         # subId=1701 dateSubmitted=2010-06-21
@@ -2212,7 +2212,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1-hESC H3K9ac
         longLabel H1-hESC H3K9ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09AC cellType=H1 treatment=zNONE
+        subGroups view=Signal factor=H3K09AC cellType=1H1 treatment=zNONE
         type bigWig 0.040000 17840.919922
         color 0,107,27
         # subId=1705 dateSubmitted=2010-06-21
@@ -2221,7 +2221,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K4me3
         longLabel HepG2 H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME3 cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME3 cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 4277.000000
         color 189,0,157
         #colorScheme2 0,150,0
@@ -2247,7 +2247,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 CTCF
         longLabel HeLa-S3 CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=CTCF cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=CTCF cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 32444.480469
         color 0,119,158
         # subId=1709 dateSubmitted=2010-06-21
@@ -2265,7 +2265,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H4K20me1
         longLabel HeLa-S3 H4K20me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H4K20ME1 cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H4K20ME1 cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 25408.839844
         color 0,119,158
         #colorScheme2 150,0,0
@@ -2275,7 +2275,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K27me3
         longLabel K562 H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27ME3 cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H3K27ME3 cellType=1K562 treatment=zNONE
         type bigWig 0.040000 13777.200195
         color 46,0,184
         #colorScheme2 255,0,0
@@ -2294,7 +2294,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K4me2
         longLabel K562 H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME2 cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME2 cellType=1K562 treatment=zNONE
         type bigWig 0.040000 4060.560059
         color 46,0,184
         #colorScheme2 0,130,0
@@ -2339,7 +2339,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 Input
         longLabel HepG2 Input Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=zCTRL cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=zCTRL cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 9153.400391
         color 189,0,157
         #colorScheme2 0,0,0
@@ -2349,7 +2349,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K9me1
         longLabel K562 H3K9me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09me1 cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H3K09me1 cellType=1K562 treatment=zNONE
         type bigWig 0.040000 22709.759766
         color 46,0,184
         #colorScheme2 30,0,0
@@ -2359,7 +2359,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1-hESC H3K27me3
         longLabel H1-hESC H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27ME3 cellType=H1 treatment=zNONE
+        subGroups view=Signal factor=H3K27ME3 cellType=1H1 treatment=zNONE
         type bigWig 0.040000 10269.200195
         color 0,107,27
         #colorScheme2 255,0,0
@@ -2369,7 +2369,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K36me3
         longLabel HUVEC H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K36ME3 cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H3K36ME3 cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 6577.279785
         color 224,75,0
         #colorScheme2 0,0,150
@@ -2407,7 +2407,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K36me3
         longLabel K562 H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K36ME3 cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H3K36ME3 cellType=1K562 treatment=zNONE
         type bigWig 0.040000 9564.440430
         color 46,0,184
         #colorScheme2 0,0,150
@@ -2417,7 +2417,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC Pol2(b)
         longLabel HUVEC Pol2(b) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=POL2B cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=POL2B cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 8296.240234
         color 224,75,0
         #colorScheme2 0,100,0
@@ -2436,7 +2436,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K9me1
         longLabel HUVEC H3K9me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09me1 cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H3K09me1 cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 6102.680176
         color 224,75,0
         #colorScheme2 30,0,0
@@ -2454,7 +2454,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K27ac
         longLabel HUVEC H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27AC cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H3K27AC cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 4396.560059
         color 224,75,0
         # subId=1731 dateSubmitted=2010-06-21
@@ -2463,7 +2463,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K4me2
         longLabel HUVEC H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME2 cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H3K04ME2 cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 5846.080078
         color 224,75,0
         #colorScheme2 0,130,0
@@ -2483,7 +2483,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1-hESC H3K36me3
         longLabel H1-hESC H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K36ME3 cellType=H1 treatment=zNONE
+        subGroups view=Signal factor=H3K36ME3 cellType=1H1 treatment=zNONE
         type bigWig 0.040000 16712.320312
         color 0,107,27
         #colorScheme2 0,0,150
@@ -2493,7 +2493,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K4me1
         longLabel K562 H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME1 cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME1 cellType=1K562 treatment=zNONE
         type bigWig 0.040000 7340.479980
         color 46,0,184
         #colorScheme2 0,110,0
@@ -2530,7 +2530,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K27ac
         longLabel HepG2 H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27AC cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=H3K27AC cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 1918.119995
         color 189,0,157
         # subId=1741 dateSubmitted=2010-06-21
@@ -2547,7 +2547,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 Pol2(b)
         longLabel HeLa-S3 Pol2(b) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=POL2B cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=POL2B cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 48100.679688
         color 0,119,158
         #colorScheme2 0,100,0
@@ -2557,7 +2557,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H3K79me2
         longLabel HeLa-S3 H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K79ME2 cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H3K79ME2 cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 20610.480469
         color 0,119,158
         # subId=1744 dateSubmitted=2010-06-21
@@ -2566,7 +2566,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1-hESC H3K4me3
         longLabel H1-hESC H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME3 cellType=H1 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME3 cellType=1H1 treatment=zNONE
         type bigWig 0.040000 9565.759766
         color 0,107,27
         #colorScheme2 0,150,0
@@ -2584,7 +2584,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K79me2
         longLabel HepG2 H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K79ME2 cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=H3K79ME2 cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 14792.160156
         color 189,0,157
         # subId=1747 dateSubmitted=2010-06-21
@@ -2593,7 +2593,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K9ac
         longLabel K562 H3K9ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09AC cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H3K09AC cellType=1K562 treatment=zNONE
         type bigWig 0.040000 14247.200195
         color 46,0,184
         # subId=1748 dateSubmitted=2010-06-21
@@ -2619,7 +2619,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H3K4me3
         longLabel HeLa-S3 H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME3 cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME3 cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 25109.240234
         color 0,119,158
         #colorScheme2 0,150,0
@@ -2629,7 +2629,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 Input
         longLabel K562 Input Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=zCTRL cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=zCTRL cellType=1K562 treatment=zNONE
         type bigWig 0.040000 17321.439453
         color 46,0,184
         #colorScheme2 0,0,0
@@ -2639,7 +2639,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1-hESC H3K27ac
         longLabel H1-hESC H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27AC cellType=H1 treatment=zNONE
+        subGroups view=Signal factor=H3K27AC cellType=1H1 treatment=zNONE
         type bigWig 0.040000 19690.599609
         color 0,107,27
         # subId=1753 dateSubmitted=2010-06-21
@@ -2658,7 +2658,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H3K4me2
         longLabel HeLa-S3 H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME2 cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME2 cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 35817.640625
         color 0,119,158
         #colorScheme2 0,130,0
@@ -2686,7 +2686,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H4K20me1
         longLabel HepG2 H4K20me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H4K20ME1 cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=H4K20ME1 cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 12546.959961
         color 189,0,157
         #colorScheme2 150,0,0
@@ -2705,7 +2705,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1-hESC Input
         longLabel H1-hESC Input Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=zCTRL cellType=H1 treatment=zNONE
+        subGroups view=Signal factor=zCTRL cellType=1H1 treatment=zNONE
         type bigWig 0.040000 10153.759766
         color 0,107,27
         #colorScheme2 0,0,0
@@ -2715,7 +2715,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K4me2
         longLabel HepG2 H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME2 cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME2 cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 4438.439941
         color 189,0,157
         #colorScheme2 0,130,0
@@ -2734,7 +2734,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H4K20me1
         longLabel HUVEC H4K20me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H4K20ME1 cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H4K20ME1 cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 13583.559570
         color 224,75,0
         #colorScheme2 150,0,0
@@ -2753,7 +2753,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K9ac
         longLabel HepG2 H3K9ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09AC cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=H3K09AC cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 10882.879883
         color 189,0,157
         # subId=1765 dateSubmitted=2010-06-21
@@ -2779,7 +2779,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 CTCF
         longLabel K562 CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=CTCF cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=CTCF cellType=1K562 treatment=zNONE
         type bigWig 0.040000 11319.440430
         color 46,0,184
         # subId=1769 dateSubmitted=2010-06-21
@@ -2797,7 +2797,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 Input
         longLabel HeLa-S3 Input Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=zCTRL cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=zCTRL cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 94318.796875
         color 0,119,158
         #colorScheme2 0,0,0
@@ -2825,7 +2825,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1-hESC H4K20me1
         longLabel H1-hESC H4K20me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H4K20ME1 cellType=H1 treatment=zNONE
+        subGroups view=Signal factor=H4K20ME1 cellType=1H1 treatment=zNONE
         type bigWig 0.040000 23103.880859
         color 0,107,27
         #colorScheme2 150,0,0
@@ -2853,7 +2853,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1-hESC H3K4me2
         longLabel H1-hESC H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME2 cellType=H1 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME2 cellType=1H1 treatment=zNONE
         type bigWig 0.040000 9300.160156
         color 0,107,27
         #colorScheme2 0,130,0
@@ -2863,7 +2863,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K4me1
         longLabel HUVEC H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME1 cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H3K04ME1 cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 4498.640137
         color 224,75,0
         #colorScheme2 0,110,0
@@ -2882,7 +2882,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H3K36me3
         longLabel HeLa-S3 H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K36ME3 cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H3K36ME3 cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 40261.800781
         color 0,119,158
         #colorScheme2 0,0,150
@@ -2892,7 +2892,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1-hESC CTCF
         longLabel H1-hESC CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=CTCF cellType=H1 treatment=zNONE
+        subGroups view=Signal factor=CTCF cellType=1H1 treatment=zNONE
         type bigWig 0.040000 23906.279297
         color 0,107,27
         # subId=1781 dateSubmitted=2010-06-21
@@ -2909,7 +2909,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1-hESC H3K4me1
         longLabel H1-hESC H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME1 cellType=H1 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME1 cellType=1H1 treatment=zNONE
         type bigWig 0.040000 10892.639648
         color 0,107,27
         #colorScheme2 0,110,0
@@ -2947,7 +2947,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 CTCF
         longLabel HepG2 CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=CTCF cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=CTCF cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 10767.599609
         color 189,0,157
         # subId=1787 dateSubmitted=2010-06-21
@@ -2956,7 +2956,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K27me3
         longLabel HepG2 H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27ME3 cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=H3K27ME3 cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 12507.360352
         color 189,0,157
         #colorScheme2 255,0,0
@@ -2966,7 +2966,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 Pol2(b)
         longLabel K562 Pol2(b) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=POL2B cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=POL2B cellType=1K562 treatment=zNONE
         type bigWig 0.040000 16058.919922
         color 46,0,184
         #colorScheme2 0,100,0
@@ -2976,7 +2976,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC CTCF
         longLabel HUVEC CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=CTCF cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=CTCF cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 5654.680176
         color 224,75,0
         # subId=1790 dateSubmitted=2010-06-21
@@ -2985,7 +2985,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H3K9ac
         longLabel HeLa-S3 H3K9ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09AC cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H3K09AC cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 22466.119141
         color 0,119,158
         # subId=1791 dateSubmitted=2010-06-21
@@ -2994,7 +2994,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H2A.Z
         longLabel HepG2 H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H2AZ cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=H2AZ cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 25146.679688
         color 189,0,157
         #colorScheme2 200,0,0
@@ -3022,7 +3022,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 CTCF
         longLabel GM12878 CTCF Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=CTCF cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=CTCF cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 16386.560547
         color 153,38,0
         # subId=1878 dateSubmitted=2010-07-12
@@ -3031,7 +3031,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 Input
         longLabel GM12878 Input Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=zCTRL cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=zCTRL cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 10034.400391
         color 153,38,0
         #colorScheme2 0,0,0
@@ -3041,7 +3041,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H3K27ac
         longLabel GM12878 H3K27ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27AC cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H3K27AC cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 355227.000000
         color 153,38,0
         # subId=1880 dateSubmitted=2010-07-12
@@ -3050,7 +3050,7 @@ html wgEncodeBroadHistone.release2
         #parent wgEncodeBroadHistoneViewSignal off
         #shortLabel GM12878 H3K27me3
         #longLabel GM12878 H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        #subGroups view=Signal factor=H3K27ME3 cellType=GM12878 treatment=zNONE
+        #subGroups view=Signal factor=H3K27ME3 cellType=1GM12878 treatment=zNONE
         #type bigWig 0.040000 51675.199219
         #color 153,38,0
         #colorScheme2 255,0,0
@@ -3060,7 +3060,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H3K36me3
         longLabel GM12878 H3K36me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K36ME3 cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H3K36ME3 cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 11943.519531
         color 153,38,0
         #colorScheme2 0,0,150
@@ -3070,7 +3070,7 @@ html wgEncodeBroadHistone.release2
         #parent wgEncodeBroadHistoneViewSignal off
         #shortLabel GM12878 H3K4me1
         #longLabel GM12878 H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        #subGroups view=Signal factor=H3K04ME1 cellType=GM12878 treatment=zNONE
+        #subGroups view=Signal factor=H3K04ME1 cellType=1GM12878 treatment=zNONE
         #type bigWig 0.040000 6971.479980
         #color 153,38,0
         #colorScheme2 0,110,0
@@ -3080,7 +3080,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H3K4me2
         longLabel GM12878 H3K4me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME2 cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME2 cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 6559.600098
         color 153,38,0
         #colorScheme2 0,130,0
@@ -3090,7 +3090,7 @@ html wgEncodeBroadHistone.release2
         #parent wgEncodeBroadHistoneViewSignal off
         #shortLabel GM12878 H3K4me3
         #longLabel GM12878 H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        #subGroups view=Signal factor=H3K04ME3 cellType=GM12878 treatment=zNONE
+        #subGroups view=Signal factor=H3K04ME3 cellType=1GM12878 treatment=zNONE
         #type bigWig 0.040000 77082.320312
         #color 153,38,0
         #colorScheme2 0,150,0
@@ -3100,7 +3100,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H3K9ac
         longLabel GM12878 H3K9ac Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09AC cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H3K09AC cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 6293.839844
         color 153,38,0
         # subId=1886 dateSubmitted=2010-07-12
@@ -3109,7 +3109,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H4K20me1
         longLabel GM12878 H4K20me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H4K20ME1 cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H4K20ME1 cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 8058.640137
         color 153,38,0
         #colorScheme2 150,0,0
@@ -3180,7 +3180,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H2A.Z
         longLabel GM12878 H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H2AZ cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H2AZ cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 5573.080078
         color 153,38,0
         #colorScheme2 200,0,0
@@ -3190,7 +3190,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H3K79me2
         longLabel GM12878 H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K79ME2 cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H3K79ME2 cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 2011.920044
         color 153,38,0
         # subId=2979 dateSubmitted=2010-11-16
@@ -3199,7 +3199,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H3K9me3
         longLabel GM12878 H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09ME3 cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H3K09ME3 cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 44431.519531
         color 153,38,0
         #colorScheme2 100,0,0
@@ -3209,7 +3209,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H3K27me3
         longLabel HeLa-S3 H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27ME3 cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H3K27ME3 cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 24157.039062
         color 0,119,158
         #colorScheme2 255,0,0
@@ -3228,7 +3228,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H2A.Z
         longLabel K562 H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H2AZ cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H2AZ cellType=1K562 treatment=zNONE
         type bigWig 0.040000 9285.080078
         color 46,0,184
         #colorScheme2 200,0,0
@@ -3238,7 +3238,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K79me2
         longLabel K562 H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K79ME2 cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H3K79ME2 cellType=1K562 treatment=zNONE
         type bigWig 0.040000 5517.479980
         color 46,0,184
         # subId=2984 dateSubmitted=2010-11-16
@@ -3247,7 +3247,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K9me3
         longLabel K562 H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09ME3 cellType=K562 treatment=zNONE
+        subGroups view=Signal factor=H3K09ME3 cellType=1K562 treatment=zNONE
         type bigWig 0.040000 44343.121094
         color 46,0,184
         #colorScheme2 100,0,0
@@ -3394,7 +3394,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H3K27me3
         longLabel GM12878 H3K27me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K27ME3 cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H3K27ME3 cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 36959.921875
         origAssembly hg18
         color 153,38,0
@@ -3404,7 +3404,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H3K4me1
         longLabel GM12878 H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME1 cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME1 cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 11792.000000
         origAssembly hg18
         color 153,38,0
@@ -3414,7 +3414,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H3K4me3
         longLabel GM12878 H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME3 cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME3 cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 44948.160156
         origAssembly hg18
         color 153,38,0
@@ -3424,7 +3424,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H3K4me1
         longLabel HeLa-S3 H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME1 cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME1 cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 17985.839844
         origAssembly hg19
         color 0,119,158
@@ -3434,7 +3434,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K4me1
         longLabel HepG2 H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K04ME1 cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=H3K04ME1 cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 5993.879883
         origAssembly hg19
         color 189,0,157
@@ -3444,7 +3444,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 p300
         longLabel K562 p300 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=P300 cellType=K562  treatment=zNONE
+        subGroups view=Signal factor=P300 cellType=1K562  treatment=zNONE
         type bigWig 0.040000 96892.500000
         origAssembly hg19
         color 46,0,184
@@ -3454,7 +3454,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1-hESC H2A.Z
         longLabel H1-hESC H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H2AZ cellType=H1  treatment=zNONE
+        subGroups view=Signal factor=H2AZ cellType=1H1  treatment=zNONE
         type bigWig 0.040000 36549.300781
         origAssembly hg19
         color 0,107,27
@@ -3464,7 +3464,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1-hESC H3K79me2
         longLabel H1-hESC H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K79ME2 cellType=H1  treatment=zNONE
+        subGroups view=Signal factor=H3K79ME2 cellType=1H1  treatment=zNONE
         type bigWig 0.040000 18712.800781
         origAssembly hg19
         color 0,107,27
@@ -3474,7 +3474,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1-hESC H3K9me3
         longLabel H1-hESC H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09ME3 cellType=H1  treatment=zNONE
+        subGroups view=Signal factor=H3K09ME3 cellType=1H1  treatment=zNONE
         type bigWig 0.040000 79621.703125
         origAssembly hg19
         color 0,107,27
@@ -3484,7 +3484,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1-hESC RBBP5
         longLabel H1-hESC RBBP5 (A300-109A) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=RBBP5A300109A cellType=H1  treatment=zNONE
+        subGroups view=Signal factor=RBBP5A300109A cellType=1H1  treatment=zNONE
         type bigWig 0.040000 20446.599609
         origAssembly hg19
         color 0,107,27
@@ -3494,7 +3494,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 CHD1
         longLabel K562 CHD1 (A301-218A) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=CHD1A301218A cellType=K562  treatment=zNONE
+        subGroups view=Signal factor=CHD1A301218A cellType=1K562  treatment=zNONE
         type bigWig 0.040000 36551.800781
         origAssembly hg19
         color 46,0,184
@@ -3504,7 +3504,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 EZH2
         longLabel K562 EZH2 (39875) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=EZH239875 cellType=K562  treatment=zNONE
+        subGroups view=Signal factor=EZH239875 cellType=1K562  treatment=zNONE
         type bigWig 0.040000 32918.300781
         origAssembly hg19
         color 46,0,184
@@ -3514,7 +3514,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 HDAC1
         longLabel K562 HDAC1 (SC-6298) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=HDAC1SC6298 cellType=K562  treatment=zNONE
+        subGroups view=Signal factor=HDAC1SC6298 cellType=1K562  treatment=zNONE
         type bigWig 0.040000 36277.398438
         origAssembly hg19
         color 46,0,184
@@ -3524,7 +3524,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 HDAC2
         longLabel K562 HDAC2 (A300-705A) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=HDAC2A300705A cellType=K562  treatment=zNONE
+        subGroups view=Signal factor=HDAC2A300705A cellType=1K562  treatment=zNONE
         type bigWig 0.040000 26424.599609
         origAssembly hg19
         color 46,0,184
@@ -3534,7 +3534,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 PHF8
         longLabel K562 PHF8 (A301-772A) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=PHF8A301772A cellType=K562  treatment=zNONE
+        subGroups view=Signal factor=PHF8A301772A cellType=1K562  treatment=zNONE
         type bigWig 0.040000 19745.099609
         origAssembly hg19
         color 46,0,184
@@ -3544,7 +3544,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 PLU1
         longLabel K562 PLU1 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=PLU1 cellType=K562  treatment=zNONE
+        subGroups view=Signal factor=PLU1 cellType=1K562  treatment=zNONE
         type bigWig 0.040000 26953.400391
         origAssembly hg19
         color 46,0,184
@@ -3554,7 +3554,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 RBBP5
         longLabel K562 RBBP5 (A300-109A) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=RBBP5A300109A cellType=K562  treatment=zNONE
+        subGroups view=Signal factor=RBBP5A300109A cellType=1K562  treatment=zNONE
         type bigWig 0.040000 26107.199219
         origAssembly hg19
         color 46,0,184
@@ -3564,7 +3564,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 SAP30
         longLabel K562 SAP30 (39731) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=SAP3039731 cellType=K562  treatment=zNONE
+        subGroups view=Signal factor=SAP3039731 cellType=1K562  treatment=zNONE
         type bigWig 0.040000 32742.500000
         origAssembly hg19
         color 46,0,184
@@ -3574,7 +3574,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1-hESC JARID1A
         longLabel H1-hESC JARID1A (ab26049) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=JARID1AAB26049 cellType=H1  treatment=zNONE
+        subGroups view=Signal factor=JARID1AAB26049 cellType=1H1  treatment=zNONE
         type bigWig 0.040000 31501.599609
         origAssembly hg19
         color 0,107,27
@@ -3584,7 +3584,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1-hESC CHD1
         longLabel H1-hESC CHD1 (A301-218A) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=CHD1A301218A cellType=H1  treatment=zNONE
+        subGroups view=Signal factor=CHD1A301218A cellType=1H1  treatment=zNONE
         type bigWig 0.040000 32837.601562
         origAssembly hg19
         color 0,107,27
@@ -3603,7 +3603,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K79me2
         longLabel HUVEC H3K79me2 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K79ME2 cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H3K79ME2 cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 5778.879883
         origAssembly hg19
         color 224,75,0
@@ -3641,7 +3641,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H2A.Z
         longLabel HUVEC H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H2AZ cellType=HUVEC treatment=zNONE
+        subGroups view=Signal factor=H2AZ cellType=2HUVEC treatment=zNONE
         type bigWig 0.040000 14335.559570
         origAssembly hg19
         color 224,75,0
@@ -3679,7 +3679,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H2A.Z
         longLabel HeLa-S3 H2A.Z Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H2AZ cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H2AZ cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 37023.699219
         origAssembly hg19
         color 0,119,158
@@ -3825,7 +3825,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLa-S3 H3K9me3
         longLabel HeLa-S3 H3K9me3 Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=H3K09ME3 cellType=HELAS3 treatment=zNONE
+        subGroups view=Signal factor=H3K09ME3 cellType=2HELAS3 treatment=zNONE
         type bigWig 0.040000 59255.601562
         origAssembly hg19
         color 0,119,158
@@ -3854,7 +3854,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 EZH2
         longLabel GM12878 EZH2 (39875) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=EZH239875 cellType=GM12878 treatment=zNONE
+        subGroups view=Signal factor=EZH239875 cellType=1GM12878 treatment=zNONE
         type bigWig 0.040000 20211.199219
         origAssembly hg19
         color 153,38,0
@@ -3909,7 +3909,7 @@ html wgEncodeBroadHistone.release2
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 EZH2
         longLabel HepG2 EZH2 (39875) Histone Mods by ChIP-seq Signal from ENCODE/Broad
-        subGroups view=Signal factor=EZH239875 cellType=HEPG2 treatment=zNONE
+        subGroups view=Signal factor=EZH239875 cellType=2HEPG2 treatment=zNONE
         type bigWig 0.040000 29916.919922
         origAssembly hg19
         color 189,0,157
