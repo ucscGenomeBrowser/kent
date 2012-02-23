@@ -15,7 +15,13 @@ nohup TrackCheck $JAVABUILD/kent/java/src/edu/ucsc/genome/qa/cgiCheck/full.props
 
 echo "TrackCheck robot done. Check to see if any errors in $WEEKLYBLD/logs/$log."
 
-echo "Check to see if any errors in $WEEKLYBLD/logs/$log." | mail -s "v${BRANCHNN} TrackCheck robot done." $USER browser-qa
+# imperfect error test.
+set wc = `cat $WEEKLYBLD/logs/$log | egrep "Error" | wc -w` 
+if ( "$wc" != "0" ) then
+  echo "At least 1 error may have occurred.  Check $WEEKLYBLD/logs/$log." | mail -s "v${BRANCHNN} TrackCheck robot done." $USER browser-qa
+else
+   echo "Check to see if any errors in $WEEKLYBLD/logs/$log." | mail -s "v${BRANCHNN} TrackCheck robot done." $USER browser-qa
+endif
 
 exit 0
 
