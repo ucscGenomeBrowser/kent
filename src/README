@@ -6,7 +6,9 @@ and web display programs.  All files are copyrighted, but license
 is hereby granted for personal, academic, and non-profit use.  
 A license is also granted for the contents of the top level lib, inc and
 utils directories for commercial users.  Commercial users should contact 
-kent@soe.ucsc.edu for access to other modules.
+kent@soe.ucsc.edu for access to other modules.  Commercial users
+interested in the UCSC Genome Browser in particular please see
+http://genome.ucsc.edu/license/.
 
 Most users will only be interested in the inc and lib
 directories, which contain the interfaces and implementations
