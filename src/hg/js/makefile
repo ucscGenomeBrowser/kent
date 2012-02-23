@@ -5,7 +5,8 @@ include ../../inc/common.mk
 JQUERY_FILES=jquery-1.2.6.pack.js jquery.js jquery.tablednd.js \
     jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
     ui.dropdownchecklist.js \
-    jquery.cookie.js jquery.watermarkinput.js jquery.floatheader.js
+    jquery.cookie.js jquery.watermarkinput.js \
+    jquery.floatheader.js jquery.rotateTableCellContent.js 
 
 JS_FILES=ajax.js autocomplete.js hgCustom.js hgGateway.js hgHubConnect.js hgTracks.js \
     hui.js utils.js ddcl.js subCfg.js \
@@ -20,8 +21,7 @@ endif
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
-	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/js/${USER}; \
-		cp ${STATIC_FILES} ${DOCUMENTROOT}-${USER}/js; \
+	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/js; \
 	else \
 	    ${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}; \
 	fi

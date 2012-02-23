@@ -492,7 +492,11 @@ class makeNotes(object):
     def printErrors(self, errors, missingFiles):
         errorsDict = {}
         output = []
+        lastpart = []
         for i in errors:
+            if not re.match(".+:.+", i):
+                lastpart.append(i)
+                continue
             line = i.split(":", 1)
             try:
                 errorsDict[line[0]].append(line[1])
@@ -510,6 +514,8 @@ class makeNotes(object):
             output.append("\n")
         if self.droppedTables:
             output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
+        if lastpart:
+            output.extend(lastpart)
         return output
 
     def __init__(self, args):
@@ -615,7 +621,7 @@ class makeNotes(object):
             #remove missing files from gbdbs
             self.oldGbdbSet = self.oldGbdbSet - self.missingFiles
             self.oldGbdbSet = self.oldGbdbSet - self.atticSet
-            self.changedGbdbs = self.oldGbdbSet - self.newGbdbSet
+            self.changedGbdbs = self.oldGbdbSet - self.newGbdbSet - self.revokedGbdbs
             for i in self.missingFiles:
                 if i in self.oldReleaseFiles:
                     del self.oldReleaseFiles[i]
@@ -629,10 +635,10 @@ class makeNotes(object):
             errors.extend(oldGbdbError)
 
             if self.changedTables:
-                errors.append("These tables were tables in the old release, but are no longer tables in the new release:"
+                errors.append("These tables were tables in the old release, but are no longer tables in the new release:")
                 errors.extend(list(self.changedTables))
             if self.changedGbdbs:
-                errors.append("These GBDBs were GBDB tables in the old release, but are no longer GBDB tables in the new release:"
+                errors.append("These GBDBs were GBDB tables in the old release, but are no longer GBDB tables in the new release:")
                 errors.extend(list(self.changedGbdbs)) 
 
             #for ease of typing

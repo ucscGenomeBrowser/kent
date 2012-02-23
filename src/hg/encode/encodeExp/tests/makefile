@@ -87,6 +87,7 @@ modifyTest:
 	${PROG} update 3 dataType DnaseSeq RnaSeq -table=${TABLE}
 	${PROG} update 2 Antibody Pol2 CTCF -table=${TABLE}
 	${PROG} update 2 treatment None TNFa -table=${TABLE}
+	${PROG} update 2 labVersion None MACS_v2.5 -table=${TABLE}
 	${PROG} show 3 -table=${TABLE} >> output/$@.out.ra
 	${PROG} show 2 -table=${TABLE} >> output/$@.out.ra
 	@grep -v updateTime output/$@.out.ra | diff - expected/$@.out.ra

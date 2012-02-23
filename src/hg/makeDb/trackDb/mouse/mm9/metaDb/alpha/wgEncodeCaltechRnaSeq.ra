@@ -18,7 +18,7 @@ insertLength 200
 lab Caltech-m
 labExpId 10985
 mapAlgorithm TH131
-md5sum 4cb0b035327226fca5a0451be168e94b
+md5sum 4cb0b035327226fca5a0451be168e94b,ed93b0d7103a9425cdd2c02b4ab9ae1b
 project wgEncode
 readType 2x75
 replicate 1
@@ -44,7 +44,7 @@ insertLength 200
 lab Caltech-m
 labExpId 10986
 mapAlgorithm TH131
-md5sum 816519a92e72bbae60d742bf5ffcc4c1
+md5sum 816519a92e72bbae60d742bf5ffcc4c1,6ed497015084c626890e277d642f647d
 project wgEncode
 readType 2x75
 replicate 1
@@ -70,7 +70,7 @@ insertLength 200
 lab Caltech-m
 labExpId 10986
 mapAlgorithm TH131
-md5sum a770546023a080bdd3db700ba2cc9d8c
+md5sum 25d259de0a0dd30481a34ec9128a9dab
 project wgEncode
 readType 2x75
 replicate 1
@@ -95,7 +95,7 @@ insertLength 200
 lab Caltech-m
 labExpId 10986
 mapAlgorithm TH131
-md5sum e218420e0f56ddfa197ded41bd095c5e
+md5sum 56df5f1cae6d2b956920cd03aa749778
 project wgEncode
 readType 2x75
 replicate 1
@@ -146,7 +146,7 @@ insertLength 200
 lab Caltech-m
 labExpId 10985
 mapAlgorithm TH131
-md5sum 220b35811f8c20e94ce38ec6de3efcdb
+md5sum 9098a7660e9b4334be29247bb1fadc4f
 project wgEncode
 readType 2x75
 replicate 1
@@ -171,7 +171,7 @@ insertLength 200
 lab Caltech-m
 labExpId 10985
 mapAlgorithm TH131
-md5sum e62d50cbfe2bc9c14a1d71aae9baf707
+md5sum 53e843c4719d1aa3d563cabf55bcdf64
 project wgEncode
 readType 2x75
 replicate 1
@@ -207,4 +207,4 @@ tableName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200RawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -1429955456
+# MAGIC: 1187785122
