@@ -611,13 +611,13 @@ wgEncode 1
         subGroups view=Peaks factor=POL2mig cellType=t3GM10847
         type narrowPeak
 
-        track wgEncodeYaleChIPseqPeaksGm12878NfkbIggrab
-        parent wgEncodeYaleChIPseqViewPeaks off
-        shortLabel GM12878 NFKB Pk
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM12878 cells)
-        subGroups view=Peaks factor=NFKBrig cellType=t1GM12878
-        type narrowPeak
-        color 153,38,0
+        #track wgEncodeYaleChIPseqPeaksGm12878NfkbIggrab
+        #parent wgEncodeYaleChIPseqViewPeaks off
+        #shortLabel GM12878 NFKB Pk
+        #longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Peaks (NFKB/IgG-rab in GM12878 cells)
+        #subGroups view=Peaks factor=NFKBrig cellType=t1GM12878
+        #type narrowPeak
+        #color 153,38,0
 
         track wgEncodeYaleChIPseqPeaksGm12878Pol2Musigg
         parent wgEncodeYaleChIPseqViewPeaks
@@ -1782,13 +1782,13 @@ wgEncode 1
         type bedGraph 4
         color 153,38,0
 
-        track wgEncodeYaleChIPseqSignalGm12878NfkbIggrab
-        parent wgEncodeYaleChIPseqViewSignal off
-        shortLabel GM12878 NFKB Sig
-        longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM12878 cells)
-        subGroups view=Signal factor=NFKBrig cellType=t1GM12878
-        type bedGraph 4
-        color 153,38,0
+        #track wgEncodeYaleChIPseqSignalGm12878NfkbIggrab
+        #parent wgEncodeYaleChIPseqViewSignal off
+        #shortLabel GM12878 NFKB Sig
+        #longLabel ENCODE TFBS, Yale/UCD/Harvard ChIP-seq Signal (NFKB/IgG-rab in GM12878 cells)
+        #subGroups view=Signal factor=NFKBrig cellType=t1GM12878
+        #type bedGraph 4
+        #color 153,38,0
 
         track wgEncodeYaleChIPseqSignalGm12878Pol2Musigg
         parent wgEncodeYaleChIPseqViewSignal
