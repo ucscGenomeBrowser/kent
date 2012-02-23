@@ -512,6 +512,7 @@ function warnBoxJsSetup()
     html += "var warnBox=document.getElementById('warnBox');";
     html += "warnBox.style.display=''; warnBox.style.width='65%%';";
     html += "document.getElementById('warnHead').innerHTML='Error(s):';";
+    html +=  "window.scrollTo(0, 0);";
     html += "}";
     html += "function hideWarnBox() {";
     html += "var warnBox=document.getElementById('warnBox');";
@@ -1180,26 +1181,30 @@ var bindings = {
     }
 }
 
-function stripHgErrors(returnedHtml)
+function stripHgErrors(returnedHtml, whatWeDid)
 { // strips HGERROR style 'early errors' and shows them in the warnBox
+  // If whatWeDid != null, we use it to return info about what we stripped out and processed (current just warnMsg).
     var cleanHtml = returnedHtml;
     while(cleanHtml.length > 0) {
         var bounds = bindings.outside('<!-- HGERROR-START -->','<!-- HGERROR-END -->',cleanHtml);
         if (bounds.start == -1)
             break;
         var warnMsg = bindings.insideOut('<P>','</P>',cleanHtml,bounds.start,bounds.stop);
-        if (warnMsg.length > 0)
+        if (warnMsg.length > 0) {
             warn(warnMsg);
+            if(whatWeDid != null)
+                whatWeDid.warnMsg = warnMsg;
+        }
         cleanHtml = cleanHtml.slice(0,bounds.start) + cleanHtml.slice(bounds.stop);
     }
     return cleanHtml;
 }
 
-function stripJsFiles(returnedHtml,showError)
+function stripJsFiles(returnedHtml,debug)
 { // strips javascript files from html returned by ajax
     var cleanHtml = returnedHtml;
     var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
-    if (showError) {
+    if (debug) {
         var jsFiles = cleanHtml.match(shlurpPattern);
         if (jsFiles && jsFiles.length > 0)
             alert("jsFiles:'"+jsFiles+"'\n---------------\n"+cleanHtml); // warn() interprets html, etc.
@@ -1209,11 +1214,11 @@ function stripJsFiles(returnedHtml,showError)
     return cleanHtml;
 }
 
-function stripCssFiles(returnedHtml,showError)
+function stripCssFiles(returnedHtml,debug)
 { // strips csst files from html returned by ajax
     var cleanHtml = returnedHtml;
     var shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
-    if (showError) {
+    if (debug) {
         var cssFiles = cleanHtml.match(shlurpPattern);
         if (cssFiles && cssFiles.length > 0)
             alert("cssFiles:'"+cssFiles+"'\n---------------\n"+cleanHtml);
@@ -1223,9 +1228,10 @@ function stripCssFiles(returnedHtml,showError)
     return cleanHtml;
 }
 
-function stripJsEmbedded(returnedHtml,showError)
+function stripJsEmbedded(returnedHtml, debug, whatWeDid)
 { // strips embedded javascript from html returned by ajax
   // NOTE: any warnBox style errors will be put into the warnBox
+  // If whatWeDid != null, we use it to return info about what we stripped out and processed (current just warnMsg).
     var cleanHtml = returnedHtml;
     // embedded javascript?
     while(cleanHtml.length > 0) {
@@ -1236,16 +1242,19 @@ function stripJsEmbedded(returnedHtml,showError)
             break;
         var jsEmbeded = cleanHtml.slice(bounds.start,bounds.stop);
         if(-1 == jsEmbeded.indexOf("showWarnBox")) {
-            if (showError)
+            if (debug)
                 alert("jsEmbedded:'"+jsEmbeded+"'\n---------------\n"+cleanHtml);
         } else {
             var warnMsg = bindings.insideOut('<li>','</li>',cleanHtml,bounds.start,bounds.stop);
-            if (warnMsg.length > 0)
+            if (warnMsg.length > 0) {
                 warn(warnMsg);
+                if(whatWeDid != null)
+                    whatWeDid.warnMsg = warnMsg;
+            }
         }
         cleanHtml = cleanHtml.slice(0,bounds.start) + cleanHtml.slice(bounds.stop);
     }
-    return stripHgErrors(cleanHtml); // Certain early errors are not called via warnBox
+    return stripHgErrors(cleanHtml, whatWeDid); // Certain early errors are not called via warnBox
 }
 
 function visTriggersHiddenSelect(obj)

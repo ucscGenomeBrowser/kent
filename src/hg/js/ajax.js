@@ -258,7 +258,7 @@ function errorHandler(request, textStatus)
         str = "Encountered a network error."
     }
     str += " Please try again. If the problem persists, please check your network connection.";
-    showWarning(str);
+    warn(str);
     jQuery('body').css('cursor', '');
     if(this.disabledEle) {
         this.disabledEle.removeAttr('disabled');
@@ -275,14 +275,6 @@ function catchErrorOrDispatch(obj, textStatus)
         this.trueSuccess(obj, textStatus);
     else
         errorHandler.call(this, obj, textStatus);
-}
-
-function showWarning(str)
-{
-    $("#warningText").text(str);
-    $("#warning").show();
-    // reset window to the top so the user sees this message.
-    $(window).scrollTop(0);
 }
 
 // Specific calls...
