@@ -626,7 +626,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
@@ -654,7 +654,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
@@ -682,7 +682,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
@@ -1348,7 +1348,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
@@ -1377,7 +1377,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
@@ -1406,7 +1406,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000672
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-03-22
 dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
@@ -1435,7 +1435,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -1461,7 +1461,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -1487,7 +1487,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -1514,7 +1514,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -1541,7 +1541,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -1568,7 +1568,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000654
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-22
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -2439,7 +2439,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002081
@@ -2463,7 +2463,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002081
@@ -2487,7 +2487,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002081
@@ -2512,7 +2512,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002081
@@ -2536,7 +2536,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002081
@@ -2560,7 +2560,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002081
@@ -2585,7 +2585,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002080
@@ -2609,7 +2609,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002080
@@ -2633,7 +2633,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002080
@@ -2658,7 +2658,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002080
@@ -2682,7 +2682,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002080
@@ -2706,7 +2706,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002080
@@ -2731,7 +2731,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002070
@@ -2755,7 +2755,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002070
@@ -2779,7 +2779,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002070
@@ -2804,7 +2804,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001882
@@ -2829,7 +2829,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001882
@@ -2854,7 +2854,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001882
@@ -2880,7 +2880,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001882
@@ -2905,7 +2905,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001882
@@ -2930,7 +2930,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001882
@@ -2956,7 +2956,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
@@ -2981,7 +2981,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
@@ -3006,7 +3006,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
@@ -3032,7 +3032,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
@@ -3057,7 +3057,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
@@ -3082,7 +3082,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
@@ -3108,7 +3108,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
@@ -3133,7 +3133,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
@@ -3158,7 +3158,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
@@ -3184,7 +3184,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
@@ -3209,7 +3209,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
@@ -3234,7 +3234,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
@@ -3260,7 +3260,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
@@ -3285,7 +3285,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
@@ -3310,7 +3310,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
@@ -3336,7 +3336,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
@@ -3361,7 +3361,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
@@ -3386,7 +3386,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
@@ -3412,7 +3412,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001883
@@ -3437,7 +3437,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001883
@@ -3462,7 +3462,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH001883
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001883
@@ -3794,7 +3794,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
@@ -3820,7 +3820,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
@@ -3846,7 +3846,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId wgEncodeEH000916
 dataType ChipSeq
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-03-22
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
@@ -3866,4 +3866,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: -1420042197
+# MAGIC: -1625812781
