@@ -11046,43 +11046,6 @@ tag GGAMMA
 type promoter
 description promoter for the G-gamma globulin genes
 
-### Species
-
-term hg18
-tag HG18
-type species
-description The reference genome: Homo sapiens, March 2006 release
-
-term panTro2
-tag PANTRO2
-type species
-description Chimpanzee: Pan troglodytes, March 2006 release
-
-term rheMac2
-tag RHEMAC2
-type species
-description Monkey: Rhesus macaque, January 2006 release
-
-term mm9
-tag MM9
-type species
-description Mouse: Mus musculus, July 2007 release
-
-term rn4
-tag RN4
-type species
-description Rat: Rattus norvegicus, November 2004 release
-
-term canFam2
-tag CANFAM2
-type species
-description Dog: Canis lupus familiaris, May 2005 release
-
-term bosTau4
-tag BOSTAU4
-type species
-description Cow: Bos Taurus, October 2007 release
-
 ##### Control Terms
 
 term Control
