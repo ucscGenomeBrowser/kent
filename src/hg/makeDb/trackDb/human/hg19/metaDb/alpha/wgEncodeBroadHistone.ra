@@ -12,7 +12,7 @@ composite wgEncodeBroadHistone
 control std
 controlId A549/EtOH_0.02pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneA549H3k04me3Etoh02AlnRep1.bam,wgEncodeBroadHistoneA549H3k04me3Etoh02AlnRep1.bam.bai
@@ -35,7 +35,7 @@ composite wgEncodeBroadHistone
 control std
 controlId A549/EtOH_0.02pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneA549H3k04me3Etoh02AlnRep2.bam,wgEncodeBroadHistoneA549H3k04me3Etoh02AlnRep2.bam.bai
@@ -58,7 +58,7 @@ composite wgEncodeBroadHistone
 control std
 controlId A549/EtOH_0.02pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneA549H3k04me3Etoh02Pk.broadPeak.gz
@@ -82,7 +82,7 @@ composite wgEncodeBroadHistone
 control std
 controlId A549/EtOH_0.02pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneA549H3k04me3Etoh02RawDataRep1.fastq.gz
@@ -106,7 +106,7 @@ composite wgEncodeBroadHistone
 control std
 controlId A549/EtOH_0.02pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneA549H3k04me3Etoh02RawDataRep2.fastq.gz
@@ -130,7 +130,7 @@ composite wgEncodeBroadHistone
 control std
 controlId A549/EtOH_0.02pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneA549H3k04me3Etoh02Sig.bigWig
@@ -153,7 +153,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002434
@@ -177,7 +177,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002434
@@ -201,7 +201,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002434
@@ -226,7 +226,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002434
@@ -251,7 +251,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002434
@@ -275,7 +275,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002402
@@ -299,7 +299,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002402
@@ -323,7 +323,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002402
@@ -348,7 +348,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002402
@@ -373,7 +373,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002402
@@ -398,7 +398,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002402
@@ -422,7 +422,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002403
@@ -446,7 +446,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002403
@@ -470,7 +470,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002403
@@ -495,7 +495,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002403
@@ -520,7 +520,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002403
@@ -545,7 +545,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002403
@@ -569,7 +569,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002406
@@ -593,7 +593,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002406
@@ -617,7 +617,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002406
@@ -642,7 +642,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002406
@@ -667,7 +667,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002406
@@ -692,7 +692,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002406
@@ -716,7 +716,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002407
@@ -740,7 +740,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002407
@@ -764,7 +764,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002407
@@ -789,7 +789,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002407
@@ -814,7 +814,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002407
@@ -839,7 +839,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002407
@@ -863,7 +863,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002408
@@ -887,7 +887,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002408
@@ -911,7 +911,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002408
@@ -936,7 +936,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002408
@@ -961,7 +961,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002408
@@ -986,7 +986,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002408
@@ -1010,7 +1010,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002432
@@ -1034,7 +1034,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002432
@@ -1058,7 +1058,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002432
@@ -1083,7 +1083,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002432
@@ -1108,7 +1108,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002432
@@ -1133,7 +1133,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002432
@@ -1157,7 +1157,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002433
@@ -1181,7 +1181,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002433
@@ -1205,7 +1205,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002433
@@ -1230,7 +1230,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002433
@@ -1255,7 +1255,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002433
@@ -1280,7 +1280,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002433
@@ -1304,7 +1304,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002404
@@ -1328,7 +1328,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002404
@@ -1352,7 +1352,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002404
@@ -1377,7 +1377,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002404
@@ -1402,7 +1402,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002404
@@ -1427,7 +1427,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002404
@@ -1451,7 +1451,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002405
@@ -1475,7 +1475,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002405
@@ -1499,7 +1499,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002405
@@ -1524,7 +1524,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002405
@@ -1549,7 +1549,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002405
@@ -1574,7 +1574,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002405
@@ -1598,7 +1598,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002409
@@ -1622,7 +1622,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002409
@@ -1646,7 +1646,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002409
@@ -1671,7 +1671,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002409
@@ -1696,7 +1696,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002409
@@ -1721,7 +1721,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002409
@@ -1745,7 +1745,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002410
@@ -1769,7 +1769,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002410
@@ -1793,7 +1793,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002410
@@ -1818,7 +1818,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002410
@@ -1843,7 +1843,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002410
@@ -1868,7 +1868,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Dnd41/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002410
@@ -2182,7 +2182,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002411
@@ -2206,7 +2206,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002411
@@ -2230,7 +2230,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002411
@@ -2255,7 +2255,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002411
@@ -2280,7 +2280,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002411
@@ -2305,7 +2305,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002411
@@ -2482,7 +2482,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
@@ -2507,7 +2507,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2011-08-05
 dccAccession wgEncodeEH000033
@@ -2533,7 +2533,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
@@ -2559,7 +2559,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
@@ -2584,7 +2584,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-04
 dccAccession wgEncodeEH000028
@@ -2609,7 +2609,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2011-08-05
 dccAccession wgEncodeEH000028
@@ -2635,7 +2635,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2001-10-05
 dccAccession wgEncodeEH000028
@@ -2661,7 +2661,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-04
 dccAccession wgEncodeEH000028
@@ -2899,7 +2899,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
@@ -2951,7 +2951,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2011-08-05
 dccAccession wgEncodeEH000031
@@ -3029,7 +3029,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
@@ -3081,7 +3081,7 @@ composite wgEncodeBroadHistone
 control std
 controlId GM12878/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
@@ -4416,7 +4416,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
@@ -4440,7 +4440,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
@@ -4464,7 +4464,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
@@ -4489,7 +4489,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
@@ -4514,7 +4514,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
@@ -4539,7 +4539,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002095
@@ -4854,7 +4854,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-04
 dateUnrestricted 2012-05-04
 dccAccession wgEncodeEH002082
@@ -4878,7 +4878,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-04
 dateUnrestricted 2012-05-04
 dccAccession wgEncodeEH002082
@@ -4902,7 +4902,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-04
 dateUnrestricted 2012-05-04
 dccAccession wgEncodeEH002082
@@ -4927,7 +4927,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-04
 dateUnrestricted 2012-05-04
 dccAccession wgEncodeEH002082
@@ -4952,7 +4952,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-04
 dateUnrestricted 2012-05-04
 dccAccession wgEncodeEH002082
@@ -4977,7 +4977,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-04
 dateUnrestricted 2012-05-04
 dccAccession wgEncodeEH002082
@@ -5001,7 +5001,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002084
@@ -5025,7 +5025,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002084
@@ -5049,7 +5049,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002084
@@ -5074,7 +5074,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002084
@@ -5099,7 +5099,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002084
@@ -5124,7 +5124,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002084
@@ -6102,7 +6102,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002083
@@ -6126,7 +6126,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002083
@@ -6150,7 +6150,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002083
@@ -6175,7 +6175,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002083
@@ -6200,7 +6200,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002083
@@ -6225,7 +6225,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002083
@@ -6567,7 +6567,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
@@ -6591,7 +6591,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
@@ -6615,7 +6615,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
@@ -6640,7 +6640,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
@@ -6665,7 +6665,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
@@ -6690,7 +6690,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002096
@@ -6714,7 +6714,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
@@ -6738,7 +6738,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
@@ -6762,7 +6762,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
@@ -6787,7 +6787,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
@@ -6812,7 +6812,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
@@ -6837,7 +6837,7 @@ composite wgEncodeBroadHistone
 control std
 controlId H1-hESC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002087
@@ -7152,7 +7152,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002395
@@ -7176,7 +7176,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002395
@@ -7200,7 +7200,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002395
@@ -7225,7 +7225,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002395
@@ -7250,7 +7250,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002395
@@ -7275,7 +7275,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002395
@@ -7299,7 +7299,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-14
 dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
@@ -7323,7 +7323,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-14
 dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
@@ -7347,7 +7347,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-14
 dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
@@ -7372,7 +7372,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-14
 dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
@@ -7397,7 +7397,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-14
 dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
@@ -7422,7 +7422,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-14
 dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
@@ -7446,7 +7446,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002396
@@ -7470,7 +7470,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002396
@@ -7494,7 +7494,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002396
@@ -7519,7 +7519,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002396
@@ -7544,7 +7544,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002396
@@ -7569,7 +7569,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HeLa-S3/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002396
@@ -9309,7 +9309,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002416
@@ -9333,7 +9333,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002416
@@ -9357,7 +9357,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002416
@@ -9382,7 +9382,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002416
@@ -9407,7 +9407,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002416
@@ -9432,7 +9432,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002416
@@ -9615,7 +9615,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
@@ -9639,7 +9639,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
@@ -9663,7 +9663,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
@@ -9688,7 +9688,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
@@ -9713,7 +9713,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
@@ -9738,7 +9738,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HepG2/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
@@ -11324,7 +11324,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002412
@@ -11348,7 +11348,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002412
@@ -11372,7 +11372,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002412
@@ -11397,7 +11397,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002412
@@ -11422,7 +11422,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002412
@@ -11447,7 +11447,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002412
@@ -11471,7 +11471,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002413
@@ -11495,7 +11495,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002413
@@ -11519,7 +11519,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002413
@@ -11544,7 +11544,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002413
@@ -11569,7 +11569,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002413
@@ -11594,7 +11594,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002413
@@ -11618,7 +11618,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002414
@@ -11642,7 +11642,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002414
@@ -11666,7 +11666,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002414
@@ -11691,7 +11691,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002414
@@ -11716,7 +11716,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002414
@@ -11741,7 +11741,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002414
@@ -12719,7 +12719,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002435
@@ -12743,7 +12743,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002435
@@ -12767,7 +12767,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002435
@@ -12792,7 +12792,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002435
@@ -12817,7 +12817,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002435
@@ -12842,7 +12842,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002435
@@ -13473,7 +13473,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMM/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002415
@@ -13497,7 +13497,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMM/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002415
@@ -13521,7 +13521,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMM/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002415
@@ -13546,7 +13546,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMM/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002415
@@ -13571,7 +13571,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMM/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002415
@@ -13596,7 +13596,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMM/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002415
@@ -15813,7 +15813,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMMtube/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002394
@@ -15837,7 +15837,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMMtube/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002394
@@ -15861,7 +15861,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMMtube/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002394
@@ -15886,7 +15886,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMMtube/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002394
@@ -15911,7 +15911,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMMtube/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002394
@@ -15936,7 +15936,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HSMMtube/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002394
@@ -17629,7 +17629,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002436
@@ -17653,7 +17653,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002436
@@ -17677,7 +17677,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002436
@@ -17702,7 +17702,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002436
@@ -17727,7 +17727,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002436
@@ -17752,7 +17752,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002436
@@ -18941,7 +18941,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002437
@@ -18965,7 +18965,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002437
@@ -18989,7 +18989,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002437
@@ -19014,7 +19014,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002437
@@ -19039,7 +19039,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002437
@@ -19064,7 +19064,7 @@ composite wgEncodeBroadHistone
 control std
 controlId HUVEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002437
@@ -19936,7 +19936,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
@@ -19960,7 +19960,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
@@ -19984,7 +19984,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
@@ -20009,7 +20009,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
@@ -20034,7 +20034,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
@@ -20059,7 +20059,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002088
@@ -20320,7 +20320,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
@@ -20344,7 +20344,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
@@ -20368,7 +20368,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
@@ -20393,7 +20393,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
@@ -20418,7 +20418,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
@@ -20443,7 +20443,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002089
@@ -22299,7 +22299,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
@@ -22323,7 +22323,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
@@ -22347,7 +22347,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
@@ -22372,7 +22372,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
@@ -22397,7 +22397,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
@@ -22422,7 +22422,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002090
@@ -22446,7 +22446,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
@@ -22470,7 +22470,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
@@ -22494,7 +22494,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
@@ -22519,7 +22519,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
@@ -22544,7 +22544,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
@@ -22569,7 +22569,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002091
@@ -22593,7 +22593,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002086
@@ -22617,7 +22617,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002086
@@ -22641,7 +22641,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002086
@@ -22666,7 +22666,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002086
@@ -22691,7 +22691,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002086
@@ -22716,7 +22716,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002086
@@ -22740,7 +22740,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
@@ -22764,7 +22764,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
@@ -22788,7 +22788,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
@@ -22813,7 +22813,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
@@ -22838,7 +22838,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
@@ -22863,7 +22863,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002092
@@ -22887,7 +22887,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002085
@@ -22911,7 +22911,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002085
@@ -22935,7 +22935,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002085
@@ -22960,7 +22960,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002085
@@ -22985,7 +22985,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002085
@@ -23010,7 +23010,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002085
@@ -23192,7 +23192,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
@@ -23216,7 +23216,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
@@ -23240,7 +23240,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
@@ -23265,7 +23265,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
@@ -23290,7 +23290,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
@@ -23315,7 +23315,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002093
@@ -23339,7 +23339,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
@@ -23363,7 +23363,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
@@ -23387,7 +23387,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
@@ -23412,7 +23412,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
@@ -23437,7 +23437,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
@@ -23462,7 +23462,7 @@ composite wgEncodeBroadHistone
 control std
 controlId K562/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002094
@@ -23486,7 +23486,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H2azAlnRep1.bam,wgEncodeBroadHistoneMonocd14ro1746H2azAlnRep1.bam.bai
@@ -23508,7 +23508,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H2azAlnRep2.bam,wgEncodeBroadHistoneMonocd14ro1746H2azAlnRep2.bam.bai
@@ -23530,7 +23530,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H2azPk.broadPeak.gz
@@ -23553,7 +23553,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H2azRawDataRep1.fastq.gz
@@ -23576,7 +23576,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H2azRawDataRep2.fastq.gz
@@ -23599,7 +23599,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H2azSig.bigWig
@@ -23621,7 +23621,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me1AlnRep1.bam,wgEncodeBroadHistoneMonocd14ro1746H3k04me1AlnRep1.bam.bai
@@ -23643,7 +23643,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me1AlnRep2.bam,wgEncodeBroadHistoneMonocd14ro1746H3k04me1AlnRep2.bam.bai
@@ -23665,7 +23665,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me1Pk.broadPeak.gz
@@ -23688,7 +23688,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me1RawDataRep1.fastq.gz
@@ -23711,7 +23711,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me1RawDataRep2.fastq.gz
@@ -23734,7 +23734,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me1Sig.bigWig
@@ -23756,7 +23756,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me3AlnRep1.bam,wgEncodeBroadHistoneMonocd14ro1746H3k04me3AlnRep1.bam.bai
@@ -23778,7 +23778,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me3AlnRep2.bam,wgEncodeBroadHistoneMonocd14ro1746H3k04me3AlnRep2.bam.bai
@@ -23800,7 +23800,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me3Pk.broadPeak.gz
@@ -23823,7 +23823,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me3RawDataRep1.fastq.gz
@@ -23846,7 +23846,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me3RawDataRep2.fastq.gz
@@ -23869,7 +23869,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k04me3Sig.bigWig
@@ -23891,7 +23891,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09me3AlnRep1.bam,wgEncodeBroadHistoneMonocd14ro1746H3k09me3AlnRep1.bam.bai
@@ -23913,7 +23913,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09me3AlnRep2.bam,wgEncodeBroadHistoneMonocd14ro1746H3k09me3AlnRep2.bam.bai
@@ -23935,7 +23935,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09me3Pk.broadPeak.gz
@@ -23958,7 +23958,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09me3RawDataRep1.fastq.gz
@@ -23981,7 +23981,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09me3RawDataRep2.fastq.gz
@@ -24004,7 +24004,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k09me3Sig.bigWig
@@ -24026,7 +24026,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27acAlnRep1.bam,wgEncodeBroadHistoneMonocd14ro1746H3k27acAlnRep1.bam.bai
@@ -24048,7 +24048,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27acAlnRep2.bam,wgEncodeBroadHistoneMonocd14ro1746H3k27acAlnRep2.bam.bai
@@ -24070,7 +24070,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27acPk.broadPeak.gz
@@ -24093,7 +24093,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27acRawDataRep1.fastq.gz
@@ -24116,7 +24116,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27acRawDataRep2.fastq.gz
@@ -24139,7 +24139,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27acSig.bigWig
@@ -24161,7 +24161,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27me3AlnRep1.bam,wgEncodeBroadHistoneMonocd14ro1746H3k27me3AlnRep1.bam.bai
@@ -24183,7 +24183,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27me3AlnRep2.bam,wgEncodeBroadHistoneMonocd14ro1746H3k27me3AlnRep2.bam.bai
@@ -24205,7 +24205,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27me3Pk.broadPeak.gz
@@ -24228,7 +24228,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27me3RawDataRep1.fastq.gz
@@ -24251,7 +24251,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27me3RawDataRep2.fastq.gz
@@ -24274,7 +24274,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k27me3Sig.bigWig
@@ -24296,7 +24296,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k36me3AlnRep1.bam,wgEncodeBroadHistoneMonocd14ro1746H3k36me3AlnRep1.bam.bai
@@ -24318,7 +24318,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k36me3AlnRep2.bam,wgEncodeBroadHistoneMonocd14ro1746H3k36me3AlnRep2.bam.bai
@@ -24340,7 +24340,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k36me3Pk.broadPeak.gz
@@ -24363,7 +24363,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k36me3RawDataRep1.fastq.gz
@@ -24386,7 +24386,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k36me3RawDataRep2.fastq.gz
@@ -24409,7 +24409,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k36me3Sig.bigWig
@@ -24431,7 +24431,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k79me2AlnRep1.bam,wgEncodeBroadHistoneMonocd14ro1746H3k79me2AlnRep1.bam.bai
@@ -24453,7 +24453,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k79me2AlnRep2.bam,wgEncodeBroadHistoneMonocd14ro1746H3k79me2AlnRep2.bam.bai
@@ -24475,7 +24475,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k79me2Pk.broadPeak.gz
@@ -24498,7 +24498,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k79me2RawDataRep1.fastq.gz
@@ -24521,7 +24521,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k79me2RawDataRep2.fastq.gz
@@ -24544,7 +24544,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H3k79me2Sig.bigWig
@@ -24566,7 +24566,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H4k20me1AlnRep1.bam,wgEncodeBroadHistoneMonocd14ro1746H4k20me1AlnRep1.bam.bai
@@ -24588,7 +24588,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H4k20me1AlnRep2.bam,wgEncodeBroadHistoneMonocd14ro1746H4k20me1AlnRep2.bam.bai
@@ -24610,7 +24610,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H4k20me1Pk.broadPeak.gz
@@ -24633,7 +24633,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H4k20me1RawDataRep1.fastq.gz
@@ -24656,7 +24656,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H4k20me1RawDataRep2.fastq.gz
@@ -24679,7 +24679,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Monocytes-CD14+_RO01746/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 fileName wgEncodeBroadHistoneMonocd14ro1746H4k20me1Sig.bigWig
@@ -24992,7 +24992,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002425
@@ -25016,7 +25016,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002425
@@ -25040,7 +25040,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002425
@@ -25065,7 +25065,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002425
@@ -25090,7 +25090,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002425
@@ -25115,7 +25115,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002425
@@ -25139,7 +25139,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002397
@@ -25163,7 +25163,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002397
@@ -25187,7 +25187,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002397
@@ -25212,7 +25212,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002397
@@ -25237,7 +25237,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002397
@@ -25262,7 +25262,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002397
@@ -25286,7 +25286,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002426
@@ -25310,7 +25310,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002426
@@ -25334,7 +25334,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002426
@@ -25359,7 +25359,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002426
@@ -25384,7 +25384,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002426
@@ -25409,7 +25409,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002426
@@ -25433,7 +25433,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002427
@@ -25457,7 +25457,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002427
@@ -25481,7 +25481,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002427
@@ -25506,7 +25506,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002427
@@ -25531,7 +25531,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002427
@@ -25556,7 +25556,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002427
@@ -25580,7 +25580,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002399
@@ -25604,7 +25604,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002399
@@ -25628,7 +25628,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002399
@@ -25653,7 +25653,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002399
@@ -25678,7 +25678,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002399
@@ -25703,7 +25703,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002399
@@ -26524,7 +26524,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002398
@@ -26548,7 +26548,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002398
@@ -26572,7 +26572,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002398
@@ -26597,7 +26597,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002398
@@ -26622,7 +26622,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002398
@@ -26647,7 +26647,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002398
@@ -26671,7 +26671,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002428
@@ -26695,7 +26695,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002428
@@ -26719,7 +26719,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002428
@@ -26744,7 +26744,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002428
@@ -26769,7 +26769,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002428
@@ -26794,7 +26794,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NH-A/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002428
@@ -27098,7 +27098,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002438
@@ -27122,7 +27122,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002438
@@ -27146,7 +27146,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002438
@@ -27171,7 +27171,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002438
@@ -27196,7 +27196,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002438
@@ -27221,7 +27221,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002438
@@ -27245,7 +27245,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002429
@@ -27269,7 +27269,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002429
@@ -27293,7 +27293,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002429
@@ -27318,7 +27318,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002429
@@ -27343,7 +27343,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002429
@@ -27368,7 +27368,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002429
@@ -27392,7 +27392,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002431
@@ -27416,7 +27416,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002431
@@ -27440,7 +27440,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002431
@@ -27465,7 +27465,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002431
@@ -27490,7 +27490,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002431
@@ -27515,7 +27515,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002431
@@ -28304,7 +28304,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002430
@@ -28328,7 +28328,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002430
@@ -28352,7 +28352,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002430
@@ -28377,7 +28377,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002430
@@ -28402,7 +28402,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002430
@@ -28427,7 +28427,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002430
@@ -28604,7 +28604,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
@@ -28628,7 +28628,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
@@ -28652,7 +28652,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
@@ -28676,7 +28676,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
@@ -28701,7 +28701,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
@@ -28726,7 +28726,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
@@ -28751,7 +28751,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
@@ -28776,7 +28776,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHDF-Ad/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002417
@@ -29144,7 +29144,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002418
@@ -29169,7 +29169,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002418
@@ -29194,7 +29194,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002418
@@ -29220,7 +29220,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002418
@@ -29246,7 +29246,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002418
@@ -29272,7 +29272,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002418
@@ -29297,7 +29297,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002419
@@ -29322,7 +29322,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002419
@@ -29347,7 +29347,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002419
@@ -29373,7 +29373,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002419
@@ -29399,7 +29399,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002419
@@ -29425,7 +29425,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002419
@@ -29450,7 +29450,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002421
@@ -29475,7 +29475,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002421
@@ -29500,7 +29500,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002421
@@ -29526,7 +29526,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002421
@@ -29552,7 +29552,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002421
@@ -29578,7 +29578,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002421
@@ -30875,7 +30875,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002420
@@ -30900,7 +30900,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002420
@@ -30925,7 +30925,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002420
@@ -30951,7 +30951,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002420
@@ -30977,7 +30977,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002420
@@ -31003,7 +31003,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHEK/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002420
@@ -32114,7 +32114,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002422
@@ -32138,7 +32138,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002422
@@ -32162,7 +32162,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002422
@@ -32187,7 +32187,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002422
@@ -32212,7 +32212,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002422
@@ -32237,7 +32237,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
 dccAccession wgEncodeEH002422
@@ -32261,7 +32261,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002423
@@ -32285,7 +32285,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002423
@@ -32309,7 +32309,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002423
@@ -32334,7 +32334,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002423
@@ -32359,7 +32359,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002423
@@ -32384,7 +32384,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002423
@@ -32408,7 +32408,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002424
@@ -32432,7 +32432,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002424
@@ -32456,7 +32456,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002424
@@ -32481,7 +32481,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002424
@@ -32506,7 +32506,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002424
@@ -32531,7 +32531,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002424
@@ -33509,7 +33509,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002439
@@ -33533,7 +33533,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002439
@@ -33557,7 +33557,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002439
@@ -33582,7 +33582,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002439
@@ -33607,7 +33607,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002439
@@ -33632,7 +33632,7 @@ composite wgEncodeBroadHistone
 control std
 controlId NHLF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002439
@@ -33974,7 +33974,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002400
@@ -33998,7 +33998,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002400
@@ -34022,7 +34022,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002400
@@ -34047,7 +34047,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002400
@@ -34072,7 +34072,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002400
@@ -34097,7 +34097,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002400
@@ -34121,7 +34121,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002440
@@ -34145,7 +34145,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002440
@@ -34169,7 +34169,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002440
@@ -34194,7 +34194,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002440
@@ -34219,7 +34219,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002440
@@ -34244,7 +34244,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
 dccAccession wgEncodeEH002440
@@ -34268,7 +34268,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002401
@@ -34292,7 +34292,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002401
@@ -34316,7 +34316,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002401
@@ -34341,7 +34341,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002401
@@ -34366,7 +34366,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002401
@@ -34391,7 +34391,7 @@ composite wgEncodeBroadHistone
 control std
 controlId Osteobl/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012
 dateSubmitted 2011-10-20
 dateUnrestricted 2012-07-20
 dccAccession wgEncodeEH002401
@@ -35605,4 +35605,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: -1052652768
+# MAGIC: 167594666
