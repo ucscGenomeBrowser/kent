@@ -6025,8 +6025,6 @@ if(!trackImgOnly)
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
-    // XXXX stole this and '.hidden' from bioInt.css - needs work
-    hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
 
 /* check for new data hub */
