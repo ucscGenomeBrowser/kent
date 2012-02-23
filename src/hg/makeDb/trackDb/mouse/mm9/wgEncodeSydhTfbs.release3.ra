@@ -56,7 +56,7 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatm
 #visibilityViewDefaults  Signal=full
 noInherit on
 wgEncode 1
-html wgEncodeSydhTfbs.new
+html wgEncodeSydhTfbs.release3
 
 	#####Peak Tracks###########
 	track wgEncodeSydhTfbsViewPeaks
