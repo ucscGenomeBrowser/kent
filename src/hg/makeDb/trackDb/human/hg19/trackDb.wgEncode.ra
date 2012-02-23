@@ -8,7 +8,7 @@ include wgEncodeGencodeV4.ra
 #include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV9.ra alpha
-include wgEncodeGencodeV10.ra alpha,beta
+include wgEncodeGencodeV10.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
@@ -96,8 +96,7 @@ include wgEncodeRikenCage.ra beta,public
 include wgEncodeRikenCage.release3.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
-include wgEncodeCshlShortRnaSeq.ra public
-include wgEncodeCshlShortRnaSeq.release2.ra alpha,beta
+include wgEncodeCshlShortRnaSeq.release2.ra
 
 # GIS RNA Seq (wrangler: cricket)
 include wgEncodeGisRnaSeq.ra

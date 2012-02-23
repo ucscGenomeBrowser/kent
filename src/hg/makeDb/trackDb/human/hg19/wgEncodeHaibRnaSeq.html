@@ -15,7 +15,11 @@ polyA selected two times. The mRNA extract was then fragmented by magnesium-cata
 <DD>The Alignments view shows reads mapped to the genome. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a>
 for more information about the SAM Bowtie output (including tag definitions) and the
 <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on
-the SAM/BAM file format. </DD>
+the SAM/BAM file format. <br />
+The reads are named using the following convention:<br />
+Lane &#35;:Tile &#35;:X-coordinate:Y-coordinate
+</DD>
+
 <DT><I>Raw Signal</I> </DT>
 <DD>Density graph of signal enrichment based on a normalized aligned read density (Read Per Million, RPM). RPM is reported in the score field and is equal to the number of reads at that position divided by the total number of reads divided by one million. The Raw Signal view displays dense, continuous data as a graph and the RPM measure assists in visualizing the relative amount of a given transcript across multiple samples.</DD>
 </DL>
@@ -36,7 +40,7 @@ the SAM/BAM file format. </DD>
 
 <P>Casava export files were aligned to the NCBI Build37 (hg19) version of the human genome with ELAND (Illumina), generating SAM files. FastQ files of experiments that were previously aligned to NCBI Build36 (hg18) were aligned to NCBI Build37 (hg19) using Bowtie (Langmead <EM>et al.</EM>, 2009; parameters: -S -n 2 -k 11 -m 10 --best), also generating SAM files. SAM files were converted to BAM files with SAMtools (Li <EM>et al.</EM>, 2009).</P>  
  
-<P>Gene expression within GENCODE.v7 (Harrow <EM>et al.</EM>, 2006) gene models was estimated using Cufflinks v0.9.3 (Roberts <EM>et al.</EM>, 2011). Estimates of transcript abundance were reported in Fragments Per Kilobase of exon per Million fragments mapped (FPKM). FPKM is calculated by dividing the total number of fragments that align to the gene model by the size of the spliced transcript (exons) in kilobases. This number is then divided by the total number of reads in millions for the experiment. FPKM is reported in the last column of the GTF (TranscriptGencV7) files.</P>
+<P>Gene expression within GENCODE V7 (Harrow <EM>et al.</EM>, 2006) gene models was estimated using Cufflinks v0.9.3 (Roberts <EM>et al.</EM>, 2011). Estimates of transcript abundance were reported in Fragments Per Kilobase of exon per Million fragments mapped (FPKM). FPKM is calculated by dividing the total number of fragments that align to the gene model by the size of the spliced transcript (exons) in kilobases. This number is then divided by the total number of reads in millions for the experiment. FPKM is reported in the last column of the GTF (TranscriptGencV7) files.</P>
 
 <P>Raw Data (fastQ), Raw Signal (bigWig), Alignments (BAM) and Transcript GENCODE V7 (GTF) files are available from the <A HREF="../../cgi-bin/hgFileUi?g=wgEncodeHaibRnaSeq" TARGET=_BLANK>Downloads</A> page.</P>  
 
@@ -48,7 +52,7 @@ the SAM/BAM file format. </DD>
 
 <H2>Release Notes</H2>
 <P>This is the first NCBI Build37 (hg19) release of this track (Feb 2012). <br />
-This release includes the 3 datasets (Jurkat, A549/DEX100nm, and A549/EtOH2pct) previously released on NCBI Build36 (hg18) and adds data for several more cell types and growth conditions in replicate. Four types of download files are available for each replicate including the Raw Data (fastQ), Transcripts GECODE V7 (GTF), Raw Signal (bigWig), and Alignments (BAM).</P>
+This release includes the 3 datasets (Jurkat, A549/DEX100nm, and A549/EtOH2pct) previously released on NCBI Build36 (hg18) and adds data for several more cell types and growth conditions in replicate. Four types of download files are available for each replicate including the Raw Data (fastQ), Transcript GENCODE V7 (GTF), Raw Signal (bigWig), and Alignments (BAM).</P>
 
 
 
