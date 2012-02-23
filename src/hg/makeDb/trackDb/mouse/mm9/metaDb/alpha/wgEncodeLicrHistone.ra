@@ -62,6 +62,32 @@ strain C57BL/6
 subId 5374
 view Alignments
 
+metaObject wgEncodeLicrHistoneBmarrowH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell BoneMarrow
+composite wgEncodeLicrHistone
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrHistoneBmarrowH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5629
+tableName wgEncodeLicrHistoneBmarrowH3k27acMAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneBmarrowH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -733,6 +759,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5375
 view Alignments
+
+metaObject wgEncodeLicrHistoneCbellumH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Cerebellum
+composite wgEncodeLicrHistone
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneCbellumH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5655
+tableName wgEncodeLicrHistoneCbellumH3k27acMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneCbellumH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -1406,6 +1458,32 @@ strain C57BL/6
 subId 5376
 view Alignments
 
+metaObject wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Cortex
+composite wgEncodeLicrHistone
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5656
+tableName wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -2077,6 +2155,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5381
 view Alignments
+
+metaObject wgEncodeLicrHistoneEsb4H3k27acME0C57bl6StdPk
+objType table
+age E0
+antibody H3K27ac
+cell ES-Bruce4
+composite wgEncodeLicrHistone
+control std
+controlId ES-Bruce4/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneEsb4H3k27acME0C57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5729
+tableName wgEncodeLicrHistoneEsb4H3k27acME0C57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneEsb4H3k27acME0C57bl6StdRawDataRep1
 objType file
@@ -2750,6 +2854,32 @@ strain C57BL/6
 subId 5415
 view Alignments
 
+metaObject wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K4me1
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5663
+tableName wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdRawDataRep1
 objType file
 age E14.5
@@ -2894,6 +3024,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5414
 view Alignments
+
+metaObject wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K4me3
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5664
+tableName wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdRawDataRep1
 objType file
@@ -3040,6 +3196,32 @@ strain C57BL/6
 subId 5377
 view Alignments
 
+metaObject wgEncodeLicrHistoneHeartH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneHeartH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5719
+tableName wgEncodeLicrHistoneHeartH3k27acMAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneHeartH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -3184,6 +3366,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5416
 view Alignments
+
+metaObject wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K27ac
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5662
+tableName wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdRawDataRep1
 objType file
@@ -4036,6 +4244,32 @@ strain C57BL/6
 subId 5378
 view Alignments
 
+metaObject wgEncodeLicrHistoneKidneyH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Kidney
+composite wgEncodeLicrHistone
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneKidneyH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5726
+tableName wgEncodeLicrHistoneKidneyH3k27acMAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneKidneyH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -4742,6 +4976,32 @@ strain C57BL/6
 subId 5371
 view Alignments
 
+metaObject wgEncodeLicrHistoneLimbH3k04me1UE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K4me1
+cell Limb
+composite wgEncodeLicrHistone
+control std
+controlId Limb/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLimbH3k04me1UE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5667
+tableName wgEncodeLicrHistoneLimbH3k04me1UE14halfC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneLimbH3k04me1UE14halfC57bl6StdRawDataRep1
 objType file
 age E14.5
@@ -4887,6 +5147,32 @@ strain C57BL/6
 subId 5372
 view Alignments
 
+metaObject wgEncodeLicrHistoneLimbH3k04me3UE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K4me3
+cell Limb
+composite wgEncodeLicrHistone
+control std
+controlId Limb/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLimbH3k04me3UE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5668
+tableName wgEncodeLicrHistoneLimbH3k04me3UE14halfC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneLimbH3k04me3UE14halfC57bl6StdRawDataRep1
 objType file
 age E14.5
@@ -5031,6 +5317,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5370
 view Alignments
+
+metaObject wgEncodeLicrHistoneLimbH3k27acUE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K27ac
+cell Limb
+composite wgEncodeLicrHistone
+control std
+controlId Limb/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLimbH3k27acUE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5666
+tableName wgEncodeLicrHistoneLimbH3k27acUE14halfC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneLimbH3k27acUE14halfC57bl6StdRawDataRep1
 objType file
@@ -5321,6 +5633,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5379
 view Alignments
+
+metaObject wgEncodeLicrHistoneLiverH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneLiverH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5727
+tableName wgEncodeLicrHistoneLiverH3k27acMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneLiverH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -6521,6 +6859,32 @@ strain C57BL/6
 subId 5380
 view Alignments
 
+metaObject wgEncodeLicrHistoneMefH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell MEF
+composite wgEncodeLicrHistone
+control std
+controlId MEF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneMefH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5728
+tableName wgEncodeLicrHistoneMefH3k27acMAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneMefH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -7193,6 +7557,32 @@ strain C57BL/6
 subId 5314
 view Alignments
 
+metaObject wgEncodeLicrHistoneOlfactH3k04me1MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me1
+cell OlfactBulb
+composite wgEncodeLicrHistone
+control std
+controlId OlfactBulb/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneOlfactH3k04me1MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Peaks
+strain C57BL/6
+subId 5732
+tableName wgEncodeLicrHistoneOlfactH3k04me1MAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneOlfactH3k04me1MAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -7338,6 +7728,32 @@ strain C57BL/6
 subId 5446
 view Alignments
 
+metaObject wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me3
+cell OlfactBulb
+composite wgEncodeLicrHistone
+control std
+controlId OlfactBulb/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5733
+tableName wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -7482,6 +7898,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5342
 view Alignments
+
+metaObject wgEncodeLicrHistoneOlfactH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell OlfactBulb
+composite wgEncodeLicrHistone
+control std
+controlId OlfactBulb/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneOlfactH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Peaks
+strain C57BL/6
+subId 5731
+tableName wgEncodeLicrHistoneOlfactH3k27acMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneOlfactH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -7773,6 +8215,32 @@ strain C57BL/6
 subId 5442
 view Alignments
 
+metaObject wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me1
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion MACS
+strain C57BL/6
+subId 5751
+tableName wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -7918,6 +8386,32 @@ strain C57BL/6
 subId 5443
 view Alignments
 
+metaObject wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me3
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion MACS
+strain C57BL/6
+subId 5752
+tableName wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -8062,6 +8556,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5441
 view Alignments
+
+metaObject wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion MACS
+strain C57BL/6
+subId 5750
+tableName wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -8353,6 +8873,32 @@ strain C57BL/6
 subId 5347
 view Alignments
 
+metaObject wgEncodeLicrHistoneSmintH3k04me1MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me1
+cell SmIntestine
+composite wgEncodeLicrHistone
+control std
+controlId SmIntestine/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneSmintH3k04me1MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5722
+tableName wgEncodeLicrHistoneSmintH3k04me1MAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneSmintH3k04me1MAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -8498,6 +9044,32 @@ strain C57BL/6
 subId 5348
 view Alignments
 
+metaObject wgEncodeLicrHistoneSmintH3k04me3MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me3
+cell SmIntestine
+composite wgEncodeLicrHistone
+control std
+controlId SmIntestine/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneSmintH3k04me3MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5723
+tableName wgEncodeLicrHistoneSmintH3k04me3MAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneSmintH3k04me3MAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -8642,6 +9214,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5350
 view Alignments
+
+metaObject wgEncodeLicrHistoneSmintH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell SmIntestine
+composite wgEncodeLicrHistone
+control std
+controlId SmIntestine/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneSmintH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5721
+tableName wgEncodeLicrHistoneSmintH3k27acMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneSmintH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -8932,6 +9530,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5382
 view Alignments
+
+metaObject wgEncodeLicrHistoneSpleenH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Spleen
+composite wgEncodeLicrHistone
+control std
+controlId Spleen/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneSpleenH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5735
+tableName wgEncodeLicrHistoneSpleenH3k27acMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneSpleenH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -9605,6 +10229,32 @@ strain C57BL/6
 subId 5352
 view Alignments
 
+metaObject wgEncodeLicrHistoneTestisH3k04me1MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me1
+cell Testis
+composite wgEncodeLicrHistone
+control std
+controlId Testis/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneTestisH3k04me1MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5738
+tableName wgEncodeLicrHistoneTestisH3k04me1MAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneTestisH3k04me1MAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -9750,6 +10400,32 @@ strain C57BL/6
 subId 5353
 view Alignments
 
+metaObject wgEncodeLicrHistoneTestisH3k04me3MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me3
+cell Testis
+composite wgEncodeLicrHistone
+control std
+controlId Testis/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneTestisH3k04me3MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5739
+tableName wgEncodeLicrHistoneTestisH3k04me3MAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneTestisH3k04me3MAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -9894,6 +10570,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5351
 view Alignments
+
+metaObject wgEncodeLicrHistoneTestisH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Testis
+composite wgEncodeLicrHistone
+control std
+controlId Testis/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneTestisH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5737
+tableName wgEncodeLicrHistoneTestisH3k27acMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneTestisH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -10356,6 +11058,32 @@ strain C57BL/6
 subId 5316
 view Alignments
 
+metaObject wgEncodeLicrHistoneThymusH3k04me3MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K4me3
+cell Thymus
+composite wgEncodeLicrHistone
+control std
+controlId Thymus/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneThymusH3k04me3MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5756
+tableName wgEncodeLicrHistoneThymusH3k04me3MAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneThymusH3k04me3MAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -10500,6 +11228,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5343
 view Alignments
+
+metaObject wgEncodeLicrHistoneThymusH3k27acMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Thymus
+composite wgEncodeLicrHistone
+control std
+controlId Thymus/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-16
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneThymusH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 5754
+tableName wgEncodeLicrHistoneThymusH3k27acMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneThymusH3k27acMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -10791,6 +11545,32 @@ strain C57BL/6
 subId 5364
 view Alignments
 
+metaObject wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K4me1
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5659
+tableName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdRawDataRep1
 objType file
 age E14.5
@@ -10936,6 +11716,32 @@ strain C57BL/6
 subId 5365
 view Alignments
 
+metaObject wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K4me3
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5660
+tableName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdRawDataRep1
 objType file
 age E14.5
@@ -11080,6 +11886,32 @@ softwareVersion Bowtie
 strain C57BL/6
 subId 5366
 view Alignments
+
+metaObject wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K27ac
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5658
+tableName wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdRawDataRep1
 objType file
@@ -11313,4 +12145,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -855963893
+# MAGIC: -1267931561
