@@ -2129,3 +2129,28 @@ fr3.8way.nh > fr3.commonNames.8way.nh
     ln -s /hive/data/genomes/fr3/bed/multiz8way/downloads/md5sum.txt .
 
 #############################################################################
+# Construct download files (DONE - 2012-02-23 - Hiram)
+    cd /hive/data/genomes/fr3
+    # verify joinerCheck is good and fr3 is in all.joiner
+    joinerCheck -keys -database=fr3 \
+	$HOME/kent/src/hg/makeDb/schema/all.joiner
+
+    time makeDownloads.pl fr3 -workhorse=hgwdev > downloads.log 2>&1 &
+    #	real    24m7.903s
+    # you must edit the */README files in ./goldenPath/
+
+############################################################################
+# after downloads, construct pushQ (DONE - 2012-02-23 - Hiram)
+    mkdir /hive/data/genomes/fr3/pushQ
+    cd /hive/data/genomes/fr3/pushQ
+    time makePushQSql.pl fr3 > fr3.sql 2> stderr.log
+    # check stderr.log for anything not categorized
+
+    scp -p fr3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < fr3.sql
+    # after loading, view the subQ in the WEB interface, go through each
+    #	item and verify it can measure the tables and files
+
+############################################################################
