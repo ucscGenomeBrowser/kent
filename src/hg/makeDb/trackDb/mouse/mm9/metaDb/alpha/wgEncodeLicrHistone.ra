@@ -5576,6 +5576,318 @@ subId 5373
 tableName wgEncodeLicrHistoneLimbInputUE14halfC57bl6StdSig
 view Signal
 
+metaObject wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdAlnRep1
+objType file
+age E14.5
+antibody H3K4me1
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/28/11 Lane 3
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5671
+view Alignments
+
+metaObject wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdAlnRep2
+objType file
+age E14.5
+antibody H3K4me1
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 5/24/11 Lane 7-6
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5671
+view Alignments
+
+metaObject wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K4me1
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5671
+tableName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdRawDataRep1
+objType file
+age E14.5
+antibody H3K4me1
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/28/10 Lane 3
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5671
+view RawData
+
+metaObject wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdRawDataRep2
+objType file
+age E14.5
+antibody H3K4me1
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 5/24/11 Lane 7-6
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5671
+view RawData
+
+metaObject wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdSig
+objType table
+age E14.5
+antibody H3K4me1
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-15
+dateUnrestricted 2012-11-15
+fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5671
+tableName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdAlnRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/28/11 Lane 3
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5672
+view Alignments
+
+metaObject wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdAlnRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 5/24/11 Lane 7-6
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5672
+view Alignments
+
+metaObject wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K4me3
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5672
+tableName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdRawDataRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/28/10 Lane 3
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5672
+view RawData
+
+metaObject wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdRawDataRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 5/24/11 Lane 7-6
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5672
+view RawData
+
+metaObject wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdSig
+objType table
+age E14.5
+antibody H3K4me3
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5672
+tableName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdSig
+view Signal
+
 metaObject wgEncodeLicrHistoneLiverH3k27acMAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -5745,6 +6057,162 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 5379
 tableName wgEncodeLicrHistoneLiverH3k27acMAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdAlnRep1
+objType file
+age E14.5
+antibody H3K27ac
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/28/11 Lane 3-11
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5670
+view Alignments
+
+metaObject wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdAlnRep2
+objType file
+age E14.5
+antibody H3K27ac
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 7/26/11 Lane 7-6
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5670
+view Alignments
+
+metaObject wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdPk
+objType table
+age E14.5
+antibody H3K27ac
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion MACS
+strain C57BL/6
+subId 5670
+tableName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdRawDataRep1
+objType file
+age E14.5
+antibody H3K27ac
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/28/11 Lane 3-11
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5670
+view RawData
+
+metaObject wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdRawDataRep2
+objType file
+age E14.5
+antibody H3K27ac
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 7/26/11 Lane 7-6
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5670
+view RawData
+
+metaObject wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdSig
+objType table
+age E14.5
+antibody H3K27ac
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-14
+dateUnrestricted 2012-11-14
+fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5670
+tableName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdSig
 view Signal
 
 metaObject wgEncodeLicrHistoneLiverH3k4me1MAdult8wksC57bl6StdAlnRep1
@@ -6272,6 +6740,136 @@ strain C57BL/6
 subId 3933
 tableName wgEncodeLicrHistoneLiverInputMAdult8wksC57bl6StdSig
 tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdAlnRep1
+objType file
+age E14.5
+antibody Input
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/18/10 Lane 6
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5627
+view Alignments
+
+metaObject wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdAlnRep2
+objType file
+age E14.5
+antibody Input
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 4/6/11 Lane 3-1
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5627
+view Alignments
+
+metaObject wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdRawDataRep1
+objType file
+age E14.5
+antibody Input
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/18/10 Lane 7
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5627
+view RawData
+
+metaObject wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdRawDataRep2
+objType file
+age E14.5
+antibody Input
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 4/6/11 Lane 3-1
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5627
+view RawData
+
+metaObject wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdSig
+objType table
+age E14.5
+antibody Input
+cell Liver
+composite wgEncodeLicrHistone
+control std
+controlId Liver/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-13
+fileName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5627
+tableName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdSig
 view Signal
 
 metaObject wgEncodeLicrHistoneLungH3k4me1MAdult8wksC57bl6StdAlnRep1
@@ -12145,4 +12743,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1267931561
+# MAGIC: -234033560
