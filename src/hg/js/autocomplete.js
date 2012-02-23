@@ -29,7 +29,7 @@ function ajaxGet(getDb, cache)
                            var msg = "ajax call failed";
                            if(status != "error")
                                msg = msg + "; error: " + status;
-                           showWarning(msg + "; statusText: " + request.statusText + "; responseText: " + request.responseText);
+                           warn(msg + "; statusText: " + request.statusText + "; responseText: " + request.responseText);
                        },
                        key: key,
                        cont: callback
@@ -37,7 +37,7 @@ function ajaxGet(getDb, cache)
         } else {
             callback(eval(suggestCache[key]));
         }
-        // showWarning(request.term);
+        // warn(request.term);
     }
 }
 

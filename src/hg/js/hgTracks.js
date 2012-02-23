@@ -19,7 +19,6 @@ var browser;              // browser ("msie", "safari" etc.) // move to utils.js
  * int imgBox*            // various drag-scroll values
  * boolean measureTiming  // true if measureTiming is on
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
- * string err             // error message (present only when hgTracks has hit a fatal berror).
  */
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
@@ -1624,7 +1623,7 @@ var rightClick = {
             }
             return;
         }
-        showWarning("Couldn't parse out img src");
+        warn("Couldn't parse out img src");
     },
 
     myPrompt: function (msg, callback)
@@ -1655,7 +1654,7 @@ var rightClick = {
     {   // dispatcher for context menu hits
         var id = rightClick.selectedMenuItem.id;
         if(menuObject.shown) {
-            // showWarning("Spinning: menu is still shown");
+            // warn("Spinning: menu is still shown");
             setTimeout(function() { rightClick.hitFinish(menuItemClicked, menuObject, cmd); }, 10);
             return;
         }
@@ -1689,7 +1688,7 @@ var rightClick = {
                         chromEnd = parseInt(a[1]);
                 }
                 if(chrom == null || chromStart == null || chromEnd == null) {
-                    showWarning("couldn't parse out genomic coordinates");
+                    warn("couldn't parse out genomic coordinates");
                 } else {
                     if(cmd == 'getDna')
                     {
@@ -2622,9 +2621,10 @@ var imageV2 = {
         var oldTrackDb = hgTracks.trackDb;
         var valid = false;
         if(json == undefined) {
-            showWarning("hgTracks object is missing from the response");
-        } else if (json.err) {
-            showWarning("Request failed; error: " + json.err);
+            var stripped = new Object();
+            stripJsEmbedded(response, true, stripped);
+            if(stripped.warnMsg == null)
+                warn("hgTracks object is missing from the response");
         } else {
             if(this.id != null) {
                 if(json.trackDb[this.id]) {
@@ -2641,7 +2641,7 @@ var imageV2 = {
                     vis.update(this.id, visibility);
                     valid = true;
                 } else {
-                    showWarning("Invalid hgTracks.trackDb received from the server");
+                    warn("Invalid hgTracks.trackDb received from the server");
                 }
             } else {
                 valid = true;
@@ -2660,7 +2660,7 @@ var imageV2 = {
                 if(imageV2.updateImgForId(response, id)) {
                     imageV2.afterReload();
                 } else {
-                    showWarning("Couldn't parse out new image for id: " + id);
+                    warn("Couldn't parse out new image for id: " + id);
                     //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                 }
             } else {
@@ -2682,7 +2682,7 @@ var imageV2 = {
                             if(hgTracks.trackDb[id].type != "remote"
                             && hgTracks.trackDb[id].visibility > 0 // && $('#tr_' + id).length > 0
                             && !imageV2.updateImgForId(response, id)) {
-                                showWarning("Couldn't parse out new image for id: " + id);
+                                warn("Couldn't parse out new image for id: " + id);
                             }
                         }
                     /* This (disabled) code handles dynamic addition of tracks:
@@ -2706,7 +2706,7 @@ var imageV2 = {
                 // now pull out and parse the map.
                 //a = /<MAP id='map' Name=map>([\s\S]+)<\/MAP>/.exec(response);
                 //if(!a[1])
-                //    showWarning("Couldn't parse out map");
+                //    warn("Couldn't parse out map");
             }
             // Parse out new ideoGram url (if available)
             // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
