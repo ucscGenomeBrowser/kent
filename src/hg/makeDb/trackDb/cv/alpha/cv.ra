@@ -11329,16 +11329,19 @@ label 14 day diff protein A
 
 term diffDoxy_6hr
 tag DIFFD6H
+type treatment
 description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours (Stam) PROVISIONAL
 label 6 hour diff Doxcycline
 
 term diffDoxy_24hr
 tag DIFFD24H
+type treatment
 description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours (Stam) PROVISIONAL
 label 24 hour diff Doxcycline
 
 term diffDoxy_72hr
 tag DIFFD72H
+type treatment
 description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours (Stam) PROVISIONAL
 label 72 hour diff Doxcycline
 
