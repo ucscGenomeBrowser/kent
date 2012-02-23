@@ -1976,4 +1976,11 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     hgLoadSqlTab fr3 ensemblToGeneName ensemblToGeneName.sql \
 	fr3.ensemblToGeneName.tab
 
+    hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("fr3", "ensGene", "hiram", "65", now(), \
+        "lifted from mm9 ensGene 65", \
+        "lifted from mm9 ensGene 65", \
+        "dec2011" );' hgFixed
+
 #############################################################################

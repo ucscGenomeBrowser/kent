@@ -1054,5 +1054,12 @@ done >> cmdList.sh
     hgLoadSqlTab mm10 ensemblToGeneName ensemblToGeneName.sql \
 	mm10.ensemblToGeneName.tab
 
+hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("mm10", "ensGene", "hiram", "65", now(), \
+        "lifted from mm9 ensGene 65", \
+        "lifted from mm9 ensGene 65", \
+        "dec2011" );' hgFixed
+
 #########################################################################
 
