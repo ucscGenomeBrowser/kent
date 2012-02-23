@@ -51,7 +51,7 @@ cat j.out |sort -u >omimGeneSymbol.tab
 
 hgLoadSqlTab -warn $1 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab 
 
-perl ./script1.pl --gene-map-file=genemap >omimPhenotype.tab
+perl ./parseGeneMap.pl --gene-map-file=genemap >omimPhenotype.tab
 
 hgLoadSqlTab -warn $1 omimPhenotype ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab 
 
