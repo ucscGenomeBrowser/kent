@@ -49,7 +49,7 @@ listed above. Antibody-chromatin complexes were pulled-down using protein
 A-sepharose (or anti-IgM-conjugated agarose for RNA polymerase II), washed and
 then eluted. After cross-link reversal and proteinase K treatment,
 immunoprecipitated DNA was extracted with phenol-chloroform, ethanol
-precipitated, treated with RNAse and purified. A quantity of 1-10 ng of DNA were
+precipitated, treated with RNAse and purified. A quantity of 1-10 ng of DNA was
 end-repaired, adapter-ligated and sequenced by Illumina Genome Analyzers as
 recommended by the manufacturer.</p>
 
@@ -57,7 +57,7 @@ recommended by the manufacturer.</p>
 human reference genome (<B>GRCh37/hg19</B>) using
 <a href="http://maq.sourceforge.net/" title='http://maq.sourceforge.net/' rel="nofollow" TARGET = _BLANK>MAQ</a>
 with default parameters, except '<code>-C 11</code>' and
-'<code>-H output_file</code>', which added outputs up to 11 additional best matches
+'<code>-H output_file</code>' were added, which added outputs up to 11 additional best matches
 for each read (if any are found) to a file. This information was used to filter
 out any read that had more than 10 best matches on the genome.  Note: It is
 likely that instances where multiple reads align to the same position and with
@@ -70,7 +70,7 @@ reads overlapping each 25 bp bin along the genome. Densities were computed using
 <a href="http://www.broadinstitute.org/igv/node/173" title='http://www.broadinstitute.org/igv/node/173' rel="nofollow" TARGET = _BLANK>igvtools count</a>
 with default parameters (in particular, '<code>-w 25</code>' to set window size
 of 25 bp and '<code>-f mean</code>' to report the mean value across the window),
-except for '<code>-e</code>' was set to extend the reads to 200 bp, and the
+except for '<code>-e</code>' which was set to extend the reads to 200 bp, and the
 <em>.wig</em> output was converted to <em>bigWig</em> using <code>wigToBigWig</code>
 from the UCSC Kent software package.</p>
 
