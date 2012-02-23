@@ -7,6 +7,7 @@
 #include "dlist.h"
 #include "rbTree.h"
 
+/* Global vars - all of which can be set by command line options. */
 int maxChainSize = 3;
 int maxNonsenseSize = 10000;
 int minUse = 1;
@@ -259,7 +260,7 @@ int llSize = 0;
 struct wordTree *wt = wordTreeNew("");
 int wordCount = 0;
 struct lm *lm = lmInit(0);
-struct rbTreeNode **stack;
+struct rbTreeNode **stack;	/* Save time/space by sharing stack between trees. */
 
 lmAllocArray(lm, stack, 256);
 while (lineFileNext(lf, &line, NULL))
