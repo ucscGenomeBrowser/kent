@@ -8,7 +8,7 @@ objType file
 cell BJ
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002097
@@ -28,7 +28,7 @@ objType file
 cell BJ
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002097
@@ -48,7 +48,7 @@ objType file
 cell BJ
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002097
@@ -68,7 +68,7 @@ objType file
 cell BJ
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002097
@@ -88,7 +88,7 @@ objType file
 cell Caco-2
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002098
@@ -108,7 +108,7 @@ objType file
 cell Caco-2
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002098
@@ -128,7 +128,7 @@ objType file
 cell Caco-2
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002098
@@ -148,7 +148,7 @@ objType file
 cell Caco-2
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002098
@@ -168,7 +168,7 @@ objType file
 cell GM06990
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002099
@@ -188,7 +188,7 @@ objType file
 cell GM06990
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002099
@@ -208,7 +208,7 @@ objType file
 cell GM06990
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002099
@@ -228,7 +228,7 @@ objType file
 cell GM06990
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002099
@@ -248,7 +248,7 @@ objType file
 cell GM12878
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002100
@@ -268,7 +268,7 @@ objType file
 cell GM12878
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002100
@@ -288,7 +288,7 @@ objType file
 cell GM12878
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002100
@@ -308,7 +308,7 @@ objType file
 cell GM12878
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002100
@@ -328,7 +328,7 @@ objType file
 cell HepG2
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002101
@@ -348,7 +348,7 @@ objType file
 cell HepG2
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002101
@@ -368,7 +368,7 @@ objType file
 cell HepG2
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002101
@@ -388,7 +388,7 @@ objType file
 cell HepG2
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002101
@@ -408,7 +408,7 @@ objType file
 cell K562
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002102
@@ -428,7 +428,7 @@ objType file
 cell K562
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002102
@@ -448,7 +448,7 @@ objType file
 cell K562
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002102
@@ -468,7 +468,7 @@ objType file
 cell K562
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002102
@@ -488,7 +488,7 @@ objType file
 cell LNCaP
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002103
@@ -508,7 +508,7 @@ objType file
 cell LNCaP
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002103
@@ -528,7 +528,7 @@ objType file
 cell LNCaP
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002103
@@ -548,7 +548,7 @@ objType file
 cell LNCaP
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002103
@@ -568,7 +568,7 @@ objType file
 cell MCF-7
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002104
@@ -588,7 +588,7 @@ objType file
 cell MCF-7
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002104
@@ -608,7 +608,7 @@ objType file
 cell MCF-7
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002104
@@ -628,7 +628,7 @@ objType file
 cell MCF-7
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002104
@@ -648,7 +648,7 @@ objType file
 cell SK-N-SH_RA
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002107
@@ -668,7 +668,7 @@ objType file
 cell SK-N-SH_RA
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002107
@@ -688,7 +688,7 @@ objType file
 cell SK-N-SH_RA
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002107
@@ -708,7 +708,7 @@ objType file
 cell SK-N-SH_RA
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002107
@@ -728,7 +728,7 @@ objType file
 cell None
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002105
@@ -748,7 +748,7 @@ objType file
 cell None
 composite wgEncodeUw5C
 dataType 5C
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-09
 dateUnrestricted 2011-12-08
 dccAccession wgEncodeEH002106
@@ -763,4 +763,4 @@ replicate 1
 subId 3813
 view Primer
 
-# MAGIC: 1620661554
+# MAGIC: -1379830366
