@@ -11307,25 +11307,43 @@ term diffProtA_2d
 tag DIFFA2D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 2 days, lineage: mesoderm
-label 2 day diff prot A
+label 2 day diff protein A
 
 term diffProtA_5d
 tag DIFFA5D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 5 days, lineage: mesoderm
-label 5 day diffProtA
+label 5 day diff protein A
 
 term diffProtA_9d
 tag DIFFA9D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 9 days, lineage: mesoderm
-label 9 day diffProtA
+label 9 day diff protein A
 
 term diffProtA_14d
 tag DIFFA14D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, cell sorting and specific growth factors were used, lineage: mesoderm
-label 14 day diffProtA
+label 14 day diff protein A
+
+term diffDoxy_6hr
+tag DIFFD6H
+type treatment
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours (Stam) PROVISIONAL
+label 6 hour diff Doxcycline
+
+term diffDoxy_24hr
+tag DIFFD24H
+type treatment
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours (Stam) PROVISIONAL
+label 24 hour diff Doxcycline
+
+term diffDoxy_72hr
+tag DIFFD72H
+type treatment
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours (Stam) PROVISIONAL
+label 72 hour diff Doxcycline
 
 term DMSO_0.02pct
 tag DM002P1H
