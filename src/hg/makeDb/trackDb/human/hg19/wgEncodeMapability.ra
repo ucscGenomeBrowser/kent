@@ -19,7 +19,6 @@ noInherit on
 type bed 3
 visibility hide
 wgEncode 1
-html wgEncodeMapability.patch
 
     track wgEncodeMapabilityViewDuniq
     shortLabel Duke Uniqueness
