@@ -14,7 +14,7 @@ Instructions for configuring multi-view tracks are
 <DL>
 <DT><I>Alignability</I></DT>
 <DD>These tracks provide a measure of how often the sequence found at the particular
-location will align with the whole genome.  Unlike measures of uniqueness, alignability
+location will align within the whole genome.  Unlike measures of uniqueness, alignability
 will tolerate up to 2 mismatches. These tracks are in the form of signals ranging from
 0 to 1 and have several configuration options.</DD>
 </P>
@@ -46,15 +46,15 @@ generated independently of the ENCODE project, in the framework of the GEM
 (GEnome Multitool) project.
 
 <H4>Uniqueness</H4>
-The <em>Duke uniqueness</em> tracks display how unique is each sequence on the
+The <em>Duke Uniqueness</em> tracks display how unique each sequence is on the
 positive strand starting at a particular base and of a particular length.
 Thus, the 20 bp track reflects the uniqueness of all 20 base sequences with
-the score being assigned to the first base of the sequence. Scores are
-normalized to between 0 and 1 with 1 representing a completely unique
-sequence and 0 representing the sequence occurs &#62; 4 times in the genome
+the score being assigned to the first base of the sequence. Scores are 
+normalized to between 0 and 1, with 1 representing a completely unique sequence 
+and 0 representing a sequence that occurs more than 4 times in the genome
 (excluding chrN_random and alternative haplotypes).  A score of 0.5
 indicates the sequence occurs exactly twice, likewise 0.33 for three times
-and 0.25 for four times. The <em>Duke uniqueness</em> tracks were generated
+and 0.25 for four times. The <em>Duke Uniqueness</em> tracks were generated
 for the ENCODE project as tools in the development of the
 <A HREF="hgTrackUi?g=wgEncodeDNAseSuper">Open Chromatin</A>:
 <A HREF="hgTrackUi?g=wgEncodeOpenChromDnase">DNaseI HS</A>,
@@ -63,25 +63,25 @@ for the ENCODE project as tools in the development of the
 <A HREF="hgTrackUi?g=wgEncodeOpenChromSynth">Synthesis</A></B> tracks.
 
 <H4>Blacklisted Regions</H4>
-The <em>DAC Blacklist regions</em> aim to identify a comprehensive set of
+The <em>DAC Blacklisted Regions</em> aim to identify a comprehensive set of
 regions in the human genome that have anomalous, unstructured, high
 signal/read counts in next gen sequencing experiments independent of
-cell line and type of experiment. We use 80 open chromatin tracks
+cell line and type of experiment. There were 80 open chromatin tracks
 (DNase and FAIRE datasets) and 20 ChIP-seq input/control tracks spanning
-&#126;60 human tissue types/cell lines in total to identify these regions
+&#126;60 human tissue types/cell lines in total used to identify these regions
 with signal artifacts. These regions tend to have a very high ratio of
 multi-mapping to unique mapping reads and high variance in mapability.
 Some of these regions overlap pathological repeat elements such as satellite,
 centromeric and telomeric repeats. However, simple mapability based filters
 do not account for most of these regions. Hence, it is recommended to use this
 blacklist alongside mapability filters.  The
-<em>DAC Blacklist regions</em> track was generated for the ENCODE project.
+<em>DAC Blacklisted Regions</em> track was generated for the ENCODE project.
 <!-- Complete methods can be found
 <A HREF="ftp://encodeftp.cse.ucsc.edu/users/akundaje/rawdata/blacklists/hg19/hg19-blacklist-README.pdf">here</a>.
 -->
 
 <P>
-The <em>Duke excluded regions</em> track displays genomic regions for
+The <em>Duke Excluded Regions</em> track displays genomic regions for
 which mapped sequence tags were filtered out before signal generation
 and peak calling for
 <A HREF="hgTrackUi?g=wgEncodeDNAseSuper">Open Chromatin</A>:
@@ -89,7 +89,7 @@ and peak calling for
 <A HREF="hgTrackUi?g=wgEncodeOpenChromFaire">FAIRE</A> tracks.
 This track contains problematic regions for short sequence tag signal
 detection (such as satellites and rRNA genes). The
-<em>Duke excluded regions</em> track was generated for the ENCODE project.
+<em>Duke Excluded Regions</em> track was generated for the ENCODE project.
 </P>
 
 <h2>Release Notes</h2>
@@ -112,7 +112,7 @@ CDS2007-00050 from the Spanish Ministerio de Educaci&#243;n y Ciencia.
 </P>
 
 <P>
-The <em>Duke uniqueness</em> and <em>Duke excluded regions</em> tracks were created
+The <em>Duke Uniqueness</em> and <em>Duke Excluded Regions</em> tracks were created
 by
 <A HREF="mailto:&#116;&#115;&#102;ur&#101;&#121;&#64;&#100;&#117;&#107;&#101;.e&#100;u"
 title="&#116;&#115;&#102;ur&#101;&#121;&#64;&#100;&#117;&#107;&#101;.e&#100;u" rel="nofollow" TARGET=_BLANK>Terry Furey</A>
@@ -125,7 +125,7 @@ We thank NHGRI for ENCODE funding support.
 </P>
 
 <P>
-The <em>DAC Blacklisted regions</em> were created by
+The <em>DAC Blacklisted Regions</em> were created by
 <A HREF="http://sites.google.com/site/anshulkundaje/" TARGET=_BLANK>Anshul Kundaje</A>
 at Stanford University in the labs of
 <A HREF="http://ai.stanford.edu/~serafim/research.html" TARGET=_BLANK>Batzoglou</A> and

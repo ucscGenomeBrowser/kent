@@ -198,6 +198,7 @@ include wgEncodeSunyRipSeq.ra
 # Other miscellany ------------------------------------
 
 # Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
-include wgEncodeMapability.ra beta,public
+include wgEncodeMapability.ra public
+include wgEncodeMapability.patch.ra beta
 include wgEncodeMapability.release4.ra alpha
 
