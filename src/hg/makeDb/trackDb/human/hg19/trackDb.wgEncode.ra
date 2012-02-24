@@ -174,7 +174,7 @@ include wgEncodeHaibTfbs.ra public
 include wgEncodeHaibTfbs.release2.ra alpha,beta
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
-include wgEncodeSydhTfbs.new.ra alpha
+include wgEncodeSydhTfbs.release2.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra beta,public
