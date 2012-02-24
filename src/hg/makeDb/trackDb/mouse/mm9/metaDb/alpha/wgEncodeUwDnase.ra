@@ -4353,6 +4353,7 @@ grant Stam
 lab UW-m
 labExpId DS18784
 labVersion Bowtie 0.12.5
+md5sum fc0663651ef69adadd1c0d4739bc1ebf,3cdfcc41edc9c5b9743abc1a143f1e8e
 project wgEncode
 replicate 2
 sex M
@@ -4400,6 +4401,7 @@ grant Stam
 lab UW-m
 labExpId DS18784
 labVersion Hotspot-v5.2
+md5sum 0b6ead4612cc3b74d70c6810f47876ca
 project wgEncode
 replicate 2
 sex M
@@ -4448,6 +4450,7 @@ grant Stam
 lab UW-m
 labExpId DS18784
 labVersion lmax-v1.1
+md5sum a3ed25c089d710af54fae6c366832f3e
 project wgEncode
 replicate 2
 sex M
@@ -4495,6 +4498,7 @@ grant Stam
 lab UW-m
 labExpId DS18784
 labVersion 1
+md5sum b868b603fc4e00248f046e038bcc5be4
 project wgEncode
 replicate 2
 sex M
@@ -4542,6 +4546,7 @@ grant Stam
 lab UW-m
 labExpId DS18784
 labVersion WindowDensity-bin20-win+/-75
+md5sum 49de5ceb254943018f65575435837138
 project wgEncode
 replicate 2
 sex M
@@ -4664,6 +4669,7 @@ grant Stam
 lab UW-m
 labExpId DS16858
 labVersion Bowtie 0.12.5
+md5sum be88b5c30fb69591ec5358c74fafe513,57a3d24495c412312a436e824615fa82
 project wgEncode
 replicate 13
 sex M
@@ -4688,6 +4694,7 @@ grant Stam
 lab UW-m
 labExpId DS19375
 labVersion Bowtie 0.12.5
+md5sum c970320ea724d2ac0cd1ec18ed26455e,05bd3472a20e515cd601b05cdd9ad42d
 project wgEncode
 replicate 14
 sex M
@@ -5012,6 +5019,7 @@ grant Stam
 lab UW-m
 labExpId DS16858
 labVersion Hotspot-v5.2
+md5sum 2ecb1b787d33ed22ea145d6cb24e4a97
 project wgEncode
 replicate 13
 sex M
@@ -5037,6 +5045,7 @@ grant Stam
 lab UW-m
 labExpId DS19375
 labVersion Hotspot-v5.2
+md5sum 20d6985b3e44f87350cff4669fb024c0
 project wgEncode
 replicate 14
 sex M
@@ -5370,6 +5379,7 @@ grant Stam
 lab UW-m
 labExpId DS16858
 labVersion lmax-v1.1
+md5sum 3de5c3a510f78f7a0b7098e6ba36d1f1
 project wgEncode
 replicate 13
 sex M
@@ -5395,6 +5405,7 @@ grant Stam
 lab UW-m
 labExpId DS19375
 labVersion lmax-v1.1
+md5sum 601686b621d2c9c1d9bccb7ad323db82
 project wgEncode
 replicate 14
 sex M
@@ -5724,6 +5735,7 @@ grant Stam
 lab UW-m
 labExpId DS16858
 labVersion 1
+md5sum c78250fa490a343f2edc497676d06f3e
 project wgEncode
 replicate 13
 sex M
@@ -5748,6 +5760,7 @@ grant Stam
 lab UW-m
 labExpId DS19375
 labVersion 1
+md5sum 55f0cacf1ca9af52691f2adefdccd838
 project wgEncode
 replicate 14
 sex M
@@ -6072,6 +6085,7 @@ grant Stam
 lab UW-m
 labExpId DS16858
 labVersion WindowDensity-bin20-win+/-75
+md5sum 78ea5c11b53df494e1278007543b0ee2
 project wgEncode
 replicate 13
 sex M
@@ -6097,6 +6111,7 @@ grant Stam
 lab UW-m
 labExpId DS19375
 labVersion WindowDensity-bin20-win+/-75
+md5sum bd7eb9cff931b4b39e7f2f3d78880fed
 project wgEncode
 replicate 14
 sex M
@@ -6328,6 +6343,7 @@ grant Stam
 lab UW-m
 labExpId DS20666
 labVersion Bowtie 0.12.5
+md5sum e0cf554c4e28b665e58cfa308f2d6d95,c9e682893c97b940cb2cb98d2820ee4d
 project wgEncode
 replicate 1
 sex M
@@ -6351,6 +6367,7 @@ grant Stam
 lab UW-m
 labExpId DS20666
 labVersion Hotspot-v5.2
+md5sum f8dd041f7ff671fe712111105b9b5559
 project wgEncode
 replicate 1
 sex M
@@ -6375,6 +6392,7 @@ grant Stam
 lab UW-m
 labExpId DS20666
 labVersion lmax-v1.1
+md5sum e0affce45fc38079f5b626e1b609e4bf
 project wgEncode
 replicate 1
 sex M
@@ -6399,6 +6417,7 @@ grant Stam
 lab UW-m
 labExpId DS20666
 labVersion 1
+md5sum 1789a9b402c5cd69666fc7faa0df1c1a
 project wgEncode
 replicate 1
 sex M
@@ -6422,6 +6441,7 @@ grant Stam
 lab UW-m
 labExpId DS20666
 labVersion WindowDensity-bin20-win+/-75
+md5sum 869e3f828824c54a2a8a11d0d1e7a7ce
 project wgEncode
 replicate 1
 sex M
@@ -7391,9 +7411,9 @@ tableName wgEncodeUwDnaseMesodermCd1ME11halfSigRep2
 tissueSourceType Pooled
 view Signal
 
-metaObject wgEncodeUwDnaseNih3t3NihsMAdult8wksAlnRep1
+metaObject wgEncodeUwDnaseNih3t3NihsMImmortalAlnRep1
 objType file
-age adult-8wks
+age immortalized
 cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -7401,7 +7421,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksAlnRep1.bam,wgEncodeUwDnaseNih3t3NihsMAdult8wksAlnRep1.bam.bai
+fileName wgEncodeUwDnaseNih3t3NihsMImmortalAlnRep1.bam,wgEncodeUwDnaseNih3t3NihsMImmortalAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labExpId DS16900
@@ -7414,105 +7434,6 @@ strain NIH/Swiss
 subId 5218
 tissueSourceType Pooled
 view Alignments
-
-metaObject wgEncodeUwDnaseNih3t3NihsMAdult8wksHotspotsRep1
-objType table
-age adult-8wks
-cell NIH-3T3
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-02-21
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksHotspotsRep1.broadPeak.gz
-grant Stam
-lab UW-m
-labExpId DS16900
-labVersion Hotspot-v5.2
-md5sum cb3ccc8813749f72526e03ddca7c11a5
-project wgEncode
-replicate 1
-sex M
-strain NIH/Swiss
-subId 5218
-tableName wgEncodeUwDnaseNih3t3NihsMAdult8wksHotspotsRep1
-tissueSourceType Pooled
-view Hotspots
-
-metaObject wgEncodeUwDnaseNih3t3NihsMAdult8wksPkRep1
-objType table
-age adult-8wks
-cell NIH-3T3
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-02-21
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksPkRep1.narrowPeak.gz
-grant Stam
-lab UW-m
-labExpId DS16900
-labVersion lmax-v1.1
-md5sum 54134761a71b30ab12638c939fa7bfff
-project wgEncode
-replicate 1
-sex M
-strain NIH/Swiss
-subId 5218
-tableName wgEncodeUwDnaseNih3t3NihsMAdult8wksPkRep1
-tissueSourceType Pooled
-view Peaks
-
-metaObject wgEncodeUwDnaseNih3t3NihsMAdult8wksRawDataRep1
-objType file
-age adult-8wks
-cell NIH-3T3
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-02-21
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksRawDataRep1.fastq.tgz
-grant Stam
-lab UW-m
-labExpId DS16900
-labVersion 1
-md5sum 51531d6cb05752156fcad037c7b67260
-project wgEncode
-replicate 1
-sex M
-strain NIH/Swiss
-subId 5218
-tissueSourceType Pooled
-view RawData
-
-metaObject wgEncodeUwDnaseNih3t3NihsMAdult8wksSigRep1
-objType table
-age adult-8wks
-cell NIH-3T3
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-02-21
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksSigRep1.bigWig
-grant Stam
-lab UW-m
-labExpId DS16900
-labVersion WindowDensity-bin20-win+/-75
-md5sum f450a80001f8d617d6923337c048a4bc
-project wgEncode
-replicate 1
-sex M
-strain NIH/Swiss
-subId 5218
-tableName wgEncodeUwDnaseNih3t3NihsMAdult8wksSigRep1
-tissueSourceType Pooled
-view Signal
 
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalAlnRep2
 objType file
@@ -7535,6 +7456,31 @@ strain NIH/Swiss
 subId 3894
 tissueSourceType None
 view Alignments
+
+metaObject wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep1
+objType table
+age immortalized
+cell NIH-3T3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS16900
+labVersion Hotspot-v5.2
+md5sum 20ffab90f200be3b7556785a75a50aae
+project wgEncode
+replicate 1
+sex M
+strain NIH/Swiss
+subId 5218
+tableName wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep1
+tissueSourceType Pooled
+view Hotspots
 
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep2
 objType table
@@ -7559,6 +7505,31 @@ tableName wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep2
 tissueSourceType None
 view Hotspots
 
+metaObject wgEncodeUwDnaseNih3t3NihsMImmortalPkRep1
+objType table
+age immortalized
+cell NIH-3T3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseNih3t3NihsMImmortalPkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS16900
+labVersion lmax-v1.1
+md5sum 602888867fe7f916e4b7ccea85dfc198
+project wgEncode
+replicate 1
+sex M
+strain NIH/Swiss
+subId 5218
+tableName wgEncodeUwDnaseNih3t3NihsMImmortalPkRep1
+tissueSourceType Pooled
+view Peaks
+
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalPkRep2
 objType table
 age immortalized
@@ -7582,6 +7553,30 @@ tableName wgEncodeUwDnaseNih3t3NihsMImmortalPkRep2
 tissueSourceType None
 view Peaks
 
+metaObject wgEncodeUwDnaseNih3t3NihsMImmortalRawDataRep1
+objType file
+age immortalized
+cell NIH-3T3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseNih3t3NihsMImmortalRawDataRep1.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS16900
+labVersion 1
+md5sum 6487e455903dc4f080c90eec1506bb5b
+project wgEncode
+replicate 1
+sex M
+strain NIH/Swiss
+subId 5218
+tissueSourceType Pooled
+view RawData
+
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalRawDataRep2
 objType file
 age immortalized
@@ -7603,6 +7598,31 @@ strain NIH/Swiss
 subId 3894
 tissueSourceType None
 view RawData
+
+metaObject wgEncodeUwDnaseNih3t3NihsMImmortalSigRep1
+objType table
+age immortalized
+cell NIH-3T3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseNih3t3NihsMImmortalSigRep1.bigWig
+grant Stam
+lab UW-m
+labExpId DS16900
+labVersion WindowDensity-bin20-win+/-75
+md5sum f450a80001f8d617d6923337c048a4bc
+project wgEncode
+replicate 1
+sex M
+strain NIH/Swiss
+subId 5218
+tableName wgEncodeUwDnaseNih3t3NihsMImmortalSigRep1
+tissueSourceType Pooled
+view Signal
 
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalSigRep2
 objType table
@@ -7912,7 +7932,7 @@ grant Stam
 lab UW-m
 labExpId DS20000
 labVersion Hotspot-v5.2
-md5sum ca1f815a51589ba726dfc5ef308dd444
+md5sum a58b34cd890ce799c5e1a011ca5730dc
 project wgEncode
 replicate 1
 sex M
@@ -7937,7 +7957,7 @@ grant Stam
 lab UW-m
 labExpId DS20000
 labVersion lmax-v1.1
-md5sum 2a8f39ca1f88b7b592dd61e2057d58dd
+md5sum 55f19913ffd3f80fffaf780233e53d29
 project wgEncode
 replicate 1
 sex M
@@ -7962,7 +7982,7 @@ grant Stam
 lab UW-m
 labExpId DS20000
 labVersion 1
-md5sum 133b541569a85871a1773dc322c62098
+md5sum 86764d0e562afd0c8ae30d2f811ab3d5
 project wgEncode
 replicate 1
 sex M
@@ -8010,6 +8030,7 @@ grant Stam
 lab UW-m
 labExpId DS19060
 labVersion Bowtie 0.12.5
+md5sum 9bfc8806415c80a489049fbee27e37db,5f616187ca9058290d19a662903bc137
 project wgEncode
 replicate 1
 sex M
@@ -8033,6 +8054,7 @@ grant Stam
 lab UW-m
 labExpId DS19060
 labVersion Hotspot-v5.2
+md5sum f70023fbbfce82533c9ee001634aacc4
 project wgEncode
 replicate 1
 sex M
@@ -8057,6 +8079,7 @@ grant Stam
 lab UW-m
 labExpId DS19060
 labVersion lmax-v1.1
+md5sum 80b222e60cf0387f8713c6464544564e
 project wgEncode
 replicate 1
 sex M
@@ -8081,6 +8104,7 @@ grant Stam
 lab UW-m
 labExpId DS19060
 labVersion 1
+md5sum e6380cb11cf15add38457ab72b89540d
 project wgEncode
 replicate 1
 sex M
@@ -8104,6 +8128,7 @@ grant Stam
 lab UW-m
 labExpId DS19060
 labVersion WindowDensity-bin20-win+/-75
+md5sum c473390bb9a8b2130e77a0f5d0e0e3d0
 project wgEncode
 replicate 1
 sex M
@@ -8153,7 +8178,7 @@ grant Stam
 lab UW-m
 labExpId DS20004
 labVersion Hotspot-v5.2
-md5sum 2705307629edc1544131f33a6715beab
+md5sum dfbd52ed02ff522817dc8f02adcf2153
 project wgEncode
 replicate 1
 sex M
@@ -8178,7 +8203,7 @@ grant Stam
 lab UW-m
 labExpId DS20004
 labVersion lmax-v1.1
-md5sum 20027ee8183b8a0977b0d6dba6d7cae7
+md5sum 6fd89893fbd83c8c8d6ec817d5762943
 project wgEncode
 replicate 1
 sex M
@@ -8203,7 +8228,7 @@ grant Stam
 lab UW-m
 labExpId DS20004
 labVersion 1
-md5sum 0397e1602e3a25056bb47abe66d74f27
+md5sum 14f0a9987b3bc076c5bddd8a1168d47e
 project wgEncode
 replicate 1
 sex M
@@ -8300,7 +8325,7 @@ grant Stam
 lab UW-m
 labExpId DS18130
 labVersion Hotspot-v5.2
-md5sum 006767bcd9c987a594b87c1213dfb041
+md5sum 1b7328646e1f7622dd3060d26494db33
 project wgEncode
 replicate 1
 sex M
@@ -8325,7 +8350,7 @@ grant Stam
 lab UW-m
 labExpId DS18892
 labVersion Hotspot-v5.2
-md5sum e3d170d23c0f70223ea76940b2242ad8
+md5sum bc73c4c9e4cb9a030a3aa91f90731e3d
 project wgEncode
 replicate 2
 sex M
@@ -8350,7 +8375,7 @@ grant Stam
 lab UW-m
 labExpId DS18130
 labVersion lmax-v1.1
-md5sum b00e22c6214584a110b159ba96dd23ae
+md5sum 415cce114a08aadbfef621b382707dbc
 project wgEncode
 replicate 1
 sex M
@@ -8375,7 +8400,7 @@ grant Stam
 lab UW-m
 labExpId DS18892
 labVersion lmax-v1.1
-md5sum 3ff53ebace56ffb8d7e664325fcf998a
+md5sum 72071c581359fc66b5f8066ec3bd499a
 project wgEncode
 replicate 2
 sex M
@@ -8400,7 +8425,7 @@ grant Stam
 lab UW-m
 labExpId DS18130
 labVersion 1
-md5sum c7ae7cd166a896fdab8dbdf0d5df7cf9
+md5sum 4de9b74cce6631b77654d0e9aaa0e0fc
 project wgEncode
 replicate 1
 sex M
@@ -8424,7 +8449,7 @@ grant Stam
 lab UW-m
 labExpId DS18892
 labVersion 1
-md5sum 7c9dcfd9a47bc983840bd77efcb2f4c2
+md5sum b326e1a3e9fc1f591a23d21879af280c
 project wgEncode
 replicate 2
 sex M
@@ -8546,7 +8571,7 @@ grant Stam
 lab UW-m
 labExpId DS18870
 labVersion Hotspot-v5.2
-md5sum bb05ca82fa77a4ab3a6980afe052cc5a
+md5sum 2162dd5587e7dc03fa5df9a9114c6e83
 project wgEncode
 replicate 1
 sex M
@@ -8571,7 +8596,7 @@ grant Stam
 lab UW-m
 labExpId DS18884
 labVersion Hotspot-v5.2
-md5sum e8bf7c6d721198dcfd2aa5fdd159a0d0
+md5sum 11b913e530e7febf81b4f5ffb3b3b066
 project wgEncode
 replicate 2
 sex M
@@ -8596,7 +8621,7 @@ grant Stam
 lab UW-m
 labExpId DS18870
 labVersion lmax-v1.1
-md5sum 311eeeb65720c1399a0644a466fc8252
+md5sum 20a4fe9a968c9e98876f4cba4d41d0ce
 project wgEncode
 replicate 1
 sex M
@@ -8621,7 +8646,7 @@ grant Stam
 lab UW-m
 labExpId DS18884
 labVersion lmax-v1.1
-md5sum 7ec3e45add622f550640fbf7405cc06c
+md5sum a2b8708c1ad7b19d07c3c1dbca1aee5d
 project wgEncode
 replicate 2
 sex M
@@ -8646,7 +8671,7 @@ grant Stam
 lab UW-m
 labExpId DS18870
 labVersion 1
-md5sum 8d0816e99c3954845a4725fa5cddeef8
+md5sum 3edb69c98b6669d8d5ad489b9071196f
 project wgEncode
 replicate 1
 sex M
@@ -8670,7 +8695,7 @@ grant Stam
 lab UW-m
 labExpId DS18884
 labVersion 1
-md5sum 30a4abb94cd538e3bb87253bb4e2b861
+md5sum e57488c2937cd71f1ce7adbbd4bc0636
 project wgEncode
 replicate 2
 sex M
@@ -8792,7 +8817,7 @@ grant Stam
 lab UW-m
 labExpId DS18819
 labVersion Hotspot-v5.2
-md5sum d1cdf118af6dc49d5ae8fa6fdeda11de
+md5sum 91cf3f85d169095a6566122849517ead
 project wgEncode
 replicate 1
 sex M
@@ -8817,7 +8842,7 @@ grant Stam
 lab UW-m
 labExpId DS18890
 labVersion Hotspot-v5.2
-md5sum d32b11e3e6a4bf2952d90407a91611ea
+md5sum fad57a4716ac87cb364b0067d91c0833
 project wgEncode
 replicate 2
 sex M
@@ -8842,7 +8867,7 @@ grant Stam
 lab UW-m
 labExpId DS18819
 labVersion lmax-v1.1
-md5sum ff3fc105b9de47f24aaafa74750df1f7
+md5sum 38d3fdb7917ea28d20c4def40b5230f7
 project wgEncode
 replicate 1
 sex M
@@ -8867,7 +8892,7 @@ grant Stam
 lab UW-m
 labExpId DS18890
 labVersion lmax-v1.1
-md5sum 9de5ab32c874bd975d49ee8fd65538c4
+md5sum 942525bb0a37fdcf9ff9e3ccfade6e11
 project wgEncode
 replicate 2
 sex M
@@ -8892,7 +8917,7 @@ grant Stam
 lab UW-m
 labExpId DS18819
 labVersion 1
-md5sum eac11af199c5dbc3312f1e9b952085ac
+md5sum a7732799f9862f09462b6e49aaf6bf5e
 project wgEncode
 replicate 1
 sex M
@@ -8916,7 +8941,7 @@ grant Stam
 lab UW-m
 labExpId DS18890
 labVersion 1
-md5sum dc3052ca4e11e01c8a69f6e2cf629ccf
+md5sum 6d79bd351ae46bb1ae3469f71914c500
 project wgEncode
 replicate 2
 sex M
@@ -9139,7 +9164,7 @@ grant Stam
 lab UW-m
 labExpId DS17080
 labVersion Hotspot-v5.2
-md5sum d7adf2c41211a2bdd73bbb86e5ffe96e
+md5sum 00d3ca064bfce266a802202825640f42
 project wgEncode
 replicate 3
 sex M
@@ -9165,7 +9190,7 @@ grant Stam
 lab UW-m
 labExpId DS17082
 labVersion Hotspot-v5.2
-md5sum 9e627c09dd142aee18a33e69aee9cc18
+md5sum 657b0abf9148700ed6f75b75963ddfb7
 project wgEncode
 replicate 4
 sex M
@@ -9241,7 +9266,7 @@ grant Stam
 lab UW-m
 labExpId DS17080
 labVersion lmax-v1.1
-md5sum 4539bf82fab661c2e4c7eed15b77335f
+md5sum 322752d3dd1fe161c65a57de7aa59fbb
 project wgEncode
 replicate 3
 sex M
@@ -9267,7 +9292,7 @@ grant Stam
 lab UW-m
 labExpId DS17082
 labVersion lmax-v1.1
-md5sum 292ab963cee14434c1794d854638c21c
+md5sum e2e4854fe21255d9ebadb1d03e1979dd
 project wgEncode
 replicate 4
 sex M
@@ -9341,7 +9366,7 @@ grant Stam
 lab UW-m
 labExpId DS17080
 labVersion 1
-md5sum f7af289bc6db97acf28a9e8e18b5be03
+md5sum d90f65eda23da53b1b7e6e58de54b2a1
 project wgEncode
 replicate 3
 sex M
@@ -9366,7 +9391,7 @@ grant Stam
 lab UW-m
 labExpId DS17082
 labVersion 1
-md5sum 079bb828bbf9c1f238712dfe7fac27f3
+md5sum 0e01920d139523de8d7c094583403b61
 project wgEncode
 replicate 4
 sex M
@@ -9612,7 +9637,7 @@ grant Stam
 lab UW-m
 labExpId DS16358
 labVersion Hotspot-v5.2
-md5sum a59c97302fc408f3d049393315f24769
+md5sum 8965f86a18dabd53543d9bd182be5646
 project wgEncode
 replicate 3
 sex M
@@ -9686,7 +9711,7 @@ grant Stam
 lab UW-m
 labExpId DS16358
 labVersion lmax-v1.1
-md5sum 76ecaf89c2462540bdcfe38e239a6dff
+md5sum 755b433a8cdc194ae6e9d13393a1aa90
 project wgEncode
 replicate 3
 sex M
@@ -9758,7 +9783,7 @@ grant Stam
 lab UW-m
 labExpId DS16358
 labVersion 1
-md5sum e726debcef7b6bb8ab3c8866174729c7
+md5sum fc6bf799af1ee9fc171e09efcca5b0b3
 project wgEncode
 replicate 3
 sex M
@@ -11010,6 +11035,7 @@ grant Stam
 lab UW-m
 labExpId DS15269
 labVersion Bowtie 0.12.5
+md5sum 36e48053c856b32c351200c5e100f5fd,1082b707708e62b8b04ceb29d1a14a13
 project wgEncode
 replicate 2
 sex M
@@ -11057,6 +11083,7 @@ grant Stam
 lab UW-m
 labExpId DS15269
 labVersion Hotspot-v5.2
+md5sum c23776bbb41db9595c8bd32865e42fe6
 project wgEncode
 replicate 2
 sex M
@@ -11105,6 +11132,7 @@ grant Stam
 lab UW-m
 labExpId DS15269
 labVersion lmax-v1.1
+md5sum 81b3e29d2520f7634c67dd9e90513d4f
 project wgEncode
 replicate 2
 sex M
@@ -11152,6 +11180,7 @@ grant Stam
 lab UW-m
 labExpId DS15269
 labVersion 1
+md5sum 8fa3adb5b90df86bc7a4cf56669e0d81
 project wgEncode
 replicate 2
 sex M
@@ -11199,6 +11228,7 @@ grant Stam
 lab UW-m
 labExpId DS15269
 labVersion WindowDensity-bin20-win+/-75
+md5sum 53891c01bc2b7f5fcc893b412ab59fde
 project wgEncode
 replicate 2
 sex M
@@ -12627,4 +12657,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 510139639
+# MAGIC: 1876833529

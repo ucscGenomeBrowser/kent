@@ -8,7 +8,7 @@ objType table
 cell A549
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002174
@@ -31,7 +31,7 @@ objType table
 cell AG04449
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002198
@@ -54,7 +54,7 @@ objType table
 cell AG04450
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002199
@@ -77,7 +77,7 @@ objType table
 cell AG09309
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002200
@@ -100,7 +100,7 @@ objType table
 cell AG09319
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002201
@@ -123,7 +123,7 @@ objType table
 cell AG10803
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002202
@@ -146,7 +146,7 @@ objType table
 cell AoSMC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002209
@@ -169,7 +169,7 @@ objType table
 cell BE2_C
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002210
@@ -192,7 +192,7 @@ objType table
 cell BJ
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002203
@@ -215,7 +215,7 @@ objType table
 cell Caco-2
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002205
@@ -238,7 +238,7 @@ objType table
 cell CMK
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002204
@@ -261,7 +261,7 @@ objType table
 cell ECC-1
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002175
@@ -284,7 +284,7 @@ objType table
 cell GM06990
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002206
@@ -307,7 +307,7 @@ objType table
 cell GM12878
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002185
@@ -330,7 +330,7 @@ objType table
 cell GM12891
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002186
@@ -353,7 +353,7 @@ objType table
 cell GM12892
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002187
@@ -376,7 +376,7 @@ objType table
 cell GM19239
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002207
@@ -399,7 +399,7 @@ objType table
 cell H1-hESC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002188
@@ -422,7 +422,7 @@ objType table
 cell HAEpiC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002208
@@ -445,7 +445,7 @@ objType table
 cell HCF
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002211
@@ -468,7 +468,7 @@ objType table
 cell HCM
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002212
@@ -491,7 +491,7 @@ objType table
 cell HCPEpiC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002213
@@ -514,7 +514,7 @@ objType table
 cell HCT-116
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002214
@@ -537,7 +537,7 @@ objType table
 cell HCT-116
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002214
@@ -560,7 +560,7 @@ objType table
 cell HEEpiC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002189
@@ -583,7 +583,7 @@ objType table
 cell HEK293
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002176
@@ -606,7 +606,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002191
@@ -629,7 +629,7 @@ objType table
 cell Hepatocytes
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002193
@@ -652,7 +652,7 @@ objType table
 cell HepG2
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002192
@@ -675,7 +675,7 @@ objType table
 cell HIPEpiC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002190
@@ -698,7 +698,7 @@ objType table
 cell HL-60
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002215
@@ -721,7 +721,7 @@ objType table
 cell HMEC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002216
@@ -744,7 +744,7 @@ objType table
 cell HNPCEpiC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002217
@@ -767,7 +767,7 @@ objType table
 cell HPAEpiC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002218
@@ -790,7 +790,7 @@ objType table
 cell HRCEpiC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002219
@@ -813,7 +813,7 @@ objType table
 cell HRE
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002220
@@ -836,7 +836,7 @@ objType table
 cell HRPEpiC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002221
@@ -859,7 +859,7 @@ objType table
 cell HUVEC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002177
@@ -882,7 +882,7 @@ objType table
 cell IMR90
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002194
@@ -905,7 +905,7 @@ objType table
 cell Jurkat
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002178
@@ -928,7 +928,7 @@ objType table
 cell K562
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002195
@@ -951,7 +951,7 @@ objType table
 cell LNCaP
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002179
@@ -974,7 +974,7 @@ objType table
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002222
@@ -997,7 +997,7 @@ objType table
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002235
@@ -1020,7 +1020,7 @@ objType table
 cell MCF-7
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002180
@@ -1043,7 +1043,7 @@ objType table
 cell NB4
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002223
@@ -1066,7 +1066,7 @@ objType table
 cell NH-A
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002224
@@ -1089,7 +1089,7 @@ objType table
 cell NHBE
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002225
@@ -1112,7 +1112,7 @@ objType table
 cell NHDF-neo
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002226
@@ -1135,7 +1135,7 @@ objType table
 cell NT2-D1
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002181
@@ -1158,7 +1158,7 @@ objType table
 cell ovcar-3
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002234
@@ -1181,7 +1181,7 @@ objType table
 cell PANC-1
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002227
@@ -1204,7 +1204,7 @@ objType table
 cell PFSK-1
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002182
@@ -1227,7 +1227,7 @@ objType table
 cell PrEC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002228
@@ -1250,7 +1250,7 @@ objType table
 cell ProgFib
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002196
@@ -1273,7 +1273,7 @@ objType table
 cell RPTEC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
 dccAccession wgEncodeEH002197
@@ -1296,7 +1296,7 @@ objType table
 cell SAEC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002229
@@ -1319,7 +1319,7 @@ objType table
 cell SKMC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002232
@@ -1342,7 +1342,7 @@ objType table
 cell SK-N-MC
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002183
@@ -1365,7 +1365,7 @@ objType table
 cell SK-N-SH
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002230
@@ -1388,7 +1388,7 @@ objType table
 cell SK-N-SH_RA
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002231
@@ -1411,7 +1411,7 @@ objType table
 cell T-47D
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002184
@@ -1434,7 +1434,7 @@ objType table
 cell U87
 composite wgEncodeHaibMethyl450
 dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002233
@@ -1453,4 +1453,4 @@ tableName wgEncodeHaibMethyl450U87SitesRep1
 treatment None
 view Sites
 
-# MAGIC: -1837493811
+# MAGIC: 1586060331

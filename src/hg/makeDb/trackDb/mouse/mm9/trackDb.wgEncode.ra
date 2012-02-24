@@ -4,7 +4,7 @@
 
 # Stan/Yale TFBS (wrangler: Venkat) 
 include wgEncodeSydhTfbs.ra beta,public
-include wgEncodeSydhTfbs.new.ra alpha
+include wgEncodeSydhTfbs.release3.ra alpha
 
 # Stan/Yale Histone (wrangler: Venkat)
 include wgEncodeSydhHist.ra
@@ -39,7 +39,7 @@ include wgEncodeUwRnaSeq.ra alpha
 
 # Caltech TFBS (wrangler: Venkat)
 include wgEncodeCaltechTfbs.ra beta,public
-include wgEncodeCaltechTfbs.new.ra alpha
+include wgEncodeCaltechTfbs.release2.ra alpha
 
 # Caltech Histone (wrangler: Venkat)
 include wgEncodeCaltechHist.ra 
@@ -48,7 +48,7 @@ include wgEncodeCaltechHist.ra
 include wgEncodeUwDgf.ra alpha
 
 # CSHL Long RNA-Seq (wrangler: Venkat)
-include wgEncodeCshlLongRnaSeq.ra alpha
+include wgEncodeCshlLongRnaSeq.ra alpha,beta
 
 # Caltech RNA-Seq (wrangler: Venkat)
 include wgEncodeCaltechRnaSeq.ra alpha
