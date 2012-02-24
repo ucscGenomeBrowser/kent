@@ -76,7 +76,7 @@ required         no
 downloadOnly     yes
 
 view             Spikeins
-type             txt
+type             document
 hasReplicates    yes
 required         no
 downloadOnly     yes
