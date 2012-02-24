@@ -30,7 +30,7 @@ longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line BMARROW=Bone_Marrow CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF OLFACT=OlfactBulb SMINT=SmIntestine SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
-subGroup3 factor Factor CTCF=CTCF P300=p300 POL2=Pol2 Input=Input
+subGroup3 factor Factor CTCF=CTCF P300=p300 POL2=Pol2 INPUT=Input
 subGroup4 sex Sex M=M U=U
 subGroup5 age Age ADULT8WKS=adult-8wks E0=E0 E14HALF=E14.5
 subGroup6 strain Strain C57BL6=C57BL/6
