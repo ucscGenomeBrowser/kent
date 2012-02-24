@@ -1,9 +1,8 @@
 <H2> Description </H2>
 
-<TABLE style='max-width: 900px'><TR><TD>
 <P>This track shows probable binding sites of the specified transcription
 factors (TFs) in the given cell types as determined by chromatin
-immunoprecipitation followed by high throughput sequencing (ChIP-Seq).
+immunoprecipitation followed by high throughput sequencing (ChIP-seq).
 Included for each cell type is the input signal, which represents the control
 condition where no antibody targeting was performed.
 For each experiment (cell type vs. antibody) this track shows
@@ -23,12 +22,13 @@ tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>
 ENCODE tracks typically contain one or more of the following views:
 <DL>
 <DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data
-(usually normalized data from pooled replicates). ENCODE Peaks tables contain
+(normalized data from pooled replicates). ENCODE Peaks tables contain
 fields for statistical significance, including FDR
 (<A HREF="../../goldenPath/help/qValue.html" TARGET=_BLANK>qValue</A>).</DD>
 <DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
 processed data.</DD>
 </DL>
+<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
 
 <H2> Methods </H2>
 <P>
@@ -43,7 +43,7 @@ Euskirchen <EM>et al.</EM> (2007) and Rozowsky <EM>et al.</EM> (2009).
 <P>
 DNA recovered from the precipitated chromatin was sequenced on the Illumina (Solexa)
 sequencing platform and mapped to the genome using the Eland alignment program.
-ChIP-seq data was scored based on sequence reads (length ~30 bps) that align uniquely
+ChIP-seq data was scored based on sequence reads (length ~30 bp) that align uniquely
 to the human genome. From the mapped tags a signal map of ChIP DNA fragments
 (average fragment length ~ 200 bp) was constructed where the signal height is the number of
 overlapping fragments at each nucleotide position in the genome.
@@ -61,61 +61,45 @@ in genomic 10 kb windows) number of mapped tags in the same region from an input
 Using a binomial test, only regions that have a p-value &lt;= 0.05 are considered to be
 significantly enriched compared to the input DNA control.
 </P>
-<P>
-Expression data generated as confirmation of the TFBS data
-can be found in the
-<!-- <A HREF="hgTrackUi?g=wgEncodeYaleRNAseq">Yale Poly-A</A> -->
-Yale Poly-A tracks (coming soon).
-</p>
-
-<H2>Release Notes</H2>
-<P>
-Update to Release 4 (Feb 2012): the GM12878/NFKB (IgG-rab) experiments and files have been revoked
-because the incorrect raw data files were used for generation of the processed data.
-</P>
-<P>
-This is Release 4 (June 2011) of this track, which includes 2 additional
-experiments and 2 experiments, K562/NF-YA and K562/NF-YB that were present 
-in earlier releases have been removed.
-</P>
-<P>
-A number of previously released datasets have been replaced by updated versions.
-The affected database tables and files include 'V3' 
-in the name, and metadata is marked with "submittedDataVersion=V3",
-followed by the specific reason. The specific reason is:
-Includes previously missing sequence data.
-
-Previous versions of files are available for download from the
-<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPseq/"
- TARGET=_BLANK>FTP site</A>
-</P>
 
 <H2> Credits </H2>
 <P>These data were generated and analyzed by the labs of
 <A HREF="http://snyderlab.stanford.edu/"
   class="external text" title="http://snyderlab.stanford.edu/"
-  rel="nofollow" TARGET = _BLANK>Michael Snyder</a>,
+  rel="nofollow" TARGET = _BLANK>Michael Snyder</a> at Stanford University;
 <A HREF="http://bioinfo.mbb.yale.edu/"
   class="external text"
   title="http://bioinfo.mbb.yale.edu/" rel="nofollow"
   TARGET = _BLANK>Mark Gerstein</a> and
-<A HREF="http://info.med.yale.edu/bcmm/SMW/SMWhome2.html"
-  class="external text" title="http://info.med.yale.edu/bcmm/SMW/SMWhome2.html"
+<A HREF="http://medicine.yale.edu/genetics/index.aspx"
+  class="external text" title="http://medicine.yale.edu/genetics/index.aspx"
   rel="nofollow" TARGET = _BLANK>Sherman Weissman</a> at Yale University;
-<A HREF="http://www.genomecenter.ucdavis.edu/farnham/"
-  class="external text" title="http://www.genomecenter.ucdavis.edu/farnham/"
-  rel="nofollow" TARGET = _BLANK>Peggy Farnham</a> at UC Davis; and
+<A HREF="http://www.usc.edu/programs/pibbs/site/faculty/farnham_p.htm"
+  class="external text" title="http://www.usc.edu/programs/pibbs/site/faculty/farnham_p.htm"
+  rel="nofollow" TARGET = _BLANK>Peggy Farnham</a> at University of Southern California; and
 <A HREF="http://struhl.med.harvard.edu/"
   class="external text" title="http://struhl.med.harvard.edu/"
-  rel="nofollow" TARGET = _BLANK>Kevin Struhl</a> at Harvard.
-&nbsp;&nbsp;
-Contact: the <A HREF="mailto:&#100;&#97;&#116;&#97;&#115;u&#98;&#109;&#105;&#115;&#115;i&#111;n&#64;&#103;&#101;r&#115;t&#101;&#105;n&#108;&#97;&#98;.&#111;&#114;&#103;"
-  title="&#100;&#97;&#116;&#97;&#115;u&#98;&#109;&#105;&#115;&#115;i&#111;n&#64;&#103;&#101;r&#115;t&#101;&#105;n&#108;&#97;&#98;.&#111;&#114;&#103;" rel="nofollow"
-  TARGET =_BLANK>Gerstein lab</a>.
-<!-- above address is datasubmission at gersteinlab.org -->
-
+  rel="nofollow" TARGET = _BLANK>Kevin Struhl</a> at Harvard.</P>
+<P>
+Contact:
+<A HREF="mailto:&#112;c&#97;&#121;&#116;&#105;n&#103;&#64;&#115;&#116;&#97;n&#102;o&#114;&#100;.&#101;d&#117;"
+ title="mailto:&#112;c&#97;&#121;&#116;&#105;n&#103;&#64;&#115;&#116;&#97;n&#102;o&#114;&#100;.&#101;d&#117;" rel="nofollow"
+  TARGET=_BLANK>Philip Cayting</A>.
+ <!-- above address is (Philip Cayting) pcayting at stanford.edu -->
 </P>
+
 <H2> References </H2>
+
+<P>
+Cao AR, Rabinovich, R, Xu M, Xu X, Jin VX, Farnham PJ. 
+<A HREF="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3069401/"
+	class="external text"
+	title="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3069401/"
+	rel="nofollow"
+	TARGET = _BLANK>Genome-wide Analysis of Transcription Factor E2F1 Mutant Proteins Reveals That N- and C-terminal Protein Interaction Domains Do Not Participate in Targeting E2F1 to the Human Genome</A>.
+<EM> J biol Chem.</EM> 2001 April 8; 286(14): 11985-11996
+</P>
+
 <P>
 Euskirchen G, Royce TE, Bertone P, Martone R, Rinn JL, Nelson FK,
 Sayward F, Luscombe NM, Miller P, Gerstein, M <EM>et al.</EM>
@@ -138,13 +122,23 @@ sequencing-based technologies</A>.
 </P>
 
 <P>
+Iyengar s, Ivanov AV, Jin VX, Rauscher FJ 3rd, Farnham PJ.
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/21343339"
+	class="external text"
+	title="http://www.ncbi.nlm.nih.gov/pubmed/21343339"
+	rel="nofollow"
+	TARGET = _BLAN>Functional analysis of KAP1 genomic recruitment</A>.
+<EM>Mol Cell Bio.</EM> 2001 May;31(9):1887-47.
+</P>
+
+<P>
 Martone R, Euskirchen G, Bertone P, Hartman S, Royce TE, Luscombe NM,
 Rinn JL, Nelson FK, Miller P, Gerstein M <EM>et al.</EM>
 <A HREF="http://www.pnas.org/content/100/21/12247.abstract"
   class="external text" title="http://www.pnas.org/content/100/21/12247.abstract"
   rel="nofollow" TARGET = _BLANK> Distribution of NF-kappaB-binding sites across
 human chromosome 22</A>.
-<EM>Proc Natl Acad Sci U S A.</EM> 2003 Oct;100(21):12247-52.
+<EM>Proc Natl Acad Sci USA.</EM> 2003 Oct;100(21):12247-52.
 </P>
 
 <P>
@@ -155,7 +149,7 @@ Euskirchen G, Bernier B, Varhol R, Delaney A <EM>et al.</EM>
   title="http://www.nature.com/doifinder/10.1038/nmeth1068" rel="nofollow"
    TARGET = _BLANK> Genome-wide profiles of STAT1 DNA association using
 chromatin immunoprecipitation and massively parallel sequencing</A>.
-<EM>Nat. Methods</EM> 2007;4:651-7.
+<EM>Nat Methods.</EM> 2007;4:651-7.
 </P>
 
 <P>
@@ -179,4 +173,3 @@ the <EM>Restricted Until</EM> column on the track configuration page and
 the download page.  The full data release policy for ENCODE is available
 <A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
 
-</TD></TR></TABLE>

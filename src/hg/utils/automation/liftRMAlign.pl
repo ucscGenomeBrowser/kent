@@ -116,7 +116,11 @@ foreach my $chunk (@orderedChunks) {
 	($1, $2, $3, $4, $5, $6);
       my $newStart = $oldStart + $offset;
       my $newEnd   = $oldEnd   + $offset;
-      &updateSpacing("$oldName$maybeSuffix$leftSpace$oldStart");
+      if (defined($maybeSuffix)) {
+         &updateSpacing("$oldName$maybeSuffix$leftSpace$oldStart");
+      } else {
+         &updateSpacing("$oldName$leftSpace$oldStart");
+      }
       $_ = sprintf("$initSpace%-15s %9d%s%-9d\n",
 		   $newName, $newStart, $seqStuff, $newEnd);
     } elsif (/^(C\s+|\s+)(\S+)(\s+)(-?\d+)(\s+\S+\s+)(-?\d+)\s*$/) {

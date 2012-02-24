@@ -1896,3 +1896,261 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# lifting ensGene track from fr2 (DONE - 2012-02-22 - Hiram)
+    # no gene tracks yet on fr3.  liftUp fr2 ensGenes to fr3
+    # history of fr2 ensGene indicates it has been the same there since
+    #	v60 of ensGene - thru today same as v65
+    mkdir /hive/data/genomes/fr3/bed/ensGene
+    cd /hive/data/genomes/fr3/bed/ensGene
+    hgsql -N -e "select * from ensGene;" fr2 | cut -f2- > fr2.ensGene.gp
+    liftOver -genePred fr2.ensGene.gp \
+	/gbdb/fr2/liftOver/fr2ToFr3.over.chain.gz \
+	fr3.lifted.ensGene.gp unmapped.ensGene.gp
+    ls -ogrt
+# -rw-rw-r-- 1 18680443 Feb 22 16:22 fr2.ensGene.gp
+# -rw-rw-r-- 1 15869141 Feb 22 16:22 fr3.lifted.ensGene.gp
+# -rw-rw-r-- 1   126578 Feb 22 16:22 unmapped.ensGene.gp
+
+    hgLoadGenePred -skipInvalid -genePredExt fr3 ensGene fr3.lifted.ensGene.gp
+    #	Warning: skipping 782 invalid genePreds
+
+    # make a list of what did get loaded:
+    hgsql -N -e "select name from ensGene;" fr3 | sort -u > fr3.name.ensGene.txt
+    wc -l fr3.name.ensGene.txt 
+    #	47702 fr3.name.ensGene.txt
+
+    hgsql -N -e "select * from ensPep;" fr2 | sort > fr2.ensPep.tab
+    hgsql -N -e "select * from ensGtp;" fr2 | sort -k2,2 > fr2.ensGtp.tab
+    hgsql -N -e "select * from ensemblSource;" fr2 | sort -k1,1 \
+	> fr2.ensemblSource.tab
+    hgsql -N -e "select * from ensemblToGeneName;" fr2 | sort -k1,1 \
+	> fr2.ensemblToGeneName.tab
+
+    # select out ensGtp records that match with the names in fr3 ensGene:
+    join -1 2 -2 1 -o "1.1,1.2,1.3" fr2.ensGtp.tab fr3.name.ensGene.txt \
+	| tr '[ ]' '[\t]' > fr3.ensGtp.tab
+    wc -l *.ensGtp.tab
+    #	48706 fr2.ensGtp.tab
+    #	47702 fr3.ensGtp.tab
+
+    # select out ensPep records that match with the names in fr3 ensGene:
+    join -1 1 -2 2 -o "1.1,1.2" fr2.ensPep.tab fr3.ensGtp.tab \
+	| tr '[ ]' '[\t]' > fr3.ensPep.tab
+
+    wc -l fr2.ensPep.tab fr3.ensPep.tab
+    #	47841 fr2.ensPep.tab
+    #	46842 fr3.ensPep.tab
+
+    # select out ensemblSource records that match the fr3 ensGene names:
+    join -1 1 -2 1 -o "1.1,1.2" fr2.ensemblSource.tab fr3.name.ensGene.txt \
+	| tr '[ ]' '[\t]' > fr3.ensemblSource.tab
+    wc -l fr2.ensemblSource.tab fr3.ensemblSource.tab 
+  48706 fr2.ensemblSource.tab
+  47702 fr3.ensemblSource.tab
+
+    # select out ensemblToGeneName records that match the fr3 ensGene names:
+    join -1 1 -2 1 -o "1.1,1.2" fr2.ensemblToGeneName.tab \
+	fr3.name.ensGene.txt | tr '[ ]' '[\t]' > fr3.ensemblToGeneName.tab
+    wc -l fr2.ensemblToGeneName.tab fr3.ensemblToGeneName.tab
+    #	40067 fr2.ensemblToGeneName.tab
+    #	39200 fr3.ensemblToGeneName.tab
+
+    hgPepPred fr3 tab ensPep fr3.ensPep.tab
+    hgLoadSqlTab fr3 ensGtp ~/kent/src/hg/lib/ensGtp.sql fr3.ensGtp.tab
+
+    # verify size of the names
+    cut -f1 fr3.ensemblSource.tab | awk '{print length($0)}' \
+	| sort | uniq -c | head
+    #	47702 18
+
+    sed -e "s/15/18/" ~/kent/src/hg/lib/ensemblSource.sql > ensemblSource.sql
+    hgLoadSqlTab fr3 ensemblSource ensemblSource.sql fr3.ensemblSource.tab
+
+    # find sizes for indexes
+  NL=`awk '{print length($1)}' fr3.ensemblToGeneName.tab | sort -rn | head -1`
+  VL=`awk '{print length($2)}' fr3.ensemblToGeneName.tab | sort -rn | head -1`
+    # construct sql definition with appropriate index sizes
+    sed -e "s/ knownTo / ensemblToGeneName /; s/known gene/ensGen/; s/INDEX(name(12)/PRIMARY KEY(name($NL)/; s/value(12)/value($VL)/" \
+	~/kent/src/hg/lib/knownTo.sql > ensemblToGeneName.sql
+
+    hgLoadSqlTab fr3 ensemblToGeneName ensemblToGeneName.sql \
+	fr3.ensemblToGeneName.tab
+
+    hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("fr3", "ensGene", "hiram", "65", now(), \
+        "lifted from mm9 ensGene 65", \
+        "lifted from mm9 ensGene 65", \
+        "dec2011" );' hgFixed
+
+#############################################################################
+# hgPal downloads (DONE - Hiram - 2011-12-08)
+#   FASTA from 8way for ensGene
+
+    ssh hgwdev
+    rm -rf /hive/data/genomes/fr3/bed/multiz8way/pal
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/pal
+    cd /hive/data/genomes/fr3/bed/multiz8way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    mz=multiz8way
+    gp=ensGene
+    db=fr3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /hive/data/genomes/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.list stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.list stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.list stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.list stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+    #	real    49m45.740s
+
+    mz=multiz8way
+    gp=ensGene
+    db=fr3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+    # about 12 minutes
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc &
+
+    md5sum $gp.$mz.exonAA.fa.gz $gp.$mz.exonNuc.fa.gz > md5sum.txt
+
+    # we're only distributing exons at the moment
+    mz=multiz8way
+    gp=ensGene
+    db=fr3
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    # obtain a copy of a most-recent README.txt file
+    cp -p /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/multiz11way/alignments/README.txt .
+
+    # edit to bring up to date for fr3
+    ln -s `pwd`/README.txt $pd/
+
+#############################################################################
+# download data for 8-way (DONE - 2012-02-23 - Hiram)
+    # use a README from the most recent multiz like this
+    #	this one is from gorGor3
+    cd /hive/data/genomes/fr3/bed/multiz8way/cons
+    cp -p /hive/data/genomes/gorGor3/bed/multiz11way/cons/README.txt .
+    # need to edit this to finish it off
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phastCons8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phastCons8way
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/cons/all/downloads/phastCons8way.wigFix.gz \
+	./phastCons8way.wigFix.gz
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/all/phastCons8way.bw \
+	./phastCons8way.bw
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/all/all.mod \
+	./fish.mod
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/README.txt .
+
+    md5sum phastCons8way.bw phastCons8way.wigFix.gz fish.mod \
+	> /hive/data/genomes/fr3/bed/multiz8way/cons/md5sum.txt
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/md5sum.txt .
+
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cd /hive/data/genomes/fr3/bed/multiz8way/consPhyloP
+    cp /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/README.txt .
+    # need to edit this to finish it off
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phyloP8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phyloP8way
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/consPhyloP/all/downloads/phyloP8way.wigFix.gz \
+	./phyloP8way.wigFix.gz
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/consPhyloP/all/phyloP8way.bw \
+	./phyloP8way.bw
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/consPhyloP/run.phyloP/all.mod \
+	./fish.mod
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/README.txt .
+    md5sum README.txt phyloP8way.bw phyloP8way.wigFix.gz fish.mod \
+	> /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/md5sum.txt
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/md5sum.txt .
+
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/downloads
+    cd /hive/data/genomes/fr3/bed/multiz8way/downloads
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cp -p /hive/data/genomes/gorGor3/bed/multiz11way/downloads/README.txt .
+    # need to edit this README.txt to finish it off
+    # you can find this common name translation above in the section that
+    # began the multiz8way work:
+    grep TREE ../cons/all/all.mod | sed -e "s/TREE: //" > fr3.8way.nh
+
+    /cluster/bin/phast/tree_doctor --rename \
+"fr3->Fugu; tetNig2->Tetraodon; oreNil1->Nile_Tilapia; gasAcu1->Stickleback; oryLat2->Medaka; gadMor1->Atlantic_cod; danRer7->Zebrafish; latCha1->Coelacanth;" \
+fr3.8way.nh > fr3.commonNames.8way.nh
+
+    time cp -p ../anno/fr3.8way.maf ./multiz8way.maf
+    #	real    1m38.305s
+# -rw-rw-r-- 1 3235224846 Feb 21 13:55 multiz8way.maf
+    time gzip multiz8way.maf
+    #	real    7m24.097s
+# -rw-rw-r-- 1 738827448 Feb 21 13:55 multiz8way.maf.gz
+
+    md5sum *.nh *.gz *.txt > md5sum.txt
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/multiz8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/multiz8way
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/downloads/fr3.8way.nh .
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/downloads/fr3.commonNames.8way.nh .
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/downloads/multiz8way.maf.gz .
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/downloads/README.txt .
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/downloads/md5sum.txt .
+
+#############################################################################
+# Construct download files (DONE - 2012-02-23 - Hiram)
+    cd /hive/data/genomes/fr3
+    # verify joinerCheck is good and fr3 is in all.joiner
+    joinerCheck -keys -database=fr3 \
+	$HOME/kent/src/hg/makeDb/schema/all.joiner
+
+    time makeDownloads.pl fr3 -workhorse=hgwdev > downloads.log 2>&1 &
+    #	real    24m7.903s
+    # you must edit the */README files in ./goldenPath/
+
+############################################################################
+# after downloads, construct pushQ (DONE - 2012-02-23 - Hiram)
+    mkdir /hive/data/genomes/fr3/pushQ
+    cd /hive/data/genomes/fr3/pushQ
+    time makePushQSql.pl fr3 > fr3.sql 2> stderr.log
+    # check stderr.log for anything not categorized
+
+    scp -p fr3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < fr3.sql
+    # after loading, view the subQ in the WEB interface, go through each
+    #	item and verify it can measure the tables and files
+
+############################################################################
