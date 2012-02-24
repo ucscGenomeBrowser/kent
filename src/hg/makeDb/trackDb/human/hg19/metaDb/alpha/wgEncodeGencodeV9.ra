@@ -2,7 +2,6 @@ metaObject wgEncodeGencode2wayConsPseudoV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -20,7 +19,6 @@ metaObject wgEncodeGencodeAnnotationRemarkV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -38,7 +36,6 @@ metaObject wgEncodeGencodeAttrsV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -56,7 +53,6 @@ metaObject wgEncodeGencodeBasicV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -74,7 +70,6 @@ metaObject wgEncodeGencodeCompV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -92,7 +87,6 @@ metaObject wgEncodeGencodeExonSupportV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -110,7 +104,6 @@ metaObject wgEncodeGencodeGeneSourceV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -128,7 +121,6 @@ metaObject wgEncodeGencodePdbV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -146,7 +138,6 @@ metaObject wgEncodeGencodePolyaV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -164,7 +155,6 @@ metaObject wgEncodeGencodePseudoGeneV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -182,7 +172,6 @@ metaObject wgEncodeGencodePubMedV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -200,7 +189,6 @@ metaObject wgEncodeGencodeRefSeqV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -218,7 +206,6 @@ metaObject wgEncodeGencodeTagV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -236,7 +223,6 @@ metaObject wgEncodeGencodeTranscriptSourceV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -254,7 +240,6 @@ metaObject wgEncodeGencodeTranscriptSupportV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
@@ -272,7 +257,6 @@ metaObject wgEncodeGencodeUniProtV9
 objType table
 composite wgEncodeGencodeV9
 dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
