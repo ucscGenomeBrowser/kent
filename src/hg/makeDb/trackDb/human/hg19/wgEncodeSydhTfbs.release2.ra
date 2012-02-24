@@ -38,6 +38,7 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control 
 visibilityViewDefaults Peaks=pack  Signal=full
 noInherit on
 wgEncode 1
+html wgEncodeSydhTfbs.release2
 #dataVersion through the ENCODE Jan 2010 Freeze
 
 	#Peak Track SYDH TFBS#
