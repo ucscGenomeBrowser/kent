@@ -78,6 +78,7 @@ fileName wgEncodeLicrHistoneBmarrowH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 54588e059d4693e0a3fb9bf489073427
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -776,6 +777,7 @@ fileName wgEncodeLicrHistoneCbellumH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum f65bb208131e587055e923610e3562ca
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -1474,6 +1476,7 @@ fileName wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum bb7eeda4e8e28f79ee847c6a0d2a58bb
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -2172,6 +2175,7 @@ fileName wgEncodeLicrHistoneEsb4H3k27acME0C57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 54db854612bb955083c747d1491ada7f
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -2870,6 +2874,7 @@ fileName wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum b3497b1ba326cfc22e57a631849c8a8c
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3041,6 +3046,7 @@ fileName wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 01a7a5c0721729400bcd06f4c6fd5fa9
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3212,6 +3218,7 @@ fileName wgEncodeLicrHistoneHeartH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum cd03b080a7d4225ee4b483c1bfb0abd5
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3383,6 +3390,7 @@ fileName wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum bce973dffa4522bd4cdc38cf38420e91
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3906,6 +3914,7 @@ fileName wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdAlnRep1V2.bam,wgEncodeL
 grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 3
+md5sum feb02168f8c85b2e60ad19543ba83878,98683537f5c915bb2b202ca8a464d89e
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4260,6 +4269,7 @@ fileName wgEncodeLicrHistoneKidneyH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 4f4188cb0dc7ec4fec89200d0755b843
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -4783,6 +4793,7 @@ fileName wgEncodeLicrHistoneKidneyInputMAdult8wksC57bl6StdAlnRep1V2.bam,wgEncode
 grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 7
+md5sum 8ba73c5e55a4ce67bd267923e06ff357,053c9ab828965e14f087dec7583da52d
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4992,6 +5003,7 @@ fileName wgEncodeLicrHistoneLimbH3k04me1UE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum cfa165d3ee340c978b9bf35ce2ef1d32
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5163,6 +5175,7 @@ fileName wgEncodeLicrHistoneLimbH3k04me3UE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 292a7e9834c945646a35dda753ca4367
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5334,6 +5347,7 @@ fileName wgEncodeLicrHistoneLimbH3k27acUE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum a31242ea20ae64f37673d9d80b90eff1
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5592,6 +5606,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdAlnRep1.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 6/28/11 Lane 3
+md5sum dfb2ccc310966fff2d551a8e2594775a,9d1e4c3648874013c5b3210709005c72
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5618,6 +5633,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdAlnRep2.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 5/24/11 Lane 7-6
+md5sum 448a93a138117a41cbb1e9854bc3fd45,3ac16a2bf6838bf7783248593e491132
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5644,6 +5660,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 84832a593d3b9535c30e3529d7272b47
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5670,6 +5687,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/28/10 Lane 3
+md5sum 06e522e7f6e3a18330c29cc33a855fae
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5696,6 +5714,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 5/24/11 Lane 7-6
+md5sum fb3f06b98abf626a135afd500f9bdbc3
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5722,6 +5741,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 906bbf7c399ade07c83719e227a2fe9f
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5748,6 +5768,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdAlnRep1.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 6/28/11 Lane 3
+md5sum aabb183ee85c3e31600c1643784aa9f8,1799e6a3c18a02b305acf96c4f0fccfd
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5774,6 +5795,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdAlnRep2.bam,wgEncodeLi
 grant Ren
 lab LICR-m
 labVersion 5/24/11 Lane 7-6
+md5sum 86f30fd55c7cb55ff757ccc939600f43,9accd1e97861df12341b23edb3a4b92f
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5800,6 +5822,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 2ea70a200daa7d2605a1f7126d12afde
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5826,6 +5849,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/28/10 Lane 3
+md5sum 41016cd2beb665a8b1cb5eae622ca958
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5852,6 +5876,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 5/24/11 Lane 7-6
+md5sum 9079894f311053b062b913f8605eb06c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5878,6 +5903,7 @@ fileName wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum fd76f00118ea1a7adc450d6546e52e05
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5962,6 +5988,7 @@ fileName wgEncodeLicrHistoneLiverH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum d513b9e3be0175a1a24a8cfac4b36b08
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6075,6 +6102,7 @@ fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdAlnRep1.bam,wgEncodeLic
 grant Ren
 lab LICR-m
 labVersion 6/28/11 Lane 3-11
+md5sum b806f715f38d177960055a460b564994,2cc5f5ddedf4b5365c66c532bf527ed5
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6101,6 +6129,7 @@ fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdAlnRep2.bam,wgEncodeLic
 grant Ren
 lab LICR-m
 labVersion 7/26/11 Lane 7-6
+md5sum e51057756555822ed657463e04f8beb1,46bcc69c9b5d4f91a55f1ee57d27caa3
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6127,6 +6156,7 @@ fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum d794c41acc0e861fc70d3c02df101613
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6153,6 +6183,7 @@ fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/28/11 Lane 3-11
+md5sum 3f8fe1f465090034705b9499f6e30c99
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6179,6 +6210,7 @@ fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 7/26/11 Lane 7-6
+md5sum 6e0451b61e9ac5c4f8493dd640636481
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6205,6 +6237,7 @@ fileName wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 25fa6df9ef1ec2944185b4ffdad52b21
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6758,6 +6791,7 @@ fileName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrH
 grant Ren
 lab LICR-m
 labVersion 6/18/10 Lane 6
+md5sum 4fad67f2db8a904513b33ee5e3d5d344,9b3d622fd818fd20c65aa074445e92d5
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -6784,6 +6818,7 @@ fileName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrH
 grant Ren
 lab LICR-m
 labVersion 4/6/11 Lane 3-1
+md5sum 15383ed49e7dcb8cde6be43c82cb1d78,b78e7c515a0d6abc8eba134bd25214d9
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6810,6 +6845,7 @@ fileName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/18/10 Lane 7
+md5sum 6b9237385a7bc8e2bab763d1d5bfcc19
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -6836,6 +6872,7 @@ fileName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 4/6/11 Lane 3-1
+md5sum 5dc745d815ba3dbeade9d5a1da934e3d
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6862,6 +6899,7 @@ fileName wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum bbf171253808bf9e3df20e9ea01f36f8
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -7473,6 +7511,7 @@ fileName wgEncodeLicrHistoneMefH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 483f083584cf36505e31505b27289942
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -8171,6 +8210,7 @@ fileName wgEncodeLicrHistoneOlfactH3k04me1MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum e2bb28f76fcbeb431e8dc09532e20a72
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -8342,6 +8382,7 @@ fileName wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum cd4e9a622b919a28ce8aa4e0294a29f2
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -8513,6 +8554,7 @@ fileName wgEncodeLicrHistoneOlfactH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum f1f52ce50de63df292a601671fffb27b
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -8829,6 +8871,7 @@ fileName wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 54b5646ff1c6117b55e3b6ccc1ca1e3c
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -9000,6 +9043,7 @@ fileName wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 8e86b72cad317b1f45251531b979bef0
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -9171,6 +9215,7 @@ fileName wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 56a512a53a66d68f23549d5358976cf0
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -9487,6 +9532,7 @@ fileName wgEncodeLicrHistoneSmintH3k04me1MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum bdf7575ae570b972c60fbef78397504c
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -9658,6 +9704,7 @@ fileName wgEncodeLicrHistoneSmintH3k04me3MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum e7fdf45c3c162a9ffe8bf529802dd006
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -9829,6 +9876,7 @@ fileName wgEncodeLicrHistoneSmintH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 06b3ed9b1018230bcd01211f3813f497
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -10145,6 +10193,7 @@ fileName wgEncodeLicrHistoneSpleenH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 9f6bf8240dc7e332626ab30af3769bec
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -10843,6 +10892,7 @@ fileName wgEncodeLicrHistoneTestisH3k04me1MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum ab69fd5a73849fa994bb3a696c664432
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -11014,6 +11064,7 @@ fileName wgEncodeLicrHistoneTestisH3k04me3MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 4965b2163ad28c7d456208cb88ce8d07
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -11185,6 +11236,7 @@ fileName wgEncodeLicrHistoneTestisH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 72097de0ad8454bd83ec25f945f6cf59
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -11501,6 +11553,7 @@ fileName wgEncodeLicrHistoneThymusH3k04me1MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 9d0eb2d80610f21f47bda169ac75bdbc
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -11672,6 +11725,7 @@ fileName wgEncodeLicrHistoneThymusH3k04me3MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 170a72f0bf31c2d7f0c8c014d88120a1
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -11843,6 +11897,7 @@ fileName wgEncodeLicrHistoneThymusH3k27acMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 55b20e0f4bac7c27ddd09830096b5f6c
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -12159,6 +12214,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum c5fc3d6a3efadcc34a83147c07c26af0
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -12330,6 +12386,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 0437dbe7dbe022fb85b178a7dd6497a0
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -12501,6 +12558,7 @@ fileName wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 98041ceca71dd15fe0e2ca40ef8ddc67
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -12743,4 +12801,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -234033560
+# MAGIC: -279989049
