@@ -393,7 +393,7 @@ noInherit on
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel CB Input Sg
         longLabel Cerebellum adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
-        subGroups view=Signal age=ADULT8WKS factor=Input cellType=CBELLUM control=STD sex=M strain=C57BL6
+        subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=CBELLUM control=STD sex=M strain=C57BL6
         type bigWig 0.140000 41.009998
         color 105,105,105
         # subId=3921 dateSubmitted=2011-04-22
@@ -433,7 +433,7 @@ noInherit on
 	parent wgEncodeLicrTfbsViewSignal off 
 	shortLabel Cortex Input Sg
         longLabel Cortex adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
-	subGroups view=Signal age=ADULT8WKS factor=Input cellType=CORTEX control=STD sex=M strain=C57BL6
+	subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=CORTEX control=STD sex=M strain=C57BL6
 	type bigWig 0.130000 61.080002
 	color 105,105,105
 	# subId=3398 dateSubmitted=2011-01-20
@@ -521,7 +521,7 @@ noInherit on
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel BM Input Sg
         longLabel Bone Marrow adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
-        subGroups view=Signal age=ADULT8WKS factor=Input cellType=BMARROW control=STD sex=M strain=C57BL6
+        subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=BMARROW control=STD sex=M strain=C57BL6
         type bigWig 0.150000 34.869999
         color 86,180,233
         # subId=3920 dateSubmitted=2011-04-22
@@ -530,7 +530,7 @@ noInherit on
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel Heart Input Sg
         longLabel Heart adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
-        subGroups view=Signal age=ADULT8WKS factor=Input cellType=HEART control=STD sex=M strain=C57BL6
+        subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=HEART control=STD sex=M strain=C57BL6
         type bigWig 0.140000 73.459999
         color 153,38,0
         # subId=2791 dateSubmitted=2011-04-25
@@ -539,7 +539,7 @@ noInherit on
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel Kidney Input Sg
         longLabel Kidney adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
-        subGroups view=Signal age=ADULT8WKS factor=Input cellType=KIDNEY control=STD sex=M strain=C57BL6
+        subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=KIDNEY control=STD sex=M strain=C57BL6
         type bigWig 0.140000 51.650002
         color 204,121,167
         # subId=3004 dateSubmitted=2011-04-24
@@ -557,7 +557,7 @@ noInherit on
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel Lung Input Sg
         longLabel Lung adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
-        subGroups view=Signal age=ADULT8WKS factor=Input cellType=LUNG control=STD sex=M strain=C57BL6
+        subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=LUNG control=STD sex=M strain=C57BL6
         type bigWig 0.150000 39.330002
         # subId=3924 dateSubmitted=2011-04-25
 
@@ -575,7 +575,7 @@ noInherit on
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel Liver Input Sg
         longLabel Liver adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
-        subGroups view=Signal age=ADULT8WKS factor=Input cellType=LIVER control=STD sex=M strain=C57BL6
+        subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=LIVER control=STD sex=M strain=C57BL6
         type bigWig 0.130000 65.070000
         color 230,159,0
         # subId=3926 dateSubmitted=2011-04-25
@@ -594,7 +594,7 @@ noInherit on
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel MEF Input Sg
         longLabel Embryonic Fibroblast adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
-        subGroups view=Signal age=ADULT8WKS factor=Input cellType=MEF control=STD sex=M strain=C57BL6
+        subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=MEF control=STD sex=M strain=C57BL6
         type bigWig 0.140000 50.770000
         color 65,105,225
         # subId=4009 dateSubmitted=2011-04-29
@@ -623,7 +623,7 @@ noInherit on
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel Spleen Input Sg
         longLabel Spleen adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
-        subGroups view=Signal age=ADULT8WKS factor=Input cellType=SPLEEN control=STD sex=M strain=C57BL6
+        subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=SPLEEN control=STD sex=M strain=C57BL6
         type bigWig 0.130000 31.219999
         color 86,180,233
         # subId=4036 dateSubmitted=2011-05-02
@@ -652,7 +652,7 @@ noInherit on
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel ES-B4 Input Sg
         longLabel ES-Bruce4 (embryonic stem cell) adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
-        subGroups view=Signal age=E0 factor=Input cellType=ESB4 control=STD sex=M strain=C57BL6
+        subGroups view=Signal age=E0 factor=INPUT cellType=ESB4 control=STD sex=M strain=C57BL6
         type bigWig 0.130000 64.720001
         color 65,105,225
         # subId=4047 dateSubmitted=2011-05-06
