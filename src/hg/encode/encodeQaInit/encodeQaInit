@@ -1,6 +1,6 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, subprocess, math, datetime
-from ucscgenomics import ra, track, mkChangeNotes, qa
+from ucscgenomics import ra, track, mkChangeNotes, qa, ucscUtils
 
 def getMethods(qaDir, args, user, d):
 	cmd = "curl -X GET http://genomewiki.cse.ucsc.edu/genecats/index.php/ENCODE_QA 2>/dev/null"
@@ -198,9 +198,10 @@ Thank You!
 	f.close()
 	return gbdbstr
 	
-def writeFileMail(files, others, args, user, qaDir, c, path):
+def writeFileMail(files, others, args, user, qaDir, c, path, notesObj):
 	sep = ""
 	filestr = sep.join(list(sorted(files | others)))
+	filesize = ucscUtils.makeFileSizes(notesObj.pushFiles, notesObj.releasePath)
 	mail = """Hi Pushers,
 
 Please push:
@@ -213,6 +214,8 @@ from hgwdev to hgdownload:
 
 excluding md5sum.history
 
+The total size of the new files should be: %s MB
+
 Please note the destination on hgdownload is *one directory above the location on dev*
 
 Reason: releasing ENCODE %s on %s to the RR http://redmine.soe.ucsc.edu/issues/%s
@@ -220,7 +223,7 @@ Reason: releasing ENCODE %s on %s to the RR http://redmine.soe.ucsc.edu/issues/%
 Thanks!
 
 %s
-""" % (path, c._rrHttpDir, args.composite, args.database, args.redmine, user)
+""" % (path, c._rrHttpDir, filesize, args.composite, args.database, args.redmine, user)
 
 	f = open(qaDir + "/pushFilesMail", "w")
 	f.write(mail)
@@ -547,7 +550,7 @@ encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	print "Writing mails and friends"
 	tablestr = writeTableMail(tables, args, user, qaDir)
 	gbdbstr = writeGbdbMail(gbdbs, args, user, qaDir)
-	(filestr, subIds) = writeFileMail(files, supplemental | others, args, user, qaDir, c, genNotes.releasePath)
+	(filestr, subIds) = writeFileMail(files, supplemental | others, args, user, qaDir, c, genNotes.releasePath, genNotes)
 	(short, long) = writeHtml(args, c, qaDir)
 	
 	writePushHtmlMail(args, user, qaDir)
