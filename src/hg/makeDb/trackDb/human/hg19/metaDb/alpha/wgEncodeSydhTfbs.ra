@@ -53937,8 +53937,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId wgEncodeEH001783
 dataType ChipSeq
-dataVersio ENCODE Mar 2012 Freeze
-dataVersion ENCODE Mar 2012
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH002031
@@ -54410,4 +54409,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1049931216
+# MAGIC: -620359918

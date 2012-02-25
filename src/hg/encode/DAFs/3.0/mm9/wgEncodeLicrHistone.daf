@@ -1,6 +1,6 @@
 # Data Agreement File for LICR Lab ChIP-seq (Histone) experiments for mm9
 
-#$Revision: 1.10 $
+#$Revision: 1.11 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -50,10 +50,10 @@ required         no
 view             Alignments
 type             bam
 hasReplicates    yes
-required         yes
+required         no
 
 view             RawData
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
 
