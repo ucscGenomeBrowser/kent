@@ -12,10 +12,10 @@
 //include "hgTrackUi.h"
 
 // cgi var to activate debug output
-int t2gDebug = 0;
+static int t2gDebug = 0;
 
 // internal section types in mysql table
-char* t2gSecNames[] ={
+static char* t2gSecNames[] ={
       "header", "abstract",
       "intro", "methods",
       "results", "discussion",
@@ -23,17 +23,17 @@ char* t2gSecNames[] ={
       "refs", "unknown" };
 //
 // whether a checkbox is checked by default, have to correspond to t2gSecNames
-int t2gSecChecked[] ={
+static int t2gSecChecked[] ={
       1, 1,
       1, 1,
       1, 1,
       1, 0,
       0, 1 };
 
-char* t2gSequenceTable;
-char* t2gArticleTable;
+static char* t2gSequenceTable;
+static char* t2gArticleTable;
 
-char* makeSqlMarkerList(void)
+static char* makeSqlMarkerList(void)
 /* return list of sections from cgi vars, format like "'abstract','header'" */
 {
 int secCount = sizeof(t2gSecNames)/sizeof(char *);
@@ -46,7 +46,7 @@ for (i=0; i<secCount; i++)
     if (cgiOptionalInt(secName, t2gSecChecked[i]))
     {
         char nameBuf[100];
-        sprintf(nameBuf, "'%s'", secName);
+        safef(nameBuf, sizeof(nameBuf), "'%s'", secName);
         slAddHead(&names, slNameNew(nameBuf));
     }
 }
@@ -59,19 +59,23 @@ slNameFree(names);
 return nameListString;
 }
 
-struct sqlResult* queryMarkerRows(struct sqlConnection* conn, char* markerTable, char* articleTable, char* item, int itemLimit)
-/* query marker rows from mysql, based on http parameters */
+
+static struct sqlResult* queryMarkerRows(struct sqlConnection* conn, char* markerTable, char* articleTable, char* item, int itemLimit, char* sectionList)
+/* query marker rows from mysql, based on http parameters  */
 {
 char query[4000];
+/* Mysql specific setting to make the group_concat function return longer strings */
 sqlUpdate(conn, "SET SESSION group_concat_max_len = 40000");
 
-char* sectionList = makeSqlMarkerList();
+safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation," 
+    "group_concat(snippet, section SEPARATOR ' (...) ') FROM %s "
+    "JOIN %s USING (articleId) "
+    "WHERE markerId='%s' AND section in (%s) "
+    "GROUP by articleId LIMIT %d;", 
+    markerTable, markerTable, articleTable, item, sectionList, itemLimit);
 
-safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet, section SEPARATOR ' (...) ') FROM %s JOIN %s USING (articleId) WHERE markerId='%s' GROUP by articleId LIMIT %d", markerTable, articleTable, item, itemLimit);
-//safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet SEPARATOR ' (...) ') FROM t2gElsevierMarker JOIN t2gElsevierArticle USING (articleId) WHERE markerId='%s' AND section IN (%s) GROUP by articleId LIMIT %d", item, sectionList, itemLimit);
-
-//printf(sectionList);
-freeMem(sectionList);
+if (t2gDebug)
+    printf("%s", query);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 
@@ -79,7 +83,7 @@ return sr;
 }
 
 
-void printSectionCheckboxes()
+static void printSectionCheckboxes()
 /* show a little form with checkboxes where user can select sections they want to show */
 {
 // labels to show to user, have to correspond to t2gSecNames
@@ -123,10 +127,11 @@ printf("<INPUT TYPE=\"submit\" VALUE=\"Submit\" />\n");
 printf("</FORM><P>\n");
 }
 
-void printLimitWarning(struct sqlConnection *conn, char* item, int itemLimit)
+static void printLimitWarning(struct sqlConnection *conn, char* markerTable, 
+    char* item, int itemLimit, char* sectionList)
 {
 char query[4000];
-safef(query, sizeof(query), "SELECT COUNT(*) from t2gElsevierMarker WHERE markerId='%s'", item);
+safef(query, sizeof(query), "SELECT COUNT(*) from %s WHERE markerId='%s' AND section in (%s) ", markerTable, item, sectionList);
 if (sqlNeedQuickNum(conn, query) > itemLimit) 
 {
     printf("<b>This marker is mentioned more than %d times</b><BR>\n", itemLimit);
@@ -135,18 +140,18 @@ if (sqlNeedQuickNum(conn, query) > itemLimit)
 }
 }
 
-void printMarkerSnippets(struct sqlConnection *conn, char* articleTable, char* markerTable, char* item)
+static void printMarkerSnippets(struct sqlConnection *conn, char* articleTable, char* markerTable, char* item)
 {
 
 /* do not show more snippets than this limit */
-int itemLimit=4000;
+int itemLimit=1000;
 
 printSectionCheckboxes();
-printLimitWarning(conn, item, itemLimit);
+char* sectionList = makeSqlMarkerList();
+printLimitWarning(conn, markerTable, item, itemLimit, sectionList);
 
 printf("<H3>Snippets from Publications:</H3>");
-
-struct sqlResult* sr = queryMarkerRows(conn, markerTable, articleTable, item, itemLimit);
+struct sqlResult* sr = queryMarkerRows(conn, markerTable, articleTable, item, itemLimit, sectionList);
 
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -165,9 +170,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<I>%s</I><P>", snippets);
     printf("<HR>");
 }
+
+freeMem(sectionList);
 }
 
-char* printArticleInfo(struct sqlConnection *conn, char* item)
+static char* printArticleInfo(struct sqlConnection *conn, char* item)
 /* Header with information about paper, return documentId */
 {
     char query[512];
@@ -194,7 +201,7 @@ char* printArticleInfo(struct sqlConnection *conn, char* item)
     return docId;
 }
 
-struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, char* docId, char *item, char* seqName, int start)
+static struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, char* docId, char *item, char* seqName, int start)
 {
     char query[512];
     /* check first if the column exists (some debugging tables on hgwdev don't have seqIds) */
@@ -227,7 +234,7 @@ struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, char* do
     return seqIdHash;
 }
 
-void printSeqHeaders(bool showDesc, bool isClickedSection) 
+static void printSeqHeaders(bool showDesc, bool isClickedSection) 
 {
     printf("<TABLE style=\"background-color: #%s\" WIDTH=\"100%%\" CELLPADDING=\"2\">\n", HG_COL_BORDER);
     printf("<TR style=\"background-color: #%s; color: #FFFFFF\">\n", HG_COL_TABLE_LABEL);
@@ -242,7 +249,7 @@ void printSeqHeaders(bool showDesc, bool isClickedSection)
     puts("</TR>\n");
 }
 
-void printAddWbr(char* text, int distance) 
+static void printAddWbr(char* text, int distance) 
 /* a crazy hack for firefox/mozilla that is unable to break long words in tables
  * We need to add a <wbr> tag every x characters in the text to make text breakable.
  */
@@ -251,7 +258,7 @@ int i;
 i = 0;
 char* c;
 c = text;
-while (*c!=0){
+while (*c != 0){
     {
     if (i % distance == 0) 
         printf("<wbr>");
@@ -262,7 +269,7 @@ while (*c!=0){
 }
 }
 
-bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnection* conn, struct hash* clickedSeqs, bool isClickedSection, bool fasta)
+static bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnection* conn, struct hash* clickedSeqs, bool isClickedSection, bool fasta)
 /* print a table of sequences, show only sequences with IDs in hash,
  * There are two sections, respective sequences are shown depending on isClickedSection and clickedSeqs 
  *   - seqs that were clicked on (isClickedSection=True) -> show only seqs in clickedSeqs
@@ -307,7 +314,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
         safef(annotId, 100, "%010d%03d%05d", atoi(artId), atoi(fileId), atoi(seqId));
 
         // only display this sequence if we're in the right section
-        if (clickedSeqs!=NULL && ((hashLookup(clickedSeqs, annotId)!=0) != isClickedSection)) {
+        if (clickedSeqs!=NULL && ((hashLookup(clickedSeqs, annotId)!=NULL) != isClickedSection)) {
             foundSkippedRows = TRUE;
             continue;
         }
@@ -362,7 +369,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
     return foundSkippedRows;
 }
 
-void printSeqInfo(struct sqlConnection* conn, char* trackTable,
+static void printSeqInfo(struct sqlConnection* conn, char* trackTable,
     char* docId, char* item, char* seqName, int start, bool fileDesc, bool fasta)
     /* print sequences, split into two sections 
      * two sections: one for sequences that were clicked, one for all others*/
@@ -385,7 +392,7 @@ void printSeqInfo(struct sqlConnection* conn, char* trackTable,
 
 }
 
-void printTrackVersion(struct trackDb *tdb, struct sqlConnection* conn, char* item) 
+static void printTrackVersion(struct trackDb *tdb, struct sqlConnection* conn, char* item) 
 {
     char versionString[256];
     char dateReference[256];
@@ -425,7 +432,7 @@ void printTrackVersion(struct trackDb *tdb, struct sqlConnection* conn, char* it
     genericHeader(tdb, headerTitle);
 }
 
-void printPositionAndSize(int start, int end, bool showSize)
+static void printPositionAndSize(int start, int end, bool showSize)
 {
     printf("<B>Position:</B>&nbsp;"
                "<A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d\">",
@@ -468,7 +475,7 @@ else
     t2gArticleTable = hashMustFindVal(tdb->settingsHash, "t2gArticleTable");
 
     char* docId = printArticleInfo(conn, item);
-    if (docId!=0) 
+    if (docId!=NULL) 
     {
         bool showDesc; 
         showDesc = (! endsWith(trackTable, "Elsevier")); // avoid clutter: Elsevier has only main text

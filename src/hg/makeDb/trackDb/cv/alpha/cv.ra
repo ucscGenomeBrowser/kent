@@ -406,7 +406,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_naive
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -423,7 +423,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th0
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -440,7 +440,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th1
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -1338,7 +1338,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_naive
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -1355,7 +1355,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th0
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -1372,7 +1372,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th1
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -3748,7 +3748,7 @@ tissue induced pluripotent cell (iPS)
 karyotype iPS
 vendorName Paul Tesar at Case Western University
 vendorId iPS_CWRU1
-orderUrl pjt5@case.edu
+orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul 
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 sex M
@@ -3765,7 +3765,7 @@ tissue induced pluripotent cell (iPS)
 karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi7
-orderUrl chenowej@ninds.nih.gov
+orderUrl http://www.ninds.nih.gov/research/labs/25.htm 
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 sex F
@@ -3782,7 +3782,7 @@ tissue induced pluripotent cell (iPS)
 karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi11
-orderUrl chenowej@ninds.nih.gov
+orderUrl http://www.ninds.nih.gov/research/labs/25.htm 
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 sex M
@@ -3999,7 +3999,7 @@ tissue brain
 karyotype cancer
 vendorName Darrell Bigner at Duke University
 vendorId Medullo_D341
-orderUrl bigne001@mc.duke.edu
+orderUrl http://www.cancer.duke.edu/btc/modules/facultystaff1/index.php?id=85
 termId BTO:0001757
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001757&termName=medulloblastoma%20cell
 sex U
@@ -4032,7 +4032,7 @@ tissue Melanoma cell line derived from melanoma metastasis
 karyotype cancer
 vendorName Dr. Yardena Samuels
 vendorId Mel_2183
-orderUrl samuelsy@mail.nih.gov
+orderUrl http://www.genome.gov/19519015
 termId BTO:0000849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000849&termName=melanoma%20cell%20line
 sex U
@@ -7660,7 +7660,7 @@ antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;
 targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4
 vendorName Laszlo Tora
 vendorId Missing
-orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
+orderUrl http://www.igbmc.fr/Tora
 lab Struhl
 targetId GeneCard:KAT2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A&search=gcn5
@@ -9436,7 +9436,7 @@ antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen:  C-
 targetDescription Also known as FAM48A or P38IP.   It is a component of SAGA complex.  Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail.
 vendorName Laszlo Tora
 vendorId missing
-orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
+orderUrl http://www.igbmc.fr/Tora
 lab Struhl
 targetId GeneCard:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
@@ -10228,7 +10228,7 @@ type Antibody
 target ZZZ3
 antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic peptide coupled to Ovalbumin (Name PI130, sequence CGNNNGRTTDLKQQSTRESW). Antibody Target: ZZZ3
 targetDescription ZZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
-orderUrl http://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
+orderUrl http://www.igbmc.fr/Tora
 vendorName Lazlo Tora, Institut de G?n?tique et de Biologie Mol?culaire et Cellulaire
 vendorId ZZZ3
 lab Struhl
@@ -11953,7 +11953,7 @@ term ModifiedPeptideMapping
 tag MODPEPTIDEMAP
 type view
 label Modified Peptide Mapping
-description Modified Peptide Mapping Provisional
+description Modified Peptide Mapping 
 
 term PctSignal
 tag PCTSIG
@@ -12061,7 +12061,7 @@ description Single Nucleotide Polymorphism
 term Spikeins
 tag SPKNS
 type view
-label Spikeins
+label Spike-ins
 description Spikeins
 
 term Splices
