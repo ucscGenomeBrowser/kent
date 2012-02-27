@@ -11309,6 +11309,21 @@ type treatment
 description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours (Stam) PROVISIONAL
 label 72 hour diff Doxcycline
 
+term diffEstradiol_24hr
+tag DIFFE24H
+type treatment
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+
+term diffEstradiol_48hr
+tag DIFFE48H
+type treatment
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+
+term diffEstradiol_120hr
+tag DIFFE120H
+type treatment
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+
 term DMSO_0.02pct
 tag DM002P1H
 description 1 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
