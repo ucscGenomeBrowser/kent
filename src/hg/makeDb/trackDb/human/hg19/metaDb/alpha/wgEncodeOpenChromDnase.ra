@@ -89,7 +89,7 @@ geoSampleAccession GSM816667
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 80641935ff2ba439b6e85d79eb5bb5f3
+md5sum 3760564816698c035f8b67c90c3b7759
 origAssembly hg19
 project wgEncode
 subId 2786
@@ -111,7 +111,7 @@ fileName wgEncodeOpenChromDnase8988tRawDataRep1.fastq.gz
 geoSampleAccession GSM816667
 grant Crawford
 lab Duke
-md5sum da6846cfaccb76729dbfbbf04fccd182
+md5sum 693d855f21e0078ae8f03c666159dcaa
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -133,7 +133,7 @@ fileName wgEncodeOpenChromDnase8988tRawDataRep2.fastq.gz
 geoSampleAccession GSM816667
 grant Crawford
 lab Duke
-md5sum cb82c8969335e85d68d82941c4192acb
+md5sum 9d7ff6af2f5274c8c13a980491b2ae93
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -248,7 +248,7 @@ geoSampleAccession GSM816649
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 4d7ca78d34c705a6e9ed9eff096e30b1
+md5sum b4dc3b9fa2713e412c3e62028c7d6b70
 origAssembly hg19
 project wgEncode
 subId 2493
@@ -270,7 +270,7 @@ fileName wgEncodeOpenChromDnaseA549RawDataRep1.fastq.gz
 geoSampleAccession GSM816649
 grant Crawford
 lab Duke
-md5sum 49c3b53f3159e38fdfd515cd52c92425
+md5sum d9e906b301025e78f3ab24ec89482c17
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -292,7 +292,7 @@ fileName wgEncodeOpenChromDnaseA549RawDataRep2.fastq.gz
 geoSampleAccession GSM816649
 grant Crawford
 lab Duke
-md5sum 4d92a2f016d4fd2e347754da308b04a2
+md5sum b9d49f56d185f2ab7a03a2ec789be9ac
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -330,10 +330,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002562
+expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0AlnRep1.bam,wgEncodeOpenChromDnaseAdultcd4th0AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum b33aaa59714397136428da8a63c5b4c4,dd360277e480aba80239291bf2a280a5
 project wgEncode
 replicate 1
@@ -348,10 +350,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002562
+expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0AlnRep2.bam,wgEncodeOpenChromDnaseAdultcd4th0AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 0ee484c38d0d2595c095dc7ce8859da1,64e5012c6c04f01a7cb24dfd12e8fc8d
 project wgEncode
 replicate 2
@@ -366,6 +370,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002562
+expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -384,11 +390,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002562
+expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum a25d3d4bf124b8a81399b651685beca9
+md5sum 0f3c0fcf83b5d596cbf90fb910c0c289
 project wgEncode
 subId 4924
 tableName wgEncodeOpenChromDnaseAdultcd4th0Pk
@@ -402,10 +410,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002562
+expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 11631e3e70ce36a46a2afe60c00a731b
+md5sum 9f693a94fd14b0108873cd0fa0bc49fc
 project wgEncode
 replicate 1
 subId 4924
@@ -419,10 +429,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002562
+expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum fe97ab40681b11a108bef81ed7e6321c
+md5sum 3f634fedb4a1555e0210fdb5f616f3aa
 project wgEncode
 replicate 2
 subId 4924
@@ -436,6 +448,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002562
+expId 2562
 fileName wgEncodeOpenChromDnaseAdultcd4th0Sig.bigWig
 grant Crawford
 lab Duke
@@ -454,10 +468,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002563
+expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1AlnRep1.bam,wgEncodeOpenChromDnaseAdultcd4th1AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum e288a36b46fecb5e07c2123f9b279db2,1da4ece4cb56051f4905cfa6261d622b
 project wgEncode
 replicate 1
@@ -472,10 +488,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002563
+expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1AlnRep2.bam,wgEncodeOpenChromDnaseAdultcd4th1AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum c948db60fe3e6b21b6a19490c958bf97,d44549139db8c900be76ae3cd6d2ab1c
 project wgEncode
 replicate 2
@@ -490,6 +508,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002563
+expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -508,11 +528,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002563
+expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum d7fbe2cc47846afb1c2d1b9f60b1033d
+md5sum a96d3d828b32078015567535e20b935c
 project wgEncode
 subId 5389
 tableName wgEncodeOpenChromDnaseAdultcd4th1Pk
@@ -526,10 +548,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002563
+expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum cda187ee40580fed4b5e1090a145043d
+md5sum 7a4acbf00dfaa60c3a9fb4dc4667faec
 project wgEncode
 replicate 1
 subId 5389
@@ -543,10 +567,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002563
+expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum 0d59a46766d38f116d75c56b1064a9ec
+md5sum 433335d1a3f3d02e36726b4d6fcbf263
 project wgEncode
 replicate 2
 subId 5389
@@ -560,6 +586,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002563
+expId 2563
 fileName wgEncodeOpenChromDnaseAdultcd4th1Sig.bigWig
 grant Crawford
 lab Duke
@@ -665,7 +693,7 @@ geoSampleAccession GSM816638
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum fe78830cd9170d4b2630b7b6be382182
+md5sum 224c4d242ba4da5132d3bca1604c435e
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -792,7 +820,7 @@ geoSampleAccession GSM816628
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 99f4fe94af33e69fff659ac63adf6714
+md5sum 30b152b1c8fd659fb089e7b1ac3a1bfa
 origAssembly hg18
 project wgEncode
 subId 1412
@@ -815,7 +843,7 @@ fileName wgEncodeOpenChromDnaseChorionRawDataRep1.fastq.gz
 geoSampleAccession GSM816628
 grant Crawford
 lab Duke
-md5sum 0879e4f50d458d00d02abcdf537df0cc
+md5sum ba2ed11244c06679cbe89ada5665e322
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -837,7 +865,7 @@ fileName wgEncodeOpenChromDnaseChorionRawDataRep2.fastq.gz
 geoSampleAccession GSM816628
 grant Crawford
 lab Duke
-md5sum e31196ba79eced1d7e437e21ad566905
+md5sum b03c862134607d76e733dc5caa8cab58
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -981,7 +1009,7 @@ geoSampleAccession GSM816664
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 04f24c4e6dc43271db92f2e56aff95a6
+md5sum ac049fea9a6a67122d7d9e3a90473039
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -1021,6 +1049,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002549
+expId 2549
 fileName wgEncodeOpenChromDnaseColo829AlnRep1.bam,wgEncodeOpenChromDnaseColo829AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -1039,6 +1069,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002549
+expId 2549
 fileName wgEncodeOpenChromDnaseColo829AlnRep2.bam,wgEncodeOpenChromDnaseColo829AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -1057,6 +1089,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002549
+expId 2549
 fileName wgEncodeOpenChromDnaseColo829BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -1075,11 +1109,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002549
+expId 2549
 fileName wgEncodeOpenChromDnaseColo829Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum b6ba0ef9930a45054fcaf6db23a7056e
+md5sum fcc463e03b06e446128fe2180da265ca
 project wgEncode
 subId 4907
 tableName wgEncodeOpenChromDnaseColo829Pk
@@ -1093,10 +1129,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002549
+expId 2549
 fileName wgEncodeOpenChromDnaseColo829RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 7af6e614b38cccce6c7b7f4a406e6a61
+md5sum 2da78d22e0662dda9bbab1cda83e544b
 project wgEncode
 replicate 1
 subId 4907
@@ -1110,10 +1148,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002549
+expId 2549
 fileName wgEncodeOpenChromDnaseColo829RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum 854312c3240e3844452aa70b9ada865f
+md5sum c837a1b73cc39fa7eda7969cb39be330
 project wgEncode
 replicate 2
 subId 4907
@@ -1127,6 +1167,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002549
+expId 2549
 fileName wgEncodeOpenChromDnaseColo829Sig.bigWig
 grant Crawford
 lab Duke
@@ -1145,10 +1187,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002555
+expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hAlnRep1.bam,wgEncodeOpenChromDnaseEcc1Dm002p1hAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 61263ff34bad91c989a5d644d0531190,55c972f9c3f8858280ad92652d5e050b
 project wgEncode
 replicate 1
@@ -1164,10 +1208,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002555
+expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hAlnRep2.bam,wgEncodeOpenChromDnaseEcc1Dm002p1hAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 3bdca3c7147ab8ea5cfcd92f7134ad91,bba6115e7d9f905fccf2fb1271e8070d
 project wgEncode
 replicate 2
@@ -1183,6 +1229,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002555
+expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -1202,11 +1250,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002555
+expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 489fc0131cefc79a7e73e82c0e7610f9
+md5sum e119c0c162bba3b552d2b3e412b90aca
 project wgEncode
 subId 5387
 tableName wgEncodeOpenChromDnaseEcc1Dm002p1hPk
@@ -1221,10 +1271,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002555
+expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 046b773e3a7f1a589921095156b00e45
+md5sum 19e76f334aeef4c94e2b4476444e2536
 project wgEncode
 replicate 1
 subId 5387
@@ -1239,10 +1291,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002555
+expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum a7b2f55d4ff564ee4c29a469d00ca4b3
+md5sum f4cc150068d37d5eb39ca19030689b6b
 project wgEncode
 replicate 2
 subId 5387
@@ -1257,6 +1311,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002555
+expId 2555
 fileName wgEncodeOpenChromDnaseEcc1Dm002p1hSig.bigWig
 grant Crawford
 lab Duke
@@ -1276,10 +1332,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002564
+expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mAlnRep1.bam,wgEncodeOpenChromDnaseEcc1Est10nm30mAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum d2637a283735f2515fa45e26e8c32f78,38119a8f1b1d5d8e827437f31b7c29fb
 project wgEncode
 replicate 1
@@ -1295,10 +1353,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002564
+expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mAlnRep2.bam,wgEncodeOpenChromDnaseEcc1Est10nm30mAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum c951977ba474875aa5be888487f7b0f2,d989842a0d4d35014cdc91265240f8e3
 project wgEncode
 replicate 2
@@ -1314,6 +1374,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002564
+expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -1333,11 +1395,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002564
+expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum be8fd93f408d3b691bf7cff47bb76d90
+md5sum 14d9758b6bed66fad0b8733efda9c64b
 project wgEncode
 subId 5384
 tableName wgEncodeOpenChromDnaseEcc1Est10nm30mPk
@@ -1352,10 +1416,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002564
+expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 0681d3199c6e5d9737e1f216b9d82571
+md5sum 285d1958b2964aa45962b98728b8224e
 project wgEncode
 replicate 1
 subId 5384
@@ -1370,10 +1436,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002564
+expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum b13a5a13b05e72b34385961d9dd45ee6
+md5sum 6d972510247a651345720d17bf2c24d8
 project wgEncode
 replicate 2
 subId 5384
@@ -1388,6 +1456,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002564
+expId 2564
 fileName wgEncodeOpenChromDnaseEcc1Est10nm30mSig.bigWig
 grant Crawford
 lab Duke
@@ -1494,7 +1564,7 @@ geoSampleAccession GSM816652
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 7589be74baea70ae56a32be9e47b98b0
+md5sum 0242072de22534e358997bcd4539793f
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -1553,6 +1623,7 @@ view Validation
 
 metaObject wgEncodeOpenChromDnaseFibropAlnRep1
 objType file
+attic auxExp
 cell FibroP
 composite wgEncodeOpenChromDnase
 controlId generic_female
@@ -1579,6 +1650,7 @@ view Alignments
 
 metaObject wgEncodeOpenChromDnaseFibropAlnRep2
 objType file
+attic auxExp
 cell FibroP
 composite wgEncodeOpenChromDnase
 controlId generic_female
@@ -1605,6 +1677,7 @@ view Alignments
 
 metaObject wgEncodeOpenChromDnaseFibropAlnRep3
 objType file
+attic auxExp
 cell FibroP
 composite wgEncodeOpenChromDnase
 controlId generic_female
@@ -1631,6 +1704,7 @@ view Alignments
 
 metaObject wgEncodeOpenChromDnaseFibropBaseOverlapSignal
 objType table
+attic auxExp
 cell FibroP
 composite wgEncodeOpenChromDnase
 controlId generic_female
@@ -1657,6 +1731,7 @@ view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromDnaseFibropPk
 objType table
+attic auxExp
 cell FibroP
 composite wgEncodeOpenChromDnase
 controlId generic_female
@@ -1672,7 +1747,7 @@ geoSampleAccession GSM816626
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 64e23bfab32175eeb056678a87cb9933
+md5sum b5a7044ddfcacefdc32b813bb672f025
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -1683,6 +1758,7 @@ view Peaks
 
 metaObject wgEncodeOpenChromDnaseFibropSig
 objType table
+attic auxExp
 cell FibroP
 composite wgEncodeOpenChromDnase
 controlId generic_female
@@ -1715,10 +1791,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002567
+expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395AlnRep1.bam,wgEncodeOpenChromDnaseFibropag08395AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 183e435a56585bd4b8cd2e887e32135d,fd52febc773436dee0d9cc9d425cb194
 project wgEncode
 replicate 1
@@ -1733,10 +1811,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002567
+expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395AlnRep2.bam,wgEncodeOpenChromDnaseFibropag08395AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 2b500510bf37b8a38726929aaac6c157,66ad41d01596650ad994406016f645b8
 project wgEncode
 replicate 2
@@ -1751,10 +1831,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002567
+expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395AlnRep3.bam,wgEncodeOpenChromDnaseFibropag08395AlnRep3.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 0157a88c23cbe2f85d4f59689777d965,70569ab42358ac80fa27b4cd5b0b93ab
 project wgEncode
 replicate 3
@@ -1769,6 +1851,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002567
+expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -1787,11 +1871,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002567
+expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 82be34ea5fde2841f8a70e911f6b8215
+md5sum 023247bd7f0a76a0d4161cd4af870d2a
 project wgEncode
 subId 5561
 tableName wgEncodeOpenChromDnaseFibropag08395Pk
@@ -1805,10 +1891,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002567
+expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum f57395cb718fa8269a2c65561b259cdf
+md5sum c67dbc2e5bb3175dbc1e31153a1f2b2c
 project wgEncode
 replicate 1
 subId 5561
@@ -1822,10 +1910,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002567
+expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum 393ac1abbde55762a2037ca6aa06bf5a
+md5sum 576d6e4d955ab633c09019b429d90578
 project wgEncode
 replicate 2
 subId 5561
@@ -1839,10 +1929,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002567
+expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395RawDataRep3.fastq.gz
 grant Crawford
 lab Duke
-md5sum 39046f9a17cda814dfd15db76a765be5
+md5sum 39e574a67290572c2886294587d0b844
 project wgEncode
 replicate 3
 subId 5561
@@ -1856,6 +1948,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002567
+expId 2567
 fileName wgEncodeOpenChromDnaseFibropag08395Sig.bigWig
 grant Crawford
 lab Duke
@@ -1874,10 +1968,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002568
+expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396AlnRep1.bam,wgEncodeOpenChromDnaseFibropag08396AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum b807dad5d1e26a5f8a205e3b98e33364,dfca18f9c5b5f36038773d165d94f3a4
 project wgEncode
 replicate 1
@@ -1892,10 +1988,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002568
+expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396AlnRep2.bam,wgEncodeOpenChromDnaseFibropag08396AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 2839c7f66c24f4c7f16af6092564e6d3,962b1ea1375f920cb389c9bcc4662e50
 project wgEncode
 replicate 2
@@ -1910,10 +2008,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002568
+expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396AlnRep3.bam,wgEncodeOpenChromDnaseFibropag08396AlnRep3.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 8f609683262e4f45d62013b76e24b527,dd70635bdd37dccaf2ef98a6aa9bc720
 project wgEncode
 replicate 3
@@ -1928,6 +2028,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002568
+expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -1946,11 +2048,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002568
+expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 3820d76a550eab857f2edcc94458ca6c
+md5sum c1ba520b6f1683bcbaf9e4cd7e7b5e61
 project wgEncode
 subId 5562
 tableName wgEncodeOpenChromDnaseFibropag08396Pk
@@ -1964,10 +2068,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002568
+expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum d578005030f73f9bd6a59cf49efbd37e
+md5sum 8ad825cbd0e8e154a2fd36d0bd3fec67
 project wgEncode
 replicate 1
 subId 5562
@@ -1981,10 +2087,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002568
+expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum 9b090727ddd1e2551d36bb20c696e3b2
+md5sum f969dba25eac6810963efe7d89e07df8
 project wgEncode
 replicate 2
 subId 5562
@@ -1998,10 +2106,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002568
+expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396RawDataRep3.fastq.gz
 grant Crawford
 lab Duke
-md5sum ed72c6c87780fa5944fc01aaee04bb7d
+md5sum bdac6fc8b019d57a23c4b5ddf6cd26b2
 project wgEncode
 replicate 3
 subId 5562
@@ -2015,6 +2125,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002568
+expId 2568
 fileName wgEncodeOpenChromDnaseFibropag08396Sig.bigWig
 grant Crawford
 lab Duke
@@ -2033,10 +2145,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002569
+expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443AlnRep1.bam,wgEncodeOpenChromDnaseFibropag20443AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum c393f95cabaa2a7d3dfc40f8171cfb52,d91a9f4175897e4e7875134b0b8cb9b4
 project wgEncode
 replicate 1
@@ -2051,10 +2165,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002569
+expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443AlnRep2.bam,wgEncodeOpenChromDnaseFibropag20443AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 1ff3f54454fe888a884f17703f8f1472,1ca07482fb224b4cb40efc0009070182
 project wgEncode
 replicate 2
@@ -2069,10 +2185,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002569
+expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443AlnRep3.bam,wgEncodeOpenChromDnaseFibropag20443AlnRep3.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 3ec0f9ad2ccbffcfa7fefde03edc9518,c7e16e734811f24200dab920ebf508e0
 project wgEncode
 replicate 3
@@ -2087,6 +2205,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002569
+expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -2105,11 +2225,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002569
+expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 6fa85248fc0c33d034c373abed10c236
+md5sum fde395a6b94157e04a0c9122afb5b951
 project wgEncode
 subId 5560
 tableName wgEncodeOpenChromDnaseFibropag20443Pk
@@ -2123,10 +2245,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002569
+expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 03fcbf8148f0fe6a51258058ede4de93
+md5sum e272b0dab5b5256b970b5a675ce5db7f
 project wgEncode
 replicate 1
 subId 5560
@@ -2140,10 +2264,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002569
+expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum 758f266e1590ffd95be7b848007c0195
+md5sum 20341344f05182ff554388e7443f69e3
 project wgEncode
 replicate 2
 subId 5560
@@ -2157,10 +2283,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002569
+expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443RawDataRep3.fastq.gz
 grant Crawford
 lab Duke
-md5sum 555be7508762f5a52149580908c0cbcb
+md5sum a8d637e74ae8f7389783885f5c30a290
 project wgEncode
 replicate 3
 subId 5560
@@ -2174,6 +2302,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-07
 dateUnrestricted 2012-11-07
+dccAccession wgEncodeEH002569
+expId 2569
 fileName wgEncodeOpenChromDnaseFibropag20443Sig.bigWig
 grant Crawford
 lab Duke
@@ -2269,7 +2399,7 @@ geoSampleAccession GSM816668
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 39b12fc1c4b1a705157c5732410879bd
+md5sum 02fa463c4f7dfcd304f183a6f3de20eb
 origAssembly hg19
 project wgEncode
 subId 2514
@@ -2291,7 +2421,7 @@ fileName wgEncodeOpenChromDnaseGlioblaRawDataRep1.fastq.gz
 geoSampleAccession GSM816668
 grant Crawford
 lab Duke
-md5sum d6b0f67fe7bba7c2b8febf203b7a900f
+md5sum 0a93c07c6d42cad208231f6fa6029711
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2313,7 +2443,7 @@ fileName wgEncodeOpenChromDnaseGlioblaRawDataRep2.fastq.gz
 geoSampleAccession GSM816668
 grant Crawford
 lab Duke
-md5sum dfaa75b4fddabf803b1caa5481fd513a
+md5sum d6d98334a2669152858d55849e613956
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2510,7 +2640,7 @@ geoSampleAccession GSM816665
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 6c7c5855069fec2ae763fe0b132f95a5
+md5sum 4e87ffa1c16612939f7bf43ca2fee5e6
 origAssembly hg18
 project wgEncode
 subId 1494
@@ -2535,7 +2665,7 @@ geoSampleAccession GSM816665
 grant Crawford
 lab Duke
 labVersion DNaseHS
-md5sum 57507e299a267805fdb6e48864423e55
+md5sum 5e91b590b9dc1fdc5e527c39ed48acc9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2559,7 +2689,7 @@ geoSampleAccession GSM816665
 grant Crawford
 lab Duke
 labVersion DNaseHS
-md5sum 42529ee392be6ad5fb4f1fbe1d2ce03a
+md5sum 442e918d34514c6a0f19d6196893bab9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2583,7 +2713,7 @@ geoSampleAccession GSM816665
 grant Crawford
 lab Duke
 labVersion DNaseHS
-md5sum 89603077988e96cb7947cbc7798a362d
+md5sum 843ead0cf99dc4eeb7be5ea04e567b19
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -2605,7 +2735,7 @@ fileName wgEncodeOpenChromDnaseGm12878RawDataRep4.fastq.gz
 geoSampleAccession GSM816665
 grant Crawford
 lab Duke
-md5sum 7d106292596cabfa0c05e7ffab06a9d7
+md5sum c363e4f68b59258e12b3416ef8b8e3f6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2627,7 +2757,7 @@ fileName wgEncodeOpenChromDnaseGm12878RawDataRep5.fastq.gz
 geoSampleAccession GSM816665
 grant Crawford
 lab Duke
-md5sum 836ffe9364653d4dec01a87b5b7343b9
+md5sum d27c695f75b50faea0bb4236e7f3cae9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2772,7 +2902,7 @@ geoSampleAccession GSM816656
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 28fd0fdd0f8e784b3a33b0fab29c740e
+md5sum c6027d3db1218e42d56828edf9d4f54b
 origAssembly hg18
 project wgEncode
 subId 1487
@@ -2795,7 +2925,7 @@ fileName wgEncodeOpenChromDnaseGm12891RawDataRep1.fastq.gz
 geoSampleAccession GSM816656
 grant Crawford
 lab Duke
-md5sum f1e8a77c15e4612a35fcd0dc76a0fc81
+md5sum 5cbf4c3d322d1ccca19f523d43104558
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2817,7 +2947,7 @@ fileName wgEncodeOpenChromDnaseGm12891RawDataRep2.fastq.gz
 geoSampleAccession GSM816656
 grant Crawford
 lab Duke
-md5sum fe7894931118f07d1a4c00325b99677c
+md5sum aa2fa652da284ad75f53fea656c27f7b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2941,7 +3071,7 @@ geoSampleAccession GSM816657
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum fb6f1017b81a9af164f11ee34ebb78f8
+md5sum 2f75875cd96949bf2f012be0b78df2a5
 origAssembly hg18
 project wgEncode
 subId 1488
@@ -2964,7 +3094,7 @@ fileName wgEncodeOpenChromDnaseGm12892RawDataRep1.fastq.gz
 geoSampleAccession GSM816657
 grant Crawford
 lab Duke
-md5sum 9d75c06f394af081d107746926ddb50c
+md5sum 543f110313f11897200634fcddb89786
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2986,7 +3116,7 @@ fileName wgEncodeOpenChromDnaseGm12892RawDataRep2.fastq.gz
 geoSampleAccession GSM816657
 grant Crawford
 lab Duke
-md5sum 32cd45cb4d30d6452c2fadf812433f73
+md5sum 44be03d40fbf8cf9f87bf3f27dada20a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3135,7 +3265,7 @@ geoSampleAccession GSM816653
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 7ead7d7818c24cae22b3379cbde6628c
+md5sum 1167e17f1af02b2f7fa7eaf8404ce6a5
 origAssembly hg18
 project wgEncode
 subId 1507
@@ -3158,7 +3288,7 @@ fileName wgEncodeOpenChromDnaseGm18507RawDataRep1.fastq.gz
 geoSampleAccession GSM816653
 grant Crawford
 lab Duke
-md5sum 5e6c5f940cea502d2e9475fdc07cc979
+md5sum a3b1cad7afb269e50da675f01f1e21ae
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3180,7 +3310,7 @@ fileName wgEncodeOpenChromDnaseGm18507RawDataRep2.fastq.gz
 geoSampleAccession GSM816653
 grant Crawford
 lab Duke
-md5sum 3160ea291b1c6c379152daa11c5e0e33
+md5sum 17077edd049e513880e38a68a5aa7894
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3202,7 +3332,7 @@ fileName wgEncodeOpenChromDnaseGm18507RawDataRep3.fastq.gz
 geoSampleAccession GSM816653
 grant Crawford
 lab Duke
-md5sum e0931b9362e21bce28510e4c9f886de5
+md5sum 0302a52ab2e01d9243f1cf8d30a99617
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3348,7 +3478,7 @@ geoSampleAccession GSM816658
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 31a2f04edc190f1aef38ca8b1f311063
+md5sum 61563c708e163987d00288c07e837293
 origAssembly hg18
 project wgEncode
 subId 1489
@@ -3371,7 +3501,7 @@ fileName wgEncodeOpenChromDnaseGm19238RawDataRep1.fastq.gz
 geoSampleAccession GSM816658
 grant Crawford
 lab Duke
-md5sum 7ac5209a5a87c12a59d9a3b0e50b8cf9
+md5sum b0028c18e042987f67c24db3e555dfab
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3393,7 +3523,7 @@ fileName wgEncodeOpenChromDnaseGm19238RawDataRep2.fastq.gz
 geoSampleAccession GSM816658
 grant Crawford
 lab Duke
-md5sum 0f53b6e6fda01bb7bbcfe2d4610a9c96
+md5sum 9183ec6ff5613288c1240c2b68bb7669
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3517,7 +3647,7 @@ geoSampleAccession GSM816659
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum d265b383d8b44b745caa6898a8f8c827
+md5sum d6b9f9594de3122501e904ccfed01b1c
 origAssembly hg18
 project wgEncode
 subId 1506
@@ -3540,7 +3670,7 @@ fileName wgEncodeOpenChromDnaseGm19239RawDataRep1.fastq.gz
 geoSampleAccession GSM816659
 grant Crawford
 lab Duke
-md5sum cb521ea799c1aaedeb7fae5324bcd730
+md5sum fee298542e88ba2cee65b8fa0ee0e30c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3562,7 +3692,7 @@ fileName wgEncodeOpenChromDnaseGm19239RawDataRep2.fastq.gz
 geoSampleAccession GSM816659
 grant Crawford
 lab Duke
-md5sum 92956e2c6ee7514745d8ce6bae8ecae7
+md5sum c46134ead94588fa52294cecc8727bb7
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3686,7 +3816,7 @@ geoSampleAccession GSM816648
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 713dda84dd2732a3e1cbc0c07ed19fdc
+md5sum ac8924b940cd3da5ac6ce7910b9b0637
 origAssembly hg18
 project wgEncode
 subId 1509
@@ -3709,7 +3839,7 @@ fileName wgEncodeOpenChromDnaseGm19240RawDataRep1.fastq.gz
 geoSampleAccession GSM816648
 grant Crawford
 lab Duke
-md5sum 1c6be9844adabc0ea8912f50d9991e37
+md5sum db1100c7c1cf97be79c59b2c935cc580
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3731,7 +3861,7 @@ fileName wgEncodeOpenChromDnaseGm19240RawDataRep2.fastq.gz
 geoSampleAccession GSM816648
 grant Crawford
 lab Duke
-md5sum 3507efbd631289ae9705ef8092b32fcc
+md5sum 47e1db268e938aa1db37fa656207f2a1
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3855,7 +3985,7 @@ geoSampleAccession GSM816632
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 29622032336f85c2e9bc3fc44d41d1c8
+md5sum 2050f652d5fd36e8fe3689063e23f465
 origAssembly hg18
 project wgEncode
 subId 1495
@@ -3878,7 +4008,7 @@ fileName wgEncodeOpenChromDnaseH1hescRawDataRep1.fastq.gz
 geoSampleAccession GSM816632
 grant Crawford
 lab Duke
-md5sum 77ed8471cf256e4867127c8d975f0cd1
+md5sum f6adc42a68dc573d3b9a554cd71a8698
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3900,7 +4030,7 @@ fileName wgEncodeOpenChromDnaseH1hescRawDataRep2.fastq.gz
 geoSampleAccession GSM816632
 grant Crawford
 lab Duke
-md5sum 38dc9aac87ad14d607fe404f94ef6e8f
+md5sum 636f197a67c3201e7646556a8988c19a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3940,6 +4070,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
+dccAccession wgEncodeEH002554
+expId 2554
 fileName wgEncodeOpenChromDnaseH7esAlnRep1.bam,wgEncodeOpenChromDnaseH7esAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -3958,6 +4090,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
+dccAccession wgEncodeEH002554
+expId 2554
 fileName wgEncodeOpenChromDnaseH7esAlnRep2.bam,wgEncodeOpenChromDnaseH7esAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -3976,6 +4110,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
+dccAccession wgEncodeEH002554
+expId 2554
 fileName wgEncodeOpenChromDnaseH7esAlnRep3.bam,wgEncodeOpenChromDnaseH7esAlnRep3.bam.bai
 grant Crawford
 lab Duke
@@ -3994,6 +4130,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
+dccAccession wgEncodeEH002554
+expId 2554
 fileName wgEncodeOpenChromDnaseH7esBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -4012,11 +4150,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
+dccAccession wgEncodeEH002554
+expId 2554
 fileName wgEncodeOpenChromDnaseH7esPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 2b46905a0f93af631e94e1c24d36a2c2
+md5sum b528fcfb1cfe1ff77d794de8ca9b723c
 project wgEncode
 subId 5386
 tableName wgEncodeOpenChromDnaseH7esPk
@@ -4030,10 +4170,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
+dccAccession wgEncodeEH002554
+expId 2554
 fileName wgEncodeOpenChromDnaseH7esRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 98d2ef0e1d5bbeedc030618744dcb454
+md5sum b9c47641b71c1455b27b2c309e9fb14d
 project wgEncode
 replicate 1
 subId 5386
@@ -4047,10 +4189,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
+dccAccession wgEncodeEH002554
+expId 2554
 fileName wgEncodeOpenChromDnaseH7esRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum 917556691078cc92526e96b04f443840
+md5sum 381f27bb1b1b35cf76c013aee8a0fa91
 project wgEncode
 replicate 2
 subId 5386
@@ -4064,10 +4208,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
+dccAccession wgEncodeEH002554
+expId 2554
 fileName wgEncodeOpenChromDnaseH7esRawDataRep3.fastq.gz
 grant Crawford
 lab Duke
-md5sum 594fa6b752c3eb5358dd18950c3d61ff
+md5sum 6e6565f5feb4560cf6527799312931de
 project wgEncode
 replicate 3
 subId 5386
@@ -4081,6 +4227,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
+dccAccession wgEncodeEH002554
+expId 2554
 fileName wgEncodeOpenChromDnaseH7esSig.bigWig
 grant Crawford
 lab Duke
@@ -4183,7 +4331,7 @@ geoSampleAccession GSM816629
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 1722edea2533d924004686fedb430b5b
+md5sum 557719d4ce776b3cc0a9ccad4f24e736
 origAssembly hg18
 project wgEncode
 subId 1519
@@ -4206,7 +4354,7 @@ fileName wgEncodeOpenChromDnaseH9esRawDataRep1.fastq.gz
 geoSampleAccession GSM816629
 grant Crawford
 lab Duke
-md5sum 679944fb845117bd4acd66ead88e5d8a
+md5sum 773698b09c1ba904e95586bf836dc28a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4228,7 +4376,7 @@ fileName wgEncodeOpenChromDnaseH9esRawDataRep2.fastq.gz
 geoSampleAccession GSM816629
 grant Crawford
 lab Duke
-md5sum 03df675f0db1da5ed337ef98e97c56e0
+md5sum fc5ca90c863c8ada1922bdadda861938
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4268,10 +4416,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002565
+expId 2565
 fileName wgEncodeOpenChromDnaseHek293tAlnRep1.bam,wgEncodeOpenChromDnaseHek293tAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 89308ecd339290574fa5b7b1455019fc,a903a9fdd16f936b448bbba6c7e17a98
 project wgEncode
 replicate 1
@@ -4286,10 +4436,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002565
+expId 2565
 fileName wgEncodeOpenChromDnaseHek293tAlnRep2.bam,wgEncodeOpenChromDnaseHek293tAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum a47b32f00747187ccccbd7dc4f072c80,724c1b6acc5b035a18172d6c0ca60ec9
 project wgEncode
 replicate 2
@@ -4304,6 +4456,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002565
+expId 2565
 fileName wgEncodeOpenChromDnaseHek293tBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -4322,11 +4476,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002565
+expId 2565
 fileName wgEncodeOpenChromDnaseHek293tPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum b657747df397b081cbef9fa36419dd04
+md5sum 25c44349bfdda616facee78e2fc4edae
 project wgEncode
 subId 5385
 tableName wgEncodeOpenChromDnaseHek293tPk
@@ -4340,10 +4496,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002565
+expId 2565
 fileName wgEncodeOpenChromDnaseHek293tRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 90646884d55e0711cc1907d6f23d6a65
+md5sum d141ef43f3212dff4f3897cb4b9dce6f
 project wgEncode
 replicate 1
 subId 5385
@@ -4357,10 +4515,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002565
+expId 2565
 fileName wgEncodeOpenChromDnaseHek293tRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum 7e0bb9f571f3e2386479d341225df139
+md5sum cc1558383632809ace0b3ea2f88c0b72
 project wgEncode
 replicate 2
 subId 5385
@@ -4374,6 +4534,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002565
+expId 2565
 fileName wgEncodeOpenChromDnaseHek293tSig.bigWig
 grant Crawford
 lab Duke
@@ -4576,7 +4738,7 @@ geoSampleAccession GSM816633
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum d2843b5add54ea162fb842ba9f07ade0
+md5sum bebf563a38f9dcd1c0d7716d4e01adba
 origAssembly hg18
 project wgEncode
 subId 1544
@@ -4599,7 +4761,7 @@ fileName wgEncodeOpenChromDnaseHelas3Ifna4hRawDataRep1.fastq.gz
 geoSampleAccession GSM816633
 grant Crawford
 lab Duke
-md5sum 6dbf1e9fc4c5f49561d9896d5335c859
+md5sum 78a053866e69c369b1c197df490f0b3b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4622,7 +4784,7 @@ fileName wgEncodeOpenChromDnaseHelas3Ifna4hRawDataRep2.fastq.gz
 geoSampleAccession GSM816633
 grant Crawford
 lab Duke
-md5sum 135d47a25bc5805fdc8e5fce4e49c8ca
+md5sum 7901c8a927604b20e6eb7564b82aae27
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4672,7 +4834,7 @@ geoSampleAccession GSM816643
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 29dce5a9685307a8d4467d0d93f765e7
+md5sum fd88cd947bcd1dedbcac461809165043
 origAssembly hg18
 project wgEncode
 subId 1498
@@ -4696,7 +4858,7 @@ fileName wgEncodeOpenChromDnaseHelas3RawDataRep1.fastq.gz
 geoSampleAccession GSM816643
 grant Crawford
 lab Duke
-md5sum 5cc5a8f23714336620cc0c5dc4739ca9
+md5sum 75f160af95bfc1c4c0d4d24dae6219aa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4719,7 +4881,7 @@ fileName wgEncodeOpenChromDnaseHelas3RawDataRep2.fastq.gz
 geoSampleAccession GSM816643
 grant Crawford
 lab Duke
-md5sum e782f52675bd450ef952a5dcbce1fd3d
+md5sum a3918ad51d073cbdad5faac9ed09f1bc
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4742,7 +4904,7 @@ fileName wgEncodeOpenChromDnaseHelas3RawDataRep3.fastq.gz
 geoSampleAccession GSM816643
 grant Crawford
 lab Duke
-md5sum 76eb7bc5e36445ad8ac336462d4d9b8e
+md5sum ff28b56401640ca3ec9170b5146553f8
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -4881,7 +5043,7 @@ geoSampleAccession GSM816663
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05, input was generic_female (should have been male)
-md5sum 65a85d569326c99a740379062d16bd19
+md5sum fed56f5ffd9a7ec6fc94d6141d68b27b
 origAssembly hg19
 project wgEncode
 subId 3063
@@ -4904,7 +5066,7 @@ geoSampleAccession GSM816663
 grant Crawford
 lab Duke
 labVersion aligned to female and input was generic_female (should have been male)
-md5sum f27dd24cd9c0115093e20232819493e0
+md5sum 08f7c20ead8cbbee2c3a17c5e0dd2ffe
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4927,7 +5089,7 @@ geoSampleAccession GSM816663
 grant Crawford
 lab Duke
 labVersion aligned to female and input was generic_female (should have been male)
-md5sum 7e427aa985df4d50407127438532fd62
+md5sum 4dd108376aea3c88ec3a5259f78179a9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5074,7 +5236,7 @@ geoSampleAccession GSM816662
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 1fd95ae9101f3c3e3781fa5601f61a72
+md5sum 3452441f11aa75a8d5cd5db5ffdbe1b3
 origAssembly hg18
 project wgEncode
 subId 1528
@@ -5098,7 +5260,7 @@ fileName wgEncodeOpenChromDnaseHepg2RawDataRep1.fastq.gz
 geoSampleAccession GSM816662
 grant Crawford
 lab Duke
-md5sum 728f82265ebd9ba6f68ad56ae6fa7a35
+md5sum 699a7c41872d330216ada2184b436c72
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5121,7 +5283,7 @@ fileName wgEncodeOpenChromDnaseHepg2RawDataRep2.fastq.gz
 geoSampleAccession GSM816662
 grant Crawford
 lab Duke
-md5sum cf86657482cd5f762a5c692986fbc04f
+md5sum d46abe70738db1a161ae9d55647cf9c0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5144,7 +5306,7 @@ fileName wgEncodeOpenChromDnaseHepg2RawDataRep3.fastq.gz
 geoSampleAccession GSM816662
 grant Crawford
 lab Duke
-md5sum c0f5c21250930445a3cdd83cfaf9196a
+md5sum 778e707ef80e978a6abd2fa8c3f67a28
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -5286,7 +5448,7 @@ geoSampleAccession GSM816669
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 1f49ab6ff46844cca2b532f03bdd81dd
+md5sum 51f8d1db953631ea37e8addf208630db
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -5425,7 +5587,7 @@ geoSampleAccession GSM816639
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 4b10dc25276e63ffd1927c848bf8aaf2
+md5sum c21c3f365f2c7c624bd17e0d0e5a6098
 origAssembly hg19
 project wgEncode
 subId 3064
@@ -5447,7 +5609,7 @@ fileName wgEncodeOpenChromDnaseHpde6e6e7RawDataRep1.fastq.gz
 geoSampleAccession GSM816639
 grant Crawford
 lab Duke
-md5sum 7e2968df5f49403ea4bd997a6b6f015a
+md5sum 9b0545fff46bbc6cfa15f1576f192a2a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5469,7 +5631,7 @@ fileName wgEncodeOpenChromDnaseHpde6e6e7RawDataRep2.fastq.gz
 geoSampleAccession GSM816639
 grant Crawford
 lab Duke
-md5sum 772fa10d75daa7dbbb79363f4c868910
+md5sum 79187935b057e79bdae825a31c313187
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5620,7 +5782,7 @@ geoSampleAccession GSM816650
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 429c84eb733f05f20b2f21b478eaf06d
+md5sum e8a26f3a234be6d42a4d24de1d3b0f79
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -5663,6 +5825,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002550
+expId 2550
 fileName wgEncodeOpenChromDnaseHsmmembAlnRep1.bam,wgEncodeOpenChromDnaseHsmmembAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -5681,6 +5845,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002550
+expId 2550
 fileName wgEncodeOpenChromDnaseHsmmembAlnRep2.bam,wgEncodeOpenChromDnaseHsmmembAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -5699,6 +5865,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002550
+expId 2550
 fileName wgEncodeOpenChromDnaseHsmmembBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -5717,11 +5885,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002550
+expId 2550
 fileName wgEncodeOpenChromDnaseHsmmembPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 2292179d96cfa3804311de29646622e9
+md5sum 90826409f5d96c70e5294577eb306320
 project wgEncode
 subId 4912
 tableName wgEncodeOpenChromDnaseHsmmembPk
@@ -5735,6 +5905,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002550
+expId 2550
 fileName wgEncodeOpenChromDnaseHsmmembSig.bigWig
 grant Crawford
 lab Duke
@@ -5753,10 +5925,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002556
+expId 2556
 fileName wgEncodeOpenChromDnaseHsmmfshdAlnRep1.bam,wgEncodeOpenChromDnaseHsmmfshdAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum a612069d27c7f8f6c543dceae0b57b18,fb76f9eda34abe628f9379d69e2d9b47
 project wgEncode
 replicate 1
@@ -5771,10 +5945,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002556
+expId 2556
 fileName wgEncodeOpenChromDnaseHsmmfshdAlnRep2.bam,wgEncodeOpenChromDnaseHsmmfshdAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum e3cdd3fe3397a72fd1260bb0819b7a32,8d87bf637ab8f2cc7e710ac416a15698
 project wgEncode
 replicate 2
@@ -5789,10 +5965,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002556
+expId 2556
 fileName wgEncodeOpenChromDnaseHsmmfshdAlnRep3.bam,wgEncodeOpenChromDnaseHsmmfshdAlnRep3.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum cf63246715220323bc2a4bb45c69ccd2,be97670b992b82bf4dd07b8def5259ec
 project wgEncode
 replicate 3
@@ -5807,6 +5985,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002556
+expId 2556
 fileName wgEncodeOpenChromDnaseHsmmfshdBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -5825,11 +6005,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002556
+expId 2556
 fileName wgEncodeOpenChromDnaseHsmmfshdPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum e5d711b19d42c7833d0d100e3afe164e
+md5sum 5fda03152865e56de7619e5bb0ee84bc
 project wgEncode
 subId 5479
 tableName wgEncodeOpenChromDnaseHsmmfshdPk
@@ -5843,6 +6025,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002556
+expId 2556
 fileName wgEncodeOpenChromDnaseHsmmfshdSig.bigWig
 grant Crawford
 lab Duke
@@ -5974,7 +6158,7 @@ geoSampleAccession GSM816651
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 46db3f04fbb980a8e5adc01541959d0f
+md5sum 9e0347a3b9ddd3be7397a2fee791643c
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6094,7 +6278,7 @@ geoSampleAccession GSM816644
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum e5d4df2ac77fe9e57538df9ae011aaaf
+md5sum 2c21b003a16c573ead0c5a8bb87026d3
 origAssembly hg19
 project wgEncode
 subId 2793
@@ -6116,7 +6300,7 @@ fileName wgEncodeOpenChromDnaseHtr8RawDataRep1.fastq.gz
 geoSampleAccession GSM816644
 grant Crawford
 lab Duke
-md5sum ccb0c467d5736f4a5498820fa3a50254
+md5sum 0c722680322db1478c1258027f348f28
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6138,7 +6322,7 @@ fileName wgEncodeOpenChromDnaseHtr8RawDataRep2.fastq.gz
 geoSampleAccession GSM816644
 grant Crawford
 lab Duke
-md5sum a864e92ec5bd0b72144c93e51c2bb1d9
+md5sum 42d959fd6131ea854fb9c1723daadb6c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6253,7 +6437,7 @@ geoSampleAccession GSM816671
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum e6b097d56c4bfaec31d149d5c0615e62
+md5sum b447b3f48f80deef96b0afc308984809
 origAssembly hg19
 project wgEncode
 subId 3076
@@ -6275,7 +6459,7 @@ fileName wgEncodeOpenChromDnaseHuh75RawDataRep1.fastq.gz
 geoSampleAccession GSM816671
 grant Crawford
 lab Duke
-md5sum 29cd165321380f9cb60b6c507f1bf98c
+md5sum a16b0aad65054914e39a9c6395f57f6d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6297,7 +6481,7 @@ fileName wgEncodeOpenChromDnaseHuh75RawDataRep2.fastq.gz
 geoSampleAccession GSM816671
 grant Crawford
 lab Duke
-md5sum 9c441e77d4a7cb99b3d638607a797bc7
+md5sum 10c0fa616ce088d25ced9dc0cb885638
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6412,7 +6596,7 @@ geoSampleAccession GSM816641
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 4d8c5e9c084b9d4c299a2ff769f20f52
+md5sum 2a1370c746392d400b81119e68b5e840
 origAssembly hg19
 project wgEncode
 subId 3075
@@ -6434,7 +6618,7 @@ fileName wgEncodeOpenChromDnaseHuh7RawDataRep1.fastq.gz
 geoSampleAccession GSM816641
 grant Crawford
 lab Duke
-md5sum 34dfaf389f69281e1d3e633697aff55f
+md5sum 1a02c336afdad817a19e611e8f0ed129
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6456,7 +6640,7 @@ fileName wgEncodeOpenChromDnaseHuh7RawDataRep2.fastq.gz
 geoSampleAccession GSM816641
 grant Crawford
 lab Duke
-md5sum 5b7063052c4fb0f7d36d1a98454c49a0
+md5sum 5ed1b283c452330693df26bf47548947
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6578,7 +6762,7 @@ geoSampleAccession GSM816646
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 0124985638b2d1dc14c3a14fa9d3d6a7
+md5sum 1ee43ebd7320c516d6a0108b28047f85
 origAssembly hg18
 project wgEncode
 subId 1532
@@ -6601,7 +6785,7 @@ fileName wgEncodeOpenChromDnaseHuvecRawDataRep1.fastq.gz
 geoSampleAccession GSM816646
 grant Crawford
 lab Duke
-md5sum b1f4edcb85c57154436da515f89f03bc
+md5sum 97073582a8e9e9f2ccaebc3452eea950
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6623,7 +6807,7 @@ fileName wgEncodeOpenChromDnaseHuvecRawDataRep2.fastq.gz
 geoSampleAccession GSM816646
 grant Crawford
 lab Duke
-md5sum c0dd7e2821d8dce0fa5b5bee9a019417
+md5sum edbebd3e30716eab26f1d6b9b6d59022
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6679,6 +6863,7 @@ view Validation
 
 metaObject wgEncodeOpenChromDnaseIpsAlnRep1
 objType file
+attic auxExp
 cell iPS
 composite wgEncodeOpenChromDnase
 controlId generic_male
@@ -6703,6 +6888,7 @@ view Alignments
 
 metaObject wgEncodeOpenChromDnaseIpsAlnRep2
 objType file
+attic auxExp
 cell iPS
 composite wgEncodeOpenChromDnase
 controlId generic_male
@@ -6727,6 +6913,7 @@ view Alignments
 
 metaObject wgEncodeOpenChromDnaseIpsAlnRep3
 objType file
+attic auxExp
 cell iPS
 composite wgEncodeOpenChromDnase
 controlId generic_male
@@ -6751,6 +6938,7 @@ view Alignments
 
 metaObject wgEncodeOpenChromDnaseIpsBaseOverlapSignal
 objType table
+attic auxExp
 cell iPS
 composite wgEncodeOpenChromDnase
 controlId generic_male
@@ -6775,6 +6963,7 @@ view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromDnaseIpsPk
 objType table
+attic auxExp
 cell iPS
 composite wgEncodeOpenChromDnase
 controlId generic_male
@@ -6789,7 +6978,7 @@ geoSampleAccession GSM816642
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum b049d9e0fc279f8e32cc210282f48706
+md5sum d8e2212fa52b4821ee9275e0ff6df789
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -6799,6 +6988,7 @@ view Peaks
 
 metaObject wgEncodeOpenChromDnaseIpsSig
 objType table
+attic auxExp
 cell iPS
 composite wgEncodeOpenChromDnase
 controlId generic_male
@@ -6829,10 +7019,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002560
+expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1AlnRep1.bam,wgEncodeOpenChromDnaseIpscwru1AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 7a53f99728819697fcf714cb0ad6a268,32bd344fc7dc485fc11e3c6e48a2a980
 project wgEncode
 replicate 1
@@ -6847,10 +7039,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002560
+expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1AlnRep2.bam,wgEncodeOpenChromDnaseIpscwru1AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 16a148bbcd5e437c9b13dacd6516a129,7970120aa2614298b6a9b688146bf861
 project wgEncode
 replicate 2
@@ -6865,6 +7059,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002560
+expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -6883,11 +7079,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002560
+expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum b49de141c41f034b7f064898faa55788
+md5sum 8dd462eb2fd517a8f14a961e93402685
 project wgEncode
 subId 5503
 tableName wgEncodeOpenChromDnaseIpscwru1Pk
@@ -6901,10 +7099,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002560
+expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 06b23beadcb20940692f3460076e386c
+md5sum 3468dacc87659c86c8bd8ef8b6daf106
 project wgEncode
 replicate 1
 subId 5503
@@ -6918,10 +7118,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002560
+expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum ea5934aea2a08755244d02443a8c94bb
+md5sum c9105e685f71bb9441256d12aeb2d704
 project wgEncode
 replicate 2
 subId 5503
@@ -6935,6 +7137,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002560
+expId 2560
 fileName wgEncodeOpenChromDnaseIpscwru1Sig.bigWig
 grant Crawford
 lab Duke
@@ -6953,10 +7157,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002561
+expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11AlnRep1.bam,wgEncodeOpenChromDnaseIpsnihi11AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum c7193241c07c623c898fb0657b29ac0c,60c650bc1ceee58e959f35c2a8803d03
 project wgEncode
 replicate 1
@@ -6971,10 +7177,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002561
+expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11AlnRep2.bam,wgEncodeOpenChromDnaseIpsnihi11AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum df829463069ec025b2f82707ad3358f8,d563429fa731daea86eb7be299ca5c24
 project wgEncode
 replicate 2
@@ -6989,10 +7197,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002561
+expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11AlnRep3.bam,wgEncodeOpenChromDnaseIpsnihi11AlnRep3.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 10f5cfebb8a1111de66e63ee672f1200,1ea64ac8bccd8b001185d2dc1d2472ac
 project wgEncode
 replicate 3
@@ -7007,6 +7217,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002561
+expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -7025,11 +7237,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002561
+expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 36ea3abbdc8cb6317bda1115df7fc1ee
+md5sum 45d6448c9f885fb5d23294fe108df626
 project wgEncode
 subId 5504
 tableName wgEncodeOpenChromDnaseIpsnihi11Pk
@@ -7043,10 +7257,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002561
+expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 7f7607b57986105b3db85f8a56ca8f6a
+md5sum 197f113eee792c44f578f1b6c4f18d5b
 project wgEncode
 replicate 1
 subId 5504
@@ -7060,10 +7276,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002561
+expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum 7867a0fbeb9909a637ca065b0c91f43a
+md5sum 9c0a5805666ba83714278ddea378da85
 project wgEncode
 replicate 2
 subId 5504
@@ -7077,10 +7295,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002561
+expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11RawDataRep3.fastq.gz
 grant Crawford
 lab Duke
-md5sum 19f4feb53a5c989e59495b5e949ca260
+md5sum d2d768c7d72344e4c745d314ab3526f9
 project wgEncode
 replicate 3
 subId 5504
@@ -7094,6 +7314,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002561
+expId 2561
 fileName wgEncodeOpenChromDnaseIpsnihi11Sig.bigWig
 grant Crawford
 lab Duke
@@ -7112,10 +7334,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEH002558
+expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7AlnRep1.bam,wgEncodeOpenChromDnaseIpsnihi7AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 5451b3ead80d87b93a6df8897fa844d2,b7b0d289a5b1ecb790df1ed69e51cef3
 project wgEncode
 replicate 1
@@ -7130,10 +7354,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEH002558
+expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7AlnRep2.bam,wgEncodeOpenChromDnaseIpsnihi7AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum dd2c5b845b748968795c90532ee909d9,c8d24a67d44e78269017c437f803ff8e
 project wgEncode
 replicate 2
@@ -7148,10 +7374,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEH002558
+expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7AlnRep3.bam,wgEncodeOpenChromDnaseIpsnihi7AlnRep3.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 61e43976ed151018bd40ccb9b7b5429b,1103900c143f16ac5538be34610728fb
 project wgEncode
 replicate 3
@@ -7166,6 +7394,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEH002558
+expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -7184,11 +7414,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEH002558
+expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 897f3994e9bf5fd4c8ce217feda009f8
+md5sum c200bbdb1c9f8d1f76c499cc60f64e2c
 project wgEncode
 subId 5481
 tableName wgEncodeOpenChromDnaseIpsnihi7Pk
@@ -7202,10 +7434,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEH002558
+expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 629ec4b794efc8158a58cfcdfad470e5
+md5sum fd7bdec9c9ac0b1ba64cb11ba7a99e13
 project wgEncode
 replicate 1
 subId 5481
@@ -7219,10 +7453,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEH002558
+expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum 8d0175c4a5d894163d2e50c715878ff7
+md5sum ac6f9daa7355ee64582d7dca28001fb7
 project wgEncode
 replicate 2
 subId 5481
@@ -7236,10 +7472,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEH002558
+expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7RawDataRep3.fastq.gz
 grant Crawford
 lab Duke
-md5sum c626fc906876a59bfa045bcc6b1bb1e8
+md5sum b5b2ca3848b2a698edb6494b7d9317b1
 project wgEncode
 replicate 3
 subId 5481
@@ -7253,6 +7491,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEH002558
+expId 2558
 fileName wgEncodeOpenChromDnaseIpsnihi7Sig.bigWig
 grant Crawford
 lab Duke
@@ -7271,6 +7511,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002551
+expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep1.bam,wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -7290,6 +7532,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002551
+expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep2.bam,wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -7309,6 +7553,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002551
+expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -7328,11 +7574,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002551
+expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 7dd1ecab615225e36f3e0dbb585b38c2
+md5sum 1d7778fc0ddb9e02115400bcb05e6f16
 project wgEncode
 subId 4909
 tableName wgEncodeOpenChromDnaseIshikawaEst10nm30mPk
@@ -7347,10 +7595,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002551
+expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 9273af65a1bd388ff24e1c794fecf22b
+md5sum a5e45d51a61769ce37935b9f12f32725
 project wgEncode
 replicate 1
 subId 4909
@@ -7365,10 +7615,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002551
+expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum bf96e4d502cfe6eb5104eb9b257a442a
+md5sum 8165b77e69242d7c96fb95e5416292ec
 project wgEncode
 replicate 2
 subId 4909
@@ -7383,6 +7635,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002551
+expId 2551
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mSig.bigWig
 grant Crawford
 lab Duke
@@ -7402,6 +7656,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002552
+expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030AlnRep1.bam,wgEncodeOpenChromDnaseIshikawaTam10030AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -7421,6 +7677,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002552
+expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030AlnRep2.bam,wgEncodeOpenChromDnaseIshikawaTam10030AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -7440,6 +7698,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002552
+expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -7459,11 +7719,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002552
+expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum aa673a9317b9232e15c823764f10fd7d
+md5sum 79f533db10ef3e36ac36ddfb44f0f5f8
 project wgEncode
 subId 4911
 tableName wgEncodeOpenChromDnaseIshikawaTam10030Pk
@@ -7478,10 +7740,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002552
+expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 4593eb64d531879d0e5c765902c98c7f
+md5sum 15c18eef1c37929fc1612a313c5f8573
 project wgEncode
 replicate 1
 subId 4911
@@ -7496,10 +7760,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002552
+expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum b5599a46469903a27c23e3e1d5e59424
+md5sum 037485c15105a7394aec0aca3ceffa45
 project wgEncode
 replicate 2
 subId 4911
@@ -7514,6 +7780,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
+dccAccession wgEncodeEH002552
+expId 2552
 fileName wgEncodeOpenChromDnaseIshikawaTam10030Sig.bigWig
 grant Crawford
 lab Duke
@@ -7608,10 +7876,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002559
+expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutAlnRep1.bam,wgEncodeOpenChromDnaseK562NabutAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 8d09a001bd8471d77637b6d42a11c951,1c8b3cfb6bf7f32493ff2e8a61753439
 project wgEncode
 replicate 1
@@ -7627,10 +7897,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002559
+expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutAlnRep2.bam,wgEncodeOpenChromDnaseK562NabutAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 388d752b316a68fd59b5731ce4f863eb,edfabec05ce55ee112e4c81cf14d0512
 project wgEncode
 replicate 2
@@ -7646,6 +7918,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002559
+expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -7665,11 +7939,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002559
+expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 8031634daa25bec88b7fbd2899136e9c
+md5sum 01591de19fe952c7ee8f9f7bc3b6f138
 project wgEncode
 subId 5388
 tableName wgEncodeOpenChromDnaseK562NabutPk
@@ -7684,10 +7960,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002559
+expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum b1b756c96dadd8717051e75520c81f04
+md5sum 4bbb17ae681d87da86a8bd918be16153
 project wgEncode
 replicate 1
 subId 5388
@@ -7702,10 +7980,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002559
+expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum edf4d85f44f6941f9e31f71ed6e56390
+md5sum d0d855fff7688454e724a2b006010f56
 project wgEncode
 replicate 2
 subId 5388
@@ -7720,6 +8000,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-02
 dateUnrestricted 2012-11-02
+dccAccession wgEncodeEH002559
+expId 2559
 fileName wgEncodeOpenChromDnaseK562NabutSig.bigWig
 grant Crawford
 lab Duke
@@ -7748,7 +8030,7 @@ geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 505526c5ea47dad5bc89ea71912078ae
+md5sum 95212105d797507c0b718dafb71d6d95
 origAssembly hg18
 project wgEncode
 subId 1534
@@ -7772,7 +8054,7 @@ fileName wgEncodeOpenChromDnaseK562RawDataRep1.fastq.gz
 geoSampleAccession GSM816655
 grant Crawford
 lab Duke
-md5sum 35a8b06645ff53ff564d5e5b089ca357
+md5sum c342383cc807e775713482416c26e9dc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7795,7 +8077,7 @@ fileName wgEncodeOpenChromDnaseK562RawDataRep2.fastq.gz
 geoSampleAccession GSM816655
 grant Crawford
 lab Duke
-md5sum a25be25bf7abcd5821d54f8f19b17510
+md5sum 09296d994ffe1f13ed63eade0cf19f14
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8005,7 +8287,7 @@ geoSampleAccession GSM816634
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 20b253e5f9564506c25180b8895975dd
+md5sum e966bc783516b4b2cc243c03144607ab
 origAssembly hg19
 project wgEncode
 subId 2492
@@ -8028,7 +8310,7 @@ fileName wgEncodeOpenChromDnaseLncapAndroRawDataRep1.fastq.gz
 geoSampleAccession GSM816634
 grant Crawford
 lab Duke
-md5sum ff157a9ab7ab537b238f4e582011db7d
+md5sum 2f561927ce553f3f60184e2b3a5f5096
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8051,7 +8333,7 @@ fileName wgEncodeOpenChromDnaseLncapAndroRawDataRep2.fastq.gz
 geoSampleAccession GSM816634
 grant Crawford
 lab Duke
-md5sum 3a5343922a1e81134f5f2a3ccd673c66
+md5sum 41c1171118030a85af72257da2b1f6ae
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8144,7 +8426,7 @@ geoSampleAccession GSM816637
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum caf1eca91a6710275422905ab9bea01c
+md5sum 477a30d0ec89f2be447c9f33411ce51c
 origAssembly hg19
 project wgEncode
 subId 2482
@@ -8166,7 +8448,7 @@ fileName wgEncodeOpenChromDnaseLncapRawDataRep1.fastq.gz
 geoSampleAccession GSM816637
 grant Crawford
 lab Duke
-md5sum c5ee3274e4d5df2c039b397ac7c1655c
+md5sum 84d08f7fa21b21a5c0c76dfea1283677
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8188,7 +8470,7 @@ fileName wgEncodeOpenChromDnaseLncapRawDataRep2.fastq.gz
 geoSampleAccession GSM816637
 grant Crawford
 lab Duke
-md5sum 8d8fa92164b60d1ef840e951ed7457ed
+md5sum e2e1a6f50da652642cb6406335174931
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8210,7 +8492,7 @@ fileName wgEncodeOpenChromDnaseLncapRawDataRep3.fastq.gz
 geoSampleAccession GSM816637
 grant Crawford
 lab Duke
-md5sum 899a4c0e1484ee6c86e7b0cb32e08b85
+md5sum 36c49973e19656ab6fdf65ad59183403
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -8418,7 +8700,7 @@ geoSampleAccession GSM816670
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 93ca997b3ac7288216381e8455402f4c
+md5sum 43b49a54a1c919eb2baeefce5b5f5795
 project wgEncode
 subId 4155
 tableName wgEncodeOpenChromDnaseMcf7HypoxlacPk
@@ -8439,7 +8721,7 @@ fileName wgEncodeOpenChromDnaseMcf7HypoxlacRawDataRep1.fastq.gz
 geoSampleAccession GSM816670
 grant Crawford
 lab Duke
-md5sum acecbcbd86b0bc57abcd0a5e5adc4ac6
+md5sum 88e0384336f1198d6d295993930e86d1
 project wgEncode
 replicate 1
 subId 4155
@@ -8460,7 +8742,7 @@ fileName wgEncodeOpenChromDnaseMcf7HypoxlacRawDataRep2.fastq.gz
 geoSampleAccession GSM816670
 grant Crawford
 lab Duke
-md5sum 314a2fa26910eea9c97e2ec719822d63
+md5sum 37f2fe7909258b8a89936acaed12c272
 project wgEncode
 replicate 2
 subId 4155
@@ -8506,7 +8788,7 @@ geoSampleAccession GSM816627
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum db7f68b4894b0f90d3f9eea5477de920
+md5sum 23b2c20c8eee5f44e2b8ac5b255915df
 origAssembly hg18
 project wgEncode
 subId 1545
@@ -8529,7 +8811,7 @@ fileName wgEncodeOpenChromDnaseMcf7RawDataRep1.fastq.gz
 geoSampleAccession GSM816627
 grant Crawford
 lab Duke
-md5sum 843b6501deb3fe3be28e0c6986d683b8
+md5sum 841166fe3bc20acb7b1a88e174b3ad51
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8551,7 +8833,7 @@ fileName wgEncodeOpenChromDnaseMcf7RawDataRep2.fastq.gz
 geoSampleAccession GSM816627
 grant Crawford
 lab Duke
-md5sum d4e74d8c58f49456dfda550a9a7c35d9
+md5sum 49e48c713e30cd1b5fb90d68c28d4ccf
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8697,7 +8979,7 @@ geoSampleAccession GSM816636
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05, input was generic_female (should have been male)
-md5sum e1ba3c2619277bde9d86c658de9e01b6
+md5sum a783f268f647292e1716319389560c28
 origAssembly hg18
 project wgEncode
 subId 1479
@@ -8721,7 +9003,7 @@ geoSampleAccession GSM816636
 grant Crawford
 lab Duke
 labVersion aligned to female and input was generic_female (should have been male)
-md5sum e6b4001805e03dc0f7661dce321068f9
+md5sum aa107ce946d45ad2ec4505549290ad1b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8744,7 +9026,7 @@ geoSampleAccession GSM816636
 grant Crawford
 lab Duke
 labVersion aligned to female and input was generic_female (should have been male)
-md5sum 050aa13d1c42315ff1991053928eec82
+md5sum 1df849f37a1b4dff421a8288ac7974bd
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8784,10 +9066,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002557
+expId 2557
 fileName wgEncodeOpenChromDnaseMel2183AlnRep1.bam,wgEncodeOpenChromDnaseMel2183AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 61969e46f33f4fb4ec6ee636fd7392ec,0c7aed42dd608d76b63f688eed9768e1
 project wgEncode
 replicate 1
@@ -8802,10 +9086,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002557
+expId 2557
 fileName wgEncodeOpenChromDnaseMel2183AlnRep2.bam,wgEncodeOpenChromDnaseMel2183AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 3807ff4129cd91c9e20323a4e6e9e9e3,a7a29dc05cefb61fdf318d32c233c96d
 project wgEncode
 replicate 2
@@ -8820,6 +9106,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002557
+expId 2557
 fileName wgEncodeOpenChromDnaseMel2183BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -8838,11 +9126,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002557
+expId 2557
 fileName wgEncodeOpenChromDnaseMel2183Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 564d9a4688cca9ac79d94d66a59aa2fe
+md5sum bb8eee38529de8a16708653681ddfdb7
 project wgEncode
 subId 5480
 tableName wgEncodeOpenChromDnaseMel2183Pk
@@ -8856,6 +9146,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEH002557
+expId 2557
 fileName wgEncodeOpenChromDnaseMel2183Sig.bigWig
 grant Crawford
 lab Duke
@@ -8954,7 +9246,7 @@ geoSampleAccession GSM816631
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum c773f042e04949d8966d6a427a6de22f
+md5sum 0e3152924050b5fb947883909fb5c902
 origAssembly hg18
 project wgEncode
 subId 2096
@@ -8977,7 +9269,7 @@ fileName wgEncodeOpenChromDnaseMelanoRawDataRep1.fastq.gz
 geoSampleAccession GSM816631
 grant Crawford
 lab Duke
-md5sum d26d7976bf83b8c0457108b5c42d7440
+md5sum 1de3c8459bc97c44decd5d1e81b5bc53
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8999,7 +9291,7 @@ fileName wgEncodeOpenChromDnaseMelanoRawDataRep2.fastq.gz
 geoSampleAccession GSM816631
 grant Crawford
 lab Duke
-md5sum 447cbc0666791d6d23c97d2fa0a4be6e
+md5sum 289bd1947fed02084f1d52a0b5f607d9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -9126,7 +9418,7 @@ geoSampleAccession GSM816630
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 8ab9a9ed9e90fca4ff74f328424faf15
+md5sum b43f904151fbcc49872adeb9211e4b2c
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -9253,7 +9545,7 @@ geoSampleAccession GSM816635
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 0b675efee77d193c4cde3aaa098dba8d
+md5sum 4065d8c22927af915b866ba2e6f191de
 origAssembly hg18
 project wgEncode
 subId 1533
@@ -9276,7 +9568,7 @@ fileName wgEncodeOpenChromDnaseNhekRawDataRep1.fastq.gz
 geoSampleAccession GSM816635
 grant Crawford
 lab Duke
-md5sum 63ca5ff6ed72929e65ca2083793d31ba
+md5sum ee554adf662a28afe757c82423e3994c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -9298,7 +9590,7 @@ fileName wgEncodeOpenChromDnaseNhekRawDataRep2.fastq.gz
 geoSampleAccession GSM816635
 grant Crawford
 lab Duke
-md5sum 5d04714a48b694857a805929a25ec1cf
+md5sum e834e54893e27d619a2baef884b14624
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -9460,7 +9752,7 @@ geoSampleAccession GSM816654
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 4bb9b32540e2a43b7a468a6dd82c6575
+md5sum 27c06ab2de2e861f0e30278567c235b4
 origAssembly hg19
 project wgEncode
 subId 2506
@@ -9482,7 +9774,7 @@ fileName wgEncodeOpenChromDnaseOsteoblRawDataRep1.fastq.gz
 geoSampleAccession GSM816654
 grant Crawford
 lab Duke
-md5sum 77a7d169c439f6d5e7cefecf1a32de35
+md5sum b6bef6a8efd89a9ecffd04f9a2d16883
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9504,7 +9796,7 @@ fileName wgEncodeOpenChromDnaseOsteoblRawDataRep2.fastq.gz
 geoSampleAccession GSM816654
 grant Crawford
 lab Duke
-md5sum 9e8ba87b310ced09fa3eb6191cb2b19f
+md5sum 372503b39056b6e34287ae881635f322
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9526,7 +9818,7 @@ fileName wgEncodeOpenChromDnaseOsteoblRawDataRep3.fastq.gz
 geoSampleAccession GSM816654
 grant Crawford
 lab Duke
-md5sum 60806cf1da1aa745bb603c95fab9a3b7
+md5sum 1313d41697723e248668e0a1260f3ed2
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -9668,7 +9960,7 @@ geoSampleAccession GSM816666
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 5d1ac5e437b1d53a022d227dc97f9fd3
+md5sum 9e48df899a8fc096ffc365be804dc8d7
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -9821,7 +10113,7 @@ geoSampleAccession GSM816660
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum f8f9c690238c4a52b9c68ae37f1c7c81
+md5sum 3053455db750ad8a85f60b038a5703f0
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -9944,7 +10236,7 @@ geoSampleAccession GSM816647
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 66108e7daa3951d66cdf55bf0f99668a
+md5sum c18dd83a358c2940160933f3efdbe412
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -10071,7 +10363,7 @@ geoSampleAccession GSM816661
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum dd8bf0dbd0292cdb324c2ff3147b0f6f
+md5sum 2429816b92842e16d1a2babcbf6b82db
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -10136,6 +10428,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
+dccAccession wgEncodeEH002553
+expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1AlnRep1.bam,wgEncodeOpenChromDnaseRwpe1AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -10154,6 +10448,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
+dccAccession wgEncodeEH002553
+expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1AlnRep2.bam,wgEncodeOpenChromDnaseRwpe1AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -10172,6 +10468,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
+dccAccession wgEncodeEH002553
+expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -10190,11 +10488,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
+dccAccession wgEncodeEH002553
+expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum e7d3843347609fea56b99c7c1a344777
+md5sum c878183035dbe43ae1bde3719163f24c
 project wgEncode
 subId 4908
 tableName wgEncodeOpenChromDnaseRwpe1Pk
@@ -10208,10 +10508,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
+dccAccession wgEncodeEH002553
+expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 5033d0faa4cce67bc1605a201d71010d
+md5sum f7d73f5bebade9cc562a45d887ac8ca5
 project wgEncode
 replicate 1
 subId 4908
@@ -10225,10 +10527,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
+dccAccession wgEncodeEH002553
+expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum de13ed86353cc32b0b9d718d576b3a34
+md5sum e23b55692a877880a2393f246c96c0e5
 project wgEncode
 replicate 2
 subId 4908
@@ -10242,6 +10546,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
+dccAccession wgEncodeEH002553
+expId 2553
 fileName wgEncodeOpenChromDnaseRwpe1Sig.bigWig
 grant Crawford
 lab Duke
@@ -10337,7 +10643,7 @@ geoSampleAccession GSM816672
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 2b6a0cc233368c733ba07235a912feee
+md5sum 848e0ddf8116695f2f1aa9d56114add7
 origAssembly hg19
 project wgEncode
 subId 3077
@@ -10359,7 +10665,7 @@ fileName wgEncodeOpenChromDnaseStellateRawDataRep1.fastq.gz
 geoSampleAccession GSM816672
 grant Crawford
 lab Duke
-md5sum db156c29b777db384769fe4f7bdc8500
+md5sum c6991a5baba322a3fe4e01b2c08821d4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10381,7 +10687,7 @@ fileName wgEncodeOpenChromDnaseStellateRawDataRep2.fastq.gz
 geoSampleAccession GSM816672
 grant Crawford
 lab Duke
-md5sum 28c2b6b50669d76ea249f47cafa48add
+md5sum c67610ab1649c844d05de07a2d6f968b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10488,10 +10794,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002566
+expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mAlnRep1.bam,wgEncodeOpenChromDnaseT47dEst10nm30mAlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 5edf0a43196dc1555524e11e090a0458,b74e32797bcb6b728b7b0802b67483fe
 project wgEncode
 replicate 1
@@ -10507,10 +10815,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002566
+expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mAlnRep2.bam,wgEncodeOpenChromDnaseT47dEst10nm30mAlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 md5sum 81757fcc3926d28fbefea1151809ddeb,2165cff4b2b8e74558f06fb8517597dc
 project wgEncode
 replicate 2
@@ -10526,6 +10836,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002566
+expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -10545,11 +10857,13 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002566
+expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mPk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 52380e64bc3584f3dac2330a5e45a7b6
+md5sum 51cb0bb761fc720b5fe805a074e01d67
 project wgEncode
 subId 5383
 tableName wgEncodeOpenChromDnaseT47dEst10nm30mPk
@@ -10564,10 +10878,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002566
+expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-md5sum 49203a003ec8f31296f61c30638d1e3d
+md5sum 8c2dde121113f9601b033da84a4037ed
 project wgEncode
 replicate 1
 subId 5383
@@ -10582,10 +10898,12 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002566
+expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-md5sum f12e9a3f6c9c29bc2d8a73819629b37d
+md5sum 731364a933a1eada5410994cb9d58a50
 project wgEncode
 replicate 2
 subId 5383
@@ -10600,6 +10918,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-03
 dateUnrestricted 2012-11-03
+dccAccession wgEncodeEH002566
+expId 2566
 fileName wgEncodeOpenChromDnaseT47dEst10nm30mSig.bigWig
 grant Crawford
 lab Duke
@@ -10627,7 +10947,7 @@ geoSampleAccession GSM816673
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 39690cea31f47fb8185187d43bf735c2
+md5sum d5c7132e1b67b44c121ddcc9686dcc44
 origAssembly hg19
 project wgEncode
 subId 3078
@@ -10649,7 +10969,7 @@ fileName wgEncodeOpenChromDnaseT47dRawDataRep1.fastq.gz
 geoSampleAccession GSM816673
 grant Crawford
 lab Duke
-md5sum 0ba4e3aca6eca9027684367ff245af04
+md5sum b289c7738571f094c94297ad8cd3a807
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10671,7 +10991,7 @@ fileName wgEncodeOpenChromDnaseT47dRawDataRep2.fastq.gz
 geoSampleAccession GSM816673
 grant Crawford
 lab Duke
-md5sum f60e36d2abe552cf2d3edfe166c1162f
+md5sum 0c6238652eff1f0791863db57f684fe4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10786,7 +11106,7 @@ geoSampleAccession GSM816640
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum 7b129751b2e2a694b309783727f16673
+md5sum 511717a180c94b25747c392909090681
 origAssembly hg19
 project wgEncode
 subId 3217
@@ -10808,7 +11128,7 @@ fileName wgEncodeOpenChromDnaseUrotsaRawDataRep1.fastq.gz
 geoSampleAccession GSM816640
 grant Crawford
 lab Duke
-md5sum ba8534e4d6e984ef66c92f5dc7a6ad37
+md5sum 28fdca872f04a062066eeed4c70c8e73
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10830,7 +11150,7 @@ fileName wgEncodeOpenChromDnaseUrotsaRawDataRep2.fastq.gz
 geoSampleAccession GSM816640
 grant Crawford
 lab Duke
-md5sum c7f279c30766d6d0fd754e4c96c4e5dd
+md5sum 20153637685fdffc5d2ade517cd7fe56
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10948,7 +11268,7 @@ geoSampleAccession GSM816645
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
-md5sum aa0aee60922694dee3c1c39732102834
+md5sum cc91bbd95d224605fff399c0d262f453
 origAssembly hg19
 project wgEncode
 subId 3218
@@ -10971,7 +11291,7 @@ fileName wgEncodeOpenChromDnaseUrotsaUt189RawDataRep1.fastq.gz
 geoSampleAccession GSM816645
 grant Crawford
 lab Duke
-md5sum d5f3efe99b5c9007682f20868e06a40c
+md5sum 219ad2dfbd9a4738ca500ee93c15e222
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10994,7 +11314,7 @@ fileName wgEncodeOpenChromDnaseUrotsaUt189RawDataRep2.fastq.gz
 geoSampleAccession GSM816645
 grant Crawford
 lab Duke
-md5sum 702ed7b18cc58ff1e5929464d82aaaaf
+md5sum 1ca11ec108ddaa453d580383aa642765
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11026,4 +11346,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 200371066
+# MAGIC: -1759909721

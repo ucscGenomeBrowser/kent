@@ -9,12 +9,14 @@ wgEncodeCshlShortRnaSeq.ra \
 wgEncodeDukeAffyExon.ra \
 wgEncodeGencodeV4.ra \
 wgEncodeGencodeV7.ra \
+wgEncodeGencodeV10.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaPet.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeHaibGenotype.ra \
 wgEncodeHaibMethyl450.ra \
 wgEncodeHaibMethylRrbs.ra \
+wgEncodeHaibRnaSeq.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeMapability.ra \
 wgEncodeOpenChromChip.ra \

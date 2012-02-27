@@ -5,14 +5,14 @@
 #	This script is used via a cron job and kept in $HOME/bin/scripts/
 
 # set EMAIL here for notification list
-EMAIL="fanhsu@soe.ucsc.edu"
+EMAIL="braney@soe.ucsc.edu"
 # set DEBUG_EMAIL here for notification of potential errors in the process
-DEBUG_EMAIL="fanhsu@soe.ucsc.edu"
+DEBUG_EMAIL="braney@soe.ucsc.edu"
 
 #	cron jobs need to ensure this is true
 umask 002
 
-WORKDIR="/hive/groups/gsid/medical/omim/auto"
+WORKDIR="/hive/data/outside/otto/omim"
 export WORKDIR
 
 #	this is where we are going to work
@@ -109,7 +109,7 @@ cd hg18
 ln -s ../genemap ./genemap
 ln -s ../mimAV.txt ./mimAV.txt
 ln -s ../mim2gene.txt ./mim2gene.txt
-ln -s ../../script1.pl ./script1.pl
+ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
 
 ../../buildOmimTracks.csh hg18
 cd ..
@@ -121,7 +121,7 @@ cd hg19
 ln -s ../genemap ./genemap
 ln -s ../mimAV.txt ./mimAV.txt
 ln -s ../mim2gene.txt ./mim2gene.txt
-ln -s ../../script1.pl ./script1.pl
+ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
 
 ../../buildOmimTracks.csh hg19
 
