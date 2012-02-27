@@ -406,7 +406,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_naive
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -423,7 +423,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th0
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -440,7 +440,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th1
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -1338,7 +1338,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_naive
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -1355,7 +1355,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th0
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -1372,7 +1372,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th1
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -3748,7 +3748,7 @@ tissue induced pluripotent cell (iPS)
 karyotype iPS
 vendorName Paul Tesar at Case Western University
 vendorId iPS_CWRU1
-orderUrl pjt5@case.edu
+orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul 
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 sex M
@@ -3765,7 +3765,7 @@ tissue induced pluripotent cell (iPS)
 karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi7
-orderUrl chenowej@ninds.nih.gov
+orderUrl http://www.ninds.nih.gov/research/labs/25.htm 
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 sex F
@@ -3782,7 +3782,7 @@ tissue induced pluripotent cell (iPS)
 karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi11
-orderUrl chenowej@ninds.nih.gov
+orderUrl http://www.ninds.nih.gov/research/labs/25.htm 
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 sex M
@@ -3999,7 +3999,7 @@ tissue brain
 karyotype cancer
 vendorName Darrell Bigner at Duke University
 vendorId Medullo_D341
-orderUrl bigne001@mc.duke.edu
+orderUrl http://www.cancer.duke.edu/btc/modules/facultystaff1/index.php?id=85
 termId BTO:0001757
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001757&termName=medulloblastoma%20cell
 sex U
@@ -4032,7 +4032,7 @@ tissue Melanoma cell line derived from melanoma metastasis
 karyotype cancer
 vendorName Dr. Yardena Samuels
 vendorId Mel_2183
-orderUrl samuelsy@mail.nih.gov
+orderUrl http://www.genome.gov/19519015
 termId BTO:0000849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000849&termName=melanoma%20cell%20line
 sex U
