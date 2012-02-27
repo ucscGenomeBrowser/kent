@@ -12,6 +12,7 @@ dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
+dccAccession wgEncodeEH001254
 fileName wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -31,6 +32,7 @@ dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
+dccAccession wgEncodeEH001255
 fileName wgEncodeSunyAlbanyTilingGm12878Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -50,6 +52,7 @@ dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
+dccAccession wgEncodeEH001257
 fileName wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -69,6 +72,7 @@ dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
+dccAccession wgEncodeEH001256
 fileName wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -88,6 +92,7 @@ dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
+dccAccession wgEncodeEH001258
 fileName wgEncodeSunyAlbanyTilingK562Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -107,6 +112,7 @@ dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
+dccAccession wgEncodeEH001259
 fileName wgEncodeSunyAlbanyTilingK562Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -126,6 +132,7 @@ dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
+dccAccession wgEncodeEH001261
 fileName wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -145,6 +152,7 @@ dataType RipTiling
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
+dccAccession wgEncodeEH001260
 fileName wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
