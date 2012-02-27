@@ -6101,35 +6101,40 @@ orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
 color 65,105,225
 sex M
 protocol Stam:ZhBTc4_Stam_protocol.pdf
-#tissue
-#termId
-#termUrl
 
 # Gene types
+# CRICKET is commenting this out in Feb 2012.  We can find no use of it anywhere in the source tree and it is confusing the cvValidator.
+# If this is still commented out after April 2012, please remove it.
+# Also, I am changing the Gene Type to geneType.  So, if we do need to uncomment this, we will need to deal with that change.  But Gene Type
+# with a space is troublesome.
 # term (human-readable cell type name)
 # tag (machine-readable cell type name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be Gene Type)
 # description (human-readable description of the gene type.  Perhaps it's used by the Gencode track.(
+#term Known
+#tag KNOWN
+#type  geneType
+#description known or novel CDS
+#
+#term Putative
+#tag PUTATIVE
+#type  geneType
+#description novel, putative, TEC or artifact
+#
+#term Polymorphic
+#tag POLYMORPH
+#type  geneType
+#description polymorphic
+#
+#term Pseudo
+#tag PSEUDO
+#type  geneType
+#description pseudogene
 
-term Known
-tag KNOWN
-type Gene Type
-description known or novel CDS
 
-term Putative
-tag PUTATIVE
-type Gene Type
-description novel, putative, TEC or artifact
 
-term Polymorphic
-tag POLYMORPH
-type Gene Type
-description polymorphic
 
-term Pseudo
-tag PSEUDO
-type Gene Type
-description pseudogene
+
 
 #### Antibodies
 # template below
