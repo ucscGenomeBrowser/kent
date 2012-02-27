@@ -4251,42 +4251,6 @@ term NHLF
 tag NHLF
 type Cell Line
 organism human
-
-term NHDF_0060801.3
-tag NHDF0060801.3
-type Cell Line
-tier 3
-organism human
-description Dermal Fibroblasts
-lineage missing
-karyotype normal
-sex F
-tissue skin / temple
-vendorName PromoCell
-vendorId NHDF#c1390
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF#c1390
-termId BTO:0003185
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
-lab Gingeras
-protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf
-
-term NHDF_7071701.2
-tag NHDF7071701.2
-type Cell Line
-tier 3
-organism human
-description Dermal Fibroblasts
-lineage missing
-karyotype normal
-sex F
-tissue skin / breast
-vendorName PromoCell
-vendorId NHDF#c1390
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF#c1390
-termId BTO:0003185
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
-lab Gingeras
-protocol Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
 tissue lung
 lineage endoderm
 karyotype normal
