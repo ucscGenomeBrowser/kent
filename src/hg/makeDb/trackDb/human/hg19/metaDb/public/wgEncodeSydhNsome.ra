@@ -188,7 +188,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -208,7 +208,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -228,7 +228,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -248,7 +248,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -268,7 +268,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -288,7 +288,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -308,7 +308,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -328,7 +328,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -348,7 +348,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -368,7 +368,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -388,7 +388,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -408,7 +408,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -428,7 +428,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -448,7 +448,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -468,7 +468,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -488,7 +488,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -508,7 +508,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -528,7 +528,7 @@ objType file
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000922
@@ -548,7 +548,7 @@ objType table
 cell GM12878
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-24
 dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
@@ -789,7 +789,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -809,7 +809,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -829,7 +829,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -849,7 +849,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -869,7 +869,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -889,7 +889,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -909,7 +909,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -929,7 +929,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -949,7 +949,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -969,7 +969,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -989,7 +989,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1009,7 +1009,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1029,7 +1029,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1049,7 +1049,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1069,7 +1069,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1089,7 +1089,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1109,7 +1109,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1129,7 +1129,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1149,7 +1149,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1169,7 +1169,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1189,7 +1189,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1209,7 +1209,7 @@ objType file
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000921
@@ -1229,7 +1229,7 @@ objType table
 cell K562
 composite wgEncodeSydhNsome
 dataType Nucleosome
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-24
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
@@ -1245,4 +1245,4 @@ subId 4351
 tableName wgEncodeSydhNsomeK562Sig
 view Signal
 
-# MAGIC: 1427796430
+# MAGIC: -584801438
