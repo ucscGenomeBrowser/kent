@@ -5,6 +5,8 @@
 #
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CAAB02
 #	WGS: CAAB02000001:CAAB02030857
+#	http://www.ncbi.nlm.nih.gov/nuccore/CAAB00000000
+#	http://www.fugu-sg.org/
 #
 ##########################################################################
 # Download sequence (DONE - 2011-11-09 - Hiram)
