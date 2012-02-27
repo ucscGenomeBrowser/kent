@@ -5008,7 +5008,7 @@ tag BAT
 type Cell Line
 organism mouse
 tissue adipose
-categorey Tissue
+category Tissue
 age ageUnknown
 strain Unknown
 description Brown adipocytes tissue PROVISIONAL
