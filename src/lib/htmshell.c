@@ -265,6 +265,7 @@ fprintf(f,"function showWarnBox() {"
             "var warnBox=document.getElementById('warnBox');"
             "warnBox.style.display=''; warnBox.style.width='65%%';"
             "document.getElementById('warnHead').innerHTML='Error(s):';"
+            "window.scrollTo(0, 0);"
           "}\n");
 fprintf(f,"function hideWarnBox() {"
             "var warnBox=document.getElementById('warnBox');"

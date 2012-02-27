@@ -1,13 +1,13 @@
 mkChangeNotes v2
 hg19 wgEncodeBroadHistone Release 2 vs Release 1
-2012-02-08
+2012-02-23
 
 QA Count Summaries for Release 2:
 Tables: 415
 Files: 1768
 Gbdbs: 215
 Supplemental: 0
-Other: 2
+Other: 3
 
 REVOKED:
 Tables: 6
@@ -2486,19 +2486,19 @@ Revoked/Replaced/Renamed Gbdb Files (3):
 
 
 OTHER FILES:
-New: 2
+New: 3
 Revoked/Replace: 0
-Total: 2
+Total: 3
 
-New Other Files (2):
+New Other Files (3):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/release2/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/release2/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/release2/md5sum.txt
 
 Revoked Other Files (0):
 
 
-Files that dropped between releases (4):
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/release1/README.txt
+Files that dropped between releases (3):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/release1/index.html
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/release1/preamble.html
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/release1/tmp.html
