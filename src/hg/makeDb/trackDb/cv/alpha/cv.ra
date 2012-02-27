@@ -12061,7 +12061,7 @@ description Single Nucleotide Polymorphism
 term Spikeins
 tag SPKNS
 type view
-label Spikeins
+label Spike-ins
 description Spikeins
 
 term Splices
