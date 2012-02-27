@@ -5003,6 +5003,23 @@ color 189,0,157
 sex U
 protocol Gingeras:Adrenal_Gingeras_protocol.pdf
 
+term BAT
+tag BAT
+type Cell Line
+organism mouse
+tissue adipose
+category Tissue
+age ageUnknown
+strain Unknown
+description Brown adipocytes tissue PROVISIONAL
+vendorName Jerrold M. Olefsky Lab, UCSD
+termId 7188
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
+color 189,0,157
+sex U
+label Brown Adipose Tissue
+protocol Ren:BAT_Ren_protocol.pdf
+
 term B-cell_(CD19+)
 tag BCELLCD19P
 type Cell Line
@@ -5056,6 +5073,23 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6961
 color 204,121,167
 sex U
 protocol Gingeras:Bladder_Gingeras_protocol.pdf
+
+term BMDM
+tag BMDM
+type Cell Line
+organism mouse
+tissue blood
+category primaryCells
+description Bone marrow derived macrophage PROVISIONAL
+age ageUnknown
+strain Unknown
+vendorName Genhong Cheng Lab, UCLA
+termId 7058
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
+color 86,180,233
+sex U
+protocol Ren:BMDM_Ren_protocol.pdf
+label Bone marrow derived macrophage
 
 term BoneMarrow
 tag BMARROW
@@ -6067,35 +6101,40 @@ orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
 color 65,105,225
 sex M
 protocol Stam:ZhBTc4_Stam_protocol.pdf
-#tissue
-#termId
-#termUrl
 
 # Gene types
+# CRICKET is commenting this out in Feb 2012.  We can find no use of it anywhere in the source tree and it is confusing the cvValidator.
+# If this is still commented out after April 2012, please remove it.
+# Also, I am changing the Gene Type to geneType.  So, if we do need to uncomment this, we will need to deal with that change.  But Gene Type
+# with a space is troublesome.
 # term (human-readable cell type name)
 # tag (machine-readable cell type name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be Gene Type)
 # description (human-readable description of the gene type.  Perhaps it's used by the Gencode track.(
+#term Known
+#tag KNOWN
+#type  geneType
+#description known or novel CDS
+#
+#term Putative
+#tag PUTATIVE
+#type  geneType
+#description novel, putative, TEC or artifact
+#
+#term Polymorphic
+#tag POLYMORPH
+#type  geneType
+#description polymorphic
+#
+#term Pseudo
+#tag PSEUDO
+#type  geneType
+#description pseudogene
 
-term Known
-tag KNOWN
-type Gene Type
-description known or novel CDS
 
-term Putative
-tag PUTATIVE
-type Gene Type
-description novel, putative, TEC or artifact
 
-term Polymorphic
-tag POLYMORPH
-type Gene Type
-description polymorphic
 
-term Pseudo
-tag PSEUDO
-type Gene Type
-description pseudogene
+
 
 #### Antibodies
 # template below
