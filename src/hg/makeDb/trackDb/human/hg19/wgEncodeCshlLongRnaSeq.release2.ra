@@ -5,8 +5,8 @@ superTrack wgEncodeRnaSeqSuper dense
 shortLabel CSHL Long RNA-seq
 longLabel Long RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
-subGroup1 view Views Contigs=Contigs PlusRawSig=Plus_Raw_Signal MinusRawSig=Minus_Raw_Signal Junctions=Splice_Junctions Alignments=Alignments
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLaS3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ HMEC=HMEC HSMM=HSMM MCF7=MCF-7 NHEK=NHEK  NHLF=NHLF SKNSHRA=SK-N-SH_<i>retinoic_acid</i> IMR90=IMR90
+subGroup1 view Views Contigs=Contigs PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Junctions=Splice_Junctions Alignments=Alignments
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLaS3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD20RO01794=CD20+&nbsp;(RO&nbsp;01794) CD34MOBILIZED=CD34+_Mobilized HMEC=HMEC HSMM=HSMM MCF7=MCF-7  MONOCD14RO1746=Monocytes-CD14+&nbsp;(RO&nbsp;01746) NHEK=NHEK NHLF=NHLF SKNSH=SK-N-SH SKNSHRA=SK-N-SH_<i>retinoic_acid</i> IMR90=IMR90
 subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol NUCLEUS=Nucleus POLYSOME=Polysome NUCLEOPLASM=Nucleoplasm CHROMATIN=Chromatin NUCLEOLUS=Nucleolus
 subGroup4 rnaExtract RNA_Extract PAP=PolyA+ PAM=PolyA- TOTAL=Total_RNA
 subGroup5 rep Rep rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 Pooled=Pooled 
@@ -26,7 +26,7 @@ html wgEncodeCshlLongRnaSeq.release2
 
 	track wgEncodeCshlLongRnaSeqViewPlusRawSig
     	shortLabel Plus Raw Signal
-    	view PlusRawSig
+    	view PlusRawSignal
     	visibility full
     	subTrack wgEncodeCshlLongRnaSeq
     	maxHeightPixels 100:24:16
@@ -38,10 +38,10 @@ html wgEncodeCshlLongRnaSeq.release2
     	maxLimit 898990
 
 		track wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel GM78 cell tot + 1
 	        longLabel GM12878 whole cell total Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-	        subGroups view=PlusRawSig cellType=1GM12878 localization=CELL rnaExtract=TOTAL rep=rep1
+	        subGroups view=PlusRawSignal cellType=1GM12878 localization=CELL rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 6199516.000000
 		color 153,38,0
 		# subId=1502 dateSubmitted=2010-06-17
@@ -51,7 +51,7 @@ html wgEncodeCshlLongRnaSeq.release2
     		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
     		shortLabel GM78 cell tot + 2
                 longLabel GM12878 whole cell total Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-                subGroups view=PlusRawSig cellType=1GM12878 localization=CELL rnaExtract=TOTAL rep=rep2
+                subGroups view=PlusRawSignal cellType=1GM12878 localization=CELL rnaExtract=TOTAL rep=rep2
     		type bigWig 1.000000 10330039.000000
     		color 153,38,0
     		# subId=1502 dateSubmitted=2010-06-17
@@ -61,7 +61,7 @@ html wgEncodeCshlLongRnaSeq.release2
     		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
     		shortLabel K562 cell tot + 1
                 longLabel K562 whole cell total Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-                subGroups view=PlusRawSig cellType=1K562 localization=CELL rnaExtract=TOTAL rep=rep1
+                subGroups view=PlusRawSignal cellType=1K562 localization=CELL rnaExtract=TOTAL rep=rep1
     		type bigWig 1.000000 3748237.000000
     		color 46,0,184
     		# subId=1503 dateSubmitted=2010-06-17
@@ -70,7 +70,7 @@ html wgEncodeCshlLongRnaSeq.release2
     		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
     		shortLabel K562 cell tot + 2
                 longLabel K562 whole cell total Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-                subGroups view=PlusRawSig cellType=1K562 localization=CELL rnaExtract=TOTAL rep=rep2
+                subGroups view=PlusRawSignal cellType=1K562 localization=CELL rnaExtract=TOTAL rep=rep2
     		type bigWig 1.000000 2382607.000000
     		color 46,0,184
     		# subId=1503 dateSubmitted=2010-06-17
@@ -79,7 +79,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 cyto pA+ + 2
                 longLabel K562 cytosol polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-                subGroups view=PlusRawSig cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=rep2
+                subGroups view=PlusRawSignal cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 635425.000000
 		origAssembly hg19
 		color 46,0,184
@@ -89,7 +89,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel H1ES cyto pA+ + 2
 		longLabel H1-hESC cytosol polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1H1HESC localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=1H1HESC localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 463028.000000
 		origAssembly hg19
 		color 0,107,27
@@ -99,7 +99,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel H1ES nucl pA+ + 2
 		longLabel H1-hESC nucleus polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1H1HESC localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=1H1HESC localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 498253.000000
 		origAssembly hg19
 		color 0,107,27
@@ -109,7 +109,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE cell pA+ + 2
 		longLabel HUVEC whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 643851.000000
 		origAssembly hg19
 		color 224,75,0
@@ -119,7 +119,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa nucl pA+ + 2
 		longLabel HeLa-S3 nucleus polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 148078.000000
 		origAssembly hg19
 		color 0,119,158
@@ -129,7 +129,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HepG cyto pA+ + 2
 		longLabel HepG2 cytosol polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 856366.000000
 		origAssembly hg19
 		color 189,0,157
@@ -139,7 +139,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HepG nucl pA+ + 1
 		longLabel HepG2 nucleus polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 381980.000000
 		origAssembly hg19
 		color 189,0,157
@@ -149,7 +149,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 cell pA+ + 2
 		longLabel K562 whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=1K562 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 1475448.000000
 		origAssembly hg19
 		color 46,0,184
@@ -159,7 +159,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel K562 cyto pA+ + 1
 		longLabel K562 cytosol polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1187454.000000
 		origAssembly hg19
 		color 46,0,184
@@ -169,7 +169,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel K562 nucl pA+ + 1
 		longLabel K562 nucleus polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 726550.000000
 		origAssembly hg19
 		color 46,0,184
@@ -179,7 +179,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel H1ES cell pA+ + 2
 		longLabel H1-hESC whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1H1HESC localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=1H1HESC localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 676628.000000
 		origAssembly hg19
 		color 0,107,27
@@ -189,7 +189,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 nucl pA+ + 2
 		longLabel GM12878 nucleus polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 149923.000000
 		origAssembly hg19
 		color 153,38,0
@@ -199,17 +199,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 nucl pA+ + 1
 		longLabel GM12878 nucleus polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 386413.000000
 		origAssembly hg19
 		color 153,38,0
 		# subId=1926 dateSubmitted=2010-09-30
 
 		track wgEncodeCshlLongRnaSeqHuvecCellPapPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel HUVE cell pA+ + 1
 		longLabel HUVEC whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 647068.000000
 		origAssembly hg19
 		color 224,75,0
@@ -219,27 +219,27 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE nucl pA+ + 1
 		longLabel HUVEC nucleus polyA+ Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 259858.000000
 		origAssembly hg19
 		color 224,75,0
 		# subId=1931 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel NHEK cell pA+ + 1
 		longLabel NHEK whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=NHEK localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 3604528.000000
 		origAssembly hg19
 		color 179,0,134
 		# subId=1947 dateSubmitted=2010-09-30
 
 		track wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel HeLa cell pA+ + 1
 		longLabel HeLa-S3 whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1098303.000000
 		origAssembly hg19
 		color 0,119,158
@@ -249,7 +249,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 nucl pA+ + 2
 		longLabel K562 nucleus polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 545745.000000
 		origAssembly hg19
 		color 46,0,184
@@ -259,7 +259,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHEK cell pA+ + 2
 		longLabel NHEK whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=NHEK localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 2623600.000000
 		origAssembly hg19
 		color 179,0,134
@@ -269,7 +269,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa cyto pA+ + 1
 		longLabel HeLa-S3 cytosol polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1074284.000000
 		origAssembly hg19
 		color 0,119,158
@@ -279,7 +279,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa nucl pA+ + 1
 		longLabel HeLa-S3 nucleus polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 214832.000000
 		origAssembly hg19
 		color 0,119,158
@@ -289,17 +289,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa cell pA+ + 2
 		longLabel HeLa-S3 whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 1063394.000000
 		origAssembly hg19
 		color 0,119,158
 		# subId=1957 dateSubmitted=2010-09-30
 
 		track wgEncodeCshlLongRnaSeqHepg2CellPapPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel HepG cell pA+ + 1
 		longLabel HepG2 whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1008445.000000
 		origAssembly hg19
 		color 189,0,157
@@ -309,7 +309,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HepG cell pA+ + 2
 		longLabel HepG2 whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 892437.000000
 		origAssembly hg19
 		color 189,0,157
@@ -319,7 +319,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HepG nucl pA+ + 2
 		longLabel HepG2 nucleus polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 276679.000000
 		origAssembly hg19
 		color 189,0,157
@@ -329,26 +329,26 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel AG50 cell pA+ + 1
 		longLabel AG04450 whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=AG04450 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=AG04450 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 650052.000000
 		origAssembly hg19
 		# subId=2345 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel H1ES cell pA+ + 1
 		longLabel H1-hESC whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1H1HESC localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=1H1HESC localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1426609.000000
 		origAssembly hg19
 		color 0,107,27
 		# subId=2098 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqGm12878CellPapPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel GM78 cell pA+ + 1
 		longLabel GM12878 whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1276217.000000
 		origAssembly hg19
 		color 153,38,0
@@ -358,7 +358,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel SKRA cell pA+ + 1
 		longLabel SK-N-SH_RA whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=SKNSHRA localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 849498.000000
 		origAssembly hg19
 		# subId=2341 dateSubmitted=2010-09-29
@@ -367,17 +367,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 cell pA- + 2
 		longLabel GM12878 whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 2689835.000000
 		origAssembly hg19
 		color 153,38,0
 		# subId=2402 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel K562 cell pA- + 1
 		longLabel K562 whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=1K562 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 803002.000000
 		origAssembly hg19
 		color 46,0,184
@@ -387,16 +387,16 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel A549 cell pA+ + 2
 		longLabel A549 whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=A549 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=A549 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 956633.000000
 		origAssembly hg19
 		# subId=2405 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqA549CellPapPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel A549 cell pA+ + 1
 		longLabel A549 whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=A549 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=A549 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 838938.000000
 		origAssembly hg19
 		# subId=2404 dateSubmitted=2010-09-29
@@ -405,7 +405,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel AG50 cell pA+ + 2
 		longLabel AG04450 whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=AG04450 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=AG04450 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 526018.000000
 		origAssembly hg19
 		# subId=2406 dateSubmitted=2010-09-29
@@ -414,7 +414,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel H1ES cell pA- + 2
 		longLabel H1-hESC whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1H1HESC localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=1H1HESC localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 745615.000000
 		origAssembly hg19
 		color 0,107,27
@@ -424,17 +424,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE nucl pA+ + 2
 		longLabel HUVEC nucleus polyA+ Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 261683.000000
 		origAssembly hg19
 		color 224,75,0
 		# subId=2408 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel HepG cell pA- + 1
 		longLabel HepG2 whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1255590.000000
 		origAssembly hg19
 		color 189,0,157
@@ -444,7 +444,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 cell pA- + 2
 		longLabel K562 whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=1K562 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1498507.000000
 		origAssembly hg19
 		color 46,0,184
@@ -454,16 +454,16 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel SKRA cell pA+ + 2
 		longLabel SK-N-SH_RA whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=SKNSHRA localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 3970030.000000
 		origAssembly hg19
 		# subId=2418 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel NHEK cell pA- + 1
 		longLabel NHEK whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=NHEK localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 947488.000000
 		origAssembly hg19
 		color 179,0,134
@@ -473,7 +473,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHEK cell pA- + 2
 		longLabel NHEK whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=NHEK localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1154367.000000
 		origAssembly hg19
 		color 179,0,134
@@ -483,7 +483,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHEK cyto pA+ + 1
 		longLabel NHEK cytosol polyA+ Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 429216.000000
 		origAssembly hg19
 		color 179,0,134
@@ -493,7 +493,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHEK nucl pA+ + 1
 		longLabel NHEK nucleus polyA+ Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 466812.000000
 		origAssembly hg19
 		color 179,0,134
@@ -503,7 +503,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHEK cyto pA+ + 2
 		longLabel NHEK cytosol polyA+ Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 693609.000000
 		origAssembly hg19
 		color 179,0,134
@@ -513,7 +513,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 cyto pA+ + 2
 		longLabel GM12878 cytosol polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 755125.000000
 		origAssembly hg19
 		color 153,38,0
@@ -523,7 +523,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 cell pA+ + 2
 		longLabel GM12878 whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 1512808.000000
 		origAssembly hg19
 		color 153,38,0
@@ -533,7 +533,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa cyto pA+ + 2
 		longLabel HeLa-S3 cytosol polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 620754.000000
 		origAssembly hg19
 		color 0,119,158
@@ -543,7 +543,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel BJ cell pA+ + 1
 		longLabel BJ whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=BJ localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=BJ localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 547029.000000
 		origAssembly hg19
 		# subId=2456 dateSubmitted=2010-09-29
@@ -552,16 +552,16 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HMEC cell pA+ + 1
 		longLabel HMEC whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=HMEC localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=HMEC localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 540932.000000
 		origAssembly hg19
 		# subId=2458 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel H1ES cell pA- + 1
 		longLabel H1-hESC whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1H1HESC localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=1H1HESC localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1138574.000000
 		origAssembly hg19
 		color 0,107,27
@@ -571,7 +571,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HSMM cell pA+ + 1
 		longLabel HSMM whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=HSMM localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=HSMM localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 294373.000000
 		origAssembly hg19
 		# subId=2459 dateSubmitted=2010-09-29
@@ -580,7 +580,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HSMM cell pA+ + 2
 		longLabel HSMM whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=HSMM localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=HSMM localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 393623.000000
 		origAssembly hg19
 		# subId=2460 dateSubmitted=2010-09-29
@@ -589,7 +589,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE cyto pA+ + 1
 		longLabel HUVEC cytosol polyA+ Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 728088.000000
 		origAssembly hg19
 		color 224,75,0
@@ -599,7 +599,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE cyto pA+ + 2
 		longLabel HUVEC cytosol polyA+ Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 1099648.000000
 		origAssembly hg19
 		color 224,75,0
@@ -609,7 +609,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel MCF7 cell pA+ + 2
 		longLabel MCF-7 whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=MCF7 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=MCF7 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 467541.000000
 		origAssembly hg19
 		# subId=2466 dateSubmitted=2010-09-29
@@ -618,7 +618,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHEK nucl pA+ + 2
 		longLabel NHEK nucleus polyA+ Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 504737.000000
 		origAssembly hg19
 		color 179,0,134
@@ -628,7 +628,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHLF cell pA+ + 1
 		longLabel NHLF whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHLF localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=NHLF localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 416153.000000
 		origAssembly hg19
 		# subId=2469 dateSubmitted=2010-09-29
@@ -637,7 +637,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHLF cell pA+ + 2
 		longLabel NHLF whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHLF localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=NHLF localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 479716.000000
 		origAssembly hg19
 		# subId=2470 dateSubmitted=2010-09-29
@@ -646,7 +646,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		#parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		#shortLabel NHEK cell pA+ + 5
 		#longLabel NHEK whole cell polyA+ Long RNA-seq Plus signal Rep 5 from ENCODE/CSHL
-		#subGroups view=PlusRawSig cellType=NHEK localization=CELL rnaExtract=PAP rep=rep5
+		#subGroups view=PlusRawSignal cellType=NHEK localization=CELL rnaExtract=PAP rep=rep5
 		#type bigWig 1.000000 245952.000000
 		#origAssembly hg19
 		#color 179,0,134
@@ -657,7 +657,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel BJ cell pA+ + 2
 		longLabel BJ whole cell polyA+ Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=BJ localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=PlusRawSignal cellType=BJ localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 298791.000000
 		origAssembly hg19
 		# subId=2477 dateSubmitted=2010-10-01
@@ -666,17 +666,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HepG cyto pA+ + 1
 		longLabel HepG2 cytosol polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1453816.000000
 		origAssembly hg19
 		color 189,0,157
 		# subId=1959 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel MCF7 cell pA+ + 1
 		longLabel MCF-7 whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=MCF7 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=MCF7 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1250592.000000
 		origAssembly hg19
 		# subId=2475 dateSubmitted=2010-10-01
@@ -685,7 +685,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel K562 cell pA+ + 1
 		longLabel K562 whole cell polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=1K562 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 870831.000000
 		origAssembly hg19
 		color 46,0,184
@@ -695,17 +695,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 cyto pA+ + 1
 		longLabel GM12878 cytosol polyA+ Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1310264.000000
 		origAssembly hg19
 		color 153,38,0
 		# subId=1911 dateSubmitted=2010-10-05
 
 		track wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel MCF7 cell pA- + 1
 		longLabel MCF-7 whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=MCF7 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=MCF7 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 4160686.000000
 		origAssembly hg19
 		# subId=2714 dateSubmitted=2010-10-25
@@ -714,7 +714,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		#parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		#shortLabel NHEK cell pA- + 5
 		#longLabel NHEK whole cell polyA- Long RNA-seq Plus signal Rep 5 from ENCODE/CSHL
-		#subGroups view=PlusRawSig cellType=NHEK localization=CELL rnaExtract=PAM rep=rep5
+		#subGroups view=PlusRawSignal cellType=NHEK localization=CELL rnaExtract=PAM rep=rep5
 		#type bigWig 1.000000 3193184.000000
 		#origAssembly hg19
 		#color 179,0,134
@@ -725,7 +725,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel MCF7 cell pA- + 2
 		longLabel MCF-7 whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=MCF7 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=MCF7 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 2795274.000000
 		origAssembly hg19
 		# subId=2708 dateSubmitted=2010-10-25
@@ -734,7 +734,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel AG50 cell pA- + 1
 		longLabel AG04450 whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 7494687.000000
 		origAssembly hg19
 		# subId=2707 dateSubmitted=2010-10-25
@@ -743,7 +743,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHLF cell pA- + 1
 		longLabel NHLF whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHLF localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=NHLF localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 5593257.000000
 		origAssembly hg19
 		# subId=2557 dateSubmitted=2010-10-22
@@ -752,7 +752,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HSMM cell pA- + 2
 		longLabel HSMM whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=HSMM localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=HSMM localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 5108249.000000
 		origAssembly hg19
 		# subId=2556 dateSubmitted=2010-10-22
@@ -761,7 +761,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHLF cell pA- + 2
 		longLabel NHLF whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHLF localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=NHLF localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 3533679.000000
 		origAssembly hg19
 		# subId=2554 dateSubmitted=2010-10-22
@@ -770,7 +770,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HMEC cell pA- + 1
 		longLabel HMEC whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=HMEC localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=HMEC localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 3876176.000000
 		origAssembly hg19
 		# subId=2555 dateSubmitted=2010-10-22
@@ -779,7 +779,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HSMM cell pA- + 1
 		longLabel HSMM whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=HSMM localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=HSMM localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 4651964.000000
 		origAssembly hg19
 		# subId=2552 dateSubmitted=2010-10-22
@@ -788,7 +788,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 chrm tot + 2
 		longLabel K562 chromatin total Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep2
+		subGroups view=PlusRawSignal cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep2
 		type bigWig 1.000000 1486821.000000
 		origAssembly hg19
 		color 46,0,184
@@ -798,7 +798,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 nplm tot + 2
 		longLabel K562 nucleoplasm total Long RNA-seq Plus signal Rep 2 (Lab Rep 4) ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep2
+		subGroups view=PlusRawSignal cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep2
 		type bigWig 1.000000 1842308.000000
 		origAssembly hg19
 		color 46,0,184
@@ -808,7 +808,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel K562 chrm tot + 1
 		longLabel K562 chromatin total Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep1
+		subGroups view=PlusRawSignal cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 791439.000000
 		origAssembly hg19
 		color 46,0,184
@@ -818,7 +818,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel K562 nplm tot + 1
 		longLabel K562 nucleoplasm total Long RNA-seq Plus signal Rep 1 (Lab Rep 3) ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep1
+		subGroups view=PlusRawSignal cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 2322045.000000
 		origAssembly hg19
 		color 46,0,184
@@ -828,7 +828,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 nlos tot + 2
 		longLabel K562 nucleolus total Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep2
+		subGroups view=PlusRawSignal cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep2
 		type bigWig 1.000000 3090993.000000
 		origAssembly hg19
 		color 46,0,184
@@ -838,7 +838,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel K562 nlos tot + 1
 		longLabel K562 nucleolus total Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
+		subGroups view=PlusRawSignal cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 3553953.000000
 		origAssembly hg19
 		color 46,0,184
@@ -848,7 +848,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel SKRA cell pA- + 2
 		longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 6761712.000000
 		origAssembly hg19
 		# subId=3151 dateSubmitted=2010-12-24
@@ -857,7 +857,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel SKRA cell pA- + 1
 		longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 8791351.000000
 		origAssembly hg19
 		# subId=3149 dateSubmitted=2010-12-24
@@ -866,7 +866,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHEK nucl pA- + 2
 		longLabel NHEK nucleus polyA- Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 7824493.000000
 		origAssembly hg19
 		color 179,0,134
@@ -876,7 +876,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHEK cyto pA- + 1
 		longLabel NHEK cytosol polyA- Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=CYTOSOL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=NHEK localization=CYTOSOL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 10528045.000000
 		origAssembly hg19
 		color 179,0,134
@@ -886,7 +886,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HepG nucl pA- + 1
 		longLabel HepG2 nucleus polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 10273940.000000
 		origAssembly hg19
 		color 189,0,157
@@ -896,7 +896,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa nucl pA- + 2
 		longLabel HeLa-S3 nucleus polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 5526818.000000
 		origAssembly hg19
 		color 0,119,158
@@ -906,7 +906,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa cell pA- + 2
 		longLabel HeLa-S3 whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 2383328.000000
 		origAssembly hg19
 		color 0,119,158
@@ -916,7 +916,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE nucl pA- + 2
 		longLabel HUVEC nucleus polyA- Long RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 2440259.000000
 		origAssembly hg19
 		color 224,75,0
@@ -924,10 +924,10 @@ html wgEncodeCshlLongRnaSeq.release2
 
 
 		track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel HeLa cell pA- + 1
 		longLabel HeLa-S3 whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 920085.000000
 		origAssembly hg19
 		color 0,119,158
@@ -937,7 +937,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE nucl pA- + 1
 		longLabel HUVEC nucleus polyA- Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 6352828.000000
 		origAssembly hg19
 		color 224,75,0
@@ -947,17 +947,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE cell pA- + 2
 		longLabel HUVEC whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1783683.000000
 		origAssembly hg19
 		color 224,75,0
 		# subId=3135 dateSubmitted=2010-12-23
 
 		track wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel HUVE cell pA- + 1
 		longLabel HUVEC whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 844212.000000
 		origAssembly hg19
 		color 224,75,0
@@ -967,7 +967,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel BJ cell pA- + 2
 		longLabel BJ whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=BJ localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=BJ localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1897313.000000
 		origAssembly hg19
 		# subId=3129 dateSubmitted=2010-12-23
@@ -976,7 +976,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel BJ cell pA- + 1
 		longLabel BJ whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=BJ localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=BJ localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 3598691.000000
 		origAssembly hg19
 		# subId=3128 dateSubmitted=2010-12-23
@@ -985,7 +985,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel AG50 cell pA- + 2
 		longLabel AG04450 whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 6246875.000000
 		origAssembly hg19
 		# subId=3127 dateSubmitted=2010-12-23
@@ -994,16 +994,16 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel A549 cell pA- + 2
 		longLabel A549 whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=A549 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=A549 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 7604967.000000
 		origAssembly hg19
 		# subId=3125 dateSubmitted=2010-12-23
 
 		track wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel A549 cell pA- + 1
 		longLabel A549 whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=A549 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=A549 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 6539260.000000
 		origAssembly hg19
 		# subId=3124 dateSubmitted=2010-12-23
@@ -1012,7 +1012,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 nucl pA- + 2
 		longLabel K562 nucleus polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 2041837.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1022,7 +1022,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 nucl pA- + 1
 		longLabel K562 nucleus polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 7626713.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1032,7 +1032,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off 
 		shortLabel K562 cyto pA- + 1
 		longLabel K562 cytosol polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 23953612.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1042,7 +1042,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 nucl pA- + 1
 		longLabel GM12878 nucleus polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1853238.000000
 		origAssembly hg19
 		color 153,38,0
@@ -1052,7 +1052,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 cyto pA- + 2
 		longLabel GM12878 cytosol polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 24327980.000000
 		origAssembly hg19
 		color 153,38,0
@@ -1062,7 +1062,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 cyto pA- + 1
 		longLabel GM12878 cytosol polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 18182836.000000
 		origAssembly hg19
 		color 153,38,0
@@ -1072,7 +1072,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa cyto pA- + 2
 		longLabel HeLa-S3 cytosol polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 17458640.000000
 		origAssembly hg19
 		color 0,119,158
@@ -1082,7 +1082,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HUVE cyto pA- + 1
 		longLabel HUVEC cytosol polyA- Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 13448932.000000
 		origAssembly hg19
 		color 224,75,0
@@ -1092,7 +1092,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HepG cyto pA- + 2
 		longLabel HepG2 cytosol polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 33054432.000000
 		origAssembly hg19
 		color 189,0,157
@@ -1102,7 +1102,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel NHEK nucl pA- + 1
 		longLabel NHEK nucleus polyA- Long RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 15331443.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1112,7 +1112,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HeLa nucl pA- + 1
 		longLabel HeLa-S3 nucleus polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 15630286.000000
 		origAssembly hg19
 		color 0,119,158
@@ -1122,7 +1122,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HepG cyto pA- + 1
 		longLabel HepG2 cytosol polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 47250604.000000
 		origAssembly hg19
 		color 189,0,157
@@ -1132,7 +1132,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel H1ES cyto pA- + 2
 		longLabel H1-hESC cytosol polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1H1HESC localization=CYTOSOL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=1H1HESC localization=CYTOSOL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 12750162.000000
 		origAssembly hg19
 		color 0,107,27
@@ -1142,7 +1142,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel H1ES nucl pA- + 2
 		longLabel H1-hESC nucleus polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1H1HESC localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=1H1HESC localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 8968383.000000
 		origAssembly hg19
 		color 0,107,27
@@ -1152,17 +1152,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel K562 cyto pA- + 2
 		longLabel K562 cytosol polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 31500754.000000
 		origAssembly hg19
 		color 46,0,184
 		# subId=3229 dateSubmitted=2011-01-11
 
 		track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel GM78 cell pA- + 1
 		longLabel GM12878 whole cell polyA- Long RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1565992.000000
 		origAssembly hg19
 		color 153,38,0
@@ -1172,7 +1172,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel GM78 nucl pA- + 2
 		longLabel GM12878 nucleus polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1589847.000000
 		origAssembly hg19
 		color 153,38,0
@@ -1182,7 +1182,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HepG nucl pA- + 2
 		longLabel HepG2 nucleus polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 7826750.000000
 		origAssembly hg19
 		color 189,0,157
@@ -1192,7 +1192,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
 		shortLabel HepG cell pA- + 2
 		longLabel HepG2 whole cell polyA- Long RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=PlusRawSignal cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1251920.000000
 		origAssembly hg19
 		color 189,0,157
@@ -1202,16 +1202,248 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
         shortLabel IM90 cell tot + 1
         longLabel IMR90 whole cell total RNA-seq Plus signal Rep 1 from ENCODE/CSHL 
-        subGroups view=PlusRawSig cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep1
+        subGroups view=PlusRawSignal cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep1
         type bigWig 1.000000 5416102.000000
         # subId=5120 dateSubmitted=2011-12-06
+
+        track wgEncodeCshlLongRnaSeqCd20ro01794CellPapPlusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel CD20+_RO01794 cell longPolyA PlusRaw 1
+        longLabel CD20+ RO01794 cell longPolyA RNA-seq Raw signal + Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=CD20RO01794 localization=CELL rnaExtract=PAP rep=rep1
+        type bigWig 1.000000 128659.000000
+        # subId=5758 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqCd20ro01778CellPamPlusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel CD20+_RO01778 cell longNonPolyA PlusRaw 2
+        longLabel CD20+ RO01778 cell longNonPolyA RNA-seq Raw signal + Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=CD20RO01778 localization=CELL rnaExtract=PAM rep=rep2
+        type bigWig 1.000000 2185589.000000
+        # subId=5761 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel MCF-7 nucleus longPolyA PlusRaw 4
+        longLabel MCF-7 nucleus longPolyA RNA-seq Raw signal + Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=MCF7 localization=NUCLEUS rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 219145.000000
+        # subId=5760 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel A549 nucleus longPolyA PlusRaw 4
+        longLabel A549 nucleus longPolyA RNA-seq Raw signal + Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=A549 localization=NUCLEUS rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 181472.000000
+        # subId=5763 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel IMR90 cytosol longPolyA PlusRaw 2
+        longLabel IMR90 cytosol longPolyA RNA-seq Raw signal + Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=IMR90 localization=CYTOSOL rnaExtract=PAP rep=rep2
+        type bigWig 1.000000 1581512.000000
+        # subId=5762 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamPlusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel Monocytes-CD14+_RO01746 cell longNonPolyA PlusRaw 2
+        longLabel Monocytes-CD14+ RO01746 cell longNonPolyA RNA-seq Raw signal + Rep 2 from ENCODE/CSHL #too long length = 85 #autogenerated
+        subGroups view=PlusRawSignal cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAM rep=rep2
+        type bigWig 1.000000 2583502.000000
+        # subId=5764 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel A549 cytosol longPolyA PlusRaw 3
+        longLabel A549 cytosol longPolyA RNA-seq Raw signal + Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=A549 localization=CYTOSOL rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 770362.000000
+        # subId=5766 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel SK-N-SH nucleus longPolyA PlusRaw 4
+        longLabel SK-N-SH nucleus longPolyA RNA-seq Raw signal + Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=SKNSH localization=NUCLEUS rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 207210.000000
+        # subId=5767 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel IMR90 cell longPolyA PlusRaw 2
+        longLabel IMR90 cell longPolyA RNA-seq Raw signal + Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=IMR90 localization=CELL rnaExtract=PAP rep=rep2
+        type bigWig 1.000000 261016.000000
+        # subId=5771 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqCd20ro01778CellPapPlusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel CD20+_RO01778 cell longPolyA PlusRaw 2
+        longLabel CD20+ RO01778 cell longPolyA RNA-seq Raw signal + Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=CD20RO01778 localization=CELL rnaExtract=PAP rep=rep2
+        type bigWig 1.000000 153183.000000
+        # subId=5772 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapPlusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel Monocytes-CD14+_RO01746 cell longPolyA PlusRaw 2
+        longLabel Monocytes-CD14+ RO01746 cell longPolyA RNA-seq Raw signal + Rep 2 from ENCODE/CSHL #too long length = 82 #autogenerated
+        subGroups view=PlusRawSignal cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAP rep=rep2
+        type bigWig 1.000000 281379.000000
+        # subId=5773 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel SK-N-SH cell longPolyA PlusRaw 4
+        longLabel SK-N-SH cell longPolyA RNA-seq Raw signal + Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=SKNSH localization=CELL rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 665967.000000
+        # subId=5775 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqMcf7NucleusPapPlusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel MCF-7 nucleus longPolyA PlusRaw 3
+        longLabel MCF-7 nucleus longPolyA RNA-seq Raw signal + Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=MCF7 localization=NUCLEUS rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 260473.000000
+        # subId=5774 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel SK-N-SH cytosol longPolyA PlusRaw 3
+        longLabel SK-N-SH cytosol longPolyA RNA-seq Raw signal + Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=SKNSH localization=CYTOSOL rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 1357547.000000
+        # subId=5770 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel IMR90 nucleus longPolyA PlusRaw 1
+        longLabel IMR90 nucleus longPolyA RNA-seq Raw signal + Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=IMR90 localization=NUCLEUS rnaExtract=PAP rep=rep1
+        type bigWig 1.000000 246866.000000
+        # subId=5776 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CytosolPapPlusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel IMR90 cytosol longPolyA PlusRaw 1
+        longLabel IMR90 cytosol longPolyA RNA-seq Raw signal + Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=IMR90 localization=CYTOSOL rnaExtract=PAP rep=rep1
+        type bigWig 1.000000 1124582.000000
+        # subId=5779 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90NucleusPapPlusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel IMR90 nucleus longPolyA PlusRaw 2
+        longLabel IMR90 nucleus longPolyA RNA-seq Raw signal + Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=IMR90 localization=NUCLEUS rnaExtract=PAP rep=rep2
+        type bigWig 1.000000 122470.000000
+        # subId=5778 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CellPapPlusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel IMR90 cell longPolyA PlusRaw 1
+        longLabel IMR90 cell longPolyA RNA-seq Raw signal + Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=IMR90 localization=CELL rnaExtract=PAP rep=rep1
+        type bigWig 1.000000 423262.000000
+        # subId=5781 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalPlusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel CD34+_Mobilized cell total PlusRaw 1
+        longLabel CD34+ Mobilized cell total RNA-seq Raw signal + Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=CD34MOBILIZED localization=CELL rnaExtract=TOTAL rep=rep1
+        type bigWig 1.000000 17965708.000000
+        # subId=5780 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel IMR90 cell total PlusRaw 2
+        longLabel IMR90 cell total RNA-seq Raw signal + Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep2
+        type bigWig 1.000000 4710285.000000
+        # subId=5783 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCytosolPapPlusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel SK-N-SH cytosol longPolyA PlusRaw 4
+        longLabel SK-N-SH cytosol longPolyA RNA-seq Raw signal + Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=SKNSH localization=CYTOSOL rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 1847796.000000
+        # subId=5782 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqA549CytosolPapPlusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel A549 cytosol longPolyA PlusRaw 4
+        longLabel A549 cytosol longPolyA RNA-seq Raw signal + Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=A549 localization=CYTOSOL rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 686611.000000
+        # subId=5784 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapPlusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel Monocytes-CD14+_RO01746 cell longPolyA PlusRaw 1
+        longLabel Monocytes-CD14+ RO01746 cell longPolyA RNA-seq Raw signal + Rep 1 from ENCODE/CSHL #too long length = 82 #autogenerated
+        subGroups view=PlusRawSignal cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAP rep=rep1
+        type bigWig 1.000000 240362.000000
+        # subId=5785 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel SK-N-SH cell longPolyA PlusRaw 3
+        longLabel SK-N-SH cell longPolyA RNA-seq Raw signal + Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=SKNSH localization=CELL rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 724140.000000
+        # subId=5787 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel A549 nucleus longPolyA PlusRaw 3
+        longLabel A549 nucleus longPolyA RNA-seq Raw signal + Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=A549 localization=NUCLEUS rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 591420.000000
+        # subId=5788 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamPlusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel Monocytes-CD14+_RO01746 cell longNonPolyA PlusRaw 1
+        longLabel Monocytes-CD14+ RO01746 cell longNonPolyA RNA-seq Raw signal + Rep 1 from ENCODE/CSHL #too long length = 85 #autogenerated
+        subGroups view=PlusRawSignal cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAM rep=rep1
+        type bigWig 1.000000 4891235.000000
+        # subId=5789 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel SK-N-SH nucleus longPolyA PlusRaw 3
+        longLabel SK-N-SH nucleus longPolyA RNA-seq Raw signal + Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=SKNSH localization=NUCLEUS rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 229125.000000
+        # subId=5790 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel MCF-7 cytosol longPolyA PlusRaw 3
+        longLabel MCF-7 cytosol longPolyA RNA-seq Raw signal + Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=MCF7 localization=CYTOSOL rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 810947.000000
+        # subId=5792 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqCd20ro01794CellPamPlusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel CD20+_RO01794 cell longNonPolyA PlusRaw 1
+        longLabel CD20+ RO01794 cell longNonPolyA RNA-seq Raw signal + Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=PlusRawSignal cellType=CD20RO01794 localization=CELL rnaExtract=PAM rep=rep1
+        type bigWig 1.000000 3144462.000000
+        # subId=5793 dateSubmitted=2012-02-18
 
 
 
 
     	track wgEncodeCshlLongRnaSeqViewMinusRawSig
     	shortLabel Minus Raw Signal
-    	view MinusRawSig
+    	view MinusRawSignal
     	visibility full
     	subTrack wgEncodeCshlLongRnaSeq
     	maxHeightPixels 100:24:16
@@ -1223,10 +1455,10 @@ html wgEncodeCshlLongRnaSeq.release2
     	maxLimit 3756424
 
     		track wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1
-    		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+    		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
     		shortLabel GM78 cell tot - 1
                 longLabel GM12878 whole cell total Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-                subGroups view=MinusRawSig cellType=1GM12878 localization=CELL rnaExtract=TOTAL rep=rep1
+                subGroups view=MinusRawSignal cellType=1GM12878 localization=CELL rnaExtract=TOTAL rep=rep1
     		type bigWig 1.000000 3986288.000000
     		color 153,38,0
     		# subId=1502 dateSubmitted=2010-06-17
@@ -1236,7 +1468,7 @@ html wgEncodeCshlLongRnaSeq.release2
     		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
     		shortLabel GM78 cell tot - 2
                 longLabel GM12878 whole cell total Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-                subGroups view=MinusRawSig cellType=1GM12878 localization=CELL rnaExtract=TOTAL rep=rep2
+                subGroups view=MinusRawSignal cellType=1GM12878 localization=CELL rnaExtract=TOTAL rep=rep2
     		type bigWig 1.000000 5649824.000000
     		color 153,38,0
     		# subId=1502 dateSubmitted=2010-06-17
@@ -1245,7 +1477,7 @@ html wgEncodeCshlLongRnaSeq.release2
     		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
     		shortLabel K562 cell tot - 1
                 longLabel K562 whole cell total Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-                subGroups view=MinusRawSig cellType=1K562 localization=CELL rnaExtract=TOTAL rep=rep1
+                subGroups view=MinusRawSignal cellType=1K562 localization=CELL rnaExtract=TOTAL rep=rep1
     		type bigWig 1.000000 3699513.000000
     		color 46,0,184
     		# subId=1503 dateSubmitted=2010-06-17
@@ -1254,7 +1486,7 @@ html wgEncodeCshlLongRnaSeq.release2
     		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
     		shortLabel K562 cell tot - 2
                 longLabel K562 whole cell total Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-                subGroups view=MinusRawSig cellType=1K562 localization=CELL rnaExtract=TOTAL rep=rep2
+                subGroups view=MinusRawSignal cellType=1K562 localization=CELL rnaExtract=TOTAL rep=rep2
     		type bigWig 1.000000 2916467.000000
     		color 46,0,184
     		# subId=1503 dateSubmitted=2010-06-17
@@ -1263,7 +1495,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 cyto pA+ - 2
                 longLabel K562 cytosol polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-                subGroups view=MinusRawSig cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=rep2
+                subGroups view=MinusRawSignal cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 530019.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1273,7 +1505,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel H1ES cyto pA+ - 2
 		longLabel H1-hESC cytosol polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1H1HESC localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=1H1HESC localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 250111.000000
 		origAssembly hg19
 		color 0,107,27
@@ -1283,7 +1515,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel H1ES nucl pA+ - 2
 		longLabel H1-hESC nucleus polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1H1HESC localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=1H1HESC localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 178195.000000
 		origAssembly hg19
 		color 0,107,27
@@ -1293,7 +1525,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE cell pA+ - 2
 		longLabel HUVEC whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 251226.000000
 		origAssembly hg19
 		color 224,75,0
@@ -1303,7 +1535,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa nucl pA+ - 2
 		longLabel HeLa-S3 nucleus polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 105697.000000
 		origAssembly hg19
 		color 0,119,158
@@ -1313,7 +1545,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HepG cyto pA+ - 2
 		longLabel HepG2 cytosol polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 394467.000000
 		origAssembly hg19
 		color 189,0,157
@@ -1323,7 +1555,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HepG nucl pA+ - 1
 		longLabel HepG2 nucleus polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 189313.000000
 		origAssembly hg19
 		color 189,0,157
@@ -1333,7 +1565,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 cell pA+ - 2
 		longLabel K562 whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=1K562 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 614150.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1343,7 +1575,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel K562 cyto pA+ - 1
 		longLabel K562 cytosol polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 678760.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1353,7 +1585,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel K562 nucl pA+ - 1
 		longLabel K562 nucleus polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 224694.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1363,7 +1595,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel H1ES cell pA+ - 2
 		longLabel H1-hESC whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1H1HESC localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=1H1HESC localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 337372.000000
 		origAssembly hg19
 		color 0,107,27
@@ -1373,7 +1605,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 nucl pA+ - 2
 		longLabel GM12878 nucleus polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 167621.000000
 		origAssembly hg19
 		color 153,38,0
@@ -1383,17 +1615,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 nucl pA+ - 1
 		longLabel GM12878 nucleus polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 170294.000000
 		origAssembly hg19
 		color 153,38,0
 		# subId=1926 dateSubmitted=2010-09-30
 
 		track wgEncodeCshlLongRnaSeqHuvecCellPapMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel HUVE cell pA+ - 1
 		longLabel HUVEC whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 263759.000000
 		origAssembly hg19
 		color 224,75,0
@@ -1403,27 +1635,27 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE nucl pA+ - 1
 		longLabel HUVEC nucleus polyA+ Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 181418.000000
 		origAssembly hg19
 		color 224,75,0
 		# subId=1931 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel NHEK cell pA+ - 1
 		longLabel NHEK whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=NHEK localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 615785.000000
 		origAssembly hg19
 		color 179,0,134
 		# subId=1947 dateSubmitted=2010-09-30
 
 		track wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel HeLa cell pA+ - 1
 		longLabel HeLa-S3 whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 97260.000000
 		origAssembly hg19
 		color 0,119,158
@@ -1433,7 +1665,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 nucl pA+ - 2
 		longLabel K562 nucleus polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 101888.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1443,7 +1675,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHEK cell pA+ - 2
 		longLabel NHEK whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=NHEK localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 753030.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1453,7 +1685,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa cyto pA+ - 1
 		longLabel HeLa-S3 cytosol polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 723030.000000
 		origAssembly hg19
 		color 0,119,158
@@ -1463,7 +1695,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa nucl pA+ - 1
 		longLabel HeLa-S3 nucleus polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 191704.000000
 		origAssembly hg19
 		color 0,119,158
@@ -1473,17 +1705,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa cell pA+ - 2
 		longLabel HeLa-S3 whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 302289.000000
 		origAssembly hg19
 		color 0,119,158
 		# subId=1957 dateSubmitted=2010-09-30
 
 		track wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel HepG cell pA+ - 1
 		longLabel HepG2 whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 318524.000000
 		origAssembly hg19
 		color 189,0,157
@@ -1493,7 +1725,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HepG cell pA+ - 2
 		longLabel HepG2 whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 336035.000000
 		origAssembly hg19
 		color 189,0,157
@@ -1503,7 +1735,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HepG nucl pA+ - 2
 		longLabel HepG2 nucleus polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 152896.000000
 		origAssembly hg19
 		color 189,0,157
@@ -1513,26 +1745,26 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel AG50 cell pA+ - 1
 		longLabel AG04450 whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=AG04450 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=AG04450 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 357918.000000
 		origAssembly hg19
 		# subId=2345 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel H1ES cell pA+ - 1
 		longLabel H1-hESC whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1H1HESC localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=1H1HESC localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 458570.000000
 		origAssembly hg19
 		color 0,107,27
 		# subId=2098 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqGm12878CellPapMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel GM78 cell pA+ - 1
 		longLabel GM12878 whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 216835.000000
 		origAssembly hg19
 		color 153,38,0
@@ -1542,7 +1774,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel SKRA cell pA+ - 1
 		longLabel SK-N-SH_RA whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=SKNSHRA localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1472243.000000
 		origAssembly hg19
 		# subId=2341 dateSubmitted=2010-09-29
@@ -1551,17 +1783,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 cell pA- - 2
 		longLabel GM12878 whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 2788978.000000
 		origAssembly hg19
 		color 153,38,0
 		# subId=2402 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel K562 cell pA- - 1
 		longLabel K562 whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=1K562 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 812379.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1571,16 +1803,16 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel A549 cell pA+ - 2
 		longLabel A549 whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=A549 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=A549 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 311436.000000
 		origAssembly hg19
 		# subId=2405 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqA549CellPapMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel A549 cell pA+ - 1
 		longLabel A549 whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=A549 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=A549 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 1112985.000000
 		origAssembly hg19
 		# subId=2404 dateSubmitted=2010-09-29
@@ -1589,7 +1821,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel AG50 cell pA+ - 2
 		longLabel AG04450 whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=AG04450 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=AG04450 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 700329.000000
 		origAssembly hg19
 		# subId=2406 dateSubmitted=2010-09-29
@@ -1598,7 +1830,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel H1ES cell pA- - 2
 		longLabel H1-hESC whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1H1HESC localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=1H1HESC localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 770082.000000
 		origAssembly hg19
 		color 0,107,27
@@ -1608,17 +1840,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE nucl pA+ - 2
 		longLabel HUVEC nucleus polyA+ Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 81348.000000
 		origAssembly hg19
 		color 224,75,0
 		# subId=2408 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel HepG cell pA- - 1
 		longLabel HepG2 whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 695167.000000
 		origAssembly hg19
 		color 189,0,157
@@ -1628,7 +1860,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 cell pA- - 2
 		longLabel K562 whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=1K562 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1504958.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1638,16 +1870,16 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel SKRA cell pA+ - 2
 		longLabel SK-N-SH_RA whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=SKNSHRA localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 734082.000000
 		origAssembly hg19
 		# subId=2418 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel NHEK cell pA- - 1
 		longLabel NHEK whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=NHEK localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 896693.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1657,7 +1889,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHEK cell pA- - 2
 		longLabel NHEK whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=NHEK localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 877862.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1667,7 +1899,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHEK cyto pA+ - 1
 		longLabel NHEK cytosol polyA+ Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 868073.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1677,7 +1909,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHEK nucl pA+ - 1
 		longLabel NHEK nucleus polyA+ Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 397759.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1687,7 +1919,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHEK cyto pA+ - 2
 		longLabel NHEK cytosol polyA+ Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 777654.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1697,7 +1929,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 cyto pA+ - 2
 		longLabel GM12878 cytosol polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 652894.000000
 		origAssembly hg19
 		color 153,38,0
@@ -1707,7 +1939,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 cell pA+ - 2
 		longLabel GM12878 whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 309358.000000
 		origAssembly hg19
 		color 153,38,0
@@ -1717,7 +1949,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa cyto pA+ - 2
 		longLabel HeLa-S3 cytosol polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 292030.000000
 		origAssembly hg19
 		color 0,119,158
@@ -1727,7 +1959,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel BJ cell pA+ - 1
 		longLabel BJ whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=BJ localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=BJ localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 840503.000000
 		origAssembly hg19
 		# subId=2456 dateSubmitted=2010-09-29
@@ -1736,16 +1968,16 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HMEC cell pA+ - 1
 		longLabel HMEC whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=HMEC localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=HMEC localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 639015.000000
 		origAssembly hg19
 		# subId=2458 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel H1ES cell pA- - 1
 		longLabel H1-hESC whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1H1HESC localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=1H1HESC localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 764531.000000
 		origAssembly hg19
 		color 0,107,27
@@ -1755,7 +1987,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HSMM cell pA+ - 1
 		longLabel HSMM whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=HSMM localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=HSMM localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 346917.000000
 		origAssembly hg19
 		# subId=2459 dateSubmitted=2010-09-29
@@ -1764,7 +1996,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HSMM cell pA+ - 2
 		longLabel HSMM whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=HSMM localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=HSMM localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 377785.000000
 		origAssembly hg19
 		# subId=2460 dateSubmitted=2010-09-29
@@ -1773,7 +2005,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE cyto pA+ - 1
 		longLabel HUVEC cytosol polyA+ Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 704670.000000
 		origAssembly hg19
 		color 224,75,0
@@ -1783,7 +2015,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE cyto pA+ - 2
 		longLabel HUVEC cytosol polyA+ Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 676971.000000
 		origAssembly hg19
 		color 224,75,0
@@ -1793,7 +2025,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel MCF7 cell pA+ - 2
 		longLabel MCF-7 whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=MCF7 localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=MCF7 localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 1025114.000000
 		origAssembly hg19
 		# subId=2466 dateSubmitted=2010-09-29
@@ -1802,7 +2034,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHEK nucl pA+ - 2
 		longLabel NHEK nucleus polyA+ Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 433842.000000
 		origAssembly hg19
 		color 179,0,134
@@ -1812,7 +2044,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHLF cell pA+ - 1
 		longLabel NHLF whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHLF localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=NHLF localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 370794.000000
 		origAssembly hg19
 		# subId=2469 dateSubmitted=2010-09-29
@@ -1821,7 +2053,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHLF cell pA+ - 2
 		longLabel NHLF whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHLF localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=NHLF localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 460058.000000
 		origAssembly hg19
 		# subId=2470 dateSubmitted=2010-09-29
@@ -1830,7 +2062,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		#parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		#shortLabel NHEK cell pA+ - 5
 		#longLabel NHEK whole cell polyA+ Long RNA-seq Minus signal Rep 5 from ENCODE/CSHL
-		#subGroups view=MinusRawSig cellType=NHEK localization=CELL rnaExtract=PAP rep=rep5
+		#subGroups view=MinusRawSignal cellType=NHEK localization=CELL rnaExtract=PAP rep=rep5
 		#type bigWig 1.000000 625976.000000
 		#origAssembly hg19
 		#color 179,0,134
@@ -1841,7 +2073,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel BJ cell pA+ - 2
 		longLabel BJ whole cell polyA+ Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=BJ localization=CELL rnaExtract=PAP rep=rep2
+		subGroups view=MinusRawSignal cellType=BJ localization=CELL rnaExtract=PAP rep=rep2
 		type bigWig 1.000000 423113.000000
 		origAssembly hg19
 		# subId=2477 dateSubmitted=2010-10-01
@@ -1850,17 +2082,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HepG cyto pA+ - 1
 		longLabel HepG2 cytosol polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 396313.000000
 		origAssembly hg19
 		color 189,0,157
 		# subId=1959 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel MCF7 cell pA+ - 1
 		longLabel MCF-7 whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=MCF7 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=MCF7 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 327906.000000
 		origAssembly hg19
 		# subId=2475 dateSubmitted=2010-10-01
@@ -1869,7 +2101,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel K562 cell pA+ - 1
 		longLabel K562 whole cell polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CELL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=1K562 localization=CELL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 828694.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1879,17 +2111,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 cyto pA+ - 1
 		longLabel GM12878 cytosol polyA+ Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP rep=rep1
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP rep=rep1
 		type bigWig 1.000000 387464.000000
 		origAssembly hg19
 		color 153,38,0
 		# subId=1911 dateSubmitted=2010-10-05
 
 		track wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel MCF7 cell pA- - 1
 		longLabel MCF-7 whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=MCF7 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=MCF7 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 3345629.000000
 		origAssembly hg19
 		# subId=2714 dateSubmitted=2010-10-25
@@ -1898,7 +2130,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		#parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		#shortLabel NHEK cell pA- - 5
 		#longLabel NHEK whole cell polyA- Long RNA-seq Minus signal Rep 5 from ENCODE/CSHL
-		#subGroups view=MinusRawSig cellType=NHEK localization=CELL rnaExtract=PAM rep=rep5
+		#subGroups view=MinusRawSignal cellType=NHEK localization=CELL rnaExtract=PAM rep=rep5
 		#type bigWig 1.000000 2782728.000000
 		#origAssembly hg19
 		#color 179,0,134
@@ -1909,7 +2141,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel MCF7 cell pA- - 2
 		longLabel MCF-7 whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=MCF7 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=MCF7 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1895927.000000
 		origAssembly hg19
 		# subId=2708 dateSubmitted=2010-10-25
@@ -1918,7 +2150,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel AG50 cell pA- - 1
 		longLabel AG04450 whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1177911.000000
 		origAssembly hg19
 		# subId=2707 dateSubmitted=2010-10-25
@@ -1927,7 +2159,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHLF cell pA- - 1
 		longLabel NHLF whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHLF localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=NHLF localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 4165964.000000
 		origAssembly hg19
 		# subId=2557 dateSubmitted=2010-10-22
@@ -1936,7 +2168,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HSMM cell pA- - 2
 		longLabel HSMM whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=HSMM localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=HSMM localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 4422711.000000
 		origAssembly hg19
 		# subId=2556 dateSubmitted=2010-10-22
@@ -1945,7 +2177,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHLF cell pA- - 2
 		longLabel NHLF whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHLF localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=NHLF localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 2777457.000000
 		origAssembly hg19
 		# subId=2554 dateSubmitted=2010-10-22
@@ -1954,7 +2186,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HMEC cell pA- - 1
 		longLabel HMEC whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=HMEC localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=HMEC localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 3515488.000000
 		origAssembly hg19
 		# subId=2555 dateSubmitted=2010-10-22
@@ -1963,7 +2195,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HSMM cell pA- - 1
 		longLabel HSMM whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=HSMM localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=HSMM localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 4754829.000000
 		origAssembly hg19
 		# subId=2552 dateSubmitted=2010-10-22
@@ -1972,7 +2204,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 chrm tot - 2
 		longLabel K562 chromatin total Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep2
+		subGroups view=MinusRawSignal cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep2
 		type bigWig 1.000000 2383507.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1982,7 +2214,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 nplm tot - 2
 		longLabel K562 nucleoplasm total Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep2
+		subGroups view=MinusRawSignal cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep2
 		type bigWig 1.000000 1307707.000000
 		origAssembly hg19
 		color 46,0,184
@@ -1992,7 +2224,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel K562 chrm tot - 1
 		longLabel K562 chromatin total Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep1
+		subGroups view=MinusRawSignal cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 1518807.000000
 		origAssembly hg19
 		color 46,0,184
@@ -2002,7 +2234,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel K562 nplm tot - 1
 		longLabel K562 nucleoplasm total Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep1
+		subGroups view=MinusRawSignal cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 3269539.000000
 		origAssembly hg19
 		color 46,0,184
@@ -2012,7 +2244,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 nlos tot - 2
 		longLabel K562 nucleolus total Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep2
+		subGroups view=MinusRawSignal cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep2
 		type bigWig 1.000000 5373313.000000
 		origAssembly hg19
 		color 46,0,184
@@ -2022,7 +2254,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel K562 nlos tot - 1
 		longLabel K562 nucleolus total Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
+		subGroups view=MinusRawSignal cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=rep1
 		type bigWig 1.000000 4348115.000000
 		origAssembly hg19
 		color 46,0,184
@@ -2032,7 +2264,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel SKRA cell pA- - 2
 		longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1625856.000000
 		origAssembly hg19
 		# subId=3151 dateSubmitted=2010-12-24
@@ -2041,7 +2273,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel SKRA cell pA- - 1
 		longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1177854.000000
 		origAssembly hg19
 		# subId=3149 dateSubmitted=2010-12-24
@@ -2050,7 +2282,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHEK nucl pA- - 2
 		longLabel NHEK nucleus polyA- Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 3083517.000000
 		origAssembly hg19
 		color 179,0,134
@@ -2060,7 +2292,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHEK cyto pA- - 1
 		longLabel NHEK cytosol polyA- Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=CYTOSOL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=NHEK localization=CYTOSOL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 3188309.000000
 		origAssembly hg19
 		color 179,0,134
@@ -2070,7 +2302,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HepG nucl pA- - 1
 		longLabel HepG2 nucleus polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 6208901.000000
 		origAssembly hg19
 		color 189,0,157
@@ -2080,7 +2312,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa nucl pA- - 2
 		longLabel HeLa-S3 nucleus polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 6425744.000000
 		origAssembly hg19
 		color 0,119,158
@@ -2090,7 +2322,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa cell pA- - 2
 		longLabel HeLa-S3 whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1171222.000000
 		origAssembly hg19
 		color 0,119,158
@@ -2100,7 +2332,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE nucl pA- - 2
 		longLabel HUVEC nucleus polyA- Long RNA-seq Minus Signal Rep 2 (Lab Rep 4) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 2061775.000000
 		origAssembly hg19
 		color 224,75,0
@@ -2108,10 +2340,10 @@ html wgEncodeCshlLongRnaSeq.release2
 
 
 		track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel HeLa cell pA- - 1
 		longLabel HeLa-S3 whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 580980.000000
 		origAssembly hg19
 		color 0,119,158
@@ -2121,7 +2353,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE nucl pA- - 1
 		longLabel HUVEC nucleus polyA- Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 2390083.000000
 		origAssembly hg19
 		color 224,75,0
@@ -2131,17 +2363,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE cell pA- - 2
 		longLabel HUVEC whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1051466.000000
 		origAssembly hg19
 		color 224,75,0
 		# subId=3135 dateSubmitted=2010-12-23
 
 		track wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel HUVE cell pA- - 1
 		longLabel HUVEC whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 736288.000000
 		origAssembly hg19
 		color 224,75,0
@@ -2151,7 +2383,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel BJ cell pA- - 2
 		longLabel BJ whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=BJ localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=BJ localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1471367.000000
 		origAssembly hg19
 		# subId=3129 dateSubmitted=2010-12-23
@@ -2160,7 +2392,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel BJ cell pA- - 1
 		longLabel BJ whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=BJ localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=BJ localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1310427.000000
 		origAssembly hg19
 		# subId=3128 dateSubmitted=2010-12-23
@@ -2169,7 +2401,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel AG50 cell pA- - 2
 		longLabel AG04450 whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=AG04450 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1806068.000000
 		origAssembly hg19
 		# subId=3127 dateSubmitted=2010-12-23
@@ -2178,16 +2410,16 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel A549 cell pA- - 2
 		longLabel A549 whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=A549 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=A549 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1209428.000000
 		origAssembly hg19
 		# subId=3125 dateSubmitted=2010-12-23
 
 		track wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel A549 cell pA- - 1
 		longLabel A549 whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=A549 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=A549 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 1483709.000000
 		origAssembly hg19
 		# subId=3124 dateSubmitted=2010-12-23
@@ -2196,7 +2428,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 nucl pA- - 2
 		longLabel K562 nucleus polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 5175165.000000
 		origAssembly hg19
 		color 46,0,184
@@ -2206,7 +2438,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 nucl pA- - 1
 		longLabel K562 nucleus polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 5740841.000000
 		origAssembly hg19
 		color 46,0,184
@@ -2216,7 +2448,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 cyto pA- - 1
 		longLabel K562 cytosol polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 6589672.000000
 		origAssembly hg19
 		color 46,0,184
@@ -2226,7 +2458,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 nucl pA- - 1
 		longLabel GM12878 nucleus polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 4320234.000000
 		origAssembly hg19
 		color 153,38,0
@@ -2236,7 +2468,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 cyto pA- - 2
 		longLabel GM12878 cytosol polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 7751126.000000
 		origAssembly hg19
 		color 153,38,0
@@ -2246,7 +2478,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 cyto pA- - 1
 		longLabel GM12878 cytosol polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 6361835.000000
 		origAssembly hg19
 		color 153,38,0
@@ -2256,7 +2488,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa cyto pA- - 2
 		longLabel HeLa-S3 cytosol polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 4123325.000000
 		origAssembly hg19
 		color 0,119,158
@@ -2266,7 +2498,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HUVE cyto pA- - 1
 		longLabel HUVEC cytosol polyA- Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 7543856.000000
 		origAssembly hg19
 		color 224,75,0
@@ -2276,7 +2508,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HepG cyto pA- - 2
 		longLabel HepG2 cytosol polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 7925012.000000
 		origAssembly hg19
 		color 189,0,157
@@ -2286,7 +2518,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel NHEK nucl pA- - 1
 		longLabel NHEK nucleus polyA- Long RNA-seq Minus Signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 6344022.000000
 		origAssembly hg19
 		color 179,0,134
@@ -2296,7 +2528,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HeLa nucl pA- - 1
 		longLabel HeLa-S3 nucleus polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 2726794.000000
 		origAssembly hg19
 		color 0,119,158
@@ -2306,7 +2538,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HepG cyto pA- - 1
 		longLabel HepG2 cytosol polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 12366078.000000
 		origAssembly hg19
 		color 189,0,157
@@ -2316,7 +2548,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel H1ES cyto pA- - 2
 		longLabel H1-hESC cytosol polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1H1HESC localization=CYTOSOL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=1H1HESC localization=CYTOSOL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 4084665.000000
 		origAssembly hg19
 		color 0,107,27
@@ -2326,7 +2558,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel H1ES nucl pA- - 2
 		longLabel H1-hESC nucleus polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1H1HESC localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=1H1HESC localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 3290208.000000
 		origAssembly hg19
 		color 0,107,27
@@ -2336,17 +2568,17 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel K562 cyto pA- - 2
 		longLabel K562 cytosol polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 11296614.000000
 		origAssembly hg19
 		color 46,0,184
 		# subId=3229 dateSubmitted=2011-01-11
 
 		track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep1
-		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
 		shortLabel GM78 cell pA- - 1
 		longLabel GM12878 whole cell polyA- Long RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep1
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep1
 		type bigWig 1.000000 993820.000000
 		origAssembly hg19
 		color 153,38,0
@@ -2356,7 +2588,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel GM78 nucl pA- - 2
 		longLabel GM12878 nucleus polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1823306.000000
 		origAssembly hg19
 		color 153,38,0
@@ -2366,7 +2598,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HepG nucl pA- - 2
 		longLabel HepG2 nucleus polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 8530886.000000
 		origAssembly hg19
 		color 189,0,157
@@ -2376,7 +2608,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
 		shortLabel HepG cell pA- - 2
 		longLabel HepG2 whole cell polyA- Long RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-		subGroups view=MinusRawSig cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=rep2
+		subGroups view=MinusRawSignal cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=rep2
 		type bigWig 1.000000 1212148.000000
 		origAssembly hg19
 		color 189,0,157
@@ -2386,9 +2618,241 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
         shortLabel IM90 cell tot - 1
         longLabel IMR90 cell total RNA-seq Minus signal Rep 1 from ENCODE/CSHL 
-        subGroups view=MinusRawSig cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep1
+        subGroups view=MinusRawSignal cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep1
         type bigWig 1.000000 1657789.000000
         # subId=5120 dateSubmitted=2011-12-06
+
+        track wgEncodeCshlLongRnaSeqCd20ro01794CellPapMinusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel CD20+_RO01794 cell longPolyA MinusRaw 1
+        longLabel CD20+ RO01794 cell longPolyA RNA-seq Raw signal - Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=CD20RO01794 localization=CELL rnaExtract=PAP rep=rep1
+        type bigWig 1.000000 115834.000000
+        # subId=5758 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqCd20ro01778CellPamMinusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel CD20+_RO01778 cell longNonPolyA MinusRaw 2
+        longLabel CD20+ RO01778 cell longNonPolyA RNA-seq Raw signal - Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=CD20RO01778 localization=CELL rnaExtract=PAM rep=rep2
+        type bigWig 1.000000 1807477.000000
+        # subId=5761 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel MCF-7 nucleus longPolyA MinusRaw 4
+        longLabel MCF-7 nucleus longPolyA RNA-seq Raw signal - Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=MCF7 localization=NUCLEUS rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 171431.000000
+        # subId=5760 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel A549 nucleus longPolyA MinusRaw 4
+        longLabel A549 nucleus longPolyA RNA-seq Raw signal - Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=A549 localization=NUCLEUS rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 212255.000000
+        # subId=5763 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel IMR90 cytosol longPolyA MinusRaw 2
+        longLabel IMR90 cytosol longPolyA RNA-seq Raw signal - Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=IMR90 localization=CYTOSOL rnaExtract=PAP rep=rep2
+        type bigWig 1.000000 922437.000000
+        # subId=5762 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamMinusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel Monocytes-CD14+_RO01746 cell longNonPolyA MinusRaw 2
+        longLabel Monocytes-CD14+ RO01746 cell longNonPolyA RNA-seq Raw signal - Rep 2 from ENCODE/CSHL #too long length = 85 #autogenerated
+        subGroups view=MinusRawSignal cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAM rep=rep2
+        type bigWig 1.000000 2792428.000000
+        # subId=5764 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel A549 cytosol longPolyA MinusRaw 3
+        longLabel A549 cytosol longPolyA RNA-seq Raw signal - Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=A549 localization=CYTOSOL rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 553569.000000
+        # subId=5766 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel SK-N-SH nucleus longPolyA MinusRaw 4
+        longLabel SK-N-SH nucleus longPolyA RNA-seq Raw signal - Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=SKNSH localization=NUCLEUS rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 154353.000000
+        # subId=5767 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel IMR90 cell longPolyA MinusRaw 2
+        longLabel IMR90 cell longPolyA RNA-seq Raw signal - Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=IMR90 localization=CELL rnaExtract=PAP rep=rep2
+        type bigWig 1.000000 238947.000000
+        # subId=5771 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqCd20ro01778CellPapMinusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel CD20+_RO01778 cell longPolyA MinusRaw 2
+        longLabel CD20+ RO01778 cell longPolyA RNA-seq Raw signal - Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=CD20RO01778 localization=CELL rnaExtract=PAP rep=rep2
+        type bigWig 1.000000 198056.000000
+        # subId=5772 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapMinusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel Monocytes-CD14+_RO01746 cell longPolyA MinusRaw 2
+        longLabel Monocytes-CD14+ RO01746 cell longPolyA RNA-seq Raw signal - Rep 2 from ENCODE/CSHL #too long length = 82 #autogenerated
+        subGroups view=MinusRawSignal cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAP rep=rep2
+        type bigWig 1.000000 420927.000000
+        # subId=5773 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel SK-N-SH cell longPolyA MinusRaw 4
+        longLabel SK-N-SH cell longPolyA RNA-seq Raw signal - Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=SKNSH localization=CELL rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 236639.000000
+        # subId=5775 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqMcf7NucleusPapMinusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel MCF-7 nucleus longPolyA MinusRaw 3
+        longLabel MCF-7 nucleus longPolyA RNA-seq Raw signal - Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=MCF7 localization=NUCLEUS rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 268921.000000
+        # subId=5774 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel SK-N-SH cytosol longPolyA MinusRaw 3
+        longLabel SK-N-SH cytosol longPolyA RNA-seq Raw signal - Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=SKNSH localization=CYTOSOL rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 777524.000000
+        # subId=5770 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel IMR90 nucleus longPolyA MinusRaw 1
+        longLabel IMR90 nucleus longPolyA RNA-seq Raw signal - Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=IMR90 localization=NUCLEUS rnaExtract=PAP rep=rep1
+        type bigWig 1.000000 690540.000000
+        # subId=5776 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CytosolPapMinusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel IMR90 cytosol longPolyA MinusRaw 1
+        longLabel IMR90 cytosol longPolyA RNA-seq Raw signal - Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=IMR90 localization=CYTOSOL rnaExtract=PAP rep=rep1
+        type bigWig 1.000000 708440.000000
+        # subId=5779 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90NucleusPapMinusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel IMR90 nucleus longPolyA MinusRaw 2
+        longLabel IMR90 nucleus longPolyA RNA-seq Raw signal - Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=IMR90 localization=NUCLEUS rnaExtract=PAP rep=rep2
+        type bigWig 1.000000 470206.000000
+        # subId=5778 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CellPapMinusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel IMR90 cell longPolyA MinusRaw 1
+        longLabel IMR90 cell longPolyA RNA-seq Raw signal - Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=IMR90 localization=CELL rnaExtract=PAP rep=rep1
+        type bigWig 1.000000 300454.000000
+        # subId=5781 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalMinusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel CD34+_Mobilized cell total MinusRaw 1
+        longLabel CD34+ Mobilized cell total RNA-seq Raw signal - Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=CD34MOBILIZED localization=CELL rnaExtract=TOTAL rep=rep1
+        type bigWig 1.000000 10512010.000000
+        # subId=5780 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep2
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel IMR90 cell total MinusRaw 2
+        longLabel IMR90 cell total RNA-seq Raw signal - Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep2
+        type bigWig 1.000000 2961529.000000
+        # subId=5783 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCytosolPapMinusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel SK-N-SH cytosol longPolyA MinusRaw 4
+        longLabel SK-N-SH cytosol longPolyA RNA-seq Raw signal - Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=SKNSH localization=CYTOSOL rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 1082381.000000
+        # subId=5782 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqA549CytosolPapMinusRawRep4
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel A549 cytosol longPolyA MinusRaw 4
+        longLabel A549 cytosol longPolyA RNA-seq Raw signal - Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=A549 localization=CYTOSOL rnaExtract=PAP rep=rep4
+        type bigWig 1.000000 478575.000000
+        # subId=5784 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapMinusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel Monocytes-CD14+_RO01746 cell longPolyA MinusRaw 1
+        longLabel Monocytes-CD14+ RO01746 cell longPolyA RNA-seq Raw signal - Rep 1 from ENCODE/CSHL #too long length = 82 #autogenerated
+        subGroups view=MinusRawSignal cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAP rep=rep1
+        type bigWig 1.000000 577352.000000
+        # subId=5785 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel SK-N-SH cell longPolyA MinusRaw 3
+        longLabel SK-N-SH cell longPolyA RNA-seq Raw signal - Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=SKNSH localization=CELL rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 662709.000000
+        # subId=5787 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel A549 nucleus longPolyA MinusRaw 3
+        longLabel A549 nucleus longPolyA RNA-seq Raw signal - Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=A549 localization=NUCLEUS rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 505459.000000
+        # subId=5788 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamMinusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel Monocytes-CD14+_RO01746 cell longNonPolyA MinusRaw 1
+        longLabel Monocytes-CD14+ RO01746 cell longNonPolyA RNA-seq Raw signal - Rep 1 from ENCODE/CSHL #too long length = 85 #autogenerated
+        subGroups view=MinusRawSignal cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAM rep=rep1
+        type bigWig 1.000000 4143578.000000
+        # subId=5789 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel SK-N-SH nucleus longPolyA MinusRaw 3
+        longLabel SK-N-SH nucleus longPolyA RNA-seq Raw signal - Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=SKNSH localization=NUCLEUS rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 158821.000000
+        # subId=5790 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep3
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel MCF-7 cytosol longPolyA MinusRaw 3
+        longLabel MCF-7 cytosol longPolyA RNA-seq Raw signal - Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=MCF7 localization=CYTOSOL rnaExtract=PAP rep=rep3
+        type bigWig 1.000000 777550.000000
+        # subId=5792 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqCd20ro01794CellPamMinusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel CD20+_RO01794 cell longNonPolyA MinusRaw 1
+        longLabel CD20+ RO01794 cell longNonPolyA RNA-seq Raw signal - Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=MinusRawSignal cellType=CD20RO01794 localization=CELL rnaExtract=PAM rep=rep1
+        type bigWig 1.000000 1599361.000000
+        # subId=5793 dateSubmitted=2012-02-18
 
 	track wgEncodeCshlLongRnaSeqViewAlignments
     	shortLabel Alignments
@@ -2409,7 +2873,7 @@ html wgEncodeCshlLongRnaSeq.release2
 	maxWindowToDraw 1000000
 
 		track wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
-    		parent wgEncodeCshlLongRnaSeqViewAlignments off
+    		parent wgEncodeCshlLongRnaSeqViewAlignments on
     		shortLabel K562 cell tot A 1
                 longLabel K562 whole cell total Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
                 subGroups view=Alignments cellType=1K562 localization=CELL rnaExtract=TOTAL rep=rep1
@@ -2427,7 +2891,7 @@ html wgEncodeCshlLongRnaSeq.release2
     		# subId=1503 dateSubmitted=2010-06-17
 
     		track wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1
-    		parent wgEncodeCshlLongRnaSeqViewAlignments off
+    		parent wgEncodeCshlLongRnaSeqViewAlignments on
     		shortLabel GM78 cell tot A 1
                 longLabel GM12878 whole cell total Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
                 subGroups view=Alignments cellType=1GM12878 localization=CELL rnaExtract=TOTAL rep=rep1
@@ -2575,7 +3039,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=1926 dateSubmitted=2010-09-30
 
 		track wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel HUVE cell pA+ A 1
 		longLabel HUVEC whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HUVEC localization=CELL rnaExtract=PAP rep=rep1
@@ -2595,7 +3059,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=1931 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel NHEK cell pA+ A 1
 		longLabel NHEK whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=NHEK localization=CELL rnaExtract=PAP rep=rep1
@@ -2605,7 +3069,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=1947 dateSubmitted=2010-09-30
 
 		track wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel HeLa cell pA+ A 1
 		longLabel HeLa-S3 whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=rep1
@@ -2665,7 +3129,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=1957 dateSubmitted=2010-09-30
 
 		track wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel HepG cell pA+ A 1
 		longLabel HepG2 whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=rep1
@@ -2704,7 +3168,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=2345 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel H1ES cell pA+ A 1
 		longLabel H1-hESC whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1H1HESC localization=CELL rnaExtract=PAP rep=rep1
@@ -2714,7 +3178,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=2098 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel GM78 cell pA+ A 1
 		longLabel GM12878 whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1GM12878 localization=CELL rnaExtract=PAP rep=rep1
@@ -2743,7 +3207,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=2402 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel K562 cell pA- A 1
 		longLabel K562 whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=CELL rnaExtract=PAM rep=rep1
@@ -2762,7 +3226,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=2405 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqA549CellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel A549 cell pA+ A 1
 		longLabel A549 whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=A549 localization=CELL rnaExtract=PAP rep=rep1
@@ -2800,7 +3264,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=2408 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel HepG cell pA- A 1
 		longLabel HepG2 whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=rep1
@@ -2829,7 +3293,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=2418 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel NHEK cell pA- A 1
 		longLabel NHEK whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=NHEK localization=CELL rnaExtract=PAM rep=rep1
@@ -2927,7 +3391,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=2458 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel H1ES cell pA- A 1
 		longLabel H1-hESC whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1H1HESC localization=CELL rnaExtract=PAM rep=rep1
@@ -3037,7 +3501,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=1959 dateSubmitted=2010-09-29
 
 		track wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel MCF7 cell pA+ A 1
 		longLabel MCF-7 whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=MCF7 localization=CELL rnaExtract=PAP rep=rep1
@@ -3046,7 +3510,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=2475 dateSubmitted=2010-10-01
 
 		track wgEncodeCshlLongRnaSeqK562CellPapAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel K562 cell pA+ A 1
 		longLabel K562 whole cell polyA+ Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1K562 localization=CELL rnaExtract=PAP rep=rep1
@@ -3066,7 +3530,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=1911 dateSubmitted=2010-10-05
 
 		track wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel MCF7 cell pA- A 1
 		longLabel MCF-7 whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=MCF7 localization=CELL rnaExtract=PAM rep=rep1
@@ -3287,7 +3751,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=3137 dateSubmitted=2010-12-23
 
 		track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel HeLa cell pA- A 1
 		longLabel HeLa-S3 whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=rep1
@@ -3317,7 +3781,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=3135 dateSubmitted=2010-12-23
 
 		track wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel HUVE cell pA- A 1
 		longLabel HUVEC whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=2HUVEC localization=CELL rnaExtract=PAM rep=rep1
@@ -3363,7 +3827,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=3125 dateSubmitted=2010-12-23
 
 		track wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel A549 cell pA- A 1
 		longLabel A549 whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=A549 localization=CELL rnaExtract=PAM rep=rep1
@@ -3522,7 +3986,7 @@ html wgEncodeCshlLongRnaSeq.release2
 		# subId=3229 dateSubmitted=2011-01-11
 
 		track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1
-		parent wgEncodeCshlLongRnaSeqViewAlignments off
+		parent wgEncodeCshlLongRnaSeqViewAlignments on
 		shortLabel GM78 cell pA- A 1
 		longLabel GM12878 whole cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
 		subGroups view=Alignments cellType=1GM12878 localization=CELL rnaExtract=PAM rep=rep1
@@ -3569,6 +4033,238 @@ html wgEncodeCshlLongRnaSeq.release2
         type bam
         # subId=5120 dateSubmitted=2011-12-06
 
+        track wgEncodeCshlLongRnaSeqCd20ro01794CellPapAlnRep1
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel CD20+_RO01794 cell longPolyA Aln 1
+        longLabel CD20+ RO01794 cell longPolyA RNA-seq Alignments Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=CD20RO01794 localization=CELL rnaExtract=PAP rep=rep1
+        type bam
+        # subId=5758 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqCd20ro01778CellPamAlnRep2
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel CD20+_RO01778 cell longNonPolyA Aln 2
+        longLabel CD20+ RO01778 cell longNonPolyA RNA-seq Alignments Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=CD20RO01778 localization=CELL rnaExtract=PAM rep=rep2
+        type bam
+        # subId=5761 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqMcf7NucleusPapAlnRep4
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel MCF-7 nucleus longPolyA Aln 4
+        longLabel MCF-7 nucleus longPolyA RNA-seq Alignments Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=MCF7 localization=NUCLEUS rnaExtract=PAP rep=rep4
+        type bam
+        # subId=5760 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep4
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel A549 nucleus longPolyA Aln 4
+        longLabel A549 nucleus longPolyA RNA-seq Alignments Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=A549 localization=NUCLEUS rnaExtract=PAP rep=rep4
+        type bam
+        # subId=5763 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqImr90CytosolPapAlnRep2
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel IMR90 cytosol longPolyA Aln 2
+        longLabel IMR90 cytosol longPolyA RNA-seq Alignments Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=IMR90 localization=CYTOSOL rnaExtract=PAP rep=rep2
+        type bam
+        # subId=5762 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamAlnRep2
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel Monocytes-CD14+_RO01746 cell longNonPolyA Aln 2
+        longLabel Monocytes-CD14+ RO01746 cell longNonPolyA RNA-seq Alignments Rep 2 from ENCODE/CSHL #too long length = 83 #autogenerated
+        subGroups view=Alignments cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAM rep=rep2
+        type bam
+        # subId=5764 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqA549CytosolPapAlnRep3
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel A549 cytosol longPolyA Aln 3
+        longLabel A549 cytosol longPolyA RNA-seq Alignments Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=A549 localization=CYTOSOL rnaExtract=PAP rep=rep3
+        type bam
+        # subId=5766 dateSubmitted=2012-02-16
+
+        track wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep4
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel SK-N-SH nucleus longPolyA Aln 4
+        longLabel SK-N-SH nucleus longPolyA RNA-seq Alignments Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=SKNSH localization=NUCLEUS rnaExtract=PAP rep=rep4
+        type bam
+        # subId=5767 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CellPapAlnRep2
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel IMR90 cell longPolyA Aln 2
+        longLabel IMR90 cell longPolyA RNA-seq Alignments Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=IMR90 localization=CELL rnaExtract=PAP rep=rep2
+        type bam
+        # subId=5771 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqCd20ro01778CellPapAlnRep2
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel CD20+_RO01778 cell longPolyA Aln 2
+        longLabel CD20+ RO01778 cell longPolyA RNA-seq Alignments Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=CD20RO01778 localization=CELL rnaExtract=PAP rep=rep2
+        type bam
+        # subId=5772 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapAlnRep2
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel Monocytes-CD14+_RO01746 cell longPolyA Aln 2
+        longLabel Monocytes-CD14+ RO01746 cell longPolyA RNA-seq Alignments Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAP rep=rep2
+        type bam
+        # subId=5773 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCellPapAlnRep4
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel SK-N-SH cell longPolyA Aln 4
+        longLabel SK-N-SH cell longPolyA RNA-seq Alignments Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=SKNSH localization=CELL rnaExtract=PAP rep=rep4
+        type bam
+        # subId=5775 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqMcf7NucleusPapAlnRep3
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel MCF-7 nucleus longPolyA Aln 3
+        longLabel MCF-7 nucleus longPolyA RNA-seq Alignments Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=MCF7 localization=NUCLEUS rnaExtract=PAP rep=rep3
+        type bam
+        # subId=5774 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCytosolPapAlnRep3
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel SK-N-SH cytosol longPolyA Aln 3
+        longLabel SK-N-SH cytosol longPolyA RNA-seq Alignments Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=SKNSH localization=CYTOSOL rnaExtract=PAP rep=rep3
+        type bam
+        # subId=5770 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90NucleusPapAlnRep1
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel IMR90 nucleus longPolyA Aln 1
+        longLabel IMR90 nucleus longPolyA RNA-seq Alignments Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=IMR90 localization=NUCLEUS rnaExtract=PAP rep=rep1
+        type bam
+        # subId=5776 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CytosolPapAlnRep1
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel IMR90 cytosol longPolyA Aln 1
+        longLabel IMR90 cytosol longPolyA RNA-seq Alignments Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=IMR90 localization=CYTOSOL rnaExtract=PAP rep=rep1
+        type bam
+        # subId=5779 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90NucleusPapAlnRep2
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel IMR90 nucleus longPolyA Aln 2
+        longLabel IMR90 nucleus longPolyA RNA-seq Alignments Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=IMR90 localization=NUCLEUS rnaExtract=PAP rep=rep2
+        type bam
+        # subId=5778 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CellPapAlnRep1
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel IMR90 cell longPolyA Aln 1
+        longLabel IMR90 cell longPolyA RNA-seq Alignments Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=IMR90 localization=CELL rnaExtract=PAP rep=rep1
+        type bam
+        # subId=5781 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalAlnRep1
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel CD34+_Mobilized cell total Aln 1
+        longLabel CD34+ Mobilized cell total RNA-seq Alignments Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=CD34MOBILIZED localization=CELL rnaExtract=TOTAL rep=rep1
+        type bam
+        # subId=5780 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep2
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel IMR90 cell total Aln 2
+        longLabel IMR90 cell total RNA-seq Alignments Rep 2 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep2
+        type bam
+        # subId=5783 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCytosolPapAlnRep4
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel SK-N-SH cytosol longPolyA Aln 4
+        longLabel SK-N-SH cytosol longPolyA RNA-seq Alignments Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=SKNSH localization=CYTOSOL rnaExtract=PAP rep=rep4
+        type bam
+        # subId=5782 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqA549CytosolPapAlnRep4
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel A549 cytosol longPolyA Aln 4
+        longLabel A549 cytosol longPolyA RNA-seq Alignments Rep 4 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=A549 localization=CYTOSOL rnaExtract=PAP rep=rep4
+        type bam
+        # subId=5784 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapAlnRep1
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel Monocytes-CD14+_RO01746 cell longPolyA Aln 1
+        longLabel Monocytes-CD14+ RO01746 cell longPolyA RNA-seq Alignments Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAP rep=rep1
+        type bam
+        # subId=5785 dateSubmitted=2012-02-17
+
+        track wgEncodeCshlLongRnaSeqSknshCellPapAlnRep3
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel SK-N-SH cell longPolyA Aln 3
+        longLabel SK-N-SH cell longPolyA RNA-seq Alignments Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=SKNSH localization=CELL rnaExtract=PAP rep=rep3
+        type bam
+        # subId=5787 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep3
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel A549 nucleus longPolyA Aln 3
+        longLabel A549 nucleus longPolyA RNA-seq Alignments Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=A549 localization=NUCLEUS rnaExtract=PAP rep=rep3
+        type bam
+        # subId=5788 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamAlnRep1
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel Monocytes-CD14+_RO01746 cell longNonPolyA Aln 1
+        longLabel Monocytes-CD14+ RO01746 cell longNonPolyA RNA-seq Alignments Rep 1 from ENCODE/CSHL #too long length = 83 #autogenerated
+        subGroups view=Alignments cellType=MONOCD14RO1746 localization=CELL rnaExtract=PAM rep=rep1
+        type bam
+        # subId=5789 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep3
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel SK-N-SH nucleus longPolyA Aln 3
+        longLabel SK-N-SH nucleus longPolyA RNA-seq Alignments Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=SKNSH localization=NUCLEUS rnaExtract=PAP rep=rep3
+        type bam
+        # subId=5790 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqMcf7CytosolPapAlnRep3
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel MCF-7 cytosol longPolyA Aln 3
+        longLabel MCF-7 cytosol longPolyA RNA-seq Alignments Rep 3 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=MCF7 localization=CYTOSOL rnaExtract=PAP rep=rep3
+        type bam
+        # subId=5792 dateSubmitted=2012-02-18
+
+        track wgEncodeCshlLongRnaSeqCd20ro01794CellPamAlnRep1
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel CD20+_RO01794 cell longNonPolyA Aln 1
+        longLabel CD20+ RO01794 cell longNonPolyA RNA-seq Alignments Rep 1 from ENCODE/CSHL #autogenerated
+        subGroups view=Alignments cellType=CD20RO01794 localization=CELL rnaExtract=PAM rep=rep1
+        type bam
+        # subId=5793 dateSubmitted=2012-02-18
+
     track wgEncodeCshlLongRnaSeqViewContigs
     shortLabel Contigs 
     view Contigs 
@@ -3576,7 +4272,7 @@ html wgEncodeCshlLongRnaSeq.release2
     subTrack wgEncodeCshlLongRnaSeq
 
         track wgEncodeCshlLongRnaSeqA549CellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel A549 cell pA- C 
         longLabel A549 whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=A549 localization=CELL rnaExtract=PAM
@@ -3584,7 +4280,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3601 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqA549CellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel A549 cell pA+ C 
         longLabel A549 whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=A549 localization=CELL rnaExtract=PAP
@@ -3660,7 +4356,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3610 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqGm12878CellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel GM78 cell pA- C 
         longLabel GM12878 whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=1GM12878 localization=CELL rnaExtract=PAM
@@ -3669,7 +4365,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3611 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqGm12878CellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel GM78 cell pA+ C 
         longLabel GM12878 whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=1GM12878 localization=CELL rnaExtract=PAP
@@ -3678,7 +4374,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3612 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqH1hescCellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel H1ES cell pA- C 
         longLabel H1-hESC whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=1H1HESC localization=CELL rnaExtract=PAM
@@ -3687,7 +4383,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3613 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqH1hescCellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel H1ES cell pA+ C 
         longLabel H1-hESC whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=1H1HESC localization=CELL rnaExtract=PAP
@@ -3739,7 +4435,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3626 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHuvecCellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel HUVE cell pA- C 
         longLabel HUVEC whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=2HUVEC localization=CELL rnaExtract=PAM
@@ -3748,7 +4444,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3627 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHuvecCellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel HUVE cell pA+ C 
         longLabel HUVEC whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=2HUVEC localization=CELL rnaExtract=PAP
@@ -3757,7 +4453,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3628 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHelas3CellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel HeLa cell pA- C 
         longLabel HeLa-S3 whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=2HELAS3 localization=CELL rnaExtract=PAM
@@ -3766,7 +4462,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3629 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHelas3CellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel HeLa cell pA+ C 
         longLabel HeLa-S3 whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=2HELAS3 localization=CELL rnaExtract=PAP
@@ -3838,7 +4534,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3638 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHepg2CellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel HepG cell pA- C 
         longLabel HepG2 whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=2HEPG2 localization=CELL rnaExtract=PAM
@@ -3847,7 +4543,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3639 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHepg2CellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel HepG cell pA+ C 
         longLabel HepG2 whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=2HEPG2 localization=CELL rnaExtract=PAP
@@ -3919,7 +4615,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3647 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqK562CellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel K562 cell pA- C 
         longLabel K562 whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=1K562 localization=CELL rnaExtract=PAM
@@ -3937,7 +4633,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3649 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqMcf7CellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel MCF7 cell pA- C 
         longLabel MCF-7 whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=MCF7 localization=CELL rnaExtract=PAM
@@ -3945,7 +4641,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3650 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqMcf7CellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel MCF7 cell pA+ C 
         longLabel MCF-7 whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=MCF7 localization=CELL rnaExtract=PAP
@@ -4090,7 +4786,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=5612 dateSubmitted=2012-02-10
 
         track wgEncodeCshlLongRnaSeqNhekCellPamContigsV2
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel NHEK cell longNonPolyA
         longLabel NHEK whole cell polyA- Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=CELL rnaExtract=PAM
@@ -4100,7 +4796,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=5612 dateSubmitted=2012-02-10
 
         track wgEncodeCshlLongRnaSeqNhekCellPapContigsV2
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel NHEK cell longPolyA
         longLabel NHEK whole cell polyA+ Long RNA-seq Contigs Rep Pooled from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=NHEK localization=CELL rnaExtract=PAP
@@ -4131,7 +4827,7 @@ html wgEncodeCshlLongRnaSeq.release2
 				score2=[f]Raw_Score
 
         track wgEncodeCshlLongRnaSeqA549CellPamJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel A549 cell pA- J 
         longLabel A549 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=A549 localization=CELL rnaExtract=PAM
@@ -4139,7 +4835,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3601 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqA549CellPapJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel A549 cell pA+ J 
         longLabel A549 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=A549 localization=CELL rnaExtract=PAP
@@ -4215,7 +4911,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3610 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqGm12878CellPamJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel GM78 cell pA- J 
         longLabel GM12878 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=1GM12878 localization=CELL rnaExtract=PAM
@@ -4224,7 +4920,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3611 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqGm12878CellPapJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel GM78 cell pA+ J 
         longLabel GM12878 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=1GM12878 localization=CELL rnaExtract=PAP
@@ -4233,7 +4929,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3612 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqH1hescCellPamJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel H1ES cell pA- J 
         longLabel H1-hESC whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=1H1HESC localization=CELL rnaExtract=PAM
@@ -4242,7 +4938,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3613 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqH1hescCellPapJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel H1ES cell pA+ J 
         longLabel H1-hESC whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=1H1HESC localization=CELL rnaExtract=PAP
@@ -4355,7 +5051,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3626 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHuvecCellPamJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HUVE cell pA- J 
         longLabel HUVEC whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=2HUVEC localization=CELL rnaExtract=PAM
@@ -4364,7 +5060,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3627 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHuvecCellPapJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HUVE cell pA+ J 
         longLabel HUVEC whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=2HUVEC localization=CELL rnaExtract=PAP
@@ -4373,7 +5069,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3628 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHelas3CellPamJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HeLa cell pA- J 
         longLabel HeLa-S3 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=2HELAS3 localization=CELL rnaExtract=PAM
@@ -4382,7 +5078,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3629 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHelas3CellPapJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HeLa cell pA+ J 
         longLabel HeLa-S3 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=2HELAS3 localization=CELL rnaExtract=PAP
@@ -4463,7 +5159,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3638 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHepg2CellPamJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HepG cell pA- J 
         longLabel HepG2 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=2HEPG2 localization=CELL rnaExtract=PAM
@@ -4472,7 +5168,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3639 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqHepg2CellPapJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HepG cell pA+ J 
         longLabel HepG2 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=2HEPG2 localization=CELL rnaExtract=PAP
@@ -4544,7 +5240,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3647 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqK562CellPamJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel K562 cell pA- J 
         longLabel K562 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=1K562 localization=CELL rnaExtract=PAM
@@ -4553,7 +5249,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3648 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqK562CellPapJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel K562 cell pA+ J 
         longLabel K562 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=1K562 localization=CELL rnaExtract=PAP
@@ -4562,7 +5258,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3649 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqMcf7CellPamJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel MCF7 cell pA- J 
         longLabel MCF-7 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=MCF7 localization=CELL rnaExtract=PAM
@@ -4570,7 +5266,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3650 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqMcf7CellPapJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel MCF7 cell pA+ J 
         longLabel MCF-7 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=MCF7 localization=CELL rnaExtract=PAP
@@ -4614,7 +5310,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3655 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqNhekCellPamJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel NHEK cell pA- J 
         longLabel NHEK whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=NHEK localization=CELL rnaExtract=PAM
@@ -4623,7 +5319,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=3656 dateSubmitted=2011-02-18
 
         track wgEncodeCshlLongRnaSeqNhekCellPapJunctions
-        parent wgEncodeCshlLongRnaSeqViewJunctions off
+        parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel NHEK cell pA+ J 
         longLabel NHEK whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
         subGroups view=Junctions rep=Pooled cellType=NHEK localization=CELL rnaExtract=PAP

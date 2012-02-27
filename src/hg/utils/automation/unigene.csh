@@ -1,5 +1,8 @@
 #!/bin/csh -f
 #
+# This script lives in kent/src/hg/utils/automation.
+# DO NOT CHANGE THE INSTALLED COPY OF THIS SCRIPT
+#
 # This script checks NCBI's UniGene repository version, 
 # downloads the latest and notifies $us if the version appears 
 # to have changed.  
@@ -9,7 +12,7 @@
 # - previous_version
 #
 
-set us = "rhead ann fanhsu"
+set us = "rhead ann braney"
 set localRepos = /hive/data/outside/uniGene
 set path = (/usr/bin /bin)
 

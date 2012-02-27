@@ -1,0 +1,312 @@
+metaObject wgEncodeGencode2wayConsPseudoV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencode2wayConsPseudoV10.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion 2-way Pseudogene Annotation Set
+md5sum ddbb8ef08e0f42b866afbd42aaa252cb
+project wgEncode
+subId 5127
+tableName wgEncodeGencode2wayConsPseudoV10
+
+metaObject wgEncodeGencodeAnnotationRemarkV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeAnnotationRemarkV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Annotation Remarks
+md5sum cebc87fd3b1bd669711870b9354d3d72
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeAnnotationRemarkV10
+
+metaObject wgEncodeGencodeAttrsV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeAttrsV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Transcript Attributes
+md5sum 5da35c1e64ba7f587011b9a99534f465
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeAttrsV10
+
+metaObject wgEncodeGencodeBasicV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeBasicV10.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Basic Gene Annotation Set
+md5sum c6123226849281359efd025e1ff6462c
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeBasicV10
+
+metaObject wgEncodeGencodeCompV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeCompV10.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Comprehensive Gene Annotation Set
+md5sum 7fd7bd47319b89fa675f328bcee30add
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeCompV10
+
+metaObject wgEncodeGencodeExonSupportV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeExonSupportV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Exon Support
+md5sum 1bf6e6f0b15aa56da2a5ab62ca47aee6
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeExonSupportV10
+
+metaObject wgEncodeGencodeGeneSourceV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeGeneSourceV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Source Lab
+md5sum c1744ba679a62556f3e06383fae5a207
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeGeneSourceV10
+
+metaObject wgEncodeGencodePdbV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodePdbV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion PDB entry mapping
+md5sum 660376b3bbf34e8775fdfa3b0fff763b
+project wgEncode
+subId 5127
+tableName wgEncodeGencodePdbV10
+
+metaObject wgEncodeGencodePolyaV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodePolyaV10.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion PolyA Transcript Annotation Set
+md5sum fa9dd0707c5e26290a29c41f8ff5a5ef
+project wgEncode
+subId 5127
+tableName wgEncodeGencodePolyaV10
+
+metaObject wgEncodeGencodePseudoGeneV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodePseudoGeneV10.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Pseudogene Annotation Set
+md5sum df762bce6a615dd877dc282769e40914
+project wgEncode
+subId 5127
+tableName wgEncodeGencodePseudoGeneV10
+
+metaObject wgEncodeGencodePubMedV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodePubMedV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion PubMed ID mapping
+md5sum fdd261e9f1043c0873edee5c4582e95d
+project wgEncode
+subId 5127
+tableName wgEncodeGencodePubMedV10
+
+metaObject wgEncodeGencodeRefSeqV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeRefSeqV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion RefSeq mapping
+md5sum 72cce64ddc383bac96be17dcd4852125
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeRefSeqV10
+
+metaObject wgEncodeGencodeTagV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeTagV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Transcript Tags
+md5sum 331f111736fb8f6782933c0d0c03391a
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeTagV10
+
+metaObject wgEncodeGencodeTranscriptSourceV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeTranscriptSourceV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Transcript Source Lab
+md5sum d03defd58ffccb54849d68ec12730f98
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeTranscriptSourceV10
+
+metaObject wgEncodeGencodeTranscriptSupportV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeTranscriptSupportV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Transcript Support
+md5sum c65ea55a459835c40ffe813a88592e32
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeTranscriptSupportV10
+
+metaObject wgEncodeGencodeTranscriptionSupportLevelV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeTranscriptionSupportLevelV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion Transcription Support Level
+md5sum a024d0902b8a83e0175b6222d5e04108
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeTranscriptionSupportLevelV10
+
+metaObject wgEncodeGencodeUniProtV10
+objType table
+composite wgEncodeGencodeV10
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-12
+dccAccession wgEncodeEH002252
+expId 2252
+fileName wgEncodeGencodeUniProtV10.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V10
+labVersion UniProt ID mapping
+md5sum 84f504e501da461aa8db8616ac2f8501
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeUniProtV10
+
+metaObject wgEncodeGencodeV10
+objType composite
+composite wgEncodeGencodeV10
+expVars lab,dataType,labExpId
+
+# MAGIC: -498223102

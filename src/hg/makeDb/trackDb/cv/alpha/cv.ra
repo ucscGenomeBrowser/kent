@@ -4251,42 +4251,6 @@ term NHLF
 tag NHLF
 type Cell Line
 organism human
-
-term NHDF_0060801.3
-tag NHDF0060801.3
-type Cell Line
-tier 3
-organism human
-description Dermal Fibroblasts
-lineage missing
-karyotype normal
-sex F
-tissue skin / temple
-vendorName PromoCell
-vendorId NHDF#c1390
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF#c1390
-termId BTO:0003185
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
-lab Gingeras
-protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf
-
-term NHDF_7071701.2
-tag NHDF7071701.2
-type Cell Line
-tier 3
-organism human
-description Dermal Fibroblasts
-lineage missing
-karyotype normal
-sex F
-tissue skin / breast
-vendorName PromoCell
-vendorId NHDF#c1390
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF#c1390
-termId BTO:0003185
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
-lab Gingeras
-protocol Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
 tissue lung
 lineage endoderm
 karyotype normal
@@ -9694,6 +9658,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
 validation Human_-_TBLR1_(ab24550)(Immunoprecipitation,ChIP):human_TBLR1_ab24550_validation_Snyder.pdf
 label TBLR1 (ab24550)
 
+term TBLR1_(NB600-270)
+tag TBLR1NB600270
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen: A synthetic peptide that maps to a region between residues 100 and 150 of human TBL1-related Protein 1 using the numbering given in SwissProt entry Q9BZK7.
+target TBLR1
+targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
+vendorName Novus Biologicals
+vendorId NB600-270
+orderUrl http://www.novusbio.com/TBLR1-Antibody_NB600-270.html
+lab Snyder
+lots 1
+targetId GeneCard:TBL1XR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
+validation TBLR1_(NB600-270)(Immunoprecipitation,ChIP):human_TBLR1_NB600-270_validation_Snyder.pdf
+
 term TBP
 tag TBP
 type Antibody
@@ -11046,43 +11025,6 @@ tag GGAMMA
 type promoter
 description promoter for the G-gamma globulin genes
 
-### Species
-
-term hg18
-tag HG18
-type species
-description The reference genome: Homo sapiens, March 2006 release
-
-term panTro2
-tag PANTRO2
-type species
-description Chimpanzee: Pan troglodytes, March 2006 release
-
-term rheMac2
-tag RHEMAC2
-type species
-description Monkey: Rhesus macaque, January 2006 release
-
-term mm9
-tag MM9
-type species
-description Mouse: Mus musculus, July 2007 release
-
-term rn4
-tag RN4
-type species
-description Rat: Rattus norvegicus, November 2004 release
-
-term canFam2
-tag CANFAM2
-type species
-description Dog: Canis lupus familiaris, May 2005 release
-
-term bosTau4
-tag BOSTAU4
-type species
-description Cow: Bos Taurus, October 2007 release
-
 ##### Control Terms
 
 term Control
@@ -11344,25 +11286,58 @@ term diffProtA_2d
 tag DIFFA2D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 2 days, lineage: mesoderm
-label 2 day diff prot A
+label 2 day diff protein A
 
 term diffProtA_5d
 tag DIFFA5D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 5 days, lineage: mesoderm
-label 5 day diffProtA
+label 5 day diff protein A
 
 term diffProtA_9d
 tag DIFFA9D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 9 days, lineage: mesoderm
-label 9 day diffProtA
+label 9 day diff protein A
 
 term diffProtA_14d
 tag DIFFA14D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, cell sorting and specific growth factors were used, lineage: mesoderm
-label 14 day diffProtA
+label 14 day diff protein A
+
+term diffDoxy_6hr
+tag DIFFD6H
+type treatment
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours (Stam) PROVISIONAL
+label 6 hour diff Doxcycline
+
+term diffDoxy_24hr
+tag DIFFD24H
+type treatment
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours (Stam) PROVISIONAL
+label 24 hour diff Doxcycline
+
+term diffDoxy_72hr
+tag DIFFD72H
+type treatment
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours (Stam) PROVISIONAL
+label 72 hour diff Doxcycline
+
+term diffEstradiol_24hr
+tag DIFFE24H
+type treatment
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+
+term diffEstradiol_48hr
+tag DIFFE48H
+type treatment
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+
+term diffEstradiol_120hr
+tag DIFFE120H
+type treatment
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
 
 term DMSO_0.02pct
 tag DM002P1H

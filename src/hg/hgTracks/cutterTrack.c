@@ -5,6 +5,8 @@
 #include "hdb.h"
 #include "cutterTrack.h"
 
+#define MAX_CUTTER_WINSIZE 250000
+
 void cuttersDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y, double scale,
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -103,7 +105,7 @@ windowDna = hDnaFromSeq(database, chromName, winStart, winEnd, dnaUpper);
 
 /* Do different things based on window size. */
 
-if (winSize < 250000)
+if (winSize < MAX_CUTTER_WINSIZE)
     {
     char *enz = cartUsualString(cart, cutterVar, cutterDefault);
     struct slName *cartCutters = NULL;
@@ -120,7 +122,7 @@ if (winSize < 250000)
 	{
 	if (zoomedToBaseLevel)
 	    cullCutters(&cutters, FALSE, NULL, 0);
-	else if (winSize >= 20000 && winSize < 250000)
+	else if (winSize >= 20000 && winSize < MAX_CUTTER_WINSIZE)
 	    {
 	    struct slName *popularCutters = slNameListFromComma(CUTTERS_POPULAR);
 	    cullCutters(&cutters, TRUE, popularCutters, 0);
@@ -146,6 +148,7 @@ struct track *cuttersTg()
 {
 struct track *tg = trackNew();
 struct trackDb *tdb;
+char buf[32];
 
 bedMethods(tg);
 AllocVar(tdb);
@@ -169,6 +172,8 @@ tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
 tdb->priority = tg->priority;
+safef(buf, sizeof(buf), "%d", MAX_CUTTER_WINSIZE);
+trackDbAddSetting(tdb, "maxWindowToDraw", buf);
 trackDbPolish(tdb);
 tg->tdb = tdb;
 return tg;
