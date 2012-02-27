@@ -9117,11 +9117,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002532
+expId 2532
 fileName wgEncodeUwTfbsH7esInputStdAlnRep1.bam,wgEncodeUwTfbsH7esInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS14111
 labVersion Bowtie 0.12.7
+md5sum 226bc38c6dfe637a9a4eb25e0c8c8551,5e0099ac64d81632d523ad6041e55afe
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9141,11 +9144,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002543
+expId 2543
 fileName wgEncodeUwTfbsH7esInputStdDiffa2dAlnRep1.bam,wgEncodeUwTfbsH7esInputStdDiffa2dAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS15392
 labVersion Bowtie 0.12.7
+md5sum 47afc956562362b214a71b372bd1f5cb,cb3f85f47b71260e67d5ff54a8300d61
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9165,10 +9171,13 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002543
+expId 2543
 fileName wgEncodeUwTfbsH7esInputStdDiffa2dRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS15392
+md5sum 98a9df0797b233a5bef81cef08a1aaba
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9188,11 +9197,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002543
+expId 2543
 fileName wgEncodeUwTfbsH7esInputStdDiffa2dRawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS15392
 labVersion WindowDensity-bin20-win+/-75
+md5sum 5abeed2d93aa8258306a3fd20250e1c3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9213,11 +9225,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002544
+expId 2544
 fileName wgEncodeUwTfbsH7esInputStdDiffa5dAlnRep1.bam,wgEncodeUwTfbsH7esInputStdDiffa5dAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS14110
 labVersion Bowtie 0.12.7
+md5sum e5786cf71baa6fc8dacfc02d2c4816c7,f512d19731d53c7245b1d21abc355948
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9237,10 +9252,13 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002544
+expId 2544
 fileName wgEncodeUwTfbsH7esInputStdDiffa5dRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS14110
+md5sum 9baa6088334b71230cee62e1584c30d1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9260,11 +9278,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002544
+expId 2544
 fileName wgEncodeUwTfbsH7esInputStdDiffa5dRawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS14110
 labVersion WindowDensity-bin20-win+/-75
+md5sum d096b44fc7213b943b2b6c2676fc91d4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9285,11 +9306,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002545
+expId 2545
 fileName wgEncodeUwTfbsH7esInputStdDiffa9dAlnRep1.bam,wgEncodeUwTfbsH7esInputStdDiffa9dAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS15393
 labVersion Bowtie 0.12.7
+md5sum 9aaa7fd5eb1c2368ce237f30d25886cd,b0cf75ff4c022b375d16a4e3b5bbceed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9309,10 +9333,13 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002545
+expId 2545
 fileName wgEncodeUwTfbsH7esInputStdDiffa9dRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS15393
+md5sum 647184ce010333879bda47b9e3d57ea9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9332,11 +9359,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002545
+expId 2545
 fileName wgEncodeUwTfbsH7esInputStdDiffa9dRawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS15393
 labVersion WindowDensity-bin20-win+/-75
+md5sum 92311ba1418c9e406ffe16a0da9262d2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9357,10 +9387,13 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002532
+expId 2532
 fileName wgEncodeUwTfbsH7esInputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS14111
+md5sum c4867a6cc9df611da856cd764c5a1272
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9380,11 +9413,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002532
+expId 2532
 fileName wgEncodeUwTfbsH7esInputStdRawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS14111
 labVersion WindowDensity-bin20-win+/-75
+md5sum 24b2b51da548dc2c76426c5936f4b7a5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13277,11 +13313,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002547
+expId 2547
 fileName wgEncodeUwTfbsHffCtcfStdAlnRep1.bam,wgEncodeUwTfbsHffCtcfStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18318
 labVersion Bowtie 0.12.7
+md5sum 71e45b8525be08dc3d47571ebea735dd,92a91b2b847d2266ca5a81bd5fa8389d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13301,11 +13340,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002547
+expId 2547
 fileName wgEncodeUwTfbsHffCtcfStdHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS18318
 labVersion Hotspot-v5.2
+md5sum d56999319bc430e752e212fc1a031d4c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13326,11 +13368,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002547
+expId 2547
 fileName wgEncodeUwTfbsHffCtcfStdPkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS18318
 labVersion lmax-v1.0
+md5sum aacb1925e2474e71d34ee1b580cb620c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13351,10 +13396,13 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002547
+expId 2547
 fileName wgEncodeUwTfbsHffCtcfStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS18318
+md5sum 16651c9f969938915cbbd0e04febc3dc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13374,11 +13422,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002547
+expId 2547
 fileName wgEncodeUwTfbsHffCtcfStdRawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS18318
 labVersion WindowDensity-bin20-win+/-75
+md5sum 1df273d42414c3152d60faa8550f0c82
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18809,11 +18860,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002548
+expId 2548
 fileName wgEncodeUwTfbsNhlfCtcfStdAlnRep1.bam,wgEncodeUwTfbsNhlfCtcfStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS16349
 labVersion Bowtie 0.12.7
+md5sum f176d1cffa45fa71953ab30500bd44a1,7f1647206c6dba95dcc72a7bc1626a92
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18833,11 +18887,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002548
+expId 2548
 fileName wgEncodeUwTfbsNhlfCtcfStdHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS16349
 labVersion Hotspot-v5.2
+md5sum 8b8af271382f63035dcf0dc92af4905d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18858,11 +18915,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002548
+expId 2548
 fileName wgEncodeUwTfbsNhlfCtcfStdPkRep1.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS16349
 labVersion lmax-v1.0
+md5sum 48a51fbc5d3c55523a17188b1c0125b3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18883,10 +18943,13 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002548
+expId 2548
 fileName wgEncodeUwTfbsNhlfCtcfStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS16349
+md5sum 648e1a399208e7fe2c78ad1a56b61545
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18906,11 +18969,14 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
 dateUnrestricted 2012-09-12
+dccAccession wgEncodeEH002548
+expId 2548
 fileName wgEncodeUwTfbsNhlfCtcfStdRawRep1.bigWig
 grant Stam
 lab UW
 labExpId DS16349
 labVersion WindowDensity-bin20-win+/-75
+md5sum 9f7027b5865089b6ce279a1ab709d4df
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -21110,4 +21176,4 @@ tableName wgEncodeUwTfbsWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 1940899040
+# MAGIC: -1314265453
