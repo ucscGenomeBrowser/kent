@@ -10,6 +10,7 @@ include wgEncodeGencodeV4.ra
 include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV10.ra
+include wgEncodeGencodeV11.ra alpha
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
