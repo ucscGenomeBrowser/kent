@@ -1457,3 +1457,700 @@ fr3     danRer7 1.415419
 fr3     latCha1 1.688189
 
 #########################################################################
+# phastCons 8-way (DONE - 2012-02-22 - Hiram)
+
+    # split 8way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh encodek
+    mkdir -p /hive/data/genomes/fr3/bed/multiz8way/cons/SS
+    cd /hive/data/genomes/fr3/bed/multiz8way/cons/SS
+    mkdir result done
+
+    cat << '_EOF_' > mkSS.csh
+#!/bin/csh -ef
+set dirPath = $1
+set mafFile = $2
+set MAF = /hive/data/genomes/fr3/bed/multiz8way/anno/result/mafSplit/$dirPath/$mafFile.maf
+set WINDOWS = /hive/data/genomes/fr3/bed/multiz8way/cons/SS/result/$dirPath
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $3 ) then
+    exit 0
+endif
+mkdir -p done/$dirPath
+if ( -s done/$dirPath/$mafFile.running ) then
+    exit 0
+endif
+
+date >> done/$dirPath/$mafFile.running
+
+rm -f $WINDOWS/$mafFile
+mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$mafFile -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $3
+rm -f done/$dirPath/$mafFile.running
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSS.csh
+
+    cat << '_EOF_' > template
+#LOOP
+mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #
+    find ../../anno/result/mafSplit -type f \
+	| sed -e 's#../../anno/result/mafSplit/##' > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+# Completed: 6214 of 6214 jobs
+# CPU time in finished jobs:        562s       9.36m     0.16h    0.01d  0.000 y
+# IO & Wait Time:                 16125s     268.76m     4.48h    0.19d  0.001 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:              29s       0.48m     0.01h    0.00d
+# Submission to last job:           914s      15.23m     0.25h    0.01d
+
+    # not all of them produce results
+    #	 there isn't much aligned in these MAF files
+    find ./result -type f | wc
+    #	 5472 5472 176757
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh encodek
+    mkdir -p /hive/data/genomes/fr3/bed/multiz8way/cons/run.cons
+    cd /hive/data/genomes/fr3/bed/multiz8way/cons/run.cons
+
+    #	there are going to be only one phastCons run using
+    #	this same script.  It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is:
+    #	all 
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set dir = $1
+set c = $2
+set f = $3
+set len = $4
+set cov = $5
+set rho = $6
+set resultFile = pp/$dir/$c.pp
+set grp = $cwd:t
+set cons = /hive/data/genomes/fr3/bed/multiz8way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+ln -s $ssSrc/SS/result/$c/$f.ss $tmp
+ln -s $cons/$grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phastCons $cons/SS/result/$dir/$f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p pp/$dir bed/$dir
+sleep 4
+touch pp/$dir bed/$dir
+rm -f $resultFile
+rm -f bed/$dir/$f.bed
+mv $tmp/$f.pp pp/$dir
+mv $tmp/$f.bed bed/$dir
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(dir1) $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(dir1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../SS -type f | grep ".ss$" | sed -e 's#../SS/result/##; s/.ss$//' \
+	> ss.list
+    wc -l ss.list
+    #	3291 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/fr3/bed/multiz8way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para create jobList
+    para try ... check ...
+    para push
+# Completed: 5472 of 5472 jobs
+# CPU time in finished jobs:       1187s      19.78m     0.33h    0.01d  0.000 y
+# IO & Wait Time:                 35801s     596.69m     9.94h    0.41d  0.001 y
+# Average job time:                   7s       0.11m     0.00h    0.00d
+# Longest finished job:              40s       0.67m     0.01h    0.00d
+# Submission to last job:          2238s      37.30m     0.62h    0.03d
+
+    cd /hive/data/genomes/fr3/bed/multiz8way/cons/all
+
+    find ./bed -type f | grep ".bed$" | xargs cat | sort -k1,1 -k2,2n \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	    > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    time nice -n +19 hgLoadBed fr3 phastConsElements8way mostConserved.bed
+    #	Loaded 1126332 elements of size 5
+    #	real    0m7.677s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov 
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    featureBits fr3 -enrichment ensGene:cds phastConsElements8way
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+# ensGene:cds 2.244%, phastConsElements8way 10.055%, both 1.669%, cover 74.39%, enrich 7.40x
+    featureBits fr3 -enrichment mgcGenes:cds phastConsElements8way
+# mgcGenes:cds 0.741%, phastConsElements8way 10.055%, both 0.619%, cover 83.53%, enrich 8.31x
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/fr3/bed/multiz8way/cons/all
+    mkdir downloads
+
+    find ./pp -type f | sed -e "s#/# dir #g; s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k9,9 -k11,11n | sed -e "s# dir #/#g; s# d #.#g; s# m #-#g;" \
+	| xargs cat \
+	| gzip -c > downloads/phastCons8way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons8way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/fr3/chrom.sizes \
+	    phastCons8way.bw) > bigWig.log 2>&1 &
+    tail bigWig.log
+    # pid=25817: VmPeak:     3413828 kB
+    #	real    3m47.314s
+
+    bigWigInfo phastCons8way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 606,493,400
+# primaryIndexSize: 11,794,172
+# zoomLevels: 10
+# chromCount: 5452
+# basesCovered: 305,346,303
+# mean: 0.363248
+# min: 0.000000
+# max: 1.000000
+# std: 0.412709
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons8way.wigFix.gz \
+	| wigEncode stdin phastCons8way.wig phastCons8way.wib) &
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    1m28.386s
+
+    du -hsc *.wi?
+    #	292M    phastCons8way.wib
+    #	34M     phastCons8way.wig
+    #	325M    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons8way.wib /gbdb/fr3/multiz8way/phastCons8way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/fr3/multiz8way \
+	fr3 phastCons8way phastCons8way.wig
+    #	real    0m5.850s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh fr3 phastCons8way
+# db.table         min max mean       count sumData      stdDev viewLimits
+# fr3.phastCons8way  0 1 0.363248 305346303 1.10917e+08 0.412709 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=fr3 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons8way > histogram.data 2>&1
+    #	real    0m46.993s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Fugu fr3 Histogram phastCons8way track"
+set xlabel " phastCons8way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# phyloP for 8-way (DONE - 2012-02-22 - Hiram)
+    # run phyloP with score=LRT 
+    ssh encodek
+    mkdir /cluster/data/fr3/bed/multiz8way/consPhyloP
+    cd /cluster/data/fr3/bed/multiz8way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.613
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.613 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod 
+    #	BACKGROUND: 0.193500 0.306500 0.306500 0.193500
+
+    #	following the pattern from panTro3 with grp: "all" (no other grp)
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set dir = $1
+set f = $2
+set file1 = $f:t
+set out = $3
+set cName = $f:t:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/fr3/bed/multiz8way/consPhyloP
+set tmp = $cons/tmp/$grp/$cName
+rm -fr $tmp
+mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/fr3/bed/multiz8way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+mkdir -p $out:h
+sleep 4
+mv $tmp/$file1.wigFix $out
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+rmdir --ignore-fail-on-non-empty $cons/tmp
+'_EOF_'
+    # << happy emacs
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e 's#../../cons/SS/result/##; s/.ss$//'  > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	5472 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(dir1) $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/all
+    cd /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # the -ram=8g will allow only one job per node to slow this down since
+    #	it would run too fast otherwise.  Either run on one of the small
+    #	klusters or use the -ram=8g on the para create
+    para -ram=8g create jobList
+    para try ... check ... etc ...
+    para -maxJob=64 push
+    para time > run.time
+# Completed: 5690 of 5690 jobs
+# CPU time in finished jobs:       9670s     161.17m     2.69h    0.11d  0.000 y
+# IO & Wait Time:                 38146s     635.76m    10.60h    0.44d  0.001 y
+# Average job time:                   8s       0.14m     0.00h    0.00d
+# Longest finished job:              63s       1.05m     0.02h    0.00d
+# Submission to last job:          2448s      40.80m     0.68h    0.03d
+
+    # make downloads
+    mkdir downloads
+
+    time (find ./wigFix -type f \
+	| sed -e "s#/# dir #g; s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k9,9 -k11,11n | sed -e "s# dir #/#g; s# d #.#g; s# m #-#g;" \
+	| xargs cat \
+	| gzip -c > downloads/phyloP8way.wigFix.gz) &
+    #	real    5m50.668s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP8way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/fr3/chrom.sizes \
+	phyloP8way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    #   pid=32533: VmPeak:     3413824 kB
+    #	real    4m20.055s
+
+    bigWigInfo phyloP8way.bw  | sed -e "s/^/#\t/"
+#       version: 4
+#       isCompressed: yes
+#       isSwapped: 0
+#       primaryDataSize: 613,964,662
+#       primaryIndexSize: 11,794,172
+#       zoomLevels: 10
+#       chromCount: 5452
+#       basesCovered: 305,346,303
+#       mean: 0.340267
+#       min: -2.059000
+#       max: 2.645000
+#       std: 0.813855
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP8way.wigFix.gz \
+	| wigEncode stdin phyloP8way.wig phyloP8way.wib) &
+    #	Converted stdin, upper limit 2.65, lower limit -2.06
+    #	real    1m34.170s
+
+    du -hsc *.wi?
+    #	292M    phyloP8way.wib
+    #	35M     phyloP8way.wig
+    #	326M    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP8way.wib /gbdb/fr3/multiz8way/phyloP8way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/fr3/multiz8way fr3 \
+	phyloP8way phyloP8way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh fr3 phyloP8way
+# db.table      min max mean count sumData stdDev viewLimits
+# fr3.phyloP8way  -2.059 2.645 0.340267 305346303 1.03899e+08 0.813855
+# viewLimits=-2.059:2.645
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=fr3 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phyloP8way > histogram.data 2>&1
+    #	real    0m46.775s
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+#	Q1 0.000392
+#	median 0.000683
+#	Q3 0.001184
+#	average 0.001000
+#	min 0.000086
+#	max 0.029306
+#	count 1000
+#	total 0.999978
+#	standard deviation 0.001531
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Fugu fr3 Histogram phyloP8way track"
+set xlabel " phyloP8way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.007]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# lifting ensGene track from fr2 (DONE - 2012-02-22 - Hiram)
+    # no gene tracks yet on fr3.  liftUp fr2 ensGenes to fr3
+    # history of fr2 ensGene indicates it has been the same there since
+    #	v60 of ensGene - thru today same as v65
+    mkdir /hive/data/genomes/fr3/bed/ensGene
+    cd /hive/data/genomes/fr3/bed/ensGene
+    hgsql -N -e "select * from ensGene;" fr2 | cut -f2- > fr2.ensGene.gp
+    liftOver -genePred fr2.ensGene.gp \
+	/gbdb/fr2/liftOver/fr2ToFr3.over.chain.gz \
+	fr3.lifted.ensGene.gp unmapped.ensGene.gp
+    ls -ogrt
+# -rw-rw-r-- 1 18680443 Feb 22 16:22 fr2.ensGene.gp
+# -rw-rw-r-- 1 15869141 Feb 22 16:22 fr3.lifted.ensGene.gp
+# -rw-rw-r-- 1   126578 Feb 22 16:22 unmapped.ensGene.gp
+
+    hgLoadGenePred -skipInvalid -genePredExt fr3 ensGene fr3.lifted.ensGene.gp
+    #	Warning: skipping 782 invalid genePreds
+
+    # make a list of what did get loaded:
+    hgsql -N -e "select name from ensGene;" fr3 | sort -u > fr3.name.ensGene.txt
+    wc -l fr3.name.ensGene.txt 
+    #	47702 fr3.name.ensGene.txt
+
+    hgsql -N -e "select * from ensPep;" fr2 | sort > fr2.ensPep.tab
+    hgsql -N -e "select * from ensGtp;" fr2 | sort -k2,2 > fr2.ensGtp.tab
+    hgsql -N -e "select * from ensemblSource;" fr2 | sort -k1,1 \
+	> fr2.ensemblSource.tab
+    hgsql -N -e "select * from ensemblToGeneName;" fr2 | sort -k1,1 \
+	> fr2.ensemblToGeneName.tab
+
+    # select out ensGtp records that match with the names in fr3 ensGene:
+    join -1 2 -2 1 -o "1.1,1.2,1.3" fr2.ensGtp.tab fr3.name.ensGene.txt \
+	| tr '[ ]' '[\t]' > fr3.ensGtp.tab
+    wc -l *.ensGtp.tab
+    #	48706 fr2.ensGtp.tab
+    #	47702 fr3.ensGtp.tab
+
+    # select out ensPep records that match with the names in fr3 ensGene:
+    join -1 1 -2 2 -o "1.1,1.2" fr2.ensPep.tab fr3.ensGtp.tab \
+	| tr '[ ]' '[\t]' > fr3.ensPep.tab
+
+    wc -l fr2.ensPep.tab fr3.ensPep.tab
+    #	47841 fr2.ensPep.tab
+    #	46842 fr3.ensPep.tab
+
+    # select out ensemblSource records that match the fr3 ensGene names:
+    join -1 1 -2 1 -o "1.1,1.2" fr2.ensemblSource.tab fr3.name.ensGene.txt \
+	| tr '[ ]' '[\t]' > fr3.ensemblSource.tab
+    wc -l fr2.ensemblSource.tab fr3.ensemblSource.tab 
+  48706 fr2.ensemblSource.tab
+  47702 fr3.ensemblSource.tab
+
+    # select out ensemblToGeneName records that match the fr3 ensGene names:
+    join -1 1 -2 1 -o "1.1,1.2" fr2.ensemblToGeneName.tab \
+	fr3.name.ensGene.txt | tr '[ ]' '[\t]' > fr3.ensemblToGeneName.tab
+    wc -l fr2.ensemblToGeneName.tab fr3.ensemblToGeneName.tab
+    #	40067 fr2.ensemblToGeneName.tab
+    #	39200 fr3.ensemblToGeneName.tab
+
+    hgPepPred fr3 tab ensPep fr3.ensPep.tab
+    hgLoadSqlTab fr3 ensGtp ~/kent/src/hg/lib/ensGtp.sql fr3.ensGtp.tab
+
+    # verify size of the names
+    cut -f1 fr3.ensemblSource.tab | awk '{print length($0)}' \
+	| sort | uniq -c | head
+    #	47702 18
+
+    sed -e "s/15/18/" ~/kent/src/hg/lib/ensemblSource.sql > ensemblSource.sql
+    hgLoadSqlTab fr3 ensemblSource ensemblSource.sql fr3.ensemblSource.tab
+
+    # find sizes for indexes
+  NL=`awk '{print length($1)}' fr3.ensemblToGeneName.tab | sort -rn | head -1`
+  VL=`awk '{print length($2)}' fr3.ensemblToGeneName.tab | sort -rn | head -1`
+    # construct sql definition with appropriate index sizes
+    sed -e "s/ knownTo / ensemblToGeneName /; s/known gene/ensGen/; s/INDEX(name(12)/PRIMARY KEY(name($NL)/; s/value(12)/value($VL)/" \
+	~/kent/src/hg/lib/knownTo.sql > ensemblToGeneName.sql
+
+    hgLoadSqlTab fr3 ensemblToGeneName ensemblToGeneName.sql \
+	fr3.ensemblToGeneName.tab
+
+    hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("fr3", "ensGene", "hiram", "65", now(), \
+        "lifted from mm9 ensGene 65", \
+        "lifted from mm9 ensGene 65", \
+        "dec2011" );' hgFixed
+
+#############################################################################
+# hgPal downloads (DONE - Hiram - 2011-12-08)
+#   FASTA from 8way for ensGene
+
+    ssh hgwdev
+    rm -rf /hive/data/genomes/fr3/bed/multiz8way/pal
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/pal
+    cd /hive/data/genomes/fr3/bed/multiz8way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    mz=multiz8way
+    gp=ensGene
+    db=fr3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /hive/data/genomes/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.list stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.list stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.list stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.list stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+    #	real    49m45.740s
+
+    mz=multiz8way
+    gp=ensGene
+    db=fr3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+    # about 12 minutes
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc &
+
+    md5sum $gp.$mz.exonAA.fa.gz $gp.$mz.exonNuc.fa.gz > md5sum.txt
+
+    # we're only distributing exons at the moment
+    mz=multiz8way
+    gp=ensGene
+    db=fr3
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    # obtain a copy of a most-recent README.txt file
+    cp -p /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/multiz11way/alignments/README.txt .
+
+    # edit to bring up to date for fr3
+    ln -s `pwd`/README.txt $pd/
+
+#############################################################################
+# download data for 8-way (DONE - 2012-02-23 - Hiram)
+    # use a README from the most recent multiz like this
+    #	this one is from gorGor3
+    cd /hive/data/genomes/fr3/bed/multiz8way/cons
+    cp -p /hive/data/genomes/gorGor3/bed/multiz11way/cons/README.txt .
+    # need to edit this to finish it off
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phastCons8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phastCons8way
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/cons/all/downloads/phastCons8way.wigFix.gz \
+	./phastCons8way.wigFix.gz
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/all/phastCons8way.bw \
+	./phastCons8way.bw
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/all/all.mod \
+	./fish.mod
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/README.txt .
+
+    md5sum phastCons8way.bw phastCons8way.wigFix.gz fish.mod \
+	> /hive/data/genomes/fr3/bed/multiz8way/cons/md5sum.txt
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/md5sum.txt .
+
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cd /hive/data/genomes/fr3/bed/multiz8way/consPhyloP
+    cp /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/README.txt .
+    # need to edit this to finish it off
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phyloP8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phyloP8way
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/consPhyloP/all/downloads/phyloP8way.wigFix.gz \
+	./phyloP8way.wigFix.gz
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/consPhyloP/all/phyloP8way.bw \
+	./phyloP8way.bw
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/consPhyloP/run.phyloP/all.mod \
+	./fish.mod
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/README.txt .
+    md5sum README.txt phyloP8way.bw phyloP8way.wigFix.gz fish.mod \
+	> /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/md5sum.txt
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/md5sum.txt .
+
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/downloads
+    cd /hive/data/genomes/fr3/bed/multiz8way/downloads
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cp -p /hive/data/genomes/gorGor3/bed/multiz11way/downloads/README.txt .
+    # need to edit this README.txt to finish it off
+    # you can find this common name translation above in the section that
+    # began the multiz8way work:
+    grep TREE ../cons/all/all.mod | sed -e "s/TREE: //" > fr3.8way.nh
+
+    /cluster/bin/phast/tree_doctor --rename \
+"fr3->Fugu; tetNig2->Tetraodon; oreNil1->Nile_Tilapia; gasAcu1->Stickleback; oryLat2->Medaka; gadMor1->Atlantic_cod; danRer7->Zebrafish; latCha1->Coelacanth;" \
+fr3.8way.nh > fr3.commonNames.8way.nh
+
+    time cp -p ../anno/fr3.8way.maf ./multiz8way.maf
+    #	real    1m38.305s
+# -rw-rw-r-- 1 3235224846 Feb 21 13:55 multiz8way.maf
+    time gzip multiz8way.maf
+    #	real    7m24.097s
+# -rw-rw-r-- 1 738827448 Feb 21 13:55 multiz8way.maf.gz
+
+    md5sum *.nh *.gz *.txt > md5sum.txt
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/multiz8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/multiz8way
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/downloads/fr3.8way.nh .
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/downloads/fr3.commonNames.8way.nh .
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/downloads/multiz8way.maf.gz .
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/downloads/README.txt .
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/downloads/md5sum.txt .
+
+#############################################################################
+# Construct download files (DONE - 2012-02-23 - Hiram)
+    cd /hive/data/genomes/fr3
+    # verify joinerCheck is good and fr3 is in all.joiner
+    joinerCheck -keys -database=fr3 \
+	$HOME/kent/src/hg/makeDb/schema/all.joiner
+
+    time makeDownloads.pl fr3 -workhorse=hgwdev > downloads.log 2>&1 &
+    #	real    24m7.903s
+    # you must edit the */README files in ./goldenPath/
+
+############################################################################
+# after downloads, construct pushQ (DONE - 2012-02-23 - Hiram)
+    mkdir /hive/data/genomes/fr3/pushQ
+    cd /hive/data/genomes/fr3/pushQ
+    time makePushQSql.pl fr3 > fr3.sql 2> stderr.log
+    # check stderr.log for anything not categorized
+
+    scp -p fr3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < fr3.sql
+    # after loading, view the subQ in the WEB interface, go through each
+    #	item and verify it can measure the tables and files
+
+############################################################################
