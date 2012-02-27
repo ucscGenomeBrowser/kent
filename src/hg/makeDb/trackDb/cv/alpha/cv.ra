@@ -5003,6 +5003,23 @@ color 189,0,157
 sex U
 protocol Gingeras:Adrenal_Gingeras_protocol.pdf
 
+term BAT
+tag BAT
+type Cell Line
+organism mouse
+tissue adipose
+categorey Tissue
+age ageUnknown
+strain Unknown
+description Brown adipocytes tissue PROVISIONAL
+vendorName Jerrold M. Olefsky Lab, UCSD
+termId 7188
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
+color 189,0,157
+sex U
+label Brown Adipose Tissue
+protocol Ren:BAT_Ren_protocol.pdf
+
 term B-cell_(CD19+)
 tag BCELLCD19P
 type Cell Line
@@ -5056,6 +5073,23 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6961
 color 204,121,167
 sex U
 protocol Gingeras:Bladder_Gingeras_protocol.pdf
+
+term BMDM
+tag BMDM
+type Cell Line
+organism mouse
+tissue blood
+category primaryCells
+description Bone marrow derived macrophage PROVISIONAL
+age ageUnknown
+strain Unknown
+vendorName Genhong Cheng Lab, UCLA
+termId 7058
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
+color 86,180,233
+sex U
+protocol Ren:BMDM_Ren_protocol.pdf
+label Bone marrow derived macrophage
 
 term BoneMarrow
 tag BMARROW
