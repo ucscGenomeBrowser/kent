@@ -144,7 +144,7 @@ static void printMarkerSnippets(struct sqlConnection *conn, char* articleTable, 
 {
 
 /* do not show more snippets than this limit */
-int itemLimit=4000;
+int itemLimit=1000;
 
 printSectionCheckboxes();
 char* sectionList = makeSqlMarkerList();
