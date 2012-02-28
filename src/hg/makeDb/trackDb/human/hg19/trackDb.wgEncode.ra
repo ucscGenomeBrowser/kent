@@ -18,7 +18,7 @@ include wgEncodeUncBsuProt.release2.ra alpha
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra beta,public
-include wgEncodeReg.new.ra alpha
+include wgEncodeReg.release2.ra alpha
 
 
 # UW Repli-Seq track (wrangler: venkat)
