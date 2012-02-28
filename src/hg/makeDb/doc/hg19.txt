@@ -8412,6 +8412,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 
 ########################################################################
 # NHGRI GWAS CATALOG (DONE 2/21/12 angie)
+# NOTE: This assumes that the corresponding section in hg18.txt has just been run.
+#       It depends on the noCoords.tab file in the corresponding hg18 build directory.
 # Updated 2/21/12 (remove extra whitespace, translate non-ASCII to html), 2/6/12
 # Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
