@@ -1,4 +1,3 @@
-
 LIST=\
 wgEncodeCaltechHist.ra \
 wgEncodeCaltechTfbs.ra \
@@ -14,6 +13,7 @@ wgEncodeUwDnase.ra \
 wgEncodeUwRnaSeq.ra \
 wgEncodeUwDgf.ra \
 wgEncodeCshlLongRnaSeq.ra \
-wgEncodeCaltechRnaSeq.ra
+wgEncodeCaltechRnaSeq.ra \
+wgEncodeNhgriBip.ra
 
 include ../../../../makefile.metaDb
