@@ -1403,7 +1403,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseCd20ro01778HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel CD20+_RO01778 1
+        shortLabel CD20+_01778 1
         longLabel CD20+ RO01778 DNaseI HS Hotspots Rep 1 from ENCODE/UW 
         subGroups view=Hot cellType=CD20RO01778 rep=1 treatment=None
         type broadPeak
@@ -2900,7 +2900,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseCd20ro01778PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel CD20+_RO01778 Pk 1
+        shortLabel CD20+_01778 Pk 1
         longLabel CD20+ RO01778 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
         subGroups view=Peaks cellType=CD20RO01778 rep=1 treatment=None
         type narrowPeak
@@ -4399,7 +4399,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseCd20ro01778RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel CD20+_RO01778 Raw 1
+        shortLabel CD20+_01778 Raw 1
         longLabel CD20+ RO01778 DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
         subGroups view=zRSig cellType=CD20RO01778 rep=1 treatment=None
         type bigWig 1.000000 17468.000000

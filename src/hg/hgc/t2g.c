@@ -172,6 +172,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 }
 
 freeMem(sectionList);
+sqlFreeResult(&sr);
 }
 
 static char* printArticleInfo(struct sqlConnection *conn, char* item)
