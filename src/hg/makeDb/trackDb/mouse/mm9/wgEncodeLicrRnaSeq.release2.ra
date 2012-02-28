@@ -184,7 +184,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep1
         parent wgEncodeLicrRnaSeqViewSignal 
         shortLabel MEF 8wk Sg 1
-        longLabel Embryonic Fibroblast adult-8wks C57BL/6 RNA-seq Signal Rep 1 from ENCODE/LICR
+        longLabel MEF adult-8wks C57BL/6 RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=MEF localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
         type bigWig 4.000000 65454.000000
         color 65,105,225
@@ -193,7 +193,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep2
         parent wgEncodeLicrRnaSeqViewSignal 
         shortLabel MEF 8wk Sg 2
-        longLabel Embryonic Fibroblast adult-8wks C57BL/6 RNA-seq Signal Rep 2 from ENCODE/LICR
+        longLabel MEF adult-8wks C57BL/6 RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=MEF localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
         type bigWig 4.000000 65533.000000
         color 65,105,225
@@ -202,7 +202,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep1
         parent wgEncodeLicrRnaSeqViewSignal 
         shortLabel ES-Bruce4 E0 Sg 1
-        longLabel ES-Bruce4 (embryonic stem cell) E0 C57BL/6 RNA-seq Signal Rep 1 from ENCODE/LICR
+        longLabel ES-Bruce4 E0 C57BL/6 RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=E0 cellType=ESB4 localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
         type bigWig 0.000000 65475.000000
         color 65,105,225
@@ -211,7 +211,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep2
         parent wgEncodeLicrRnaSeqViewSignal 
         shortLabel ES-Bruce4 E0 Sg 2
-        longLabel ES-Bruce4 (embryonic stem cell) E0 C57BL/6 RNA-seq Signal Rep 2 from ENCODE/LICR
+        longLabel ES-Bruce4 E0 C57BL/6 RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=E0 cellType=ESB4 localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
         type bigWig 0.000000 65447.000000
         color 65,105,225
@@ -563,7 +563,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep1
         parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel MEF 8wk Al 1
-        longLabel Embryonic Fibroblast adult-8wks C57BL/6 RNA-seq Alignments Rep 1 from ENCODE/LICR
+        longLabel MEF adult-8wks C57BL/6 RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=ADULT8WKS cellType=MEF localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
         type bam
         color 65,105,225
@@ -572,7 +572,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6AlnRep2
         parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel MEF 8wk Al 2
-        longLabel Embryonic Fibroblast adult-8wks C57BL/6 RNA-seq Alignments Rep 2 from ENCODE/LICR
+        longLabel MEF adult-8wks C57BL/6 RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=ADULT8WKS cellType=MEF localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
         type bam
         color 65,105,225
@@ -581,7 +581,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep1
         parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel ES-Bruce4 E0 Al 1
-        longLabel ES-Bruce4 (embryonic stem cell) E0 C57BL/6 RNA-seq Alignments Rep 1 from ENCODE/LICR
+        longLabel ES-Bruce4 E0 C57BL/6 RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=E0 cellType=ESB4 localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
         type bam
         color 65,105,225
@@ -590,7 +590,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6AlnRep2
         parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel ES-Bruce4 E0 Al 2
-        longLabel ES-Bruce4 (embryonic stem cell) E0 C57BL/6 RNA-seq Alignments Rep 2 from ENCODE/LICR
+        longLabel ES-Bruce4 E0 C57BL/6 RNA-seq Alignments Rep 2 from ENCODE/LICR
         subGroups view=Alignments age=E0 cellType=ESB4 localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
         type bam
         color 65,105,225

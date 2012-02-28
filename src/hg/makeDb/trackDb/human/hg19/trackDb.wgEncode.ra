@@ -18,7 +18,7 @@ include wgEncodeUncBsuProt.release2.ra alpha
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra beta,public
-include wgEncodeReg.new.ra alpha
+include wgEncodeReg.release2.ra alpha
 
 
 # UW Repli-Seq track (wrangler: venkat)
@@ -55,7 +55,8 @@ include wgEncodeUmassDekker5C.ra alpha
 
 # UW 5C (wrangler: kate)
 include wgEncodeUw5C.ra beta,public
-include wgEncodeUw5C.release2.ra alpha
+include wgEncodeUw5C.patch.ra alpha
+#include wgEncodeUw5C.release2.ra alpha
 
 
 # Encode Affy Exon --------------------------------------------
@@ -161,8 +162,8 @@ include wgEncodeSydhHistone.release3.ra alpha
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release2.ra beta,public
-include wgEncodeUwTfbs.release3.ra alpha
+include wgEncodeUwTfbs.release2.ra public
+include wgEncodeUwTfbs.release3.ra alpha,beta
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha

@@ -5003,6 +5003,23 @@ color 189,0,157
 sex U
 protocol Gingeras:Adrenal_Gingeras_protocol.pdf
 
+term BAT
+tag BAT
+type Cell Line
+organism mouse
+tissue adipose
+category Tissue
+age ageUnknown
+strain Unknown
+description Brown adipocytes tissue PROVISIONAL
+vendorName Jerrold M. Olefsky Lab, UCSD
+termId 7188
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
+color 189,0,157
+sex U
+label Brown Adipose Tissue
+protocol Ren:BAT_Ren_protocol.pdf
+
 term B-cell_(CD19+)
 tag BCELLCD19P
 type Cell Line
@@ -5056,6 +5073,23 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6961
 color 204,121,167
 sex U
 protocol Gingeras:Bladder_Gingeras_protocol.pdf
+
+term BMDM
+tag BMDM
+type Cell Line
+organism mouse
+tissue blood
+category primaryCells
+description Bone marrow derived macrophage PROVISIONAL
+age ageUnknown
+strain Unknown
+vendorName Genhong Cheng Lab, UCLA
+termId 7058
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
+color 86,180,233
+sex U
+protocol Ren:BMDM_Ren_protocol.pdf
+label Bone marrow derived macrophage
 
 term BoneMarrow
 tag BMARROW
@@ -6067,35 +6101,40 @@ orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
 color 65,105,225
 sex M
 protocol Stam:ZhBTc4_Stam_protocol.pdf
-#tissue
-#termId
-#termUrl
 
 # Gene types
+# CRICKET is commenting this out in Feb 2012.  We can find no use of it anywhere in the source tree and it is confusing the cvValidator.
+# If this is still commented out after April 2012, please remove it.
+# Also, I am changing the Gene Type to geneType.  So, if we do need to uncomment this, we will need to deal with that change.  But Gene Type
+# with a space is troublesome.
 # term (human-readable cell type name)
 # tag (machine-readable cell type name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be Gene Type)
 # description (human-readable description of the gene type.  Perhaps it's used by the Gencode track.(
+#term Known
+#tag KNOWN
+#type  geneType
+#description known or novel CDS
+#
+#term Putative
+#tag PUTATIVE
+#type  geneType
+#description novel, putative, TEC or artifact
+#
+#term Polymorphic
+#tag POLYMORPH
+#type  geneType
+#description polymorphic
+#
+#term Pseudo
+#tag PSEUDO
+#type  geneType
+#description pseudogene
 
-term Known
-tag KNOWN
-type Gene Type
-description known or novel CDS
 
-term Putative
-tag PUTATIVE
-type Gene Type
-description novel, putative, TEC or artifact
 
-term Polymorphic
-tag POLYMORPH
-type Gene Type
-description polymorphic
 
-term Pseudo
-tag PSEUDO
-type Gene Type
-description pseudogene
+
 
 #### Antibodies
 # template below
@@ -11309,35 +11348,35 @@ label 14 day diff protein A
 term diffDoxy_6hr
 tag DIFFD6H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours. Doxycycline added to a final concentration of 100 ng/ml. (Stam) PROVISIONAL
 label 6 hour diff Doxcycline
 
 term diffDoxy_24hr
 tag DIFFD24H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
 label 24 hour diff Doxcycline
 
 term diffDoxy_72hr
 tag DIFFD72H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
 label 72 hour diff Doxcycline
 
 term diffEstradiol_24hr
 tag DIFFE24H
 type treatment
-description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
 
 term diffEstradiol_48hr
 tag DIFFE48H
 type treatment
-description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
 
 term diffEstradiol_120hr
 tag DIFFE120H
 type treatment
-description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
 
 term DMSO_0.02pct
 tag DM002P1H
