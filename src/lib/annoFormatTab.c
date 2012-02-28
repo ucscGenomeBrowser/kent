@@ -38,6 +38,8 @@ for (col = source->columns, i = 0;  col != NULL;  col = col->next, i++)
 	{
 	if (i > 0 || dyStringLen(self->header) > 0)
 	    dyStringAppendC(self->header, '\t');
+	else
+	    dyStringAppendC(self->header, '#');
 	dyStringAppend(self->header, col->def->name);
 	}
     if (i > 0 || dyStringLen(self->line) > 0)
