@@ -11348,35 +11348,35 @@ label 14 day diff protein A
 term diffDoxy_6hr
 tag DIFFD6H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours. Doxycycline added to a final concentration of 100 ng/ml. (Stam) PROVISIONAL
 label 6 hour diff Doxcycline
 
 term diffDoxy_24hr
 tag DIFFD24H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
 label 24 hour diff Doxcycline
 
 term diffDoxy_72hr
 tag DIFFD72H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
 label 72 hour diff Doxcycline
 
 term diffEstradiol_24hr
 tag DIFFE24H
 type treatment
-description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
 
 term diffEstradiol_48hr
 tag DIFFE48H
 type treatment
-description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
 
 term diffEstradiol_120hr
 tag DIFFE120H
 type treatment
-description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
 
 term DMSO_0.02pct
 tag DM002P1H
