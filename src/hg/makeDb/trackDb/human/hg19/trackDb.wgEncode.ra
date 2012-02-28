@@ -10,6 +10,7 @@ include wgEncodeGencodeV4.ra
 include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV10.ra
+include wgEncodeGencodeV11.ra alpha
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
@@ -116,7 +117,6 @@ include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra
-#include wgEncodeHaibRnaSeq.release2.ra
 
 
 
@@ -161,8 +161,8 @@ include wgEncodeSydhHistone.release3.ra alpha
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release2.ra beta,public
-include wgEncodeUwTfbs.release3.ra alpha
+include wgEncodeUwTfbs.release2.ra public
+include wgEncodeUwTfbs.release3.ra alpha,beta
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha
@@ -174,7 +174,7 @@ include wgEncodeHaibTfbs.ra public
 include wgEncodeHaibTfbs.release2.ra alpha,beta
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
-include wgEncodeSydhTfbs.new.ra alpha
+include wgEncodeSydhTfbs.release2.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra beta,public
@@ -198,6 +198,5 @@ include wgEncodeSunyRipSeq.ra
 # Other miscellany ------------------------------------
 
 # Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
-include wgEncodeMapability.ra beta,public
-include wgEncodeMapability.release4.ra alpha
+include wgEncodeMapability.ra
 

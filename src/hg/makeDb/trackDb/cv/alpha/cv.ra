@@ -406,7 +406,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_naive
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -423,7 +423,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th0
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -440,7 +440,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Adult_CD4_Th1
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -1338,7 +1338,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_naive
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -1355,7 +1355,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th0
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -1372,7 +1372,7 @@ tissue blood
 karyotype blood
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th1
-orderUrl drdrdr@uab.edu
+orderUrl http://138.26.61.118/depts/MEB/SOMResearchFaculty/currentfacultydata.asp?ID=DRDRDR 
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
 sex B
@@ -3748,7 +3748,7 @@ tissue induced pluripotent cell (iPS)
 karyotype iPS
 vendorName Paul Tesar at Case Western University
 vendorId iPS_CWRU1
-orderUrl pjt5@case.edu
+orderUrl http://genetics.case.edu/page.php?page_id=5&LN=Tesar&FN=Paul 
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 sex M
@@ -3765,7 +3765,7 @@ tissue induced pluripotent cell (iPS)
 karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi7
-orderUrl chenowej@ninds.nih.gov
+orderUrl http://www.ninds.nih.gov/research/labs/25.htm 
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 sex F
@@ -3782,7 +3782,7 @@ tissue induced pluripotent cell (iPS)
 karyotype iPS
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi11
-orderUrl chenowej@ninds.nih.gov
+orderUrl http://www.ninds.nih.gov/research/labs/25.htm 
 termId BTO:0000001
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000001
 sex M
@@ -3999,7 +3999,7 @@ tissue brain
 karyotype cancer
 vendorName Darrell Bigner at Duke University
 vendorId Medullo_D341
-orderUrl bigne001@mc.duke.edu
+orderUrl http://www.cancer.duke.edu/btc/modules/facultystaff1/index.php?id=85
 termId BTO:0001757
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001757&termName=medulloblastoma%20cell
 sex U
@@ -4032,7 +4032,7 @@ tissue Melanoma cell line derived from melanoma metastasis
 karyotype cancer
 vendorName Dr. Yardena Samuels
 vendorId Mel_2183
-orderUrl samuelsy@mail.nih.gov
+orderUrl http://www.genome.gov/19519015
 termId BTO:0000849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000849&termName=melanoma%20cell%20line
 sex U
@@ -4251,42 +4251,6 @@ term NHLF
 tag NHLF
 type Cell Line
 organism human
-
-term NHDF_0060801.3
-tag NHDF0060801.3
-type Cell Line
-tier 3
-organism human
-description Dermal Fibroblasts
-lineage missing
-karyotype normal
-sex F
-tissue skin / temple
-vendorName PromoCell
-vendorId NHDF#c1390
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF#c1390
-termId BTO:0003185
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
-lab Gingeras
-protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf
-
-term NHDF_7071701.2
-tag NHDF7071701.2
-type Cell Line
-tier 3
-organism human
-description Dermal Fibroblasts
-lineage missing
-karyotype normal
-sex F
-tissue skin / breast
-vendorName PromoCell
-vendorId NHDF#c1390
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF#c1390
-termId BTO:0003185
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
-lab Gingeras
-protocol Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
 tissue lung
 lineage endoderm
 karyotype normal
@@ -5039,6 +5003,23 @@ color 189,0,157
 sex U
 protocol Gingeras:Adrenal_Gingeras_protocol.pdf
 
+term BAT
+tag BAT
+type Cell Line
+organism mouse
+tissue adipose
+category Tissue
+age ageUnknown
+strain Unknown
+description Brown adipocytes tissue PROVISIONAL
+vendorName Jerrold M. Olefsky Lab, UCSD
+termId 7188
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
+color 189,0,157
+sex U
+label Brown Adipose Tissue
+protocol Ren:BAT_Ren_protocol.pdf
+
 term B-cell_(CD19+)
 tag BCELLCD19P
 type Cell Line
@@ -5092,6 +5073,23 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6961
 color 204,121,167
 sex U
 protocol Gingeras:Bladder_Gingeras_protocol.pdf
+
+term BMDM
+tag BMDM
+type Cell Line
+organism mouse
+tissue blood
+category primaryCells
+description Bone marrow derived macrophage PROVISIONAL
+age ageUnknown
+strain Unknown
+vendorName Genhong Cheng Lab, UCLA
+termId 7058
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
+color 86,180,233
+sex U
+protocol Ren:BMDM_Ren_protocol.pdf
+label Bone marrow derived macrophage
 
 term BoneMarrow
 tag BMARROW
@@ -6103,35 +6101,40 @@ orderUrl http://molcellbio.grad.uiowa.edu/faculty/dana-levasseur
 color 65,105,225
 sex M
 protocol Stam:ZhBTc4_Stam_protocol.pdf
-#tissue
-#termId
-#termUrl
 
 # Gene types
+# CRICKET is commenting this out in Feb 2012.  We can find no use of it anywhere in the source tree and it is confusing the cvValidator.
+# If this is still commented out after April 2012, please remove it.
+# Also, I am changing the Gene Type to geneType.  So, if we do need to uncomment this, we will need to deal with that change.  But Gene Type
+# with a space is troublesome.
 # term (human-readable cell type name)
 # tag (machine-readable cell type name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be Gene Type)
 # description (human-readable description of the gene type.  Perhaps it's used by the Gencode track.(
+#term Known
+#tag KNOWN
+#type  geneType
+#description known or novel CDS
+#
+#term Putative
+#tag PUTATIVE
+#type  geneType
+#description novel, putative, TEC or artifact
+#
+#term Polymorphic
+#tag POLYMORPH
+#type  geneType
+#description polymorphic
+#
+#term Pseudo
+#tag PSEUDO
+#type  geneType
+#description pseudogene
 
-term Known
-tag KNOWN
-type Gene Type
-description known or novel CDS
 
-term Putative
-tag PUTATIVE
-type Gene Type
-description novel, putative, TEC or artifact
 
-term Polymorphic
-tag POLYMORPH
-type Gene Type
-description polymorphic
 
-term Pseudo
-tag PSEUDO
-type Gene Type
-description pseudogene
+
 
 #### Antibodies
 # template below
@@ -7696,7 +7699,7 @@ antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;
 targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4
 vendorName Laszlo Tora
 vendorId Missing
-orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
+orderUrl http://www.igbmc.fr/Tora
 lab Struhl
 targetId GeneCard:KAT2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A&search=gcn5
@@ -9472,7 +9475,7 @@ antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen:  C-
 targetDescription Also known as FAM48A or P38IP.   It is a component of SAGA complex.  Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail.
 vendorName Laszlo Tora
 vendorId missing
-orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
+orderUrl http://www.igbmc.fr/Tora
 lab Struhl
 targetId GeneCard:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
@@ -9693,6 +9696,21 @@ targetId GeneCard:TBL1XR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
 validation Human_-_TBLR1_(ab24550)(Immunoprecipitation,ChIP):human_TBLR1_ab24550_validation_Snyder.pdf
 label TBLR1 (ab24550)
+
+term TBLR1_(NB600-270)
+tag TBLR1NB600270
+type Antibody
+antibodyDescription Rabbit polyclonal, immunogen: A synthetic peptide that maps to a region between residues 100 and 150 of human TBL1-related Protein 1 using the numbering given in SwissProt entry Q9BZK7.
+target TBLR1
+targetDescription F-box-like protein involved in the recruitment of the ubiquitin/19S proteasome complex to nuclear receptor-regulated transcription units. Plays an essential role in transcription activation mediated by nuclear receptors. Probably acts as integral component of the N-Cor corepressor complex that mediates the recruitment of the 19S proteasome complex, leading to the subsequent proteasomal degradation of N-Cor complex, thereby allowing cofactor exchange, and transcription activation
+vendorName Novus Biologicals
+vendorId NB600-270
+orderUrl http://www.novusbio.com/TBLR1-Antibody_NB600-270.html
+lab Snyder
+lots 1
+targetId GeneCard:TBL1XR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBL1XR1
+validation TBLR1_(NB600-270)(Immunoprecipitation,ChIP):human_TBLR1_NB600-270_validation_Snyder.pdf
 
 term TBP
 tag TBP
@@ -10249,7 +10267,7 @@ type Antibody
 target ZZZ3
 antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic peptide coupled to Ovalbumin (Name PI130, sequence CGNNNGRTTDLKQQSTRESW). Antibody Target: ZZZ3
 targetDescription ZZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
-orderUrl http://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
+orderUrl http://www.igbmc.fr/Tora
 vendorName Lazlo Tora, Institut de G?n?tique et de Biologie Mol?culaire et Cellulaire
 vendorId ZZZ3
 lab Struhl
@@ -11345,6 +11363,21 @@ type treatment
 description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours (Stam) PROVISIONAL
 label 72 hour diff Doxcycline
 
+term diffEstradiol_24hr
+tag DIFFE24H
+type treatment
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+
+term diffEstradiol_48hr
+tag DIFFE48H
+type treatment
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+
+term diffEstradiol_120hr
+tag DIFFE120H
+type treatment
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+
 term DMSO_0.02pct
 tag DM002P1H
 description 1 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
@@ -11959,7 +11992,7 @@ term ModifiedPeptideMapping
 tag MODPEPTIDEMAP
 type view
 label Modified Peptide Mapping
-description Modified Peptide Mapping Provisional
+description Modified Peptide Mapping 
 
 term PctSignal
 tag PCTSIG
@@ -12067,7 +12100,7 @@ description Single Nucleotide Polymorphism
 term Spikeins
 tag SPKNS
 type view
-label Spikeins
+label Spike-ins
 description Spikeins
 
 term Splices

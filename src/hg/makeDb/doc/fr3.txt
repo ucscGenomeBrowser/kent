@@ -5,6 +5,8 @@
 #
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CAAB02
 #	WGS: CAAB02000001:CAAB02030857
+#	http://www.ncbi.nlm.nih.gov/nuccore/CAAB00000000
+#	http://www.fugu-sg.org/
 #
 ##########################################################################
 # Download sequence (DONE - 2011-11-09 - Hiram)
@@ -1984,3 +1986,173 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "dec2011" );' hgFixed
 
 #############################################################################
+# hgPal downloads (DONE - Hiram - 2011-12-08)
+#   FASTA from 8way for ensGene
+
+    ssh hgwdev
+    rm -rf /hive/data/genomes/fr3/bed/multiz8way/pal
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/pal
+    cd /hive/data/genomes/fr3/bed/multiz8way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    mz=multiz8way
+    gp=ensGene
+    db=fr3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /hive/data/genomes/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.list stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.list stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.list stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.list stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+    #	real    49m45.740s
+
+    mz=multiz8way
+    gp=ensGene
+    db=fr3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+    # about 12 minutes
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc &
+
+    md5sum $gp.$mz.exonAA.fa.gz $gp.$mz.exonNuc.fa.gz > md5sum.txt
+
+    # we're only distributing exons at the moment
+    mz=multiz8way
+    gp=ensGene
+    db=fr3
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    # obtain a copy of a most-recent README.txt file
+    cp -p /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/multiz11way/alignments/README.txt .
+
+    # edit to bring up to date for fr3
+    ln -s `pwd`/README.txt $pd/
+
+#############################################################################
+# download data for 8-way (DONE - 2012-02-23 - Hiram)
+    # use a README from the most recent multiz like this
+    #	this one is from gorGor3
+    cd /hive/data/genomes/fr3/bed/multiz8way/cons
+    cp -p /hive/data/genomes/gorGor3/bed/multiz11way/cons/README.txt .
+    # need to edit this to finish it off
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phastCons8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phastCons8way
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/cons/all/downloads/phastCons8way.wigFix.gz \
+	./phastCons8way.wigFix.gz
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/all/phastCons8way.bw \
+	./phastCons8way.bw
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/all/all.mod \
+	./fish.mod
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/README.txt .
+
+    md5sum phastCons8way.bw phastCons8way.wigFix.gz fish.mod \
+	> /hive/data/genomes/fr3/bed/multiz8way/cons/md5sum.txt
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/cons/md5sum.txt .
+
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cd /hive/data/genomes/fr3/bed/multiz8way/consPhyloP
+    cp /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/README.txt .
+    # need to edit this to finish it off
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phyloP8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/phyloP8way
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/consPhyloP/all/downloads/phyloP8way.wigFix.gz \
+	./phyloP8way.wigFix.gz
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/consPhyloP/all/phyloP8way.bw \
+	./phyloP8way.bw
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/consPhyloP/run.phyloP/all.mod \
+	./fish.mod
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/README.txt .
+    md5sum README.txt phyloP8way.bw phyloP8way.wigFix.gz fish.mod \
+	> /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/md5sum.txt
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/consPhyloP/md5sum.txt .
+
+    mkdir /hive/data/genomes/fr3/bed/multiz8way/downloads
+    cd /hive/data/genomes/fr3/bed/multiz8way/downloads
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cp -p /hive/data/genomes/gorGor3/bed/multiz11way/downloads/README.txt .
+    # need to edit this README.txt to finish it off
+    # you can find this common name translation above in the section that
+    # began the multiz8way work:
+    grep TREE ../cons/all/all.mod | sed -e "s/TREE: //" > fr3.8way.nh
+
+    /cluster/bin/phast/tree_doctor --rename \
+"fr3->Fugu; tetNig2->Tetraodon; oreNil1->Nile_Tilapia; gasAcu1->Stickleback; oryLat2->Medaka; gadMor1->Atlantic_cod; danRer7->Zebrafish; latCha1->Coelacanth;" \
+fr3.8way.nh > fr3.commonNames.8way.nh
+
+    time cp -p ../anno/fr3.8way.maf ./multiz8way.maf
+    #	real    1m38.305s
+# -rw-rw-r-- 1 3235224846 Feb 21 13:55 multiz8way.maf
+    time gzip multiz8way.maf
+    #	real    7m24.097s
+# -rw-rw-r-- 1 738827448 Feb 21 13:55 multiz8way.maf.gz
+
+    md5sum *.nh *.gz *.txt > md5sum.txt
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/multiz8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/fr3/multiz8way
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/downloads/fr3.8way.nh .
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/downloads/fr3.commonNames.8way.nh .
+    ln -s \
+/hive/data/genomes/fr3/bed/multiz8way/downloads/multiz8way.maf.gz .
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/downloads/README.txt .
+
+    ln -s /hive/data/genomes/fr3/bed/multiz8way/downloads/md5sum.txt .
+
+#############################################################################
+# Construct download files (DONE - 2012-02-23 - Hiram)
+    cd /hive/data/genomes/fr3
+    # verify joinerCheck is good and fr3 is in all.joiner
+    joinerCheck -keys -database=fr3 \
+	$HOME/kent/src/hg/makeDb/schema/all.joiner
+
+    time makeDownloads.pl fr3 -workhorse=hgwdev > downloads.log 2>&1 &
+    #	real    24m7.903s
+    # you must edit the */README files in ./goldenPath/
+
+############################################################################
+# after downloads, construct pushQ (DONE - 2012-02-23 - Hiram)
+    mkdir /hive/data/genomes/fr3/pushQ
+    cd /hive/data/genomes/fr3/pushQ
+    time makePushQSql.pl fr3 > fr3.sql 2> stderr.log
+    # check stderr.log for anything not categorized
+
+    scp -p fr3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < fr3.sql
+    # after loading, view the subQ in the WEB interface, go through each
+    #	item and verify it can measure the tables and files
+
+############################################################################

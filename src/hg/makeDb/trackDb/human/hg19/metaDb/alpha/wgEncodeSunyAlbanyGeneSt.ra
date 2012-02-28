@@ -16,6 +16,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001213
 expId 1213
 fileName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787549
 grant Tenenbaum
 lab SunyAlbany
 labVersion Mil_05621 antibody
@@ -26,7 +27,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787549
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRnaV2
 objType table
@@ -34,12 +34,13 @@ antibody CELF1
 cell GM12878
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001213
 expId 1213
 fileName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787549
 grant Tenenbaum
 lab SunyAlbany
 labVersion Mil_05621 antibody
@@ -50,7 +51,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787549
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna
 objType table
@@ -64,6 +64,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001214
 expId 1214
 fileName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787543
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -74,7 +75,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787543
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRnaV2
 objType table
@@ -82,12 +82,13 @@ antibody ELAVL1
 cell GM12878
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001214
 expId 1214
 fileName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787543
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -98,7 +99,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787543
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna
 objType table
@@ -112,6 +112,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001215
 expId 1215
 fileName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787555
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_21027 antibody
@@ -122,7 +123,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787555
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRnaV2
 objType table
@@ -130,12 +130,13 @@ antibody IGF2BP1
 cell GM12878
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001215
 expId 1215
 fileName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787555
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_21027 antibody
@@ -146,7 +147,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787555
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna
 objType table
@@ -160,6 +160,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001216
 expId 1216
 fileName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787546
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -170,7 +171,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787546
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRnaV2
 objType table
@@ -178,12 +178,13 @@ antibody PABPC1
 cell GM12878
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001216
 expId 1216
 fileName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787546
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -194,7 +195,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787546
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna
 objType table
@@ -208,6 +208,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001219
 expId 1219
 fileName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787540
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -218,7 +219,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787540
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2
 objType table
@@ -226,12 +226,13 @@ antibody ripInput
 cell GM12878
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001219
 expId 1219
 fileName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787540
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -242,7 +243,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787540
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna
 objType table
@@ -256,6 +256,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001217
 expId 1217
 fileName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787552
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_26522 antibody
@@ -266,7 +267,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787552
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRnaV2
 objType table
@@ -274,12 +274,13 @@ antibody SLBP
 cell GM12878
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001217
 expId 1217
 fileName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787552
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_26522 antibody
@@ -290,7 +291,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787552
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna
 objType table
@@ -304,6 +304,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001218
 expId 1218
 fileName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787537
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
@@ -314,7 +315,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787537
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRnaV2
 objType table
@@ -322,12 +322,13 @@ antibody T7Tag
 cell GM12878
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001218
 expId 1218
 fileName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787537
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
@@ -338,7 +339,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787537
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
 objType table
@@ -352,6 +352,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEH001234
 expId 1234
 fileName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787626
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -362,7 +363,6 @@ project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787626
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2
 objType table
@@ -370,12 +370,13 @@ antibody ELAVL1
 cell H1-hESC
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEH001234
 expId 1234
 fileName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787626
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -386,7 +387,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787626
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 objType table
@@ -400,6 +400,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEH001236
 expId 1236
 fileName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787623
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -410,7 +411,6 @@ project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787623
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2
 objType table
@@ -418,12 +418,13 @@ antibody ripInput
 cell H1-hESC
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEH001236
 expId 1236
 fileName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787623
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -434,7 +435,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787623
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
 objType table
@@ -448,6 +448,7 @@ dateUnrestricted 2011-09-10
 dccAccession wgEncodeEH001235
 expId 1235
 fileName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787620
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
@@ -458,7 +459,6 @@ project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787620
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2
 objType table
@@ -466,12 +466,13 @@ antibody T7Tag
 cell H1-hESC
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
 dccAccession wgEncodeEH001235
 expId 1235
 fileName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787620
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
@@ -482,7 +483,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787620
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna
 objType table
@@ -496,6 +496,7 @@ dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001227
 expId 1227
 fileName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787602
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -506,7 +507,6 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787602
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRnaV2
 objType table
@@ -514,12 +514,13 @@ antibody ELAVL1
 cell HeLa-S3
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001227
 expId 1227
 fileName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787602
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -530,7 +531,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787602
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRna
 objType table
@@ -544,6 +544,7 @@ dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001228
 expId 1228
 fileName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787605
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -554,7 +555,6 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787605
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRnaV2
 objType table
@@ -562,12 +562,13 @@ antibody PABPC1
 cell HeLa-S3
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001228
 expId 1228
 fileName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787605
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -578,7 +579,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787605
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna
 objType table
@@ -592,6 +592,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001220
 expId 1220
 fileName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787599
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -602,7 +603,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787599
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRnaV2
 objType table
@@ -610,12 +610,13 @@ antibody ripInput
 cell HeLa-S3
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001220
 expId 1220
 fileName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787599
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -626,7 +627,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787599
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna
 objType table
@@ -640,6 +640,7 @@ dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001229
 expId 1229
 fileName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787596
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
@@ -650,7 +651,6 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787596
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRnaV2
 objType table
@@ -658,12 +658,13 @@ antibody T7Tag
 cell HeLa-S3
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001229
 expId 1229
 fileName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787596
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
@@ -674,7 +675,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787596
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna
 objType table
@@ -688,6 +688,7 @@ dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001230
 expId 1230
 fileName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787614
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -698,7 +699,6 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787614
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRnaV2
 objType table
@@ -706,12 +706,13 @@ antibody ELAVL1
 cell HepG2
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001230
 expId 1230
 fileName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787614
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -722,7 +723,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787614
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna
 objType table
@@ -736,6 +736,7 @@ dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001231
 expId 1231
 fileName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787617
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -746,7 +747,6 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787617
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRnaV2
 objType table
@@ -754,12 +754,13 @@ antibody PABPC1
 cell HepG2
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001231
 expId 1231
 fileName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787617
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -770,7 +771,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787617
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna
 objType table
@@ -784,6 +784,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001221
 expId 1221
 fileName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787611
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -794,7 +795,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787611
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRnaV2
 objType table
@@ -802,12 +802,13 @@ antibody ripInput
 cell HepG2
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001221
 expId 1221
 fileName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787611
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -818,7 +819,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787611
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna
 objType table
@@ -832,6 +832,7 @@ dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001232
 expId 1232
 fileName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787608
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
@@ -842,7 +843,6 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787608
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRnaV2
 objType table
@@ -850,12 +850,13 @@ antibody T7Tag
 cell HepG2
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001232
 expId 1232
 fileName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787608
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
@@ -866,7 +867,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787608
 
 metaObject wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna
 objType table
@@ -880,6 +880,7 @@ dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001233
 expId 1233
 fileName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787570
 grant Tenenbaum
 lab SunyAlbany
 labVersion Mil_05621 antibody
@@ -890,7 +891,6 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787570
 
 metaObject wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRnaV2
 objType table
@@ -898,12 +898,13 @@ antibody CELF1
 cell K562
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
 dccAccession wgEncodeEH001233
 expId 1233
 fileName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787570
 grant Tenenbaum
 lab SunyAlbany
 labVersion Mil_05621 antibody
@@ -914,7 +915,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787570
 
 metaObject wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna
 objType table
@@ -928,6 +928,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001222
 expId 1222
 fileName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787564
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -938,7 +939,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787564
 
 metaObject wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRnaV2
 objType table
@@ -946,12 +946,13 @@ antibody ELAVL1
 cell K562
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001222
 expId 1222
 fileName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787564
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -962,7 +963,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787564
 
 metaObject wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna
 objType table
@@ -976,6 +976,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001223
 expId 1223
 fileName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787567
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246  antibody
@@ -986,7 +987,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787567
 
 metaObject wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRnaV2
 objType table
@@ -994,12 +994,13 @@ antibody PABPC1
 cell K562
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001223
 expId 1223
 fileName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787567
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246  antibody
@@ -1010,7 +1011,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787567
 
 metaObject wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna
 objType table
@@ -1024,6 +1024,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001226
 expId 1226
 fileName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787561
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -1034,7 +1035,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787561
 
 metaObject wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRnaV2
 objType table
@@ -1042,12 +1042,13 @@ antibody ripInput
 cell K562
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001226
 expId 1226
 fileName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787561
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -1058,7 +1059,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787561
 
 metaObject wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna
 objType table
@@ -1072,6 +1072,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001224
 expId 1224
 fileName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787573
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_26522,Mil_061376 antibodies
@@ -1082,7 +1083,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787573
 
 metaObject wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRnaV2
 objType table
@@ -1090,12 +1090,13 @@ antibody SLBP
 cell K562
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001224
 expId 1224
 fileName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787573
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_26522,Mil_061376 antibodies
@@ -1106,7 +1107,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787573
 
 metaObject wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 objType table
@@ -1120,6 +1120,7 @@ dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001225
 expId 1225
 fileName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna.broadPeak.gz
+geoSampleAccession GSM787558
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
@@ -1130,7 +1131,6 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 view RbpAssocRna
-geoSampleAccession GSM787558
 
 metaObject wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2
 objType table
@@ -1138,12 +1138,13 @@ antibody T7Tag
 cell K562
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipGeneSt
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001225
 expId 1225
 fileName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2.broadPeak.gz
+geoSampleAccession GSM787558
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
@@ -1154,6 +1155,5 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2
 view RbpAssocRna
-geoSampleAccession GSM787558
 
-# MAGIC: -1243231951
+# MAGIC: -1372169421
