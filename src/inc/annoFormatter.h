@@ -48,7 +48,7 @@ struct annoFormatterOption *annoFormatterGetOptions(struct annoFormatter *self);
 /* Return supported options and current settings.  Callers can modify and free when done. */
 
 void annoFormatterSetOptions(struct annoFormatter *self, struct annoFormatterOption *newOptions);
-/* Free old options and use newOptions. */
+/* Free old options and use clone of newOptions. */
 
 void annoFormatterFree(struct annoFormatter **pSelf);
 /* Free self. This should be called at the end of subclass close methods, after

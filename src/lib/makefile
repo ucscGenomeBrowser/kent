@@ -1,7 +1,8 @@
 include ../inc/common.mk
 
 
-O = aliType.o annoColumn.o annoFilter.o annoFormatTab.o annoGratorQuery.o annoRow.o annoStreamer.o \
+O = aliType.o annoColumn.o annoFilter.o annoFormatter.o annoFormatTab.o \
+    annoGratorQuery.o annoRow.o annoStreamer.o \
     apacheLog.o asParse.o axt.o axtAffine.o bamFile.o base64.o \
     basicBed.o bbiRead.o bbiWrite.o bigBed.o binRange.o bits.o \
     blastOut.o blastParse.o boxClump.o boxLump.o bPlusTree.o \

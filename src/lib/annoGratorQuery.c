@@ -51,7 +51,7 @@ if (tbf != NULL)
 	query->csAllocdHere = TRUE;
 	}
     }
-query->assemblyName = assemblyName;
+query->assemblyName = cloneString(assemblyName);
 query->chromSizes = chromSizes;
 query->tbf = tbf;
 query->primarySource = primarySource;

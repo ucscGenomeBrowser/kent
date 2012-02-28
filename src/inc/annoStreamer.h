@@ -60,13 +60,13 @@ struct annoFilter *annoStreamerGetFilters(struct annoStreamer *self);
 /* Return supported filters with current settings.  Callers can modify and free when done. */
 
 void annoStreamerSetFilters(struct annoStreamer *self, struct annoFilter *newFilters);
-/* Free old filters and use newFilters. */
+/* Free old filters and use clone of newFilters. */
 
 struct annoColumn *annoStreamerGetColumns(struct annoStreamer *self);
 /* Return supported columns with current settings.  Callers can modify and free when done. */
 
 void annoStreamerSetColumns(struct annoStreamer *self, struct annoColumn *columns);
-/* Free old columns and use newColumns. */
+/* Free old columns and use clone of newColumns. */
 
 void annoStreamerInit(struct annoStreamer *self, struct asObject *asObj);
 /* Initialize a newly allocated annoStreamer with default annoStreamer methods and

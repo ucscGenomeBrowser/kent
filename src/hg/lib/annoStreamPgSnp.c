@@ -27,7 +27,7 @@ if (self->sr != NULL)
     sqlFreeResult(&(self->sr));
 }
 
-struct sqlResult *aspsDoQuery(struct annoStreamPgSnpDb *self)
+void aspsDoQuery(struct annoStreamPgSnpDb *self)
 /* Return a sqlResult for a query on table items in position range. */
 // NOTE: it would be possible to implement filters at this level, as in hgTables.
 {
@@ -35,19 +35,21 @@ struct annoStreamer *streamer = &(self->streamer);
 struct dyString *query = dyStringCreate("select * from %s", self->table);
 if (!streamer->positionIsGenome)
     {
-    dyStringPrintf(query, "where chrom='%s'", streamer->chrom);
+    dyStringPrintf(query, " where chrom='%s'", streamer->chrom);
     int chromSize = hashIntVal(streamer->query->chromSizes, streamer->chrom);
     if (streamer->regionStart != 0 || streamer->regionEnd != chromSize)
 	{
-	dyStringPrintf(query, " and chromStart < %u and chromEnd > %u",
-		       streamer->regionEnd, streamer->regionStart);
+	dyStringAppend(query, " and ");
 	if (self->hasBin)
 	    hAddBinToQuery(streamer->regionStart, streamer->regionEnd, query);
+	dyStringPrintf(query, "chromStart < %u and chromEnd > %u",
+		       streamer->regionEnd, streamer->regionStart);
 	}
     }
+verbose(2, "mysql query: '%s'\n", query->string);
 struct sqlResult *sr = sqlGetResult(self->conn, query->string);
 dyStringFree(&query);
-return sr;
+self->sr = sr;
 }
 
 static struct annoRow *aspsNextRowDb(struct annoStreamer *vSelf, boolean *retFilterFailed)
@@ -65,8 +67,9 @@ row += self->skipBin;
 boolean fail = annoFilterTestRow(self->streamer.filters, row, PGSNP_NUM_COLS);
 if (retFilterFailed != NULL)
     *retFilterFailed = fail;
-return annoRowFromStringArray(row[0], sqlUnsigned(row[1]), sqlUnsigned(row[2]),
-			      row, PGSNP_NUM_COLS);
+char *chrom = row[0+self->hasBin];
+uint chromStart = sqlUnsigned(row[1+self->hasBin]), chromEnd = sqlUnsigned(row[2+self->hasBin]);
+return annoRowFromStringArray(chrom, chromStart, chromEnd, row, PGSNP_NUM_COLS);
 }
 
 static void aspsCloseDb(struct annoStreamer **pVSelf)

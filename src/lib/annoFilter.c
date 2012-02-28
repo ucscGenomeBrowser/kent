@@ -114,7 +114,7 @@ boolean annoFilterTestRow(struct annoFilter *filterList, char **row, int rowSize
 /* Apply filters to row, using autoSql column definitions to interpret
  * each word of row.  Return TRUE if any filter fails. */
 {
-if (slCount(filterList) != rowSize)
+if (filterList != NULL && slCount(filterList) != rowSize)
     errAbort("annoFilterTestRow: filterList length %d doesn't match rowSize %d",
 	     slCount(filterList), rowSize);
 struct annoFilter *filter;

@@ -38,7 +38,7 @@ return annoFilterCloneList(self->filters);
 }
 
 void annoStreamerSetFilters(struct annoStreamer *self, struct annoFilter *newFilters)
-/* Free old filters and use newFilters. */
+/* Free old filters and use clone of newFilters. */
 {
 annoFilterFreeList(&(self->filters));
 self->filters = annoFilterCloneList(newFilters);
@@ -51,7 +51,7 @@ return annoColumnCloneList(self->columns);
 }
 
 void annoStreamerSetColumns(struct annoStreamer *self, struct annoColumn *newColumns)
-/* Free old columns and use newColumns. */
+/* Free old columns and use clone of newColumns. */
 {
 annoColumnFreeList(&(self->columns));
 self->columns = annoColumnCloneList(newColumns);
