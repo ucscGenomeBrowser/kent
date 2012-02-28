@@ -16,7 +16,7 @@ virtualenv ENV
 
 Generate a snapshot environment with base packages(BeautifulSoup==3.2.0 and MySQL-python==1.2.3) used for ENCODE:
 
-python ~kent/python/ucsc_virtualenv.py ENV
+python ~/kent/python/ucsc_virtualenv.py ENV
 
 2) Switch to use virtual environement
 
@@ -34,7 +34,9 @@ Third-Party:
 
 pip install <package name>
 
-Internal packages:
+pip is an easy_install replacement. For more information visit: http://pypi.python.org/pypi/pip
+
+Internal packagesi (use setup.py located in package directory e.g. kent/python/lib):
 
 python setup.py install
 
