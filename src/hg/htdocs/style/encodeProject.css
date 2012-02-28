@@ -44,6 +44,9 @@ body {
     color: grey;
 }
 
+#searchPanelInstructions {
+    font-style: italic;
+}
 
 a {
     color: #003366;

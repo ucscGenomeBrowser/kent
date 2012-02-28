@@ -85,7 +85,7 @@ var encodeProject = (function () {
         addSearchPanel: function (divId) {
             // Create panel of radio buttons for user to select search type
             // Add to passed in HTML div ID; e.g. #searchTypePanel
-            return $(divId).append('<span id="searchPanelTitle"><strong>Search for:</strong></span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">Tracks<input type="radio" name="searchType" id="searchFiles" value="files">Files');
+            return $(divId).append('<span id="searchPanelInstructions">Search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">tracks<input type="radio" name="searchType" id="searchFiles" value="files">files');
         },
 
         getSearchUrl: function (assembly, vars) {
