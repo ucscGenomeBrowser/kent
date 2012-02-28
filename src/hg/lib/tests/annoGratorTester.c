@@ -1,9 +1,10 @@
 /* annoGratorTester -- exercise anno* lib modules (in kent/src as well as kent/src/hg) */
 
 #include "annoGratorQuery.h"
-#include "annoStreamPgSnp.h"
+#include "annoStreamDb.h"
 #include "annoFormatTab.h"
 #include "dystring.h"
+#include "pgSnp.h"
 
 void usage()
 /* explain usage and exit */
@@ -20,11 +21,11 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-void pgSnpDbToTabOut(char *db, char *table, char *outFile)
+void dbToTabOut(char *db, char *table, struct asObject *asObj, char *outFile)
 /* Get data from a pgSnp database table and print all fields to tab-sep output. */
 {
 struct sqlConnection *conn = sqlConnect(db);
-struct annoStreamer *pgSnpIn = annoStreamPgSnpNewDb(conn, table);
+struct annoStreamer *pgSnpIn = annoStreamDbNew(conn, table, asObj);
 struct annoFormatter *tabOut = annoFormatTabNew(outFile);
 struct dyString *dbDotTwoBit = dyStringCreate("/hive/data/genomes/%s/%s.2bit", db, db);
 struct twoBitFile *tbf = twoBitOpen(dbDotTwoBit->string);
@@ -43,6 +44,6 @@ if (argc != 2)
     usage();
 char *db = argv[1];
 char *table = "pgNA12878";
-pgSnpDbToTabOut(db, table, "stdout");
+dbToTabOut(db, table, pgSnpAsObj(), "stdout");
 return 0;
 }
