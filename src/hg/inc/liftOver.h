@@ -6,6 +6,13 @@
 #define LIFTOVER_MINMATCH        0.95
 #define LIFTOVER_MINBLOCKS       1.00
 
+enum liftOverFileType
+{
+    none = 0,
+    bed = 1,
+    positions = 2,
+};
+
 struct liftOverChain *liftOverChainList();
 /* Get list of all liftOver chains in the central database */
 
@@ -26,6 +33,10 @@ struct liftOverChain *liftOverChainListForDbFiltered(char *fromDb);
 
 char *liftOverChainFile(char *fromDb, char *toDb);
 /* Get filename of liftOver chain */
+
+enum liftOverFileType liftOverSniff(char *fileName);
+/* the file-sniffing bit used to distinguish bed from positions files */
+/* returns enum concerning the file type */
 
 int liftOverBed(char *fileName, struct hash *chainHash, 
                         double minMatch,  double minBlocks, 

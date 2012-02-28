@@ -1199,14 +1199,9 @@ lineFileClose(&lf);
 return ct;
 }
 
-int liftOverBedOrPositions(char *fileName, struct hash *chainHash, 
-                        double minMatch,  double minBlocks, 
-                        int minSizeT, int minSizeQ,
-                        int minChainT, int minChainQ,
-		        bool fudgeThick, FILE *mapped, FILE *unmapped, 
-		        bool multiple, char *chainTable, int *errCt)
-/* Sniff the first line of the file, and determine whether it's a */
-/* bed, a positions file, or neither. */
+enum liftOverFileType liftOverSniff(char *fileName)
+/* the file-sniffing bit used to distinguish bed from positions files */
+/* returns enum concerning the file type */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line = NULL;
@@ -1239,15 +1234,32 @@ else
     end = words[2];
     }
 if (!isdigit(start[0]) || !isdigit(end[0]))
-    return 0;
+    return none;
 lineFileClose(&lf);
 if (isPosition)
+    return positions;
+return bed;
+}
+
+int liftOverBedOrPositions(char *fileName, struct hash *chainHash, 
+                        double minMatch,  double minBlocks, 
+                        int minSizeT, int minSizeQ,
+                        int minChainT, int minChainQ,
+		        bool fudgeThick, FILE *mapped, FILE *unmapped, 
+		        bool multiple, char *chainTable, int *errCt)
+/* Sniff the first line of the file, and determine whether it's a */
+/* bed, a positions file, or neither. */
+{
+enum liftOverFileType lft = liftOverSniff(fileName);
+if (lft == positions)
     return liftOverPositions(fileName, chainHash, minMatch, minBlocks, minSizeT, 
 			     minSizeQ, minChainT, minChainQ, fudgeThick, mapped, unmapped,
 			     multiple, chainTable, errCt);
-return liftOverBed(fileName, chainHash, minMatch, minBlocks, minSizeT, 
+if (lft == bed)
+    return liftOverBed(fileName, chainHash, minMatch, minBlocks, minSizeT, 
 			     minSizeQ, minChainT, minChainQ, fudgeThick, mapped, unmapped,
 			     multiple, chainTable, errCt);
+return -1;
 }
 
 static char *remapBlockedPsl(struct hash *chainHash, struct psl *psl, 
