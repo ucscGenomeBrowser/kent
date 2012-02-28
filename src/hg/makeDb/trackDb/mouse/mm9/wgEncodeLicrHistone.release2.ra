@@ -27,7 +27,7 @@
 track wgEncodeLicrHistone
 compositeTrack on
 shortLabel LICR Histone
-longLabel Histone Modifications by Histone Modifications by ChIP-seq from ENCODE/LICR
+longLabel Histone Modifications by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line BMARROW=Bone_Marrow CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
