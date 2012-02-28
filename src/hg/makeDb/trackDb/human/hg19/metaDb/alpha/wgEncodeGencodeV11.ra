@@ -1,0 +1,261 @@
+metaObject wgEncodeGencode2wayConsPseudoV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencode2wayConsPseudoV11.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion 2-way Pseudogene Annotation Set
+project wgEncode
+subId 5127
+tableName wgEncodeGencode2wayConsPseudoV11
+
+metaObject wgEncodeGencodeAnnotationRemarkV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeAnnotationRemarkV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Annotation Remarks
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeAnnotationRemarkV11
+
+metaObject wgEncodeGencodeAttrsV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeAttrsV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Transcript Attributes
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeAttrsV11
+
+metaObject wgEncodeGencodeBasicV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeBasicV11.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Basic Gene Annotation Set
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeBasicV11
+
+metaObject wgEncodeGencodeCompV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeCompV11.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Comprehensive Gene Annotation Set
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeCompV11
+
+metaObject wgEncodeGencodeExonSupportV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeExonSupportV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Exon Support
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeExonSupportV11
+
+metaObject wgEncodeGencodeGeneSourceV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeGeneSourceV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Source Lab
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeGeneSourceV11
+
+metaObject wgEncodeGencodePdbV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodePdbV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion PDB entry mapping
+project wgEncode
+subId 5127
+tableName wgEncodeGencodePdbV11
+
+metaObject wgEncodeGencodePolyaV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodePolyaV11.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion PolyA Transcript Annotation Set
+project wgEncode
+subId 5127
+tableName wgEncodeGencodePolyaV11
+
+metaObject wgEncodeGencodePseudoGeneV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodePseudoGeneV11.gp.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Pseudogene Annotation Set
+project wgEncode
+subId 5127
+tableName wgEncodeGencodePseudoGeneV11
+
+metaObject wgEncodeGencodePubMedV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodePubMedV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion PubMed ID mapping
+project wgEncode
+subId 5127
+tableName wgEncodeGencodePubMedV11
+
+metaObject wgEncodeGencodeRefSeqV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeRefSeqV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion RefSeq mapping
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeRefSeqV11
+
+metaObject wgEncodeGencodeTagV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeTagV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Transcript Tags
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeTagV11
+
+metaObject wgEncodeGencodeTranscriptSourceV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeTranscriptSourceV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Transcript Source Lab
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeTranscriptSourceV11
+
+metaObject wgEncodeGencodeTranscriptSupportV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeTranscriptSupportV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Transcript Support
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeTranscriptSupportV11
+
+metaObject wgEncodeGencodeTranscriptionSupportLevelV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeTranscriptionSupportLevelV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion Transcription Support Level
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeTranscriptionSupportLevelV11
+
+metaObject wgEncodeGencodeUniProtV11
+objType table
+composite wgEncodeGencodeV11
+dataType Gencode
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-23
+fileName wgEncodeGencodeUniProtV11.tab.gz
+grant Hubbard
+lab Sanger
+labExpId V11
+labVersion UniProt ID mapping
+project wgEncode
+subId 5127
+tableName wgEncodeGencodeUniProtV11
+
+metaObject wgEncodeGencodeV11
+objType composite
+composite wgEncodeGencodeV11
+expVars lab,dataType,labExpId
+
+# MAGIC: -498223102

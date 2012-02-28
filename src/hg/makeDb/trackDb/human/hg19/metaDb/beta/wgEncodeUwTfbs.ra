@@ -5309,7 +5309,7 @@ attic auxExp
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5337,7 +5337,7 @@ attic auxExp
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5365,7 +5365,7 @@ attic auxExp
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5394,7 +5394,7 @@ attic auxExp
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5423,7 +5423,7 @@ attic auxExp
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5452,7 +5452,7 @@ attic auxExp
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5481,7 +5481,7 @@ attic auxExp
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5508,7 +5508,7 @@ attic auxExp
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5535,7 +5535,7 @@ attic auxExp
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5564,7 +5564,7 @@ attic auxExp
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5593,7 +5593,7 @@ attic auxExp
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5621,7 +5621,7 @@ attic auxExp
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5649,7 +5649,7 @@ attic auxExp
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5678,7 +5678,7 @@ attic auxExp
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5707,7 +5707,7 @@ attic auxExp
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5736,7 +5736,7 @@ attic auxExp
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5765,7 +5765,7 @@ attic auxExp
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5792,7 +5792,7 @@ attic auxExp
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5819,7 +5819,7 @@ attic auxExp
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5848,7 +5848,7 @@ attic auxExp
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5877,7 +5877,7 @@ attic auxExp
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5905,7 +5905,7 @@ attic auxExp
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5933,7 +5933,7 @@ attic auxExp
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5962,7 +5962,7 @@ attic auxExp
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -5991,7 +5991,7 @@ attic auxExp
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6020,7 +6020,7 @@ attic auxExp
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6049,7 +6049,7 @@ attic auxExp
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6076,7 +6076,7 @@ attic auxExp
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6103,7 +6103,7 @@ attic auxExp
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6132,7 +6132,7 @@ attic auxExp
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6161,7 +6161,7 @@ attic auxExp
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6189,7 +6189,7 @@ attic auxExp
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6217,7 +6217,7 @@ attic auxExp
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6246,7 +6246,7 @@ attic auxExp
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6275,7 +6275,7 @@ attic auxExp
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6304,7 +6304,7 @@ attic auxExp
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6333,7 +6333,7 @@ attic auxExp
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6360,7 +6360,7 @@ attic auxExp
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6387,7 +6387,7 @@ attic auxExp
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6416,7 +6416,7 @@ attic auxExp
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6445,7 +6445,7 @@ attic auxExp
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6473,7 +6473,7 @@ attic auxExp
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6501,7 +6501,7 @@ attic auxExp
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6530,7 +6530,7 @@ attic auxExp
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6559,7 +6559,7 @@ attic auxExp
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6588,7 +6588,7 @@ attic auxExp
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6617,7 +6617,7 @@ attic auxExp
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6644,7 +6644,7 @@ attic auxExp
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6671,7 +6671,7 @@ attic auxExp
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6700,7 +6700,7 @@ attic auxExp
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6729,7 +6729,7 @@ attic auxExp
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6757,7 +6757,7 @@ attic auxExp
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6785,7 +6785,7 @@ attic auxExp
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6814,7 +6814,7 @@ attic auxExp
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6843,7 +6843,7 @@ attic auxExp
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6872,7 +6872,7 @@ attic auxExp
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6901,7 +6901,7 @@ attic auxExp
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6928,7 +6928,7 @@ attic auxExp
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6955,7 +6955,7 @@ attic auxExp
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -6984,7 +6984,7 @@ attic auxExp
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/None/Input/std
+controlId None
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-29
@@ -9112,7 +9112,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -9139,7 +9139,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9166,7 +9166,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9192,7 +9192,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9220,7 +9220,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9247,7 +9247,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9273,7 +9273,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9301,7 +9301,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9328,7 +9328,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9354,7 +9354,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9382,7 +9382,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -9408,7 +9408,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -13308,7 +13308,7 @@ antibody CTCF
 cell HFF
 composite wgEncodeUwTfbs
 control std
-controlId HFF/None/Input/std
+controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -13335,7 +13335,7 @@ antibody CTCF
 cell HFF
 composite wgEncodeUwTfbs
 control std
-controlId HFF/None/Input/std
+controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -13363,7 +13363,7 @@ antibody CTCF
 cell HFF
 composite wgEncodeUwTfbs
 control std
-controlId HFF/None/Input/std
+controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -13391,7 +13391,7 @@ antibody CTCF
 cell HFF
 composite wgEncodeUwTfbs
 control std
-controlId HFF/None/Input/std
+controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -13417,7 +13417,7 @@ antibody CTCF
 cell HFF
 composite wgEncodeUwTfbs
 control std
-controlId HFF/None/Input/std
+controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -18855,7 +18855,7 @@ antibody CTCF
 cell NHLF
 composite wgEncodeUwTfbs
 control std
-controlId NHLF/None/Input/std
+controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -18882,7 +18882,7 @@ antibody CTCF
 cell NHLF
 composite wgEncodeUwTfbs
 control std
-controlId NHLF/None/Input/std
+controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -18910,7 +18910,7 @@ antibody CTCF
 cell NHLF
 composite wgEncodeUwTfbs
 control std
-controlId NHLF/None/Input/std
+controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -18938,7 +18938,7 @@ antibody CTCF
 cell NHLF
 composite wgEncodeUwTfbs
 control std
-controlId NHLF/None/Input/std
+controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -18964,7 +18964,7 @@ antibody CTCF
 cell NHLF
 composite wgEncodeUwTfbs
 control std
-controlId NHLF/None/Input/std
+controlId wgEncodeEH002043
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -21176,4 +21176,4 @@ tableName wgEncodeUwTfbsWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -1314265453
+# MAGIC: -544688815
