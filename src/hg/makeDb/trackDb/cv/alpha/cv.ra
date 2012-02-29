@@ -12817,12 +12817,14 @@ description Tissue obtained from pooling samples from various sample organisms
 # tag (machine-readable name, no special characters. uppercase.)
 # type (informs pipeline code of stanza type, should be seqPlatform)
 # description: Working on inputing description from geo and product website
+# label provisional label using description and words joined with numbers
 
 term Illumina_GA
 tag ILLUMINAGA
 geoPlatformName Illumina Genome Analyzer
 type seqPlatform
 description Illumina Genome Analyzer
+label Illumina Genome Analyzer
 # Matches GA that Kate initially indicated as the term
 
 term Illumina_GA2
@@ -12830,12 +12832,14 @@ tag ILLUMINAGA2
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer II
+label Illumina Genome AnalyzerII
 
 term Illumina_GA2e
 tag ILLUMINAGA2E
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe
+label Illumina Genome AnalyzerIIe
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
@@ -12843,6 +12847,7 @@ tag ILLUMINAGA2X
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIx
+label Illumina Genome AnalyzerIIx
 # Matches GA2x that Kate initally indicated as the term
 
 term Illumina_HiSeq_2000
@@ -12850,42 +12855,49 @@ tag ILLUMINAHISEQ2000
 geoPlatformName Illumina HiSeq 2000
 type seqPlatform
 description Illumina HiSeq 2000
+label Illumina HiSeq2000
 
 term 454_GS
 tag 454GS
 geoPlatformName 454 GS
 type seqPlatform
 description Roche 454 Genome Sequencer
+label Roche454 Genome Sequencer
 
 term 454_GS_20
 tag 454GS20
 geoPlatformName 454 GS 20
 type seqPlatform
 description Roche 454 Genome Sequencer 20
+label Roche454 Genome Sequencer 20
 
 term 454_GS_FLX
 tag 454GSFLX
 geoPlatformName 454 GS FLX
 type seqPlatform
 description Roche 454 Genome Sequencer FLX
+label Roche454 Genome Sequencer FLX
 
 term AB_SOLiD
 tag ABSOLID
 geoPlatformName AB SOLiD System
 type seqPlatform
 description Applied Biosystems SOLiD System
+label Applied Biosystems SOLiD System
 
 term AB_SOLiD_2.0
 tag ABSOLID2
 geoPlatformName AB_SOLiD System 2.0
 type seqPlatform
 description Applied Biosystems SOLiD System 2.0
+label Applied Biosystems SOLiD System2.0
 
 term AB_SOLiD_3.5
 tag ABSOLID3PLUS
 geoPlatformName AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
+label Applied Biosystems SOLiD System3.5
 
 #Uses the GEO terms to be conistent and help with GEO submissions
 ### Platform
