@@ -10754,66 +10754,79 @@ label T7Tag (AB3790; Nov_69522)
 # tag (machine-readable map algorithm name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be mapAlgorithm)
 # description (human-readable description of the map algorithm, unclear where/if it's used)
+# label provisional labels, same as description
 
 term NA
 tag NA
 type mapAlgorithm
 description No algorithm applicable
+label No algorithm applicable
 
 term erng32a
 tag ERNG32A
 type mapAlgorithm
 description erange v3.2.0alpha
+label erange v3.2.0alpha
 
 term erng3
 tag ERNG3
 type mapAlgorithm
 description erange v3.0
+label erange v3.0
 
 term erng3b
 tag ERNG3b
 type mapAlgorithm
 description erange v3.0beta
+label erange v3.0beta
 
 term blat34
 tag BLAT34
 type mapAlgorithm
 description blat v34
+label blat v34
 
 term bow098
 tag BOW098
 type mapAlgorithm
 description bowtie v0.981
+label bowtie v0.981
 
 term bow10
 tag BOW10
 type mapAlgorithm
 description bowtie v0.10.0
+label bowtie v0.10.0
 
 term bow125
 tag BOW125
 type mapAlgorithm
 description bowtie v0.12.5
+label bowtie v0.12.5
 
 term BB1
 tag BB1
 type mapAlgorithm
 description bowtie v0.981 followed by blat v34
+label bowtie v0.981 followed by blat v34
 
 term BB2
 tag BB2
 type mapAlgorithm
 description bowtie v0.10.0 followed by blat v34
+label bowtie v0.10.0 followed by blat v34
 
 term TH1014
 tag TH1014
 type mapAlgorithm
 description TopHat v1.0.14
+label TopHat v1.0.14
 
 term TH131
 tag TH131
 type mapAlgorithm
 description TopHat v1.3.1
+label TopHat v1.3.1
 
 ### readType
 # term (human-readable read type name)
