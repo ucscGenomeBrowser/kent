@@ -1,0 +1,69 @@
+metaObject wgEncodeHaibMethylWgbsGm12878CpGSites
+objType table
+cell GM12878
+composite wgEncodeHaibMethylWgbs
+dataType MethylWgbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-29
+dateUnrestricted 2012-11-28
+fileName wgEncodeHaibMethylWgbsGm12878CpGSites.bigBed
+grant Myers
+lab HudsonAlpha
+labExpId SL8614_SL8615
+project wgEncode
+subId 5890
+tableName wgEncodeHaibMethylWgbsGm12878CpGSites
+view CpG_Sites
+
+metaObject wgEncodeHaibMethylWgbsGm12878NonCpGSites
+objType table
+cell GM12878
+composite wgEncodeHaibMethylWgbs
+dataType MethylWgbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-29
+dateUnrestricted 2012-11-28
+fileName wgEncodeHaibMethylWgbsGm12878NonCpGSites.bigBed
+grant Myers
+lab HudsonAlpha
+labExpId SL8614_SL8615
+project wgEncode
+subId 5890
+tableName wgEncodeHaibMethylWgbsGm12878NonCpGSites
+view NonCpG_Sites
+
+metaObject wgEncodeHaibMethylWgbsH1hescCpGSites
+objType table
+cell H1-hESC
+composite wgEncodeHaibMethylWgbs
+dataType MethylWgbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-29
+dateUnrestricted 2012-11-28
+fileName wgEncodeHaibMethylWgbsH1hescCpGSites.bigBed
+grant Myers
+lab HudsonAlpha
+labExpId SL8616_SL8617
+project wgEncode
+subId 5890
+tableName wgEncodeHaibMethylWgbsH1hescCpGSites
+view CpG_Sites
+
+metaObject wgEncodeHaibMethylWgbsH1hescNonCpGSites
+objType table
+cell H1-hESC
+composite wgEncodeHaibMethylWgbs
+dataType MethylWgbs
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-29
+dateUnrestricted 2012-11-28
+fileName wgEncodeHaibMethylWgbsH1hescNonCpGSites.bigBed
+grant Myers
+lab HudsonAlpha
+labExpId SL8616_SL8617
+project wgEncode
+subId 5890
+tableName wgEncodeHaibMethylWgbsH1hescNonCpGSites
+view NonCpG_Sites
+
+# MAGIC: 2092282052
