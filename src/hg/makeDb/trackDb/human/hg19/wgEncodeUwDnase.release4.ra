@@ -75,7 +75,7 @@ wgEncode 1
     pValueFilter 0.0
     pValueFilterLimits 1:324
     scoreFilter 0
-    scoreFilterLimits 0:1000
+    scoreFilterLimits 0:500
 
         track wgEncodeUwDnaseAg04450HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
@@ -1572,7 +1572,7 @@ wgEncode 1
     pValueFilter 0.0
     pValueFilterLimits 1:324
     scoreFilter 0
-    scoreFilterLimits 0:1000
+    scoreFilterLimits 0:500
 
         track wgEncodeUwDnaseAg04450PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
