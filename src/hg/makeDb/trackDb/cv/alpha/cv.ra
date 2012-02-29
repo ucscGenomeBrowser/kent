@@ -11394,11 +11394,11 @@ type treatment
 description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
 label 120 hour diff protocol C
 
-term diffDMEM_7d
-tag DIFFDM7D
+term diffProtD_7d
+tag DIFFD7D
 type treatment
 description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter. (Ren) PROVSIONAL
-label 7 day diff DMEM
+label 7 day diff protocol D
 
 term DMSO_0.02pct
 tag DM002P1H
