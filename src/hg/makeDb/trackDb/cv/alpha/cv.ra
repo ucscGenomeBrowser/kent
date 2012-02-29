@@ -2418,7 +2418,7 @@ description Undifferentiated Chondrocytes
 lineage missing
 karyotype normal
 sex M
-tissue catilage / knee joint
+tissue cartilage/ knee joint
 vendorName PromoCell
 vendorId HCH#c1315
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH#c1315
@@ -2436,7 +2436,7 @@ description Undifferentiated Chondrocytes
 lineage missing
 karyotype normal
 sex F
-tissue catilage / knee joint
+tissue cartilage/ knee joint
 vendorName PromoCell
 vendorId HCH#c1315
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH#c1315
@@ -5295,10 +5295,10 @@ type Cell Line
 organism mouse
 category primaryCells
 description E14 mouse ES line PROVISIONAL
-age E0
+age E14
 strain 129/Ola
 vendorName Santos lab
-vendorId E14
+vendorId E0
 orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
 color 65,105,225
 sex M
@@ -11338,25 +11338,25 @@ term diffProtA_2d
 tag DIFFA2D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 2 days, lineage: mesoderm
-label 2 day diff protein A
+label 2 day diff protocol A
 
 term diffProtA_5d
 tag DIFFA5D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 5 days, lineage: mesoderm
-label 5 day diff protein A
+label 5 day diff protocol A
 
 term diffProtA_9d
 tag DIFFA9D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 9 days, lineage: mesoderm
-label 9 day diff protein A
+label 9 day diff protocol A
 
 term diffProtA_14d
 tag DIFFA14D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, cell sorting and specific growth factors were used, lineage: mesoderm
-label 14 day diff protein A
+label 14 day diff protocol A
 
 term diffDMEM_7d
 tag DIFFDM7D
