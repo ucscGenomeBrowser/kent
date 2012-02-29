@@ -1,50 +1,83 @@
 /* annoFormatTab -- collect fields from all inputs and print them out, tab-separated. */
 
 #include "annoFormatTab.h"
+#include "annoGratorQuery.h"
 #include "dystring.h"
 
 struct annoFormatTab
-{
+    {
     struct annoFormatter formatter;
     char *fileName;
     FILE *f;
-    boolean needHeader;
-    struct dyString *header;
-    struct dyString *line;
-};
+    boolean needHeader;			// TRUE if we should print out the header
+    struct annoRow *primaryRow;		// Single row from primary source
+    struct slRef *gratorRowLists;	// Accumulated from each grator (0 or more annoRows each)
+    };
 
-void aftCollect(struct annoFormatter *vSelf, struct annoStreamer *source, struct annoRow *rows,
-		boolean filterFailed)
-/* Gather columns from a single source's row(s).
- * If filterFailed, forget what we've collected so far, time to start over. */
+static void printHeaderColumns(FILE *f, struct annoStreamer *source, boolean isFirst)
+/* Print names of included columns from this source. */
 {
-struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
-// handle filter failure:
-if (filterFailed)
-    {
-    dyStringClear(self->line);
-    dyStringClear(self->header);
-    return;
-    }
-//#*** uh-oh -- we can have multiple rows of input!
-char **words = rows->data;  //#*** formatter & source must agree here
 struct annoColumn *col;
 int i;
 for (col = source->columns, i = 0;  col != NULL;  col = col->next, i++)
     {
     if (! col->included)
 	continue;
-    if (self->needHeader)
-	{
-	if (i > 0 || dyStringLen(self->header) > 0)
-	    dyStringAppendC(self->header, '\t');
-	else
-	    dyStringAppendC(self->header, '#');
-	dyStringAppend(self->header, col->def->name);
-	}
-    if (i > 0 || dyStringLen(self->line) > 0)
-	dyStringAppendC(self->line, '\t');
-    dyStringAppend(self->line, words[i]);
+    if (isFirst && i == 0)
+	fputc('#', f);
+    else
+	fputc('\t', f);
+    fputs(col->def->name, f);
+    }
+}
+
+void aftInitialize(struct annoFormatter *vSelf, struct annoGratorQuery *query)
+/* Print header, regardless of whether we get any data after this. */
+{
+vSelf->query = query;
+struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
+if (self->needHeader)
+    {
+    printHeaderColumns(self->f, query->primarySource, TRUE);
+    struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
+    for (;  grator != NULL;  grator = grator->next)
+	printHeaderColumns(self->f, grator, FALSE);
+    fputc('\n', self->f);
+    self->needHeader = FALSE;
+    }
+}
+
+void aftCollect(struct annoFormatter *vSelf, struct annoStreamer *source, struct annoRow *rows)
+/* Gather columns from a single source's row(s). */
+{
+struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
+if (self->primaryRow == NULL)
+    self->primaryRow = rows;
+else
+    slAddHead(&(self->gratorRowLists), slRefNew(rows));
+}
+
+void aftDiscard(struct annoFormatter *vSelf)
+/* Forget what we've collected so far, time to start over. */
+{
+struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
+self->primaryRow = NULL;
+slFreeList(&(self->gratorRowLists));
+return;
+}
+
+static void printColumns(FILE *f, struct annoStreamer *streamer, char **row, boolean isFirst)
+/* Print columns in streamer's row (if NULL, print the right number of empty fields). */
+{
+struct annoColumn *col;
+int i;
+for (col = streamer->columns, i = 0;  col != NULL;  col = col->next, i++)
+    {
+    if (! col->included)
+	continue;
+    if (!isFirst || i > 0)
+	fputc('\t', f);
+    fputs(row[i], f);
     }
 }
 
@@ -53,15 +86,38 @@ void aftFormatOne(struct annoFormatter *vSelf)
  * and start over fresh for the next line of output.  Write header if necessary. */
 {
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
-if (self->needHeader)
+slReverse(&(self->gratorRowLists));
+int maxRows = 1;
+int i;
+struct slRef *grRef;
+// How many rows did each grator give us, and what's the largest # of rows?
+int numGrators = slCount(self->gratorRowLists);
+if (numGrators > 1)
     {
-    dyStringAppendC(self->header, '\n');
-    fputs(self->header->string, self->f);
-    self->needHeader = FALSE;
+    for (i = 0, grRef = self->gratorRowLists;  i < numGrators;  i++, grRef = grRef->next)
+	{
+	int gratorRowCount = slCount(grRef->val);
+	if (gratorRowCount > maxRows)
+	    maxRows = gratorRowCount;
+	}
     }
-dyStringAppendC(self->line, '\n');
-fputs(self->line->string, self->f);
-dyStringClear(self->line);
+// Print out enough rows to make sure that all grator rows are included.
+for (i = 0;  i < maxRows;  i++)
+    {
+    char **row = (char **)(self->primaryRow->data);
+    printColumns(self->f, vSelf->query->primarySource, row, TRUE);
+    struct annoStreamer *grator = (struct annoStreamer *)self->formatter.query->integrators;
+    for (grRef = self->gratorRowLists;  grRef != NULL;  grRef = grRef->next,
+	     grator = grator->next)
+	{
+	struct annoRow *gratorRow = slElementFromIx(grRef->val, i);
+	char **row = (gratorRow == NULL) ? NULL : (char **)(gratorRow->data);
+	printColumns(self->f, grator, row, FALSE);
+	}
+    }
+fputc('\n', self->f);
+self->primaryRow = NULL;
+slFreeList(&(self->gratorRowLists));
 }
 
 void aftClose(struct annoFormatter **pVSelf)
@@ -72,8 +128,7 @@ if (pVSelf == NULL)
 struct annoFormatTab *self = *(struct annoFormatTab **)pVSelf;
 freeMem(self->fileName);
 carefulClose(&(self->f));
-dyStringFree(&(self->header));
-dyStringFree(&(self->line));
+slFreeList(&(self->gratorRowLists));
 annoFormatterFree(pVSelf);
 }
 
@@ -85,13 +140,13 @@ AllocVar(aft);
 struct annoFormatter *formatter = &(aft->formatter);
 formatter->getOptions = annoFormatterGetOptions;
 formatter->setOptions = annoFormatterSetOptions;
+formatter->initialize = aftInitialize;
 formatter->collect = aftCollect;
+formatter->discard = aftDiscard;
 formatter->formatOne = aftFormatOne;
 formatter->close = aftClose;
 aft->fileName = cloneString(fileName);
 aft->f = mustOpen(fileName, "w");
 aft->needHeader = TRUE;
-aft->header = dyStringNew(0);
-aft->line = dyStringNew(0);
 return (struct annoFormatter *)aft;
 }

@@ -30,9 +30,12 @@ struct annoFormatter
     // Get and set output options
     struct annoFormatterOption *(*getOptions)(struct annoFormatter *self);
     void (*setOptions)(struct annoFormatter *self, struct annoFormatterOption *options);
+    // Initialize output (header, etc)
+    void (*initialize)(struct annoFormatter *self, struct annoGratorQuery *query);
     // Collect data from one source
-    void (*collect)(struct annoFormatter *self, struct annoStreamer *source, struct annoRow *rows,
-		    boolean filterFailed);
+    void (*collect)(struct annoFormatter *self, struct annoStreamer *source, struct annoRow *rows);
+    // Discard data collected so far (filter failure)
+    void (*discard)(struct annoFormatter *self);
     // Aggregate all sources' data for a single primarySource item into output:
     void (*formatOne)(struct annoFormatter *self);
     // End of input; finish output, close connection/handle and free self.

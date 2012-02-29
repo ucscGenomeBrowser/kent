@@ -59,12 +59,12 @@ query->integrators = integrators;
 query->formatters = formatters;
 // Set streamers' and formatters' ->query pointer.
 query->primarySource->query = query;
-struct annoGrator *grator;
-for (grator = query->integrators;  grator != NULL;  grator = grator->next)
-    grator->source->query = query;
+struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
+for (;  grator != NULL;  grator = grator->next)
+    grator->query = query;
 struct annoFormatter *formatter;
 for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
-    formatter->query = query;
+    formatter->initialize(formatter, query);
 return query;
 }
 
@@ -82,9 +82,9 @@ if (rEnd == 0)
     rEnd = chromSize;
 // Alert all streamers that they should now send data from a possibly different region:
 query->primarySource->setRegion(query->primarySource, chrom, rStart, rEnd);
-struct annoGrator *grator;
-for (grator = query->integrators;  grator != NULL;  grator = grator->next)
-    grator->source->setRegion(grator->source, chrom, rStart, rEnd);
+struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
+for (;  grator != NULL;  grator = grator->next)
+    grator->setRegion(grator, chrom, rStart, rEnd);
 }
 
 void annoGratorQueryExecute(struct annoGratorQuery *query)
@@ -96,21 +96,24 @@ struct annoFormatter *formatter = NULL;
 struct annoRow *primaryRow = NULL;
 while ((primaryRow = primarySrc->nextRow(primarySrc, NULL)) != NULL)
     {
-    boolean filterFailed = FALSE;
     for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
-	formatter->collect(formatter, primarySrc, primaryRow, filterFailed);
-    struct annoGrator *grator;
-    for (grator = query->integrators;  grator != NULL;  grator = grator->next)
+	formatter->collect(formatter, primarySrc, primaryRow);
+    boolean filterFailed = FALSE;
+    struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
+    for (;  grator != NULL;  grator = grator->next)
 	{
-	struct annoRow *gratorRows = grator->integrate(grator, primarySrc, primaryRow,
-						       &filterFailed);
-	for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
-	    formatter->collect(formatter, grator->source, gratorRows, filterFailed);
+	struct annoGrator *realGrator = (struct annoGrator *)grator;
+	struct annoRow *gratorRows = realGrator->integrate(realGrator, primarySrc, primaryRow,
+							   &filterFailed);
 	if (filterFailed)
 	    break;
-	}
-    if (!filterFailed)
 	for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
+	    formatter->collect(formatter, grator, gratorRows);
+	}
+    for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
+	if (filterFailed)
+	    formatter->discard(formatter);
+	else
 	    formatter->formatOne(formatter);
     }
 }
@@ -126,8 +129,8 @@ if (query->csAllocdHere)
     hashFree(&(query->chromSizes));
 twoBitClose(&(query->tbf));
 query->primarySource->close(&(query->primarySource));
-struct annoGrator *grator, *nextGrator;
-for (grator = query->integrators;  grator != NULL;  grator = nextGrator)
+struct annoStreamer *grator = (struct annoStreamer *)(query->integrators), *nextGrator;
+for (;  grator != NULL;  grator = nextGrator)
     {
     nextGrator = grator->next;
     grator->close(&grator);
