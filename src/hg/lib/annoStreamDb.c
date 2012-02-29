@@ -15,6 +15,12 @@ struct annoStreamDb
     boolean hasBin;			// 1 if SQL table's first column is bin
     boolean omitBin;			// 1 if table hasBin and autoSql doesn't have bin
     int numCols;			// Number of columns in autoSql
+    char *chromField;			// Name of chrom-ish column in table
+    char *startField;			// Name of chromStart-ish column in table
+    char *endField;			// Name of chromEnd-ish column in table
+    int chromIx;			// Index of chrom-ish col in autoSql or bin-less table
+    int startIx;			// Index of chromStart-ish col in autoSql or bin-less table
+    int endIx;				// Index of chromEnd-ish col in autoSql or bin-less table
     };
 
 static void asdSetRegionDb(struct annoStreamer *vSelf,
@@ -27,7 +33,7 @@ if (self->sr != NULL)
     sqlFreeResult(&(self->sr));
 }
 
-void asdDoQuery(struct annoStreamDb *self)
+static void asdDoQuery(struct annoStreamDb *self)
 /* Return a sqlResult for a query on table items in position range. */
 // NOTE: it would be possible to implement filters at this level, as in hgTables.
 {
@@ -35,15 +41,15 @@ struct annoStreamer *streamer = &(self->streamer);
 struct dyString *query = dyStringCreate("select * from %s", self->table);
 if (!streamer->positionIsGenome)
     {
-    dyStringPrintf(query, " where chrom='%s'", streamer->chrom);
+    dyStringPrintf(query, " where %s='%s'", self->chromField, streamer->chrom);
     int chromSize = hashIntVal(streamer->query->chromSizes, streamer->chrom);
     if (streamer->regionStart != 0 || streamer->regionEnd != chromSize)
 	{
 	dyStringAppend(query, " and ");
 	if (self->hasBin)
 	    hAddBinToQuery(streamer->regionStart, streamer->regionEnd, query);
-	dyStringPrintf(query, "chromStart < %u and chromEnd > %u",
-		       streamer->regionEnd, streamer->regionStart);
+	dyStringPrintf(query, "%s < %u and %s > %u", self->startField, streamer->regionEnd,
+		       self->endField, streamer->regionStart);
 	}
     }
 verbose(2, "mysql query: '%s'\n", query->string);
@@ -52,23 +58,47 @@ dyStringFree(&query);
 self->sr = sr;
 }
 
+static char **nextRowUnfiltered(struct annoStreamDb *self)
+/* Fetch the next row from the sqlResult, and skip past table's bin field if necessary. */
+{
+char **row = sqlNextRow(self->sr);
+if (row == NULL)
+    return NULL;
+// Skip table's bin field if not in autoSql:
+row += self->omitBin;
+return row;
+}
+
 static struct annoRow *asdNextRowDb(struct annoStreamer *vSelf, boolean *retFilterFailed)
-/* Perform sql query if we haven't already and return a single annoRow, or NULL if
- * there are no more items. */
+/* Perform sql query if we haven't already and return a single
+ * annoRow, or NULL if there are no more items.  If there is a
+ * rightJoin failure, set retFilterFailed to TRUE and return NULL. */
 {
 struct annoStreamDb *self = (struct annoStreamDb *)vSelf;
 if (self->sr == NULL)
     asdDoQuery(self);
-char **row = sqlNextRow(self->sr);
+char **row = nextRowUnfiltered(self);
 if (row == NULL)
     return NULL;
-// Skip table's bin field if necessary:
-row += self->omitBin;
-boolean fail = annoFilterTestRow(self->streamer.filters, row, self->numCols);
+boolean rightFail = FALSE;
 if (retFilterFailed != NULL)
-    *retFilterFailed = fail;
-char *chrom = row[0+self->hasBin];
-uint chromStart = sqlUnsigned(row[1+self->hasBin]), chromEnd = sqlUnsigned(row[2+self->hasBin]);
+    retFilterFailed = FALSE;
+// Skip past any left-join failures until we get a right-join failure, a passing row, or EOF.
+while (annoFilterRowFails(vSelf->filters, row, self->numCols, &rightFail))
+    {
+    if (rightFail)
+	{
+	if (retFilterFailed != NULL)
+	    *retFilterFailed = TRUE;
+	return NULL;
+	}
+    row = nextRowUnfiltered(self);
+    if (row == NULL)
+	return NULL;
+    }
+char *chrom = row[self->omitBin+self->chromIx];
+uint chromStart = sqlUnsigned(row[self->omitBin+self->startIx]);
+uint chromEnd = sqlUnsigned(row[self->omitBin+self->endIx]);
 return annoRowFromStringArray(chrom, chromStart, chromEnd, row, self->numCols);
 }
 
@@ -79,9 +109,57 @@ if (pVSelf == NULL)
     return;
 struct annoStreamDb *self = *(struct annoStreamDb **)pVSelf;
 // Let the caller close conn; it might be from a cache.
-freez(&(self->table));
+freeMem(self->table);
 sqlFreeResult(&(self->sr));
 annoStreamerFree(pVSelf);
+}
+
+static int asColumnFindIx(struct asColumn *list, char *string)
+/* Return index of first element of asColumn list that matches string.
+ * Return -1 if not found. */
+{
+struct asColumn *ac;
+int ix = 0;
+for (ac = list; ac != NULL; ac = ac->next, ix++)
+    if (sameString(string, ac->name))
+        return ix;
+return -1;
+}
+
+static boolean asHasFields(struct annoStreamDb *self, char *chromField, char *startField,
+			   char *endField)
+/* If autoSql def has all three columns, remember their names and column indexes and 
+ * return TRUE. */
+{
+struct asColumn *columns = self->streamer.asObj->columnList;
+int chromIx = asColumnFindIx(columns, chromField);
+int startIx = asColumnFindIx(columns, startField);
+int endIx = asColumnFindIx(columns, endField);
+if (chromIx >= 0 && startIx >= 0 && endIx >= 0)
+    {
+    self->chromField = cloneString(chromField);
+    self->startField = cloneString(startField);
+    self->endField = cloneString(endField);
+    self->chromIx = chromIx;
+    self->startIx = startIx;
+    self->endIx = endIx;
+    return TRUE;
+    }
+return FALSE;
+}
+
+static boolean asdInitBed3Fields(struct annoStreamDb *self)
+/* Use autoSql to figure out which table fields correspond to {chrom, chromStart, chromEnd}. */
+{
+if (asHasFields(self, "chrom", "chromStart", "chromEnd"))
+    return TRUE;
+if (asHasFields(self, "chrom", "txStart", "txEnd"))
+    return TRUE;
+if (asHasFields(self, "tName", "tStart", "tEnd"))
+    return TRUE;
+if (asHasFields(self, "genoName", "genoStart", "genoEnd"))
+    return TRUE;
+return FALSE;
 }
 
 struct annoStreamer *annoStreamDbNew(struct sqlConnection *conn, char *table,
@@ -105,5 +183,8 @@ if (sqlFieldIndex(self->conn, self->table, "bin") == 0)
 if (self->hasBin && !sameString(asFirstColumnName, "bin"))
     self->omitBin = 1;
 self->numCols = slCount(streamer->asObj->columnList);
+if (!asdInitBed3Fields(self))
+    errAbort("annoStreamDbNew: can't figure out which fields of %s to use as "
+	     "{chrom, chromStart, chromEnd}.", table);
 return (struct annoStreamer *)self;
 }

@@ -38,6 +38,7 @@ struct annoFilter
     char *label;		// Option label for UI (if NULL, see column->comment)
     enum annoFilterOp op;	// Action to be performed
     void *values;		// Depending on op: name(s) to match, thresholds to compare, etc.
+    boolean rightJoin;		// A la SQL: if this filter fails, discard primary row.
     boolean haveMinMax;		// True if we know the allowable range for numeric thresholds
 				// so e.g. UI can enforce limits
     union aNumber min;		// Lowest valid threshold value
@@ -49,9 +50,11 @@ struct annoFilter *annoFiltersFromAsObject(struct asObject *asObj);
  * sense for the table's set of fields.
  * Callers: do not modify any filter's columnDef! */
 
-boolean annoFilterTestRow(struct annoFilter *filterList, char **row, int rowSize);
+boolean annoFilterRowFails(struct annoFilter *filterList, char **row, int rowSize,
+			   boolean *retRightJoin);
 /* Apply filters to row, using autoSql column definitions to interpret
- * each word of row.  Return TRUE if any filter fails. */
+ * each word of row.  Return TRUE if any filter fails.  Set retRightJoin to TRUE
+ * if a rightJoin filter has failed. */
 
 struct annoFilter *annoFilterCloneList(struct annoFilter *list);
 /* Shallow-copy a list of annoFilters.  Callers: do not modify any filter's columnDef! */
