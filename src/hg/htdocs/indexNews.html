@@ -14,77 +14,93 @@
                     </TD></TR></TABLE>
                 </TD></TR></TABLE>
                 <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
-                    <TR><TH HEIGHT=3></TH></TR>
-                    <TR><TD WIDTH=10></TD>
-                    <TD>
-                    <P>
-                    To receive announcements of new genome 
-                    assembly releases, new software features, updates and 
-                    training seminars by email, subscribe to the
-                    <A HREF="https://lists.soe.ucsc.edu/mailman/listinfo/genome-announce" 
-                    TARGET=_blank>genome-announce</A> mailing list.</P>
+                  <TR><TH HEIGHT=3></TH></TR>
+                  <TR><TD WIDTH=10></TD>
+                  <TD>
+                  <P>
+                  To receive announcements of new genome 
+                  assembly releases, new software features, updates and 
+                  training seminars by email, subscribe to the
+                  <A HREF="https://lists.soe.ucsc.edu/mailman/listinfo/genome-announce" 
+                  TARGET=_blank>genome-announce</A> mailing list.</P>
 
             
             <!-- start news -->
-                    <FONT FACE="courier" SIZE="3"><B>2 February 2012 - New UCSC 
-		    Genes Track Released for GRCh37/hg19</B></FONT>
-                    <P>
-		    We're happy to announce the release of an updated UCSC Genes
-		    track for the GRCh37/hg19 human Genome Browser. This release
-		    includes more noncoding transcripts based on data from 
-		    <A HREF="http://rfam.sanger.ac.uk/" TARGET=_blank>Rfam</A> 
-		    and from the 
-		    <A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=tRNAs">tRNA Genes track</A> 
-		    contributed by the <A HREF="http://lowelab.ucsc.edu/" 
-		    TARGET=_blank>Todd Lowe lab</A> at UCSC.
-		    <P>
-		    The new release has 80,922 total transcripts, compared with 
-		    77,614 in the previous version. The total number of 
-		    canonical genes has increased from 27,297 to 31,227. 
-		    Comparing the new gene set with the previous version: 
-		    <UL>
-		    <LI>24,804 transcripts did not change between versions.
-		    <LI>483 transcripts were not carried forward to the new 
-		    version.
-		    <LI>46,367 transcripts are "compatible" with those in the 
-		    previous set, meaning that the two transcripts show 
-		    consistent splicing. In most cases, the old and new 
-		    transcripts differ in the lengths of their UTRs.
-		    <LI>5,960 transcripts overlap with those in the previous 
-		    set but do not show consistent splicing, i.e., they contain 
-		    overlapping introns with differing splice sites.
-		    </UL>
-		    <P>
-		    Additionally, several improvements where made to the UCSC 
-		    Genes build pipeline:
-		    <UL>
-		    <LI>We developed new genomic alignment protocols for 
-		    aligning short sequences, facilitating the expansion of the 
-		    noncoding RNA content.
-		    <LI>
-		    We changed the way that gene symbols are assigned to 
-		    transcripts so that names from curated sources are favored 
-		    over names coming directly from GenBank mRNA records. This 
-		    change resolved several confusing naming issues reported to 
-		    us by users.
-		    <LI>We tracked down and corrected a bug in the pipeline that
-		    was causing a number of poor quality protein mappings to 
-		    displace high quality protein mappings.
-		    <LI>We have started producing two new tables, 
-		    knownGeneTxMrna and knownGeneTxPep, that contain sequence 
-		    derived from the genome rather than from the mRNA used for 
-		    the transcript.
-		    </UL>
-		    <P>
-		    More details about the new UCSC Genes track can be found on the 
-		    <A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes track description page</A>.
-		    <P>
-		    Many thanks to Melissa Cline, Jim Kent, Brian Raney, Mark 
-		    Diekhans, and Brooke Rhead for their work on this track!
-		    <P>
-		    <HR>
+            	<FONT FACE="courier" SIZE="3"><B>05 March 2012 - New Mouse 
+                Browser Available</B></FONT>
+                <P>
+                We have released the latest Genome Browser for the December 2011
+		Mouse genome assembly produced by the 
+		<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/mouse/" TARGET=_blank>
+		Mouse Genome Reference Consortium</a> (NCBI Build 38, UCSC version mm10).	
+		This version, which includes approximately 2.6 Gb of sequence, 
+		is considered to be "essentially complete". The assembly includes 
+		chromosomes 1-19, X, Y, M (mitochondrial DNA) and chr*_random 
+		(unlocalized) and chrUn_* (unplaced clone contigs).
+		Note that the UCSC mm10 database contains only the 
+		reference strain C57BL/6J.
+		<P>					
+		Bulk downloads of the sequence and annotation data are available
+		via the Genome Browser <a href="ftp://hgdownload.cse.ucsc.edu/goldenPath/mm10/" 
+		TARGET=_blank>FTP server</a> or the 
+		<a href="http://hgdownload.cse.ucsc.edu/downloads.html#mouse" TARGET=_blank>Downloads</a>
+		page. The Mouse browser annotation tracks were generated by UCSC
+		and collaborators worldwide. See the 
+		<a href="http://hgwdev.cse.ucsc.edu/goldenPath/credits.html#mouse_credits" 
+		TARGET=_blank>Credits</a> page for a detailed list of the 
+		organizations and individuals who contributed to the success of this release.				                   <P>
+                <HR>
+
+            <!-- more news -->
+		 <FONT FACE="courier" SIZE="3"><B>10 February 2012 
+                 - dbSNP 135 Available for hg19</B></FONT>
+                 <P>We are pleased to announce the release of four tracks derived
+                 from dbSNP build 135, available on the human assembly (GRCh37/hg19).
+                 dbSNP build 135 is available at NCBI. The new tracks contain
+                 additional annotation data not included in previous dbSNP tracks,
+                 with corresponding coloring and filtering options in the Genome
+                 Browser.
+                 </P>
+                 <P>
+                 As for dbSNP build 132, there are four tracks in this release.
+                 One is a track containing all mappings of reference SNPs to the
+                 human assembly, labeled "All SNPs (135)". The other three tracks
+                 are subsets of this track and show interesting and easily defined
+                 subsets of dbSNP:
+                 </P>
+
+                 <UL>
+                 <LI>Common SNPs (135): uniquely mapped variants that appear in
+                 at least 1% of the population
+                 <LI>Flagged SNPs (135): uniquely mapped variants, excluding
+                 Common SNPs, that have been flagged by dbSNP as "clinically
+                 associated"
+                 <LI>Mult. SNPs (135): variants that have been mapped to more
+                 than one genomic location
+                 </UL>
+
+                 <P>By default, only the Common SNPs (135) are visible; other
+                 tracks must be made visible using the track controls.
+                 </P>
+
+                 <P>You will find the four SNPs (135) tracks on the Human Feb.
+                 2009 (GRCh37/hg19) browser in the "Variation and Repeats" group.
+                 </P>
+
+                 </P> Many thanks to dbSNP at NCBI for the data, and to
+                 Mary-Claire King at the University of Washington for helpful
+                 comments that motivated us to enhance our dbSNP annotations. The
+                 tracks were produced at UCSC by Angie Hinrichs and Brooke Rhead.
+                 </P>   
+		 <HR>
 		  
             <!-- start archives -->
+		   <FONT FACE="courier" SIZE="3"><B>2 February 2012 - New UCSC 
+                   Genes Track Released for GRCh37/hg19: </B></FONT>
+		   We're happy to announce the release of an updated UCSC Genes
+                   track for the GRCh37/hg19 human Genome Browser. 
+		   <A HREF="goldenPath/newsarch.html#020212">Read more</A>.
+		   <P>
                    <FONT FACE="courier" SIZE="3"><B>23 January 2012 - Wallaby 
 		   Browser Available: </B></FONT>
                    We have released a Genome Browser for the September 2009
@@ -100,13 +116,6 @@
 		   Data Hub function. 
                    <A HREF="goldenPath/newsarch.html#030112">Read more</A>.
 		   <P>
-                   <FONT FACE="courier" SIZE="3"><B>19 December 2011 - Variant
-                   Call Format (VCF) Now Supported in Genome Browser: </B></FONT>
-                   We are pleased to announce that the UCSC Genome Browser
-                   now supports Variant Call Format (VCF).  
-                   <A HREF="goldenPath/newsarch.html#191211">Read more</A>.
-                   </P>
-                   <P>
 
 ==> <a href="goldenPath/newsarch.html">News Archives</a>
 

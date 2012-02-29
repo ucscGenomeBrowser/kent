@@ -162,17 +162,15 @@ include wgEncodeSydhHistone.release3.ra alpha
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release2.ra public
-include wgEncodeUwTfbs.release3.ra alpha,beta
+include wgEncodeUwTfbs.release3.ra
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra public
 #include wgEncodeHaibTfbs.patch.ra beta
-include wgEncodeHaibTfbs.release2.ra alpha,beta
+include wgEncodeHaibTfbs.release2.ra
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
 include wgEncodeSydhTfbs.release2.ra alpha
