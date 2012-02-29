@@ -200,7 +200,7 @@ tier 3
 protocol ENCODE:Keratinocyte_protocol.pdf
 
 term NHEM_M2_7011001.2
-tag NHEMM27011001.2
+tag NHEMM270110012
 type Cell Line
 tier 3
 organism human
@@ -236,7 +236,7 @@ lab Gingeras
 protocol Gingeras:NHEMM27012303_Gingeras_protocol.pdf
 
 term NHEM.f_M2_5071302.2
-tag NHEM.FM25071302.2
+tag NHEMFM250713022
 type Cell Line
 tier 3
 organism human
@@ -254,7 +254,7 @@ lab Gingeras
 protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf
 
 term NHEM.f_M2_6022001
-tag NHEM.FM26022001
+tag NHEMFM26022001
 type Cell Line
 tier 3
 organism human
@@ -2249,7 +2249,7 @@ sex U
 protocol Myers:HAL_Myers_protocol.pdf
 
 term HAoAF_6090101.11
-tag HAOAF6090101.11
+tag HAOAF609010111
 type Cell Line
 tier 3
 organism human
@@ -2267,7 +2267,7 @@ lab Gingeras
 protocol Gingeras:HAoAF6090101.11_Gingeras_protocol.pdf
 
 term HAoAF_6111301.9
-tag HAOAF6111301.9
+tag HAOAF61113019
 type Cell Line
 tier 3
 organism human
@@ -2285,7 +2285,7 @@ lab Gingeras
 protocol Gingeras:HAoAF6111301.9_Gingeras_protocol.pdf
 
 term HAoEC_8061102.1
-tag HAOEC8061102.1
+tag HAOEC80611021
 type Cell Line
 tier 3
 organism human
@@ -2303,7 +2303,7 @@ lab Gingeras
 protocol Gingeras:HAoEC8061102.1_Gingeras_protocol.pdf
 
 term HAoEC_7071706.1
-tag HAOEC7071706.1
+tag HAOEC70717061
 type Cell Line
 tier 3
 organism human
@@ -2410,7 +2410,7 @@ tier 3
 protocol Stam:HCF_Stam_protocol.pdf
 
 term HCH_8100808.2
-tag HCH8100808.2
+tag HCH81008082
 type Cell Line
 tier 3
 organism human
@@ -2428,7 +2428,7 @@ lab Gingeras
 protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf
 
 term HCH_0011308.2P
-tag HCH0011308.2P
+tag HCH00113082P
 type Cell Line
 tier 3
 organism human
@@ -2607,7 +2607,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Crawford:Hepatocytes_Crawford_protocol.pdf
 
 term HFDPC_0100503.2
-tag HFDPC0100503.2
+tag HFDPC01005032
 type Cell Line
 tier 3
 organism human
@@ -2625,7 +2625,7 @@ lab Gingeras
 protocol Gingeras:HFDPC0100503.2_Gingeras_protocol.pdf
 
 term HFDPC_0102703.3
-tag HFDPC0102703.3
+tag HFDPC01027033
 type Cell Line
 tier 3
 organism human
@@ -2803,7 +2803,7 @@ lab Gingeras
 protocol Gingeras:HMEpC_Gingeras_protocol.pdf
 
 term HMEpC_6022801.3
-tag HMEPC6022801.3
+tag HMEPC60228013
 type Cell Line
 tier 3
 organism human
@@ -2835,7 +2835,7 @@ protocol Stam:HMF_Stam_protocol.pdf
 # mammary stromal cell line
 
 term hMNC-PB_0022330.9
-tag HMNCPB0022330.9
+tag HMNCPB00223309
 type Cell Line
 tier 3
 organism human
@@ -2853,7 +2853,7 @@ lab Gingeras
 protocol Gingeras:hMNCPB0022330.9_Gingeras_protocol.pdf
 
 term hMNC-PB_0082430.9
-tag HMNCPB0082430.9
+tag HMNCPB00824309
 type Cell Line
 tier 3
 organism human
@@ -2871,7 +2871,7 @@ lab Gingeras
 protocol Gingeras:hMNCPB0082430.9_Gingeras_protocol.pdf
 
 term hMNC-CB_9111701.6
-tag HMNCCB9111701.6
+tag HMNCCB91117016
 type Cell Line
 tier 3
 organism human
@@ -2889,7 +2889,7 @@ lab Gingeras
 protocol Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf
 
 term hMNC-CB_8072802.6
-tag HMNCCB8072802.6
+tag HMNCCB80728026
 type Cell Line
 tier 3
 organism human
@@ -2907,7 +2907,7 @@ lab Gingeras
 protocol Gingeras:hMNCCB8072802.6_Gingeras_protocol.pdf
 
 term hMSC-BM_0050602.11
-tag HMSCBM0050602.11
+tag HMSCBM005060211
 type Cell Line
 tier 3
 organism human
@@ -2925,7 +2925,7 @@ lab Gingeras
 protocol Gingeras:hMSCBM0050602.11_Gingeras_protocol.pdf
 
 term hMSC-AT_9061601.12
-tag HMSCAT9061601.12
+tag HMSCAT906160112
 type Cell Line
 tier 3
 organism human
@@ -2943,7 +2943,7 @@ lab Gingeras
 protocol Gingeras:hMSCAT9061601.12_Gingeras_protocol.pdf
 
 term hMSC-AT_0102604.12
-tag HMSCAT0102604.12
+tag HMSCAT010260412
 type Cell Line
 tier 3
 organism human
@@ -2961,7 +2961,7 @@ lab Gingeras
 protocol Gingeras:hMSCAT0102604.12_Gingeras_protocol.pdf
 
 term hMSC-BM_0051105.11
-tag HMSCBM0051105.11
+tag HMSCBM005110511
 type Cell Line
 tier 3
 organism human
@@ -2979,7 +2979,7 @@ lab Gingeras
 protocol Gingeras:hMSCBM0051105.11_Gingeras_protocol.pdf
 
 term hMSC-UC_0081101.7
-tag HMSCUC0081101.7
+tag HMSCUC00811017
 type Cell Line
 tier 3
 organism human
@@ -2997,7 +2997,7 @@ lab Gingeras
 protocol Gingeras:hMSCUC0081101.7_Gingeras_protocol.pdf
 
 term hMSC-UC_0052501.7
-tag HMSCUC0052501.7
+tag HMSCUC00525017
 type Cell Line
 tier 3
 organism human
@@ -3148,7 +3148,7 @@ tier 3
 protocol Stam:HNPCEpiC_Stam_protocol.pdf
 
 term HOB_0090202.1
-tag HOB0090202.1
+tag HOB00902021
 type Cell Line
 tier 3
 organism human
@@ -3226,7 +3226,7 @@ tier 3
 protocol Stam:HPAF_Stam_protocol.pdf
 
 term HPC-PL_0032601.13
-tag HPCPL0032601.13
+tag HPCPL003260113
 type Cell Line
 tier 3
 organism human
@@ -3244,7 +3244,7 @@ lab Gingeras
 protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf
 
 term HPC-PL_0101504.13
-tag HPCPL0101504.13
+tag HPCPL010150413
 type Cell Line
 tier 3
 organism human
@@ -3305,7 +3305,7 @@ tier 3
 protocol Stam:HPF_Stam_protocol.pdf
 
 term HPIEpC_9012801.2
-tag HPIEPC9012801.2
+tag HPIEPC90128012
 type Cell Line
 tier 3
 organism human
@@ -3323,7 +3323,7 @@ lab Gingeras
 protocol Gingeras:HPIEpC9012801.2_Gingeras_protocol.pdf
 
 term HPIEpC_9041503.2
-tag HPIEPC9041503.2
+tag HPIEPC90415032
 type Cell Line
 tier 3
 organism human
@@ -3406,7 +3406,7 @@ tier 3
 protocol Stam:HRPEpiC_Stam_protocol.pdf
 
 term HSaVEC_9100101.15
-tag HSAVEC9100101.15
+tag HSAVEC910010115
 type Cell Line
 tier 3
 organism human
@@ -3424,7 +3424,7 @@ lab Gingeras
 protocol Gingeras:HSaVEC9100101.15_Gingeras_protocol.pdf
 
 term HSaVEC_0022202.16
-tag HSAVEC0022202.16
+tag HSAVEC002220216
 type Cell Line
 tier 3
 organism human
@@ -3603,7 +3603,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Crawford:Huh-7_Crawford_protocol.pdf
 
 term Huh-7.5
-tag HUH7.5
+tag HUH75
 type Cell Line
 tier 3
 organism human
@@ -3633,7 +3633,7 @@ tier 3
 protocol Stam:HVMF_Stam_protocol.pdf
 
 term HVMF_6100401.3
-tag HVMF6100401.3
+tag HVMF61004013
 type Cell Line
 tier 3
 organism human
@@ -3651,7 +3651,7 @@ lab Gingeras
 protocol Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
 
 term HVMF_6091203.3
-tag HVMF6091203.3
+tag HVMF60912033
 type Cell Line
 tier 3
 organism human
@@ -3687,7 +3687,7 @@ lab Gingeras
 protocol Gingeras:HWP0092205_Gingeras_protocol.pdf
 
 term HWP_8120201.5
-tag HWP8120201.5
+tag HWP81202015
 type Cell Line
 tier 3
 organism human
@@ -4212,7 +4212,7 @@ tier 3
 protocol Stam:NHDF-neo_Stam_protocol.pdf
 
 term NHDF_0060801.3
-tag NHDF0060801.3
+tag NHDF00608013
 type Cell Line
 tier 3
 organism human
@@ -4230,7 +4230,7 @@ lab Gingeras
 protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf
 
 term NHDF_7071701.2
-tag NHDF7071701.2
+tag NHDF70717012
 type Cell Line
 tier 3
 organism human
@@ -4666,7 +4666,7 @@ lab Gingeras
 protocol Gingeras:SkMC9011302_Gingeras_protocol.pdf
 
 term SkMC_8121902.17
-tag SKMC8121902.17
+tag SKMC812190217
 type Cell Line
 tier 3
 organism human
