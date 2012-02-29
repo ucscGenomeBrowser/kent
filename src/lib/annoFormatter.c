@@ -3,7 +3,7 @@
 #include "annoFormatter.h"
 
 static struct annoFormatterOption *annoFormatterOptionCloneList(struct annoFormatterOption *list)
-/* Return a copy of list. */
+/* Return a newly allocated copy of list. */
 {
 struct annoFormatterOption *newList = NULL, *afo;
 for (afo = list;  afo != NULL;  afo = afo->next)
@@ -14,7 +14,6 @@ for (afo = list;  afo != NULL;  afo = afo->next)
     unsigned opFlags = opFlags;
     if (opFlags & OPTION_MULTI)
 	{
-//#*** What does it mean to have OPTION_MULTI set for an output field?
 	switch (opFlags & OPTION_TYPE_MASK)
 	    {
 	    case OPTION_STRING:
