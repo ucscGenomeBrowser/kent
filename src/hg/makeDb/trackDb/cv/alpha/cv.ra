@@ -10754,66 +10754,79 @@ label T7Tag (AB3790; Nov_69522)
 # tag (machine-readable map algorithm name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be mapAlgorithm)
 # description (human-readable description of the map algorithm, unclear where/if it's used)
+# label provisional labels, same as description
 
 term NA
 tag NA
 type mapAlgorithm
 description No algorithm applicable
+label No algorithm applicable
 
 term erng32a
 tag ERNG32A
 type mapAlgorithm
 description erange v3.2.0alpha
+label erange v3.2.0alpha
 
 term erng3
 tag ERNG3
 type mapAlgorithm
 description erange v3.0
+label erange v3.0
 
 term erng3b
 tag ERNG3b
 type mapAlgorithm
 description erange v3.0beta
+label erange v3.0beta
 
 term blat34
 tag BLAT34
 type mapAlgorithm
 description blat v34
+label blat v34
 
 term bow098
 tag BOW098
 type mapAlgorithm
 description bowtie v0.981
+label bowtie v0.981
 
 term bow10
 tag BOW10
 type mapAlgorithm
 description bowtie v0.10.0
+label bowtie v0.10.0
 
 term bow125
 tag BOW125
 type mapAlgorithm
 description bowtie v0.12.5
+label bowtie v0.12.5
 
 term BB1
 tag BB1
 type mapAlgorithm
 description bowtie v0.981 followed by blat v34
+label bowtie v0.981 followed by blat v34
 
 term BB2
 tag BB2
 type mapAlgorithm
 description bowtie v0.10.0 followed by blat v34
+label bowtie v0.10.0 followed by blat v34
 
 term TH1014
 tag TH1014
 type mapAlgorithm
 description TopHat v1.0.14
+label TopHat v1.0.14
 
 term TH131
 tag TH131
 type mapAlgorithm
 description TopHat v1.3.1
+label TopHat v1.3.1
 
 ### readType
 # term (human-readable read type name)
@@ -12550,96 +12563,112 @@ description Unknown strain origin
 # type (informs pipeline code of stanza type.  Should always be age)
 # stage (either embryonic or adult.  cannot say how/where this is used)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional labels using description
 
 term E0
 tag E0
 type age
 stage Embryonic
 description Embryonic day 0 (stem cell)
+label Embryonic day 0 (stem cell)
 
 term E11.5
 tag E11HALF
 type age
 stage Embryonic
 description Embryonic day 11.5
+label Embryonic day 11.5
 
 term E13.5
 tag E13HALF
 type age
 stage Embryonic
 description Embryonic day 13.5
+label Embryonic day 13.5
 
 term E14
 tag E14
 type age
 stage Embryonic
 description Embryonic day 14
+label Embryonic day 14
 
 term E14.5
 tag E14HALF
 type age
 stage Embryonic
 description Embryonic day 14.5
+label Embryonic day 14.5
 
 term E18
 tag E18
 type age
 stage Embryonic
 description Embryonic day 18
+label Embryonic day 18
 
 term E18.5
 tag E18HALF
 type age
 stage Embryonic
 description Embryonic day 18.5
+label Embryonic day 18.5
 
 term newborn-1days
 tag NEW1DAYS
 type age
 stage newborn
 description Newborn 1 day
+label Newborn 1 day
 
 term adult-1wks
 tag ADULT1WKS
 type age
 stage Adult
 description Adult 1 week
+label Adult 1 week
 
 term adult-4wks
 tag ADULT4WKS
 type age
 stage Adult
 description Adult 4 weeks
+label Adult 4 weeks
 
 term adult-5wks
 tag ADULT5WKS
 type age
 stage Adult
 description Adult 5 weeks
+label Adult 5 weeks
 
 term adult-8wks
 tag ADULT8WKS
 type age
 stage Adult
 description Adult 8 weeks
+label Adult 8 weeks
 
 term adult-24wks
 tag ADULT24WKS
 type age
 stage Adult
 description Adult 24 weeks PROVISIONAL
+label Adult 24 weeks PROVISIONAL
 
 term immortalized
 tag IMMORTAL
 type age
 stage Cell Line
 description Immortal cells
+label Immortal cells
 
 term ageUnknown
 tag AGEUNKN
 type age
 stage stageUnknown
 description the age when the real age is unknown
+label the age when the real age is unknown
 
 ### Attic
 # Expected fields:
@@ -12788,12 +12817,14 @@ description Tissue obtained from pooling samples from various sample organisms
 # tag (machine-readable name, no special characters. uppercase.)
 # type (informs pipeline code of stanza type, should be seqPlatform)
 # description: Working on inputing description from geo and product website
+# label provisional label using description and words joined with numbers
 
 term Illumina_GA
 tag ILLUMINAGA
 geoPlatformName Illumina Genome Analyzer
 type seqPlatform
 description Illumina Genome Analyzer
+label Illumina Genome Analyzer
 # Matches GA that Kate initially indicated as the term
 
 term Illumina_GA2
@@ -12801,12 +12832,14 @@ tag ILLUMINAGA2
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer II
+label Illumina Genome AnalyzerII
 
 term Illumina_GA2e
 tag ILLUMINAGA2E
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe
+label Illumina Genome AnalyzerIIe
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
@@ -12814,6 +12847,7 @@ tag ILLUMINAGA2X
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIx
+label Illumina Genome AnalyzerIIx
 # Matches GA2x that Kate initally indicated as the term
 
 term Illumina_HiSeq_2000
@@ -12821,42 +12855,49 @@ tag ILLUMINAHISEQ2000
 geoPlatformName Illumina HiSeq 2000
 type seqPlatform
 description Illumina HiSeq 2000
+label Illumina HiSeq2000
 
 term 454_GS
 tag 454GS
 geoPlatformName 454 GS
 type seqPlatform
 description Roche 454 Genome Sequencer
+label Roche454 Genome Sequencer
 
 term 454_GS_20
 tag 454GS20
 geoPlatformName 454 GS 20
 type seqPlatform
 description Roche 454 Genome Sequencer 20
+label Roche454 Genome Sequencer 20
 
 term 454_GS_FLX
 tag 454GSFLX
 geoPlatformName 454 GS FLX
 type seqPlatform
 description Roche 454 Genome Sequencer FLX
+label Roche454 Genome Sequencer FLX
 
 term AB_SOLiD
 tag ABSOLID
 geoPlatformName AB SOLiD System
 type seqPlatform
 description Applied Biosystems SOLiD System
+label Applied Biosystems SOLiD System
 
 term AB_SOLiD_2.0
 tag ABSOLID2
 geoPlatformName AB_SOLiD System 2.0
 type seqPlatform
 description Applied Biosystems SOLiD System 2.0
+label Applied Biosystems SOLiD System2.0
 
 term AB_SOLiD_3.5
 tag ABSOLID3PLUS
 geoPlatformName AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
+label Applied Biosystems SOLiD System3.5
 
 #Uses the GEO terms to be conistent and help with GEO submissions
 ### Platform
