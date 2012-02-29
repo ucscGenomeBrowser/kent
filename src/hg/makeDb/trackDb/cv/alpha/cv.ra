@@ -11345,6 +11345,12 @@ type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, cell sorting and specific growth factors were used, lineage: mesoderm
 label 14 day diff protein A
 
+term diffDMEM_7d
+tag DIFFDM7D
+type treatment
+description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter. (Ren) PROVSIONAL
+label 7 day diff DMEM
+
 term diffDoxy_6hr
 tag DIFFD6H
 type treatment
@@ -12616,6 +12622,12 @@ tag ADULT8WKS
 type age
 stage Adult
 description Adult 8 weeks
+
+term adult-24wks
+tag ADULT24WKS
+type age
+stage Adult
+description Adult 24 weeks PROVISIONAL
 
 term immortalized
 tag IMMORTAL
