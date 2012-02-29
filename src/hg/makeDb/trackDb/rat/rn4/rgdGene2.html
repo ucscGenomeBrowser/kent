@@ -2,8 +2,10 @@
 <P>
 This track shows protein-coding genes based on annotation provided by 
 <A HREF="http://rgd.mcw.edu/" TARGET=_BLANK>RGD</A>.
+</P>
 
 <H2>Method</H2>
+<P>
 Annotations on RGD Genes were 
 downloaded from:
 <UL>
@@ -16,22 +18,36 @@ ftp://rgd.mcw.edu/pub/data_release/GENES_RAT
 </UL>
 </P>
 <P>
-The GFF files were combined into a temporary MySQL database table and those records of "gene", "exon", and "CDS" were selected and loaded into separate MySQL tables.
-Records of inconsistent strand information were cleaned out.
-<P>The resulting collection was loaded into a gene prediction format table using the ldHgGene utility program.  The data were further processed by two programs, getRgdGeneCds and doRgdGene2 to create the genePred format table, rgdGene2, as the base table for RGD Genes. 
-<P>
-A program, doRgdGene2Xref, was used to create the rgdGene2Xref table using the Dbxref field.  rgdGene2ToDescription table was built using the gene_desc field from GENES_RAT file.  rgdGene2ToUniProt and rgdGene2Pep tables were built using data from GENES_RAT and UniProt database.  
-<P>A total of 753 genes were found to have inconsistent annotations, which caused display problems in the Geneome Browser.  These 753 entries were removed.
-<P>
-All the programs mentioned above in this build pipeline could be found in the source code package which may be downloaded 
-			<A HREF="http://hgdownload.cse.ucsc.edu/admin/jksrc.zip">here</A>.
+The GFF files were combined into a temporary MySQL database table 
+and those records of "gene", "exon", and "CDS" were selected and loaded 
+into separate MySQL tables. Records of inconsistent strand information 
+were cleaned out.
+</P><P>
+The resulting collection was loaded into a gene prediction format table
+using the ldHgGene utility program.  The data were further processed by 
+two programs, getRgdGeneCds and doRgdGene2 to create the genePred format 
+table, rgdGene2, as the base table for RGD Genes. 
+</P><P>
+A program, doRgdGene2Xref, was used to create the rgdGene2Xref table using
+the Dbxref field.  rgdGene2ToDescription table was built using the 
+gene_desc field from GENES_RAT file.  rgdGene2ToUniProt and rgdGene2Pep 
+tables were built using data from GENES_RAT and UniProt database.  
+</P><P>
+A total of 753 genes were found to have inconsistent annotations, which 
+caused display problems in the Geneome Browser.  These 753 entries were 
+removed.
+</P><P>
+All the programs mentioned above in this build pipeline could be found in 
+the source code package which may be downloaded 
+<A HREF="http://hgdownload.cse.ucsc.edu/admin/jksrc.zip">here</A>.
+</P>
 
 <H2>Credits</H2>
 <P>
 Thanks to 
 <A HREF="http://rgd.mcw.edu/" TARGET=_BLANK>RGD</A> 
 for providing the base annotation of RGD Genes.
-<P>
+</P><P>
 The RGD Genes track was produced at UCSC by Fan Hsu, Mary Goldman and Hiram 
 Clawson. It is based on data from RGD, NCBI RefSeq, UniProt, and GenBank. Our 
 thanks to the people running these databases and to the scientists worldwide 
