@@ -12563,96 +12563,112 @@ description Unknown strain origin
 # type (informs pipeline code of stanza type.  Should always be age)
 # stage (either embryonic or adult.  cannot say how/where this is used)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional labels using description
 
 term E0
 tag E0
 type age
 stage Embryonic
 description Embryonic day 0 (stem cell)
+label Embryonic day 0 (stem cell)
 
 term E11.5
 tag E11HALF
 type age
 stage Embryonic
 description Embryonic day 11.5
+label Embryonic day 11.5
 
 term E13.5
 tag E13HALF
 type age
 stage Embryonic
 description Embryonic day 13.5
+label Embryonic day 13.5
 
 term E14
 tag E14
 type age
 stage Embryonic
 description Embryonic day 14
+label Embryonic day 14
 
 term E14.5
 tag E14HALF
 type age
 stage Embryonic
 description Embryonic day 14.5
+label Embryonic day 14.5
 
 term E18
 tag E18
 type age
 stage Embryonic
 description Embryonic day 18
+label Embryonic day 18
 
 term E18.5
 tag E18HALF
 type age
 stage Embryonic
 description Embryonic day 18.5
+label Embryonic day 18.5
 
 term newborn-1days
 tag NEW1DAYS
 type age
 stage newborn
 description Newborn 1 day
+label Newborn 1 day
 
 term adult-1wks
 tag ADULT1WKS
 type age
 stage Adult
 description Adult 1 week
+label Adult 1 week
 
 term adult-4wks
 tag ADULT4WKS
 type age
 stage Adult
 description Adult 4 weeks
+label Adult 4 weeks
 
 term adult-5wks
 tag ADULT5WKS
 type age
 stage Adult
 description Adult 5 weeks
+label Adult 5 weeks
 
 term adult-8wks
 tag ADULT8WKS
 type age
 stage Adult
 description Adult 8 weeks
+label Adult 8 weeks
 
 term adult-24wks
 tag ADULT24WKS
 type age
 stage Adult
 description Adult 24 weeks PROVISIONAL
+label Adult 24 weeks PROVISIONAL
 
 term immortalized
 tag IMMORTAL
 type age
 stage Cell Line
 description Immortal cells
+label Immortal cells
 
 term ageUnknown
 tag AGEUNKN
 type age
 stage stageUnknown
 description the age when the real age is unknown
+label the age when the real age is unknown
 
 ### Attic
 # Expected fields:
