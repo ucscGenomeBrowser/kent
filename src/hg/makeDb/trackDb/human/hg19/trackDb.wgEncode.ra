@@ -81,8 +81,8 @@ include wgEncodeOpenChromDnase.release2.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.release3.ra beta,public
-include wgEncodeUwDnase.release4.ra alpha
+include wgEncodeUwDnase.release3.ra public
+include wgEncodeUwDnase.release4.ra alpha,beta
 
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.release3.ra

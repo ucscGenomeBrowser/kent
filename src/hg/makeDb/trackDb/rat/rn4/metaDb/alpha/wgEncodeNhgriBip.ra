@@ -1,0 +1,14 @@
+metaObject wgEncodeNhgriBip
+objType table
+cell Reference_Genome
+dataType BiP
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-01-27
+dateUnrestricted 2009-10-27
+fileName wgEncodeNhgriBip.rn4.bed8.gz
+grant Elnitski
+lab NHGRI
+project wgEncode
+subId 200
+tableName wgEncodeNhgriBip
+
