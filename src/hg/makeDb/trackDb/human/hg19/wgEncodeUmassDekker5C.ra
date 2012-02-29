@@ -1,7 +1,7 @@
 
 track wgEncodeUmassDekker5C
 superTrack wgEncodeChromSuper dense
-shortLabel UMass 5C Interactions
+shortLabel UMass 5C
 longLabel Chromatin Interactions by 5C from ENCODE/Dekker Univ. Mass.
 group regulation
 compositeTrack on
