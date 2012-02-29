@@ -7,19 +7,18 @@
 
 struct annoRow
 /* Representation of a row from a database table or file.  The chrom, chromStart and chromEnd
- * facilitate intersection by position.  The rest of the row data is purposefully left vague so
- * that different data types can use the most suitable representation, e.g. a struct bed4
- * or a char *row[] or a struct that contains a genePred and a functionPred. */
+ * facilitate intersection by position.  The words correspond to columns in the autoSql
+ * definition provided by the source of the annoRow. */
     {
     struct annoRow *next;
     char *chrom;
     uint chromStart;
     uint chromEnd;
-    void *data;
+    char **words;
     };
 
 struct annoRow *annoRowFromStringArray(char *chrom, uint chromStart, uint chromEnd,
-				       char **rowIn, int numCols);
-/* Allocate & return an annoRow with data = new char ** row, with elements copied from rowIn. */
+				       char **wordsIn, int numCols);
+/* Allocate & return an annoRow with words cloned from wordsIn. */
 
 #endif//ndef ANNOROW_H

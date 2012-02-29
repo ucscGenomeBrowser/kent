@@ -92,8 +92,8 @@ if (!sqlTableExists(conn, table))
     errAbort("annoStreamNewDb: table %s doesn't exist", table);
 struct annoStreamDb *self = NULL;
 AllocVar(self);
-annoStreamerInit(self, asObj);
 struct annoStreamer *streamer = &(self->streamer);
+annoStreamerInit(streamer, asObj);
 streamer->setRegion = asdSetRegionDb;
 streamer->nextRow = asdNextRowDb;
 streamer->close = asdCloseDb;

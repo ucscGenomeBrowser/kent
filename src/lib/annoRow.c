@@ -3,20 +3,20 @@
 #include "annoRow.h"
 
 struct annoRow *annoRowFromStringArray(char *chrom, uint chromStart, uint chromEnd,
-				       char **rowIn, int numCols)
-/* Allocate & return an annoRow with data = new char ** row, with elements copied from rowIn. */
+				       char **wordsIn, int numCols)
+/* Allocate & return an annoRow with words cloned from wordsIn. */
 {
 struct annoRow *aRow;
 AllocVar(aRow);
 aRow->chrom = cloneString(chrom);
 aRow->chromStart = chromStart;
 aRow->chromEnd = chromEnd;
-char **rowOut;
-AllocArray(rowOut, numCols);
+char **words;
+AllocArray(words, numCols);
 int i;
 for (i = 0;  i < numCols;  i++)
-    rowOut[i] = cloneString(rowIn[i]);
-aRow->data = rowOut;
+    words[i] = cloneString(wordsIn[i]);
+aRow->words = words;
 return aRow;
 }
 

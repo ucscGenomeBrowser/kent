@@ -104,14 +104,13 @@ if (numGrators > 1)
 // Print out enough rows to make sure that all grator rows are included.
 for (i = 0;  i < maxRows;  i++)
     {
-    char **row = (char **)(self->primaryRow->data);
-    printColumns(self->f, vSelf->query->primarySource, row, TRUE);
+    printColumns(self->f, vSelf->query->primarySource, self->primaryRow->words, TRUE);
     struct annoStreamer *grator = (struct annoStreamer *)self->formatter.query->integrators;
     for (grRef = self->gratorRowLists;  grRef != NULL;  grRef = grRef->next,
 	     grator = grator->next)
 	{
 	struct annoRow *gratorRow = slElementFromIx(grRef->val, i);
-	char **row = (gratorRow == NULL) ? NULL : (char **)(gratorRow->data);
+	char **row = (gratorRow == NULL) ? NULL : gratorRow->words;
 	printColumns(self->f, grator, row, FALSE);
 	}
     }
