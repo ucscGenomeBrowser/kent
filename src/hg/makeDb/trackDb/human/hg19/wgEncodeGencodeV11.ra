@@ -42,7 +42,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     baseColorDefault genomicCodons
     geneClasses coding nonCoding pseudo problem
     gClass_coding 12,12,120
-    gClass_nonCoding 0,100,0
+    gClass_nonCoding 0,153,0
     gClass_pseudo 255,51,255
     gClass_problem 254,0,0
 #These last terms should move the Genes view after CGI is fixed
