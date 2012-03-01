@@ -10,7 +10,7 @@ dafVersion        2.0
 grant             Weng
 lab               UMass-Weng
 dataType          TfbsValid
-compositeSuffix   UMassWengTfbsValid
+compositeSuffix   UmassWengTfbsValid
 group             regulation
 variables         cell
 assembly          hg19
@@ -18,8 +18,9 @@ assembly          hg19
 validationSettings none
 
 # Track/view definition
-view             TestedSites
+view             Sites
 type             bed 6 +
 sql              wgEncodeWengTfbsValid
 required         yes
+downloadOnly     yes
 hasReplicates    no

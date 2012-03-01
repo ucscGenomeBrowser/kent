@@ -3935,7 +3935,6 @@ noInherit on
 urlLabel ISCA details: 
 
     track iscaPathGainCum
-    release alpha
     parent iscaComposite
     shortLabel ISCA Path Gain
     longLabel ISCA CNVs: Pathogenic Gain Cumulative
@@ -3947,7 +3946,6 @@ urlLabel ISCA details:
     priority 1
 
     track iscaPathLossCum
-    release alpha
     parent iscaComposite
     shortLabel ISCA Path Loss
     longLabel ISCA CNVs: Pathogenic Loss Cumulative

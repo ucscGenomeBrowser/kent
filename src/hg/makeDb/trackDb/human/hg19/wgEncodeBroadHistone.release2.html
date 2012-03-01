@@ -49,7 +49,7 @@ listed above. Antibody-chromatin complexes were pulled-down using protein
 A-sepharose (or anti-IgM-conjugated agarose for RNA polymerase II), washed and
 then eluted. After cross-link reversal and proteinase K treatment,
 immunoprecipitated DNA was extracted with phenol-chloroform, ethanol
-precipitated, treated with RNAse and purified. One to ten nanograms of DNA were
+precipitated, treated with RNAse and purified. A quantity of 1-10 ng of DNA was
 end-repaired, adapter-ligated and sequenced by Illumina Genome Analyzers as
 recommended by the manufacturer.</p>
 
@@ -57,7 +57,7 @@ recommended by the manufacturer.</p>
 human reference genome (<B>GRCh37/hg19</B>) using
 <a href="http://maq.sourceforge.net/" title='http://maq.sourceforge.net/' rel="nofollow" TARGET = _BLANK>MAQ</a>
 with default parameters, except '<code>-C 11</code>' and
-'<code>-H output_file</code>', which outputs up to 11 additional best matches
+'<code>-H output_file</code>' were added, which added outputs up to 11 additional best matches
 for each read (if any are found) to a file. This information was used to filter
 out any read that had more than 10 best matches on the genome.  Note: It is
 likely that instances where multiple reads align to the same position and with
@@ -70,7 +70,7 @@ reads overlapping each 25 bp bin along the genome. Densities were computed using
 <a href="http://www.broadinstitute.org/igv/node/173" title='http://www.broadinstitute.org/igv/node/173' rel="nofollow" TARGET = _BLANK>igvtools count</a>
 with default parameters (in particular, '<code>-w 25</code>' to set window size
 of 25 bp and '<code>-f mean</code>' to report the mean value across the window),
-except for '<code>-e</code>' set to extend the reads to 200 bp, and the
+except for '<code>-e</code>' which was set to extend the reads to 200 bp, and the
 <em>.wig</em> output was converted to <em>bigWig</em> using <code>wigToBigWig</code>
 from the UCSC Kent software package.</p>
 
@@ -92,8 +92,8 @@ based on prior expectations.
 
 <p>
 <ul>
-<li>This is Release 2 (Feb 2012). It contains 64 new experiments including 1 new cell line (Dnd41) and 10 new antibodies.</li>
-<li>Three data sets have added additional data: GM12878/H3K27me3 (Accession: wgEncodeEH000031), GM12878/H3K4me1 (Accession: wgEncodeEH000033) and GM12878/H3K4me3 (Accession: wgEncodeEH000028). Files that have been reanalyzed have a version number appended to the name e.g. V2. </li>
+<li>This is Release 2 (Mar 2012). It contains 64 new experiments including 1 new cell line (Dnd41) and 10 new antibodies.</li>
+<li>Three data sets have added additional data: GM12878/H3K27me3 (UCSC Accession: wgEncodeEH000031), GM12878/H3K4me1 (UCSC Accession: wgEncodeEH000033) and GM12878/H3K4me3 (UCSC Accession: wgEncodeEH000028). Files that have been reanalyzed have a version number appended to the name, <i>e.g.</i>V2. </li>
 </ul>
 </p>
 
@@ -102,61 +102,65 @@ based on prior expectations.
 <p>The ChIP-seq data were generated at the
  <a href="http://www.broadinstitute.org/science/projects/epigenomics/epigenomics-initiative" title="http://www.broad.mit.edu" rel="nofollow" TARGET = _BLANK>
  Broad Institute</a> and in the
- <a href="http://csb.mgh.harvard.edu/bradley_bernstein" title="http://csb.mgh.harvard.edu/bradley_bernstein" rel="nofollow" TARGET = _BLANK>
+ <a href="https://csb.mgh.harvard.edu/bradley_bernstein" title="https://csb.mgh.harvard.edu/bradley_bernstein" rel="nofollow" TARGET = _BLANK>
  Bradley E. Bernstein lab</a> at the Massachusetts General Hospital/Harvard Medical School.
   &nbsp;&nbsp;
 
-Contact: <A HREF="mailto:&#110;&#115;h&#111;&#114;&#101;&#115;h&#64;&#98;r&#111;&#97;&#100;.&#109;it.&#101;&#100;&#117;"
-  title="&#110;&#115;h&#111;&#114;&#101;&#115;h&#64;&#98;r&#111;&#97;&#100;.&#109;it.&#101;&#100;&#117;" rel="nofollow"
-  TARGET = _BLANK>Noam Shoresh</a>.
-</p>
 <p>Data generation and analysis was supported by funds from the NHGRI, the
 Burroughs Wellcome Fund, Massachusetts General Hospital and the Broad Institute.
 </p>
 
+</p>
+Contact: <A HREF="mailto:&#110;&#115;h&#111;&#114;&#101;&#115;h&#64;&#98;r&#111;&#97;&#100;.&#109;it.&#101;&#100;&#117;"
+  title="&#110;&#115;h&#111;&#114;&#101;&#115;h&#64;&#98;r&#111;&#97;&#100;.&#109;it.&#101;&#100;&#117;" rel="nofollow"
+  TARGET = _BLANK>Noam Shoresh</a>
+</p>
+
 <h2>References</h2>
-
-
-
-<p>Bernstein BE, Kamal M, Lindblad-Toh K, Bekiranov S, Bailey DK, Huebert DJ,
-McMahon S, Karlsson EK, Kulbokas EJ, Gingeras TR, <em>et al</em>.
- <a href="http://www.cell.com/content/article/abstract?uid=PIIS0092867405000395" title="http://www.cell.com/content/article/abstract?uid=PIIS0092867405000395" rel="nofollow" TARGET = _BLANK>
+<p>
+Bernstein BE, Kamal M, Lindblad-Toh K, Bekiranov S, Bailey DK, Huebert DJ, McMahon S, Karlsson EK, Kulbokas EJ 3rd, Gingeras TR <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/15680324"
+ rel="nofollow" target="_blank">
  Genomic maps and comparative analysis of histone modifications in human and mouse</a>.
  <em>Cell</em>. 2005 Jan 28;120(2):169-81.
 </p>
 
-<p>Bernstein BE, Mikkelsen TS, Xie X, Kamal M, Huebert DJ, Cuff J, Fry B, Meissner A,
-Wernig M, Plath K, <em>et al</em>.
- <a href="http://www.cell.com/content/article/abstract?uid=PIIS0092867406003801" title="http://www.cell.com/content/article/abstract?uid=PIIS0092867406003801" rel="nofollow" TARGET = _BLANK>
+<p>
+Bernstein BE, Mikkelsen TS, Xie X, Kamal M, Huebert DJ, Cuff J, Fry B, Meissner A, Wernig M, Plath K <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16630819"
+ rel="nofollow" target="_blank">
  A bivalent chromatin structure marks key developmental genes in embryonic stem cells</a>.
- <em>Cell</em>. 2006 Apr 21;125(2):315-26.</p>
+ <em>Cell</em>. 2006 Apr 21;125(2):315-26.
+</p>
 
-<P>
-Ernst J, Kheradpour P, Mikkelsen TS, Shoresh N, Ward LD, Epstein CB, Zhang X, Wang L, Issner R, Coyne M, <em>et al</em>.
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/21441907"
-	class="nofollow"
-	title="http://www.ncbi.nlm.nih.gov/pubmed/21441907"
-	rel="nofollow"
-	TARGET = _BLANK>Mapping and analysis of chromatin state dynamics in nine human cell types</A>.
-<EM>Nature</EM>. 2011 May 5;473(7345):43-9.
+<p>
+Ernst J, Kheradpour P, Mikkelsen TS, Shoresh N, Ward LD, Epstein CB, Zhang X, Wang L, Issner R, Coyne M <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/21441907"
+ rel="nofollow" target="_blank">
+ Mapping and analysis of chromatin state dynamics in nine human cell types</a>.
+ <em>Nature</em>. 2011 May 5;473(7345):43-9.
+</p>
 
-
-<p>Guttman M, Garber M, Levin JZ, Donaghey J, Robinson J, Adiconis X, Fan L, Koziol MJ, Gnirke A, Nusbaum C, <em>et al</em>.
- <a href="http://www.nature.com/nbt/journal/v28/n5/abs/nbt.1633.html" title="http://www.nature.com/nbt/journal/v28/n5/abs/nbt.1633.html" rel="nofollow" TARGET = _BLANK>
+<p>
+Guttman M, Garber M, Levin JZ, Donaghey J, Robinson J, Adiconis X, Fan L, Koziol MJ, Gnirke A, Nusbaum C <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/20436462"
+ rel="nofollow" target="_blank">
  Ab initio reconstruction of cell type-specific transcriptomes in mouse reveals the conserved multi-exonic structure of lincRNAs</a>.
- <em>Nature Biotechnology</em>. 2010 Jul 9;28:503-510.
+ <em>Nat Biotechnol</em>. 2010 May;28(5):503-10.
+</p>
 
-<p>Mikkelsen TS, Ku M, Jaffe DB, Issac B, Lieberman E, Giannoukos G, Alvarez
-P, Brockman W, Kim T, Koche RP, <em>et al</em>.
-<a href="http://www.nature.com/nature/journal/v448/n7153/abs/nature06008.html" title="http://www.nature.com/nature/journal/v448/n7153/abs/nature06008.html" rel="nofollow" TARGET = _BLANK>
+<p>
+Mikkelsen TS, Ku M, Jaffe DB, Issac B, Lieberman E, Giannoukos G, Alvarez P, Brockman W, Kim TK, Koche RP <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17603471"
+ rel="nofollow" target="_blank">
  Genome-wide maps of chromatin state in pluripotent and lineage-committed cells</a>.
- <em>Nature</em>. 2007 Aug 2;448:553-60. </p>
+ <em>Nature</em>. 2007 Aug 2;448(7153):553-60.
+</p>
 
 <H2> Data Release Policy </H2>
 
 <P>Data users may freely use ENCODE data, but may not, without prior
 consent, submit publications that use an unpublished ENCODE dataset until
 nine months following the release of the dataset.  This date is listed in
-the <EM>Restricted Until</EM> column on the track configuration page and
-the download page.  The full data release policy for ENCODE is available
+the <EM>Restricted Until</EM>, above.  The full data release policy for ENCODE is available
 <A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>

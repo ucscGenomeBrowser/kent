@@ -10,6 +10,7 @@ include wgEncodeGencodeV4.ra
 include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV10.ra
+include wgEncodeGencodeV11.ra alpha
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
@@ -17,7 +18,7 @@ include wgEncodeUncBsuProt.release2.ra alpha
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra beta,public
-include wgEncodeReg.new.ra alpha
+include wgEncodeReg.release2.ra alpha
 
 
 # UW Repli-Seq track (wrangler: venkat)
@@ -54,7 +55,8 @@ include wgEncodeUmassDekker5C.ra alpha
 
 # UW 5C (wrangler: kate)
 include wgEncodeUw5C.ra beta,public
-include wgEncodeUw5C.release2.ra alpha
+include wgEncodeUw5C.patch.ra alpha
+#include wgEncodeUw5C.release2.ra alpha
 
 
 # Encode Affy Exon --------------------------------------------
@@ -79,8 +81,8 @@ include wgEncodeOpenChromDnase.release2.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.release3.ra beta,public
-include wgEncodeUwDnase.release4.ra alpha
+include wgEncodeUwDnase.release3.ra public
+include wgEncodeUwDnase.release4.ra alpha,beta
 
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.release3.ra
@@ -116,7 +118,6 @@ include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra
-#include wgEncodeHaibRnaSeq.release2.ra
 
 
 
@@ -145,8 +146,7 @@ include wgEncodeHaibMethylWgbs.ra alpha
 
 #Broad Histone (wrangler: Matt and Venkat)
 #include wgEncodeBroadHistone.release3.ra alpha
-include wgEncodeBroadHistone.release2.ra alpha,beta
-include wgEncodeBroadHistone.ra public
+include wgEncodeBroadHistone.release2.ra
 
 #Broad HMM (wrangler: Matt)
 include wgEncodeBroadHmm.ra
@@ -161,24 +161,25 @@ include wgEncodeSydhHistone.release3.ra alpha
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release2.ra beta,public
-include wgEncodeUwTfbs.release3.ra alpha
+include wgEncodeUwTfbs.release3.ra
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra public
 #include wgEncodeHaibTfbs.patch.ra beta
-include wgEncodeHaibTfbs.release2.ra alpha,beta
+include wgEncodeHaibTfbs.release2.ra
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
-include wgEncodeSydhTfbs.new.ra alpha
+include wgEncodeSydhTfbs.release2.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra beta,public
 include wgEncodeUchicagoTfbs.release2.ra alpha
+
+# U Mass Weng TFBS Valid
+include wgEncodeUmassWengTfbsValid.ra alpha
 
 # SUNY RBP -----------------------------------------
 
@@ -198,6 +199,5 @@ include wgEncodeSunyRipSeq.ra
 # Other miscellany ------------------------------------
 
 # Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
-include wgEncodeMapability.ra beta,public
-include wgEncodeMapability.release4.ra alpha
+include wgEncodeMapability.ra
 

@@ -3,16 +3,16 @@
 <p>This track is produced as part of the ENCODE Project.
 This track shows DNaseI sensitivity measured genome-wide in different
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>
-using the Digital DNaseI methodology (see below), and DNaseI hypersensitive
+using the Digital DNaseI methodology (see below) and DNaseI hypersensitive
 sites.
 DNaseI has long been used to map general chromatin accessibility and
 DNaseI hypersensitivity is a universal feature of active
 <EM>cis</EM>-regulatory sequences. The use of this method has led
 to the discovery of functional regulatory elements that include enhancers,
 insulators, promoters, locus control regions and novel elements.
-For each experiment (cell type) this track shows DNaseI sensitivity as a
-continuous function using sequencing tag density (<I>Raw Signal</I>), 
-and discrete loci of DNaseI sensitive zones  (<I>HotSpots</I>) and
+For each experiment (cell type), this track shows DNaseI sensitivity as a
+continuous function using sequencing tag density (<I>Raw Signal</I>) 
+and discrete loci of DNaseI sensitive zones (<I>HotSpots</I>) and
 hypersensitive sites (<I>Peaks</I>).
 </p>
 
@@ -49,7 +49,7 @@ cleavage sites across the genome mapped using the Digital DNaseI methodology
 Cells were grown according to the approved
 <A TARGET=_BLANK HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 Digital DNaseI was performed by DNaseI digestion of intact
-nuclei, isolating DNaseI 'double-hit' fragments as described in
+nuclei, isolation of DNaseI 'double-hit' fragments as described in
 Sabo <EM>et al.</EM> (2006), and direct sequencing of fragment
 ends (which correspond to <EM>in vivo</EM> DNaseI cleavage sites)
 using the Illumina Geneome Analyzer II platform (36 bp reads).  Uniquely mapping high-quality reads
@@ -67,17 +67,14 @@ zones using a peak-finding algorithm.</p>
 
 <H2>Verification</H2>
 
-<p>Data were verified by sequencing biological replicates displaying
+<p>Data were verified by sequencing biological replicates displaying a 
 correlation coefficient &gt; 0.9.  Results are extensively validated by
 conventional DNaseI hypersensitivity assays using end-labeling/Southern
 blotting methods. </p>
 
 <h2>Release Notes</h2>
 <P>
-This is Release 3 (October 2011) of this track, which includes 6 new cell lines 
-(CD20+, CD34+ Mobilized, HMVEC-dAd, HPAEC,NT2-D1,PrEC) and second replicates
-for 2 cell lines (Monocytes-CD14+ and HSMMtube). Addtionaly, an updated version of Monocytes-CD14+
-replicate 1 is included. GEO accession numbers are available for the data from release 2.
+This is Release 4 (March 2012) of this track. It includes 11 new experiments across 9 new cell lines.
 </P>
 <P>
 Previous versions of files are available on the 
@@ -88,7 +85,7 @@ TARGET=_BLANK>downloads page</A>.
 
 <p>
 There are 5 bam files that contain mis-mappings to chrY, with long
-stretches of n's in the alignments. The associated processed data files will contain small 
+stretches of N's in the alignments. The associated processed data files will contain small 
 number of mis-mapping to chrY. The files directly affected are:
 </p>
 <ul>
@@ -108,17 +105,21 @@ Richard Sandstrom</A>
 
 <H2>References</H2>
 
-<p>Sabo PJ, Hawrylycz M, Wallace JC, Humbert R, Yu M, Shafer A, Kawamoto J,
-Hall R, Mack J, Dorschner M <EM>et al</EM>.
-<A TARGET=_BLANK HREF="http://www.pnas.org/content/101/48/16837">
-Discovery of functional noncoding elements by digital analysis of chromatin structure</A>.
-<EM>PNAS</EM>. 2004 Nov 30;101(48):16837-42.</p>
+<p>
+Sabo PJ, Hawrylycz M, Wallace JC, Humbert R, Yu M, Shafer A, Kawamoto J, Hall R, Mack J, Dorschner MO <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/15550541"
+ rel="nofollow" target="_blank">
+Discovery of functional noncoding elements by digital analysis of chromatin structure</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2004 Nov 30;101(48):16837-42.
+</p>
 
-<p>Sabo PJ, Kuehn MS, Thurman R, Johnson BE, Johnson EM, Cao H, Yu M,
-Rosenzweig E, Goldy J, Haydock A <EM>et al</EM>.
-<A TARGET=_BLANK HREF="http://www.nature.com/nmeth/journal/v3/n7/abs/nmeth890.html">
-Genome-scale mapping of DNase I sensitivity in vivo using tiling DNA microarrays</A>.
-<EM>Nature Methods</EM>. 2006 Jul;3(7):511-8.</p>
+<p>
+Sabo PJ, Kuehn MS, Thurman R, Johnson BE, Johnson EM, Cao H, Yu M, Rosenzweig E, Goldy J, Haydock A <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16791208"
+ rel="nofollow" target="_blank">
+Genome-scale mapping of DNase I sensitivity in vivo using tiling DNA microarrays</a>.
+<em>Nat Methods</em>. 2006 Jul;3(7):511-8.
+</p>
 
 <H2> Data Release Policy </H2>
 

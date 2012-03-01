@@ -1,0 +1,76 @@
+metaObject wgEncodeUmassWengTfbsValidHct116Sites
+objType file
+cell HCT-116
+composite wgEncodeUmassWengTfbsValid
+dataType TfbsValid
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-29
+dateUnrestricted 2012-11-29
+fileName wgEncodeUmassWengTfbsValidHct116Sites.bed.gz
+grant Weng
+lab UMass-Weng
+project wgEncode
+subId 1936
+view Sites
+
+metaObject wgEncodeUmassWengTfbsValidHepg2Sites
+objType file
+cell HepG2
+composite wgEncodeUmassWengTfbsValid
+dataType TfbsValid
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-29
+dateUnrestricted 2012-11-29
+fileName wgEncodeUmassWengTfbsValidHepg2Sites.bed.gz
+grant Weng
+lab UMass-Weng
+project wgEncode
+subId 1937
+view Sites
+
+metaObject wgEncodeUmassWengTfbsValidHt1080Sites
+objType file
+cell HT-1080
+composite wgEncodeUmassWengTfbsValid
+dataType TfbsValid
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-29
+dateUnrestricted 2012-11-29
+fileName wgEncodeUmassWengTfbsValidHt1080Sites.bed.gz
+grant Weng
+lab UMass-Weng
+project wgEncode
+subId 1941
+view Sites
+
+metaObject wgEncodeUmassWengTfbsValidK562Sites
+objType file
+cell K562
+composite wgEncodeUmassWengTfbsValid
+dataType TfbsValid
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-29
+dateUnrestricted 2012-11-29
+fileName wgEncodeUmassWengTfbsValidK562Sites.bed.gz
+grant Weng
+lab UMass-Weng
+project wgEncode
+subId 1938
+view Sites
+
+metaObject wgEncodeUmassWengTfbsValidT98gSites
+objType file
+cell T98G
+composite wgEncodeUmassWengTfbsValid
+dataType TfbsValid
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-29
+dateUnrestricted 2012-11-29
+fileName wgEncodeUmassWengTfbsValidT98gSites.bed.gz
+grant Weng
+lab UMass-Weng
+project wgEncode
+subId 1942
+view Sites
+
+# MAGIC: 1065410002

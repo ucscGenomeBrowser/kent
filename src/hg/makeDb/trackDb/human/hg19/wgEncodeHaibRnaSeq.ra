@@ -91,7 +91,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex1nmAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX1nM 1
-        longLabel A549 DEX 1 hr 1nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 1 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 treatment=DEX1NM rep=rep1
         type bam
         # subId=2974 dateSubmitted=2011-01-22
@@ -136,7 +136,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex1nmAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel A549 DEX1nM 2
-        longLabel A549 DEX 1 hr 1nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 1 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 treatment=DEX1NM rep=rep2
         type bam
         # subId=2974 dateSubmitted=2011-01-22
@@ -163,7 +163,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Estradia4hAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 EST 2
-        longLabel ECC-1 ESTRADIOL 4 hr 10nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 treatment=EST10NM4H rep=rep2
         type bam
         # subId=2975 dateSubmitted=2011-01-21
@@ -172,7 +172,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Estradia4hAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel ECC-1 EST 1
-        longLabel ECC-1 ESTRADIOL 4 hr 10nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 treatment=EST10NM4H rep=rep1
         type bam
         # subId=2975 dateSubmitted=2011-01-21
@@ -181,7 +181,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dEstradia4hAlnRep1
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D EST 1
-        longLabel T-47D ESTRADIOL 4 hr 10nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D treatment=EST10NM4H rep=rep1
         type bam
         # subId=2975 dateSubmitted=2011-01-21
@@ -209,7 +209,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dEstradia4hAlnRep2
         parent wgEncodeHaibRnaSeqViewAlignments off
         shortLabel T-47D EST 2
-        longLabel T-47D ESTRADIOL 4 hr 10nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D treatment=EST10NM4H rep=rep2
         type bam
         # subId=2975 dateSubmitted=2011-01-21
@@ -496,7 +496,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex1nmRawRep1
         parent wgEncodeHaibRnaSeqViewSignal on
         shortLabel A549 DEX1nM 1
-        longLabel A549 DEX 1 hr 1nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 1 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX1NM rep=rep1
         type bigWig 0.120431 1351.449951
         # subId=2974 dateSubmitted=2011-01-22
@@ -541,7 +541,7 @@ noInherit on
         track wgEncodeHaibRnaSeqA549Dex1nmRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel A549 DEX1nM 2
-        longLabel A549 DEX 1 hr 1nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel A549 DEX 1 hr 1 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 treatment=DEX1NM rep=rep2
         type bigWig 0.122421 1310.829956
         # subId=2974 dateSubmitted=2011-01-22
@@ -568,7 +568,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Estradia4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 EST 2
-        longLabel ECC-1 ESTRADIOL 4 hr 10nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 treatment=EST10NM4H rep=rep2
         type bigWig 0.208881 751.294006
         # subId=2975 dateSubmitted=2011-01-21
@@ -577,7 +577,7 @@ noInherit on
         track wgEncodeHaibRnaSeqEcc1Estradia4hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel ECC-1 EST 1
-        longLabel ECC-1 ESTRADIOL 4 hr 10nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 4 hr 10 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 treatment=EST10NM4H rep=rep1
         type bigWig 0.267722 963.263977
         # subId=2975 dateSubmitted=2011-01-21
@@ -586,7 +586,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dEstradia4hRawRep1
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D EST 1
-        longLabel T-47D ESTRADIOL 4 hr 10nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D treatment=EST10NM4H rep=rep1
         type bigWig 0.271642 1572.939941
         # subId=2975 dateSubmitted=2011-01-21
@@ -614,7 +614,7 @@ noInherit on
         track wgEncodeHaibRnaSeqT47dEstradia4hRawRep2
         parent wgEncodeHaibRnaSeqViewSignal off
         shortLabel T-47D EST 2
-        longLabel T-47D ESTRADIOL 4 hr 10nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 4 hr 10 nM RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D treatment=EST10NM4H rep=rep2
         type bigWig 0.090113 781.908997
         # subId=2975 dateSubmitted=2011-01-21
