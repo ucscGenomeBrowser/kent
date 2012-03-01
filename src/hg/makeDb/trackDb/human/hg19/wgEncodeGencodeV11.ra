@@ -56,8 +56,8 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     visibility full
     subTrack wgEncodeGencodeV11
     type genePred
-    hgGene on
-    hgsid on
+    #hgGene on  We are commenting this out since Tim finds do code doing anything with these
+    #hgsid on
     itemClassTbl wgEncodeGencodeAttrsV11
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass
