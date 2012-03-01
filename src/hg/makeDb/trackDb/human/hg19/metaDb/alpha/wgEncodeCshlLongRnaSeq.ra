@@ -1459,6 +1459,32 @@ spikeInPool Nist14
 subId 5784
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep3
+objType table
+bioRep 087N
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep3.bam,wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep3.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID45899
+labProtocolId 087N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5788
+tableName wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep3
+view Alignments
+
 metaObject wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep4
 objType table
 bioRep 088N
@@ -1485,6 +1511,31 @@ subId 5763
 tableName wgEncodeCshlLongRnaSeqA549NucleusPapAlnRep4
 view Alignments
 
+metaObject wgEncodeCshlLongRnaSeqA549NucleusPapFastqRd1Rep3
+objType file
+bioRep 087N
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapFastqRd1Rep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID45899
+labProtocolId 087N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5788
+view FastqRd1
+
 metaObject wgEncodeCshlLongRnaSeqA549NucleusPapFastqRd1Rep4
 objType file
 bioRep 088N
@@ -1510,6 +1561,31 @@ spikeInPool Nist14
 subId 5763
 view FastqRd1
 
+metaObject wgEncodeCshlLongRnaSeqA549NucleusPapFastqRd2Rep3
+objType file
+bioRep 087N
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapFastqRd2Rep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID45899
+labProtocolId 087N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5788
+view FastqRd2
+
 metaObject wgEncodeCshlLongRnaSeqA549NucleusPapFastqRd2Rep4
 objType file
 bioRep 088N
@@ -1534,6 +1610,32 @@ seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5763
 view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep3
+objType table
+bioRep 087N
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID45899
+labProtocolId 087N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5788
+tableName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep3
+view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep4
 objType table
@@ -1561,6 +1663,32 @@ subId 5763
 tableName wgEncodeCshlLongRnaSeqA549NucleusPapMinusRawRep4
 view MinusRawSignal
 
+metaObject wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep3
+objType table
+bioRep 087N
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID45899
+labProtocolId 087N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5788
+tableName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep3
+view PlusRawSignal
+
 metaObject wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep4
 objType table
 bioRep 088N
@@ -1586,6 +1714,31 @@ spikeInPool Nist14
 subId 5763
 tableName wgEncodeCshlLongRnaSeqA549NucleusPapPlusRawRep4
 view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqA549NucleusPapSpikeinsRep3
+objType file
+bioRep 087N
+cell A549
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqA549NucleusPapSpikeinsRep3.txt.gz
+grant Gingeras
+lab CSHL
+labExpId LID45899
+labProtocolId 087N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5788
+view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqA549NucleusPapSpikeinsRep4
 objType file
@@ -4214,6 +4367,159 @@ rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5772
+view Spikeins
+
+metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamAlnRep1
+objType table
+bioRep 041WC
+cell CD20+_RO01794
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqCd20ro01794CellPamAlnRep1.bam,wgEncodeCshlLongRnaSeqCd20ro01794CellPamAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID44659
+labProtocolId 041WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5793
+tableName wgEncodeCshlLongRnaSeqCd20ro01794CellPamAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamFastqRd1Rep1
+objType file
+bioRep 041WC
+cell CD20+_RO01794
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqCd20ro01794CellPamFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID44659
+labProtocolId 041WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5793
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamFastqRd2Rep1
+objType file
+bioRep 041WC
+cell CD20+_RO01794
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqCd20ro01794CellPamFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID44659
+labProtocolId 041WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5793
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamMinusRawRep1
+objType table
+bioRep 041WC
+cell CD20+_RO01794
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqCd20ro01794CellPamMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID44659
+labProtocolId 041WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5793
+tableName wgEncodeCshlLongRnaSeqCd20ro01794CellPamMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamPlusRawRep1
+objType table
+bioRep 041WC
+cell CD20+_RO01794
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqCd20ro01794CellPamPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID44659
+labProtocolId 041WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5793
+tableName wgEncodeCshlLongRnaSeqCd20ro01794CellPamPlusRawRep1
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamSpikeinsRep1
+objType file
+bioRep 041WC
+cell CD20+_RO01794
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqCd20ro01794CellPamSpikeinsRep1.txt.gz
+grant Gingeras
+lab CSHL
+labExpId LID44659
+labProtocolId 041WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5793
 view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPapAlnRep1
@@ -31674,6 +31980,159 @@ subId 4600
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV7
 view TranscriptGencV7
 
+metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapAlnRep3
+objType table
+bioRep 089C
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapAlnRep3.bam,wgEncodeCshlLongRnaSeqMcf7CytosolPapAlnRep3.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID46857
+labProtocolId 089C+
+localization cytosol
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5792
+tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapAlnRep3
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapFastqRd1Rep3
+objType file
+bioRep 089C
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapFastqRd1Rep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID46857
+labProtocolId 089C+
+localization cytosol
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5792
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapFastqRd2Rep3
+objType file
+bioRep 089C
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapFastqRd2Rep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID46857
+labProtocolId 089C+
+localization cytosol
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5792
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep3
+objType table
+bioRep 089C
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID46857
+labProtocolId 089C+
+localization cytosol
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5792
+tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapMinusRawRep3
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep3
+objType table
+bioRep 089C
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID46857
+labProtocolId 089C+
+localization cytosol
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5792
+tableName wgEncodeCshlLongRnaSeqMcf7CytosolPapPlusRawRep3
+view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqMcf7CytosolPapSpikeinsRep3
+objType file
+bioRep 089C
+cell MCF-7
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMcf7CytosolPapSpikeinsRep3.txt.gz
+grant Gingeras
+lab CSHL
+labExpId LID46857
+labProtocolId 089C+
+localization cytosol
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5792
+view Spikeins
+
 metaObject wgEncodeCshlLongRnaSeqMcf7NucleusPapAlnRep3
 objType table
 bioRep 089N
@@ -31980,6 +32439,32 @@ spikeInPool Nist14
 subId 5760
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamAlnRep1
+objType table
+bioRep 039WC
+cell Monocytes-CD14+_RO01746
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamAlnRep1.bam,wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID44657
+labProtocolId 039WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5789
+tableName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamAlnRep1
+view Alignments
+
 metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamAlnRep2
 objType table
 bioRep 040WC
@@ -32006,6 +32491,31 @@ subId 5764
 tableName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamAlnRep2
 view Alignments
 
+metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamFastqRd1Rep1
+objType file
+bioRep 039WC
+cell Monocytes-CD14+_RO01746
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamFastqRd1Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID44657
+labProtocolId 039WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5789
+view FastqRd1
+
 metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamFastqRd1Rep2
 objType file
 bioRep 040WC
@@ -32031,6 +32541,31 @@ spikeInPool Nist14
 subId 5764
 view FastqRd1
 
+metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamFastqRd2Rep1
+objType file
+bioRep 039WC
+cell Monocytes-CD14+_RO01746
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamFastqRd2Rep1.fastq.tgz
+grant Gingeras
+lab CSHL
+labExpId LID44657
+labProtocolId 039WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5789
+view FastqRd2
+
 metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamFastqRd2Rep2
 objType file
 bioRep 040WC
@@ -32055,6 +32590,32 @@ seqPlatform Illumina_GA2x
 spikeInPool Nist14
 subId 5764
 view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamMinusRawRep1
+objType table
+bioRep 039WC
+cell Monocytes-CD14+_RO01746
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID44657
+labProtocolId 039WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5789
+tableName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamMinusRawRep1
+view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamMinusRawRep2
 objType table
@@ -32082,6 +32643,32 @@ subId 5764
 tableName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamMinusRawRep2
 view MinusRawSignal
 
+metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamPlusRawRep1
+objType table
+bioRep 039WC
+cell Monocytes-CD14+_RO01746
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID44657
+labProtocolId 039WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5789
+tableName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamPlusRawRep1
+view PlusRawSignal
+
 metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamPlusRawRep2
 objType table
 bioRep 040WC
@@ -32107,6 +32694,31 @@ spikeInPool Nist14
 subId 5764
 tableName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamSpikeinsRep1
+objType file
+bioRep 039WC
+cell Monocytes-CD14+_RO01746
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamSpikeinsRep1.txt.gz
+grant Gingeras
+lab CSHL
+labExpId LID44657
+labProtocolId 039WC-
+localization cell
+project wgEncode
+protocol None
+readType 2x76D
+replicate 1
+rnaExtract longNonPolyA
+seqPlatform Illumina_GA2x
+spikeInPool Nist14
+subId 5789
+view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamSpikeinsRep2
 objType file
@@ -37729,6 +38341,32 @@ subId 4543
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV7
 view TranscriptGencV7
 
+metaObject wgEncodeCshlLongRnaSeqSknshCellPapAlnRep3
+objType table
+bioRep 085WC
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshCellPapAlnRep3.bam,wgEncodeCshlLongRnaSeqSknshCellPapAlnRep3.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID46598
+labProtocolId 085WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5787
+tableName wgEncodeCshlLongRnaSeqSknshCellPapAlnRep3
+view Alignments
+
 metaObject wgEncodeCshlLongRnaSeqSknshCellPapAlnRep4
 objType table
 bioRep 086WC
@@ -37755,6 +38393,31 @@ subId 5775
 tableName wgEncodeCshlLongRnaSeqSknshCellPapAlnRep4
 view Alignments
 
+metaObject wgEncodeCshlLongRnaSeqSknshCellPapFastqRd1Rep3
+objType file
+bioRep 085WC
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshCellPapFastqRd1Rep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID46598
+labProtocolId 085WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5787
+view FastqRd1
+
 metaObject wgEncodeCshlLongRnaSeqSknshCellPapFastqRd1Rep4
 objType file
 bioRep 086WC
@@ -37780,6 +38443,31 @@ spikeInPool Nist14
 subId 5775
 view FastqRd1
 
+metaObject wgEncodeCshlLongRnaSeqSknshCellPapFastqRd2Rep3
+objType file
+bioRep 085WC
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshCellPapFastqRd2Rep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID46598
+labProtocolId 085WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5787
+view FastqRd2
+
 metaObject wgEncodeCshlLongRnaSeqSknshCellPapFastqRd2Rep4
 objType file
 bioRep 086WC
@@ -37804,6 +38492,32 @@ seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5775
 view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep3
+objType table
+bioRep 085WC
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID46598
+labProtocolId 085WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5787
+tableName wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep3
+view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep4
 objType table
@@ -37831,6 +38545,32 @@ subId 5775
 tableName wgEncodeCshlLongRnaSeqSknshCellPapMinusRawRep4
 view MinusRawSignal
 
+metaObject wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep3
+objType table
+bioRep 085WC
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID46598
+labProtocolId 085WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5787
+tableName wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep3
+view PlusRawSignal
+
 metaObject wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep4
 objType table
 bioRep 086WC
@@ -37856,6 +38596,31 @@ spikeInPool Nist14
 subId 5775
 tableName wgEncodeCshlLongRnaSeqSknshCellPapPlusRawRep4
 view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqSknshCellPapSpikeinsRep3
+objType file
+bioRep 085WC
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshCellPapSpikeinsRep3.txt.gz
+grant Gingeras
+lab CSHL
+labExpId LID46598
+labProtocolId 085WC+
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5787
+view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSknshCellPapSpikeinsRep4
 objType file
@@ -38188,6 +38953,32 @@ spikeInPool Nist14
 subId 5782
 view Spikeins
 
+metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep3
+objType table
+bioRep 085N
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep3.bam,wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep3.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID46596
+labProtocolId 085N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5790
+tableName wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep3
+view Alignments
+
 metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep4
 objType table
 bioRep 086N
@@ -38214,6 +39005,31 @@ subId 5767
 tableName wgEncodeCshlLongRnaSeqSknshNucleusPapAlnRep4
 view Alignments
 
+metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapFastqRd1Rep3
+objType file
+bioRep 085N
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapFastqRd1Rep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID46596
+labProtocolId 085N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5790
+view FastqRd1
+
 metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapFastqRd1Rep4
 objType file
 bioRep 086N
@@ -38239,6 +39055,31 @@ spikeInPool Nist14
 subId 5767
 view FastqRd1
 
+metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapFastqRd2Rep3
+objType file
+bioRep 085N
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapFastqRd2Rep3.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID46596
+labProtocolId 085N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5790
+view FastqRd2
+
 metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapFastqRd2Rep4
 objType file
 bioRep 086N
@@ -38263,6 +39104,32 @@ seqPlatform Illumina_HiSeq_2000
 spikeInPool Nist14
 subId 5767
 view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep3
+objType table
+bioRep 085N
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID46596
+labProtocolId 085N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5790
+tableName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep3
+view MinusRawSignal
 
 metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep4
 objType table
@@ -38290,6 +39157,32 @@ subId 5767
 tableName wgEncodeCshlLongRnaSeqSknshNucleusPapMinusRawRep4
 view MinusRawSignal
 
+metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep3
+objType table
+bioRep 085N
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep3.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID46596
+labProtocolId 085N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5790
+tableName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep3
+view PlusRawSignal
+
 metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep4
 objType table
 bioRep 086N
@@ -38315,6 +39208,31 @@ spikeInPool Nist14
 subId 5767
 tableName wgEncodeCshlLongRnaSeqSknshNucleusPapPlusRawRep4
 view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapSpikeinsRep3
+objType file
+bioRep 085N
+cell SK-N-SH
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-18
+dateUnrestricted 2012-11-17
+fileName wgEncodeCshlLongRnaSeqSknshNucleusPapSpikeinsRep3.txt.gz
+grant Gingeras
+lab CSHL
+labExpId LID46596
+labProtocolId 085N+
+localization nucleus
+project wgEncode
+protocol None
+readType 2x101D
+replicate 3
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5790
+view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqSknshNucleusPapSpikeinsRep4
 objType file
@@ -39493,4 +40411,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -289980392
+# MAGIC: 39298298

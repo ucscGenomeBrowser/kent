@@ -163,13 +163,13 @@ dataVersion through the ENCODE Mar 2012 Freeze
         color 179,0,134
         # subId=1533 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseK562Pk
-        parent wgEncodeOpenChromDnaseViewPeaks
-        shortLabel K562 Pk
-        longLabel K562 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=1K562 treatment=AANONE
-        type narrowPeak
-        color 46,0,184
+        #track wgEncodeOpenChromDnaseK562Pk
+        #parent wgEncodeOpenChromDnaseViewPeaks
+        #shortLabel K562 Pk
+        #longLabel K562 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        #subGroups view=Peaks cellType=1K562 treatment=AANONE
+        #type narrowPeak
+        #color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
 
@@ -199,12 +199,12 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type narrowPeak
         # subId=1650 dateSubmitted=2010-06-19
 
-        track wgEncodeOpenChromDnaseFibropPk
-        parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel FibroP Pk
-        longLabel FibroP DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=FIBROP treatment=AANONE
-        type narrowPeak
+        #track wgEncodeOpenChromDnaseFibropPk
+        #parent wgEncodeOpenChromDnaseViewPeaks off
+        #shortLabel FibroP Pk
+        #longLabel FibroP DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        #subGroups view=Peaks cellType=FIBROP treatment=AANONE
+        #type narrowPeak
         # subId=1651 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseFibroblPk
@@ -369,12 +369,12 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type narrowPeak
         # subId=3064 dateSubmitted=2010-12-06
 
-        track wgEncodeOpenChromDnaseIpsPk
-        parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel iPS Pk
-        longLabel iPS DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=IPS treatment=AANONE
-        type narrowPeak
+        #track wgEncodeOpenChromDnaseIpsPk
+        #parent wgEncodeOpenChromDnaseViewPeaks off
+        #shortLabel iPS Pk
+        #longLabel iPS DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        #subGroups view=Peaks cellType=IPS treatment=AANONE
+        #type narrowPeak
         # subId=3065 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseHuh7Pk
@@ -602,6 +602,15 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type narrowPeak
         # subId=5562 dateSubmitted=2012-02-07
 
+        track wgEncodeOpenChromDnaseK562PkV2
+        parent wgEncodeOpenChromDnaseViewPeaks
+        shortLabel K562 Pk
+        longLabel K562 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        subGroups view=Peaks cellType=1K562 treatment=AANONE
+        type narrowPeak
+        color 46,0,184
+        # subId=5901 dateSubmitted=2012-02-28
+
     track wgEncodeOpenChromDnaseViewSignal
     shortLabel DNase F-Seq Density Signal
     view SIG
@@ -740,13 +749,13 @@ dataVersion through the ENCODE Mar 2012 Freeze
         color 179,0,134
         # subId=1533 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseK562Sig
-        parent wgEncodeOpenChromDnaseViewSignal
-        shortLabel K562 DS
-        longLabel K562 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=1K562 treatment=AANONE
-        type bigWig 0.000000 3.111200
-        color 46,0,184
+        #track wgEncodeOpenChromDnaseK562Sig
+        #parent wgEncodeOpenChromDnaseViewSignal
+        #shortLabel K562 DS
+        #longLabel K562 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIG cellType=1K562 treatment=AANONE
+        #type bigWig 0.000000 3.111200
+        #color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
 
@@ -776,12 +785,12 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 1.924100
         # subId=1650 dateSubmitted=2010-06-19
 
-        track wgEncodeOpenChromDnaseFibropSig
-        parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel FibroP DS
-        longLabel FibroP DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=FIBROP treatment=AANONE
-        type bigWig 0.000000 1.562600
+        #track wgEncodeOpenChromDnaseFibropSig
+        #parent wgEncodeOpenChromDnaseViewSignal off
+        #shortLabel FibroP DS
+        #longLabel FibroP DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIG cellType=FIBROP treatment=AANONE
+        #type bigWig 0.000000 1.562600
         # subId=1651 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseFibroblSig
@@ -946,12 +955,12 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 0.568300
         # subId=3064 dateSubmitted=2010-12-06
 
-        track wgEncodeOpenChromDnaseIpsSig
-        parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel iPS DS
-        longLabel iPS DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=IPS treatment=AANONE
-        type bigWig 0.000000 2.048100
+        #track wgEncodeOpenChromDnaseIpsSig
+        #parent wgEncodeOpenChromDnaseViewSignal off
+        #shortLabel iPS DS
+        #longLabel iPS DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIG cellType=IPS treatment=AANONE
+        #type bigWig 0.000000 2.048100
         # subId=3065 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseHuh7Sig
@@ -1179,6 +1188,15 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 1.203900
         # subId=5562 dateSubmitted=2012-02-07
 
+        track wgEncodeOpenChromDnaseK562SigV2
+        parent wgEncodeOpenChromDnaseViewSignal
+        shortLabel K562 DS
+        longLabel K562 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIG cellType=1K562 treatment=AANONE
+        type bigWig 0.000000 1.153500
+        color 46,0,184
+        # subId=5901 dateSubmitted=2012-02-28
+
 
     track wgEncodeOpenChromDnaseViewSigBo
     shortLabel DNase Base Overlap Signal
@@ -1318,13 +1336,13 @@ dataVersion through the ENCODE Mar 2012 Freeze
         color 179,0,134
         # subId=1533 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseK562BaseOverlapSignal
-        parent wgEncodeOpenChromDnaseViewSigBo
-        shortLabel K562 OS
-        longLabel K562 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=1K562 treatment=AANONE
-        type bigWig 0.000000 256.000000
-        color 46,0,184
+        #track wgEncodeOpenChromDnaseK562BaseOverlapSignal
+        #parent wgEncodeOpenChromDnaseViewSigBo
+        #shortLabel K562 OS
+        #longLabel K562 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIGBO cellType=1K562 treatment=AANONE
+        #type bigWig 0.000000 256.000000
+        #color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
 
@@ -1354,12 +1372,12 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 231.000000
         # subId=1650 dateSubmitted=2010-06-19
 
-        track wgEncodeOpenChromDnaseFibropBaseOverlapSignal
-        parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel FibroP OS
-        longLabel FibroP DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=FIBROP treatment=AANONE
-        type bigWig 0.000000 430.000000
+        #track wgEncodeOpenChromDnaseFibropBaseOverlapSignal
+        #parent wgEncodeOpenChromDnaseViewSigBo off
+        #shortLabel FibroP OS
+        #longLabel FibroP DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIGBO cellType=FIBROP treatment=AANONE
+        #type bigWig 0.000000 430.000000
         # subId=1651 dateSubmitted=2010-06-19
 
         track wgEncodeOpenChromDnaseFibroblBaseOverlapSignal
@@ -1525,12 +1543,12 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 185.000000
         # subId=3064 dateSubmitted=2010-12-06
 
-        track wgEncodeOpenChromDnaseIpsBaseOverlapSignal
-        parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel iPS OS
-        longLabel iPS DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=IPS treatment=AANONE
-        type bigWig 0.000000 440.000000
+        #track wgEncodeOpenChromDnaseIpsBaseOverlapSignal
+        #parent wgEncodeOpenChromDnaseViewSigBo off
+        #shortLabel iPS OS
+        #longLabel iPS DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIGBO cellType=IPS treatment=AANONE
+        #type bigWig 0.000000 440.000000
         # subId=3065 dateSubmitted=2010-12-06
 
         track wgEncodeOpenChromDnaseHuh7BaseOverlapSignal
@@ -1757,4 +1775,13 @@ dataVersion through the ENCODE Mar 2012 Freeze
         subGroups view=SIGBO cellType=FIBROPAG08396 treatment=AANONE
         type bigWig 0.000000 352.000000
         # subId=5562 dateSubmitted=2012-02-07
+
+        track wgEncodeOpenChromDnaseK562BaseOverlapSignalV2
+        parent wgEncodeOpenChromDnaseViewSigBo
+        shortLabel K562 OS
+        longLabel K562 DNaseI Overlap Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIGBO cellType=1K562 treatment=AANONE 
+        type bigWig 0.000000 352.000000
+        color 46,0,184
+        # subId=5901 dateSubmitted=2012-02-28
 

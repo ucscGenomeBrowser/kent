@@ -7411,9 +7411,9 @@ tableName wgEncodeUwDnaseMesodermCd1ME11halfSigRep2
 tissueSourceType Pooled
 view Signal
 
-metaObject wgEncodeUwDnaseNih3t3NihsMAdult8wksAlnRep1
+metaObject wgEncodeUwDnaseNih3t3NihsMImmortalAlnRep1
 objType file
-age adult-8wks
+age immortalized
 cell NIH-3T3
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -7421,7 +7421,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-02-21
 dateSubmitted 2011-12-15
 dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksAlnRep1.bam,wgEncodeUwDnaseNih3t3NihsMAdult8wksAlnRep1.bam.bai
+fileName wgEncodeUwDnaseNih3t3NihsMImmortalAlnRep1.bam,wgEncodeUwDnaseNih3t3NihsMImmortalAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labExpId DS16900
@@ -7434,105 +7434,6 @@ strain NIH/Swiss
 subId 5218
 tissueSourceType Pooled
 view Alignments
-
-metaObject wgEncodeUwDnaseNih3t3NihsMAdult8wksHotspotsRep1
-objType table
-age adult-8wks
-cell NIH-3T3
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-02-21
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksHotspotsRep1.broadPeak.gz
-grant Stam
-lab UW-m
-labExpId DS16900
-labVersion Hotspot-v5.2
-md5sum 20ffab90f200be3b7556785a75a50aae
-project wgEncode
-replicate 1
-sex M
-strain NIH/Swiss
-subId 5218
-tableName wgEncodeUwDnaseNih3t3NihsMAdult8wksHotspotsRep1
-tissueSourceType Pooled
-view Hotspots
-
-metaObject wgEncodeUwDnaseNih3t3NihsMAdult8wksPkRep1
-objType table
-age adult-8wks
-cell NIH-3T3
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-02-21
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksPkRep1.narrowPeak.gz
-grant Stam
-lab UW-m
-labExpId DS16900
-labVersion lmax-v1.1
-md5sum 602888867fe7f916e4b7ccea85dfc198
-project wgEncode
-replicate 1
-sex M
-strain NIH/Swiss
-subId 5218
-tableName wgEncodeUwDnaseNih3t3NihsMAdult8wksPkRep1
-tissueSourceType Pooled
-view Peaks
-
-metaObject wgEncodeUwDnaseNih3t3NihsMAdult8wksRawDataRep1
-objType file
-age adult-8wks
-cell NIH-3T3
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-02-21
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksRawDataRep1.fastq.tgz
-grant Stam
-lab UW-m
-labExpId DS16900
-labVersion 1
-md5sum 6487e455903dc4f080c90eec1506bb5b
-project wgEncode
-replicate 1
-sex M
-strain NIH/Swiss
-subId 5218
-tissueSourceType Pooled
-view RawData
-
-metaObject wgEncodeUwDnaseNih3t3NihsMAdult8wksSigRep1
-objType table
-age adult-8wks
-cell NIH-3T3
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-02-21
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseNih3t3NihsMAdult8wksSigRep1.bigWig
-grant Stam
-lab UW-m
-labExpId DS16900
-labVersion WindowDensity-bin20-win+/-75
-md5sum f450a80001f8d617d6923337c048a4bc
-project wgEncode
-replicate 1
-sex M
-strain NIH/Swiss
-subId 5218
-tableName wgEncodeUwDnaseNih3t3NihsMAdult8wksSigRep1
-tissueSourceType Pooled
-view Signal
 
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalAlnRep2
 objType file
@@ -7555,6 +7456,31 @@ strain NIH/Swiss
 subId 3894
 tissueSourceType None
 view Alignments
+
+metaObject wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep1
+objType table
+age immortalized
+cell NIH-3T3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS16900
+labVersion Hotspot-v5.2
+md5sum 20ffab90f200be3b7556785a75a50aae
+project wgEncode
+replicate 1
+sex M
+strain NIH/Swiss
+subId 5218
+tableName wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep1
+tissueSourceType Pooled
+view Hotspots
 
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep2
 objType table
@@ -7579,6 +7505,31 @@ tableName wgEncodeUwDnaseNih3t3NihsMImmortalHotspotsRep2
 tissueSourceType None
 view Hotspots
 
+metaObject wgEncodeUwDnaseNih3t3NihsMImmortalPkRep1
+objType table
+age immortalized
+cell NIH-3T3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseNih3t3NihsMImmortalPkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS16900
+labVersion lmax-v1.1
+md5sum 602888867fe7f916e4b7ccea85dfc198
+project wgEncode
+replicate 1
+sex M
+strain NIH/Swiss
+subId 5218
+tableName wgEncodeUwDnaseNih3t3NihsMImmortalPkRep1
+tissueSourceType Pooled
+view Peaks
+
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalPkRep2
 objType table
 age immortalized
@@ -7602,6 +7553,30 @@ tableName wgEncodeUwDnaseNih3t3NihsMImmortalPkRep2
 tissueSourceType None
 view Peaks
 
+metaObject wgEncodeUwDnaseNih3t3NihsMImmortalRawDataRep1
+objType file
+age immortalized
+cell NIH-3T3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseNih3t3NihsMImmortalRawDataRep1.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS16900
+labVersion 1
+md5sum 6487e455903dc4f080c90eec1506bb5b
+project wgEncode
+replicate 1
+sex M
+strain NIH/Swiss
+subId 5218
+tissueSourceType Pooled
+view RawData
+
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalRawDataRep2
 objType file
 age immortalized
@@ -7623,6 +7598,31 @@ strain NIH/Swiss
 subId 3894
 tissueSourceType None
 view RawData
+
+metaObject wgEncodeUwDnaseNih3t3NihsMImmortalSigRep1
+objType table
+age immortalized
+cell NIH-3T3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-21
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseNih3t3NihsMImmortalSigRep1.bigWig
+grant Stam
+lab UW-m
+labExpId DS16900
+labVersion WindowDensity-bin20-win+/-75
+md5sum f450a80001f8d617d6923337c048a4bc
+project wgEncode
+replicate 1
+sex M
+strain NIH/Swiss
+subId 5218
+tableName wgEncodeUwDnaseNih3t3NihsMImmortalSigRep1
+tissueSourceType Pooled
+view Signal
 
 metaObject wgEncodeUwDnaseNih3t3NihsMImmortalSigRep2
 objType table
@@ -12657,4 +12657,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -1146382857
+# MAGIC: 1876833529

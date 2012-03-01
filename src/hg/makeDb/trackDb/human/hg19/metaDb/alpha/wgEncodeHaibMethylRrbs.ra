@@ -9,7 +9,7 @@ objType file
 cell A549
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-31
 dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002062
@@ -31,7 +31,7 @@ objType file
 cell A549
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-31
 dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002062
@@ -53,7 +53,7 @@ objType table
 cell A549
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-31
 dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002062
@@ -76,7 +76,7 @@ objType table
 cell A549
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-31
 dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002062
@@ -99,7 +99,7 @@ objType file
 cell AG04449
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001330
@@ -121,7 +121,7 @@ objType file
 cell AG04449
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001330
@@ -239,7 +239,7 @@ objType file
 cell AG04450
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001331
@@ -261,7 +261,7 @@ objType file
 cell AG04450
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001331
@@ -379,7 +379,7 @@ objType file
 cell AG09309
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001332
@@ -401,7 +401,7 @@ objType file
 cell AG09309
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001332
@@ -519,7 +519,7 @@ objType file
 cell AG09319
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001333
@@ -541,7 +541,7 @@ objType file
 cell AG09319
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001333
@@ -659,7 +659,7 @@ objType file
 cell AG10803
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001334
@@ -681,7 +681,7 @@ objType file
 cell AG10803
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001334
@@ -799,7 +799,7 @@ objType file
 cell AoSMC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001382
@@ -821,7 +821,7 @@ objType file
 cell AoSMC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001382
@@ -891,7 +891,7 @@ objType file
 cell BC_Adrenal_Gland_H12803N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001384
@@ -913,7 +913,7 @@ objType file
 cell BC_Adrenal_Gland_H12803N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001384
@@ -983,7 +983,7 @@ objType file
 cell BC_Brain_H11058N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001385
@@ -1005,7 +1005,7 @@ objType file
 cell BC_Brain_H11058N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001385
@@ -1075,7 +1075,7 @@ objType file
 cell BC_Breast_02-03015
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001386
@@ -1097,7 +1097,7 @@ objType file
 cell BC_Breast_02-03015
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001386
@@ -1167,7 +1167,7 @@ objType file
 cell BC_Kidney_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001387
@@ -1189,7 +1189,7 @@ objType file
 cell BC_Kidney_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001387
@@ -1259,7 +1259,7 @@ objType file
 cell BC_Left_Ventricle_N41
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001388
@@ -1281,7 +1281,7 @@ objType file
 cell BC_Left_Ventricle_N41
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001388
@@ -1351,7 +1351,7 @@ objType file
 cell BC_Leukocyte_UHN00204
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001389
@@ -1373,7 +1373,7 @@ objType file
 cell BC_Leukocyte_UHN00204
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001389
@@ -1443,7 +1443,7 @@ objType file
 cell BC_Liver_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001390
@@ -1465,7 +1465,7 @@ objType file
 cell BC_Liver_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001390
@@ -1535,7 +1535,7 @@ objType file
 cell BC_Lung_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001391
@@ -1557,7 +1557,7 @@ objType file
 cell BC_Lung_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001391
@@ -1627,7 +1627,7 @@ objType file
 cell BC_Pancreas_H12817N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001392
@@ -1649,7 +1649,7 @@ objType file
 cell BC_Pancreas_H12817N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001392
@@ -1719,7 +1719,7 @@ objType file
 cell BC_Pericardium_H12529N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001393
@@ -1741,7 +1741,7 @@ objType file
 cell BC_Pericardium_H12529N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001393
@@ -1811,7 +1811,7 @@ objType file
 cell BC_Placenta_UHN00189
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001394
@@ -1833,7 +1833,7 @@ objType file
 cell BC_Placenta_UHN00189
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001394
@@ -1903,7 +1903,7 @@ objType file
 cell BC_Skeletal_Muscle_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001395
@@ -1925,7 +1925,7 @@ objType file
 cell BC_Skeletal_Muscle_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001395
@@ -1995,7 +1995,7 @@ objType file
 cell BC_Skeletal_Muscle_H12817N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001396
@@ -2017,7 +2017,7 @@ objType file
 cell BC_Skeletal_Muscle_H12817N
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001396
@@ -2089,7 +2089,7 @@ objType file
 cell BC_Skin_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001397
@@ -2111,7 +2111,7 @@ objType file
 cell BC_Skin_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001397
@@ -2181,7 +2181,7 @@ objType file
 cell BC_Stomach_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001398
@@ -2203,7 +2203,7 @@ objType file
 cell BC_Stomach_01-11002
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001398
@@ -2273,7 +2273,7 @@ objType file
 cell BC_Testis_N30
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001399
@@ -2295,7 +2295,7 @@ objType file
 cell BC_Testis_N30
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001399
@@ -2365,7 +2365,7 @@ objType file
 cell BC_Uterus_BN0765
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001400
@@ -2387,7 +2387,7 @@ objType file
 cell BC_Uterus_BN0765
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001400
@@ -2457,7 +2457,7 @@ objType file
 cell BE2_C
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001401
@@ -2479,7 +2479,7 @@ objType file
 cell BE2_C
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001401
@@ -2549,7 +2549,7 @@ objType file
 cell BJ
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001402
@@ -2571,7 +2571,7 @@ objType file
 cell BJ
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001402
@@ -2641,7 +2641,7 @@ objType file
 cell Caco-2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001416
@@ -2663,7 +2663,7 @@ objType file
 cell Caco-2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001416
@@ -2685,7 +2685,7 @@ objType table
 cell Caco-2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001416
@@ -2708,7 +2708,7 @@ objType table
 cell Caco-2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001416
@@ -2731,7 +2731,7 @@ objType file
 cell CMK
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001335
@@ -2753,7 +2753,7 @@ objType file
 cell CMK
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001335
@@ -2871,7 +2871,7 @@ objType file
 cell ECC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001403
@@ -2893,7 +2893,7 @@ objType file
 cell ECC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001403
@@ -2963,7 +2963,7 @@ objType file
 cell Fibrobl
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001336
@@ -2985,7 +2985,7 @@ objType file
 cell Fibrobl
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001336
@@ -3103,7 +3103,7 @@ objType file
 cell GM06990
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001417
@@ -3125,7 +3125,7 @@ objType file
 cell GM06990
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001417
@@ -3147,7 +3147,7 @@ objType table
 cell GM06990
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001417
@@ -3170,7 +3170,7 @@ objType table
 cell GM06990
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001417
@@ -3193,7 +3193,7 @@ objType file
 cell GM12878
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001355
@@ -3215,7 +3215,7 @@ objType file
 cell GM12878
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001355
@@ -3333,7 +3333,7 @@ objType file
 cell GM12878-XiMat
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001376
@@ -3355,7 +3355,7 @@ objType file
 cell GM12878-XiMat
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001376
@@ -3473,7 +3473,7 @@ objType file
 cell GM12891
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001360
@@ -3495,7 +3495,7 @@ objType file
 cell GM12891
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001360
@@ -3613,7 +3613,7 @@ objType file
 cell GM12892
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001361
@@ -3635,7 +3635,7 @@ objType file
 cell GM12892
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001361
@@ -3753,7 +3753,7 @@ objType file
 cell GM19239
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001337
@@ -3775,7 +3775,7 @@ objType file
 cell GM19239
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001337
@@ -3893,7 +3893,7 @@ objType file
 cell GM19240
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001338
@@ -3915,7 +3915,7 @@ objType file
 cell GM19240
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001338
@@ -4033,7 +4033,7 @@ objType file
 cell H1-hESC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001362
@@ -4055,7 +4055,7 @@ objType file
 cell H1-hESC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-01
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001362
@@ -4173,7 +4173,7 @@ objType file
 cell HAEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001339
@@ -4195,7 +4195,7 @@ objType file
 cell HAEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001339
@@ -4313,7 +4313,7 @@ objType file
 cell HCF
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001340
@@ -4335,7 +4335,7 @@ objType file
 cell HCF
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001340
@@ -4453,7 +4453,7 @@ objType file
 cell HCM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001341
@@ -4475,7 +4475,7 @@ objType file
 cell HCM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001341
@@ -4593,7 +4593,7 @@ objType file
 cell HCPEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001365
@@ -4615,7 +4615,7 @@ objType file
 cell HCPEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001365
@@ -4733,7 +4733,7 @@ objType file
 cell HCT-116
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001356
@@ -4755,7 +4755,7 @@ objType file
 cell HCT-116
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001356
@@ -4873,7 +4873,7 @@ objType file
 cell HEEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001342
@@ -4895,7 +4895,7 @@ objType file
 cell HEEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001342
@@ -5013,7 +5013,7 @@ objType file
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001343
@@ -5035,7 +5035,7 @@ objType file
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001343
@@ -5108,7 +5108,7 @@ attic auxExp
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001343
@@ -5131,7 +5131,7 @@ attic auxExp
 cell HEK293
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001343
@@ -5295,7 +5295,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001363
@@ -5317,7 +5317,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-01
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001363
@@ -5435,7 +5435,7 @@ objType file
 cell Hepatocytes
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001405
@@ -5457,7 +5457,7 @@ objType file
 cell Hepatocytes
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001405
@@ -5527,7 +5527,7 @@ objType file
 cell HepG2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001349
@@ -5549,7 +5549,7 @@ objType file
 cell HepG2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001349
@@ -5622,7 +5622,7 @@ attic auxExp
 cell HepG2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001349
@@ -5645,7 +5645,7 @@ attic auxExp
 cell HepG2
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-01
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001349
@@ -5805,7 +5805,7 @@ objType file
 cell HIPEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001344
@@ -5827,7 +5827,7 @@ objType file
 cell HIPEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001344
@@ -5945,7 +5945,7 @@ objType file
 cell HL-60
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001418
@@ -5967,7 +5967,7 @@ objType file
 cell HL-60
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001418
@@ -5989,7 +5989,7 @@ objType table
 cell HL-60
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001418
@@ -6012,7 +6012,7 @@ objType table
 cell HL-60
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001418
@@ -6035,7 +6035,7 @@ objType file
 cell HMEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001345
@@ -6057,7 +6057,7 @@ objType file
 cell HMEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001345
@@ -6175,7 +6175,7 @@ objType file
 cell HNPCEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001346
@@ -6197,7 +6197,7 @@ objType file
 cell HNPCEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001346
@@ -6315,7 +6315,7 @@ objType file
 cell HPAEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001366
@@ -6337,7 +6337,7 @@ objType file
 cell HPAEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001366
@@ -6455,7 +6455,7 @@ objType file
 cell HRCEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001347
@@ -6477,7 +6477,7 @@ objType file
 cell HRCEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001347
@@ -6595,7 +6595,7 @@ objType file
 cell HRE
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001357
@@ -6617,7 +6617,7 @@ objType file
 cell HRE
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001357
@@ -6735,7 +6735,7 @@ objType file
 cell HRPEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001358
@@ -6757,7 +6757,7 @@ objType file
 cell HRPEpiC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001358
@@ -6875,7 +6875,7 @@ objType file
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001371
@@ -6897,7 +6897,7 @@ objType file
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001371
@@ -6920,7 +6920,7 @@ attic auxExp
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-19
 dateUnrestricted 2012-01-19
 dccAccession wgEncodeEH001371
@@ -7016,7 +7016,7 @@ objType file
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH001371
@@ -7039,7 +7039,7 @@ objType file
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH001371
@@ -7062,7 +7062,7 @@ objType file
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH001371
@@ -7085,7 +7085,7 @@ objType file
 cell HSMM_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
@@ -7107,7 +7107,7 @@ objType file
 cell HSMM_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
@@ -7129,7 +7129,7 @@ objType file
 cell HSMM_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
@@ -7151,7 +7151,7 @@ objType table
 cell HSMM_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
@@ -7174,7 +7174,7 @@ objType table
 cell HSMM_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
@@ -7197,7 +7197,7 @@ objType table
 cell HSMM_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002060
@@ -7220,7 +7220,7 @@ objType file
 cell HSMMtube
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001348
@@ -7242,7 +7242,7 @@ objType file
 cell HSMMtube
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001348
@@ -7265,7 +7265,7 @@ attic auxExp
 cell HSMMtube
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001348
@@ -7408,7 +7408,7 @@ objType file
 cell HSMMtube_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
@@ -7430,7 +7430,7 @@ objType file
 cell HSMMtube_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
@@ -7452,7 +7452,7 @@ objType file
 cell HSMMtube_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
@@ -7474,7 +7474,7 @@ objType table
 cell HSMMtube_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
@@ -7497,7 +7497,7 @@ objType table
 cell HSMMtube_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
@@ -7520,7 +7520,7 @@ objType table
 cell HSMMtube_FSHD
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-26
 dateUnrestricted 2012-05-26
 dccAccession wgEncodeEH002061
@@ -7543,7 +7543,7 @@ objType file
 cell HTR8svn
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001415
@@ -7565,7 +7565,7 @@ objType file
 cell HTR8svn
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001415
@@ -7636,7 +7636,7 @@ objType file
 cell IMR90
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001377
@@ -7658,7 +7658,7 @@ objType file
 cell IMR90
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001377
@@ -7776,7 +7776,7 @@ objType file
 cell Jurkat
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001359
@@ -7798,7 +7798,7 @@ objType file
 cell Jurkat
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001359
@@ -7916,7 +7916,7 @@ objType file
 cell K562
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001364
@@ -7938,7 +7938,7 @@ objType file
 cell K562
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001364
@@ -8056,7 +8056,7 @@ objType file
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001367
@@ -8078,7 +8078,7 @@ objType file
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001367
@@ -8197,7 +8197,7 @@ attic auxExp
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001406
@@ -8220,7 +8220,7 @@ attic auxExp
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001406
@@ -8292,7 +8292,7 @@ objType file
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001406
@@ -8314,7 +8314,7 @@ objType file
 cell LNCaP
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001406
@@ -8384,7 +8384,7 @@ objType file
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001378
@@ -8406,7 +8406,7 @@ objType file
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001378
@@ -8429,7 +8429,7 @@ attic auxExp
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001378
@@ -8525,7 +8525,7 @@ objType file
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001379
@@ -8547,7 +8547,7 @@ objType file
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001379
@@ -8570,7 +8570,7 @@ attic auxExp
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001379
@@ -8758,7 +8758,7 @@ objType file
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001350
@@ -8780,7 +8780,7 @@ objType file
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001350
@@ -8899,7 +8899,7 @@ attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001350
@@ -8922,7 +8922,7 @@ attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001350
@@ -8995,7 +8995,7 @@ attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001350
@@ -9018,7 +9018,7 @@ attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001350
@@ -9178,7 +9178,7 @@ objType file
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001372
@@ -9200,7 +9200,7 @@ objType file
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001372
@@ -9223,7 +9223,7 @@ attic auxExp
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001372
@@ -9321,7 +9321,7 @@ objType file
 cell Myometr
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001407
@@ -9343,7 +9343,7 @@ objType file
 cell Myometr
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001407
@@ -9413,7 +9413,7 @@ objType file
 cell NB4
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001351
@@ -9435,7 +9435,7 @@ objType file
 cell NB4
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001351
@@ -9553,7 +9553,7 @@ objType file
 cell NH-A
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001380
@@ -9575,7 +9575,7 @@ objType file
 cell NH-A
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001380
@@ -9645,7 +9645,7 @@ objType file
 cell NH-A
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001380
@@ -9667,7 +9667,7 @@ objType file
 cell NH-A
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001380
@@ -9785,7 +9785,7 @@ objType file
 cell NHBE
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001352
@@ -9807,7 +9807,7 @@ objType file
 cell NHBE
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001352
@@ -9925,7 +9925,7 @@ objType file
 cell NHDF-neo
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001368
@@ -9947,7 +9947,7 @@ objType file
 cell NHDF-neo
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001368
@@ -10065,7 +10065,7 @@ objType file
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001353
@@ -10087,7 +10087,7 @@ objType file
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001353
@@ -10160,7 +10160,7 @@ attic auxExp
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001353
@@ -10183,7 +10183,7 @@ attic auxExp
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001353
@@ -10322,7 +10322,7 @@ objType file
 cell Osteobl
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001381
@@ -10344,7 +10344,7 @@ objType file
 cell Osteobl
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001381
@@ -10462,7 +10462,7 @@ objType file
 cell ovcar-3
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001419
@@ -10484,7 +10484,7 @@ objType file
 cell ovcar-3
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001419
@@ -10506,7 +10506,7 @@ objType table
 cell ovcar-3
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001419
@@ -10529,7 +10529,7 @@ objType table
 cell ovcar-3
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001419
@@ -10552,7 +10552,7 @@ objType file
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001408
@@ -10574,7 +10574,7 @@ objType file
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001408
@@ -10645,7 +10645,7 @@ attic auxExp
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001408
@@ -10668,7 +10668,7 @@ attic auxExp
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001408
@@ -10691,7 +10691,7 @@ attic auxExp
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001408
@@ -10715,7 +10715,7 @@ attic auxExp
 cell PANC-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001408
@@ -10738,7 +10738,7 @@ objType file
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001373
@@ -10760,7 +10760,7 @@ objType file
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001373
@@ -10783,7 +10783,7 @@ attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001373
@@ -10806,7 +10806,7 @@ attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001373
@@ -10829,7 +10829,7 @@ attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001373
@@ -10979,7 +10979,7 @@ objType file
 cell PFSK-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001409
@@ -11001,7 +11001,7 @@ objType file
 cell PFSK-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001409
@@ -11071,7 +11071,7 @@ objType file
 cell PrEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001410
@@ -11093,7 +11093,7 @@ objType file
 cell PrEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001410
@@ -11163,7 +11163,7 @@ objType file
 cell ProgFib
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-24
 dateUnrestricted 2011-12-24
 dccAccession wgEncodeEH001374
@@ -11185,7 +11185,7 @@ objType file
 cell ProgFib
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001374
@@ -11307,7 +11307,7 @@ objType file
 cell RPTEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001375
@@ -11329,7 +11329,7 @@ objType file
 cell RPTEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001375
@@ -11351,7 +11351,7 @@ objType file
 cell SAEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001369
@@ -11373,7 +11373,7 @@ objType file
 cell SAEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001369
@@ -11491,7 +11491,7 @@ objType file
 cell SKMC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001354
@@ -11513,7 +11513,7 @@ objType file
 cell SKMC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001354
@@ -11631,7 +11631,7 @@ objType file
 cell SK-N-MC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001411
@@ -11653,7 +11653,7 @@ objType file
 cell SK-N-MC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001411
@@ -11723,7 +11723,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001404
@@ -11745,7 +11745,7 @@ objType file
 cell SK-N-SH
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001404
@@ -11815,7 +11815,7 @@ objType file
 cell SK-N-SH_RA
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001370
@@ -11837,7 +11837,7 @@ objType file
 cell SK-N-SH_RA
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001370
@@ -11955,7 +11955,7 @@ objType file
 cell T-47D
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001412
@@ -11977,7 +11977,7 @@ objType file
 cell T-47D
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001412
@@ -12047,7 +12047,7 @@ objType file
 cell T-47D
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001413
@@ -12069,7 +12069,7 @@ objType file
 cell T-47D
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001413
@@ -12139,7 +12139,7 @@ objType file
 cell U87
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001414
@@ -12162,7 +12162,7 @@ objType file
 cell U87
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 dccAccession wgEncodeEH001414
@@ -12235,7 +12235,7 @@ objType file
 cell UCH-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-31
 dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002063
@@ -12257,7 +12257,7 @@ objType file
 cell UCH-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-31
 dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002063
@@ -12279,7 +12279,7 @@ objType table
 cell UCH-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-31
 dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002063
@@ -12302,7 +12302,7 @@ objType table
 cell UCH-1
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-31
 dateUnrestricted 2012-05-31
 dccAccession wgEncodeEH002063
@@ -12320,4 +12320,4 @@ tableName wgEncodeHaibMethylRrbsUch1DukeSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -1133366866
+# MAGIC: -877971100

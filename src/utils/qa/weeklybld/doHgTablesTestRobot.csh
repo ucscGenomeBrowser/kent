@@ -18,12 +18,12 @@ $HOME/bin/$MACHTYPE/hgTablesTest -appendLog -org=Mouse -orgs=1  hgwbeta.cse.ucsc
 # creates hgTables.log - look for unusual errors
 
 #-- to check for errors: 
-set res = `cat ./logs/hgTables-v${BRANCHNN}.log | egrep "^[ \t]*Total" | egrep "0 soft errors,  0 hard errors"`
+set res = `cat ./logs/hgTables-v${BRANCHNN}.log | egrep "^[ \t]*Total" | egrep -v "0 soft errors,  0 hard errors"`
 set res2 = `cat ./logs/hgTables-v${BRANCHNN}.log | awk '/^[ \t]*Total/ {print} /TablesTest/ {print}'`
 
 
-set lines = `echo "$res" | wc -l` 
-if ( "$lines" != "2" ) then
+set wc = `echo "$res" | wc -w` 
+if ( "$wc" != "0" ) then
  echo "errs found:"
  echo "$res2"
  echo "$res2" | mail -s "Errors in hgTablesTestRobot on $HOST" $USER rhead pauline luvina

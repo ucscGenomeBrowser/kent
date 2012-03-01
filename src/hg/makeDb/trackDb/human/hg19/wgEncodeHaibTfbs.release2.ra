@@ -14,14 +14,14 @@ subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
 dimensions dimX=cellType dimY=factor dimA=protocol dimB=treatment dimC=rep
 dimensionAchecked PCR1x,PCR2x,V0416101,V0416102
 dimensionBchecked NONE
-dimensionCchecked rep1
+dimensionCchecked rep1,rep2
 #dimensionXchecked GM12878,H1hESC,K562
 #dimensionYchecked NRSF,POL2,POL24H8,SIX5,TAF1
-filterComposite dimB=all dimC=one
+filterComposite dimB=all dimC=multi
 sortOrder cellType=+ factor=+ treatment=+ protocol=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target protocol=Protocol treatment=Treatment replicate=Rep view=View labExpId=Lab_ID controlId=Control_ID setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
-controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protocol treatment=treatment rep=replicate
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protocol treatment=treatment
 priority 0
 type bed 3
 wgEncode 1
