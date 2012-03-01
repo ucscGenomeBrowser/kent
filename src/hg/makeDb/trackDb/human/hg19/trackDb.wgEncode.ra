@@ -179,6 +179,9 @@ include wgEncodeSydhTfbs.release2.ra alpha
 include wgEncodeUchicagoTfbs.ra beta,public
 include wgEncodeUchicagoTfbs.release2.ra alpha
 
+# U Mass Weng TFBS Valid
+include wgEncodeUmassWengTfbsValid.ra alpha
+
 # SUNY RBP -----------------------------------------
 
 # SUNY RIP Gene ST (wrangler: cricket)
