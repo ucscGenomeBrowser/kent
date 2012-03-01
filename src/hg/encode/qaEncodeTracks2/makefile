@@ -3,7 +3,7 @@
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
-	qaEncodeTracks
+	qaEncodeTracks2
 
 SCRIPT_INSTALL = "/cluster/bin/scripts"
 

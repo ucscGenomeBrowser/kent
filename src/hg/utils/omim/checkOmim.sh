@@ -14,6 +14,7 @@ umask 002
 
 WORKDIR="/hive/data/outside/otto/omim"
 export WORKDIR
+export PATH=$WORKDIR":$PATH"
 
 #	this is where we are going to work
 if [ ! -d "${WORKDIR}" ]; then
