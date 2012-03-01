@@ -42,6 +42,7 @@ wgEncodeSydhRnaSeq.ra \
 wgEncodeSydhTfbs.ra \
 wgEncodeUchicagoTfbs.ra \
 wgEncodeUmassDekker5C.ra \
+wgEncodeUMassWengTfbsValid.ra \
 wgEncodeUncBsuProt.ra \
 wgEncodeUw5C.ra \
 wgEncodeUwAffyExonArray.ra \
