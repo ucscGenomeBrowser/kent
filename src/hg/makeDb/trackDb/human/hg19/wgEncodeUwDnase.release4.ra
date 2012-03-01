@@ -53,7 +53,7 @@ shortLabel UW DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2&#95;C BJ=BJ CACO2=Caco-2 CD14MONO=CD14+_Monocytes CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD34MOBILIZED=CD34+_Mobilized CMK=CMK GM04503=GM04503 GM04504=GM04504 GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 H7ES=H7-hESC HAAH=HA-h HAASP=HA-sp HAC=HAc HAE=HAEpiC HBMEC=HBMEC HBVP=HBVP HBVSMC=HBVSCM HCF=HCF HCFaa=HCFaa HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HFF=HFF HFFMyc=HFF-Myc HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECDAD=HMVEC-dAd HMVECDBLAD=HMVEC-dBl-Ad HMVECDBLNEO=HMVEC-dBl-Neo HMVECDLYAD=HMVEC-dLy-Ad HMVECDLYNEO=HMVEC-dLy-Neo HMVECDNEO=HMVEC-dNeo HMVECLBL=HMVEC-LBl HMVECLLy=HMVEC-LLy HNPCE=HNPCEpiC HPAEC=HPAEC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRGEC=HRGEC HRPE=HRPEpiC HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp;(G1_phase) LNCaP=LNCaP M059J=M059J MCF7=MCF-7 NB4=NB4 NHBERA=NHBE&#95;RA NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF NHZA=NH-A NT2D1=NT2-D1 PANC1=PANC-1 PREC=PReC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH&#95;RA Th1=Th1 Th2=Th2 TZ47D=T-47D WERIRb1=WERI-Rb-1 WI38=WI-38 WI38O=WI-38_<i>4-hydroxytamoxifen<\i>
+subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2&#95;C BJ=BJ CACO2=Caco-2 CD14MONO=CD14+_Monocytes CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD34MOBILIZED=CD34+_Mobilized CMK=CMK GM04503=GM04503 GM04504=GM04504 GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 H7ES=H7-hESC HAAH=HA-h HAASP=HA-sp HAC=HAc HAE=HAEpiC HBMEC=HBMEC HBVP=HBVP HBVSMC=HBVSCM HCF=HCF HCFaa=HCFaa HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HFF=HFF HFFMyc=HFF-Myc HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECDAD=HMVEC-dAd HMVECDBLAD=HMVEC-dBl-Ad HMVECDBLNEO=HMVEC-dBl-Neo HMVECDLYAD=HMVEC-dLy-Ad HMVECDLYNEO=HMVEC-dLy-Neo HMVECDNEO=HMVEC-dNeo HMVECLBL=HMVEC-LBl HMVECLLy=HMVEC-LLy HNPCE=HNPCEpiC HPAEC=HPAEC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRGEC=HRGEC HRPE=HRPEpiC HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp;(G1_phase) LNCaP=LNCaP M059J=M059J MCF7=MCF-7 NB4=NB4 NHAA=NH-A NHBERA=NHBE&#95;RA NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2D1=NT2-D1 PANC1=PANC-1 PREC=PReC RPTEC=RPTEC SAEC=SAEC SKNMC=SK-N-MC SKNSHRA=SK-N-SH&#95;RA SKZMC=SKMC TA47D=T-47D Th1=Th1 Th2=Th2 WERIRb1=WERI-Rb-1 WI38=WI-38 WI38O=WI-38_<i>4-hydroxytamoxifen<\i>
 subGroup3 rep Replicate 1=1 2=2
 subGroup4 treatment Treatment None=None DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_5d DIFFA14D=diffProtA_14d OHTAM=4-OHTAM_20nM_72hr
 dimensions dimensionY=cellType dimensionX=rep
@@ -169,7 +169,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel SKMC Hspt 1
         longLabel SKMC DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=SKMC rep=1 treatment=None
+        subGroups view=Hot cellType=SKZMC rep=1 treatment=None
         type broadPeak
         # subId=1573 dateSubmitted=2010-06-17
 
@@ -626,7 +626,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel SKMC Hspt 2
         longLabel SKMC DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=SKMC rep=2 treatment=None
+        subGroups view=Hot cellType=SKZMC rep=2 treatment=None
         type broadPeak
         # subId=1642 dateSubmitted=2010-06-19
 
@@ -956,7 +956,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel NH-A Hspt 2
         longLabel NH-A DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=NHZA rep=2 treatment=None
+        subGroups view=Hot cellType=NHAA rep=2 treatment=None
         type broadPeak
         # subId=2089 dateSubmitted=2010-07-31
 
@@ -972,7 +972,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel NH-A Hspt 1
         longLabel NH-A DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot cellType=NHZA rep=1 treatment=None
+        subGroups view=Hot cellType=NHAA rep=1 treatment=None
         type broadPeak
         # subId=2088 dateSubmitted=2010-07-31
 
@@ -1540,7 +1540,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel T-47D 2
         longLabel T-47D DNaseI HS Hotspots Rep 2 from ENCODE/UW 
-        subGroups view=Hot cellType=TZ47D rep=2 treatment=None
+        subGroups view=Hot cellType=TA47D rep=2 treatment=None
         type broadPeak
         origAssembly hg19
         # subId=5203 dateSubmitted=2011-12-14
@@ -1549,7 +1549,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel T-47D 1
         longLabel T-47D DNaseI HS Hotspots Rep 1 from ENCODE/UW 
-        subGroups view=Hot cellType=TZ47D rep=1 treatment=None
+        subGroups view=Hot cellType=TA47D rep=1 treatment=None
         type broadPeak
         origAssembly hg19
         # subId=5204 dateSubmitted=2011-12-14
@@ -1658,7 +1658,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKMC Pk 1
         longLabel SKMC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=SKMC rep=1 treatment=None
+        subGroups view=Peaks cellType=SKZMC rep=1 treatment=None
         type narrowPeak
         # subId=1573 dateSubmitted=2010-06-17
 
@@ -2058,7 +2058,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKMC Pk 2
         longLabel SKMC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=SKMC rep=2 treatment=None
+        subGroups view=Peaks cellType=SKZMC rep=2 treatment=None
         type narrowPeak
         # subId=1642 dateSubmitted=2010-06-19
 
@@ -2388,7 +2388,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NH-A Pk 2
         longLabel NH-A DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=NHZA rep=2 treatment=None
+        subGroups view=Peaks cellType=NHAA rep=2 treatment=None
         type narrowPeak
         # subId=2089 dateSubmitted=2010-07-31
 
@@ -2404,7 +2404,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NH-A Pk 1
         longLabel NH-A DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=NHZA rep=1 treatment=None
+        subGroups view=Peaks cellType=NHAA rep=1 treatment=None
         type narrowPeak
         # subId=2088 dateSubmitted=2010-07-31
 
@@ -3037,7 +3037,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel T-47D Pk 2
         longLabel T-47D DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW 
-        subGroups view=Peaks cellType=TZ47D rep=2 treatment=None
+        subGroups view=Peaks cellType=TA47D rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
         # subId=5203 dateSubmitted=2011-12-14
@@ -3046,7 +3046,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel T-47D Pk 1
         longLabel T-47D DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
-        subGroups view=Peaks cellType=TZ47D rep=1 treatment=None
+        subGroups view=Peaks cellType=TA47D rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
         # subId=5204 dateSubmitted=2011-12-14
@@ -3165,7 +3165,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SKMC Sig 1
         longLabel SKMC DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=SKMC rep=1 treatment=None
+        subGroups view=zRSig cellType=SKZMC rep=1 treatment=None
         type bigWig 1.000000 9371.000000
         # subId=1573 dateSubmitted=2010-06-17
 
@@ -3622,7 +3622,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SKMC Sig 2
         longLabel SKMC DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=SKMC rep=2 treatment=None
+        subGroups view=zRSig cellType=SKZMC rep=2 treatment=None
         type bigWig 1.000000 12057.000000
         # subId=1642 dateSubmitted=2010-06-19
 
@@ -3952,7 +3952,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NH-A Sig 2
         longLabel NH-A DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=NHZA rep=2 treatment=None
+        subGroups view=zRSig cellType=NHAA rep=2 treatment=None
         type bigWig 1.000000 18410.000000
         # subId=2089 dateSubmitted=2010-07-31
 
@@ -3968,7 +3968,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NH-A Sig 1
         longLabel NH-A DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig cellType=NHZA rep=1 treatment=None
+        subGroups view=zRSig cellType=NHAA rep=1 treatment=None
         type bigWig 1.000000 28967.000000
         # subId=2088 dateSubmitted=2010-07-31
 
@@ -4536,7 +4536,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel T-47D Raw 2
         longLabel T-47D DNaseI HS Raw Signal Rep 2 from ENCODE/UW 
-        subGroups view=zRSig cellType=TZ47D rep=2 treatment=None
+        subGroups view=zRSig cellType=TA47D rep=2 treatment=None
         type bigWig 1.000000 107581.000000
         origAssembly hg19
         # subId=5203 dateSubmitted=2011-12-14
@@ -4545,7 +4545,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel T-47D Raw 1
         longLabel T-47D DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
-        subGroups view=zRSig cellType=TZ47D rep=1 treatment=None
+        subGroups view=zRSig cellType=TA47D rep=1 treatment=None
         type bigWig 1.000000 75983.000000
         origAssembly hg19
         # subId=5204 dateSubmitted=2011-12-14
