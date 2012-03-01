@@ -1,59 +1,107 @@
 mkChangeNotes v2
 hg19 wgEncodeOpenChromDnase Release 2 vs Release 1
-2012-02-22
+2012-02-29
 
 QA Count Summaries for Release 2:
-Tables: 161
-Files: 511
-Gbdbs: 107
+Tables: 200
+Files: 662
+Gbdbs: 133
 Supplemental: 0
 Other: 3
 
 REVOKED:
-Tables: 1
-Files: 1
-Gbdbs: 1
+Tables: 4
+Files: 10
+Gbdbs: 3
 
 Sizes of New:
-Table: 469 MB
-Files: 107787 MB (105 GB)
-Gbdbs: 31724 MB (31 GB)
+Table: 573 MB
+Files: 440825 MB (430 GB)
+Gbdbs: 106947 MB (104 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 139981 MB (137 GB)
+Total: 548346 MB (535 GB)
 
 
 TABLES:
-New: 21
-Untouched: 140
-Revoked/Replaced/Renamed: 1
-New + Untouched: 161
-Total (New + Untouched + Revoked/Replaced/Renamed): 162
+New: 69
+Untouched: 131
+Revoked/Replaced/Renamed: 4
+New + Untouched: 200
+Total (New + Untouched + Revoked/Replaced/Renamed): 204
 
-New Tables (21):
+New Tables (69):
+wgEncodeOpenChromDnaseAdultcd4th0BaseOverlapSignal
+wgEncodeOpenChromDnaseAdultcd4th0Pk
+wgEncodeOpenChromDnaseAdultcd4th0Sig
+wgEncodeOpenChromDnaseAdultcd4th1BaseOverlapSignal
+wgEncodeOpenChromDnaseAdultcd4th1Pk
+wgEncodeOpenChromDnaseAdultcd4th1Sig
 wgEncodeOpenChromDnaseColo829BaseOverlapSignal
 wgEncodeOpenChromDnaseColo829Pk
 wgEncodeOpenChromDnaseColo829Sig
+wgEncodeOpenChromDnaseEcc1Dm002p1hBaseOverlapSignal
+wgEncodeOpenChromDnaseEcc1Dm002p1hPk
+wgEncodeOpenChromDnaseEcc1Dm002p1hSig
+wgEncodeOpenChromDnaseEcc1Est10nm30mBaseOverlapSignal
+wgEncodeOpenChromDnaseEcc1Est10nm30mPk
+wgEncodeOpenChromDnaseEcc1Est10nm30mSig
+wgEncodeOpenChromDnaseFibropag08395BaseOverlapSignal
+wgEncodeOpenChromDnaseFibropag08395Pk
+wgEncodeOpenChromDnaseFibropag08395Sig
+wgEncodeOpenChromDnaseFibropag08396BaseOverlapSignal
+wgEncodeOpenChromDnaseFibropag08396Pk
+wgEncodeOpenChromDnaseFibropag08396Sig
+wgEncodeOpenChromDnaseFibropag20443BaseOverlapSignal
+wgEncodeOpenChromDnaseFibropag20443Pk
+wgEncodeOpenChromDnaseFibropag20443Sig
 wgEncodeOpenChromDnaseH7esBaseOverlapSignal
 wgEncodeOpenChromDnaseH7esPk
 wgEncodeOpenChromDnaseH7esSig
+wgEncodeOpenChromDnaseHek293tBaseOverlapSignal
+wgEncodeOpenChromDnaseHek293tPk
+wgEncodeOpenChromDnaseHek293tSig
 wgEncodeOpenChromDnaseHsmmembBaseOverlapSignal
 wgEncodeOpenChromDnaseHsmmembPk
 wgEncodeOpenChromDnaseHsmmembSig
+wgEncodeOpenChromDnaseHsmmfshdBaseOverlapSignal
+wgEncodeOpenChromDnaseHsmmfshdPk
+wgEncodeOpenChromDnaseHsmmfshdSig
+wgEncodeOpenChromDnaseIpscwru1BaseOverlapSignal
+wgEncodeOpenChromDnaseIpscwru1Pk
+wgEncodeOpenChromDnaseIpscwru1Sig
+wgEncodeOpenChromDnaseIpsnihi11BaseOverlapSignal
+wgEncodeOpenChromDnaseIpsnihi11Pk
+wgEncodeOpenChromDnaseIpsnihi11Sig
+wgEncodeOpenChromDnaseIpsnihi7BaseOverlapSignal
+wgEncodeOpenChromDnaseIpsnihi7Pk
+wgEncodeOpenChromDnaseIpsnihi7Sig
 wgEncodeOpenChromDnaseIshikawaEst10nm30mBaseOverlapSignal
 wgEncodeOpenChromDnaseIshikawaEst10nm30mPk
 wgEncodeOpenChromDnaseIshikawaEst10nm30mSig
 wgEncodeOpenChromDnaseIshikawaTam10030BaseOverlapSignal
 wgEncodeOpenChromDnaseIshikawaTam10030Pk
 wgEncodeOpenChromDnaseIshikawaTam10030Sig
+wgEncodeOpenChromDnaseK562BaseOverlapSignalV2
+wgEncodeOpenChromDnaseK562NabutBaseOverlapSignal
+wgEncodeOpenChromDnaseK562NabutPk
+wgEncodeOpenChromDnaseK562NabutSig
+wgEncodeOpenChromDnaseK562PkV2
+wgEncodeOpenChromDnaseK562SigV2
 wgEncodeOpenChromDnaseMcf7HypoxlacBaseOverlapSignal
 wgEncodeOpenChromDnaseMcf7HypoxlacPk
 wgEncodeOpenChromDnaseMcf7HypoxlacSig
+wgEncodeOpenChromDnaseMel2183BaseOverlapSignal
+wgEncodeOpenChromDnaseMel2183Pk
+wgEncodeOpenChromDnaseMel2183Sig
 wgEncodeOpenChromDnaseRwpe1BaseOverlapSignal
 wgEncodeOpenChromDnaseRwpe1Pk
 wgEncodeOpenChromDnaseRwpe1Sig
+wgEncodeOpenChromDnaseT47dEst10nm30mBaseOverlapSignal
+wgEncodeOpenChromDnaseT47dEst10nm30mPk
+wgEncodeOpenChromDnaseT47dEst10nm30mSig
 
-Untouched Tables (140):
+Untouched Tables (131):
 wgEncodeOpenChromDnase8988tBaseOverlapSignal
 wgEncodeOpenChromDnase8988tPk
 wgEncodeOpenChromDnase8988tSig
@@ -72,9 +120,6 @@ wgEncodeOpenChromDnaseCllSig
 wgEncodeOpenChromDnaseFibroblBaseOverlapSignal
 wgEncodeOpenChromDnaseFibroblPk
 wgEncodeOpenChromDnaseFibroblSig
-wgEncodeOpenChromDnaseFibropBaseOverlapSignal
-wgEncodeOpenChromDnaseFibropPk
-wgEncodeOpenChromDnaseFibropSig
 wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal
 wgEncodeOpenChromDnaseGlioblaPk
 wgEncodeOpenChromDnaseGlioblaSig
@@ -141,12 +186,6 @@ wgEncodeOpenChromDnaseHuh7Sig
 wgEncodeOpenChromDnaseHuvecBaseOverlapSignal
 wgEncodeOpenChromDnaseHuvecPk
 wgEncodeOpenChromDnaseHuvecSig
-wgEncodeOpenChromDnaseIpsBaseOverlapSignal
-wgEncodeOpenChromDnaseIpsPk
-wgEncodeOpenChromDnaseIpsSig
-wgEncodeOpenChromDnaseK562BaseOverlapSignal
-wgEncodeOpenChromDnaseK562Pk
-wgEncodeOpenChromDnaseK562Sig
 wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal
 wgEncodeOpenChromDnaseLncapAndroPk
 wgEncodeOpenChromDnaseLncapAndroSig
@@ -195,18 +234,39 @@ wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal
 wgEncodeOpenChromDnaseUrotsaUt189Pk
 wgEncodeOpenChromDnaseUrotsaUt189Sig
 
-Revoked/Replaced/Renamed Tables (1):
+Revoked/Replaced/Renamed Tables (4):
+wgEncodeOpenChromDnaseK562BaseOverlapSignal
+wgEncodeOpenChromDnaseK562Pk
+wgEncodeOpenChromDnaseK562Sig
 wgEncodeOpenChromDnaseMyometrBaseOverlapSignal
 
 
 DOWNLOAD FILES:
-New: 77
-Untouched: 434
-Revoked/Replaced/Renamed: 1
-New + Untouched: 511
-Total (New + Untouched + Revoked/Replaced/Renamed): 512
+New: 237
+Untouched: 425
+Revoked/Replaced/Renamed: 10
+New + Untouched: 662
+Total (New + Untouched + Revoked/Replaced/Renamed): 672
 
-New Download Files (77):
+New Download Files (237):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th0AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th0AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th0AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th0AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th0BaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th0Pk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th0RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th0RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th0Sig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th1AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th1AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th1AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th1AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th1BaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th1Pk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th1RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th1RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseAdultcd4th1Sig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseColo829AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseColo829AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseColo829AlnRep2.bam
@@ -216,7 +276,61 @@ New Download Files (77):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseColo829RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseColo829RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseColo829Sig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Dm002p1hAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Dm002p1hAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Dm002p1hAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Dm002p1hAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Dm002p1hBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Dm002p1hPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Dm002p1hRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Dm002p1hRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Dm002p1hSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Est10nm30mAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Est10nm30mAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Est10nm30mAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Est10nm30mAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Est10nm30mBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Est10nm30mPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Est10nm30mRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Est10nm30mRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseEcc1Est10nm30mSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibroblValidation.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395AlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395AlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395BaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395Pk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395RawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08395Sig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396AlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396AlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396BaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396Pk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396RawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag08396Sig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443AlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443AlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443BaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443Pk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443RawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseFibropag20443Sig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseGm12878Validation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseGm18507Validation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseH7esAlnRep1.bam
@@ -231,6 +345,15 @@ New Download Files (77):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseH7esRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseH7esRawDataRep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseH7esSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHek293tAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHek293tAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHek293tAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHek293tAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHek293tBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHek293tPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHek293tRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHek293tRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHek293tSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHelas3Validation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHepg2Validation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHmecValidation.tgz
@@ -241,7 +364,49 @@ New Download Files (77):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmembBaseOverlapSignal.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmembPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmembSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmfshdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmfshdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmfshdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmfshdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmfshdAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmfshdAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmfshdBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmfshdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHsmmfshdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseHuvecValidation.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpscwru1AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpscwru1AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpscwru1AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpscwru1AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpscwru1BaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpscwru1Pk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpscwru1RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpscwru1RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpscwru1Sig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11AlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11AlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11BaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11Pk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11RawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi11Sig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7AlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7AlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7BaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7Pk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7RawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsnihi7Sig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep2.bam
@@ -260,6 +425,27 @@ New Download Files (77):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIshikawaTam10030RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIshikawaTam10030RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIshikawaTam10030Sig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep1V2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep1V2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep2V2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep2V2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep3V2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep3V2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562BaseOverlapSignalV2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562NabutAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562NabutAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562NabutAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562NabutAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562NabutBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562NabutPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562NabutRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562NabutRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562NabutSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562PkV2.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562RawDataRep1V2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562RawDataRep2V2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562RawDataRep3V2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562SigV2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562Validation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseLncapAndroValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseLncapValidation.tgz
@@ -273,6 +459,13 @@ New Download Files (77):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMcf7HypoxlacRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMcf7HypoxlacSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMcf7Validation.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMel2183AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMel2183AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMel2183AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMel2183AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMel2183BaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMel2183Pk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMel2183Sig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseNhekValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseProgfibValidation.tgz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseRwpe1AlnRep1.bam
@@ -284,8 +477,17 @@ New Download Files (77):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseRwpe1RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseRwpe1RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseRwpe1Sig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseT47dEst10nm30mAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseT47dEst10nm30mAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseT47dEst10nm30mAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseT47dEst10nm30mAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseT47dEst10nm30mBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseT47dEst10nm30mPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseT47dEst10nm30mRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseT47dEst10nm30mRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseT47dEst10nm30mSig.bigWig
 
-Untouched Download Files (434):
+Untouched Download Files (425):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnase8988tAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnase8988tAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnase8988tAlnRep2.bam
@@ -568,15 +770,6 @@ Untouched Download Files (434):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsBaseOverlapSignal.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseIpsSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562BaseOverlapSignal.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562Pk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562RawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562RawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562Sig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseLncapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseLncapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseLncapAlnRep2.bam
@@ -721,34 +914,75 @@ Untouched Download Files (434):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseUrotsaUt189RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseUrotsaUt189Sig.bigWig
 
-Revoked/Replaced/Renamed Download Files (1):
+Revoked/Replaced/Renamed Download Files (10):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562BaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562Pk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseK562Sig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/release2/wgEncodeOpenChromDnaseMyometrBaseOverlapSignal.bigWig
 
 
 GBDBS:
-New: 14
-Untouched: 93
-Revoked/Replaced/Renamed: 1
-New + Untouched: 107
-Total (New + Untouched + Revoked/Replaced/Renamed): 108
+New: 46
+Untouched: 87
+Revoked/Replaced/Renamed: 3
+New + Untouched: 133
+Total (New + Untouched + Revoked/Replaced/Renamed): 136
 
-New Gbdb Files (14):
+New Gbdb Files (46):
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseAdultcd4th0BaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseAdultcd4th0Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseAdultcd4th1BaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseAdultcd4th1Sig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseColo829BaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseColo829Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseEcc1Dm002p1hBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseEcc1Dm002p1hSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseEcc1Est10nm30mBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseEcc1Est10nm30mSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseFibropag08395BaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseFibropag08395Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseFibropag08396BaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseFibropag08396Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseFibropag20443BaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseFibropag20443Sig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseH7esBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseH7esSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseHek293tBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseHek293tSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseHsmmembBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseHsmmembSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseHsmmfshdBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseHsmmfshdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseIpscwru1BaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseIpscwru1Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseIpsnihi11BaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseIpsnihi11Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseIpsnihi7BaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseIpsnihi7Sig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseIshikawaEst10nm30mBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseIshikawaEst10nm30mSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseIshikawaTam10030BaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseIshikawaTam10030Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseK562BaseOverlapSignalV2.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseK562NabutBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseK562NabutSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseK562SigV2.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseMcf7HypoxlacBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseMcf7HypoxlacSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseMel2183BaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseMel2183Sig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseRwpe1BaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseRwpe1Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseT47dEst10nm30mBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseT47dEst10nm30mSig.bigWig
 
-Untouched Gbdb Files (93):
+Untouched Gbdb Files (87):
 /gbdb/hg19/bbi/wgEncodeOpenChromDnase8988tBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnase8988tSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseA549BaseOverlapSignal.bigWig
@@ -761,8 +995,6 @@ Untouched Gbdb Files (93):
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseCllSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseFibroblBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseFibroblSig.bigWig
-/gbdb/hg19/bbi/wgEncodeOpenChromDnaseFibropBaseOverlapSignal.bigWig
-/gbdb/hg19/bbi/wgEncodeOpenChromDnaseFibropSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseGlioblaSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseGm12878BaseOverlapSignal.bigWig
@@ -807,10 +1039,6 @@ Untouched Gbdb Files (93):
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseHuh7Sig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseHuvecBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseHuvecSig.bigWig
-/gbdb/hg19/bbi/wgEncodeOpenChromDnaseIpsBaseOverlapSignal.bigWig
-/gbdb/hg19/bbi/wgEncodeOpenChromDnaseIpsSig.bigWig
-/gbdb/hg19/bbi/wgEncodeOpenChromDnaseK562BaseOverlapSignal.bigWig
-/gbdb/hg19/bbi/wgEncodeOpenChromDnaseK562Sig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseLncapAndroSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseLncapBaseOverlapSignal.bigWig
@@ -843,7 +1071,9 @@ Untouched Gbdb Files (93):
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseUrotsaUt189Sig.bigWig
 
-Revoked/Replaced/Renamed Gbdb Files (1):
+Revoked/Replaced/Renamed Gbdb Files (3):
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseK562BaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromDnaseK562Sig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromDnaseMyometrBaseOverlapSignal.bigWig
 
 
@@ -889,14 +1119,26 @@ Files that dropped between releases (2):
 
 
 
-New Attic Objects (13):
+New Attic Objects (25):
 wgEncodeOpenChromDnaseFibroblValidation
+wgEncodeOpenChromDnaseFibropAlnRep1
+wgEncodeOpenChromDnaseFibropAlnRep2
+wgEncodeOpenChromDnaseFibropAlnRep3
+wgEncodeOpenChromDnaseFibropBaseOverlapSignal
+wgEncodeOpenChromDnaseFibropPk
+wgEncodeOpenChromDnaseFibropSig
 wgEncodeOpenChromDnaseGm12878Validation
 wgEncodeOpenChromDnaseGm18507Validation
 wgEncodeOpenChromDnaseHelas3Validation
 wgEncodeOpenChromDnaseHepg2Validation
 wgEncodeOpenChromDnaseHmecValidation
 wgEncodeOpenChromDnaseHuvecValidation
+wgEncodeOpenChromDnaseIpsAlnRep1
+wgEncodeOpenChromDnaseIpsAlnRep2
+wgEncodeOpenChromDnaseIpsAlnRep3
+wgEncodeOpenChromDnaseIpsBaseOverlapSignal
+wgEncodeOpenChromDnaseIpsPk
+wgEncodeOpenChromDnaseIpsSig
 wgEncodeOpenChromDnaseK562Validation
 wgEncodeOpenChromDnaseLncapAndroValidation
 wgEncodeOpenChromDnaseLncapValidation

@@ -23,6 +23,7 @@ wgEncodeHaibMethyl450.ra \
 wgEncodeHaibMethylArray.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibMethylSeq.ra \
+wgEncodeHaibMethylWgbs.ra \
 wgEncodeHaibRnaSeq.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeMapability.ra \
