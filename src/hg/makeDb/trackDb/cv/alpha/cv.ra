@@ -2418,7 +2418,7 @@ description Undifferentiated Chondrocytes
 lineage missing
 karyotype normal
 sex M
-tissue catilage / knee joint
+tissue cartilage/ knee joint
 vendorName PromoCell
 vendorId HCH#c1315
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH#c1315
@@ -2436,7 +2436,7 @@ description Undifferentiated Chondrocytes
 lineage missing
 karyotype normal
 sex F
-tissue catilage / knee joint
+tissue cartilage/ knee joint
 vendorName PromoCell
 vendorId HCH#c1315
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH#c1315
@@ -5295,10 +5295,10 @@ type Cell Line
 organism mouse
 category primaryCells
 description E14 mouse ES line PROVISIONAL
-age E0
+age E14
 strain 129/Ola
 vendorName Santos lab
-vendorId E14
+vendorId E0
 orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
 color 65,105,225
 sex M
@@ -5692,7 +5692,7 @@ tag MGER
 type Cell Line
 organism mouse
 category cellLine
-description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with β-estradiol treatment PROVISIONAL
+description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with &Beta;-estradiol treatment PROVISIONAL
 age immortalized
 strain Unknown
 tissue blood
@@ -11338,64 +11338,67 @@ term diffProtA_2d
 tag DIFFA2D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 2 days, lineage: mesoderm
-label 2 day diff protein A
+label 2 day diff protocol A
 
 term diffProtA_5d
 tag DIFFA5D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 5 days, lineage: mesoderm
-label 5 day diff protein A
+label 5 day diff protocol A
 
 term diffProtA_9d
 tag DIFFA9D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 9 days, lineage: mesoderm
-label 9 day diff protein A
+label 9 day diff protocol A
 
 term diffProtA_14d
 tag DIFFA14D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, cell sorting and specific growth factors were used, lineage: mesoderm
-label 14 day diff protein A
+label 14 day diff protocol A
 
-term diffDMEM_7d
-tag DIFFDM7D
-type treatment
-description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter. (Ren) PROVSIONAL
-label 7 day diff DMEM
-
-term diffDoxy_6hr
-tag DIFFD6H
+term diffProtB_6hr
+tag DIFFB6H
 type treatment
 description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours. Doxycycline added to a final concentration of 100 ng/ml. (Stam) PROVISIONAL
-label 6 hour diff Doxcycline
+label 6 hour diff protocol B
 
-term diffDoxy_24hr
-tag DIFFD24H
+term diffProtB_24hr
+tag DIFFB24H
 type treatment
 description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
-label 24 hour diff Doxcycline
+label 24 hour diff protocol B
 
-term diffDoxy_72hr
-tag DIFFD72H
+term diffProtB_72hr
+tag DIFFB72H
 type treatment
 description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
-label 72 hour diff Doxcycline
+label 72 hour diff protocol B
 
-term diffEstradiol_24hr
-tag DIFFE24H
+term diffProtC_24hr
+tag DIFFC24H
 type treatment
 description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+label 24 hour diff protocol C
 
-term diffEstradiol_48hr
-tag DIFFE48H
+term diffProtC_48hr
+tag DIFFC48H
 type treatment
 description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+label 48 hour diff protocol C
 
-term diffEstradiol_120hr
-tag DIFFE120H
+term diffProtC_120hr
+tag DIFFC120H
 type treatment
 description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+label 120 hour diff protocol C
+
+term diffProtD_7d
+tag DIFFD7D
+type treatment
+description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter. (Ren) PROVSIONAL
+label 7 day diff protocol D
 
 term DMSO_0.02pct
 tag DM002P1H
