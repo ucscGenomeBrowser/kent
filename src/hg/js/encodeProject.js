@@ -16,6 +16,7 @@ var encodeProject = (function () {
         cgi = "/cgi-bin/hgApi?";
 
     var accessionPrefix = 'wgEncodeE?';
+    var dataTypeLabelHash = {}, dataTypeTermHash = {}, cellTypeTermHash = {};
 
     // Functions
 
@@ -31,6 +32,11 @@ var encodeProject = (function () {
             if (settings.assembly) {
                 assembly = settings.assembly;
             }
+        },
+
+        getAssembly: function () {
+            // Get currently set assembly
+            return assembly;
         },
 
         getServer: function () {
@@ -80,30 +86,6 @@ var encodeProject = (function () {
                 a.term.toLowerCase().localeCompare(b.term.toLowerCase()));
         },
 
-        // User interface
-
-        addSearchPanel: function (divId) {
-            // Create panel of radio buttons for user to select search type
-            // Add to passed in HTML div ID; e.g. #searchTypePanel
-            return $(divId).append('<span id="searchPanelInstructions">Search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">tracks<input type="radio" name="searchType" id="searchFiles" value="files">files');
-        },
-
-        getSearchUrl: function (assembly, vars) {
-            // Return URL for search of type requested in search panel
-
-            var prog, cartVar, url;
-            if ($('input:radio[name=searchType]:checked').val() === "tracks") {
-                prog = 'hgTracks';
-                cartVar = 'hgt_tSearch';
-            } else {
-                prog = "hgFileSearch";
-                cartVar = "hgfs_Search";
-            }
-             url = '/cgi-bin/' + prog + '?db=' + assembly + '&' + cartVar + '=search' +
-                    '&tsCurTab=advancedTab&hgt_tsPage=';
-            return (url);
-        },
-
         getSearchType: function () {
             return $('input:radio[name=searchType]:checked').val();
         },
@@ -114,19 +96,42 @@ var encodeProject = (function () {
             return accession.slice(accessionPrefix.length);
         },
 
-        getExpIdHash: function (expIds) {
+        getExpIdHash: function (ids) {
             // Return hash of experiment ID's
-            var expIdHash = {};
-            $.each(expIds, function (i, expId) {
-                expIdHash[expId.expId] = true;
+
+            var hash = {};
+            $.each(ids, function (i, id) {
+                hash[id.expId] = true;
             });
-            return expIdHash;
+            return hash;
+        },
+
+        getDataType: function (term) {
+            // Return cellType object from term
+            // Needs loader function (using getDataGroups below for now)
+            if (dataTypeTermHash !== undefined && 
+                dataTypeTermHash[term] !== undefined) {
+                    return dataTypeTermHash[term];
+            }
+            return null;
+        },
+
+        getDataTypeByLabel: function (label) {
+            // Return hash of dataTypes keyed by term
+            // Needs loader function (using getDataGroups below for now)
+            if (dataTypeLabelHash !== undefined && 
+                dataTypeLabelHash[label] !== undefined) {
+                    return dataTypeLabelHash[label];
+            }
         },
 
         getDataGroups: function (dataTypes) {
+            // Unpack JSON list of dataTypes
             // Return sorted array of dataGroup objects each having a .label,
             // .dataTypes, 
             // and an array of dataTypes, alphasorted, with 'Other' last
+            // Also populates hashes for lookup by term or label (for now)
+
             var dataGroupHash = {},
                 dataGroups = [],
                 otherGroup, group;
@@ -135,6 +140,9 @@ var encodeProject = (function () {
                 if (!group) {
                     return true;
                 }
+                // stash hashes for lookup by utility functions
+                dataTypeTermHash[dataType.term] = dataType;
+                dataTypeLabelHash[dataType.label] = dataType;
                 if (!dataGroupHash[group]) {
                     dataGroupHash[group] = {
                         label: group,
@@ -162,10 +170,21 @@ var encodeProject = (function () {
             return dataGroups;
         },
 
+        getCellType: function (cellType) {
+            // Return cellType object from term
+            // Needs loader function (using getCellTiers below for now)
+            if (cellTypeTermHash !== undefined && 
+                cellTypeTermHash[cellType] !== undefined) {
+                    return cellTypeTermHash[cellType];
+            }
+            return null;
+        },
+
         getCellTiers: function (cellTypes) {
+            // Unpack JSON list of cellTypes
             // Return sorted array of cellTier objects each having a .term,
-            // with tier number, .celltypes, 
-            // and an array of cell types, alphasorted
+            // with tier number, .celltypes, and an array of cell types, alphasorted
+            // Also loads hash for lookup by term (for now)
             var cellTiers = [],
                 tier;
             $.each(cellTypes, function (i, cellType) {
@@ -174,6 +193,7 @@ var encodeProject = (function () {
                 if (!tier) {
                     return true;
                 }
+                cellTypeTermHash[cellType.term] = cellType;
                 if (!cellTiers[tier]) {
                     cellTiers[tier] = {
                         term: tier,

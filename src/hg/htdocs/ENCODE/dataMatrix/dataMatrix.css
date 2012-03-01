@@ -15,12 +15,12 @@ th {
 
 td {
     border: none;
-    padding: 5px 5px 3px 3px;
+    padding: 3px;
 }
 
 /* vertical column headers (th child of columnHeaders row) */
 #columnHeaders th {
-    /*height: 150px;    restore when data types labels are cleaned up */
+    /* height is dynamically reset based on max label length */
     height: 180px;
 }
 
@@ -100,7 +100,7 @@ text-decoration: none;
 }
 
 #cellHeaderLabel {
-    margin-top: 2em;
+    margin-top: 4em;
 }
 
 /* colored bullets on cell types based on karyotype CV field */
