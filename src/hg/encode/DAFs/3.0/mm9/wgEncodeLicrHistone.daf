@@ -1,6 +1,6 @@
 # Data Agreement File for LICR Lab ChIP-seq (Histone) experiments for mm9
 
-#$Revision: 1.12 $
+#$Revision: 1.13 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -31,7 +31,7 @@
 grant             Ren 
 lab               LICR-m
 dataType          ChipSeq 
-variables         cell, antibody,sex,age,strain,control
+variables         cell, antibody,sex,age,strain,control,treatment
 compositeSuffix   LicrHistone
 assembly          mm9
 dafVersion        2.0
