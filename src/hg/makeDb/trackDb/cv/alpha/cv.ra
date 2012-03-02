@@ -11378,10 +11378,11 @@ description 120 hour differentiation time point of mG/ER cells towards red blood
 label 120 hour diff protocol C
 
 term diffProtD_7d
-tag DIFFD7D
+tag DD7D
 type treatment
 description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter. (Ren) PROVSIONAL
 label 7 day diff protocol D
+#shortened tag from DIFFD7d to DD7D
 
 term DMSO_0.02pct
 tag DM002P1H
