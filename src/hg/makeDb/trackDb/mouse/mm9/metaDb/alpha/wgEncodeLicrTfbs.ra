@@ -3875,6 +3875,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -3902,6 +3904,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -3929,6 +3933,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -3956,6 +3962,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -3983,6 +3991,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -4010,6 +4020,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
+dccAccession wgEncodeEM002589
+expId 2589
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -4182,6 +4194,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -4209,6 +4223,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -4236,6 +4252,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -4263,6 +4281,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -4290,6 +4310,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -4317,6 +4339,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
+dccAccession wgEncodeEM002590
+expId 2590
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -6019,6 +6043,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
+dccAccession wgEncodeEM002585
+expId 2585
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -6046,6 +6072,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
+dccAccession wgEncodeEM002585
+expId 2585
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -6073,6 +6101,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
+dccAccession wgEncodeEM002585
+expId 2585
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -6100,6 +6130,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
+dccAccession wgEncodeEM002585
+expId 2585
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -6127,6 +6159,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
+dccAccession wgEncodeEM002585
+expId 2585
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -6154,6 +6188,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
+dccAccession wgEncodeEM002585
+expId 2585
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -6326,6 +6362,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002586
+expId 2586
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -6353,6 +6391,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002586
+expId 2586
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -6380,6 +6420,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
 dateUnrestricted 2012-11-15
+dccAccession wgEncodeEM002586
+expId 2586
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -6407,6 +6449,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002586
+expId 2586
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -6434,6 +6478,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002586
+expId 2586
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -6461,6 +6507,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002586
+expId 2586
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -6633,6 +6681,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002591
+expId 2591
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -6660,6 +6710,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002591
+expId 2591
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -6687,6 +6739,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2012-11-15
+dccAccession wgEncodeEM002591
+expId 2591
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -6714,6 +6768,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002591
+expId 2591
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -6741,6 +6797,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002591
+expId 2591
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -6768,6 +6826,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002591
+expId 2591
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -6940,6 +7000,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002592
+expId 2592
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -6967,6 +7029,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002592
+expId 2592
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -6994,6 +7058,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2012-11-15
+dccAccession wgEncodeEM002592
+expId 2592
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -7021,6 +7087,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002592
+expId 2592
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -7048,6 +7116,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002592
+expId 2592
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -7075,6 +7145,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002592
+expId 2592
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -7612,6 +7684,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002593
+expId 2593
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -7639,6 +7713,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002593
+expId 2593
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -7666,6 +7742,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2012-11-15
+dccAccession wgEncodeEM002593
+expId 2593
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -7693,6 +7771,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002593
+expId 2593
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -7720,6 +7800,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002593
+expId 2593
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -7747,6 +7829,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002593
+expId 2593
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -7919,6 +8003,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002594
+expId 2594
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -7946,6 +8032,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002594
+expId 2594
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -7973,6 +8061,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
 dateUnrestricted 2012-11-15
+dccAccession wgEncodeEM002594
+expId 2594
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -8000,6 +8090,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002594
+expId 2594
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -8027,6 +8119,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002594
+expId 2594
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -8054,6 +8148,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002594
+expId 2594
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -8081,6 +8177,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002587
+expId 2587
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -8108,6 +8206,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002587
+expId 2587
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -8135,6 +8235,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
 dateUnrestricted 2012-11-15
+dccAccession wgEncodeEM002587
+expId 2587
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -8162,6 +8264,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002587
+expId 2587
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -8189,6 +8293,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002587
+expId 2587
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -8216,6 +8322,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002587
+expId 2587
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -8388,6 +8496,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002588
+expId 2588
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -8415,6 +8525,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002588
+expId 2588
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -8442,6 +8554,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
 dateUnrestricted 2012-11-15
+dccAccession wgEncodeEM002588
+expId 2588
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -8469,6 +8583,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002588
+expId 2588
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -8496,6 +8612,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002588
+expId 2588
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -8523,6 +8641,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002588
+expId 2588
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -8550,6 +8670,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -8577,6 +8699,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -8604,6 +8728,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -8631,6 +8757,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -8658,6 +8786,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -8685,6 +8815,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002595
+expId 2595
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -8857,6 +8989,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -8884,6 +9018,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -8911,6 +9047,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
 dateUnrestricted 2012-11-14
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -8938,6 +9076,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -8965,6 +9105,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -8992,6 +9134,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
+dccAccession wgEncodeEM002596
+expId 2596
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -9007,4 +9151,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 925982533
+# MAGIC: 347973241

@@ -36,7 +36,7 @@ pip install <package name>
 
 pip is an easy_install replacement. For more information visit: http://pypi.python.org/pypi/pip
 
-Internal packagesi (use setup.py located in package directory e.g. kent/python/lib):
+Internal packages (use setup.py located in package directory e.g. kent/python/lib):
 
 python setup.py install
 

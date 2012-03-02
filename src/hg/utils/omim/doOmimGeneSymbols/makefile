@@ -1,38 +1,21 @@
-
-include ../../../inc/common.mk
+include ../../../../inc/common.mk
 
 L += -lm $(MYSQLLIBS)
-MYLIBDIR = ../../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-A = doOmimGeneSymbols
+O = doOmimGeneSymbols.o
 
-O = $A.o
+all: doOmimGeneSymbols
 
-my: compile
-	mv $A ${BINDIR}/$A
-
-mgsc: compile
-	mv $A /usr/local/apache/cgi-bin-mgsc/$A
-
-alpha: compile
-	mv $A /usr/local/apache/cgi-bin/$A
-
-beta: compile
-	mv $A /usr/local/apache/cgi-bin-beta/$A
-
-
-compile: $O 
-	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
-	mv ${AOUT} $A${EXE}
-#	${STRIP} $A${EXE}
-	chmod a+rx $A
-
-lib:
-	cd ../../lib && ${MAKE}
-
-tags: 
-	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
+doOmimGeneSymbols: $O $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o doOmimGeneSymbols $O $(MYLIBS) $L
 
 clean::
 	rm -f ${O}
+
+install: check-prefix all
+	cp doOmimGeneSymbols ${PREFIX}
+
+check-prefix:
+	@test -n "${PREFIX}" || (echo "must specify PREFIX= to install"; exit 1)
