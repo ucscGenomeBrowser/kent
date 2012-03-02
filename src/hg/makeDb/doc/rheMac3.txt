@@ -502,11 +502,11 @@ rheMac3.upstreamGeneTbl = refGene
     #   test it with some sequence
 
 #########################################################################
-# reset default position (working DONE - 2012-01-13  - Chin)
-#       Reset default position to an area contains RHO and a number of
+# reset default position (DONE - 2012-01-13  - Chin)
+#       Reset default position to an area contains RHOG and a number of
 #       other genes
     hgsql -e \
-'update dbDb set defaultPos="chr22:56,647,062-58,290,728" where name="rheMac3";' \
+'update dbDb set defaultPos="chr14:70,034,487-70,048,046" where name="rheMac3";' \
         hgcentraltest
 ############################################################################
 # ctgPos2 track - showing clone sequence locations on chromosomes

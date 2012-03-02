@@ -5074,23 +5074,6 @@ color 204,121,167
 sex U
 protocol Gingeras:Bladder_Gingeras_protocol.pdf
 
-term BMDM
-tag BMDM
-type Cell Line
-organism mouse
-tissue blood
-category primaryCells
-description Bone marrow derived macrophage PROVISIONAL
-age ageUnknown
-strain Unknown
-vendorName Genhong Cheng Lab, UCLA
-termId 7058
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
-color 86,180,233
-sex U
-protocol Ren:BMDM_Ren_protocol.pdf
-label Bone marrow derived macrophage
-
 term BoneMarrow
 tag BMARROW
 type Cell Line

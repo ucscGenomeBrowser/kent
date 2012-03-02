@@ -3094,4 +3094,73 @@ buildDir /hive/data/genomes/dm3/bed/hgNearBlastp/100806
 scratchDir /hive/data/genomes/dm3/bed/hgNearBlastp/100806/tmp
 _EOF_
 doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
+
+###########################################################################
+# BLASTZ/CHAIN/NET DROVIR3 (DONE 2012-03-01 - Chin)
+    mkdir /cluster/data/dm3/bed/blastz.droVir2.2012-03-01
+    cd /cluster/data/dm3/bed/blastz.droVir2.2012-03-01
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. virilis
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+    
+# TARGET - D. melanogaster
+SEQ1_DIR=/scratch/data/dm3/dm3.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000 
+SEQ1_LEN=/cluster/data/dm3/chrom.sizes
+
+# QUERY - D. virilis
+SEQ2_DIR=/scratch/data/droVir2/droVir2.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/droVir2/chrom.sizes
+
+BASE=/cluster/data/dm3/bed/blastz.droVir2.2012-03-01
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+         -noDbNameCheck -chainMinScore=3000 \
+         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+         > do.log 2>&1 &
+    # real    11m58.080s
+
+    tail do.log
+    #  *** All done !  Elapsed time: 11m58s
+    # *** Make sure that goldenPath/dm3/vsDroVir2/README.txt is accurate.
+    # *** Add {chain,net}DroVir2 tracks to trackDb.ra if necessary.
+
+    featureBits dm3 -chrom=chr2L -enrichment flyBaseLiftGene chainDroVir2Link
+    # flyBaseLiftGene 22.721%, chainDroVir2Link 61.821%, both 20.304%,
+    # cover 89.36%, enrich 1.45x
+
+    cat fb.dm3.chainDroVir2Link.txt
+    # 75854911 bases of 162367812 (46.718%) in intersection
+
+    cd /cluster/data/dm3/bed
+    rm -f /cluster/data/dm3/bed/blastz.droVir2
+    ln -s blastz.droVir2.2012-03-01 /cluster/data/dm3/bed/blastz.droVir2
+
+    # swap droVir2
+    mkdir /cluster/data/droVir2/bed/blastz.dm3.swap
+    cd /cluster/data/droVir2/bed/blastz.dm3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /cluster/data/dm3/bed/blastz.droVir2/DEF \
+        -swap -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 > swap.log 2>&1 &
+    # real    10m3.062s
+    tail swap.log
+    #  *** All done !  Elapsed time: 10m3s
+    # *** Make sure that goldenPath/droVir2/vsDm3/README.txt is accurate.
+    # *** Add {chain,net}Dm3 tracks to trackDb.ra if necessary.
+
+    cat fb.droVir2.chainDm3Link.txt
+    # 83468526 bases of 189914823 (43.951%) in intersection
+
 #########################################################################
