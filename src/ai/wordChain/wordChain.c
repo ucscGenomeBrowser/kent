@@ -7,6 +7,7 @@
 #include "dlist.h"
 #include "rbTree.h"
 
+/* Global vars - all of which can be set by command line options. */
 int maxChainSize = 3;
 int maxNonsenseSize = 10000;
 int minUse = 1;
@@ -34,6 +35,7 @@ errAbort(
   );
 }
 
+/* Command line validation table. */
 static struct optionSpec options[] = {
    {"size", OPTION_INT},
    {"minUse", OPTION_INT},
@@ -46,10 +48,55 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+/* The wordTree structure below is the central data structure for this program.  It is
+ * used to build up a tree that contains all observed N-word-long sequences observed in
+ * the text, where N corresponds to the "size" command line option which defaults to 3,
+ * an option that in turn is stored in the maxChainSize variable.  At this chain size the
+ * text 
+ *     this is the black dog and the black cat
+ * would have the chains 
+ *     this is the 
+ *     is the black
+ *     the black dog
+ *     black dog and
+ *     dog and the
+ *     and the black
+ *     the black cat
+ * and turn into the tree
+ *     this
+ *        is
+ *           the
+ *     is
+ *        the
+ *           black
+ *     the
+ *        black
+ *           dog
+ *           cat
+ *     black
+ *        dog
+ *           and
+ *     dog
+ *        and
+ *           the
+ *     and
+ *        the
+ *           black
+ * Note how the tree is able to compress the two chains "the black dog" and "the black cat."
+ *
+ * A node in the tree can have as many children as it needs to at each node.  The depth of
+ * the tree is the same as the chain size, by default 3. At each node in the tree you get
+ * a word, and a list of all words that are observed in the text to follow that word.
+ *
+ * There are special cases in the code so that the first and last words in the text get included 
+ * as much as possible in the tree. 
+ *
+ * Once the program has build up the wordTree, it can output it in a couple of fashions. */
+
 struct wordTree
-/* A tree of words. */
+/* A node in a tree of words.  The head of the tree is a node with word value the empty string. */
     {
-    struct rbTree *following;	/* Binary tree of words that follow us. */
+    struct rbTree *following;	/* Contains words (as struct wordTree) that follow us. */
     char *word;			/* The word itself including comma, period etc. */
     int useCount;		/* Number of times word used. */
     };
@@ -76,14 +123,16 @@ struct wordTree *wordTreeAddFollowing(struct wordTree *wt, char *word,
 /* Make word follow wt in tree.  If word already exists among followers
  * return it and bump use count.  Otherwise create new one. */
 {
-struct wordTree *w;
+struct wordTree *w;   /* Points to following element if any */
 if (wt->following == NULL)
     {
+    /* Allocate new if you've never seen it before. */
     wt->following = rbTreeNewDetailed(wordTreeCmpWord, lm, stack);
     w = NULL;
     }
 else
     {
+    /* Find word in existing tree */
     struct wordTree key;
     key.word = word;
     w = rbTreeFind(wt->following, &key);
@@ -247,21 +296,30 @@ for (;;)
 dlListFree(&ll);
 }
 
-void wordChain(char *inFile, int maxSize)
-/* wordChain - Create Markov chain of words. */
+struct wordTree *wordTreeForChainsInFile(char *fileName, int chainSize, struct lm *lm)
+/* Return a wordTree of all chains-of-words of length chainSize seen in file. 
+ * Allocate the structure in local memory pool lm. */ 
 {
-struct lineFile *lf = lineFileOpen(inFile, TRUE);
-FILE *f;
-char *line, *word, *firstWord = NULL;
-struct dlList *ll = dlListNew();
-struct dlNode *node;
-int llSize = 0;
-struct wordTree *wt = wordTreeNew("");
-int wordCount = 0;
-struct lm *lm = lmInit(0);
-struct rbTreeNode **stack;
+/* Stuff for processing file a line at a time. */
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *word;
 
+/* We'll keep a chain of three or so words in a doubly linked list. */
+struct dlNode *node;
+struct dlList *chain = dlListNew();
+int curSize = 0;
+
+/* We'll build up the tree starting with an empty root node. */
+struct wordTree *wt = wordTreeNew("");	
+int wordCount = 0;
+
+/* Save time/space by sharing stack between all "following" rbTrees. */
+struct rbTreeNode **stack;	
 lmAllocArray(lm, stack, 256);
+
+/* Loop through each line of input file, lowercasing the whole line, and then
+ * looping through each word of line, stripping out special chars, and finally
+ * processing each word. */
 while (lineFileNext(lf, &line, NULL))
     {
     if (lower)
@@ -283,42 +341,61 @@ while (lineFileNext(lf, &line, NULL))
 	         continue;
 	    }
 	verbose(2, "%s\n", word);
-	if (wordCount == 0)
-	    firstWord = cloneString(word);
 
-	if (llSize < maxSize)
+	/* We come to this point in the code for each word in the file. 
+	 * Here we want to maintain a chain of sequential words up to
+	 * chainSize long.  We do this with a doubly-linked list structure.
+	 * For the first few words in the file we'll just build up the list,
+	 * only adding it to the tree when we finally do get to the desired
+	 * chain size.  Once past the initial section of the file we'll be
+	 * getting rid of the first link in the chain as well as adding a new
+	 * last link in the chain with each new word we see. */
+	if (curSize < chainSize)
 	    {
-	    dlAddValTail(ll, cloneString(word));
-	    ++llSize;
-	    if (llSize == maxSize)
-		addChainToTree(wt, ll, lm, stack);
+	    dlAddValTail(chain, cloneString(word));
+	    ++curSize;
+	    if (curSize == chainSize)
+		addChainToTree(wt, chain, lm, stack);
 	    }
 	else
 	    {
-	    node = dlPopHead(ll);
+	    /* Reuse doubly-linked-list node, but give it a new value, as we move
+	     * it from head to tail of list. */
+	    node = dlPopHead(chain);
 	    freeMem(node->val);
 	    node->val = cloneString(word);
-	    dlAddTail(ll, node);
-	    addChainToTree(wt, ll, lm, stack);
+	    dlAddTail(chain, node);
+	    addChainToTree(wt, chain, lm, stack);
 	    }
 	++wordCount;
 	}
     }
-if (llSize < maxSize)
-    addChainToTree(wt, ll, lm, stack);
-while ((node = dlPopHead(ll)) != NULL)
+
+/* Handle last few words in file, where can't make a chain of full size.  Need
+ * a special case for file that has fewer than chain size words too. */
+if (curSize < chainSize)
+    addChainToTree(wt, chain, lm, stack);
+while ((node = dlPopHead(chain)) != NULL)
     {
-    addChainToTree(wt, ll, lm, stack);
+    addChainToTree(wt, chain, lm, stack);
     freeMem(node->val);
     freeMem(node);
     }
-dlListFree(&ll);
+dlListFree(&chain);
 lineFileClose(&lf);
+return wt;
+}
+
+void wordChain(char *inFile, int maxSize)
+/* wordChain - Create Markov chain of words and optionally output chain in two formats. */
+{
+struct lm *lm = lmInit(0);
+struct wordTree *wt = wordTreeForChainsInFile(inFile, maxSize, lm);
 
 if (optionExists("chain"))
     {
     char *fileName = optionVal("chain", NULL);
-    f = mustOpen(fileName, "w");
+    FILE *f = mustOpen(fileName, "w");
     wordTreeDump(0, wt, f);
     carefulClose(&f);
     }
@@ -327,10 +404,12 @@ if (optionExists("nonsense"))
     {
     char *fileName = optionVal("nonsense", NULL);
     FILE *f = mustOpen(fileName, "w");
-    int maxSize = min(wordCount, maxNonsenseSize);
-    wordTreeMakeNonsense(wt, maxChainSize, firstWord, maxSize, f);
+    int maxSize = min(wt->useCount, maxNonsenseSize);
+    wordTreeMakeNonsense(wt, maxChainSize, pickRandomWord(wt->following), maxSize, f);
     carefulClose(&f);
     }
+
+lmCleanup(&lm);	// Not really needed since we're just going to exit.
 }
 
 int main(int argc, char *argv[])

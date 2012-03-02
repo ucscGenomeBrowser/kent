@@ -1,0 +1,11 @@
+# Umass  TFBS Validation 
+#  Currently downloads only, there is an empty table for now
+
+track wgEncodeUmassWengTfbsValid
+superTrack wgEncodeTfBindingSuper dense
+type downloadsOnly
+shortLabel UMass TFBS Valid
+longLabel TFBS Validation from ENCODE/Univ. Massachusetts 
+group regulation
+fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+wgEncode 1
