@@ -51,7 +51,7 @@ include wgEncodeAffyRnaChip.ra
 include wgEncodeGisChiaPet.ra alpha
 
 # UMass-Dekker 5C (wrangler: kate)
-include wgEncodeUmassDekker5C.ra alpha
+include wgEncodeUmassDekker5C.ra alpha,beta
 
 # UW 5C (wrangler: kate)
 include wgEncodeUw5C.ra beta,public

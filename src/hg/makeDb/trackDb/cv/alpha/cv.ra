@@ -12643,11 +12643,12 @@ description Adult 24 weeks PROVISIONAL
 label Adult 24 weeks PROVISIONAL
 
 term immortalized
-tag IMMORTAL
+tag IMMOR
 type age
 stage Cell Line
 description Immortal cells
 label Immortal cells
+# shortened tag from IMMORTAL to IMMOR to fit better.
 
 term ageUnknown
 tag AGEUNKN
