@@ -71,7 +71,9 @@ safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, 
     "group_concat(snippet, section SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
     "WHERE markerId='%s' AND section in (%s) "
-    "GROUP by articleId LIMIT %d;", 
+    "GROUP by articleId "
+    "ORDER BY year DESC "
+    "LIMIT %d",
     markerTable, markerTable, articleTable, item, sectionList, itemLimit);
 
 if (t2gDebug)
