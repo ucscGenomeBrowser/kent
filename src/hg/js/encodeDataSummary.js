@@ -7,9 +7,6 @@
 /*global $, encodeProject */
 
 $(function () {
-    var dataTypeLabelHash = {}, targetHash = {};
-    var server, organism, assembly, header;
-    var spinner;
     var requests = [
             // requests to server API
             encodeProject.serverRequests.experiment,
@@ -18,113 +15,44 @@ $(function () {
             encodeProject.serverRequests.expId
             ];
 
-    function tableOut(table, types, exps, isChipSeq) {
-        // Helper function to output tables to document
-        var total = 0, row = 0;
-
-        $.each(exps, function (key, value) {
-            types.push(key);
-            total += parseInt(value, 10);
-        });
-        types.sort(encodeProject.cmpNoCase);
-
-        // lay out table
-        $.each(types, function (i, value) {
-            description = '';
-            if (isChipSeq) {
-                if (targetHash[value] !== undefined)
-                    description = targetHash[value].description;
-            } else {
-                if (dataTypeLabelHash[value] !== undefined) {
-                    description = dataTypeLabelHash[value].description;
-                }
-            }
-            // quote the end tags so HTML validator doesn't whine
-            $(table).append("<tr class='" + (row % 2 === 0 ? "even" : "odd") + "'><td title='" + description + "'>" + value + "<\/td><td id='" + value + "' class='dataItem' title='Click to search for " + value + " data'>" + exps[value] + "<\/td><\/tr>");
-            row++;
-        });
-
-        $(".dataItem").addClass("selectable");
-        $(".dataItem").click(function () {
-            // TODO: base on preview ?
-            var url = encodeProject.getSearchUrl(assembly);
-            if (isChipSeq) {
-                target = $(this).attr("id");
-                url += '&hgt_mdbVar1=antibody';
-                $.each(targetHash[target].antibodies, function (i, antibody) {
-                    url += '&hgt_mdbVal1=' + antibody;
-                });
-            } else {
-                dataType = dataTypeLabelHash[$(this).attr("id")].term;
-                url += '&hgt_mdbVar1=dataType&hgt_mdbVal1=' + dataType;
-            }
-            url += '&hgt_mdbVar2=view&hgt_mdbVal2=Any';
-            // TODO: open search window 
-            //window.open(url, "searchWindow");
-            window.location = url;
-        });
-
-        $(table).append("<tr><td class='totals'>Total: " + types.length + "<\/td><td class='totals'>" + total + "<\/td><\/tr>");
-        if (total === 0) {
-            $(table).remove();
-        }
-    }
+    var $summaryTables = $('.summaryTable');
 
     function handleServerData(responses) {
         // Main actions, called when loading data from server is complete
-        var experiments = responses[0], dataTypes = responses[1], 
-                        antibodies = responses[2], expIds = responses[3];
-        var antibodyHash = {}, dataTypeHash = {}, 
-                cellAssayExps = {}, tfbsExps = {},  refGenomeExps = {};
+        var experiments = responses[0], 
+            dataTypes = responses[1], 
+            antibodies = responses[2], 
+            expIds = responses[3];
+
+        var cellAssayExps = {}, tfbsExps = {},  refGenomeExps = {};
         var refGenomeTypes = [], elementTypes = [], tfbsTypes = [];
         var dataType, antibody, target;
 
+        encodeMatrix.show($summaryTables);
 
-        hideLoadingImage(spinner);
-        $('.summaryTable').show();
-        $('#searchTypePanel').show();
-
-        $("#pageHeader").text(header);
-        document.title = 'ENCODE ' + header;
-
-        $.each(antibodies, function (i, antibody) {
-            antibodyHash[antibody.term] = antibody;
-            target = antibody.target;
-            if (targetHash[target] === undefined) {
-                targetHash[target] = {
-                    count: 0,   // experiments
-                    description: antibody.targetDescription,
-                    antibodies: []
-                };
-            }
-            targetHash[target].antibodies.push(antibody.term)
-        });
         antibodyGroups = encodeProject.getAntibodyGroups(antibodies);
-
-        $.each(dataTypes, function (i, item) {
-            dataTypeHash[item.term] = item;
-            dataTypeLabelHash[item.label] = item;
-        });
+        encodeProject.getDataGroups(dataTypes);
 
         // use to filter out experiments not in this assembly
         expIdHash = encodeProject.getExpIdHash(expIds);
 
         $.each(experiments, function (i, exp) {
-            // todo: filter out with arg to hgApi
-            if (exp.organism !== organism) {
-                return true;
-            }
             // experiment not in this assembly
             if (expIdHash[exp.ix] === undefined) {
                 return true;
             }
             antibody = encodeProject.antibodyFromExp(exp);
             if (antibody) {
-                target = encodeProject.targetFromAntibody(antibody, antibodyHash);
+                target = encodeProject.targetFromAntibody(antibody);
             }
             // add experiments into the appropriate table object
             if (exp.cellType === 'None') {
-                dataType = dataTypeHash[exp.dataType].label;
+                dataType = encodeProject.getDataType(exp.dataType);
+                if (dataType !== undefined) {
+                    dataType = dataType.label;
+                } else {
+                    dataType = exp.dataType;
+                }
                 if (!refGenomeExps[dataType]) {
                     refGenomeExps[dataType] = 0;
                 }
@@ -138,14 +66,18 @@ $(function () {
                 }
                 tfbsExps[target]++;
             } else {
-                dataType = dataTypeHash[exp.dataType].label;
+                dataType = encodeProject.getDataType(exp.dataType);
+                if (dataType !== undefined) {
+                    dataType = dataType.label;
+                } else {
+                    dataType = exp.dataType;
+                }
                 if (!cellAssayExps[dataType]) {
                     cellAssayExps[dataType] = 0;
                 }
                 cellAssayExps[dataType]++;
             }
         });
-
         // fill in tables and activate buttons
         tableOut("#refGenomeTable", refGenomeTypes, refGenomeExps, false);
         tableOut("#elementTable", elementTypes, cellAssayExps, false);
@@ -158,36 +90,67 @@ $(function () {
             window.location = "encodeChipMatrixHuman.html";
         });
     }
-    // initialize
 
-    // get server from calling web page (intended for genome-preview)
-    if ('encodeDataMatrix_server' in window) {
-        server = encodeDataMatrix_server;
-    } else {
-        server = document.location.hostname;
-        // or document.domain ?
+    function tableOut(table, types, exps, isChipSeq) {
+        // Helper function to output tables to document
+        var total = 0, row = 0;
+        var dataType, antibodyTarget;
+
+        $.each(exps, function (key, value) {
+            types.push(key);
+            total += parseInt(value, 10);
+        });
+        types.sort(encodeProject.cmpNoCase);
+
+        // lay out table
+        $.each(types, function (i, value) {
+            description = '';
+            if (isChipSeq) {
+                antibodyTarget = encodeProject.getAntibodyTarget(value);
+                if (antibodyTarget !== undefined) {
+                    description = antibodyTarget.description;
+                }
+            } else {
+                dataType = encodeProject.getDataTypeByLabel(value);
+                if (dataType !== undefined) {
+                    description = dataType.description;
+                }
+            }
+            // quote the end tags so HTML validator doesn't whine
+            $(table).append("<tr class='" + (row % 2 === 0 ? "even" : "odd") + "'><td title='" + description + "'>" + value + "<\/td><td id='" + value + "' class='dataItem' title='Click to search for " + value + " data'>" + exps[value] + "<\/td><\/tr>");
+            row++;
+        });
+
+        $(".dataItem").addClass("selectable");
+        $(".dataItem").click(function () {
+            // TODO: base on preview ?
+            var url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
+            if (isChipSeq) {
+                target = $(this).attr("id");
+                url += '&hgt_mdbVar1=antibody';
+                antibodyTarget = encodeProject.getAntibodyTarget(target);
+                $.each(antibodyTarget.antibodies, function (i, antibody) {
+                    url += '&hgt_mdbVal1=' + antibody;
+                });
+            } else {
+                dataType = $(this).attr("id");
+                url += '&hgt_mdbVar1=dataType&hgt_mdbVal1=' + dataType;
+            }
+            url += '&hgt_mdbVar2=view&hgt_mdbVal2=Any';
+            // TODO: open search window 
+            window.open(url, "searchWindow");
+            //window.location = url;
+        });
+
+        $(table).append("<tr><td class='totals'>Total: " + types.length + "<\/td><td class='totals'>" + total + "<\/td><\/tr>");
+        if (total === 0) {
+            $(table).remove();
+        }
     }
 
-    // variables from calling page
-    organism = encodeDataSummary_organism;
-    assembly = encodeDataSummary_assembly;
-    $("#assemblyLabel").text(assembly);
-    header = encodeDataSummary_pageHeader;
-    $("#pageHeader").text(header);
-    document.title = 'ENCODE ' + header;
+    // initialize
 
-    encodeProject.setup({
-        server: server,
-        assembly: assembly
-    });
-
-    // add radio buttons for search type to specified div on page
-    encodeProject.addSearchPanel('#searchTypePanel');
-
-    // show only spinner until data is retrieved
-    $('#searchTypePanel').hide();
-    $('.summaryTable').hide();
-    spinner = showLoadingImage("spinner", true);
+    encodeMatrix.start($summaryTables);
 
     // load data from server
     encodeProject.loadAllFromServer(requests, handleServerData);
