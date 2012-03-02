@@ -1,4 +1,4 @@
-/* encodeAssayMatrix.js - ENCODE Data Matrix application
+/* encodeDataMatrix.js - ENCODE Data Matrix application
 
       Pulls experiment table and metadata from server 
       and displays in matrix of assay vs. cell type
