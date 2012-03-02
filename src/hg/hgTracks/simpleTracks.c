@@ -9669,7 +9669,6 @@ pgSnpFreeList(((struct pgSnp **)(&tg->items)));
 void loadPgSnp(struct track *tg)
 /* Load up pgSnp (personal genome SNP) type tracks */
 {
-char query[256];
 struct customTrack *ct = tg->customPt;
 char *table = tg->table;
 struct sqlConnection *conn;
@@ -9680,8 +9679,11 @@ else
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
     }
-safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart < %d and chromEnd > %d", table, chromName, winEnd, winStart);
-tg->items = pgSnpLoadByQuery(conn, query);
+struct dyString *query = dyStringCreate("select * from %s where ", table);
+hAddBinToQuery(winStart, winEnd, query);
+dyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d",
+	       chromName, winEnd, winStart);
+tg->items = pgSnpLoadByQuery(conn, query->string);
 /* base coloring/display decision on count of items */
 tg->customInt = slCount(tg->items);
 hFreeConn(&conn);
