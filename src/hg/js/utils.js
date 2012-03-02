@@ -511,7 +511,7 @@ function warnBoxJsSetup()
     html += "document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';";
     html += "var warnBox=document.getElementById('warnBox');";
     html += "warnBox.style.display=''; warnBox.style.width='65%%';";
-    html += "document.getElementById('warnHead').innerHTML='Error(s):';";
+    html += "document.getElementById('warnHead').innerHTML='Warning/Error(s):';";
     html +=  "window.scrollTo(0, 0);";
     html += "}";
     html += "function hideWarnBox() {";
