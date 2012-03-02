@@ -151,7 +151,69 @@ var encodeMatrix = (function () {
        // TODO: restrict to IE
        $table.rotateTableCellContent({className: 'verticalText'});
        $(this).attr('disabled', 'disabled');
-    }
+    },
 
-    };
+    tableMatrixOut: function ($table, matrix, cellTiers, groups, expCounts, rowAddCells) {
+        // Fill in matrix --
+        // add rows with cell type labels (column 1) and cells for experiments
+        // add sections for each Tier of cell type
+
+        var maxLen, karyotype, cellType;
+        var $row;
+
+        // add sections for each Tier of cells
+        $.each(cellTiers, function (i, tier) {
+            //skip bogus 4th tier (not my property ?)
+            if (tier === undefined) {
+                return true;
+            }
+            $row = $('<tr class="matrix"><th class="groupType">' +
+                                "Tier " + tier.term + '</th></td></tr>');
+            rowAddCells($row, groups, expCounts, matrix, null);
+            $table.append($row);
+            maxLen = 0;
+
+            $.each(tier.cellTypes, function (i, term) {
+                if (!term) {
+                    return true;
+                }
+                if (!matrix[term]) {
+                    return true;
+                }
+                cellType = encodeProject.getCellType(term);
+                karyotype = cellType.karyotype;
+                if (karyotype !== 'cancer' && karyotype !== 'normal') {
+                    karyotype = 'unknown';
+                }
+                // note karyotype bullet layout requires non-intuitive placement
+                // in code before the span that shows to it's left
+                $row = $('<tr>' +
+                    '<th class="elementType">' +
+                    '<span style="float:right; text-align: right;" title="karyotype: ' + karyotype + '" class="karyotype ' + karyotype + '">&bull;</span>' +
+                    '<span title="' + cellType.description + '"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' + cellType.term + '">' + cellType.term + '</a>' +
+                    '</th>'
+                    );
+                maxLen = Math.max(maxLen, cellType.term.length);
+
+                rowAddCells($row, groups, expCounts, matrix, cellType.term);
+                $table.append($row);
+            });
+            // adjust size of row headers based on longest label length
+            $('tbody th').css('height', '1em');
+            $('tbody th').css('width', (String((maxLen/2 + 2)).concat('em')));
+        });
+        $('body').append($table);
+    },
+
+    tableOut: function ($table, matrix, cellTiers, groups, expCounts, tableHeaderOut, rowAddCells) {
+        // Create table with rows for each cell type and columns for each antibody target
+
+        tableHeaderOut($table, groups, expCounts);
+        encodeMatrix.tableMatrixOut($table, matrix, cellTiers, groups, expCounts, rowAddCells);
+
+        encodeMatrix.addTableFloatingHeader($table);
+        encodeMatrix.rotateTableCells($table);
+        encodeMatrix.hoverTableCrossHair($table);
+    }
+};
 }());
