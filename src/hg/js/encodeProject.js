@@ -16,7 +16,9 @@ var encodeProject = (function () {
         cgi = "/cgi-bin/hgApi?";
 
     var accessionPrefix = 'wgEncodeE?';
-    var dataTypeLabelHash = {}, dataTypeTermHash = {}, cellTypeTermHash = {};
+    var dataTypeLabelHash = {}, dataTypeTermHash = {};
+    var cellTypeTermHash = {};
+    var antibodyHash = {}, antibodyTargetHash = {};
 
     // Functions
 
@@ -107,22 +109,21 @@ var encodeProject = (function () {
         },
 
         getDataType: function (term) {
-            // Return cellType object from term
+            // Return dataType object using term
             // Needs loader function (using getDataGroups below for now)
-            if (dataTypeTermHash !== undefined && 
-                dataTypeTermHash[term] !== undefined) {
-                    return dataTypeTermHash[term];
+            if (dataTypeTermHash !== undefined) {
+                return dataTypeTermHash[term];
             }
-            return null;
+            return undefined;
         },
 
         getDataTypeByLabel: function (label) {
-            // Return hash of dataTypes keyed by term
+            // Return dataType object using label
             // Needs loader function (using getDataGroups below for now)
-            if (dataTypeLabelHash !== undefined && 
-                dataTypeLabelHash[label] !== undefined) {
-                    return dataTypeLabelHash[label];
+            if (dataTypeLabelHash !== undefined) {
+                return dataTypeLabelHash[label];
             }
+            return undefined;
         },
 
         getDataGroups: function (dataTypes) {
@@ -173,11 +174,10 @@ var encodeProject = (function () {
         getCellType: function (cellType) {
             // Return cellType object from term
             // Needs loader function (using getCellTiers below for now)
-            if (cellTypeTermHash !== undefined && 
-                cellTypeTermHash[cellType] !== undefined) {
-                    return cellTypeTermHash[cellType];
+            if (cellTypeTermHash !== undefined) {
+                return cellTypeTermHash[cellType];
             }
-            return null;
+            return undefined;
         },
 
         getCellTiers: function (cellTypes) {
@@ -223,11 +223,23 @@ var encodeProject = (function () {
             }
         },
 
-        targetFromAntibody: function (antibody, antibodyCV) {
-            // Get target for antibody from antibody controlled vocab
-            if (antibodyCV[antibody]) {
-                return antibodyCV[antibody].target;
+        targetFromAntibody: function (antibody ) {
+            // Get target for antibody
+            // Needs loader function (using getAntibodyGroups below)
+
+            if (antibodyHash !== undefined &&
+                antibodyHash[antibody] !== undefined) {
+                    return antibodyHash[antibody].target;
             }
+            return undefined;
+        },
+
+        getAntibodyTarget: function (target) {
+            // Get target object by term
+            if (antibodyTargetHash !== undefined) {
+                return antibodyTargetHash[target];
+            }
+            return undefined;
         },
 
         isHistone: function (target) {
@@ -245,8 +257,15 @@ var encodeProject = (function () {
             var antibodyGroups = [],
                 antibodyGroupHash = {},
                 group, target;
+
             $.each(antibodies, function (i, antibody) {
-                group = encodeProject.isHistone(antibody.target) ? 
+                // populate hashes to lookup antibodies by target and vice versa
+                // organize into groups (histones vs TFs)
+                antibodyHash[antibody.term] = antibody;
+                target = antibody.target;
+
+                // pull out of loop if needed to improve perf
+                group = encodeProject.isHistone(target) ? 
                         "Histone Modification" : "Transcription Factor";
                 if (!antibodyGroupHash[group]) {
                     antibodyGroupHash[group] = {
@@ -254,8 +273,18 @@ var encodeProject = (function () {
                         targets: []
                     };
                 }
-                antibodyGroupHash[group].targets.push(antibody.target);
+                if (antibodyTargetHash[target] === undefined) {
+                    antibodyTargetHash[target] = {
+                        description: antibody.targetDescription,
+                        antibodies: []
+                        };
+                    antibodyGroupHash[group].targets.push(target);
+                }
+                antibodyTargetHash[target].antibodies.push(antibody.term);
             });
+
+            // unpack temp stash into sorted array of groups containing
+            // sorted array of antibody targets
             $.each(antibodyGroupHash, function (key, item) {
                 antibodyGroups.push(item);
             });

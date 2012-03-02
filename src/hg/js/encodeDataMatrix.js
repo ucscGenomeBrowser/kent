@@ -75,7 +75,7 @@ $(function () {
             // so don't need hash for those
             dataType = exp.dataType;
             if (dataTypeExps[dataType] === undefined) {
-                dataTypeExps[dataType] = 1;
+                dataTypeExps[dataType] = 0;
             }
             dataTypeExps[dataType]++;
 
@@ -92,7 +92,7 @@ $(function () {
     }
 
     function tableHeaderOut($table, dataGroups, dataTypeExps) {
-        // Generate table header and add to DOM
+        // Generate table header and add to document
         // NOTE: relies on hard-coded classes and ids
 
         var $tableHeader, $thead;
@@ -110,7 +110,6 @@ $(function () {
             $tableHeader.append('<th class="groupType"><div class="verticalText">' + 
                                 group.label + '</div></th>');
             maxLen = Math.max(maxLen, group.label.length);
-
             $thead.before('<colgroup></colgroup>');
             $.each(group.dataTypes, function (i, label) {
                 dataType = encodeProject.getDataTypeByLabel(label);
@@ -122,7 +121,7 @@ $(function () {
                                         '"><div class="verticalText">' + dataType.label + 
                                         '</div></th>');
                     // add colgroup element to support cross-hair hover effect
-                    $thead.before('<colgroup class="dataTypeCol"></colgroup>');
+                    $thead.before('<colgroup class="experimentCol"></colgroup>');
                     maxLen = Math.max(maxLen, dataType.label.length);
                 }
             });
@@ -138,7 +137,6 @@ $(function () {
         // null cellType indicates this is a row for a cell group (tier)
 
         var $td;
-        var dataType, url;
 
         $.each(dataGroups, function (i, group) {
             // skip group header
@@ -176,7 +174,6 @@ $(function () {
                             ' ' + ' in ' + $(this).data().cellType +' cells');
                 });
                 $td.click(function() {
-                   // TODO: base on preview ?
                     var url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
                     // TODO: encapsulate var names
                     url +=
@@ -207,8 +204,8 @@ $(function () {
                                 "Tier " + tier.term + '</th></td></tr>');
             rowAddCells($row, dataGroups, dataTypeExps, matrix, null);
             $table.append($row);
-
             maxLen = 0;
+
             $.each(tier.cellTypes, function (i, term) {
                 if (!term) {
                     return true;

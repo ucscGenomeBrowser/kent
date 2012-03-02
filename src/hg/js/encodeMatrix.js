@@ -136,7 +136,7 @@ var encodeMatrix = (function () {
                     $(this).parent().addClass('crossHair');
                 }
                 $col = $('colGroup').eq($(this).index());
-                if ($col.hasClass('dataTypeCol')) {
+                if ($col.hasClass('experimentCol')) {
                     $col.addClass('crossHair');
                 }
             } else {
