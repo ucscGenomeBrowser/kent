@@ -112,7 +112,7 @@ errAbort(
   "               Default is %d.\n"
   "   -maxNtSize=N Maximum size of untranslated DNA query sequence\n"
   "               Default is %d\n"
-  "   -maxAsSize=N Maximum size of protein or translated DNA queries\n"
+  "   -maxAaSize=N Maximum size of protein or translated DNA queries\n"
   "               Default is %d\n"
   "   -canStop If set then a quit message will actually take down the\n"
   "            server\n"
