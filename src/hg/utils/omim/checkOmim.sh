@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 #	Do not modify this script, modify the source tree copy:
 #	src/utils/omim/checkOmim.sh
@@ -61,7 +61,7 @@ fi
 
 #	see if anything is changing, if so, email notify, download, and build
 
-diff prev.release.list release.list  >release.diff
+diff prev.release.list release.list  >release.diff || true
 WC=`cat release.diff | wc -l`
 if [ "${WC}" -gt 1 ]; then
     echo -e "New OMIM update noted at:\n" \
@@ -104,6 +104,7 @@ bye" > ftp.omim.rsp
 ftp -n -v -i grcf.jhmi.edu  < ftp.omim.rsp > ftp.log
 
 # build the new OMIM track tables for hg18
+rm -rf hg18
 mkdir -p hg18
 cd hg18
 
@@ -116,6 +117,7 @@ ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
 cd ..
 
 # build the new OMIM track tables for hg19
+rm -rf hg19
 mkdir -p hg19
 cd hg19
 
@@ -127,4 +129,5 @@ ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
 ../../buildOmimTracks.csh hg19
 
 fi
+echo "All Finished" | mail -s "OMIM update finished" ${EMAIL}
 

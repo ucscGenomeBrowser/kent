@@ -662,3 +662,32 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+#####################################################################
+# BLASTZ/CHAIN/NET DM3  Swap (DONE - 2012-03-02 - Chin)
+
+    cd /cluster/data/dm3/bed/blastz.droVir2.2012-03-01
+    cat fb.dm3.chainDroVir2Link.txt
+    # 75854911 bases of 162367812 (46.718%) in intersection
+
+    # swap droVir2
+    mkdir /cluster/data/droVir2/bed/blastz.dm3.swap
+    cd /cluster/data/droVir2/bed/blastz.dm3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /cluster/data/dm3/bed/blastz.droVir2/DEF \
+        -swap -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 > swap.log 2>&1 &
+    # real    10m3.062s
+    tail swap.log
+    #  *** All done !  Elapsed time: 10m3s
+    # *** Make sure that goldenPath/droVir2/vsDm3/README.txt is accurate.
+    # *** Add {chain,net}Dm3 tracks to trackDb.ra if necessary.
+
+    cat fb.droVir2.chainDm3Link.txt
+    # 83468526 bases of 189914823 (43.951%) in intersection
+
+
+
+#####################################################################
+
