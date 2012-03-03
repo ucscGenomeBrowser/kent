@@ -51,7 +51,7 @@ include wgEncodeAffyRnaChip.ra
 include wgEncodeGisChiaPet.ra alpha
 
 # UMass-Dekker 5C (wrangler: kate)
-include wgEncodeUmassDekker5C.ra alpha
+include wgEncodeUmassDekker5C.ra alpha,beta
 
 # UW 5C (wrangler: kate)
 include wgEncodeUw5C.ra beta,public
@@ -146,8 +146,7 @@ include wgEncodeHaibMethylWgbs.ra alpha
 
 #Broad Histone (wrangler: Matt and Venkat)
 #include wgEncodeBroadHistone.release3.ra alpha
-include wgEncodeBroadHistone.release2.ra alpha,beta
-include wgEncodeBroadHistone.ra public
+include wgEncodeBroadHistone.release2.ra
 
 #Broad HMM (wrangler: Matt)
 include wgEncodeBroadHmm.ra
@@ -178,6 +177,9 @@ include wgEncodeSydhTfbs.release2.ra alpha
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra beta,public
 include wgEncodeUchicagoTfbs.release2.ra alpha
+
+# U Mass Weng TFBS Valid
+include wgEncodeUmassWengTfbsValid.ra alpha
 
 # SUNY RBP -----------------------------------------
 

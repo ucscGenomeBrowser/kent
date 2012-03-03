@@ -16,6 +16,9 @@ var encodeProject = (function () {
         cgi = "/cgi-bin/hgApi?";
 
     var accessionPrefix = 'wgEncodeE?';
+    var dataTypeLabelHash = {}, dataTypeTermHash = {};
+    var cellTypeTermHash = {};
+    var antibodyHash = {}, antibodyTargetHash = {};
 
     // Functions
 
@@ -31,6 +34,11 @@ var encodeProject = (function () {
             if (settings.assembly) {
                 assembly = settings.assembly;
             }
+        },
+
+        getAssembly: function () {
+            // Get currently set assembly
+            return assembly;
         },
 
         getServer: function () {
@@ -80,30 +88,6 @@ var encodeProject = (function () {
                 a.term.toLowerCase().localeCompare(b.term.toLowerCase()));
         },
 
-        // User interface
-
-        addSearchPanel: function (divId) {
-            // Create panel of radio buttons for user to select search type
-            // Add to passed in HTML div ID; e.g. #searchTypePanel
-            return $(divId).append('<span id="searchPanelTitle"><strong>Search for:</strong></span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">Tracks<input type="radio" name="searchType" id="searchFiles" value="files">Files');
-        },
-
-        getSearchUrl: function (assembly, vars) {
-            // Return URL for search of type requested in search panel
-
-            var prog, cartVar, url;
-            if ($('input:radio[name=searchType]:checked').val() === "tracks") {
-                prog = 'hgTracks';
-                cartVar = 'hgt_tSearch';
-            } else {
-                prog = "hgFileSearch";
-                cartVar = "hgfs_Search";
-            }
-             url = '/cgi-bin/' + prog + '?db=' + assembly + '&' + cartVar + '=search' +
-                    '&tsCurTab=advancedTab&hgt_tsPage=';
-            return (url);
-        },
-
         getSearchType: function () {
             return $('input:radio[name=searchType]:checked').val();
         },
@@ -114,19 +98,41 @@ var encodeProject = (function () {
             return accession.slice(accessionPrefix.length);
         },
 
-        getExpIdHash: function (expIds) {
+        getExpIdHash: function (ids) {
             // Return hash of experiment ID's
-            var expIdHash = {};
-            $.each(expIds, function (i, expId) {
-                expIdHash[expId.expId] = true;
+
+            var hash = {};
+            $.each(ids, function (i, id) {
+                hash[id.expId] = true;
             });
-            return expIdHash;
+            return hash;
+        },
+
+        getDataType: function (term) {
+            // Return dataType object using term
+            // Needs loader function (using getDataGroups below for now)
+            if (dataTypeTermHash !== undefined) {
+                return dataTypeTermHash[term];
+            }
+            return undefined;
+        },
+
+        getDataTypeByLabel: function (label) {
+            // Return dataType object using label
+            // Needs loader function (using getDataGroups below for now)
+            if (dataTypeLabelHash !== undefined) {
+                return dataTypeLabelHash[label];
+            }
+            return undefined;
         },
 
         getDataGroups: function (dataTypes) {
+            // Unpack JSON list of dataTypes
             // Return sorted array of dataGroup objects each having a .label,
             // .dataTypes, 
             // and an array of dataTypes, alphasorted, with 'Other' last
+            // Also populates hashes for lookup by term or label (for now)
+
             var dataGroupHash = {},
                 dataGroups = [],
                 otherGroup, group;
@@ -135,6 +141,9 @@ var encodeProject = (function () {
                 if (!group) {
                     return true;
                 }
+                // stash hashes for lookup by utility functions
+                dataTypeTermHash[dataType.term] = dataType;
+                dataTypeLabelHash[dataType.label] = dataType;
                 if (!dataGroupHash[group]) {
                     dataGroupHash[group] = {
                         label: group,
@@ -162,10 +171,20 @@ var encodeProject = (function () {
             return dataGroups;
         },
 
+        getCellType: function (cellType) {
+            // Return cellType object from term
+            // Needs loader function (using getCellTiers below for now)
+            if (cellTypeTermHash !== undefined) {
+                return cellTypeTermHash[cellType];
+            }
+            return undefined;
+        },
+
         getCellTiers: function (cellTypes) {
+            // Unpack JSON list of cellTypes
             // Return sorted array of cellTier objects each having a .term,
-            // with tier number, .celltypes, 
-            // and an array of cell types, alphasorted
+            // with tier number, .celltypes, and an array of cell types, alphasorted
+            // Also loads hash for lookup by term (for now)
             var cellTiers = [],
                 tier;
             $.each(cellTypes, function (i, cellType) {
@@ -174,6 +193,7 @@ var encodeProject = (function () {
                 if (!tier) {
                     return true;
                 }
+                cellTypeTermHash[cellType.term] = cellType;
                 if (!cellTiers[tier]) {
                     cellTiers[tier] = {
                         term: tier,
@@ -203,11 +223,23 @@ var encodeProject = (function () {
             }
         },
 
-        targetFromAntibody: function (antibody, antibodyCV) {
-            // Get target for antibody from antibody controlled vocab
-            if (antibodyCV[antibody]) {
-                return antibodyCV[antibody].target;
+        targetFromAntibody: function (antibody ) {
+            // Get target for antibody
+            // Needs loader function (using getAntibodyGroups below)
+
+            if (antibodyHash !== undefined &&
+                antibodyHash[antibody] !== undefined) {
+                    return antibodyHash[antibody].target;
             }
+            return undefined;
+        },
+
+        getAntibodyTarget: function (target) {
+            // Get target object by term
+            if (antibodyTargetHash !== undefined) {
+                return antibodyTargetHash[target];
+            }
+            return undefined;
         },
 
         isHistone: function (target) {
@@ -225,8 +257,15 @@ var encodeProject = (function () {
             var antibodyGroups = [],
                 antibodyGroupHash = {},
                 group, target;
+
             $.each(antibodies, function (i, antibody) {
-                group = encodeProject.isHistone(antibody.target) ? 
+                // populate hashes to lookup antibodies by target and vice versa
+                // organize into groups (histones vs TFs)
+                antibodyHash[antibody.term] = antibody;
+                target = antibody.target;
+
+                // pull out of loop if needed to improve perf
+                group = encodeProject.isHistone(target) ? 
                         "Histone Modification" : "Transcription Factor";
                 if (!antibodyGroupHash[group]) {
                     antibodyGroupHash[group] = {
@@ -234,8 +273,18 @@ var encodeProject = (function () {
                         targets: []
                     };
                 }
-                antibodyGroupHash[group].targets.push(antibody.target);
+                if (antibodyTargetHash[target] === undefined) {
+                    antibodyTargetHash[target] = {
+                        description: antibody.targetDescription,
+                        antibodies: []
+                        };
+                    antibodyGroupHash[group].targets.push(target);
+                }
+                antibodyTargetHash[target].antibodies.push(antibody.term);
             });
+
+            // unpack temp stash into sorted array of groups containing
+            // sorted array of antibody targets
             $.each(antibodyGroupHash, function (key, item) {
                 antibodyGroups.push(item);
             });

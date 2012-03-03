@@ -1212,9 +1212,8 @@ done >> fr3.8way.maf
     cd /hive/data/genomes/fr3/bed/multiz8way/frames
     mkdir genes
 
-    #	we get more annotations using the ensGene on mm9 and hg19
     #	instead of knownGene, so, using ensGene for hg19 and mm9
-fr3 - all_est - Fugu ESTs
+fr3 - the lifted ensGene from fr2
 tetNig2 - ensGene
 oreNil1 - none
 gasAcu1 - ensGene
