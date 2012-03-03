@@ -65,7 +65,7 @@ outf    = mustOpen(outFn, "w");
 
 /* process omimGeneMap records with *p* or *q* locations */
 sprintf(query2,
-        "select omimId, location from omimGeneMap where location like '\%cp%c' or location like '%cq%c'", 
+        "select omimId, location from omimGeneMapNew where location like '\%cp%c' or location like '%cq%c'", 
         '%','%', '%','%');
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);

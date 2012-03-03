@@ -45,7 +45,7 @@ conn3= hAllocConn(database);
 outFn   = argv[2];
 outf    = mustOpen(outFn, "w");
 
-sprintf(query1, "select omimId, geneId from omim2gene where geneId <>'-' and entryType='gene' ");
+sprintf(query1, "select omimId, geneId from omim2geneNew where geneId <>'-' and entryType='gene' ");
 sr1 = sqlMustGetResult(conn1, query1);
 row1 = sqlNextRow(sr1);
 while (row1 != NULL)
