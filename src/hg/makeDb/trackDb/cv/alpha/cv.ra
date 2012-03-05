@@ -11674,6 +11674,7 @@ term FASP
 tag FASP
 description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
+label FASP proteomics #provisional
 
 term In-gel
 tag INGEL
@@ -11685,46 +11686,55 @@ term PCR1x
 tag PCR1X
 description 1-cycle of PCR (Myers)
 type protocol
+label PCR 1-cycle #provisional
 
 term PCR2x
 tag PCR2X
 description 2-cycles of PCR (Myers)
 type protocol
+label PCR 2-cycle #provisional
 
 term SDS-Page
 tag SDSPAGE
 description SDS-Page proteomics sample preparation protocol (Giddings)
 type protocol
+label SDS-Page proteomics sample
 
 term v041610.1
 tag V0416101
 description 2x10^7 cells, fragmentation by bioruptor, one 15-cycle round of PCR (Myers)
 type protocol
+label biorupter, PCR 1-cycle #provisional
 
 term v041610.2
 tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
-type protocol
+type protocol 
+label sonicator, PCR 1-cycle #provisional
 
 term v042211.1
 tag V0422111
 description Faster ChIP protocol & AMpure XP size selection for ChIP-seq (Myers)
 type protocol
+label ChIP AMpure XP #provisional
 
 term v042211.2
 tag V0422112
 description Faster ChIP protocol & gel size selection for ChIP-seq (Myers)
 type protocol
+label ChIP gel #provisional
 
 term TAP-Only
 tag TAP
 description This kind of library was made from RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
 type protocol
+label Tobacco Acid Pyrophosphatase Only #provisional
 
 term CIP-TAP
 tag CIPTAP
 description This kind of library was made from RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
 type protocol
+label CIP-TAP #provisional
 
 ### phase
 
