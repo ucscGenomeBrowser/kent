@@ -2789,7 +2789,7 @@ tag HMEPC
 type Cell Line
 tier 3
 organism human
-description Mammary Epithelial Cells (placeholder, waiting on second lot/donor from PromoCell)
+description Mammary Epithelial Cells 
 lineage missing
 karyotype normal
 sex F
@@ -2801,7 +2801,8 @@ termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
 lab Gingeras
 protocol Gingeras:HMEpC_Gingeras_protocol.pdf
-
+# (placeholder, waiting on second lot/donor from PromoCell)
+ 
 term HMEpC_6022801.3
 tag HMEPC60228013
 type Cell Line
@@ -5011,7 +5012,7 @@ tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
-description Brown adipocytes tissue PROVISIONAL
+description Brown adipocytes tissue 
 vendorName Jerrold M. Olefsky Lab, UCSD
 termId 7188
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
@@ -5080,7 +5081,7 @@ type Cell Line
 organism mouse
 tissue blood
 category primaryCells
-description Bone marrow derived macrophage PROVISIONAL
+description Bone marrow derived macrophage 
 age ageUnknown
 strain Unknown
 vendorName Genhong Cheng Lab, UCLA
@@ -5294,8 +5295,8 @@ tag ESE14
 type Cell Line
 organism mouse
 category primaryCells
-description E14 mouse ES line PROVISIONAL
-age E14
+description mouse embryonic stem cell line E14
+age E0
 strain 129/Ola
 vendorName Santos lab
 vendorId E0
@@ -5692,7 +5693,7 @@ tag MGER
 type Cell Line
 organism mouse
 category cellLine
-description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with &Beta;-estradiol treatment PROVISIONAL
+description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with &Beta;-estradiol treatment 
 age immortalized
 strain Unknown
 tissue blood
@@ -5931,7 +5932,7 @@ tissue stomach
 category Tissue
 age ageUnknown
 strain Unknown
-description Stomach PROVISIONAL
+description Stomach 
 vendorName CSHL lab
 vendorId Stomach
 orderUrl http://gingeraslab.cshl.edu/
@@ -5949,7 +5950,7 @@ tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
-description Subcutaneous Adipose tissue PROVISIONAL
+description Subcutaneous Adipose tissue 
 vendorName CSHL lab
 vendorId Subcutaneous Adipose tissue
 orderUrl http://gingeraslab.cshl.edu/
@@ -6004,7 +6005,7 @@ tissue blood
 age ageUnknown
 strain Unknown
 category primaryCells
-description Activated primary CD4 effector cells, isolated ex vivo PROVISIONAL
+description Activated primary CD4 effector cells, isolated ex vivo 
 vendorName Stam lab
 vendorId THelper-Activated
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -6040,7 +6041,7 @@ tissue blood
 age ageUnknown
 strain Unknown
 category primaryCells
-description Activated primary T regulatory cells, isolated ex vivo PROVISIONAL
+description Activated primary T regulatory cells, isolated ex vivo 
 vendorName Stam lab
 vendorId TReg-Activated
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -11361,37 +11362,37 @@ label 14 day diff protocol A
 term diffProtB_6hr
 tag DIFFB6H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours. Doxycycline added to a final concentration of 100 ng/ml. (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours. Doxycycline added to a final concentration of 100 ng/ml. (Stam) 
 label 6 hour diff protocol B
 
 term diffProtB_24hr
 tag DIFFB24H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) 
 label 24 hour diff protocol B
 
 term diffProtB_72hr
 tag DIFFB72H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) 
 label 72 hour diff protocol B
 
 term diffProtC_24hr
 tag DIFFC24H
 type treatment
-description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) 
 label 24 hour diff protocol C
 
 term diffProtC_48hr
 tag DIFFC48H
 type treatment
-description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) 
 label 48 hour diff protocol C
 
 term diffProtC_120hr
 tag DIFFC120H
 type treatment
-description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) 
 label 120 hour diff protocol C
 
 term diffProtD_7d
@@ -12656,8 +12657,8 @@ term adult-24wks
 tag ADULT24WKS
 type age
 stage Adult
-description Adult 24 weeks PROVISIONAL
-label Adult 24 weeks PROVISIONAL
+description Adult 24 weeks 
+label Adult 24 weeks 
 
 term immortalized
 tag IMMORTAL
