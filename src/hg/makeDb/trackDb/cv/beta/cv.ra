@@ -2789,7 +2789,7 @@ tag HMEPC
 type Cell Line
 tier 3
 organism human
-description Mammary Epithelial Cells (placeholder, waiting on second lot/donor from PromoCell)
+description Mammary Epithelial Cells 
 lineage missing
 karyotype normal
 sex F
@@ -2801,7 +2801,8 @@ termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
 lab Gingeras
 protocol Gingeras:HMEpC_Gingeras_protocol.pdf
-
+# (placeholder, waiting on second lot/donor from PromoCell)
+ 
 term HMEpC_6022801.3
 tag HMEPC60228013
 type Cell Line
