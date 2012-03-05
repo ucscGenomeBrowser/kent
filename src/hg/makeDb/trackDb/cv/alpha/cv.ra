@@ -12698,21 +12698,25 @@ term supplemental
 tag SUP
 type attic
 description Files supplemental at composite level
+label supplemental
 
 term auxSup
 tag AUXSUP
 type attic
 description Unverified files supplemental at experiment level
+label auxSup
 
 term auxValid
 tag AUXVAL
 type attic
 description Validated files supplemental to experiments
+label auxValid
 
 term auxExp
 tag AUXEXP
 type attic
 description Supplemental experiments
+label auxExp
 
 # Expected fields:
 # ----------------
