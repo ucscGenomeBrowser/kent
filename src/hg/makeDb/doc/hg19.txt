@@ -17491,33 +17491,32 @@ TMPDIR=/scratch/tmp
 
 ############################################################################
 # ISCA AGGREGATE PATHOGENIC TRACKS (DONE 2012-02-08 b0b)
+# ISCA AGGREGATE PATHOGENIC TRACKS (UPDATE DONE 2012-03-03 b0b)
 
   # get files of ISCA Pathogenic Gain and Loss  
-    set today = `date +%Y_%m_%d`
-    mkdir /hive/data/genomes/hg19/bed/isca/$today
-    cd /hive/data/genomes/hg19/bed/isca/$today
-    hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
-      WHERE attrVals LIKE '%number_loss%'" hg19 > hg19.iscaPathLoss
-    hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
-      WHERE attrVals LIKE '%number_gain%'" hg19 > hg19.iscaPathGain
+    # set today = `date +%Y_%m_%d`
+    # mkdir /hive/data/genomes/hg19/bed/isca/$today
+    # cd /hive/data/genomes/hg19/bed/isca/$today
+    # using angie's dir for update
+    cd /hive/data/genomes/hg19/bed/isca/2012_03_02
 
   # make bedGraphs
-    sort hg19.iscaPathGain | bedItemOverlapCount hg19 stdin > hg19.iscaPathGain.bedGraph
-    wc -l hg19.iscaPathGain.bedGraph
-#   1857 hg19.iscaPathGain.bedGraph
+      hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
+        WHERE attrVals LIKE '%number_gain%'" hg19 | sort \
+        | bedItemOverlapCount hg19 stdin > iscaPathGain.bedGraph 
 
-    sort hg19.iscaPathLoss | bedItemOverlapCount hg19 stdin > hg19.iscaPathLoss.bedGraph
-    wc -l hg19.iscaPathLoss.bedGraph
-#   3237 hg19.iscaPathLoss.bedGraph
+      hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
+        WHERE attrVals LIKE '%number_loss%'" hg19 | sort \
+        | bedItemOverlapCount hg19 stdin > iscaPathLoss.bedGraph 
 
   # load tables
     hgLoadBed -bedGraph=4 hg19 iscaPathGainCum hg19.iscaPathGain.bedGraph
-#   Read 1857 elements of size 4 from hg19.iscaPathGain.bedGraph
+#   Read 1919 elements of size 4 from hg19.iscaPathGain.bedGraph
 
     hgLoadBed -bedGraph=4 hg19 iscaPathLossCum hg19.iscaPathLoss.bedGraph
-#   Read 3237 elements of size 4 from hg19.iscaPathLoss.bedGraph
+#   Read 3352 elements of size 4 from hg19.iscaPathLoss.bedGraph
  
-  # trackDb
+  # trackDb (these values from original load, not update)
   # get 2 stdDev value to set default maxHeightPixels 
     # use average of: median + 2 SD - would mean be better?
     # use same viewLimit for both:  average the two
