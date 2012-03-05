@@ -12720,6 +12720,7 @@ description Supplemental experiments
 # tag (machine-readable name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be sex)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional, same as description
 #
 # Category: T for tissue, L for cell Line, P for Primary cell
 
@@ -12727,16 +12728,19 @@ term Tissue
 tag T
 type category
 description Tissue
+label Tissue
 
 term cellLine
 tag L
 type category
 description cell line
+label cell line
 
 term primaryCells
 tag P
 type category
 description primary cells
+label primary cells
 
 term M
 tag M
