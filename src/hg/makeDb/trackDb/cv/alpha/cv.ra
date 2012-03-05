@@ -11307,11 +11307,6 @@ tag BMETH
 description 1 h with 100 nM Betamethasone (Myers)
 type treatment
 
-term Bone_marrow_derived_macrophage_differentiation
-tag BMDIFF
-description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter.
-type treatment
-
 term BPA_100nM
 tag BPA1H
 description 1 h with 100 nM Bisphenol A  (Myers)
@@ -11674,6 +11669,7 @@ term FASP
 tag FASP
 description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
+label FASP proteomics #provisional
 
 term In-gel
 tag INGEL
@@ -11685,46 +11681,55 @@ term PCR1x
 tag PCR1X
 description 1-cycle of PCR (Myers)
 type protocol
+label PCR 1-cycle #provisional
 
 term PCR2x
 tag PCR2X
 description 2-cycles of PCR (Myers)
 type protocol
+label PCR 2-cycle #provisional
 
 term SDS-Page
 tag SDSPAGE
 description SDS-Page proteomics sample preparation protocol (Giddings)
 type protocol
+label SDS-Page proteomics sample
 
 term v041610.1
 tag V0416101
 description 2x10^7 cells, fragmentation by bioruptor, one 15-cycle round of PCR (Myers)
 type protocol
+label biorupter, PCR 1-cycle #provisional
 
 term v041610.2
 tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
-type protocol
+type protocol 
+label sonicator, PCR 1-cycle #provisional
 
 term v042211.1
 tag V0422111
 description Faster ChIP protocol & AMpure XP size selection for ChIP-seq (Myers)
 type protocol
+label ChIP AMpure XP #provisional
 
 term v042211.2
 tag V0422112
 description Faster ChIP protocol & gel size selection for ChIP-seq (Myers)
 type protocol
+label ChIP gel #provisional
 
 term TAP-Only
 tag TAP
 description This kind of library was made from RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
 type protocol
+label Tobacco Acid Pyrophosphatase Only #provisional
 
 term CIP-TAP
 tag CIPTAP
 description This kind of library was made from RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
 type protocol
+label CIP-TAP #provisional
 
 ### phase
 
@@ -11770,26 +11775,31 @@ term chr21
 tag CHR21
 type region
 description Chromsome 21
+label chr21 #provisional
 
 term ENM
 tag ENM
 type region
 description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENM #provisional
 
 term ENR
 tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENR #provisional
 
 term UW-5C-Myc-Region
 tag UW5CMYC
 type region
 description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+label UW-5C-Myc-Region #provisional
 
 term UW-5C-Gene-Regions
 tag UW5CGENE
 type region
 description Set of 25 regions interrogated in UW 5C gene-targeted experiments
+label UW-5C-Gene-Regions #provisional
 
 ### restrictionEnzyme
 
@@ -11797,11 +11807,13 @@ term msp
 tag MSP
 description MSP Restriction Enzyme
 type restrictionEnzyme
+label msp #provisional
 
 term hpa
 tag HPA
 description HPA Restriction Enzyme
 type restrictionEnzyme
+label hpa #provisional
 
 ### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
 ### term:
@@ -12488,72 +12500,86 @@ description version
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be strain)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional
 
 term B10.H-2aH-4bp/Wts
 tag 2A4B
 type strain
 description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
+label B10.H-2aH-4bp/Wts
 # Used for the CH12 Cell Line
 
 term B6D2F1/J
 tag B6D2F1J
 type strain
 description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
+label B6D2F1/J
 
 term BALB/cAnN
 tag BALBCANN
 type strain
 description ccMyeloma high incidence H2d
+label BALB/cAnN
 
 term C3H
 tag C3H
 type strain
 description Strain C3H, Very related to C57BL/6
+label C3H
 
 term C57BL/6
 tag C57BL6
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
+label C57BL/6
 
 term C57BL/6J
 tag C57BL6J
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
+label C57BL/6J
 
 term CD-1
 tag CD1
 type strain
 description Multipurpose mouse used for safety testing, aging studies, surgical models and pseudopregnancy.
+label CD-1
 
 term NIH/Swiss
 tag NIHS
 type strain
 description An outbred Swiss mouse  used as a general-purpose stock. Used extensively for pertussis HSF testing.
+label NIH/Swiss
 
 term RIII
 tag RIII
 type strain
 description High mammary tumor incidence in unfostered substrains.
+label RIII
 
 term 129
 tag S129
 type strain
 description Strain 129, has widely available embryonic stem cells
+label 129
 
 term 129/Ola
 tag 129OLA
 type strain
 description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
+label 129/Ola
 
 term Spretus.BL6-Xist
 tag SPBL6
 type strain
 description M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
+label Spretus.BL6-Xist
 
 term Unknown
 tag UKN
 type strain
 description Unknown strain origin
+label Unknown
 
 ### Age
 # Used in conjunction with mouse submissions
@@ -12679,26 +12705,31 @@ label the age when the real age is unknown
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional, same as term
 
 term supplemental
 tag SUP
 type attic
 description Files supplemental at composite level
+label supplemental
 
 term auxSup
 tag AUXSUP
 type attic
 description Unverified files supplemental at experiment level
+label auxSup
 
 term auxValid
 tag AUXVAL
 type attic
 description Validated files supplemental to experiments
+label auxValid
 
 term auxExp
 tag AUXEXP
 type attic
 description Supplemental experiments
+label auxExp
 
 # Expected fields:
 # ----------------
@@ -12706,6 +12737,7 @@ description Supplemental experiments
 # tag (machine-readable name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be sex)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional, same as description
 #
 # Category: T for tissue, L for cell Line, P for Primary cell
 
@@ -12713,16 +12745,19 @@ term Tissue
 tag T
 type category
 description Tissue
+label Tissue
 
 term cellLine
 tag L
 type category
 description cell line
+label cell line
 
 term primaryCells
 tag P
 type category
 description primary cells
+label primary cells
 
 term M
 tag M
