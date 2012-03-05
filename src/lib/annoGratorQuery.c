@@ -57,11 +57,11 @@ query->tbf = tbf;
 query->primarySource = primarySource;
 query->integrators = integrators;
 query->formatters = formatters;
-// Set streamers' and formatters' ->query pointer.
-query->primarySource->query = query;
+// Set streamers' and formatters' query pointer.
+primarySource->setQuery(primarySource, query);
 struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
 for (;  grator != NULL;  grator = grator->next)
-    grator->query = query;
+    grator->setQuery(grator, query);
 struct annoFormatter *formatter;
 for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
     formatter->initialize(formatter, query);
@@ -94,24 +94,25 @@ void annoGratorQueryExecute(struct annoGratorQuery *query)
 struct annoStreamer *primarySrc = query->primarySource;
 struct annoFormatter *formatter = NULL;
 struct annoRow *primaryRow = NULL;
-while ((primaryRow = primarySrc->nextRow(primarySrc, NULL)) != NULL)
+while ((primaryRow = primarySrc->nextRow(primarySrc)) != NULL)
     {
+    if (primaryRow->rightJoinFail)
+	continue;
     for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
 	formatter->collect(formatter, primarySrc, primaryRow);
-    boolean filterFailed = FALSE;
+    boolean rjFilterFailed = FALSE;
     struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
     for (;  grator != NULL;  grator = grator->next)
 	{
 	struct annoGrator *realGrator = (struct annoGrator *)grator;
-	struct annoRow *gratorRows = realGrator->integrate(realGrator, primarySrc, primaryRow,
-							   &filterFailed);
-	if (filterFailed)
+	struct annoRow *gratorRows = realGrator->integrate(realGrator, primaryRow, &rjFilterFailed);
+	if (rjFilterFailed)
 	    break;
 	for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
 	    formatter->collect(formatter, grator, gratorRows);
 	}
     for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
-	if (filterFailed)
+	if (rjFilterFailed)
 	    formatter->discard(formatter);
 	else
 	    formatter->formatOne(formatter);

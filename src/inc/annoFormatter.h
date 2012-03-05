@@ -30,7 +30,7 @@ struct annoFormatter
     // Get and set output options
     struct annoFormatterOption *(*getOptions)(struct annoFormatter *self);
     void (*setOptions)(struct annoFormatter *self, struct annoFormatterOption *options);
-    // Initialize output (header, etc)
+    // Initialize output (header, etc) and set query pointer
     void (*initialize)(struct annoFormatter *self, struct annoGratorQuery *query);
     // Collect data from one source
     void (*collect)(struct annoFormatter *self, struct annoStreamer *source, struct annoRow *rows);

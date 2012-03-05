@@ -57,6 +57,12 @@ annoColumnFreeList(&(self->columns));
 self->columns = annoColumnCloneList(newColumns);
 }
 
+void annoStreamerSetQuery(struct annoStreamer *self, struct annoGratorQuery *query)
+/* Set query (to be called only by annoGratorQuery which is created after streamers). */
+{
+self->query = query;
+}
+
 void annoStreamerInit(struct annoStreamer *self, struct asObject *asObj)
 /* Initialize a newly allocated annoStreamer with default annoStreamer methods and
  * default filters and columns based on asObj.
@@ -69,6 +75,7 @@ self->getFilters = annoStreamerGetFilters;
 self->setFilters = annoStreamerSetFilters;
 self->getColumns = annoStreamerGetColumns;
 self->setColumns = annoStreamerSetColumns;
+self->setQuery = annoStreamerSetQuery;
 self->positionIsGenome = TRUE;
 self->asObj = asObj;
 self->filters = annoFiltersFromAsObject(asObj);
@@ -83,7 +90,6 @@ if (pSelf == NULL)
     return;
 struct annoStreamer *self = *pSelf;
 freez(&(self->chrom));
-asObjectFree(&(self->asObj));
 annoFilterFreeList(&(self->filters));
 annoColumnFreeList(&(self->columns));
 freez(pSelf);

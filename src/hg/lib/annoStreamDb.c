@@ -69,10 +69,9 @@ row += self->omitBin;
 return row;
 }
 
-static struct annoRow *asdNextRowDb(struct annoStreamer *vSelf, boolean *retFilterFailed)
+static struct annoRow *asdNextRowDb(struct annoStreamer *vSelf)
 /* Perform sql query if we haven't already and return a single
- * annoRow, or NULL if there are no more items.  If there is a
- * rightJoin failure, set retFilterFailed to TRUE and return NULL. */
+ * annoRow, or NULL if there are no more items. */
 {
 struct annoStreamDb *self = (struct annoStreamDb *)vSelf;
 if (self->sr == NULL)
@@ -80,18 +79,12 @@ if (self->sr == NULL)
 char **row = nextRowUnfiltered(self);
 if (row == NULL)
     return NULL;
-boolean rightFail = FALSE;
-if (retFilterFailed != NULL)
-    retFilterFailed = FALSE;
 // Skip past any left-join failures until we get a right-join failure, a passing row, or EOF.
+boolean rightFail = FALSE;
 while (annoFilterRowFails(vSelf->filters, row, self->numCols, &rightFail))
     {
     if (rightFail)
-	{
-	if (retFilterFailed != NULL)
-	    *retFilterFailed = TRUE;
-	return NULL;
-	}
+	break;
     row = nextRowUnfiltered(self);
     if (row == NULL)
 	return NULL;
@@ -99,7 +92,7 @@ while (annoFilterRowFails(vSelf->filters, row, self->numCols, &rightFail))
 char *chrom = row[self->omitBin+self->chromIx];
 uint chromStart = sqlUnsigned(row[self->omitBin+self->startIx]);
 uint chromEnd = sqlUnsigned(row[self->omitBin+self->endIx]);
-return annoRowFromStringArray(chrom, chromStart, chromEnd, row, self->numCols);
+return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row, self->numCols);
 }
 
 static void asdCloseDb(struct annoStreamer **pVSelf)
@@ -164,7 +157,8 @@ return FALSE;
 
 struct annoStreamer *annoStreamDbNew(struct sqlConnection *conn, char *table,
 				     struct asObject *asObj)
-/* Create an annoStreamer (subclass) object from a database table described by asObj. */
+/* Create an annoStreamer (subclass) object from a database table described by asObj.
+ * conn must not be shared. */
 {
 if (!sqlTableExists(conn, table))
     errAbort("annoStreamNewDb: table %s doesn't exist", table);

@@ -77,7 +77,8 @@ for (col = streamer->columns, i = 0;  col != NULL;  col = col->next, i++)
 	continue;
     if (!isFirst || i > 0)
 	fputc('\t', f);
-    fputs(row[i], f);
+    if (row != NULL)
+	fputs(row[i], f);
     }
 }
 

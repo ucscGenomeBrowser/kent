@@ -13,15 +13,17 @@
 // annoGratorQuery framework, and simple methods shared by all
 // subclasses.
 
+// stub in order to avoid problems with circular .h references:
+struct annoGratorQuery;
+
 struct annoStreamer
 /* Generic interface to configure a data source's filters and output data, and then
  * retrieve data, which must be sorted by genomic position.  Subclasses of this
  * will do all the actual work. */
     {
     struct annoStreamer *next;
-    struct annoGratorQuery *query;	// The query object that owns this streamer.
     // Public methods
-    // Get autoSql representation
+    // Get autoSql representation (do not modify or free!)
     struct asObject *(*getAutoSqlObject)(struct annoStreamer *self);
     // Set genomic region for query (should be called only by annoGratorQuerySetRegion)
     void (*setRegion)(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
@@ -31,12 +33,14 @@ struct annoStreamer
     // Get and set output fields
     struct annoColumn *(*getColumns)(struct annoStreamer *self);
     void (*setColumns)(struct annoStreamer *self, struct annoColumn *newColumns);
-    // Get next item's output fields from this source, indicating
-    // whether a filter failed (resulting in a previous item being omitted)
-    struct annoRow *(*nextRow)(struct annoStreamer *self, boolean *retFilterFailed);
+    // Get next item's output fields from this source
+    struct annoRow *(*nextRow)(struct annoStreamer *self);
     // Close connection to source and free self.
     void (*close)(struct annoStreamer **pSelf);
+    // For use by annoGratorQuery only: hook up query object after creation
+    void (*setQuery)(struct annoStreamer *self, struct annoGratorQuery *query);
     // Private members -- callers are on the honor system to access these using only methods above.
+    struct annoGratorQuery *query;	// The query object that owns this streamer.
     boolean positionIsGenome;
     char *chrom;
     uint regionStart;
@@ -77,5 +81,8 @@ void annoStreamerInit(struct annoStreamer *self, struct asObject *asObj);
 void annoStreamerFree(struct annoStreamer **pSelf);
 /* Free self. This should be called at the end of subclass close methods, after
  * subclass-specific connections are closed and resources are freed. */
+
+void annoStreamerSetQuery(struct annoStreamer *self, struct annoGratorQuery *query);
+/* Set query (to be called only by annoGratorQuery which is created after streamers). */
 
 #endif//ndef ANNOSTREAMER_H
