@@ -11780,26 +11780,31 @@ term chr21
 tag CHR21
 type region
 description Chromsome 21
+label chr21 #provisional
 
 term ENM
 tag ENM
 type region
 description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENM #provisional
 
 term ENR
 tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENR #provisional
 
 term UW-5C-Myc-Region
 tag UW5CMYC
 type region
 description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+label UW-5C-Myc-Region #provisional
 
 term UW-5C-Gene-Regions
 tag UW5CGENE
 type region
 description Set of 25 regions interrogated in UW 5C gene-targeted experiments
+label UW-5C-Gene-Regions #provisional
 
 ### restrictionEnzyme
 
