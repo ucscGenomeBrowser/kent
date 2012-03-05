@@ -11307,11 +11307,6 @@ tag BMETH
 description 1 h with 100 nM Betamethasone (Myers)
 type treatment
 
-term Bone_marrow_derived_macrophage_differentiation
-tag BMDIFF
-description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter.
-type treatment
-
 term BPA_100nM
 tag BPA1H
 description 1 h with 100 nM Bisphenol A  (Myers)
