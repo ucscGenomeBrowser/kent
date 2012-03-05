@@ -11307,11 +11307,6 @@ tag BMETH
 description 1 h with 100 nM Betamethasone (Myers)
 type treatment
 
-term Bone_marrow_derived_macrophage_differentiation
-tag BMDIFF
-description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter.
-type treatment
-
 term BPA_100nM
 tag BPA1H
 description 1 h with 100 nM Bisphenol A  (Myers)
@@ -11780,26 +11775,31 @@ term chr21
 tag CHR21
 type region
 description Chromsome 21
+label chr21 #provisional
 
 term ENM
 tag ENM
 type region
 description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENM #provisional
 
 term ENR
 tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENR #provisional
 
 term UW-5C-Myc-Region
 tag UW5CMYC
 type region
 description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+label UW-5C-Myc-Region #provisional
 
 term UW-5C-Gene-Regions
 tag UW5CGENE
 type region
 description Set of 25 regions interrogated in UW 5C gene-targeted experiments
+label UW-5C-Gene-Regions #provisional
 
 ### restrictionEnzyme
 
