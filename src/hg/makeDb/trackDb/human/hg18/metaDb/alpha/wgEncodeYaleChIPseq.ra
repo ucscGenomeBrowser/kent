@@ -172,7 +172,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
@@ -196,7 +196,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 782
@@ -218,7 +218,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 783
@@ -312,7 +312,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
@@ -427,7 +427,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -4155,7 +4155,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
@@ -4179,7 +4179,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 782
@@ -4201,7 +4201,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 783
@@ -4270,7 +4270,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
@@ -4385,7 +4385,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -7875,7 +7875,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -9226,7 +9226,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
@@ -9251,7 +9251,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 782
@@ -9274,7 +9274,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 783
@@ -9322,7 +9322,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
@@ -9419,7 +9419,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -12622,7 +12622,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
@@ -12646,7 +12646,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 782
@@ -12668,7 +12668,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 783
@@ -12734,7 +12734,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
@@ -12851,7 +12851,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -16235,7 +16235,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
@@ -16259,7 +16259,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 782
@@ -16281,7 +16281,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 783
@@ -16347,7 +16347,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
@@ -16464,7 +16464,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -19799,7 +19799,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -21702,7 +21702,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
@@ -21727,7 +21727,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 782
@@ -21750,7 +21750,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-28
 dateUnrestricted 2011-01-28
 expId 783
@@ -21796,7 +21796,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-01-09
 dateUnrestricted 2009-10-09
@@ -21916,7 +21916,7 @@ composite wgEncodeYaleChIPseq
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-04-28
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24

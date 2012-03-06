@@ -10,7 +10,7 @@ include wgEncodeGencodeV4.ra
 include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV10.ra
-include wgEncodeGencodeV11.ra alpha
+include wgEncodeGencodeV11.ra alpha,beta
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
@@ -131,8 +131,7 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra 
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra beta,public
-include wgEncodeHaibMethylRrbs.release3.ra alpha
+include wgEncodeHaibMethylRrbs.ra
 #HAIB Bisulfite test track
 include wgEncodeHaibMethylWgbs.ra alpha
 
