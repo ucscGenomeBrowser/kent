@@ -3006,7 +3006,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 lab Crawford
-protocol Crawford:iPSCWRU1_Crawford_protocol.pdf
+protocol missing
 
 term iPS_NIHi7
 tag IPSNIHI7
@@ -3023,7 +3023,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 lab Crawford
-protocol Crawford:iPSNIHi7_Crawford_protocol.pdf
+protocol missing
 
 term iPS_NIHi11
 tag IPSNIHI11
@@ -3040,7 +3040,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 lab Crawford
-protocol Crawford:iPSNIHi11_Crawford_protocol.pdf
+protocol missing
 
 term Ishikawa
 tag ISHIKAWA
