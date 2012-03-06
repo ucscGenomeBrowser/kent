@@ -6079,7 +6079,7 @@ cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 533
@@ -6098,7 +6098,7 @@ cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 557
@@ -6117,7 +6117,7 @@ cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 544
@@ -6136,7 +6136,7 @@ cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 546
@@ -6155,7 +6155,7 @@ cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 549
@@ -6174,7 +6174,7 @@ cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 531
@@ -6193,7 +6193,7 @@ cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 558
