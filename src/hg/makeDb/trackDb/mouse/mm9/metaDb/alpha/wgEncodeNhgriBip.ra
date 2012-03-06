@@ -5,9 +5,8 @@ dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-01-27
 dateUnrestricted 2009-10-27
 fileName wgEncodeNhgriBip.mm9.bed8.gz
-grant NHGRI-Elnitski
-lab NHGRI
+lab NHGRI-Elnitski
+grant Elnitski
 project wgEncode
 subId 200
 tableName wgEncodeNhgriBip
-
