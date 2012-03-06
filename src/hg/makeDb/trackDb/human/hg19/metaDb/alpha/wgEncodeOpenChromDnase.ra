@@ -7811,10 +7811,32 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 md5sum 38c581b92a5bdf9d3ee8dbead811627a,786389664dcf11495a85e097d01ac44e
+objStatus replaced - The lab redid the experiment with better results, look for the V2 version of this file.
 origAssembly hg18
 project wgEncode
 replicate 1
 subId 1534
+treatment None
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseK562AlnRep1V2
+objType file
+cell K562
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+dccAccession wgEncodeEH000530
+expId 530
+fileName wgEncodeOpenChromDnaseK562AlnRep1V2.bam,wgEncodeOpenChromDnaseK562AlnRep1V2.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 5901
+submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
 treatment None
 view Alignments
 
@@ -7836,10 +7858,53 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 md5sum db8c1f50f40f9f210ba58adbf7439631,5934dffd67f7f8bf416387352fa0d2d4
+objStatus replaced - The lab redid the experiment with better results, look for the V2 version of this file.
 origAssembly hg18
 project wgEncode
 replicate 2
 subId 1534
+treatment None
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseK562AlnRep2V2
+objType file
+cell K562
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+dccAccession wgEncodeEH000530
+expId 530
+fileName wgEncodeOpenChromDnaseK562AlnRep2V2.bam,wgEncodeOpenChromDnaseK562AlnRep2V2.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 5901
+submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
+treatment None
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseK562AlnRep3V2
+objType file
+cell K562
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+dccAccession wgEncodeEH000530
+expId 530
+fileName wgEncodeOpenChromDnaseK562AlnRep3V2.bam,wgEncodeOpenChromDnaseK562AlnRep3V2.bam.bai
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 3
+subId 5901
+submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
 treatment None
 view Alignments
 
@@ -7861,10 +7926,32 @@ grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
 md5sum e30c3aeac3bceff5df70a4ad33dddb4b
+objStatus replaced - The lab redid the experiment with better results, look for the V2 version of this file.
 origAssembly hg18
 project wgEncode
 subId 1534
 tableName wgEncodeOpenChromDnaseK562BaseOverlapSignal
+treatment None
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseK562BaseOverlapSignalV2
+objType table
+cell K562
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+dccAccession wgEncodeEH000530
+expId 530
+fileName wgEncodeOpenChromDnaseK562BaseOverlapSignalV2.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 5901
+submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
+tableName wgEncodeOpenChromDnaseK562BaseOverlapSignalV2
 treatment None
 view Base_Overlap_Signal
 
@@ -8031,10 +8118,32 @@ grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
 md5sum 95212105d797507c0b718dafb71d6d95
+objStatus replaced - The lab redid the experiment with better results, look for the V2 version of this file.
 origAssembly hg18
 project wgEncode
 subId 1534
 tableName wgEncodeOpenChromDnaseK562Pk
+treatment None
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseK562PkV2
+objType table
+cell K562
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+dccAccession wgEncodeEH000530
+expId 530
+fileName wgEncodeOpenChromDnaseK562PkV2.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 5901
+submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
+tableName wgEncodeOpenChromDnaseK562PkV2
 treatment None
 view Peaks
 
@@ -8055,10 +8164,32 @@ geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 md5sum c342383cc807e775713482416c26e9dc
+objStatus replaced - The lab redid the experiment with better results, look for the V2 version of this file.
 origAssembly hg18
 project wgEncode
 replicate 1
 subId 480
+treatment None
+view RawData
+
+metaObject wgEncodeOpenChromDnaseK562RawDataRep1V2
+objType file
+cell K562
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+dccAccession wgEncodeEH000530
+expId 530
+fileName wgEncodeOpenChromDnaseK562RawDataRep1V2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 5901
+submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromDnaseK562RawDataRep2
@@ -8078,10 +8209,52 @@ geoSampleAccession GSM816655
 grant Crawford
 lab Duke
 md5sum 09296d994ffe1f13ed63eade0cf19f14
+objStatus replaced - The lab redid the experiment with better results, look for the V2 version of this file.
 origAssembly hg18
 project wgEncode
 replicate 2
 subId 480
+treatment None
+view RawData
+
+metaObject wgEncodeOpenChromDnaseK562RawDataRep2V2
+objType file
+cell K562
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+dccAccession wgEncodeEH000530
+expId 530
+fileName wgEncodeOpenChromDnaseK562RawDataRep2V2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 5901
+submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
+treatment None
+view RawData
+
+metaObject wgEncodeOpenChromDnaseK562RawDataRep3V2
+objType file
+cell K562
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+dccAccession wgEncodeEH000530
+expId 530
+fileName wgEncodeOpenChromDnaseK562RawDataRep3V2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 3
+subId 5901
+submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromDnaseK562Sig
@@ -8102,10 +8275,32 @@ grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
 md5sum 6ad2fd3ddfff27c30bcf6df4d6cbbb77
+objStatus replaced - The lab redid the experiment with better results, look for the V2 version of this file.
 origAssembly hg18
 project wgEncode
 subId 1534
 tableName wgEncodeOpenChromDnaseK562Sig
+treatment None
+view Signal
+
+metaObject wgEncodeOpenChromDnaseK562SigV2
+objType table
+cell K562
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+dccAccession wgEncodeEH000530
+expId 530
+fileName wgEncodeOpenChromDnaseK562SigV2.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_K562
+project wgEncode
+subId 5901
+submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
+tableName wgEncodeOpenChromDnaseK562SigV2
 treatment None
 view Signal
 
@@ -8128,6 +8323,7 @@ labVersion 1% ENCODE array platform validation tests
 md5sum 80ca4233a2d1c88641aee7bf28d82ffa
 project wgEncode
 subId 3829
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromDnaseLncapAlnRep1
@@ -11346,4 +11542,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1759909721
+# MAGIC: 1583359315

@@ -200,7 +200,7 @@ tier 3
 protocol ENCODE:Keratinocyte_protocol.pdf
 
 term NHEM_M2_7011001.2
-tag NHEMM27011001.2
+tag NHEMM270110012
 type Cell Line
 tier 3
 organism human
@@ -236,7 +236,7 @@ lab Gingeras
 protocol Gingeras:NHEMM27012303_Gingeras_protocol.pdf
 
 term NHEM.f_M2_5071302.2
-tag NHEM.FM25071302.2
+tag NHEMFM250713022
 type Cell Line
 tier 3
 organism human
@@ -254,7 +254,7 @@ lab Gingeras
 protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf
 
 term NHEM.f_M2_6022001
-tag NHEM.FM26022001
+tag NHEMFM26022001
 type Cell Line
 tier 3
 organism human
@@ -2249,7 +2249,7 @@ sex U
 protocol Myers:HAL_Myers_protocol.pdf
 
 term HAoAF_6090101.11
-tag HAOAF6090101.11
+tag HAOAF609010111
 type Cell Line
 tier 3
 organism human
@@ -2267,7 +2267,7 @@ lab Gingeras
 protocol Gingeras:HAoAF6090101.11_Gingeras_protocol.pdf
 
 term HAoAF_6111301.9
-tag HAOAF6111301.9
+tag HAOAF61113019
 type Cell Line
 tier 3
 organism human
@@ -2285,7 +2285,7 @@ lab Gingeras
 protocol Gingeras:HAoAF6111301.9_Gingeras_protocol.pdf
 
 term HAoEC_8061102.1
-tag HAOEC8061102.1
+tag HAOEC80611021
 type Cell Line
 tier 3
 organism human
@@ -2303,7 +2303,7 @@ lab Gingeras
 protocol Gingeras:HAoEC8061102.1_Gingeras_protocol.pdf
 
 term HAoEC_7071706.1
-tag HAOEC7071706.1
+tag HAOEC70717061
 type Cell Line
 tier 3
 organism human
@@ -2410,7 +2410,7 @@ tier 3
 protocol Stam:HCF_Stam_protocol.pdf
 
 term HCH_8100808.2
-tag HCH8100808.2
+tag HCH81008082
 type Cell Line
 tier 3
 organism human
@@ -2418,7 +2418,7 @@ description Undifferentiated Chondrocytes
 lineage missing
 karyotype normal
 sex M
-tissue catilage / knee joint
+tissue cartilage/ knee joint
 vendorName PromoCell
 vendorId HCH#c1315
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH#c1315
@@ -2428,7 +2428,7 @@ lab Gingeras
 protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf
 
 term HCH_0011308.2P
-tag HCH0011308.2P
+tag HCH00113082P
 type Cell Line
 tier 3
 organism human
@@ -2436,7 +2436,7 @@ description Undifferentiated Chondrocytes
 lineage missing
 karyotype normal
 sex F
-tissue catilage / knee joint
+tissue cartilage/ knee joint
 vendorName PromoCell
 vendorId HCH#c1315
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH#c1315
@@ -2607,7 +2607,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Crawford:Hepatocytes_Crawford_protocol.pdf
 
 term HFDPC_0100503.2
-tag HFDPC0100503.2
+tag HFDPC01005032
 type Cell Line
 tier 3
 organism human
@@ -2625,7 +2625,7 @@ lab Gingeras
 protocol Gingeras:HFDPC0100503.2_Gingeras_protocol.pdf
 
 term HFDPC_0102703.3
-tag HFDPC0102703.3
+tag HFDPC01027033
 type Cell Line
 tier 3
 organism human
@@ -2803,7 +2803,7 @@ lab Gingeras
 protocol Gingeras:HMEpC_Gingeras_protocol.pdf
 
 term HMEpC_6022801.3
-tag HMEPC6022801.3
+tag HMEPC60228013
 type Cell Line
 tier 3
 organism human
@@ -2835,7 +2835,7 @@ protocol Stam:HMF_Stam_protocol.pdf
 # mammary stromal cell line
 
 term hMNC-PB_0022330.9
-tag HMNCPB0022330.9
+tag HMNCPB00223309
 type Cell Line
 tier 3
 organism human
@@ -2853,7 +2853,7 @@ lab Gingeras
 protocol Gingeras:hMNCPB0022330.9_Gingeras_protocol.pdf
 
 term hMNC-PB_0082430.9
-tag HMNCPB0082430.9
+tag HMNCPB00824309
 type Cell Line
 tier 3
 organism human
@@ -2871,7 +2871,7 @@ lab Gingeras
 protocol Gingeras:hMNCPB0082430.9_Gingeras_protocol.pdf
 
 term hMNC-CB_9111701.6
-tag HMNCCB9111701.6
+tag HMNCCB91117016
 type Cell Line
 tier 3
 organism human
@@ -2889,7 +2889,7 @@ lab Gingeras
 protocol Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf
 
 term hMNC-CB_8072802.6
-tag HMNCCB8072802.6
+tag HMNCCB80728026
 type Cell Line
 tier 3
 organism human
@@ -2907,7 +2907,7 @@ lab Gingeras
 protocol Gingeras:hMNCCB8072802.6_Gingeras_protocol.pdf
 
 term hMSC-BM_0050602.11
-tag HMSCBM0050602.11
+tag HMSCBM005060211
 type Cell Line
 tier 3
 organism human
@@ -2925,7 +2925,7 @@ lab Gingeras
 protocol Gingeras:hMSCBM0050602.11_Gingeras_protocol.pdf
 
 term hMSC-AT_9061601.12
-tag HMSCAT9061601.12
+tag HMSCAT906160112
 type Cell Line
 tier 3
 organism human
@@ -2943,7 +2943,7 @@ lab Gingeras
 protocol Gingeras:hMSCAT9061601.12_Gingeras_protocol.pdf
 
 term hMSC-AT_0102604.12
-tag HMSCAT0102604.12
+tag HMSCAT010260412
 type Cell Line
 tier 3
 organism human
@@ -2961,7 +2961,7 @@ lab Gingeras
 protocol Gingeras:hMSCAT0102604.12_Gingeras_protocol.pdf
 
 term hMSC-BM_0051105.11
-tag HMSCBM0051105.11
+tag HMSCBM005110511
 type Cell Line
 tier 3
 organism human
@@ -2979,7 +2979,7 @@ lab Gingeras
 protocol Gingeras:hMSCBM0051105.11_Gingeras_protocol.pdf
 
 term hMSC-UC_0081101.7
-tag HMSCUC0081101.7
+tag HMSCUC00811017
 type Cell Line
 tier 3
 organism human
@@ -2997,7 +2997,7 @@ lab Gingeras
 protocol Gingeras:hMSCUC0081101.7_Gingeras_protocol.pdf
 
 term hMSC-UC_0052501.7
-tag HMSCUC0052501.7
+tag HMSCUC00525017
 type Cell Line
 tier 3
 organism human
@@ -3148,7 +3148,7 @@ tier 3
 protocol Stam:HNPCEpiC_Stam_protocol.pdf
 
 term HOB_0090202.1
-tag HOB0090202.1
+tag HOB00902021
 type Cell Line
 tier 3
 organism human
@@ -3226,7 +3226,7 @@ tier 3
 protocol Stam:HPAF_Stam_protocol.pdf
 
 term HPC-PL_0032601.13
-tag HPCPL0032601.13
+tag HPCPL003260113
 type Cell Line
 tier 3
 organism human
@@ -3244,7 +3244,7 @@ lab Gingeras
 protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf
 
 term HPC-PL_0101504.13
-tag HPCPL0101504.13
+tag HPCPL010150413
 type Cell Line
 tier 3
 organism human
@@ -3305,7 +3305,7 @@ tier 3
 protocol Stam:HPF_Stam_protocol.pdf
 
 term HPIEpC_9012801.2
-tag HPIEPC9012801.2
+tag HPIEPC90128012
 type Cell Line
 tier 3
 organism human
@@ -3323,7 +3323,7 @@ lab Gingeras
 protocol Gingeras:HPIEpC9012801.2_Gingeras_protocol.pdf
 
 term HPIEpC_9041503.2
-tag HPIEPC9041503.2
+tag HPIEPC90415032
 type Cell Line
 tier 3
 organism human
@@ -3406,7 +3406,7 @@ tier 3
 protocol Stam:HRPEpiC_Stam_protocol.pdf
 
 term HSaVEC_9100101.15
-tag HSAVEC9100101.15
+tag HSAVEC910010115
 type Cell Line
 tier 3
 organism human
@@ -3424,7 +3424,7 @@ lab Gingeras
 protocol Gingeras:HSaVEC9100101.15_Gingeras_protocol.pdf
 
 term HSaVEC_0022202.16
-tag HSAVEC0022202.16
+tag HSAVEC002220216
 type Cell Line
 tier 3
 organism human
@@ -3603,7 +3603,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Crawford:Huh-7_Crawford_protocol.pdf
 
 term Huh-7.5
-tag HUH7.5
+tag HUH75
 type Cell Line
 tier 3
 organism human
@@ -3633,7 +3633,7 @@ tier 3
 protocol Stam:HVMF_Stam_protocol.pdf
 
 term HVMF_6100401.3
-tag HVMF6100401.3
+tag HVMF61004013
 type Cell Line
 tier 3
 organism human
@@ -3651,7 +3651,7 @@ lab Gingeras
 protocol Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
 
 term HVMF_6091203.3
-tag HVMF6091203.3
+tag HVMF60912033
 type Cell Line
 tier 3
 organism human
@@ -3687,7 +3687,7 @@ lab Gingeras
 protocol Gingeras:HWP0092205_Gingeras_protocol.pdf
 
 term HWP_8120201.5
-tag HWP8120201.5
+tag HWP81202015
 type Cell Line
 tier 3
 organism human
@@ -4212,7 +4212,7 @@ tier 3
 protocol Stam:NHDF-neo_Stam_protocol.pdf
 
 term NHDF_0060801.3
-tag NHDF0060801.3
+tag NHDF00608013
 type Cell Line
 tier 3
 organism human
@@ -4230,7 +4230,7 @@ lab Gingeras
 protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf
 
 term NHDF_7071701.2
-tag NHDF7071701.2
+tag NHDF70717012
 type Cell Line
 tier 3
 organism human
@@ -4666,7 +4666,7 @@ lab Gingeras
 protocol Gingeras:SkMC9011302_Gingeras_protocol.pdf
 
 term SkMC_8121902.17
-tag SKMC8121902.17
+tag SKMC812190217
 type Cell Line
 tier 3
 organism human
@@ -4700,23 +4700,22 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
 
-#term T98G
-#tag T98G
-#type Cell Line
-#organism human
-#description fibroblast cell line derived from a glioblastoma multiforme. (PMID: 222778)
-#karyotype cancer
-#tissue brain
-#lineage ectoderm
-#vendorName ATCC
-#vendorId CRL-1690
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
-#termId BTO:0001583
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
-#sex M
-#tier 3
-#protocol Myers:T98G_Myers_protocol.pdf
-# Never submitted data. ~Jeff
+term T98G
+tag T98G
+type Cell Line
+organism human
+description fibroblast cell line derived from a glioblastoma multiforme. (PMID: 222778)
+karyotype cancer
+tissue brain
+lineage ectoderm
+vendorName ATCC
+vendorId CRL-1690
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
+termId BTO:0001583
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
+sex M
+tier 3
+protocol Myers:T98G_Myers_protocol.pdf
 
 term TBEC
 tag TBEC
@@ -5074,23 +5073,6 @@ color 204,121,167
 sex U
 protocol Gingeras:Bladder_Gingeras_protocol.pdf
 
-term BMDM
-tag BMDM
-type Cell Line
-organism mouse
-tissue blood
-category primaryCells
-description Bone marrow derived macrophage PROVISIONAL
-age ageUnknown
-strain Unknown
-vendorName Genhong Cheng Lab, UCLA
-termId 7058
-termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
-color 86,180,233
-sex U
-protocol Ren:BMDM_Ren_protocol.pdf
-label Bone marrow derived macrophage
-
 term BoneMarrow
 tag BMARROW
 type Cell Line
@@ -5295,10 +5277,10 @@ type Cell Line
 organism mouse
 category primaryCells
 description E14 mouse ES line PROVISIONAL
-age E0
+age E14
 strain 129/Ola
 vendorName Santos lab
-vendorId E14
+vendorId E0
 orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
 color 65,105,225
 sex M
@@ -5692,7 +5674,7 @@ tag MGER
 type Cell Line
 organism mouse
 category cellLine
-description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with β-estradiol treatment PROVISIONAL
+description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with &Beta;-estradiol treatment PROVISIONAL
 age immortalized
 strain Unknown
 tissue blood
@@ -6514,14 +6496,14 @@ type Antibody
 target BRG1
 antibodyDescription Brg-1 (G-7) is a mouse monoclonal antibody raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin. Antibody Target: BRG1
 targetDescription Brg1 (SMARCA4) is an ATPase subunit of the SWI/SNF chromatin-remodeling complex.
-orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
+orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
 vendorName Santa Cruz Biotech
-vendorId 16189
+vendorId sc-17796
 lab Snyder
 targetId GeneCard:SMARCA4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
 validation Human_-_BRG1(Immunoprecipitation,IP-Mass_spec):human_BRG1_validation_Snyder.pdf
-label BRG1 (16189)
+label BRG1 (sc-17796)
 
 term BTF3_(SC-166093)
 tag BTF3SC166093
@@ -8324,14 +8306,14 @@ type Antibody
 target INI1
 antibodyDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin. Antibody Target: INI1
 targetDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
-orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
+orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
 vendorName Santa Cruz Biotech
-vendorId sc-17796
+vendorId sc-16189
 lab Snyder
 targetId GeneCard:SMARCB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCB1
 validation Human_-_INI1(Immunoprecipitation,IP-Mass_spec):human_INI1_validation_Snyder.pdf
-label INI1 (sc-17796)
+label INI1 (sc-16189)
 
 term IRF1
 tag IRF1
@@ -10754,66 +10736,79 @@ label T7Tag (AB3790; Nov_69522)
 # tag (machine-readable map algorithm name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be mapAlgorithm)
 # description (human-readable description of the map algorithm, unclear where/if it's used)
+# label provisional labels, same as description
 
 term NA
 tag NA
 type mapAlgorithm
 description No algorithm applicable
+label No algorithm applicable
 
 term erng32a
 tag ERNG32A
 type mapAlgorithm
 description erange v3.2.0alpha
+label erange v3.2.0alpha
 
 term erng3
 tag ERNG3
 type mapAlgorithm
 description erange v3.0
+label erange v3.0
 
 term erng3b
 tag ERNG3b
 type mapAlgorithm
 description erange v3.0beta
+label erange v3.0beta
 
 term blat34
 tag BLAT34
 type mapAlgorithm
 description blat v34
+label blat v34
 
 term bow098
 tag BOW098
 type mapAlgorithm
 description bowtie v0.981
+label bowtie v0.981
 
 term bow10
 tag BOW10
 type mapAlgorithm
 description bowtie v0.10.0
+label bowtie v0.10.0
 
 term bow125
 tag BOW125
 type mapAlgorithm
 description bowtie v0.12.5
+label bowtie v0.12.5
 
 term BB1
 tag BB1
 type mapAlgorithm
 description bowtie v0.981 followed by blat v34
+label bowtie v0.981 followed by blat v34
 
 term BB2
 tag BB2
 type mapAlgorithm
 description bowtie v0.10.0 followed by blat v34
+label bowtie v0.10.0 followed by blat v34
 
 term TH1014
 tag TH1014
 type mapAlgorithm
 description TopHat v1.0.14
+label TopHat v1.0.14
 
 term TH131
 tag TH131
 type mapAlgorithm
 description TopHat v1.3.1
+label TopHat v1.3.1
 
 ### readType
 # term (human-readable read type name)
@@ -11265,6 +11260,37 @@ description Input library was prepared at UC Davis.
 
 ### Treatments
 
+term 4OHTAM_1uM_4hr
+tag TAM14H
+description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
+type treatment
+label 4-OHTAM_1uM_4hr
+
+term 4OHTAM_1uM_12hr
+tag TAM112H
+description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
+type treatment
+label 4-OHTAM_1uM_12hr
+
+term 4OHTAM_1uM_36hr
+tag TAM
+description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
+type treatment
+label 4-OHTAM_1uM_36hr
+# Changed tag from OHTAM1: 6/9/11
+
+term 4OHTAM_20nM_72hr
+tag OHTAM
+description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
+type treatment
+label 4-OHTAM_20nM_72hr
+
+term 4OHTAM_100nM_30m
+tag TAM10030
+description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
+type treatment
+label 4-OHTAM_100nM_30m
+
 term androgen
 tag ANDRO
 description 12 hrs with 1 nM Methyltrienolone (R1881) (Crawford)
@@ -11289,6 +11315,11 @@ type treatment
 term BPA_100nM_4hr
 tag BPA14H
 description 4 h with 100 nM Bisphenol A (Myers)
+type treatment
+
+term CTCF_shRNA_knockdown
+tag CTCFSHRNA
+description CTCF (CCCTC-binding factor) transcript levels were knocked down in MCF7 cells using lentiviral transduction to express an shRNA targeting the CTCF gene. The lentiviral construct also contained a puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct. By western blot, CTCF protein levels in the knockdown cells were <10% of MCF7 cell lines transduced with a randomized shRNA lentiviral construct.
 type treatment
 
 term DEX_100nM
@@ -11325,58 +11356,68 @@ term diffProtA_2d
 tag DIFFA2D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 2 days, lineage: mesoderm
-label 2 day diff protein A
+label 2 day diff protocol A
 
 term diffProtA_5d
 tag DIFFA5D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 5 days, lineage: mesoderm
-label 5 day diff protein A
+label 5 day diff protocol A
 
 term diffProtA_9d
 tag DIFFA9D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 9 days, lineage: mesoderm
-label 9 day diff protein A
+label 9 day diff protocol A
 
 term diffProtA_14d
 tag DIFFA14D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, cell sorting and specific growth factors were used, lineage: mesoderm
-label 14 day diff protein A
+label 14 day diff protocol A
 
-term diffDoxy_6hr
-tag DIFFD6H
+term diffProtB_6hr
+tag DIFFB6H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours (Stam) PROVISIONAL
-label 6 hour diff Doxcycline
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours. Doxycycline added to a final concentration of 100 ng/ml. (Stam) PROVISIONAL
+label 6 hour diff protocol B
 
-term diffDoxy_24hr
-tag DIFFD24H
+term diffProtB_24hr
+tag DIFFB24H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours (Stam) PROVISIONAL
-label 24 hour diff Doxcycline
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
+label 24 hour diff protocol B
 
-term diffDoxy_72hr
-tag DIFFD72H
+term diffProtB_72hr
+tag DIFFB72H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours (Stam) PROVISIONAL
-label 72 hour diff Doxcycline
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
+label 72 hour diff protocol B
 
-term diffEstradiol_24hr
-tag DIFFE24H
+term diffProtC_24hr
+tag DIFFC24H
 type treatment
-description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+label 24 hour diff protocol C
 
-term diffEstradiol_48hr
-tag DIFFE48H
+term diffProtC_48hr
+tag DIFFC48H
 type treatment
-description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+label 48 hour diff protocol C
 
-term diffEstradiol_120hr
-tag DIFFE120H
+term diffProtC_120hr
+tag DIFFC120H
 type treatment
-description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol (Stam) PROVISIONAL
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+label 120 hour diff protocol C
+
+term diffProtD_7d
+tag DD7D
+type treatment
+description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter. (Ren) PROVSIONAL
+label 7 day diff protocol D
+#shortened tag from DIFFD7d to DD7D
 
 term DMSO_0.02pct
 tag DM002P1H
@@ -11569,6 +11610,11 @@ tag PREDNIS
 description 1 h with 100 nM Prednisolone (Myers)
 type treatment
 
+term Randomized_shRNA_control
+tag RANDSHRNA
+description MCF7 cells were transduced with a lentivirus expressing an shRNA containing a randomized DNA sequence generated by the siRNA Wizard v3.1 (http://www.sirnawizard.com/scrambled2.php) program. Lentiviral constructs also contained the puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct.
+type treatment
+
 term serum_free_media
 tag SERUMFREE
 description Grown with growth factors, then switched to media that contains no FBS for 36 hours (Crawford)
@@ -11586,37 +11632,6 @@ tag SERUMSTIM
 description Grown with normal serum levels (10%), then switched back to normal serum levels (10% FBS) for 3 hours.
 type treatment
 label serum-stimulated media
-
-term 4OHTAM_1uM_4hr
-tag TAM14H
-description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
-type treatment
-label 4-OHTAM_1uM_4hr
-
-term 4OHTAM_1uM_12hr
-tag TAM112H
-description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
-type treatment
-label 4-OHTAM_1uM_12hr
-
-term 4OHTAM_1uM_36hr
-tag TAM
-description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
-type treatment
-label 4-OHTAM_1uM_36hr
-# Changed tag from OHTAM1: 6/9/11
-
-term 4OHTAM_20nM_72hr
-tag OHTAM
-description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
-type treatment
-label 4-OHTAM_20nM_72hr
-
-term 4OHTAM_100nM_30m
-tag TAM10030
-description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
-type treatment
-label 4-OHTAM_100nM_30m
 
 term Taxol_500nM_24hr
 tag TAX24H
@@ -11654,6 +11669,7 @@ term FASP
 tag FASP
 description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
+label FASP proteomics #provisional
 
 term In-gel
 tag INGEL
@@ -11665,46 +11681,55 @@ term PCR1x
 tag PCR1X
 description 1-cycle of PCR (Myers)
 type protocol
+label PCR 1-cycle #provisional
 
 term PCR2x
 tag PCR2X
 description 2-cycles of PCR (Myers)
 type protocol
+label PCR 2-cycle #provisional
 
 term SDS-Page
 tag SDSPAGE
 description SDS-Page proteomics sample preparation protocol (Giddings)
 type protocol
+label SDS-Page proteomics sample
 
 term v041610.1
 tag V0416101
 description 2x10^7 cells, fragmentation by bioruptor, one 15-cycle round of PCR (Myers)
 type protocol
+label biorupter, PCR 1-cycle #provisional
 
 term v041610.2
 tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
-type protocol
+type protocol 
+label sonicator, PCR 1-cycle #provisional
 
 term v042211.1
 tag V0422111
 description Faster ChIP protocol & AMpure XP size selection for ChIP-seq (Myers)
 type protocol
+label ChIP AMpure XP #provisional
 
 term v042211.2
 tag V0422112
 description Faster ChIP protocol & gel size selection for ChIP-seq (Myers)
 type protocol
+label ChIP gel #provisional
 
 term TAP-Only
 tag TAP
 description This kind of library was made from RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
 type protocol
+label Tobacco Acid Pyrophosphatase Only #provisional
 
 term CIP-TAP
 tag CIPTAP
 description This kind of library was made from RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
 type protocol
+label CIP-TAP #provisional
 
 ### phase
 
@@ -11750,26 +11775,31 @@ term chr21
 tag CHR21
 type region
 description Chromsome 21
+label chr21 #provisional
 
 term ENM
 tag ENM
 type region
 description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENM #provisional
 
 term ENR
 tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENR #provisional
 
 term UW-5C-Myc-Region
 tag UW5CMYC
 type region
 description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+label UW-5C-Myc-Region #provisional
 
 term UW-5C-Gene-Regions
 tag UW5CGENE
 type region
 description Set of 25 regions interrogated in UW 5C gene-targeted experiments
+label UW-5C-Gene-Regions #provisional
 
 ### restrictionEnzyme
 
@@ -11777,11 +11807,13 @@ term msp
 tag MSP
 description MSP Restriction Enzyme
 type restrictionEnzyme
+label msp #provisional
 
 term hpa
 tag HPA
 description HPA Restriction Enzyme
 type restrictionEnzyme
+label hpa #provisional
 
 ### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
 ### term:
@@ -12468,72 +12500,86 @@ description version
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be strain)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional
 
 term B10.H-2aH-4bp/Wts
 tag 2A4B
 type strain
 description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
+label B10.H-2aH-4bp/Wts
 # Used for the CH12 Cell Line
 
 term B6D2F1/J
 tag B6D2F1J
 type strain
 description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
+label B6D2F1/J
 
 term BALB/cAnN
 tag BALBCANN
 type strain
 description ccMyeloma high incidence H2d
+label BALB/cAnN
 
 term C3H
 tag C3H
 type strain
 description Strain C3H, Very related to C57BL/6
+label C3H
 
 term C57BL/6
 tag C57BL6
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
+label C57BL/6
 
 term C57BL/6J
 tag C57BL6J
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
+label C57BL/6J
 
 term CD-1
 tag CD1
 type strain
 description Multipurpose mouse used for safety testing, aging studies, surgical models and pseudopregnancy.
+label CD-1
 
 term NIH/Swiss
 tag NIHS
 type strain
 description An outbred Swiss mouse  used as a general-purpose stock. Used extensively for pertussis HSF testing.
+label NIH/Swiss
 
 term RIII
 tag RIII
 type strain
 description High mammary tumor incidence in unfostered substrains.
+label RIII
 
 term 129
 tag S129
 type strain
 description Strain 129, has widely available embryonic stem cells
+label 129
 
 term 129/Ola
 tag 129OLA
 type strain
 description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
+label 129/Ola
 
 term Spretus.BL6-Xist
 tag SPBL6
 type strain
 description M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
+label Spretus.BL6-Xist
 
 term Unknown
 tag UKN
 type strain
 description Unknown strain origin
+label Unknown
 
 ### Age
 # Used in conjunction with mouse submissions
@@ -12544,90 +12590,113 @@ description Unknown strain origin
 # type (informs pipeline code of stanza type.  Should always be age)
 # stage (either embryonic or adult.  cannot say how/where this is used)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional labels using description
 
 term E0
 tag E0
 type age
 stage Embryonic
 description Embryonic day 0 (stem cell)
+label Embryonic day 0 (stem cell)
 
 term E11.5
 tag E11HALF
 type age
 stage Embryonic
 description Embryonic day 11.5
+label Embryonic day 11.5
 
 term E13.5
 tag E13HALF
 type age
 stage Embryonic
 description Embryonic day 13.5
+label Embryonic day 13.5
 
 term E14
 tag E14
 type age
 stage Embryonic
 description Embryonic day 14
+label Embryonic day 14
 
 term E14.5
 tag E14HALF
 type age
 stage Embryonic
 description Embryonic day 14.5
+label Embryonic day 14.5
 
 term E18
 tag E18
 type age
 stage Embryonic
 description Embryonic day 18
+label Embryonic day 18
 
 term E18.5
 tag E18HALF
 type age
 stage Embryonic
 description Embryonic day 18.5
+label Embryonic day 18.5
 
 term newborn-1days
 tag NEW1DAYS
 type age
 stage newborn
 description Newborn 1 day
+label Newborn 1 day
 
 term adult-1wks
 tag ADULT1WKS
 type age
 stage Adult
 description Adult 1 week
+label Adult 1 week
 
 term adult-4wks
 tag ADULT4WKS
 type age
 stage Adult
 description Adult 4 weeks
+label Adult 4 weeks
 
 term adult-5wks
 tag ADULT5WKS
 type age
 stage Adult
 description Adult 5 weeks
+label Adult 5 weeks
 
 term adult-8wks
 tag ADULT8WKS
 type age
 stage Adult
 description Adult 8 weeks
+label Adult 8 weeks
+
+term adult-24wks
+tag ADULT24WKS
+type age
+stage Adult
+description Adult 24 weeks PROVISIONAL
+label Adult 24 weeks PROVISIONAL
 
 term immortalized
-tag IMMORTAL
+tag IMMOR
 type age
 stage Cell Line
 description Immortal cells
+label Immortal cells
+# shortened tag from IMMORTAL to IMMOR to fit better.
 
 term ageUnknown
 tag AGEUNKN
 type age
 stage stageUnknown
 description the age when the real age is unknown
+label the age when the real age is unknown
 
 ### Attic
 # Expected fields:
@@ -12636,26 +12705,31 @@ description the age when the real age is unknown
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional, same as term
 
 term supplemental
 tag SUP
 type attic
 description Files supplemental at composite level
+label supplemental
 
 term auxSup
 tag AUXSUP
 type attic
 description Unverified files supplemental at experiment level
+label auxSup
 
 term auxValid
 tag AUXVAL
 type attic
 description Validated files supplemental to experiments
+label auxValid
 
 term auxExp
 tag AUXEXP
 type attic
 description Supplemental experiments
+label auxExp
 
 # Expected fields:
 # ----------------
@@ -12663,6 +12737,7 @@ description Supplemental experiments
 # tag (machine-readable name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be sex)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional, same as description
 #
 # Category: T for tissue, L for cell Line, P for Primary cell
 
@@ -12670,16 +12745,19 @@ term Tissue
 tag T
 type category
 description Tissue
+label Tissue
 
 term cellLine
 tag L
 type category
 description cell line
+label cell line
 
 term primaryCells
 tag P
 type category
 description primary cells
+label primary cells
 
 term M
 tag M
@@ -12776,12 +12854,14 @@ description Tissue obtained from pooling samples from various sample organisms
 # tag (machine-readable name, no special characters. uppercase.)
 # type (informs pipeline code of stanza type, should be seqPlatform)
 # description: Working on inputing description from geo and product website
+# label provisional label using description and words joined with numbers
 
 term Illumina_GA
 tag ILLUMINAGA
 geoPlatformName Illumina Genome Analyzer
 type seqPlatform
 description Illumina Genome Analyzer
+label Illumina Genome Analyzer
 # Matches GA that Kate initially indicated as the term
 
 term Illumina_GA2
@@ -12789,12 +12869,14 @@ tag ILLUMINAGA2
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer II
+label Illumina Genome AnalyzerII
 
 term Illumina_GA2e
 tag ILLUMINAGA2E
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe
+label Illumina Genome AnalyzerIIe
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
@@ -12802,6 +12884,7 @@ tag ILLUMINAGA2X
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIx
+label Illumina Genome AnalyzerIIx
 # Matches GA2x that Kate initally indicated as the term
 
 term Illumina_HiSeq_2000
@@ -12809,42 +12892,49 @@ tag ILLUMINAHISEQ2000
 geoPlatformName Illumina HiSeq 2000
 type seqPlatform
 description Illumina HiSeq 2000
+label Illumina HiSeq2000
 
 term 454_GS
 tag 454GS
 geoPlatformName 454 GS
 type seqPlatform
 description Roche 454 Genome Sequencer
+label Roche454 Genome Sequencer
 
 term 454_GS_20
 tag 454GS20
 geoPlatformName 454 GS 20
 type seqPlatform
 description Roche 454 Genome Sequencer 20
+label Roche454 Genome Sequencer 20
 
 term 454_GS_FLX
 tag 454GSFLX
 geoPlatformName 454 GS FLX
 type seqPlatform
 description Roche 454 Genome Sequencer FLX
+label Roche454 Genome Sequencer FLX
 
 term AB_SOLiD
 tag ABSOLID
 geoPlatformName AB SOLiD System
 type seqPlatform
 description Applied Biosystems SOLiD System
+label Applied Biosystems SOLiD System
 
 term AB_SOLiD_2.0
 tag ABSOLID2
 geoPlatformName AB_SOLiD System 2.0
 type seqPlatform
 description Applied Biosystems SOLiD System 2.0
+label Applied Biosystems SOLiD System2.0
 
 term AB_SOLiD_3.5
 tag ABSOLID3PLUS
 geoPlatformName AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
+label Applied Biosystems SOLiD System3.5
 
 #Uses the GEO terms to be conistent and help with GEO submissions
 ### Platform

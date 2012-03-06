@@ -7,15 +7,15 @@ def main():
 	""" Run all the checks, print output"""
 
 	parser = argparse.ArgumentParser(
-        prog='qaChecks',
+        prog='qaEncodeTracks2',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='A series of checks for QA',
         epilog=
     """Examples:
 
-qaChecks hg19 tableList
-qaChecks hg19 tableList /path/to/trackDb.ra
-qaChecks hg19 tableList ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeSydhTfbs.new.ra
+qaEncodeTracks2 hg19 tableList
+qaEncodeTracks2 hg19 tableList /path/to/trackDb.ra
+qaEncodeTracks2 hg19 tableList ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeSydhTfbs.new.ra
 
     """
         )

@@ -1,13 +1,13 @@
 # Data Agreement File for LICR Lab ChIP-seq (Histone) experiments for mm9
 
-#$Revision: 1.11 $
+#$Revision: 1.13 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 
 # The header for the associated DDF should look like this:
-#files   view    cell    antibody        sex     age     strain  control replicate	seqPlatform       softwareVersion labVersion
+#files   view    cell    antibody        sex     age     strain  control replicate	treatment	seqPlatform       softwareVersion labVersion
 
 
 #Explanation of DDF terms
@@ -20,6 +20,7 @@
 #strain: The strain that the sample originated from. the strain registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
 #control: The input used as control for ChIP-seq data. The control registerd vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Controls
 #replicate: The Replicate number. The replication number of a given experiment.
+#treatment: The treatment used to treat a specific cell.The treatment registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Treatments
 #seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
 #softwareVersion: Free text for the lab to keep track of software used in processed data
 #labVersion: Free text for the lab to keep track of any other data
@@ -30,7 +31,7 @@
 grant             Ren 
 lab               LICR-m
 dataType          ChipSeq 
-variables         cell, antibody,sex,age,strain,control
+variables         cell, antibody,sex,age,strain,control,treatment
 compositeSuffix   LicrHistone
 assembly          mm9
 dafVersion        2.0

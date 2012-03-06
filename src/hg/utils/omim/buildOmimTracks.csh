@@ -1,9 +1,11 @@
-#!/bin/tcsh
-# BUILD $1 OMIM RELATED TRACKS
+#!/bin/tcsh -e
+# BUILD $db OMIM RELATED TRACKS
+
+set db=$1
 
 cat genemap|sed -e 's/|/\t/g' > genemap.tab
 
-hgLoadSqlTab -warn $1 omimGeneMap ~/kent/src/hg/lib/omimGeneMap.sql genemap.tab
+hgLoadSqlTab -verbose=0 -warn $db omimGeneMapNew ~/kent/src/hg/lib/omimGeneMap.sql genemap.tab 
 
 # Load mim2gene table
 
@@ -33,35 +35,37 @@ cut -f 3 mim2gene.updated.txt >j3
 
 paste j1 j3 j2 >mim2gene.tab
 
-hgsql $1 -e 'drop table mim2gene'
-hgsql $1 < ~/kent/src/hg/lib/mim2gene.sql
+# BRIAN tail -n +2 mim2gene.tab | hgLoadSqlTab -verbose=0 -warn $db omim2geneNew ~/kent/src/hg/lib/omim2gene.sql stdin
+#hgsql $db -e 'drop table mim2geneNew'
+#hgsql $db < ~/kent/src/hg/lib/mim2gene.sql
 
-hgsql $1 -e 'load data local infile "mim2gene.tab" into table mim2gene ignore 1 lines'
+#hgsql $db -e 'load data local infile "mim2gene.tab" into table mim2gene ignore 1 lines'
 
 
-hgsql $1 -e 'drop table omim2gene'
-hgsql $1 < ~/kent/src/hg/lib/omim2gene.sql
+tail -n +2 mim2gene.updated.txt | hgLoadSqlTab -verbose=0 -warn $db omim2geneNew ~/kent/src/hg/lib/omim2gene.sql stdin 
+# hgsql $db -e 'drop table omim2gene'
+# hgsql $db < ~/kent/src/hg/lib/omim2gene.sql
 
-hgsql $1 -e 'load data local infile "mim2gene.updated.txt" into table omim2gene ignore 1 lines'
+# hgsql $db -e 'load data local infile "mim2gene.updated.txt" into table omim2gene ignore 1 lines'
 
 # build omimGeneSymbol table
 
-doOmimGeneSymbols $1 j.out
+../../doOmimGeneSymbols $db j.out
 cat j.out |sort -u >omimGeneSymbol.tab
 
-hgLoadSqlTab -warn $1 omimGeneSymbol ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab 
+hgLoadSqlTab -verbose=0 -warn $db omimGeneSymbolNew ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab  
 
 perl ./parseGeneMap.pl --gene-map-file=genemap >omimPhenotype.tab
 
-hgLoadSqlTab -warn $1 omimPhenotype ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab 
+hgLoadSqlTab -verbose=0 -warn $db omimPhenotypeNew ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab  
 
-hgsql $1 -e 'update omimPhenotype set omimPhenoMapKey = -1 where omimPhenoMapKey=0'
-hgsql $1 -e 'update omimPhenotype set phenotypeId = -1 where phenotypeId=0'
+hgsql $db -e 'update omimPhenotypeNew set omimPhenoMapKey = -1 where omimPhenoMapKey=0'
+hgsql $db -e 'update omimPhenotypeNew set phenotypeId = -1 where phenotypeId=0'
 
-doOmimGene2 $1 j.tmp
+../../doOmimGene2 $db j.tmp
 cat j.tmp |sort -u > omimGene2.tab
 
-hgLoadBed $1 omimGene2 omimGene2.tab
+hgLoadBed -verbose=0 $db omimGene2New omimGene2.tab 
 
 rm j.tmp
 ##############################################################
@@ -88,26 +92,29 @@ cut -f 2 j4-2 >j4.2
 
 paste j1 j1.2 j3 j4 j4.1 j4.2 j5 j2 >omimAv.tab
 
-hgsql $1 -e 'drop table omimAv'
-hgsql $1 < ~/src/hg/lib/omimAv.sql
-hgsql $1 -e 'load data local infile "omimAv.tab" into table omimAv ignore 1 lines'
-hgsql $1 -e 'update omimAv set repl2 = rtrim(ltrim(repl2))'
+tail -n +2  omimAv.tab | hgLoadSqlTab -verbose=0 -warn $db omimAvNew ~/kent/src/hg/lib/omimAv.sql stdin 
+#hgsql $db -e 'drop table omimAv'
+#hgsql $db < ~/src/hg/lib/omimAv.sql
+#hgsql $db -e 'load data local infile "omimAv.tab" into table omimAv ignore 1 lines'
 
-doOmimAv $1 omimAvRepl.tab j.err
+hgsql $db -e 'update omimAvNew set repl2 = rtrim(ltrim(repl2))'
 
-hgsql $1 -e "drop table omimAvRepl"
-hgsql $1 < ~/kent/src/hg/lib/omimAvRepl.sql
-hgsql $1 -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
+../../../doOmimAv $db omimAvRepl.tab j.err
+
+tail -n +2  omimAvRepl.tab | hgLoadSqlTab -verbose=0 -warn $db omimAvReplNew ~/kent/src/hg/lib/omimAvRepl.sql stdin 
+# hgsql $db -e "drop table omimAvRepl"
+# hgsql $db < ~/kent/src/hg/lib/omimAvRepl.sql
+# hgsql $db -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
 
 rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
 
-if ($1 == "hg18") then
-   hgsql $1 -N -e 'select chrom, chromStart, chromEnd, avId from omimAvRepl r, snp130 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
+if ($db == "hg18") then
+   hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp130 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
 else
-   hgsql $1 -N -e 'select chrom, chromStart, chromEnd, avId from omimAvRepl r, snp132 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
+   hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp132 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
 endif
 
-hgLoadBed -allowStartEqualEnd  $1 omimAvSnp omimAvSnp.tab
+hgLoadBed -verbose=0 -allowStartEqualEnd  $db omimAvSnpNew omimAvSnp.tab 
 cd ..
 
 ##############################################################
@@ -116,14 +123,15 @@ echo build omimLocation ...
 mkdir -p location
 cd location
 
-doOmimLocation $1 omimLocation.bed j.err
+# ../../../doOmimLocation $db omimLocation.bed j.err
+../../../doOmimLocation $db omimLocation.bed 
 
-hgLoadBed $1 omimLocation omimLocation.bed
+hgLoadBed -verbose=0 $db omimLocationNew omimLocation.bed 
 
 # Remove all gene entries in omimGene2 from omimLocation table
 
-hgsql $1 -N -e \
-'delete from omimLocation where name  in (select name from omimGene2) '
+hgsql $db -N -e \
+'delete from omimLocationNew where name  in (select name from omimGene2New) '
 
 # Per OMIM request, delete all the gray entries in omimLocation table.
 
@@ -132,27 +140,27 @@ cd cleanUpOmimLocation
 
 echo cleaning omimLocation ...
 
-hgsql $1 -N -e \
-'select distinct name from omimLocation' |sort -u >j.all
+hgsql $db -N -e \
+'select distinct name from omimLocationNew' |sort -u >j.all
 
-hgsql $1 -N -e \
-'select distinct name from omimLocation, omimPhenotype where name=omimId and omimPhenoMapKey=1' >j.1
-hgsql $1 -N -e \
-'select distinct name from omimLocation, omimPhenotype where name=omimId and omimPhenoMapKey=2' >j.2
-hgsql $1 -N -e \
-'select distinct name from omimLocation, omimPhenotype where name=omimId and omimPhenoMapKey=3' >j.3
-hgsql $1 -N -e \
-'select distinct name from omimLocation, omimPhenotype where name=omimId and omimPhenoMapKey=4' >j.4
+hgsql $db -N -e \
+'select distinct name from omimLocationNew, omimPhenotypeNew where name=omimId and omimPhenoMapKey=1' >j.1
+hgsql $db -N -e \
+'select distinct name from omimLocationNew, omimPhenotypeNew where name=omimId and omimPhenoMapKey=2' >j.2
+hgsql $db -N -e \
+'select distinct name from omimLocationNew, omimPhenotypeNew where name=omimId and omimPhenoMapKey=3' >j.3
+hgsql $db -N -e \
+'select distinct name from omimLocationNew, omimPhenotypeNew where name=omimId and omimPhenoMapKey=4' >j.4
 
 cat j.1 j.2 j.3 j.4 |sort -u >j.1234
 
-diff j.all j.1234 |grep "<" |sed -e "s/</do1 ${1}/" >doall
+join -v 1 j.all j.1234 |sed -e "s/^/.\/do1  /" >doall
 
 #cat doall
 
-cat << '_EOF_' > do1
-hgsql $1 -e "delete from omimLocation where name='${2}'"
-'_EOF_'
+cat << _EOF_ > do1
+hgsql $db -e 'delete from omimLocationNew where name="\$2"'
+_EOF_
 
 #sleep 3
 #echo after sleep
