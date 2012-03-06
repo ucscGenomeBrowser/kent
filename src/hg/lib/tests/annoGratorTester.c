@@ -54,7 +54,7 @@ struct sqlConnection *conn = sqlConnect(db);
 struct annoStreamer *primary = annoStreamDbNew(conn, table1, asObj1);
 struct sqlConnection *conn2 = sqlConnect(db);
 struct annoStreamer *kgIn = annoStreamDbNew(conn2, table2, asObj2);
-struct annoGrator *geneGrator = annoGratorGenericNew(primary, kgIn);
+struct annoGrator *geneGrator = annoGratorNew(kgIn);
 struct annoFormatter *tabOut = annoFormatTabNew(outFile);
 
 struct dyString *dbDotTwoBit = dyStringCreate("/hive/data/genomes/%s/%s.2bit", db, db);

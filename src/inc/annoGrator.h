@@ -40,12 +40,12 @@ struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoRow *pri
  * overlapping row has a rightJoin filter failure (see annoFilter.h),
  * set retRJFilterFailed and stop. */
 
-struct annoGrator *annoGratorGenericNew(struct annoStreamer *mySource);
-/* Make a new integrator of columns from two annoStreamer sources.
+struct annoGrator *annoGratorNew(struct annoStreamer *mySource);
+/* Make a new integrator of columns from mySource with (positions of) rows passed to integrate().
  * mySource becomes property of the new annoGrator. */
 
 void annoGratorSetQuery(struct annoStreamer *vSelf, struct annoGratorQuery *query);
 /* Set query (to be called only by annoGratorQuery which is created after streamers). */
 
-void annoGratorGenericClose(struct annoStreamer **pSelf);
+void annoGratorClose(struct annoStreamer **pSelf);
 /* Free self (including mySource). */

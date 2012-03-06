@@ -2,11 +2,18 @@
 
 #include "annoGrator.h"
 
-static void agCheckPrimarySorting(struct annoGrator *self, struct annoRow *primaryRow)
+INLINE void agCheckPrimarySorting(struct annoGrator *self, struct annoRow *primaryRow)
 /* Die if primaryRow seems to have arrived out of order. */
 {
-if (self->prevPChrom == NULL || differentString(primaryRow->chrom, self->prevPChrom))
+if (self->prevPChrom == NULL)
     self->prevPChrom = cloneString(primaryRow->chrom);
+else if (differentString(primaryRow->chrom, self->prevPChrom))
+    {
+    if (strcmp(primaryRow->chrom, self->prevPChrom) < 0)
+	errAbort("Unsorted input from primarySource (%s < %s)",
+		 primaryRow->chrom, self->prevPChrom);
+    self->prevPChrom = cloneString(primaryRow->chrom);
+    }
 else if (primaryRow->start < self->prevPStart)
     errAbort("Unsorted input from primarySource (%s, %u < %u)",
 	     primaryRow->chrom, primaryRow->start, self->prevPStart);
@@ -22,9 +29,10 @@ struct annoRow *qRow, *prevQRow = NULL, *nextQRow;
 for (qRow = self->qHead;  qRow != NULL;  qRow = nextQRow)
     {
     nextQRow = qRow->next;
-    if (sameString(qRow->chrom, chrom) && qRow->start >= start)
+    int cDifRowP = strcmp(qRow->chrom, chrom);
+    if (cDifRowP > 0 || (cDifRowP == 0 && qRow->start >= start))
 	break;
-    else if (differentString(qRow->chrom, chrom) || qRow->end < start)
+    else if (cDifRowP < 0 || qRow->end < start)
 	{
 	if (prevQRow == NULL)
 	    self->qHead = qRow->next;
@@ -39,28 +47,58 @@ for (qRow = self->qHead;  qRow != NULL;  qRow = nextQRow)
     }
 }
 
+INLINE void agCheckInternalSorting(struct annoRow *newRow, struct annoRow *qTail)
+/* Die if newRow precedes qTail. */
+{
+if (qTail != NULL)
+    {
+    int cDifNewTail = strcmp(newRow->chrom, qTail->chrom);
+    if (cDifNewTail < 0)
+	errAbort("Unsorted input from internal source (%s < %s)",
+		 newRow->chrom, qTail->chrom);
+    else if (cDifNewTail == 0 && newRow->start < qTail->start)
+	errAbort("Unsorted input from internal source (%s, %u < %u)",
+		 newRow->chrom, newRow->start, qTail->start);
+    }
+}
+
 INLINE void agFetchToEnd(struct annoGrator *self, char *chrom, uint end)
 /* Fetch rows until we are sure we have all items that start to the left of end,
  * i.e. we have an item that starts at/after end or we hit eof. */
 {
-while (!self->eof && (self->qTail == NULL ||
-		      (sameString(self->qTail->chrom, chrom) && self->qTail->start < end)))
+while (!self->eof &&
+       (self->qTail == NULL || strcmp(self->qTail->chrom, chrom) < 0 || self->qTail->start < end))
     {
     struct annoRow *newRow = self->mySource->nextRow(self->mySource);
     if (newRow == NULL)
 	self->eof = TRUE;
     else
 	{
-	if (self->qTail != NULL)
+	agCheckInternalSorting(newRow, self->qTail);
+	int cDifNewP = strcmp(newRow->chrom, chrom);
+	if (cDifNewP < 0)
 	    {
-	    if (sameString(self->qTail->chrom, chrom) && newRow->start < self->qTail->start)
-		errAbort("unsorted input from internal source (%s, %u < %u)",
-			 chrom, newRow->start, self->qTail->start);
-	    self->qTail->next = newRow;
+	    // newRow->chrom comes before chrom; skip over newRow
+	    //#*** free/discard/reuse newRow
 	    }
-	self->qTail = newRow;
-	if (self->qHead == NULL)
-	    self->qHead = newRow;
+	else
+	    {
+	    // Add newRow to qTail
+	    if (self->qTail == NULL)
+		{
+		if (self->qHead != NULL)
+		    errAbort("qTail is NULL but qHead is non-NULL");
+		self->qHead = self->qTail = newRow;
+		}
+	    else
+		{
+		self->qTail->next = newRow;
+		self->qTail = newRow;
+		}
+	    if (cDifNewP > 0)
+		// newRow->chrom comes after chrom; we're done for now
+		break;
+	    }
 	}
     }
 }
@@ -95,7 +133,7 @@ slReverse(&rowList);
 return rowList;
 }
 
-void annoGratorGenericClose(struct annoStreamer **pSelf)
+void annoGratorClose(struct annoStreamer **pSelf)
 /* Free self (including mySource). */
 {
 if (pSelf == NULL)
@@ -138,8 +176,8 @@ self->streamer.query = query;
 self->mySource->setQuery((struct annoStreamer *)(self->mySource), query);
 }
 
-struct annoGrator *annoGratorGenericNew(struct annoStreamer *mySource)
-/* Make a new integrator of columns from two annoStreamer sources.
+struct annoGrator *annoGratorNew(struct annoStreamer *mySource)
+/* Make a new integrator of columns from mySource with (positions of) rows passed to integrate().
  * mySource becomes property of the new annoGrator. */
 {
 struct annoGrator *self;
@@ -149,7 +187,7 @@ annoStreamerInit(streamer, mySource->getAutoSqlObject(mySource));
 streamer->setRegion = annoGratorSetRegion;
 streamer->setQuery = annoGratorSetQuery;
 streamer->nextRow = noNextRow;
-streamer->close = annoGratorGenericClose;
+streamer->close = annoGratorClose;
 self->integrate = annoGratorIntegrate;
 self->mySource = mySource;
 return self;
