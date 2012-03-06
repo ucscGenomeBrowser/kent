@@ -84,7 +84,8 @@ include wgEncodeOpenChromDnase.ra beta,public
 include wgEncodeUwDnase.release4.ra
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.release3.ra
+include wgEncodeUwDgf.release3.ra beta,public
+include wgEncodeUwDgf.patch.ra alpha
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 
@@ -150,7 +151,8 @@ include wgEncodeBroadHistone.release2.ra
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.release3.ra
+include wgEncodeUwHistone.release3.ra beta,public
+include wgEncodeUwHistone.patch.ra alpha
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra beta,public
@@ -159,7 +161,8 @@ include wgEncodeSydhHistone.release3.ra alpha
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release3.ra
+include wgEncodeUwTfbs.release3.ra beta,public
+include wgEncodeUwTfbs.patch.ra alpha
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha
