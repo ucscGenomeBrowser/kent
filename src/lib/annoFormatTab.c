@@ -31,7 +31,7 @@ for (col = source->columns, i = 0;  col != NULL;  col = col->next, i++)
     }
 }
 
-void aftInitialize(struct annoFormatter *vSelf, struct annoGratorQuery *query)
+static void aftInitialize(struct annoFormatter *vSelf, struct annoGratorQuery *query)
 /* Print header, regardless of whether we get any data after this. */
 {
 vSelf->query = query;
@@ -47,7 +47,7 @@ if (self->needHeader)
     }
 }
 
-void aftCollect(struct annoFormatter *vSelf, struct annoStreamer *source, struct annoRow *rows)
+static void aftCollect(struct annoFormatter *vSelf, struct annoStreamer *stub, struct annoRow *rows)
 /* Gather columns from a single source's row(s). */
 {
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
@@ -57,7 +57,7 @@ else
     slAddHead(&(self->gratorRowLists), slRefNew(rows));
 }
 
-void aftDiscard(struct annoFormatter *vSelf)
+static void aftDiscard(struct annoFormatter *vSelf)
 /* Forget what we've collected so far, time to start over. */
 {
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
@@ -82,9 +82,9 @@ for (col = streamer->columns, i = 0;  col != NULL;  col = col->next, i++)
     }
 }
 
-void aftFormatOne(struct annoFormatter *vSelf)
+static void aftFormatOne(struct annoFormatter *vSelf)
 /* Print out tab-separated columns that we have gathered in prior calls to aftCollect,
- * and start over fresh for the next line of output.  Write header if necessary. */
+ * and start over fresh for the next line of output. */
 {
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
 slReverse(&(self->gratorRowLists));
@@ -120,7 +120,7 @@ self->primaryRow = NULL;
 slFreeList(&(self->gratorRowLists));
 }
 
-void aftClose(struct annoFormatter **pVSelf)
+static void aftClose(struct annoFormatter **pVSelf)
 /* Close file handle, free self. */
 {
 if (pVSelf == NULL)
