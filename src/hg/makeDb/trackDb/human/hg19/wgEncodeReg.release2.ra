@@ -113,8 +113,8 @@ canPack On
     priority 1.2
     dragAndDrop subtracks
 
-	track wgEncodeRegMarkH3k4me1Gm12878
-	table wgEncodeBroadHistoneGm12878H3k4me1StdSig
+	#track wgEncodeRegMarkH3k4me1Gm12878
+	track wgEncodeBroadHistoneGm12878H3k4me1StdSig
 	shortLabel GM12878
 	longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on GM12878 Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me1
