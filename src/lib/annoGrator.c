@@ -138,8 +138,7 @@ self->streamer.query = query;
 self->mySource->setQuery((struct annoStreamer *)(self->mySource), query);
 }
 
-struct annoGrator *annoGratorGenericNew(struct annoStreamer *primarySource,
-					struct annoStreamer *mySource)
+struct annoGrator *annoGratorGenericNew(struct annoStreamer *mySource)
 /* Make a new integrator of columns from two annoStreamer sources.
  * mySource becomes property of the new annoGrator. */
 {
@@ -152,7 +151,6 @@ streamer->setQuery = annoGratorSetQuery;
 streamer->nextRow = noNextRow;
 streamer->close = annoGratorGenericClose;
 self->integrate = annoGratorIntegrate;
-self->primaryAsObj = primarySource->getAutoSqlObject(primarySource);
 self->mySource = mySource;
 return self;
 }
