@@ -259,7 +259,7 @@ noInherit on
 
         track wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks off
-        shortLabel OB 8w CTCF 
+        shortLabel OFlact 8w CTCF 
         longLabel Olfactory Bulb adult-8wks CTCF TFBS ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=OLFACT control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -286,7 +286,7 @@ noInherit on
 
         track wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks off
-        shortLabel OB 8w Pol2 
+        shortLabel OFlact 8w Pol2 
         longLabel Olfactory Bulb adult-8wks Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=OLFACT control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -708,7 +708,7 @@ noInherit on
 
         track wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel OB 8w CTCF 
+        shortLabel OFlact 8w CTCF 
         longLabel Olfactory Bulb adult-8wks CTCF TFBS ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.107427 50.025291
@@ -735,7 +735,7 @@ noInherit on
 
         track wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel OB 8w Pol2 
+        shortLabel OFlact 8w Pol2 
         longLabel Olfactory Bulb adult-8wks Pol2 TFBS ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.128951 53.643612
@@ -820,7 +820,7 @@ noInherit on
 
         track wgEncodeLicrTfbsOlfactInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel OB 8w Input 
+        shortLabel OFlact 8w Input 
         longLabel Olfactory Bulb adult-8wks Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.102227 41.708450
