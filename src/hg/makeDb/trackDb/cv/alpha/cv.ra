@@ -10933,7 +10933,7 @@ type localization
 description Whole cell
 termId GO:0005623
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
-label Whole cell
+label cell GO:0005623 #provisional
 
 term nucleus
 tag NUCLEUS
@@ -10941,6 +10941,7 @@ type localization
 description Large membrane bound part of cell containing chromosomes and the bulk of the cell's DNA
 termId GO:0005634
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005634
+label nucleus GO:0005634 #provisional
 
 term cytosol
 tag CYTOSOL
@@ -10948,6 +10949,7 @@ type localization
 description The fluid between the cells outer membrane and the nucleus
 termId GO:0005829
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005829
+label cytosol GO:0005829 #provisional
 
 term polysome
 tag POLYSOME
@@ -10955,6 +10957,7 @@ type localization
 description Strand of mRNA with ribosomes attached
 termId GO:0005844
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
+label polysome GO:0005844 #provisional
 
 term chromatin
 tag CHROMATIN
@@ -10962,6 +10965,7 @@ type localization
 description Nuclear DNA and associated proteins
 termId GO:0000790
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0000790
+label chromatin GO:0000790 #provisional
 
 term nucleolus
 tag NUCLEOLUS
@@ -10969,6 +10973,7 @@ type localization
 description The part of the nucleus where ribosomal RNA is actively transcribed
 termId GO:0005730
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
+label nucleolus GO:0005730 #provisional
 
 term nucleoplasm
 tag NUCLEOPLASM
@@ -10976,6 +10981,7 @@ type localization
 description That part of the nuclear content other than the chromosomes or the nucleolus
 termId GO:0005654
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005654
+label nucleoplasm GO:0005654 #provisional
 
 term nuclearMatrix
 tag NUCLEARMATRIX
@@ -10983,6 +10989,7 @@ type localization
 description The dense fibrillar network lying on the inner side of the nuclear membrane
 termId GO:0016363
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0016363
+term nuclearMatrix GO:0016363
 
 term membraneFraction
 tag MEMBRANEFRACTION
@@ -10990,6 +10997,7 @@ type localization
 description That fraction of cells, prepared by disruptive biochemical methods, that includes the plasma and other membranes.
 termId GO:0005624
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
+label membraneFraction GO:0005624 #provisional
 
 term mitochondria
 tag MITO
@@ -10997,6 +11005,7 @@ type localization
 description Mitochondria
 termId GO:0005739
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
+label mitochondria GO:0005739 #provisional
 
 ### RNA extracts
 
