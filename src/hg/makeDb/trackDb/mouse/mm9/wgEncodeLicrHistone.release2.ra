@@ -33,7 +33,7 @@ subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
 subGroup3 factor Factor H3K04ME1=H3K4me1 H3K04ME3=H3K4me3 H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 H3K79ME2=H3K79me2 H3K09AC=H3K9ac H3K27AC=H3K27ac INPUT=Input
 subGroup4 sex Sex M=M F=F U=U
-subGroup5 age Age ADULT8WKS=adult-8wks ADULT24WKS=adult-24wks E0=E0 E14HALF=E14.5
+subGroup5 age Age ADULT8WKS=adult-8wks ADULT24WKS=adult-24wks E0=E0 E14HALF=E14.5 IMMORTAL=immortalized
 subGroup6 strain Strain C57BL6=C57BL/6
 subGroup7 control Control STD=std
 dimensions dimensionX=cellType dimensionY=factor 
