@@ -522,7 +522,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         # subId=5387 dateSubmitted=2012-01-31
 
         track wgEncodeOpenChromDnaseK562NabutPk
-        parent wgEncodeOpenChromDnaseViewPeaks
+        parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel K562 Pk
         longLabel K562 NaBut DNaseI HS Peaks from ENCODE/OpenChrom-Duke
         subGroups view=Peaks cellType=1K562 treatment=NABUT
@@ -1108,7 +1108,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         # subId=5387 dateSubmitted=2012-01-31
 
         track wgEncodeOpenChromDnaseK562NabutSig
-        parent wgEncodeOpenChromDnaseViewSignal
+        parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel K562 DS
         longLabel K562 NaBut DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIG cellType=1K562 treatment=NABUT
@@ -1696,7 +1696,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         # subId=5387 dateSubmitted=2012-01-31
 
         track wgEncodeOpenChromDnaseK562NabutBaseOverlapSignal
-        parent wgEncodeOpenChromDnaseViewSigBo
+        parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel K562 OS
         longLabel K562 NaBut DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIGBO cellType=1K562 treatment=NABUT
