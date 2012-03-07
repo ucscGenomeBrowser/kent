@@ -22,6 +22,7 @@ struct annoGrator
 				 boolean *retRJFilterFailed);
     // Private members -- callers are on the honor system to access these using only methods above.
     struct annoStreamer *mySource;	// internal source
+    int numSrcCols;			// cache the number of columns we get from mySource
     char *prevPChrom;			// for detection of unsorted input from primary
     uint prevPStart;			// for detection of unsorted input from primary
     boolean eof;			// stop asking internal source for rows when it's done

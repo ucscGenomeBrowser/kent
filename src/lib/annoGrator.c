@@ -40,7 +40,7 @@ for (qRow = self->qHead;  qRow != NULL;  qRow = nextQRow)
 	    prevQRow->next = qRow->next;
 	if (self->qTail == qRow)
 	    self->qTail = prevQRow;
-	//#*** free/discard/reuse qRow here
+	annoRowFree(&qRow, self->numSrcCols);
 	}
     else
 	prevQRow = qRow;
@@ -77,10 +77,8 @@ while (!self->eof &&
 	agCheckInternalSorting(newRow, self->qTail);
 	int cDifNewP = strcmp(newRow->chrom, chrom);
 	if (cDifNewP < 0)
-	    {
 	    // newRow->chrom comes before chrom; skip over newRow
-	    //#*** free/discard/reuse newRow
-	    }
+	    annoRowFree(&newRow, self->numSrcCols);
 	else
 	    {
 	    // Add newRow to qTail
@@ -115,13 +113,12 @@ agCheckPrimarySorting(self, primaryRow);
 agTrimToStart(self, primaryRow->chrom, primaryRow->start);
 agFetchToEnd(self, primaryRow->chrom, primaryRow->end);
 boolean rjFailHard = (retRJFilterFailed != NULL);
-int numCols = slCount(self->mySource->columns);
 struct annoRow *qRow;
 for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
     {
     if (qRow->start < primaryRow->end && qRow->end > primaryRow->start)
 	{
-	slAddHead(&rowList, annoRowClone(qRow, numCols));
+	slAddHead(&rowList, annoRowClone(qRow, self->numSrcCols));
 	if (rjFailHard && qRow->rightJoinFail)
 	    {
 	    *retRJFilterFailed = TRUE;
@@ -138,8 +135,10 @@ void annoGratorClose(struct annoStreamer **pSelf)
 {
 if (pSelf == NULL)
     return;
-struct annoStreamer *mySource = (*(struct annoGrator **)pSelf)->mySource;
-mySource->close(&mySource);
+struct annoGrator *self = *(struct annoGrator **)pSelf;
+self->mySource->close(&(self->mySource));
+annoRowFreeList(&(self->qHead), self->numSrcCols);
+freeMem(self->prevPChrom);
 freez(pSelf);
 }
 
@@ -156,8 +155,8 @@ static void agReset(struct annoGrator *self)
 freez(&self->prevPChrom);
 self->prevPStart = 0;
 self->eof = FALSE;
-//#*** free/discard/reuse q here
-self->qHead = self->qTail = NULL;
+annoRowFreeList(&(self->qHead), self->numSrcCols);
+self->qTail = NULL;
 }
 
 void annoGratorSetRegion(struct annoStreamer *vSelf, char *chrom, uint rStart, uint rEnd)
@@ -190,5 +189,6 @@ streamer->nextRow = noNextRow;
 streamer->close = annoGratorClose;
 self->integrate = annoGratorIntegrate;
 self->mySource = mySource;
+self->numSrcCols = slCount(mySource->asObj->columnList);
 return self;
 }

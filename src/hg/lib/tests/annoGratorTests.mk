@@ -8,13 +8,13 @@ EXP_DIR = expected/annoGrator
 OUT_DIR = output/annoGrator
 DB=hg19
 
-test: pgSnpDbToTabOut pgSnpKgDbToTabOut
+test: pgSnpDbToTabOut pgSnpKgDbToTabOutShort
 
 pgSnpDbToTabOut: mkout
 	${TESTER} ${DB} $@ > ${OUT_DIR}/$@.txt
 	diff -u ${EXP_DIR}/$@.txt ${OUT_DIR}/$@.txt
 
-pgSnpKgDbToTabOut: mkout
+pgSnpKgDbToTabOutShort: mkout
 	${TESTER} ${DB} $@ > ${OUT_DIR}/$@.txt
 	diff -u ${EXP_DIR}/$@.txt ${OUT_DIR}/$@.txt
 

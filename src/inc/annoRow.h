@@ -27,4 +27,10 @@ struct annoRow *annoRowFromStringArray(char *chrom, uint start, uint end, boolea
 struct annoRow *annoRowClone(struct annoRow *rowIn, int numCols);
 /* Allocate & return a single annoRow cloned from rowIn. */
 
+void annoRowFree(struct annoRow **pRow, int numCols);
+/* Free a single annoRow. */
+
+void annoRowFreeList(struct annoRow **pList, int numCols);
+/* Free a list of annoRows. */
+
 #endif//ndef ANNOROW_H

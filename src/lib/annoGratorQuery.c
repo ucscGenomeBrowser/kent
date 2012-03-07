@@ -69,22 +69,27 @@ return query;
 }
 
 void annoGratorQuerySetRegion(struct annoGratorQuery *query, char *chrom, uint rStart, uint rEnd)
-/* Set genomic region for query. */
+/* Set genomic region for query; if chrom is NULL, position is whole genome. */
 {
-uint chromSize = (uint)hashIntVal(query->chromSizes, chrom);
-if (rEnd < rStart)
-    errAbort("annoGratorQuerySetRegion: rStart (%u) can't be greater than rEnd (%u)",
-	     rStart, rEnd);
-if (rEnd > chromSize)
-    errAbort("annoGratorQuerySetRegion: rEnd (%u) can't be greater than chrom %s size (%u)",
-	     rEnd, chrom, chromSize);
-if (rEnd == 0)
-    rEnd = chromSize;
+if (chrom != NULL)
+    {
+    uint chromSize = (uint)hashIntVal(query->chromSizes, chrom);
+    if (rEnd < rStart)
+	errAbort("annoGratorQuerySetRegion: rStart (%u) can't be greater than rEnd (%u)",
+		 rStart, rEnd);
+    if (rEnd > chromSize)
+	errAbort("annoGratorQuerySetRegion: rEnd (%u) can't be greater than chrom %s size (%u)",
+		 rEnd, chrom, chromSize);
+    if (rEnd == 0)
+	rEnd = chromSize;
+    }
 // Alert all streamers that they should now send data from a possibly different region:
 query->primarySource->setRegion(query->primarySource, chrom, rStart, rEnd);
 struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
 for (;  grator != NULL;  grator = grator->next)
     grator->setRegion(grator, chrom, rStart, rEnd);
+//#*** formatters should be told too, in case the info should go in the header, or if
+//#*** they should clip output to search region....
 }
 
 void annoGratorQueryExecute(struct annoGratorQuery *query)
@@ -100,22 +105,32 @@ while ((primaryRow = primarySrc->nextRow(primarySrc)) != NULL)
 	continue;
     for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
 	formatter->collect(formatter, primarySrc, primaryRow);
+    struct slRef *gratorRowLists = NULL;
     boolean rjFilterFailed = FALSE;
     struct annoStreamer *grator = (struct annoStreamer *)(query->integrators);
     for (;  grator != NULL;  grator = grator->next)
 	{
 	struct annoGrator *realGrator = (struct annoGrator *)grator;
 	struct annoRow *gratorRows = realGrator->integrate(realGrator, primaryRow, &rjFilterFailed);
+	slAddHead(&gratorRowLists, slRefNew(gratorRows));
 	if (rjFilterFailed)
 	    break;
 	for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
 	    formatter->collect(formatter, grator, gratorRows);
 	}
+    slReverse(&gratorRowLists);
     for (formatter = query->formatters;  formatter != NULL;  formatter = formatter->next)
 	if (rjFilterFailed)
 	    formatter->discard(formatter);
 	else
 	    formatter->formatOne(formatter);
+    annoRowFree(&primaryRow, slCount(primarySrc->asObj->columnList));
+    struct slRef *oneRowList = gratorRowLists;
+    grator = (struct annoStreamer *)(query->integrators);
+    for (;  oneRowList != NULL;  oneRowList = oneRowList->next, grator = grator->next)
+	annoRowFreeList((struct annoRow **)&(oneRowList->val),
+			slCount(grator->asObj->columnList));
+    slFreeList(&oneRowList);
     }
 }
 

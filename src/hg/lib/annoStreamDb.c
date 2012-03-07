@@ -53,7 +53,7 @@ if (!streamer->positionIsGenome)
 	}
     }
 verbose(2, "mysql query: '%s'\n", query->string);
-struct sqlResult *sr = sqlGetResult(self->conn, query->string);
+struct sqlResult *sr = sqlStoreResult(self->conn, query->string);
 dyStringFree(&query);
 self->sr = sr;
 }
@@ -76,6 +76,8 @@ static struct annoRow *asdNextRowDb(struct annoStreamer *vSelf)
 struct annoStreamDb *self = (struct annoStreamDb *)vSelf;
 if (self->sr == NULL)
     asdDoQuery(self);
+if (self->sr == NULL)
+    return NULL;
 char **row = nextRowUnfiltered(self);
 if (row == NULL)
     return NULL;

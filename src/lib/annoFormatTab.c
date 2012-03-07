@@ -88,19 +88,16 @@ static void aftFormatOne(struct annoFormatter *vSelf)
 {
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
 slReverse(&(self->gratorRowLists));
+// How many rows did each grator give us, and what's the largest # of rows?
 int maxRows = 1;
 int i;
 struct slRef *grRef;
-// How many rows did each grator give us, and what's the largest # of rows?
 int numGrators = slCount(self->gratorRowLists);
-if (numGrators > 1)
+for (i = 0, grRef = self->gratorRowLists;  i < numGrators;  i++, grRef = grRef->next)
     {
-    for (i = 0, grRef = self->gratorRowLists;  i < numGrators;  i++, grRef = grRef->next)
-	{
-	int gratorRowCount = slCount(grRef->val);
-	if (gratorRowCount > maxRows)
-	    maxRows = gratorRowCount;
-	}
+    int gratorRowCount = slCount(grRef->val);
+    if (gratorRowCount > maxRows)
+	maxRows = gratorRowCount;
     }
 // Print out enough rows to make sure that all grator rows are included.
 for (i = 0;  i < maxRows;  i++)
@@ -114,8 +111,8 @@ for (i = 0;  i < maxRows;  i++)
 	char **row = (gratorRow == NULL) ? NULL : gratorRow->words;
 	printColumns(self->f, grator, row, FALSE);
 	}
+    fputc('\n', self->f);
     }
-fputc('\n', self->f);
 self->primaryRow = NULL;
 slFreeList(&(self->gratorRowLists));
 }

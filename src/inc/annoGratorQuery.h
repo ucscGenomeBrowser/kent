@@ -32,7 +32,7 @@ struct annoGratorQuery *annoGratorQueryNew(char *assemblyName, struct hash *chro
  * All other inputs must be non-NULL. */
 
 void annoGratorQuerySetRegion(struct annoGratorQuery *query, char *chrom, uint rStart, uint rEnd);
-/* Set genomic region for query. */
+/* Set genomic region for query; if chrom is NULL, position is whole genome. */
 
 void annoGratorQueryExecute(struct annoGratorQuery *query);
 /* For each annoRow from query->primarySource, invoke integrators and

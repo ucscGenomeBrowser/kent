@@ -8,7 +8,8 @@
 
 // Names of tests:
 static const char *pgSnpDbToTabOut = "pgSnpDbToTabOut";
-static const char *pgSnpKgDbToTabOut = "pgSnpKgDbToTabOut";
+static const char *pgSnpKgDbToTabOutShort = "pgSnpKgDbToTabOutShort";
+static const char *pgSnpKgDbToTabOutLong = "pgSnpKgDbToTabOutLong";
 
 void usage()
 /* explain usage and exit */
@@ -21,7 +22,8 @@ errAbort(
     "testName can be one of the following:\n"
     "    %s\n"
     "    %s\n"
-    , pgSnpDbToTabOut, pgSnpKgDbToTabOut
+    "    %s\n"
+    , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong
     );
 }
 
@@ -46,7 +48,7 @@ dyStringFree(&dbDotTwoBit);
 }
 
 void twoDbToTabOut(char *db, char *table1, struct asObject *asObj1,
-		   char *table2, struct asObject *asObj2, char *outFile)
+		   char *table2, struct asObject *asObj2, char *outFile, boolean wholeGenome)
 /* Integrate data from a pgSnp database table and a knownGene db table
  * and print all fields to tab-sep output. */
 {
@@ -61,7 +63,10 @@ struct dyString *dbDotTwoBit = dyStringCreate("/hive/data/genomes/%s/%s.2bit", d
 struct twoBitFile *tbf = twoBitOpen(dbDotTwoBit->string);
 struct annoGratorQuery *query = annoGratorQueryNew(db, NULL, tbf, primary, geneGrator, tabOut);
 
-annoGratorQuerySetRegion(query, "chr1", 705881, 752721);
+if (wholeGenome)
+    annoGratorQuerySetRegion(query, NULL, 0, 0);
+else
+    annoGratorQuerySetRegion(query, "chr1", 705881, 752721);
 annoGratorQueryExecute(query);
 
 annoGratorQueryFree(&query);
@@ -81,7 +86,8 @@ boolean doAllTests = (argc == 2);
 if (!doAllTests)
     {
     if (sameString(argv[2], pgSnpDbToTabOut) ||
-	sameString(argv[2], pgSnpKgDbToTabOut))
+	sameString(argv[2], pgSnpKgDbToTabOutShort) ||
+	sameString(argv[2], pgSnpKgDbToTabOutLong))
 	test = cloneString(argv[2]);
     else
 	{
@@ -96,13 +102,16 @@ struct asObject *asObj1 = pgSnpAsObj();
 if (doAllTests || sameString(test, pgSnpDbToTabOut))
     dbToTabOut(db, table1, asObj1, "stdout");
 
+char *table2 = "knownGene";
+struct asObject *asObj2 = asParseFile("../knownGene.as");
+
 // Second test: some rows of a pgSnp table integrated with knownGene
-if (doAllTests || sameString(test, pgSnpKgDbToTabOut))
-    {
-    char *table2 = "knownGene";
-    struct asObject *asObj2 = asParseFile("../knownGene.as");
-    twoDbToTabOut(db, table1, asObj1, table2, asObj2, "stdout");
-    }
+if (doAllTests || sameString(test, pgSnpKgDbToTabOutShort))
+    twoDbToTabOut(db, table1, asObj1, table2, asObj2, "stdout", FALSE);
+
+// Third test: all rows of a pgSnp table integrated with knownGene
+if (doAllTests || sameString(test, pgSnpKgDbToTabOutLong))
+    twoDbToTabOut(db, table1, asObj1, table2, asObj2, "stdout", TRUE);
 
 return 0;
 }

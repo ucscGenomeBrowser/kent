@@ -27,3 +27,31 @@ struct annoRow *annoRowClone(struct annoRow *rowIn, int numCols)
 return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
 			      rowIn->words, numCols);
 }
+
+void annoRowFree(struct annoRow **pRow, int numCols)
+/* Free a single annoRow. */
+{
+if (pRow == NULL)
+    return;
+struct annoRow *row = *pRow;
+freeMem(row->chrom);
+int i;
+for (i = 0;  i < numCols;  i++)
+    freeMem(row->words[i]);
+freeMem(row->words);
+freez(pRow);
+return;
+}
+
+void annoRowFreeList(struct annoRow **pList, int numCols)
+/* Free a single annoRow. */
+{
+if (pList == NULL)
+    return;
+struct annoRow *row, *nextRow;
+for (row = *pList;  row != NULL;  row = nextRow)
+    {
+    nextRow = row->next;
+    annoRowFree(&row, numCols);
+    }
+}
