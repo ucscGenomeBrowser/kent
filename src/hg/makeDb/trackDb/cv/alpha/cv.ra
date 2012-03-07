@@ -10879,16 +10879,19 @@ term 400
 tag IL400
 type insertLength
 description insert length of 400nt
+label 400 #provisional
 
 term 200
 tag IL200
 type insertLength
 description insert length of 200nt
+label 200 #provisional
 
 term ilNA
 tag ILNA
 type insertLength
 description insert length not applicable
+label N/A #provisional
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 
