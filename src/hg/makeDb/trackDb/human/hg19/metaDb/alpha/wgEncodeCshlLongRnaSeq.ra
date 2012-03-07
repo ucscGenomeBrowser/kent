@@ -28040,8 +28040,8 @@ cell IMR90
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-06
-dateUnrestricted 2012-09-06
+dateSubmitted 2012-02-17
+dateUnrestricted 2012-11-16
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -28050,12 +28050,13 @@ labProtocolId 045WCt
 localization cell
 md5sum 5f3b458260d9917ee07f287f561fbacf,904db66b92aaeaecb709e8fb626cf719
 project wgEncode
+protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
-spikeInPool NIST14
-subId 5120
+spikeInPool Nist14
+subId 5768
 tableName wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1
 view Alignments
 
@@ -28093,8 +28094,8 @@ cell IMR90
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-06
-dateUnrestricted 2012-09-06
+dateSubmitted 2012-02-17
+dateUnrestricted 2012-11-16
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd1Rep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -28103,12 +28104,13 @@ labProtocolId 045WCt
 localization cell
 md5sum 47fc17ab6a3ac42d99ce6d3c264085c9
 project wgEncode
+protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
-spikeInPool NIST14
-subId 5120
+spikeInPool Nist14
+subId 5768
 view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd1Rep2
@@ -28144,8 +28146,8 @@ cell IMR90
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-06
-dateUnrestricted 2012-09-06
+dateSubmitted 2012-02-17
+dateUnrestricted 2012-11-16
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd2Rep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -28154,12 +28156,13 @@ labProtocolId 045WCt
 localization cell
 md5sum 194ec458645a9e85264143d9d37de5db
 project wgEncode
+protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
-spikeInPool NIST14
-subId 5120
+spikeInPool Nist14
+subId 5768
 view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd2Rep2
@@ -28195,8 +28198,8 @@ cell IMR90
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-06
-dateUnrestricted 2012-09-06
+dateSubmitted 2012-02-17
+dateUnrestricted 2012-11-16
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -28205,12 +28208,13 @@ labProtocolId 045WCt
 localization cell
 md5sum d981e3b2d2672f4393ab38b2416ef2f5
 project wgEncode
+protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
-spikeInPool NIST14
-subId 5120
+spikeInPool Nist14
+subId 5768
 tableName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1
 view MinusRawSignal
 
@@ -28248,8 +28252,8 @@ cell IMR90
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-12-06
-dateUnrestricted 2012-09-06
+dateSubmitted 2012-02-17
+dateUnrestricted 2012-11-16
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -28258,12 +28262,13 @@ labProtocolId 045WCt
 localization cell
 md5sum 49c670192adab0eb6890fe1f3d98f3f8
 project wgEncode
+protocol None
 readType 2x101D
 replicate 1
 rnaExtract total
 seqPlatform Illumina_HiSeq_2000
-spikeInPool NIST14
-subId 5120
+spikeInPool Nist14
+subId 5768
 tableName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1
 view PlusRawSignal
 
@@ -28293,6 +28298,31 @@ spikeInPool Nist14
 subId 5783
 tableName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep2
 view PlusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalSpikeinsRep1
+objType file
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-17
+dateUnrestricted 2012-11-16
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalSpikeinsRep1.txt.gz
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+protocol None
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool Nist14
+subId 5768
+view Spikeins
 
 metaObject wgEncodeCshlLongRnaSeqImr90CellTotalSpikeinsRep2
 objType file
@@ -45464,4 +45494,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -598588428
+# MAGIC: -241809768
