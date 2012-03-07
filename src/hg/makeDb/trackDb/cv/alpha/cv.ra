@@ -10899,21 +10899,25 @@ term 1k
 tag F1K
 type fragSize
 description 1 kb DNA fragments
+label 1k #provisional
 
 term 5k
 tag F5K
 type fragSize
 description 5 kb DNA fragments
+label 5k #provisional
 
 term 10k
 tag F10K
 type fragSize
 description 10 kb DNA fragments
+label 10k #provisional
 
 term 20k
 tag F20K
 type fragSize
 description 20 kb DNA fragments
+label 20k #provisional
 
 ### localization
 # term (human-readable name)
@@ -11740,36 +11744,43 @@ term G1
 tag G1
 type phase
 description Flow sorted, G1 phase corresponds to the first DNA content window
+label G1 #provisional
 
 term G1b
 tag G1B
 type phase
 description Flow sorted, G1b phase corresponds to the second half of the first DNA content window
+label G1b #provisional
 
 term G2
 tag G2
 type phase
 description Flow sorted, G2 phase corresponds to the second DNA content window
+label G2 #provisional
 
 term S1
 tag S1
 type phase
 description Flow sorted, S1 phase corresponds to the third DNA content window
+label S1 #provisional
 
 term S2
 tag S2
 type phase
 description Flow sorted, S2 phase corresponds to the fourth DNA content window
+label S2 #provisional
 
 term S3
 tag S3
 type phase
 description Flow sorted, S3 phase corresponds to the fifth DNA content window
+label S3 #provisional
 
 term S4
 tag S4
 type phase
 description Flow sorted, S4 phase corresponds to the sixth DNA content window
+label S4 #provisional
 
 ### region
 # genomic regions used in experiments that are not whole-genome
