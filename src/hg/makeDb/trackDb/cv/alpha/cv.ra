@@ -9198,7 +9198,7 @@ lots 940739, 891751
 lab Snyder
 targetId GeneCard:RAD21
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
-validation Human_-_RAD21(Western Blot,siRNA):human_RAD21_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_RAD21(Western_blot,siRNA):human_RAD21_validation_Snyder.pdf Mouse_-_:missing
 label RAD21 (ab992)
 
 term RBBP5_(A300-109A)
@@ -9238,7 +9238,7 @@ type Antibody
 target RFX5
 targetDescription Activates transcription from class II MHC promoters. Recognizes X-boxes. Mediates cooperative binding betweenRFX and NF-Y. RFX binds the X1 box of MHC-II promoters
 antibodyDescription Rabbit polyclonal against RFX5 peptide corresponding to a region at amino acids 320 to 494 of the human protein conjugated to Keyhole Limpet Hemocyanin. Antibody Target: RFX5
-orderUrl http://www.rockland-inc.com//store/200-401-194-14562-O4L_9248.aspx
+orderUrl http://rockland-inc.com/store/Transcription-Factor-Antibodies-200-401-194-O4L_9248.aspx
 vendorName Rockland Immunochemicals
 vendorId 200-401-194
 lab Snyder
@@ -12684,7 +12684,7 @@ description Adult 24 weeks PROVISIONAL
 label Adult 24 weeks PROVISIONAL
 
 term immortalized
-tag IMMOR
+tag IMMORTAL
 type age
 stage Cell Line
 description Immortal cells

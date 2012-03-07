@@ -3699,7 +3699,7 @@ fileName wgEncodeSydhTfbsGm12878MaxRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
 md5sum 2b62fcd208cb4555eee85db5706ea78b
-objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3725,7 +3725,7 @@ fileName wgEncodeSydhTfbsGm12878MaxRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
 md5sum 7eb5f119db3a43f2bc8e370ee1902530
-objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3753,7 +3753,7 @@ grant Snyder
 lab Yale
 labVersion remapped from hg18
 md5sum e969ffc6adc509b8bf98c9a2a9291410,1eb1e0b5f1121749a45c43118b8a8dbd
-objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3781,7 +3781,7 @@ grant Snyder
 lab Yale
 labVersion remapped from hg18
 md5sum 5629e8abd7d38ac7cd356323c2307e21,2816f7f26fa5a05a300f0fe8589985cd
-objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3807,7 +3807,7 @@ fileName wgEncodeSydhTfbsGm12878MaxStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
 md5sum f9eb7d7b2732fa037f8bb3f74c8340c4
-objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.
 origAssembly hg18
 project wgEncode
 setType exp
@@ -3833,7 +3833,7 @@ fileName wgEncodeSydhTfbsGm12878MaxStdSig.bigWig
 grant Snyder
 lab Yale
 md5sum a142b13812fa13cc5b5409f5b855c499
-objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.
 origAssembly hg18
 project wgEncode
 setType exp
@@ -54409,4 +54409,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -620359918
+# MAGIC: 1657682584

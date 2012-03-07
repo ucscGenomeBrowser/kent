@@ -9217,7 +9217,7 @@ lots 940739, 891751
 lab Snyder
 targetId GeneCard:RAD21
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
-validation Human_-_RAD21(Western Blot,siRNA):human_RAD21_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_RAD21(Western_blot,siRNA):human_RAD21_validation_Snyder.pdf Mouse_-_:missing
 label RAD21 (ab992)
 
 term RBBP5_(A300-109A)
