@@ -11269,41 +11269,49 @@ term std
 tag STD
 type control
 description Standard input signal for most experiments.
+label std #provisional
 
 term IgG-goat
 tag IGGGOAT
 type control
 description Input signal from Normal Goat IgG ChIP-seq.
+label IgG-goat #provisional
 
 term IgG-mus
 tag IGGMUS
 type control
 description Input signal from Normal Mouse IgG ChIP-seq.
+label IgG-mus #provisional
 
 term IgG-rab
 tag IGGRAB
 type control
 description Input signal from Normal Rabbit IgG ChIP-seq.
+label IgG-rab #provisional
 
 term IgG-rat
 tag IGGRAT
 type control
 description Input signal from Normal Rat IgG ChIP-seq
+label IgG-rat #provisional
 
 term IgG-Yale
 tag IGGYALE
 type control
 description Input signal from Mouse IgG ChIP-seq prepared at Yale
+label IgG-Yale #provisional
 
 term MNase
 tag MNASE
 type control
 description Input signal from MNase digested DNA.
+label MNase #provisional
 
 term UCDavis
 tag UCD
 type control
 description Input library was prepared at UC Davis.
+label UCDavis #provisional
 
 ### Treatments
 
