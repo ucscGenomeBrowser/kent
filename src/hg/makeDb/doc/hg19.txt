@@ -18341,7 +18341,7 @@ cat table.info | while read -a line; do
 done
 
 ##############################################################################
-# LASTZ MOUSE Mm10 (DONE - 2009-05-13 - Hiram)
+# LASTZ MOUSE Mm10 (DONE - 2012-03-08 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
     cd /hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
 
@@ -18379,6 +18379,9 @@ TMPDIR=/scratch/tmp
 
     cat fb.hg19.chainMm10Link.txt
     #	1021265143 bases of 2897316137 (35.249%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzMm10.2012-03-07 lastz.mm10
 
     #	and the swap
     mkdir /hive/data/genomes/mm10/bed/blastz.hg19.swap
@@ -18388,9 +18391,11 @@ TMPDIR=/scratch/tmp
 	-swap -noLoadChainSplit -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Thu Mar  8 11:51:25 PST 2012
-    #	real    131m58.763s
+    #	real    72m32.794s
     cat fb.mm10.chainHg19Link.txt
-    #	1013880568 bases of 2620346127 (38.693%) in intersection
+    #	1014045890 bases of 2652783500 (38.226%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
