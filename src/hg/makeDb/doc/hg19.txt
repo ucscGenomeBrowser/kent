@@ -18376,7 +18376,7 @@ TMPDIR=/scratch/tmp
         -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-
+    #	real    197m23.436s
     cat fb.hg19.chainMm10Link.txt
     #	1021265143 bases of 2897316137 (35.249%) in intersection
     # set sym link to indicate this is the lastz for this genome:
