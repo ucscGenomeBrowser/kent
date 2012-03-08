@@ -11269,41 +11269,49 @@ term std
 tag STD
 type control
 description Standard input signal for most experiments.
+label std #provisional
 
 term IgG-goat
 tag IGGGOAT
 type control
 description Input signal from Normal Goat IgG ChIP-seq.
+label IgG-goat #provisional
 
 term IgG-mus
 tag IGGMUS
 type control
 description Input signal from Normal Mouse IgG ChIP-seq.
+label IgG-mus #provisional
 
 term IgG-rab
 tag IGGRAB
 type control
 description Input signal from Normal Rabbit IgG ChIP-seq.
+label IgG-rab #provisional
 
 term IgG-rat
 tag IGGRAT
 type control
 description Input signal from Normal Rat IgG ChIP-seq
+label IgG-rat #provisional
 
 term IgG-Yale
 tag IGGYALE
 type control
 description Input signal from Mouse IgG ChIP-seq prepared at Yale
+label IgG-Yale #provisional
 
 term MNase
 tag MNASE
 type control
 description Input signal from MNase digested DNA.
+label MNase #provisional
 
 term UCDavis
 tag UCD
 type control
 description Input library was prepared at UC Davis.
+label UCDavis #provisional
 
 ### Treatments
 
@@ -14389,7 +14397,7 @@ tag SUBID
 type typeOfTerm
 label Submission ID
 description The submission ID assigned by the UCSC Genome Browser at time of actual data submission.
-searchable wildList
+searchable no
 cvDefined no
 validate integer
 priority 335
@@ -14408,9 +14416,9 @@ priority 250
 term tableName
 tag TABLENAME
 type typeOfTerm
-label Name of SQL table at UCSC
+label Table name at UCSC
 description Downloadable files containing data displayed in tracks in the UCSC Genome Browser are often stored in SQL tables.  The particular table can be located by this name.
-searchable no
+searchable freeText
 cvDefined no
 validate exists
 priority 970
