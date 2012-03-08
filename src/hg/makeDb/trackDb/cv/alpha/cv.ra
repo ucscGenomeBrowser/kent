@@ -11081,156 +11081,187 @@ term Control
 tag CONTROL
 type control
 description This data represents a control being compared with the other tracks in the set.
+label Control #provisional
 
 term Control_eGFP-BACH1
 tag CONTROLBACH1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-BACH1
+label eGFP-BACH1 #provisional
 
 term Control_eGFP-CCNE1
 tag CONTROLCCNE1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-CCNE1
+label eGFP-CCNE1 #provisional
 
 term Control_eGFP-CDKN1B
 tag CONTROLCDKN1B
 type control
 description This data represents a control being compared to experiments using antibody eGFP-CDKN1B
+label eGFP-CDKN1B #provisional
 
 term Control_eGFP-E2F1
 tag CONTROLE2F1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-E2F1
+label eGFP-E2F1 #provisional
 
 term Control_eGFP-EKLF1
 tag CONTROLEKLF1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-EKLF1
+label eGFP-EKLF1 #provisional
 
 term Control_eGFP-ELF1
 tag CONTROLELF1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ELF1
+label eGFP-ELF1 #provisional
 
 term Control_eGFP-ESR
 tag CONTROLESR
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ESR
+label eGFP-ESR #provisional
 
 term Control_eGFP-FOS
 tag CONTROLFOS
 type control
 description This data represents a control being compared to experiments using antibody eGFP-FOS
+label eGFP-FOS #provisional
 
 term Control_eGFP-GATA2
 tag CONTROLGATA2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-GATA2
+label eGFP-GATA2 #provisional
 
 term Control_eGFP-HDAC8
 tag CONTROLHDAC8
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HDAC8
+label eGFP-HDAC8 #provisional
 
 term Control_eGFP-HMGB1
 tag CONTROLHMGB1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HMGB1
+label eGFP-HMGB1 #provisional
 
 term Control_eGFP-ILF2
 tag CONTROLILF2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ILF2
+label eGFP-ILF2 #provisional
 
 term Control_eGFP-JunB
 tag CONTROLJUNB
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunB
+label eGFP-JunB #provisional
 
 term Control_eGFP-JunD
 tag CONTROLJUND
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunD
+label eGFP-JunD #provisional
 
 term Control_eGFP-MLL5
 tag CONTROLMLL5
 type control
 description This data represents a control being compared to experiments using antibody eGFP-MLL5
+label eGFP-MLL5 #provisional
 
 term Control_eGFP-NCOR1
 tag CONTROLNCOR1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NCOR1
+label eGFP-NCOR1 #provisional
 
 term Control_eGFP-NF90
 tag CONTROLNF90
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NF90
+label eGFP-NF90 #provisional
 
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
+label eGFP-NR4A1 #provisional
 
 term Control_eGFP-SMARCA1
 tag CONTROLSMARCA1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-SMARCA1
+label eGFP-SMARCA1 #provisional
 
 term Control_eGFP-SMARCA2
 tag CONTROLSMARCA2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-SMARCA2
+label eGFP-SMARCA2 #provisional
 
 term Control_eGFP-STAT1
 tag CONTROLSTAT1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-STAT1
+label eGFP-STAT1 #provisional
 
 term Control_32bp
 tag CNTRL32B
 type control
 description This data represents a control being compared to experiments using read length of 32 bp
+label 32bp #provisional
 
 term Control_36bp
 tag CNTRL36B
 type control
 description This data represents a control being compared to experiments using read length of 36 bp
+label 36bp #provisional
 
 term Control_50bp
 tag CNTRL50B
 type control
 description This data represents a control being compared to experiments using read length of 50 bp
+label 50bp #provisional
 
 term Input
 tag INPUT
 type control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
+label Input  #provisional
 
 term Large_Fragment
 tag LARGEFRAGMENT
 type control
 description Control signal from sonication into large fragments of DNA (350-800 bp).
+label Large_Fragment #provisional
 
 term Naked_DNA
 tag NAKEDDNA
 type control
 description Control signal from Naked DNA.
+label Naked_DNA #provisional
 
 term Reference_Genome
 tag REFERENCEGENOME
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
+label Reference_Genome #provisional
 
 term RevXlinkChromatin
 tag RXLCH
 type control
 description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling.
+label RevXlinkChromatin #provisional
 
 term None
 tag NONE
 description No special treatment or protocol applies
 type control
+label None #provisional
 
 ### Inputs which are a special type of control
 
@@ -11238,41 +11269,49 @@ term std
 tag STD
 type control
 description Standard input signal for most experiments.
+label std #provisional
 
 term IgG-goat
 tag IGGGOAT
 type control
 description Input signal from Normal Goat IgG ChIP-seq.
+label IgG-goat #provisional
 
 term IgG-mus
 tag IGGMUS
 type control
 description Input signal from Normal Mouse IgG ChIP-seq.
+label IgG-mus #provisional
 
 term IgG-rab
 tag IGGRAB
 type control
 description Input signal from Normal Rabbit IgG ChIP-seq.
+label IgG-rab #provisional
 
 term IgG-rat
 tag IGGRAT
 type control
 description Input signal from Normal Rat IgG ChIP-seq
+label IgG-rat #provisional
 
 term IgG-Yale
 tag IGGYALE
 type control
 description Input signal from Mouse IgG ChIP-seq prepared at Yale
+label IgG-Yale #provisional
 
 term MNase
 tag MNASE
 type control
 description Input signal from MNase digested DNA.
+label MNase #provisional
 
 term UCDavis
 tag UCD
 type control
 description Input library was prepared at UC Davis.
+label UCDavis #provisional
 
 ### Treatments
 
@@ -14358,7 +14397,7 @@ tag SUBID
 type typeOfTerm
 label Submission ID
 description The submission ID assigned by the UCSC Genome Browser at time of actual data submission.
-searchable wildList
+searchable no
 cvDefined no
 validate integer
 priority 335
@@ -14377,9 +14416,9 @@ priority 250
 term tableName
 tag TABLENAME
 type typeOfTerm
-label Name of SQL table at UCSC
+label Table name at UCSC
 description Downloadable files containing data displayed in tracks in the UCSC Genome Browser are often stored in SQL tables.  The particular table can be located by this name.
-searchable no
+searchable freeText
 cvDefined no
 validate exists
 priority 970
