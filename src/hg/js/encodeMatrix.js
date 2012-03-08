@@ -15,7 +15,7 @@ var encodeMatrix = (function () {
     function addSearchPanel($div) {
         // Create panel of radio buttons for user to select search type
         // Add to passed in div ID; e.g. #searchTypePanel
-        $div.append('<span id="searchPanelInstructions">Search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">tracks<input type="radio" name="searchType" id="searchFiles" value="files">files');
+        $div.append('<span id="searchPanelInstructions">search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">tracks<input type="radio" name="searchType" id="searchFiles" value="files">files');
     }
 
     return {
