@@ -116,6 +116,7 @@ install:
 	cp -p --remove-destination removeAlphas            ${SCRIPTS}
 	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}
 	cp -p --remove-destination runBits.csh             ${SCRIPTS}
+	cp -p --remove-destination runCheckHgFindSpec      ${SCRIPTS}
 	cp -p --remove-destination runJoiner.csh           ${SCRIPTS}
 	cp -p --remove-destination sessionStats.csh        ${SCRIPTS}
 	cp -p --remove-destination showProcesslist.csh     ${SCRIPTS}
