@@ -19,6 +19,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 31d1d1e53c63fd1238beb37689362e65
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -42,6 +43,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 9bd6fd400e8455400f189f6837ce893a
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -66,6 +68,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 24ec5cae5f1768f22286089e8c363ed9
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -90,6 +93,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 26746701c1cc3ba2b162fa47605f72c9
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -114,6 +118,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 7230cdc73c06b5b00a1ffb604429246c
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -138,6 +143,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 1bc2229afe222220c7cb25eeaa039fad
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -162,6 +168,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ce13927311f884621cc4013bbb6e3dba
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -186,6 +193,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 99c379fa7b2f4fc4d89f09bd1dba530f
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -211,7 +219,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 3275891c918dcee733b1fb4a1523bd15
-objStatus renamed - Cell renaming caused file to be renamed to wgEncodeDukeAffyExonNhaSimpleSignalRep1.broadPeak.gz
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -237,7 +245,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ab729c0d011c3124fd227a159cfaff51
-objStatus renamed - Cell renaming caused file to be renamed to wgEncodeDukeAffyExonNhaSimpleSignalRep2.broadPeak.gz
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -263,6 +271,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 0369ca3c8ec04dea237abd63c69044a0
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -286,6 +295,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 4516713c13c01a1ac6b0d82cc550c612
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -309,6 +319,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 651f93b4725dd3fbd488a3ab4560b065
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -334,6 +345,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 46f909350eadbefc8cb61aa23097bf67
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -359,6 +371,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 8960cec0eae716ca00f5404a42bc3dee
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -382,6 +395,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ebad4cd5142699e89f56c4ed2c9b3aa0
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -405,6 +419,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum e603323c308bf3c8c0f0ae11099a7933
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -428,6 +443,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 2d11add6682cfafe5a32d40d36274481
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -453,6 +469,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 94449bbd89b54c05f6e39b59bad01dda
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -478,6 +495,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 12c1f2fb5a11f3c4bcbc6b98aa101d13
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -502,6 +520,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 72b46a62eb08bf1fe69bec4c77116747
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -526,6 +545,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 1b046e51bfc4857f4f710cbb4ee5213a
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -550,6 +570,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum a2728a6c1521c93d4871505582a93c38
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -574,6 +595,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 9903f84d9f2e6ca88209027c826ced36
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -598,6 +620,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 1b0b44696b5a21f7cdbb47d044599e80
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -623,6 +646,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum c8650095069233d6500daf9fde6178e4
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -648,6 +672,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum cf821ec3e1c81699549616af7821ce71
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -673,6 +698,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 0b2d99579a35fed93287dc02dd5f12fa
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -698,6 +724,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 7d7cc5cb4e2699493bd35bc8a193b6ff
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -723,6 +750,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ccf2540aa7006e133395831dee4b54dd
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -748,6 +776,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 04f1d8702fd6839a88cdbb66ce810100
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -773,6 +802,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 6b4ef2aae13489276928ac8d383526b0
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -798,6 +828,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 236793da553c135155e9014a7a09be4d
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -823,6 +854,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum f12118a69a365946fcc12dbcf3c07466
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -848,6 +880,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum e6da9bbe33aefd1b564a4aafba936f10
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -873,6 +906,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum f4101157f561e78149d998f1cb34e9a8
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -898,6 +932,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum f9aba3e67cfd9e4b5429f4c75110c01a
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -923,6 +958,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum c42e53c7b00c637df902552ed33154fc
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -946,6 +982,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 06ffbaab1691e1e76f916fd0b38dd38d
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -969,6 +1006,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ec7135de3ab4008e7b92cf6ef2fc169d
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -992,6 +1030,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 1c3d2f01fa2fa9e91c2ab20df8e5e675
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1015,6 +1054,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum a5b4dd97a8765862350593fd37d621c0
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -1038,6 +1078,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum dfc5747f368b9c4faa155c811e509a46
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1063,6 +1104,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 97dc27c61bb260345eae550d8ec6e664
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1088,6 +1130,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum fcab9572baf6bcb1bd6ca5ba6697af4a
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1113,6 +1156,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 04001f9f3eb683aa498dbf698e57d629
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1138,6 +1182,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 83134d841556a99849239607c4b36086
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1163,6 +1208,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 796fc8bbc234bc2069f1eb348262ca9b
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1188,6 +1234,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 7d8edf47f3e592345ceab3477d80ddb5
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1213,6 +1260,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 992e52a1121cc61b4faf858fe4c41077
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -1237,6 +1285,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 344fd70a9e1019be90c65774128473e1
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1260,6 +1309,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 499916e7e0a7c0d2f4485e85c6057a19
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1285,6 +1335,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 6a815aeb398ce30c17d6d51f206ac98b
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1310,6 +1361,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum f2a1a759b1395c6bd7fc5f654ac87e20
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1335,6 +1387,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 59613aad65dc38aa54bb8ebc540ec87c
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -1360,6 +1413,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ff6a35ccbf3b2f667f00cb1d18fe730a
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1385,6 +1439,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum b549c2e79aaff116841fd5ab487b38de
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1408,6 +1463,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 8dd46b0cd45b51735ff55a129762d295
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1431,6 +1487,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 32bfaa9f2d4d1db10818aab69ac13527
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1455,6 +1512,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ad1a4bfa9936c139c9216c7cb7bcec9f
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1479,6 +1537,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum b962c4b1c8442d3cde99faa686a36cf0
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1503,6 +1562,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 68359e4bb3f2efdaa16c66c62fc42c80
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1527,6 +1587,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 257dd7040cf1e50deaae618ba8cc2a5a
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1551,6 +1612,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 416601fcae236da522aa88410fe062ae
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1575,6 +1637,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum b7b916d3a9a64495d15883e0305bcef7
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1598,6 +1661,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 2dd5fca45f3ea7943a2b2a7e34e1bc35
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1621,6 +1685,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum e71c979bcf5c59a35906aa2953d153ff
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1644,6 +1709,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 0ac75a9f6020798f6a7b1da3216a48a3
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1667,6 +1733,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 776ddb2636d288a7f45ccd693b87e1c5
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1692,6 +1759,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 93af1fd558690a74d9f056df37edf42a
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1717,6 +1785,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 141803a4968c1929123c66cd13ce76db
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1740,6 +1809,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 1ffef5f0b2886f0c4e26c5dd721afc20
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1763,6 +1833,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum faf295e5502a7b837bcd1f64211d981c
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1786,6 +1857,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 625afa5da177dd3891bd90f414089e11
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1809,6 +1881,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 9000e566f2aead90060d00f2cd664472
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1832,6 +1905,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 4cacf14b7a4d2909ef91a9bf9806ce43
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1855,6 +1929,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum d2989e510528156e4bc24e8b531bf22a
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -1880,6 +1955,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum fa16d4e54c1fd24e799118b997b114aa
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1904,6 +1980,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 23da7ef2490d21a53627bd722d3d4955
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1929,6 +2006,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 815250150243e7f3e9edf27da507ff8a
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1954,6 +2032,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum fd7bf7de1cf16171182d81ed8e666aff
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1979,6 +2058,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ac34b92d1a53aa7493d588852c3c27cd
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2004,6 +2084,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 4f991cde46644f5d98e3fae4c6ced300
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2028,6 +2109,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 44b9c79d50f42fa0a2e86813e1ea22ea
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2052,6 +2134,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 94e158ca1b5018298241cec733b5ac73
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2076,6 +2159,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum bc9b4ddea9f8f0bd2f8d27f2a0ff0fba
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2101,6 +2185,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum bea2366b541ac32dd4ae17ef6f230225
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2126,6 +2211,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 9e8aad46f9725aac5d0bfd2489a9e87c
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2149,6 +2235,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 62224a8c2382b5f9e0129556cb3803e2
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -2173,6 +2260,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 5e8c0e7af3549459a6a88955ca1e0ccf
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2197,6 +2285,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 0d399ef28a3cd88e93196059a2eb359a
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2221,6 +2310,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 90b7989d4a177c2194c6b3321260f01f
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -2245,6 +2335,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum bdedf7b746dc63c108ac26c725e9f7dc
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -2268,6 +2359,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 4039b7d136038d5bdf78ba320c1bd1ea
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2291,6 +2383,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 5961d2f6b8389f38616cbf01f3d78740
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2315,6 +2408,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 3275891c918dcee733b1fb4a1523bd15
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2339,6 +2433,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ab729c0d011c3124fd227a159cfaff51
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2364,6 +2459,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 35c2ef3e06aa1230d7acf2e3f846e10f
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2389,6 +2485,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 8af9b238b99675389155f3e0da1ea949
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2414,6 +2511,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ff8567cafe379aadbedb2928058ec229
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2439,6 +2537,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum a5316630d2b022dbbc51057210bd6f61
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2462,6 +2561,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 8306b782c140b7eb0aed79dbd5ac22b3
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -2487,6 +2587,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum a11117698091afca4026f53f22f68ce0
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2512,6 +2613,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 158df50e33821d3a149f1cb804337c16
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2535,6 +2637,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 2674f5d3fccac59b1dcdb68267d03a79
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2558,6 +2661,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum e8f06de6b84c70b69c5e12e1d8461784
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2581,6 +2685,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 8e40c70a0b4429673d81e027d2c8de12
+objStatus revoked - data was produced with artifacts, get the V2 for clean data
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2589,4 +2694,4 @@ tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: 1413963176
+# MAGIC: -256180350
