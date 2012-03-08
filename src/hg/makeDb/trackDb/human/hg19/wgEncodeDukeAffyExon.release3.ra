@@ -4,9 +4,9 @@ compositeTrack on
 shortLabel Duke Affy Exon
 longLabel Affymetrix Exon Array from ENCODE/Duke
 group expression
-subGroup1 cellType Cell_Line 1GM12878=1GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=1K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2)  AOSMC=AoSMC  CHORION=Chorion CLL=CLL FIBROBL=Fibrobl FIBROP=FibroP GLIOBLA=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9ES=H9ES HEPATO=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn HUH7=Huh-7 HUH75=Huh-7.5 iPS=iPS LNCAP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHA=NH-A NHEK=NHEK OSTEO=Osteobl PROGFIB=ProgFib STELLATE=Stellate UROTHEL=Urothelia 8988T=8988T
+subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2)  8988T=8988T A549=A549 AOSMC=AoSMC  CHORION=Chorion CLL=CLL COLO829=Colo829 FIBROBL=Fibrobl FIBROPAG08395=FibroP_(AG08395) FIBROPAG08396=FibroP_(AG08396) FIBROPAG20443=FibroP_(AG20443) GLIOBLA=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7ES=H7-hESC H9ES=H9ES HEK293T=HEK293T HEPATO=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMFSHD=HSMM&#95;FSHD HSMMT=HSMMtube HSMMTUBEFSHD=HSMMtube&#95;FSHD HTR8=HTR8svn HUH7=Huh-7 HUH75=Huh-7.5 IPSCWRU1=iPS_(CWRU1) IPSNIHI11=iPS_(NIHi11) IPSNIHI7=iPS_(NIHi7) LNCAP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MEL2183=Mel_2183 MELANO=Melano MYOMETR=Myometr NHA=NH-A NHEK=NHEK OSTEO=Osteobl PROGFIB=ProgFib STELLATE=Stellate UCH1=UCH-1 UROTHEL=Urothelia
 subGroup2 rep Rep rep1=1 rep2=2 rep3=3 rep4=4
-subGroup3 treatment Treatment NONE=None IFNA4H=IFN&alpha;4h IFNG4H=IFN&gamma;4h TGFB=TGFb SERUMFREE=serum_free_media ANDRO=Methyltrienolone ESTRO=Estradiol_100nM VEH=vehicle UT189=UT189  
+subGroup3 treatment Treatment NONE=None CTCFSHRNA=CTCF_shRNA_knockdown RANDSHRNA=Randomized_shRNA_control HYPOXLAC=Hypoxia_LacAcid ESTRO=Estradiol_100nM VEH=vehicle IFNA4H=IFN&alpha;4h IFNG4H=IFN&gamma;4h NABUT=NaBut TGFB=TGFb SERUMFREE=serum_free_media ANDRO=Methyltrienolone UT189=UT189  
 dimensions dimensionA=rep dimensionY=cellType dimensionX=treatment
 dimensionAchecked rep1,rep2
 sortOrder cellType=+ treatment=+ rep=+
@@ -530,7 +530,7 @@ exonArrows on
 #        parent wgEncodeDukeAffyExon off
 #        shortLabel HSMMtube 1
 #        longLabel HSMMtube Exon array Signal Replicate 1 from ENCODE/Duke
-#        subGroups cellType=HSMMt treatment=None rep=rep1
+#        subGroups cellType=HSMMT treatment=None rep=rep1
 #        type broadPeak
 #        # subId=3081 dateSubmitted=2010-12-09
 #
@@ -538,7 +538,7 @@ exonArrows on
 #        parent wgEncodeDukeAffyExon off
 #        shortLabel HSMMtube 2
 #        longLabel HSMMtube Exon array Signal Replicate 2 from ENCODE/Duke
-#        subGroups cellType=HSMMt treatment=None rep=rep2
+#        subGroups cellType=HSMMT treatment=None rep=rep2
 #        type broadPeak
 #        # subId=3081 dateSubmitted=2010-12-09
 #
@@ -546,7 +546,7 @@ exonArrows on
 #        parent wgEncodeDukeAffyExon off
 #        shortLabel HSMMtube 3
 #        longLabel HSMMtube Exon array Signal Replicate 3 from ENCODE/Duke
-#        subGroups cellType=HSMMt treatment=None rep=rep3
+#        subGroups cellType=HSMMT treatment=None rep=rep3
 #        type broadPeak
 #        # subId=3081 dateSubmitted=2010-12-09
 #
@@ -1052,7 +1052,7 @@ exonArrows on
         # subId=5987 dateSubmitted=2012-03-08
 
         track wgEncodeDukeAffyExonGm12878SimpleSignalRep3V2
-        parent wgEncodeDukeAffyExon
+        parent wgEncodeDukeAffyExon off
         shortLabel GM12878 3
         longLabel GM12878 Exon array Signal Rep 3 from ENCODE/Duke
         subGroups cellType=1GM12878 treatment=NONE rep=rep3
@@ -1165,7 +1165,7 @@ exonArrows on
         # subId=5987 dateSubmitted=2012-03-08
 
         track wgEncodeDukeAffyExonH1hescSimpleSignalRep1V2
-        parent wgEncodeDukeAffyExon off
+        parent wgEncodeDukeAffyExon
         shortLabel H1-hESC 1
         longLabel H1-hESC Exon array Signal Rep 1 from ENCODE/Duke
         subGroups cellType=1H1HESC treatment=NONE rep=rep1
@@ -1174,7 +1174,7 @@ exonArrows on
         # subId=5987 dateSubmitted=2012-03-08
 
         track wgEncodeDukeAffyExonH1hescSimpleSignalRep2V2
-        parent wgEncodeDukeAffyExon off
+        parent wgEncodeDukeAffyExon
         shortLabel H1-hESC 2
         longLabel H1-hESC Exon array Signal Rep 2 from ENCODE/Duke
         subGroups cellType=1H1HESC treatment=NONE rep=rep2
@@ -1374,7 +1374,7 @@ exonArrows on
         parent wgEncodeDukeAffyExon off
         shortLabel HSMMtube 1
         longLabel HSMMtube Exon array Signal Rep 1 from ENCODE/Duke
-        subGroups cellType=HSMMt treatment=NONE rep=rep1
+        subGroups cellType=HSMMT treatment=NONE rep=rep1
         type broadPeak
         # subId=5987 dateSubmitted=2012-03-08
 
@@ -1382,7 +1382,7 @@ exonArrows on
         parent wgEncodeDukeAffyExon off
         shortLabel HSMMtube 2
         longLabel HSMMtube Exon array Signal Rep 2 from ENCODE/Duke
-        subGroups cellType=HSMMt treatment=NONE rep=rep2
+        subGroups cellType=HSMMT treatment=NONE rep=rep2
         type broadPeak
         # subId=5987 dateSubmitted=2012-03-08
 
@@ -1390,7 +1390,7 @@ exonArrows on
         parent wgEncodeDukeAffyExon off
         shortLabel HSMMtube 3
         longLabel HSMMtube Exon array Signal Rep 3 from ENCODE/Duke
-        subGroups cellType=HSMMt treatment=NONE rep=rep3
+        subGroups cellType=HSMMT treatment=NONE rep=rep3
         type broadPeak
         # subId=5987 dateSubmitted=2012-03-08
 
@@ -1463,7 +1463,7 @@ exonArrows on
         # subId=5987 dateSubmitted=2012-03-08
 
         track wgEncodeDukeAffyExonK562SimpleSignalRep3V2
-        parent wgEncodeDukeAffyExon
+        parent wgEncodeDukeAffyExon off
         shortLabel K562 3
         longLabel K562 Exon array Signal Rep 3 from ENCODE/Duke
         subGroups cellType=1K562 treatment=NONE rep=rep3
@@ -1716,4 +1716,433 @@ exonArrows on
         subGroups cellType=UROTHEL treatment=UT189 rep=rep1
         type broadPeak
         # subId=5987 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonA549SimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel A549 1
+        longLabel A549 Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=A549 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonA549SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel A549 2
+        longLabel A549 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=A549 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonColo829SimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel Colo829 1
+        longLabel Colo829 Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=COLO829 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonColo829SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel Colo829 2
+        longLabel Colo829 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=COLO829 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonFibropag08395SimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel FibroP_AG08395 1
+        longLabel FibroP AG08395 Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=FIBROPAG08395 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonFibropag08395SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel FibroP_AG08395 2
+        longLabel FibroP AG08395 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=FIBROPAG08395 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonFibropag08395SimpleSignalRep3
+        parent wgEncodeDukeAffyExon off
+        shortLabel FibroP_AG08395 3
+        longLabel FibroP AG08395 Exon array Signal Rep 3 from ENCODE/Duke
+        subGroups cellType=FIBROPAG08395 treatment=NONE rep=rep3
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonFibropag08396SimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel FibroP_AG08396 1
+        longLabel FibroP AG08396 Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=FIBROPAG08396 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonFibropag08396SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel FibroP_AG08396 2
+        longLabel FibroP AG08396 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=FIBROPAG08396 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonFibropag08396SimpleSignalRep3
+        parent wgEncodeDukeAffyExon off
+        shortLabel FibroP_AG08396 3
+        longLabel FibroP AG08396 Exon array Signal Rep 3 from ENCODE/Duke
+        subGroups cellType=FIBROPAG08396 treatment=NONE rep=rep3
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonFibropag20443SimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel FibroP_AG20443 1
+        longLabel FibroP AG20443 Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=FIBROPAG20443 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonFibropag20443SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel FibroP_AG20443 2
+        longLabel FibroP AG20443 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=FIBROPAG20443 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonFibropag20443SimpleSignalRep3
+        parent wgEncodeDukeAffyExon off
+        shortLabel FibroP_AG20443 3
+        longLabel FibroP AG20443 Exon array Signal Rep 3 from ENCODE/Duke
+        subGroups cellType=FIBROPAG20443 treatment=NONE rep=rep3
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonH7esSimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel H7-hESC 1
+        longLabel H7-hESC Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=H7ES treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonH7esSimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel H7-hESC 2
+        longLabel H7-hESC Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=H7ES treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonH7esSimpleSignalRep3
+        parent wgEncodeDukeAffyExon off
+        shortLabel H7-hESC 3
+        longLabel H7-hESC Exon array Signal Rep 3 from ENCODE/Duke
+        subGroups cellType=H7ES treatment=NONE rep=rep3
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonH9esSimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel H9ES 2
+        longLabel H9ES Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=H9ES treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonH9esSimpleSignalRep3
+        parent wgEncodeDukeAffyExon off
+        shortLabel H9ES 3
+        longLabel H9ES Exon array Signal Rep 3 from ENCODE/Duke
+        subGroups cellType=H9ES treatment=NONE rep=rep3
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonHek293tSimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel HEK293T 1
+        longLabel HEK293T Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=HEK293T treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonHek293tSimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel HEK293T 2
+        longLabel HEK293T Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=HEK293T treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonHsmmfshdSimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel HSMM_FSHD 1
+        longLabel HSMM FSHD Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=HSMMFSHD treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonHsmmfshdSimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel HSMM_FSHD 2
+        longLabel HSMM FSHD Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=HSMMFSHD treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonHsmmfshdSimpleSignalRep3
+        parent wgEncodeDukeAffyExon off
+        shortLabel HSMM_FSHD 3
+        longLabel HSMM FSHD Exon array Signal Rep 3 from ENCODE/Duke
+        subGroups cellType=HSMMFSHD treatment=NONE rep=rep3
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonHsmmtubefshdSimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel HSMMtube_FSHD 1
+        longLabel HSMMtube FSHD Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=HSMMTUBEFSHD treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonHsmmtubefshdSimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel HSMMtube_FSHD 2
+        longLabel HSMMtube FSHD Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=HSMMTUBEFSHD treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonHsmmtubefshdSimpleSignalRep3
+        parent wgEncodeDukeAffyExon off
+        shortLabel HSMMtube_FSHD 3
+        longLabel HSMMtube FSHD Exon array Signal Rep 3 from ENCODE/Duke
+        subGroups cellType=HSMMTUBEFSHD treatment=NONE rep=rep3
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonHuh75SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel Huh-7.5 2
+        longLabel Huh-7.5 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=HUH75 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonHuh7SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel Huh-7 2
+        longLabel Huh-7 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=HUH7 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonIpscwru1SimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel iPS_CWRU1 1
+        longLabel iPS CWRU1 Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=IPSCWRU1 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonIpscwru1SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel iPS_CWRU1 2
+        longLabel iPS CWRU1 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=IPSCWRU1 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonIpsnihi11SimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel iPS_NIHi11 1
+        longLabel iPS NIHi11 Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=IPSNIHI11 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonIpsnihi11SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel iPS_NIHi11 2
+        longLabel iPS NIHi11 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=IPSNIHI11 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonIpsnihi7SimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel iPS_NIHi7 1
+        longLabel iPS NIHi7 Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=IPSNIHI7 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonIpsnihi7SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel iPS_NIHi7 2
+        longLabel iPS NIHi7 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=IPSNIHI7 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonK562SimpleSignalRep4
+        parent wgEncodeDukeAffyExon off
+        shortLabel K562 4
+        longLabel K562 Exon array Signal Rep 4 from ENCODE/Duke
+        subGroups cellType=1K562 treatment=NONE rep=rep4
+        type broadPeak
+        color 46,0,184
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonK562NabutSimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel K562 NaBut 1
+        longLabel K562 NaBut Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=1K562 treatment=NABUT rep=rep1
+        type broadPeak
+        color 46,0,184
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonK562NabutSimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel K562 Nabut 2
+        longLabel K562 NaBut Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=1K562 treatment=NABUT rep=rep2
+        type broadPeak
+        color 46,0,184
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonK562NabutSimpleSignalRep3
+        parent wgEncodeDukeAffyExon off
+        shortLabel K562 Nabut 3
+        longLabel K562 NaBut Exon array Signal Rep 3 from ENCODE/Duke
+        subGroups cellType=1K562 treatment=NABUT rep=rep3
+        type broadPeak
+        color 46,0,184
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonK562NabutSimpleSignalRep4
+        parent wgEncodeDukeAffyExon off
+        shortLabel K562 Nabut 4
+        longLabel K562 NaBut Exon array Signal Rep 4 from ENCODE/Duke
+        subGroups cellType=1K562 treatment=NABUT rep=rep4
+        type broadPeak
+        color 46,0,184
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonMcf7CtcfshrnaSimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel MCF-7 CTCFsh 1
+        longLabel MCF-7 CTCF shRNA knockdown Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=MCF7 treatment=CTCFSHRNA rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonMcf7CtcfshrnaSimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel MCF-7 CTCFsh 2
+        longLabel MCF-7 CTCF shRNA knockdown Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=MCF7 treatment=CTCFSHRNA rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonMcf7CtcfshrnaSimpleSignalRep3
+        parent wgEncodeDukeAffyExon off
+        shortLabel MCF-7 CTCFsh 3
+        longLabel MCF-7 CTCF shRNA knockdown Exon array Signal Rep 3 from ENCODE/Duke
+        subGroups cellType=MCF7 treatment=CTCFSHRNA rep=rep3
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonMcf7HypoxlacSimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel MCF-7 Hypox 1
+        longLabel MCF-7 Hypoxia LacAcid Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=MCF7 treatment=HYPOXLAC rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonMcf7RandshrnaSimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel MCF-7 RANDsh 1
+        longLabel MCF-7 Randomized shRNA control Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=MCF7 treatment=RANDSHRNA rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonMcf7RandshrnaSimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel MCF-7 RANDsh 2
+        longLabel MCF-7 Randomized shRNA control Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=MCF7 treatment=RANDSHRNA rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonMcf7RandshrnaSimpleSignalRep3
+        parent wgEncodeDukeAffyExon off
+        shortLabel MCF-7 RANDsh 3
+        longLabel MCF-7 Randomized shRNA control Exon array Signal Rep 3 from ENCODE/Duke
+        subGroups cellType=MCF7 treatment=RANDSHRNA rep=rep3
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonMel2183SimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel Mel_2183 1
+        longLabel Mel 2183 Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=MEL2183 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonMel2183SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel Mel_2183 2
+        longLabel Mel 2183 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=MEL2183 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonStellateSimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel Stellate 2
+        longLabel Stellate Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=STELLATE treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonUch1SimpleSignalRep1
+        parent wgEncodeDukeAffyExon off
+        shortLabel UCH-1 1
+        longLabel UCH-1 Exon array Signal Rep 1 from ENCODE/Duke
+        subGroups cellType=UCH1 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonUch1SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel UCH-1 2
+        longLabel UCH-1 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=UCH1 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonUrothelSimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel Urothelia 2
+        longLabel Urothelia Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=UROTHEL treatment=NONE rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
+
+        track wgEncodeDukeAffyExonUrothelUt189SimpleSignalRep2
+        parent wgEncodeDukeAffyExon off
+        shortLabel Uro UT189 2
+        longLabel Urothelia UT189 Exon array Signal Rep 2 from ENCODE/Duke
+        subGroups cellType=UROTHEL treatment=UT189 rep=rep2
+        type broadPeak
+        # subId=5988 dateSubmitted=2012-03-08
 
