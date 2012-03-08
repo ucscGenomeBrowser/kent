@@ -3754,7 +3754,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 lab Crawford
-protocol Crawford:iPSCWRU1_Crawford_protocol.pdf
+protocol Crawford:iPS_Crawford_protocol.pdf
 
 term iPS_NIHi7
 tag IPSNIHI7
@@ -3771,7 +3771,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 lab Crawford
-protocol Crawford:iPSNIHi7_Crawford_protocol.pdf
+protocol Crawford:iPS_Crawford_protocol.pdf
 
 term iPS_NIHi11
 tag IPSNIHI11
@@ -3788,7 +3788,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 lab Crawford
-protocol Crawford:iPSNIHi11_Crawford_protocol.pdf
+protocol Crawford:iPS_Crawford_protocol.pdf
 
 term Ishikawa
 tag ISHIKAWA
@@ -4700,23 +4700,22 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
 
-#term T98G
-#tag T98G
-#type Cell Line
-#organism human
-#description fibroblast cell line derived from a glioblastoma multiforme. (PMID: 222778)
-#karyotype cancer
-#tissue brain
-#lineage ectoderm
-#vendorName ATCC
-#vendorId CRL-1690
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
-#termId BTO:0001583
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
-#sex M
-#tier 3
-#protocol Myers:T98G_Myers_protocol.pdf
-# Never submitted data. ~Jeff
+term T98G
+tag T98G
+type Cell Line
+organism human
+description fibroblast cell line derived from a glioblastoma multiforme. (PMID: 222778)
+karyotype cancer
+tissue brain
+lineage ectoderm
+vendorName ATCC
+vendorId CRL-1690
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
+termId BTO:0001583
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
+sex M
+tier 3
+protocol Myers:T98G_Myers_protocol.pdf
 
 term TBEC
 tag TBEC
@@ -9199,7 +9198,7 @@ lots 940739, 891751
 lab Snyder
 targetId GeneCard:RAD21
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
-validation Human_-_RAD21(Western Blot,siRNA):human_RAD21_validation_Snyder.pdf Mouse_-_:missing
+validation Human_-_RAD21(Western_blot,siRNA):human_RAD21_validation_Snyder.pdf Mouse_-_:missing
 label RAD21 (ab992)
 
 term RBBP5_(A300-109A)
@@ -9239,7 +9238,7 @@ type Antibody
 target RFX5
 targetDescription Activates transcription from class II MHC promoters. Recognizes X-boxes. Mediates cooperative binding betweenRFX and NF-Y. RFX binds the X1 box of MHC-II promoters
 antibodyDescription Rabbit polyclonal against RFX5 peptide corresponding to a region at amino acids 320 to 494 of the human protein conjugated to Keyhole Limpet Hemocyanin. Antibody Target: RFX5
-orderUrl http://www.rockland-inc.com//store/200-401-194-14562-O4L_9248.aspx
+orderUrl http://rockland-inc.com/store/Transcription-Factor-Antibodies-200-401-194-O4L_9248.aspx
 vendorName Rockland Immunochemicals
 vendorId 200-401-194
 lab Snyder
@@ -10880,16 +10879,19 @@ term 400
 tag IL400
 type insertLength
 description insert length of 400nt
+label 400 #provisional
 
 term 200
 tag IL200
 type insertLength
 description insert length of 200nt
+label 200 #provisional
 
 term ilNA
 tag ILNA
 type insertLength
 description insert length not applicable
+label N/A #provisional
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 
@@ -10897,21 +10899,25 @@ term 1k
 tag F1K
 type fragSize
 description 1 kb DNA fragments
+label 1k #provisional
 
 term 5k
 tag F5K
 type fragSize
 description 5 kb DNA fragments
+label 5k #provisional
 
 term 10k
 tag F10K
 type fragSize
 description 10 kb DNA fragments
+label 10k #provisional
 
 term 20k
 tag F20K
 type fragSize
 description 20 kb DNA fragments
+label 20k #provisional
 
 ### localization
 # term (human-readable name)
@@ -10927,7 +10933,7 @@ type localization
 description Whole cell
 termId GO:0005623
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
-label Whole cell
+label cell GO:0005623 #provisional
 
 term nucleus
 tag NUCLEUS
@@ -10935,6 +10941,7 @@ type localization
 description Large membrane bound part of cell containing chromosomes and the bulk of the cell's DNA
 termId GO:0005634
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005634
+label nucleus GO:0005634 #provisional
 
 term cytosol
 tag CYTOSOL
@@ -10942,6 +10949,7 @@ type localization
 description The fluid between the cells outer membrane and the nucleus
 termId GO:0005829
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005829
+label cytosol GO:0005829 #provisional
 
 term polysome
 tag POLYSOME
@@ -10949,6 +10957,7 @@ type localization
 description Strand of mRNA with ribosomes attached
 termId GO:0005844
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
+label polysome GO:0005844 #provisional
 
 term chromatin
 tag CHROMATIN
@@ -10956,6 +10965,7 @@ type localization
 description Nuclear DNA and associated proteins
 termId GO:0000790
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0000790
+label chromatin GO:0000790 #provisional
 
 term nucleolus
 tag NUCLEOLUS
@@ -10963,6 +10973,7 @@ type localization
 description The part of the nucleus where ribosomal RNA is actively transcribed
 termId GO:0005730
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
+label nucleolus GO:0005730 #provisional
 
 term nucleoplasm
 tag NUCLEOPLASM
@@ -10970,6 +10981,7 @@ type localization
 description That part of the nuclear content other than the chromosomes or the nucleolus
 termId GO:0005654
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005654
+label nucleoplasm GO:0005654 #provisional
 
 term nuclearMatrix
 tag NUCLEARMATRIX
@@ -10977,6 +10989,7 @@ type localization
 description The dense fibrillar network lying on the inner side of the nuclear membrane
 termId GO:0016363
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0016363
+term nuclearMatrix GO:0016363
 
 term membraneFraction
 tag MEMBRANEFRACTION
@@ -10984,6 +10997,7 @@ type localization
 description That fraction of cells, prepared by disruptive biochemical methods, that includes the plasma and other membranes.
 termId GO:0005624
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
+label membraneFraction GO:0005624 #provisional
 
 term mitochondria
 tag MITO
@@ -10991,6 +11005,7 @@ type localization
 description Mitochondria
 termId GO:0005739
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
+label mitochondria GO:0005739 #provisional
 
 ### RNA extracts
 
@@ -11066,156 +11081,187 @@ term Control
 tag CONTROL
 type control
 description This data represents a control being compared with the other tracks in the set.
+label Control #provisional
 
 term Control_eGFP-BACH1
 tag CONTROLBACH1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-BACH1
+label eGFP-BACH1 #provisional
 
 term Control_eGFP-CCNE1
 tag CONTROLCCNE1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-CCNE1
+label eGFP-CCNE1 #provisional
 
 term Control_eGFP-CDKN1B
 tag CONTROLCDKN1B
 type control
 description This data represents a control being compared to experiments using antibody eGFP-CDKN1B
+label eGFP-CDKN1B #provisional
 
 term Control_eGFP-E2F1
 tag CONTROLE2F1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-E2F1
+label eGFP-E2F1 #provisional
 
 term Control_eGFP-EKLF1
 tag CONTROLEKLF1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-EKLF1
+label eGFP-EKLF1 #provisional
 
 term Control_eGFP-ELF1
 tag CONTROLELF1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ELF1
+label eGFP-ELF1 #provisional
 
 term Control_eGFP-ESR
 tag CONTROLESR
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ESR
+label eGFP-ESR #provisional
 
 term Control_eGFP-FOS
 tag CONTROLFOS
 type control
 description This data represents a control being compared to experiments using antibody eGFP-FOS
+label eGFP-FOS #provisional
 
 term Control_eGFP-GATA2
 tag CONTROLGATA2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-GATA2
+label eGFP-GATA2 #provisional
 
 term Control_eGFP-HDAC8
 tag CONTROLHDAC8
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HDAC8
+label eGFP-HDAC8 #provisional
 
 term Control_eGFP-HMGB1
 tag CONTROLHMGB1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HMGB1
+label eGFP-HMGB1 #provisional
 
 term Control_eGFP-ILF2
 tag CONTROLILF2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ILF2
+label eGFP-ILF2 #provisional
 
 term Control_eGFP-JunB
 tag CONTROLJUNB
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunB
+label eGFP-JunB #provisional
 
 term Control_eGFP-JunD
 tag CONTROLJUND
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunD
+label eGFP-JunD #provisional
 
 term Control_eGFP-MLL5
 tag CONTROLMLL5
 type control
 description This data represents a control being compared to experiments using antibody eGFP-MLL5
+label eGFP-MLL5 #provisional
 
 term Control_eGFP-NCOR1
 tag CONTROLNCOR1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NCOR1
+label eGFP-NCOR1 #provisional
 
 term Control_eGFP-NF90
 tag CONTROLNF90
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NF90
+label eGFP-NF90 #provisional
 
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
+label eGFP-NR4A1 #provisional
 
 term Control_eGFP-SMARCA1
 tag CONTROLSMARCA1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-SMARCA1
+label eGFP-SMARCA1 #provisional
 
 term Control_eGFP-SMARCA2
 tag CONTROLSMARCA2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-SMARCA2
+label eGFP-SMARCA2 #provisional
 
 term Control_eGFP-STAT1
 tag CONTROLSTAT1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-STAT1
+label eGFP-STAT1 #provisional
 
 term Control_32bp
 tag CNTRL32B
 type control
 description This data represents a control being compared to experiments using read length of 32 bp
+label 32bp #provisional
 
 term Control_36bp
 tag CNTRL36B
 type control
 description This data represents a control being compared to experiments using read length of 36 bp
+label 36bp #provisional
 
 term Control_50bp
 tag CNTRL50B
 type control
 description This data represents a control being compared to experiments using read length of 50 bp
+label 50bp #provisional
 
 term Input
 tag INPUT
 type control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
+label Input  #provisional
 
 term Large_Fragment
 tag LARGEFRAGMENT
 type control
 description Control signal from sonication into large fragments of DNA (350-800 bp).
+label Large_Fragment #provisional
 
 term Naked_DNA
 tag NAKEDDNA
 type control
 description Control signal from Naked DNA.
+label Naked_DNA #provisional
 
 term Reference_Genome
 tag REFERENCEGENOME
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
+label Reference_Genome #provisional
 
 term RevXlinkChromatin
 tag RXLCH
 type control
 description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling.
+label RevXlinkChromatin #provisional
 
 term None
 tag NONE
 description No special treatment or protocol applies
 type control
+label None #provisional
 
 ### Inputs which are a special type of control
 
@@ -11223,43 +11269,82 @@ term std
 tag STD
 type control
 description Standard input signal for most experiments.
+label std #provisional
 
 term IgG-goat
 tag IGGGOAT
 type control
 description Input signal from Normal Goat IgG ChIP-seq.
+label IgG-goat #provisional
 
 term IgG-mus
 tag IGGMUS
 type control
 description Input signal from Normal Mouse IgG ChIP-seq.
+label IgG-mus #provisional
 
 term IgG-rab
 tag IGGRAB
 type control
 description Input signal from Normal Rabbit IgG ChIP-seq.
+label IgG-rab #provisional
 
 term IgG-rat
 tag IGGRAT
 type control
 description Input signal from Normal Rat IgG ChIP-seq
+label IgG-rat #provisional
 
 term IgG-Yale
 tag IGGYALE
 type control
 description Input signal from Mouse IgG ChIP-seq prepared at Yale
+label IgG-Yale #provisional
 
 term MNase
 tag MNASE
 type control
 description Input signal from MNase digested DNA.
+label MNase #provisional
 
 term UCDavis
 tag UCD
 type control
 description Input library was prepared at UC Davis.
+label UCDavis #provisional
 
 ### Treatments
+
+term 4OHTAM_1uM_4hr
+tag TAM14H
+description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
+type treatment
+label 4-OHTAM_1uM_4hr
+
+term 4OHTAM_1uM_12hr
+tag TAM112H
+description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
+type treatment
+label 4-OHTAM_1uM_12hr
+
+term 4OHTAM_1uM_36hr
+tag TAM
+description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
+type treatment
+label 4-OHTAM_1uM_36hr
+# Changed tag from OHTAM1: 6/9/11
+
+term 4OHTAM_20nM_72hr
+tag OHTAM
+description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
+type treatment
+label 4-OHTAM_20nM_72hr
+
+term 4OHTAM_100nM_30m
+tag TAM10030
+description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
+type treatment
+label 4-OHTAM_100nM_30m
 
 term androgen
 tag ANDRO
@@ -11285,6 +11370,11 @@ type treatment
 term BPA_100nM_4hr
 tag BPA14H
 description 4 h with 100 nM Bisphenol A (Myers)
+type treatment
+
+term CTCF_shRNA_knockdown
+tag CTCFSHRNA
+description CTCF (CCCTC-binding factor) transcript levels were knocked down in MCF7 cells using lentiviral transduction to express an shRNA targeting the CTCF gene. The lentiviral construct also contained a puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct. By western blot, CTCF protein levels in the knockdown cells were <10% of MCF7 cell lines transduced with a randomized shRNA lentiviral construct.
 type treatment
 
 term DEX_100nM
@@ -11378,10 +11468,11 @@ description 120 hour differentiation time point of mG/ER cells towards red blood
 label 120 hour diff protocol C
 
 term diffProtD_7d
-tag DIFFD7D
+tag DD7D
 type treatment
 description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter. (Ren) PROVSIONAL
 label 7 day diff protocol D
+#shortened tag from DIFFD7d to DD7D
 
 term DMSO_0.02pct
 tag DM002P1H
@@ -11574,6 +11665,11 @@ tag PREDNIS
 description 1 h with 100 nM Prednisolone (Myers)
 type treatment
 
+term Randomized_shRNA_control
+tag RANDSHRNA
+description MCF7 cells were transduced with a lentivirus expressing an shRNA containing a randomized DNA sequence generated by the siRNA Wizard v3.1 (http://www.sirnawizard.com/scrambled2.php) program. Lentiviral constructs also contained the puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct.
+type treatment
+
 term serum_free_media
 tag SERUMFREE
 description Grown with growth factors, then switched to media that contains no FBS for 36 hours (Crawford)
@@ -11591,37 +11687,6 @@ tag SERUMSTIM
 description Grown with normal serum levels (10%), then switched back to normal serum levels (10% FBS) for 3 hours.
 type treatment
 label serum-stimulated media
-
-term 4OHTAM_1uM_4hr
-tag TAM14H
-description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
-type treatment
-label 4-OHTAM_1uM_4hr
-
-term 4OHTAM_1uM_12hr
-tag TAM112H
-description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
-type treatment
-label 4-OHTAM_1uM_12hr
-
-term 4OHTAM_1uM_36hr
-tag TAM
-description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
-type treatment
-label 4-OHTAM_1uM_36hr
-# Changed tag from OHTAM1: 6/9/11
-
-term 4OHTAM_20nM_72hr
-tag OHTAM
-description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
-type treatment
-label 4-OHTAM_20nM_72hr
-
-term 4OHTAM_100nM_30m
-tag TAM10030
-description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
-type treatment
-label 4-OHTAM_100nM_30m
 
 term Taxol_500nM_24hr
 tag TAX24H
@@ -11659,6 +11724,7 @@ term FASP
 tag FASP
 description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
+label FASP proteomics #provisional
 
 term In-gel
 tag INGEL
@@ -11670,46 +11736,55 @@ term PCR1x
 tag PCR1X
 description 1-cycle of PCR (Myers)
 type protocol
+label PCR 1-cycle #provisional
 
 term PCR2x
 tag PCR2X
 description 2-cycles of PCR (Myers)
 type protocol
+label PCR 2-cycle #provisional
 
 term SDS-Page
 tag SDSPAGE
 description SDS-Page proteomics sample preparation protocol (Giddings)
 type protocol
+label SDS-Page proteomics sample
 
 term v041610.1
 tag V0416101
 description 2x10^7 cells, fragmentation by bioruptor, one 15-cycle round of PCR (Myers)
 type protocol
+label biorupter, PCR 1-cycle #provisional
 
 term v041610.2
 tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
-type protocol
+type protocol 
+label sonicator, PCR 1-cycle #provisional
 
 term v042211.1
 tag V0422111
 description Faster ChIP protocol & AMpure XP size selection for ChIP-seq (Myers)
 type protocol
+label ChIP AMpure XP #provisional
 
 term v042211.2
 tag V0422112
 description Faster ChIP protocol & gel size selection for ChIP-seq (Myers)
 type protocol
+label ChIP gel #provisional
 
 term TAP-Only
 tag TAP
 description This kind of library was made from RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
 type protocol
+label Tobacco Acid Pyrophosphatase Only #provisional
 
 term CIP-TAP
 tag CIPTAP
 description This kind of library was made from RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
 type protocol
+label CIP-TAP #provisional
 
 ### phase
 
@@ -11717,36 +11792,43 @@ term G1
 tag G1
 type phase
 description Flow sorted, G1 phase corresponds to the first DNA content window
+label G1 #provisional
 
 term G1b
 tag G1B
 type phase
 description Flow sorted, G1b phase corresponds to the second half of the first DNA content window
+label G1b #provisional
 
 term G2
 tag G2
 type phase
 description Flow sorted, G2 phase corresponds to the second DNA content window
+label G2 #provisional
 
 term S1
 tag S1
 type phase
 description Flow sorted, S1 phase corresponds to the third DNA content window
+label S1 #provisional
 
 term S2
 tag S2
 type phase
 description Flow sorted, S2 phase corresponds to the fourth DNA content window
+label S2 #provisional
 
 term S3
 tag S3
 type phase
 description Flow sorted, S3 phase corresponds to the fifth DNA content window
+label S3 #provisional
 
 term S4
 tag S4
 type phase
 description Flow sorted, S4 phase corresponds to the sixth DNA content window
+label S4 #provisional
 
 ### region
 # genomic regions used in experiments that are not whole-genome
@@ -11755,26 +11837,31 @@ term chr21
 tag CHR21
 type region
 description Chromsome 21
+label chr21 #provisional
 
 term ENM
 tag ENM
 type region
 description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENM #provisional
 
 term ENR
 tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENR #provisional
 
 term UW-5C-Myc-Region
 tag UW5CMYC
 type region
 description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+label UW-5C-Myc-Region #provisional
 
 term UW-5C-Gene-Regions
 tag UW5CGENE
 type region
 description Set of 25 regions interrogated in UW 5C gene-targeted experiments
+label UW-5C-Gene-Regions #provisional
 
 ### restrictionEnzyme
 
@@ -11782,11 +11869,13 @@ term msp
 tag MSP
 description MSP Restriction Enzyme
 type restrictionEnzyme
+label msp #provisional
 
 term hpa
 tag HPA
 description HPA Restriction Enzyme
 type restrictionEnzyme
+label hpa #provisional
 
 ### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
 ### term:
@@ -12213,14 +12302,14 @@ term 5C
 tag 5C
 type dataType
 label 5C
-description 5C Chromatin Interactions
+description Chromosome Conformation Capture Carbon Copy Genomic Interactions
 dataGroup Other
 
 term AffyExonArray
 tag AFFYEXONARRAY
 type dataType
-label Exon Array
-description Affymetrix Exon Microarray
+label Exon-array
+description Affymetrix Exon Array
 dataGroup RNA Profiling
 
 term Bip
@@ -12235,21 +12324,21 @@ term Cage
 tag CAGE
 type dataType
 label CAGE
-description CAGE 5' RNA Tags
+description CAGE
 dataGroup RNA Profiling
 
 term ChipSeq
 tag CHIPSEQ
 type dataType
 label ChIP-seq
-description Chromatin IP Sequencing
-dataGroup TFBS & Histones
+description Chromatin Immunoprecipitation followed by sequencing
+dataGroup TFBS/Histones
 
 term Cluster
 tag CLUSTER
 type dataType
 label Integ Cluster
-description Element Clusters by Integrative Analysis
+description Element cluster by integrative analysis
 dataGroup Other
 
 #term Cnv
@@ -12264,7 +12353,7 @@ term Combined
 tag COMBO
 type dataType
 label Combined
-description Multi-assay Synthesis
+description Synthesis of multiple types of data
 dataGroup Other
 # Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType (01/14/2011)
 
@@ -12280,21 +12369,21 @@ term DnaPet
 tag DNAPET
 type dataType
 label DNA-PET
-description DNA Paired-End Tags
+description DNA Paired End Tag
 dataGroup Other
 
 term DnaseSeq
 tag DNASESEQ
 type dataType
 label DNase-seq
-description DNaseI HS Sequencing
+description DNase digestion followed by sequencing
 dataGroup Open Chromatin
 
 term FaireSeq
 tag FAIRESEQ
 type dataType
 label FAIRE-seq
-description FAIRE-seq Open Chromatin
+description Formaldehyde-Assisted Isolation of Regulatory Elements followed by sequencing
 dataGroup Open Chromatin
 #The tag is not standard Camel case to be consistent with hg18
 
@@ -12302,13 +12391,13 @@ term Genotype
 tag GENOTYPE
 type dataType
 label Genotype
-description Genotype CNV and SNP
+description Genotyping experiments including copy nummber variants and SNPs
 dataGroup Other
 
 term Gencode
 tag GENCODE
 type dataType
-label GENCODE Genes
+label GENCODE
 description GENCODE
 dataGroup Other
 
@@ -12316,28 +12405,28 @@ term ChiaPet
 tag CHIAPET
 type dataType
 label ChIA-PET
-description Chromatin Interaction Paired-End Tags
+description Chromatin Interaction Analysis Paired-End Tags
 dataGroup Other
 
 term Orchid
 tag ORCHID
 type dataType
 label ORChID
-description ORChID DNA Cleavage
+description OH Radical Cleavage Intensity Database
 dataGroup Other
 
 term Mapability
 tag MAPABILITY
 type dataType
 label Mapability
-description Short Read Mapability
+description Uniqueness of n-mer sequence fragments across the genome
 dataGroup Other
 
 term MethylArray
 tag METHYLARRAY
 type dataType
 label Methyl Array
-description DNA Methylation Array
+description DNA Methylation Bead Array
 dataGroup DNA Methylation
 
 term MethylSeq
@@ -12351,20 +12440,20 @@ term MethylRrbs
 tag METHYLRRBS
 type dataType
 label Methyl RRBS
-description DNA Methyl Reduced Rep Bisulfite Seq
+description DNA Methylation Reduced Representation Bisulfite Sequencing
 dataGroup DNA Methylation
 
 term MethylWgbs
 tag METHYLWGBS
 type dataType
 label Methyl WGBS
-description DNA Methyl WG Bisulfite Seq Provisonal
+description DNA Methylation Whole Genome Bisulfite Sequencing Provisonal
 dataGroup DNA Methylation
 
 term NRE
 tag NRE
 type dataType
-label Negative Regulatory Elements
+label Neg Regulatory
 description Negative Regulatory Elements
 dataGroup Other
 # tag not standard to match hg18
@@ -12373,7 +12462,7 @@ term Nucleosome
 tag NUCLEOSOME
 type dataType
 label Nucleosome
-description Nucleosome Position
+description Nucleosome positioning data
 dataGroup Other
 
 term Proteogenomics
@@ -12387,14 +12476,14 @@ term RepliSeq
 tag REPLISEQ
 type dataType
 label Repli-seq
-description DNA Replication Timing
+description Assessment of DNA Replication Timing
 dataGroup Other
 
 term RnaPet
 tag PET
 type dataType
 label RNA-PET
-description RNA Paired-End Tags
+description RNA Paired-End Tag
 dataGroup RNA Profiling
 # tag not standard to match hg18
 
@@ -12402,14 +12491,14 @@ term RnaChip
 tag RNACHIP
 type dataType
 label RNA-chip
-description RNA Expression Microarray
+description microarray analysis of RNA expression
 dataGroup RNA Profiling
 
 term RnaSeq
 tag RNASEQ
 type dataType
 label RNA-seq
-description RNA Sequencing
+description Sequencing analysis of RNA expression
 dataGroup RNA Profiling
 
 #GeneST and Tiling are flavors of the RIP-chip.
@@ -12418,43 +12507,43 @@ dataGroup RNA Profiling
 term RipGeneSt
 tag GENEST
 type dataType
-label RIP Gene ST
-description RNA IP Gene Array
+label RIP-chip Gene ST
+description RIP-Chip on Affymetrix GeneChip (R) Human Gene 1.0 ST Arrays
 dataGroup RNA Binding Proteins
 
 term RipTiling
 tag TILING
 type dataType
-label RIP Tiling Array
-description RNA IP Tiling Array
+label RIP-chip Tiling Array
+description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays
 dataGroup RNA Binding Proteins
 
 term RipChip
 tag RIPCHIP
 type dataType
 label RIP-chip
-description RNA IP Microarray
+description RNA Immunoprecipitation measured on microarray
 dataGroup RNA Binding Proteins
 
 term RipSeq
 tag  RIPSEQ
 type dataType
 label RIP-seq
-description RNA IP Sequencing
+description RNA binding protein associated mRNA sequencing
 dataGroup RNA Binding Proteins
 
 term Switchgear
 tag SWITCHGEAR
 type dataType
-label RIP Validation
-description RNA IP SwitchGear Validation
+label SwitchGear
+description SwitchGear Genomics 3' UTR reporter assay
 dataGroup RNA Binding Proteins
 
 term TfbsValid
 tag TFBSVALID
 type dataType
-label TFBS Validation
-description Validation of Transcription Factor Binding
+label TFBS-Valid
+description Valid Transcription Factor Binding Sites
 dataGroup Other
 #This is not in the metaDB currently
 
@@ -12473,72 +12562,86 @@ description version
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be strain)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional
 
 term B10.H-2aH-4bp/Wts
 tag 2A4B
 type strain
 description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
+label B10.H-2aH-4bp/Wts
 # Used for the CH12 Cell Line
 
 term B6D2F1/J
 tag B6D2F1J
 type strain
 description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
+label B6D2F1/J
 
 term BALB/cAnN
 tag BALBCANN
 type strain
 description ccMyeloma high incidence H2d
+label BALB/cAnN
 
 term C3H
 tag C3H
 type strain
 description Strain C3H, Very related to C57BL/6
+label C3H
 
 term C57BL/6
 tag C57BL6
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
+label C57BL/6
 
 term C57BL/6J
 tag C57BL6J
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
+label C57BL/6J
 
 term CD-1
 tag CD1
 type strain
 description Multipurpose mouse used for safety testing, aging studies, surgical models and pseudopregnancy.
+label CD-1
 
 term NIH/Swiss
 tag NIHS
 type strain
 description An outbred Swiss mouse  used as a general-purpose stock. Used extensively for pertussis HSF testing.
+label NIH/Swiss
 
 term RIII
 tag RIII
 type strain
 description High mammary tumor incidence in unfostered substrains.
+label RIII
 
 term 129
 tag S129
 type strain
 description Strain 129, has widely available embryonic stem cells
+label 129
 
 term 129/Ola
 tag 129OLA
 type strain
 description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
+label 129/Ola
 
 term Spretus.BL6-Xist
 tag SPBL6
 type strain
 description M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
+label Spretus.BL6-Xist
 
 term Unknown
 tag UKN
 type strain
 description Unknown strain origin
+label Unknown
 
 ### Age
 # Used in conjunction with mouse submissions
@@ -12643,7 +12746,7 @@ description Adult 24 weeks PROVISIONAL
 label Adult 24 weeks PROVISIONAL
 
 term immortalized
-tag IMMOR
+tag IMMORTAL
 type age
 stage Cell Line
 description Immortal cells
@@ -12664,26 +12767,31 @@ label the age when the real age is unknown
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional, same as term
 
 term supplemental
 tag SUP
 type attic
 description Files supplemental at composite level
+label supplemental
 
 term auxSup
 tag AUXSUP
 type attic
 description Unverified files supplemental at experiment level
+label auxSup
 
 term auxValid
 tag AUXVAL
 type attic
 description Validated files supplemental to experiments
+label auxValid
 
 term auxExp
 tag AUXEXP
 type attic
 description Supplemental experiments
+label auxExp
 
 # Expected fields:
 # ----------------
@@ -12691,6 +12799,7 @@ description Supplemental experiments
 # tag (machine-readable name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be sex)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional, same as description
 #
 # Category: T for tissue, L for cell Line, P for Primary cell
 
@@ -12698,16 +12807,19 @@ term Tissue
 tag T
 type category
 description Tissue
+label Tissue
 
 term cellLine
 tag L
 type category
 description cell line
+label cell line
 
 term primaryCells
 tag P
 type category
 description primary cells
+label primary cells
 
 term M
 tag M
@@ -14285,7 +14397,7 @@ tag SUBID
 type typeOfTerm
 label Submission ID
 description The submission ID assigned by the UCSC Genome Browser at time of actual data submission.
-searchable wildList
+searchable no
 cvDefined no
 validate integer
 priority 335
@@ -14304,9 +14416,9 @@ priority 250
 term tableName
 tag TABLENAME
 type typeOfTerm
-label Name of SQL table at UCSC
+label Table name at UCSC
 description Downloadable files containing data displayed in tracks in the UCSC Genome Browser are often stored in SQL tables.  The particular table can be located by this name.
-searchable no
+searchable freeText
 cvDefined no
 validate exists
 priority 970
