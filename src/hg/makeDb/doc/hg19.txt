@@ -82,7 +82,7 @@ do
 "s/^GL000250.1/chr6_apd_hap1/" -e \
 "s/^GL000251.1/chr6_cox_hap2/" -e \
 "s/^GL000252.1/chr6_dbb_hap3/" -e \
-"s/^GL000253.1/chr6_mann_hap4/" -e \ 
+"s/^GL000253.1/chr6_mann_hap4/" -e \
 "s/^GL000254.1/chr6_mcf_hap5/" -e \
 "s/^GL000255.1/chr6_qbl_hap6/" -e \
 "s/^GL000256.1/chr6_ssto_hap7/" -e \
@@ -93,7 +93,7 @@ done > scaffolds.agp
     find ../unlocalized_scaffolds -type f | grep ".agp$" \
 | while read F
 do
-    C=`basename ${F}`   
+    C=`basename ${F}`
     C=${C/.unlocalized.scaf.agp}
     grep "^GL" ${F} | sed -e "s/^GL\([0-9]*\).1/${C}_gl\1_random/"
 done >> scaffolds.agp
@@ -106,7 +106,7 @@ done >> scaffolds.agp
 
     rm -f scaffolds.fa
     find ../alternate_loci -type f | grep ".fa$" | while read F
-do  
+do
     sed -e \
 "s/>.*GL000250.*/>chr6_apd_hap1/" -e \
 "s/>.*GL000251.*/>chr6_cox_hap2/" -e \
@@ -196,9 +196,9 @@ do
     hgsql -e "drop table ${T};" hg19
 done
     hgLoadOut -nosplit -verbose=2 -table=rmsk hg19 hg19.fa.out
-bad rep range [4385, 4384] line 1348605 of hg19.fa.out 
-bad rep range [5563, 5562] line 1563988 of hg19.fa.out 
-bad rep range [4539, 4538] line 3111186 of hg19.fa.out 
+bad rep range [4385, 4384] line 1348605 of hg19.fa.out
+bad rep range [5563, 5562] line 1563988 of hg19.fa.out
+bad rep range [4539, 4538] line 3111186 of hg19.fa.out
     #	featureBits still reports 1465724774 bases in rmsk table
     #	cleaning the hg19.fa.out file:
     cp hg19.fa.out hg19.clean.out
@@ -314,7 +314,7 @@ done | faToTwoBit stdin hg19.scaffolds.2bit
     sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
     mv tmp.c cpg_lh.c
     make
-    cd ../../ 
+    cd ../../
     ln -s hg3rdParty/cpgIslands/cpglh.exe
     mkdir -p hardMaskedFa
     cut -f1 ../../chrom.sizes | while read C
@@ -512,7 +512,7 @@ doBlastzChainNet.pl `pwd`/DEF \
 BLASTZ=lastz
 # maximum M allowed with lastz is only 255
 BLASTZ_M=254
-# lastz does not like the O= and E= lines in the matrix file 
+# lastz does not like the O= and E= lines in the matrix file
 #       this copy has that removed from /scratch/data/scratch/human_chimp.v2.q
 BLASTZ_Q=/hive/data/genomes/hg19/bed/lastzHg19Haps.2009-03-09/human_chimp.v2.q
 # and place those items here
@@ -529,14 +529,14 @@ SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 SEQ1_IN_CONTIGS=0
-    
+ 
 # QUERY: Human Hg19
 SEQ2_DIR=/scratch/data/hg19/hg19.2bit
 SEQ2_LEN=/scratch/data/hg19/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 SEQ2_IN_CONTIGS=0
-    
+ 
 BASE=/hive/data/genomes/hg19/bed/lastzSelf.2009-03-19
 TMPDIR=/scratch/tmp
 '_EOF_'
@@ -637,7 +637,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	> load.log 2>&1 &
     #	real    47m17.871s
-    cat fb.hg19.chainPanTro2Link.txt 
+    cat fb.hg19.chainPanTro2Link.txt
     #	2747983350 bases of 2897316137 (94.846%) in intersection
 
     #	running the swap - DONE - 2009-05-24
@@ -650,7 +650,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    723m41.377s
-    cat fb.panTro2.chainHg19Link.txt 
+    cat fb.panTro2.chainHg19Link.txt
     #	2761343871 bases of 2909485072 (94.908%) in intersection
 
 ############################################################################
@@ -735,7 +735,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-    cat fb.hg19.chainGorGor1Link.txt 
+    cat fb.hg19.chainGorGor1Link.txt
     #	1723432141 bases of 2897316137 (59.484%) in intersection
     doRecipBest.pl -buildDir=`pwd` hg19 gorGor1 > rbest.log 2>&1
 
@@ -771,7 +771,7 @@ split.csh $(root1) {check out line+ splitOut/$(root1).out}
 # Average job time:                 186s       3.10m     0.05h    0.00d
 # Longest finished job:             224s       3.73m     0.06h    0.00d
 # Submission to last job:           280s       4.67m     0.08h    0.00d
-    
+
     #	now, we can date and process each of those .out files
     #	this really should be a single creation of notInOthers
     #	These four different ones all end up to be the same anyhow
@@ -1349,7 +1349,7 @@ Became:
 
     # Convert the title line of the dbSTS.fa file
     #	Verify that column 3 only contains gb emb dbj
-    grep "^>" dbSTS.fa | awk -F'|' '{print $3}' | sort | uniq -c 
+    grep "^>" dbSTS.fa | awk -F'|' '{print $3}' | sort | uniq -c
 #   39124 dbj
 #   57375 emb
 # 1212541 gb
@@ -18338,4 +18338,59 @@ cat table.info | while read -a line; do
      echo "        type bigWig "$min" "$max
      echo
   done >> ${db}.ra 
-done 
+done
+
+##############################################################################
+# LASTZ MOUSE Mm10 (DONE - 2009-05-13 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
+    cd /hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
+
+    cat << '_EOF_' > DEF
+# human vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_SMSK=/scratch/data/hg19/lineageSpecificRepeats
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm9
+SEQ2_DIR=/scratch/data/mm10/nib
+SEQ2_SMSK=/scratch/data/mm10/notInOthers
+SEQ2_LEN=/scratch/data/mm10/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+
+    cat fb.hg19.chainMm10Link.txt
+    #	1021265143 bases of 2897316137 (35.249%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/mm10/bed/blastz.hg19.swap
+    cd /hive/data/genomes/mm10/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzMm10.2012-03-07/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+XXX - running - Thu Mar  8 11:51:25 PST 2012
+    #	real    131m58.763s
+    cat fb.mm10.chainHg19Link.txt
+    #	1013880568 bases of 2620346127 (38.693%) in intersection
+
+#########################################################################
