@@ -77,6 +77,7 @@ struct annoStreamDb *self = (struct annoStreamDb *)vSelf;
 if (self->sr == NULL)
     asdDoQuery(self);
 if (self->sr == NULL)
+    // This is necessary only if we're using sqlStoreResult in asdDoQuery, harmless otherwise:
     return NULL;
 char **row = nextRowUnfiltered(self);
 if (row == NULL)
