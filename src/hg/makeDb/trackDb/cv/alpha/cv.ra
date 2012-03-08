@@ -12213,14 +12213,14 @@ term 5C
 tag 5C
 type dataType
 label 5C
-description Chromosome Conformation Capture Carbon Copy Genomic Interactions
+description 5C Chromatin Interactions
 dataGroup Other
 
 term AffyExonArray
 tag AFFYEXONARRAY
 type dataType
-label Exon-array
-description Affymetrix Exon Array
+label Exon Array
+description Affymetrix Exon Microarray
 dataGroup RNA Profiling
 
 term Bip
@@ -12235,21 +12235,21 @@ term Cage
 tag CAGE
 type dataType
 label CAGE
-description CAGE
+description CAGE 5' RNA Tags
 dataGroup RNA Profiling
 
 term ChipSeq
 tag CHIPSEQ
 type dataType
 label ChIP-seq
-description Chromatin Immunoprecipitation followed by sequencing
-dataGroup TFBS/Histones
+description Chromatin IP Sequencing
+dataGroup TFBS & Histones
 
 term Cluster
 tag CLUSTER
 type dataType
 label Integ Cluster
-description Element cluster by integrative analysis
+description Element Clusters by Integrative Analysis
 dataGroup Other
 
 #term Cnv
@@ -12264,7 +12264,7 @@ term Combined
 tag COMBO
 type dataType
 label Combined
-description Synthesis of multiple types of data
+description Multi-assay Synthesis
 dataGroup Other
 # Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType (01/14/2011)
 
@@ -12280,21 +12280,21 @@ term DnaPet
 tag DNAPET
 type dataType
 label DNA-PET
-description DNA Paired End Tag
+description DNA Paired-End Tags
 dataGroup Other
 
 term DnaseSeq
 tag DNASESEQ
 type dataType
 label DNase-seq
-description DNase digestion followed by sequencing
+description DNaseI HS Sequencing
 dataGroup Open Chromatin
 
 term FaireSeq
 tag FAIRESEQ
 type dataType
 label FAIRE-seq
-description Formaldehyde-Assisted Isolation of Regulatory Elements followed by sequencing
+description FAIRE-seq Open Chromatin
 dataGroup Open Chromatin
 #The tag is not standard Camel case to be consistent with hg18
 
@@ -12302,13 +12302,13 @@ term Genotype
 tag GENOTYPE
 type dataType
 label Genotype
-description Genotyping experiments including copy nummber variants and SNPs
+description Genotype CNV and SNP
 dataGroup Other
 
 term Gencode
 tag GENCODE
 type dataType
-label GENCODE
+label GENCODE Genes
 description GENCODE
 dataGroup Other
 
@@ -12316,28 +12316,28 @@ term ChiaPet
 tag CHIAPET
 type dataType
 label ChIA-PET
-description Chromatin Interaction Analysis Paired-End Tags
+description Chromatin Interaction Paired-End Tags
 dataGroup Other
 
 term Orchid
 tag ORCHID
 type dataType
 label ORChID
-description OH Radical Cleavage Intensity Database
+description ORChID DNA Cleavage
 dataGroup Other
 
 term Mapability
 tag MAPABILITY
 type dataType
 label Mapability
-description Uniqueness of n-mer sequence fragments across the genome
+description Short Read Mapability
 dataGroup Other
 
 term MethylArray
 tag METHYLARRAY
 type dataType
 label Methyl Array
-description DNA Methylation Bead Array
+description DNA Methylation Array
 dataGroup DNA Methylation
 
 term MethylSeq
@@ -12351,20 +12351,20 @@ term MethylRrbs
 tag METHYLRRBS
 type dataType
 label Methyl RRBS
-description DNA Methylation Reduced Representation Bisulfite Sequencing
+description DNA Methyl Reduced Rep Bisulfite Seq
 dataGroup DNA Methylation
 
 term MethylWgbs
 tag METHYLWGBS
 type dataType
 label Methyl WGBS
-description DNA Methylation Whole Genome Bisulfite Sequencing Provisonal
+description DNA Methyl WG Bisulfite Seq Provisonal
 dataGroup DNA Methylation
 
 term NRE
 tag NRE
 type dataType
-label Neg Regulatory
+label Negative Regulatory Elements
 description Negative Regulatory Elements
 dataGroup Other
 # tag not standard to match hg18
@@ -12373,7 +12373,7 @@ term Nucleosome
 tag NUCLEOSOME
 type dataType
 label Nucleosome
-description Nucleosome positioning data
+description Nucleosome Position
 dataGroup Other
 
 term Proteogenomics
@@ -12387,14 +12387,14 @@ term RepliSeq
 tag REPLISEQ
 type dataType
 label Repli-seq
-description Assessment of DNA Replication Timing
+description DNA Replication Timing
 dataGroup Other
 
 term RnaPet
 tag PET
 type dataType
 label RNA-PET
-description RNA Paired-End Tag
+description RNA Paired-End Tags
 dataGroup RNA Profiling
 # tag not standard to match hg18
 
@@ -12402,14 +12402,14 @@ term RnaChip
 tag RNACHIP
 type dataType
 label RNA-chip
-description microarray analysis of RNA expression
+description RNA Expression Microarray
 dataGroup RNA Profiling
 
 term RnaSeq
 tag RNASEQ
 type dataType
 label RNA-seq
-description Sequencing analysis of RNA expression
+description RNA Sequencing
 dataGroup RNA Profiling
 
 #GeneST and Tiling are flavors of the RIP-chip.
@@ -12418,43 +12418,43 @@ dataGroup RNA Profiling
 term RipGeneSt
 tag GENEST
 type dataType
-label RIP-chip Gene ST
-description RIP-Chip on Affymetrix GeneChip (R) Human Gene 1.0 ST Arrays
+label RIP Gene ST
+description RNA IP Gene Array
 dataGroup RNA Binding Proteins
 
 term RipTiling
 tag TILING
 type dataType
-label RIP-chip Tiling Array
-description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays
+label RIP Tiling Array
+description RNA IP Tiling Array
 dataGroup RNA Binding Proteins
 
 term RipChip
 tag RIPCHIP
 type dataType
 label RIP-chip
-description RNA Immunoprecipitation measured on microarray
+description RNA IP Microarray
 dataGroup RNA Binding Proteins
 
 term RipSeq
 tag  RIPSEQ
 type dataType
 label RIP-seq
-description RNA binding protein associated mRNA sequencing
+description RNA IP Sequencing
 dataGroup RNA Binding Proteins
 
 term Switchgear
 tag SWITCHGEAR
 type dataType
-label SwitchGear
-description SwitchGear Genomics 3' UTR reporter assay
+label RIP Validation
+description RNA IP SwitchGear Validation
 dataGroup RNA Binding Proteins
 
 term TfbsValid
 tag TFBSVALID
 type dataType
-label TFBS-Valid
-description Valid Transcription Factor Binding Sites
+label TFBS Validation
+description Validation of Transcription Factor Binding
 dataGroup Other
 #This is not in the metaDB currently
 
