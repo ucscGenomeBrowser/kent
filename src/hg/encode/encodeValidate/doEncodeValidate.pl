@@ -754,7 +754,7 @@ sub getInfoFiles
     my $category = $terms{'Cell Line'}->{$cell}->{'category'};
 
     # Can be a better design, but need to flesh out design more.
-    if (defined $category && $category eq "Tissue") {
+    if (defined $category && $category eq "Tissue" && defined $sex) {
         $cellLineSex=$sex;
     }
 
