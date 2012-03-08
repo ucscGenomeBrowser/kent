@@ -1,0 +1,29 @@
+#!/bin/bash
+# Check hgFindSpec table in all active databases, ignoring
+# databases where active=1 but there is no hgFindSpec table.
+
+# get argument / give usage statement
+if [ $# -ne 1 ]
+then
+  echo -e "\n  usage:  $(basename $0) go\n
+  Runs 'checkHgFindSpec -checkTermRegex' for all dbs in
+  dbDb where active=1 that have an hgFindSpec table.\n" >&2
+  exit 1
+fi
+  
+if [ "$1" != "go" ]
+then
+  echo -e "\n only the argument 'go' is allowed.\n"
+  exit 1
+fi
+
+# run checkHgFindSpec.  The 'tail' gets rid of whitespace and cookie/domain info
+for db in $(hgsql -Ne 'select name from dbDb where active=1' hgcentraltest | sort)
+do
+  findSpec=$(hgsql -Ne 'show tables like "hgFindSpec"' $db)
+  if [ -n "$findSpec" ]
+  then
+    nice checkHgFindSpec -checkTermRegex $db | tail -n +7
+  fi
+done
+exit 0
