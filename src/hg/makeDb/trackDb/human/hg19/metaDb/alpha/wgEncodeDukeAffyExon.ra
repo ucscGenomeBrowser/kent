@@ -28,6 +28,26 @@ tableName wgEncodeDukeAffyExon8988tSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExon8988tSimpleSignalRep1V2
+objType table
+cell 8988T
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExon8988tSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExon8988tSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExon8988tSimpleSignalRep2
 objType table
 cell 8988T
@@ -49,6 +69,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExon8988tSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExon8988tSimpleSignalRep2V2
+objType table
+cell 8988T
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExon8988tSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExon8988tSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -77,6 +117,26 @@ tableName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep1
 treatment serum_free_media
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep1V2
+objType table
+cell AoSMC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep1V2
+treatment serum_free_media
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2
 objType table
 cell AoSMC
@@ -99,6 +159,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2
+treatment serum_free_media
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2V2
+objType table
+cell AoSMC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2V2
 treatment serum_free_media
 view SimpleSignal
 
@@ -127,6 +207,26 @@ tableName wgEncodeDukeAffyExonAosmcSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonAosmcSimpleSignalRep1V2
+objType table
+cell AoSMC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonAosmcSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonAosmcSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonAosmcSimpleSignalRep2
 objType table
 cell AoSMC
@@ -149,6 +249,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonAosmcSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonAosmcSimpleSignalRep2V2
+objType table
+cell AoSMC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonAosmcSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonAosmcSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -177,6 +297,26 @@ tableName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep1
 treatment TGFb
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep1V2
+objType table
+cell AoSMC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep1V2
+treatment TGFb
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep2
 objType table
 cell AoSMC
@@ -199,6 +339,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep2
+treatment TGFb
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep2V2
+objType table
+cell AoSMC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep2V2
 treatment TGFb
 view SimpleSignal
 
@@ -280,6 +440,26 @@ tableName wgEncodeDukeAffyExonChorionSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonChorionSimpleSignalRep1V2
+objType table
+cell Chorion
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonChorionSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonChorionSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonCllSimpleSignalRep1
 objType table
 cell CLL
@@ -304,6 +484,26 @@ tableName wgEncodeDukeAffyExonCllSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonCllSimpleSignalRep1V2
+objType table
+cell CLL
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonCllSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonCllSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonCllSimpleSignalRep2
 objType table
 cell CLL
@@ -325,6 +525,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonCllSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonCllSimpleSignalRep2V2
+objType table
+cell CLL
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonCllSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonCllSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -354,6 +574,26 @@ tableName wgEncodeDukeAffyExonFibroblSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonFibroblSimpleSignalRep1V2
+objType table
+cell Fibrobl
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonFibroblSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonFibroblSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonFibroblSimpleSignalRep2
 objType table
 cell Fibrobl
@@ -377,6 +617,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonFibroblSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonFibroblSimpleSignalRep2V2
+objType table
+cell Fibrobl
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonFibroblSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonFibroblSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -478,6 +738,26 @@ tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGlioblaSimpleSignalRep1V2
+objType table
+cell Gliobla
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonGlioblaSimpleSignalRep2
 objType table
 cell Gliobla
@@ -501,6 +781,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonGlioblaSimpleSignalRep2V2
+objType table
+cell Gliobla
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -529,6 +829,26 @@ tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep3
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGlioblaSimpleSignalRep3V2
+objType table
+cell Gliobla
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep3V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonGlioblaSimpleSignalRep4
 objType table
 cell Gliobla
@@ -551,6 +871,26 @@ project wgEncode
 replicate 4
 subId 3200
 tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep4
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonGlioblaSimpleSignalRep4V2
+objType table
+cell Gliobla
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep4V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 4
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGlioblaSimpleSignalRep4V2
 treatment None
 view SimpleSignal
 
@@ -579,6 +919,26 @@ tableName wgEncodeDukeAffyExonGm12878SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGm12878SimpleSignalRep1V2
+objType table
+cell GM12878
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm12878SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonGm12878SimpleSignalRep2
 objType table
 cell GM12878
@@ -604,6 +964,26 @@ tableName wgEncodeDukeAffyExonGm12878SimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGm12878SimpleSignalRep2V2
+objType table
+cell GM12878
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm12878SimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonGm12878SimpleSignalRep3
 objType table
 cell GM12878
@@ -626,6 +1006,26 @@ project wgEncode
 replicate 3
 subId 3200
 tableName wgEncodeDukeAffyExonGm12878SimpleSignalRep3
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonGm12878SimpleSignalRep3V2
+objType table
+cell GM12878
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm12878SimpleSignalRep3V2
 treatment None
 view SimpleSignal
 
@@ -655,6 +1055,26 @@ tableName wgEncodeDukeAffyExonGm12891SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGm12891SimpleSignalRep1V2
+objType table
+cell GM12891
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm12891SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm12891SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonGm12891SimpleSignalRep2
 objType table
 cell GM12891
@@ -678,6 +1098,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonGm12891SimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonGm12891SimpleSignalRep2V2
+objType table
+cell GM12891
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm12891SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm12891SimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -707,6 +1147,26 @@ tableName wgEncodeDukeAffyExonGm12892SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGm12892SimpleSignalRep1V2
+objType table
+cell GM12892
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm12892SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm12892SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonGm12892SimpleSignalRep2
 objType table
 cell GM12892
@@ -730,6 +1190,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonGm12892SimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonGm12892SimpleSignalRep2V2
+objType table
+cell GM12892
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm12892SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm12892SimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -759,6 +1239,26 @@ tableName wgEncodeDukeAffyExonGm18507SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGm18507SimpleSignalRep1V2
+objType table
+cell GM18507
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm18507SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonGm18507SimpleSignalRep2
 objType table
 cell GM18507
@@ -782,6 +1282,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonGm18507SimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonGm18507SimpleSignalRep2V2
+objType table
+cell GM18507
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm18507SimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -811,6 +1331,26 @@ tableName wgEncodeDukeAffyExonGm18507SimpleSignalRep3
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGm18507SimpleSignalRep3V2
+objType table
+cell GM18507
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm18507SimpleSignalRep3V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonGm19238SimpleSignalRep1
 objType table
 cell GM19238
@@ -834,6 +1374,26 @@ project wgEncode
 replicate 1
 subId 3200
 tableName wgEncodeDukeAffyExonGm19238SimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonGm19238SimpleSignalRep1V2
+objType table
+cell GM19238
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm19238SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm19238SimpleSignalRep1V2
 treatment None
 view SimpleSignal
 
@@ -863,6 +1423,26 @@ tableName wgEncodeDukeAffyExonGm19238SimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGm19238SimpleSignalRep2V2
+objType table
+cell GM19238
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm19238SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm19238SimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonGm19239SimpleSignalRep1
 objType table
 cell GM19239
@@ -886,6 +1466,26 @@ project wgEncode
 replicate 1
 subId 3200
 tableName wgEncodeDukeAffyExonGm19239SimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonGm19239SimpleSignalRep1V2
+objType table
+cell GM19239
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm19239SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm19239SimpleSignalRep1V2
 treatment None
 view SimpleSignal
 
@@ -915,6 +1515,26 @@ tableName wgEncodeDukeAffyExonGm19239SimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGm19239SimpleSignalRep2V2
+objType table
+cell GM19239
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm19239SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm19239SimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonGm19240SimpleSignalRep1
 objType table
 cell GM19240
@@ -938,6 +1558,26 @@ project wgEncode
 replicate 1
 subId 3200
 tableName wgEncodeDukeAffyExonGm19240SimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonGm19240SimpleSignalRep1V2
+objType table
+cell GM19240
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm19240SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm19240SimpleSignalRep1V2
 treatment None
 view SimpleSignal
 
@@ -967,6 +1607,26 @@ tableName wgEncodeDukeAffyExonGm19240SimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonGm19240SimpleSignalRep2V2
+objType table
+cell GM19240
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonGm19240SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonGm19240SimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonH1hescSimpleSignalRep1
 objType table
 cell H1-hESC
@@ -988,6 +1648,26 @@ project wgEncode
 replicate 1
 subId 3200
 tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonH1hescSimpleSignalRep1V2
+objType table
+cell H1-hESC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep1V2
 treatment None
 view SimpleSignal
 
@@ -1015,6 +1695,26 @@ tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonH1hescSimpleSignalRep2V2
+objType table
+cell H1-hESC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonH1hescSimpleSignalRep3
 objType table
 cell H1-hESC
@@ -1036,6 +1736,26 @@ project wgEncode
 replicate 3
 subId 3200
 tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep3
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonH1hescSimpleSignalRep3V2
+objType table
+cell H1-hESC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep3V2
 treatment None
 view SimpleSignal
 
@@ -1063,6 +1783,26 @@ tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep4
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonH1hescSimpleSignalRep4V2
+objType table
+cell H1-hESC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep4V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 4
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonH1hescSimpleSignalRep4V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonH9esSimpleSignalRep1
 objType table
 cell H9ES
@@ -1084,6 +1824,26 @@ project wgEncode
 replicate 1
 subId 3200
 tableName wgEncodeDukeAffyExonH9esSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonH9esSimpleSignalRep1V2
+objType table
+cell H9ES
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonH9esSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonH9esSimpleSignalRep1V2
 treatment None
 view SimpleSignal
 
@@ -1113,6 +1873,26 @@ tableName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1
 treatment IFNa4h
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1V2
+objType table
+cell HeLa-S3
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1V2
+treatment IFNa4h
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2
 objType table
 cell HeLa-S3
@@ -1136,6 +1916,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2
+treatment IFNa4h
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2V2
+objType table
+cell HeLa-S3
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2V2
 treatment IFNa4h
 view SimpleSignal
 
@@ -1165,6 +1965,26 @@ tableName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1
 treatment IFNg4h
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1V2
+objType table
+cell HeLa-S3
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1V2
+treatment IFNg4h
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2
 objType table
 cell HeLa-S3
@@ -1188,6 +2008,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2
+treatment IFNg4h
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2V2
+objType table
+cell HeLa-S3
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2V2
 treatment IFNg4h
 view SimpleSignal
 
@@ -1217,6 +2057,26 @@ tableName wgEncodeDukeAffyExonHelas3SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHelas3SimpleSignalRep1V2
+objType table
+cell HeLa-S3
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHelas3SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHelas3SimpleSignalRep2
 objType table
 cell HeLa-S3
@@ -1243,6 +2103,26 @@ tableName wgEncodeDukeAffyExonHelas3SimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHelas3SimpleSignalRep2V2
+objType table
+cell HeLa-S3
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHelas3SimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHelas3SimpleSignalRep3
 objType table
 cell HeLa-S3
@@ -1266,6 +2146,66 @@ project wgEncode
 replicate 3
 subId 3200
 tableName wgEncodeDukeAffyExonHelas3SimpleSignalRep3
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHelas3SimpleSignalRep3V2
+objType table
+cell HeLa-S3
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHelas3SimpleSignalRep3V2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHepatoSimpleSignalRep1V2
+objType table
+cell Hepatocytes
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHepatoSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHepatoSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHepatoSimpleSignalRep2V2
+objType table
+cell Hepatocytes
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHepatoSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHepatoSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -1344,6 +2284,26 @@ tableName wgEncodeDukeAffyExonHepg2SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHepg2SimpleSignalRep1V2
+objType table
+cell HepG2
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHepg2SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHepg2SimpleSignalRep2
 objType table
 cell HepG2
@@ -1367,6 +2327,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonHepg2SimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHepg2SimpleSignalRep2V2
+objType table
+cell HepG2
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHepg2SimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -1396,6 +2376,26 @@ tableName wgEncodeDukeAffyExonHepg2SimpleSignalRep3
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHepg2SimpleSignalRep3V2
+objType table
+cell HepG2
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHepg2SimpleSignalRep3V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHmecSimpleSignalRep1
 objType table
 cell HMEC
@@ -1419,6 +2419,26 @@ project wgEncode
 replicate 1
 subId 3200
 tableName wgEncodeDukeAffyExonHmecSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHmecSimpleSignalRep1V2
+objType table
+cell HMEC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHmecSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHmecSimpleSignalRep1V2
 treatment None
 view SimpleSignal
 
@@ -1448,6 +2468,26 @@ tableName wgEncodeDukeAffyExonHmecSimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHmecSimpleSignalRep2V2
+objType table
+cell HMEC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHmecSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHmecSimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep1
 objType table
 cell HPDE6-E6E7
@@ -1472,6 +2512,26 @@ tableName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep1V2
+objType table
+cell HPDE6-E6E7
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep2
 objType table
 cell HPDE6-E6E7
@@ -1493,6 +2553,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep2V2
+objType table
+cell HPDE6-E6E7
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -1521,6 +2601,26 @@ tableName wgEncodeDukeAffyExonHsmmSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHsmmSimpleSignalRep1V2
+objType table
+cell HSMM
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHsmmSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHsmmSimpleSignalRep2
 objType table
 cell HSMM
@@ -1543,6 +2643,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonHsmmSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHsmmSimpleSignalRep2V2
+objType table
+cell HSMM
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHsmmSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -1571,6 +2691,26 @@ tableName wgEncodeDukeAffyExonHsmmSimpleSignalRep3
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHsmmSimpleSignalRep3V2
+objType table
+cell HSMM
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHsmmSimpleSignalRep3V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHsmmtSimpleSignalRep1
 objType table
 cell HSMMtube
@@ -1593,6 +2733,26 @@ project wgEncode
 replicate 1
 subId 3200
 tableName wgEncodeDukeAffyExonHsmmtSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHsmmtSimpleSignalRep1V2
+objType table
+cell HSMMtube
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHsmmtSimpleSignalRep1V2
 treatment None
 view SimpleSignal
 
@@ -1621,6 +2781,26 @@ tableName wgEncodeDukeAffyExonHsmmtSimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHsmmtSimpleSignalRep2V2
+objType table
+cell HSMMtube
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHsmmtSimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHsmmtSimpleSignalRep3
 objType table
 cell HSMMtube
@@ -1643,6 +2823,26 @@ project wgEncode
 replicate 3
 subId 3200
 tableName wgEncodeDukeAffyExonHsmmtSimpleSignalRep3
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHsmmtSimpleSignalRep3V2
+objType table
+cell HSMMtube
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHsmmtSimpleSignalRep3V2
 treatment None
 view SimpleSignal
 
@@ -1670,6 +2870,26 @@ tableName wgEncodeDukeAffyExonHtr8SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHtr8SimpleSignalRep1V2
+objType table
+cell HTR8svn
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHtr8SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHtr8SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHtr8SimpleSignalRep2
 objType table
 cell HTR8svn
@@ -1691,6 +2911,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonHtr8SimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHtr8SimpleSignalRep2V2
+objType table
+cell HTR8svn
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHtr8SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHtr8SimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -1718,6 +2958,26 @@ tableName wgEncodeDukeAffyExonHuh75SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHuh75SimpleSignalRep1V2
+objType table
+cell Huh-7.5
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHuh75SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHuh75SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHuh7SimpleSignalRep1
 objType table
 cell Huh-7
@@ -1739,6 +2999,26 @@ project wgEncode
 replicate 1
 subId 3200
 tableName wgEncodeDukeAffyExonHuh7SimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHuh7SimpleSignalRep1V2
+objType table
+cell Huh-7
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHuh7SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHuh7SimpleSignalRep1V2
 treatment None
 view SimpleSignal
 
@@ -1768,6 +3048,26 @@ tableName wgEncodeDukeAffyExonHuvecSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonHuvecSimpleSignalRep1V2
+objType table
+cell HUVEC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHuvecSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHuvecSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonHuvecSimpleSignalRep2
 objType table
 cell HUVEC
@@ -1791,6 +3091,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonHuvecSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonHuvecSimpleSignalRep2V2
+objType table
+cell HUVEC
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonHuvecSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonHuvecSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -1890,6 +3210,26 @@ tableName wgEncodeDukeAffyExonK562SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonK562SimpleSignalRep1V2
+objType table
+cell K562
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonK562SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonK562SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonK562SimpleSignalRep2
 objType table
 cell K562
@@ -1914,6 +3254,26 @@ tableName wgEncodeDukeAffyExonK562SimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonK562SimpleSignalRep2V2
+objType table
+cell K562
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonK562SimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonK562SimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonK562SimpleSignalRep3
 objType table
 cell K562
@@ -1935,6 +3295,26 @@ project wgEncode
 replicate 3
 subId 3200
 tableName wgEncodeDukeAffyExonK562SimpleSignalRep3
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonK562SimpleSignalRep3V2
+objType table
+cell K562
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonK562SimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonK562SimpleSignalRep3V2
 treatment None
 view SimpleSignal
 
@@ -1964,6 +3344,26 @@ tableName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1
 treatment androgen
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1V2
+objType table
+cell LNCaP
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1V2
+treatment androgen
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2
 objType table
 cell LNCaP
@@ -1986,6 +3386,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2
+treatment androgen
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2V2
+objType table
+cell LNCaP
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2V2
 treatment androgen
 view SimpleSignal
 
@@ -2015,6 +3435,26 @@ tableName wgEncodeDukeAffyExonLncapSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonLncapSimpleSignalRep1V2
+objType table
+cell LNCaP
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonLncapSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonLncapSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonLncapSimpleSignalRep2
 objType table
 cell LNCaP
@@ -2038,6 +3478,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonLncapSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonLncapSimpleSignalRep2V2
+objType table
+cell LNCaP
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonLncapSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonLncapSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -2067,6 +3527,26 @@ tableName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep1
 treatment estrogen
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep1V2
+objType table
+cell MCF-7
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep1V2
+treatment estrogen
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2
 objType table
 cell MCF-7
@@ -2090,6 +3570,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2
+treatment estrogen
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2V2
+objType table
+cell MCF-7
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2V2
 treatment estrogen
 view SimpleSignal
 
@@ -2118,6 +3618,26 @@ tableName wgEncodeDukeAffyExonMcf7SimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonMcf7SimpleSignalRep1V2
+objType table
+cell MCF-7
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMcf7SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMcf7SimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonMcf7VehSimpleSignalRep1
 objType table
 cell MCF-7
@@ -2143,6 +3663,26 @@ tableName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep1
 treatment vehicle
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonMcf7VehSimpleSignalRep1V2
+objType table
+cell MCF-7
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep1V2
+treatment vehicle
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonMcf7VehSimpleSignalRep2
 objType table
 cell MCF-7
@@ -2165,6 +3705,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep2
+treatment vehicle
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonMcf7VehSimpleSignalRep2V2
+objType table
+cell MCF-7
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep2V2
 treatment vehicle
 view SimpleSignal
 
@@ -2194,6 +3754,26 @@ tableName wgEncodeDukeAffyExonMedulloSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonMedulloSimpleSignalRep1V2
+objType table
+cell Medullo
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMedulloSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonMedulloSimpleSignalRep2
 objType table
 cell Medullo
@@ -2220,6 +3800,26 @@ tableName wgEncodeDukeAffyExonMedulloSimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonMedulloSimpleSignalRep2V2
+objType table
+cell Medullo
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMedulloSimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonMedulloSimpleSignalRep3
 objType table
 cell Medullo
@@ -2241,6 +3841,26 @@ project wgEncode
 replicate 3
 subId 3200
 tableName wgEncodeDukeAffyExonMedulloSimpleSignalRep3
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonMedulloSimpleSignalRep3V2
+objType table
+cell Medullo
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMedulloSimpleSignalRep3V2
 treatment None
 view SimpleSignal
 
@@ -2269,6 +3889,26 @@ tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonMelanoSimpleSignalRep1V2
+objType table
+cell Melano
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonMelanoSimpleSignalRep2
 objType table
 cell Melano
@@ -2291,6 +3931,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonMelanoSimpleSignalRep2V2
+objType table
+cell Melano
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -2319,6 +3979,26 @@ tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep3
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonMelanoSimpleSignalRep3V2
+objType table
+cell Melano
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep3V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonMelanoSimpleSignalRep4
 objType table
 cell Melano
@@ -2341,6 +4021,26 @@ project wgEncode
 replicate 4
 subId 3200
 tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep4
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonMelanoSimpleSignalRep4V2
+objType table
+cell Melano
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep4V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 4
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMelanoSimpleSignalRep4V2
 treatment None
 view SimpleSignal
 
@@ -2368,6 +4068,26 @@ tableName wgEncodeDukeAffyExonMyometrSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonMyometrSimpleSignalRep1V2
+objType table
+cell Myometr
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMyometrSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMyometrSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonMyometrSimpleSignalRep2
 objType table
 cell Myometr
@@ -2389,6 +4109,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonMyometrSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonMyometrSimpleSignalRep2V2
+objType table
+cell Myometr
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonMyometrSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonMyometrSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -2417,6 +4157,26 @@ tableName wgEncodeDukeAffyExonNhaSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonNhaSimpleSignalRep1V2
+objType table
+cell NH-A
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonNhaSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonNhaSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonNhaSimpleSignalRep2
 objType table
 cell NH-A
@@ -2439,6 +4199,26 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonNhaSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonNhaSimpleSignalRep2V2
+objType table
+cell NH-A
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonNhaSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonNhaSimpleSignalRep2V2
 treatment None
 view SimpleSignal
 
@@ -2468,6 +4248,27 @@ tableName wgEncodeDukeAffyExonNhekSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonNhekSimpleSignalRep1V2
+objType table
+cell NHEK
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonNhekSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+sex F
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonNhekSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonNhekSimpleSignalRep2
 objType table
 cell NHEK
@@ -2491,6 +4292,87 @@ project wgEncode
 replicate 2
 subId 3200
 tableName wgEncodeDukeAffyExonNhekSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonNhekSimpleSignalRep2V2
+objType table
+cell NHEK
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonNhekSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+sex F
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonNhekSimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonOsteoSimpleSignalRep1V2
+objType table
+cell Osteobl
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonOsteoSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonOsteoSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonOsteoSimpleSignalRep2V2
+objType table
+cell Osteobl
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonOsteoSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonOsteoSimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonOsteoSimpleSignalRep3V2
+objType table
+cell Osteobl
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonOsteoSimpleSignalRep3V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 3
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonOsteoSimpleSignalRep3V2
 treatment None
 view SimpleSignal
 
@@ -2596,6 +4478,26 @@ tableName wgEncodeDukeAffyExonProgfibSimpleSignalRep1
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonProgfibSimpleSignalRep1V2
+objType table
+cell ProgFib
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonProgfibSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonProgfibSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonProgfibSimpleSignalRep2
 objType table
 cell ProgFib
@@ -2622,6 +4524,26 @@ tableName wgEncodeDukeAffyExonProgfibSimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonProgfibSimpleSignalRep2V2
+objType table
+cell ProgFib
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonProgfibSimpleSignalRep2V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 2
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonProgfibSimpleSignalRep2V2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonStellateSimpleSignalRep1
 objType table
 cell Stellate
@@ -2644,6 +4566,66 @@ replicate 1
 subId 3200
 tableName wgEncodeDukeAffyExonStellateSimpleSignalRep1
 treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonStellateSimpleSignalRep1V2
+objType table
+cell Stellate
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonStellateSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonStellateSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonUrothelSimpleSignalRep1V2
+objType table
+cell Urothelia
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonUrothelSimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonUrothelSimpleSignalRep1V2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonUrothelUt189SimpleSignalRep1V2
+objType table
+cell Urothelia
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+fileName wgEncodeDukeAffyExonUrothelUt189SimpleSignalRep1V2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 2.0
+project wgEncode
+replicate 1
+subId 5987
+submittedDataVersion V2 - All data was re-processed after discovering an artifact due to a change in experimental protocol.
+tableName wgEncodeDukeAffyExonUrothelUt189SimpleSignalRep1V2
+treatment UT189
 view SimpleSignal
 
 metaObject wgEncodeDukeAffyExonUrotsaSimpleSignalRep1
@@ -2694,4 +4676,4 @@ tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: -256180350
+# MAGIC: -1192915056
