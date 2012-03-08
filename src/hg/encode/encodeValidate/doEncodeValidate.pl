@@ -2248,8 +2248,8 @@ foreach my $ddfLine (@ddfLines) {
         }
         if($prevTableFound) {
             my $oldSettings = $db->quickQuery("select settings from trackDb where tableName = '$prevTableName'");
-            if( $oldSettings ) {
-                $oldSettings =~ m/metadata (.*?)\n/;    # Is this throwing away all but the contents of the metadata line?
+            if( $oldSettings =~ m/metadata (.*?)\n/ ) {
+                #$oldSettings =~ m/metadata (.*?)\n/;    # Is this throwing away all but the contents of the metadata line?
                 my ( $tagRef, $valRef ) = Encode::metadataLineToArrays($1);
                 my @tags = @{$tagRef};
                 my @vals = @{$valRef};

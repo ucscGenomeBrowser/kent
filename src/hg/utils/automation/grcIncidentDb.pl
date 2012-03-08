@@ -24,7 +24,7 @@ sub readTagValue($$) {
 
 my $argc = scalar(@ARGV);
 if ($argc < 2) {
-    printf STDERR "usage: ./ncbiIncidentDb.pl -sequenceName <humanSql/chrNN directory> [more directories] > hg19.bed5\n";
+    printf STDERR "usage: ./grcIncidentDb.pl -sequenceName <humanSql/chrNN directory> [more directories] > hg19.bed5\n";
     printf STDERR "recognized sequence names: (must be first argument)\n";
     printf STDERR "-GRCh37 == hg19\n";
     printf STDERR "-NCBI36 == hg18\n";
