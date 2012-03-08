@@ -1799,6 +1799,10 @@ while (@{$lines}) {
             }
             my $cell = $line{cell};
             my $sex = $line{sex};
+            my $category = $terms{'Cell Line'}->{$cell}->{'category'};
+            if (defined $category && $category eq "Tissue" && not defined $sex) {
+                push (@errors, "Cell '$cell' is a tissue; the sex must be defined in the DDF.");
+            }
             my $mdbError = validateDdfField($field, $line{$field}, $view, $daf, $cell, $sex, \%terms);
             if ($mdbError) {
                 push(@metadataErrors, $mdbError);
@@ -1969,6 +1973,13 @@ my $compositeTrack = Encode::compositeTrackName($daf);
 my $compositeExists = $db->quickQuery("select count(*) from trackDb where tableName = ?", $compositeTrack);
 
 if(@errors) {
+    #collapse identical errors into one line
+    my %errors;
+    foreach my $line (@errors) {
+        $errors{$line}++;
+    }
+    @errors = keys(%errors);
+
     my $prefix = @errors > 1 ? "Error(s)" : "Error";
     die "$prefix:\n\n" . join("\n\n", @errors) . "\n";
 }
