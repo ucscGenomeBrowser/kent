@@ -19,22 +19,26 @@
     border-spacing: 5px;
     margin-top: 1em;
     margin-left: 3%;
+    border: 1px solid darkgrey;
 }
 
 .summaryTable th {
     padding: 3px;
-    background-color: #FFDB70;
+    background-color: #00994D;
+    color: white;
     text-align: left;
     padding-left: 2em;
+    border: 1px solid darkgrey;
 }
 
 .odd {
-    background-color: #F6F3DF;
+    background-color: #F4F4F4;
 }
 
 .summaryTable td {
     text-align: left;
     padding-left: 1em;
+    border: none;
 }
 
 .summaryTable td+td {
@@ -43,7 +47,8 @@
 }
 
 .summaryTable td.totals {
-    background-color: #FFDB70;
+    background-color: #00994D;
+    color: white;
     padding-top: 3px;
     font-weight: bold;
 }
@@ -56,6 +61,10 @@
 #searchButtons {
     float: right;
     margin-right: 1em;
+}
+
+.rowHighlight {
+   background-color: #FFFF80;
 }
 
 
