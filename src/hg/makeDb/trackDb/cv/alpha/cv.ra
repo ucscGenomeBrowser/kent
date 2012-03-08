@@ -14397,7 +14397,7 @@ tag SUBID
 type typeOfTerm
 label Submission ID
 description The submission ID assigned by the UCSC Genome Browser at time of actual data submission.
-searchable wildList
+searchable no
 cvDefined no
 validate integer
 priority 335
@@ -14416,9 +14416,9 @@ priority 250
 term tableName
 tag TABLENAME
 type typeOfTerm
-label Name of SQL table at UCSC
+label Table name at UCSC
 description Downloadable files containing data displayed in tracks in the UCSC Genome Browser are often stored in SQL tables.  The particular table can be located by this name.
-searchable no
+searchable freeText
 cvDefined no
 validate exists
 priority 970
