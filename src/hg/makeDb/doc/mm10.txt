@@ -834,7 +834,6 @@ done
     # << emacs
     gensub2 genome.list single template jobList
     para create jobList
-XXX - running - Thu Feb  9 11:39:01 PST 2012
     para try
     para check ... etc...
     para time
@@ -1123,22 +1122,26 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm -chainMinScore=5000 -chainLinearGap=medium \
 	-noLoadChainSplit -syntenicNet -workhorse=hgwdev \
 	-smallClusterHub=encodek > do.log 2>&1 &
-XXX - running - Thu Mar  8 13:29:14 PST 2012
+    #	real    129m48.444s
     cat fb.mm10.chainRn4Link.txt
+    #	1449612208 bases of 2652783500 (54.645%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzRn4.2012-03-08 lastz.rn4
 
     #	and the swap
-    mkdir /hive/data/genomes/genomes/rn4/bed/blastz.mm10.swap
-    cd /hive/data/genomes/genomes/rn4/bed/blastz.mm10.swap
+    mkdir /hive/data/genomes/rn4/bed/blastz.mm10.swap
+    cd /hive/data/genomes/rn4/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/genomes/mm10/bed/lastzRn4.2012-03-08/DEF \
+	/hive/data/genomes/mm10/bed/lastzRn4.2012-03-08/DEF \
 	-swap -bigClusterHub=swarm -chainMinScore=5000 -chainLinearGap=medium \
 	-noLoadChainSplit -syntenicNet -workhorse=hgwdev \
 	-smallClusterHub=encodek > swap.log 2>&1 &
-    #	real    72m32.794s
-    cat fb.rn4.chainHg19Link.txt
-    #	1014045890 bases of 2652783500 (38.226%) in intersection
+    #	real    71m10.645s
+    cat fb.rn4.chainMm10Link.txt
+    #	1449012636 bases of 2571531505 (56.348%) in intersection
     # set sym link to indicate this is the lastz for this genome:
-    cd /hive/data/genomes/genomes/rn4/bed
+    cd /hive/data/genomes/rn4/bed
     ln -s blastz.mm10.swap lastz.mm10
 
 #########################################################################
@@ -1171,25 +1174,29 @@ TMPDIR=/scratch/tmp
     screen -S mm10GorGor3
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
-	-syntenicNet -noLoadChainSplit \
+	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Thu Mar  8 13:42:55 PST 2012
-    #	 Elapsed time: 17693m37s
+    #	real    625m17.180s
     cat fb.mm10.chainGorGor3Link.txt 
-    #	929446765 bases of 2900529764 (32.044%) in intersection
+    #	901610588 bases of 2652783500 (33.987%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzGorGor3.2012-03-08 lastz.gorGor3
 
-    #	running the swap - DONE - 2011-03-08
-    mkdir /hive/data/genomes/mm10/bed/blastz.mm10.swap
-    cd /hive/data/genomes/mm10/bed/blastz.mm10.swap
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/mm10/bed/lastzGorGor3.2012-03-08/DEF \
-	-swap -syntenicNet -noLoadChainSplit \
+	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    70m30.237s
-    cat fb.mm10.chainMm10Link.txt 
-    #	921877558 bases of 2620346127 (35.182%) in intersection
+    #	real    91m3.616s
+    cat fb.gorGor3.chainMm10Link.txt 
+    #	969595533 bases of 2822760080 (34.349%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
 # LASTZ Gibbon nomLeu1 (DONE - 2012-03-08 - Hiram)
@@ -1221,25 +1228,29 @@ TMPDIR=/scratch/tmp
     screen -S mm10NomLeu1
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
-	-syntenicNet -noLoadChainSplit \
+	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Thu Mar  8 13:42:55 PST 2012
-    #	 Elapsed time: 17693m37s
+    #	real    556m26.589s
     cat fb.mm10.chainNomLeu1Link.txt 
-    #	929446765 bases of 2900529764 (32.044%) in intersection
+    #	905455766 bases of 2652783500 (34.132%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzNomLeu1.2012-03-08 lastz.nomLeu1
 
-    #	running the swap - DONE - 2011-03-08
-    mkdir /hive/data/genomes/mm10/bed/blastz.mm10.swap
-    cd /hive/data/genomes/mm10/bed/blastz.mm10.swap
+    mkdir /hive/data/genomes/nomLeu1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/nomLeu1/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/mm10/bed/lastzNomLeu1.2012-03-08/DEF \
-	-swap -syntenicNet -noLoadChainSplit \
+	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    70m30.237s
-    cat fb.mm10.chainNomLeu1Link.txt 
-    #	921877558 bases of 2620346127 (35.182%) in intersection
+    #	real    66m50.839s
+    cat fb.nomLeu1.chainMm10Link.txt 
+    #	892362811 bases of 2756591777 (32.372%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/nomLeu1/bed
+    ln -s blastz.mm10.swap lastz.mm10
 
 ##############################################################################
 # LASTZ Rhesus rheMac3 (DONE - 2012-03-08 - Hiram)
@@ -1271,24 +1282,105 @@ TMPDIR=/scratch/tmp
     screen -S mm10RheMac3
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
-	-syntenicNet -noLoadChainSplit \
+	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - Thu Mar  8 13:42:55 PST 2012
-    #	 Elapsed time: 17693m37s
+    #	real    596m55.622s
     cat fb.mm10.chainRheMac3Link.txt 
-    #	929446765 bases of 2900529764 (32.044%) in intersection
+    #	900117108 bases of 2652783500 (33.931%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzRheMac3.2012-03-08 lastz.rheMac3
 
-    #	running the swap - DONE - 2011-03-08
-    mkdir /hive/data/genomes/mm10/bed/blastz.mm10.swap
-    cd /hive/data/genomes/mm10/bed/blastz.mm10.swap
+    mkdir /hive/data/genomes/rheMac3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/rheMac3/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/mm10/bed/lastzRheMac3.2012-03-08/DEF \
-	-swap -syntenicNet -noLoadChainSplit \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    69m5.839s
+    cat fb.rheMac3.chainMm10Link.txt 
+    #	883164992 bases of 2639145830 (33.464%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/rheMac3/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################
+# LASTZ Rhesus papHam1 (DONE - 2012-03-09 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzPapHam1.2012-03-09
+    cd /hive/data/genomes/mm10/bed/lastzPapHam1.2012-03-09
+
+    cat << '_EOF_' > DEF
+# baboon vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Baboon PapHam1
+SEQ2_DIR=/scratch/data/papHam1/papHam1.2bit
+SEQ2_LEN=/scratch/data/papHam1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/mm10/bed/lastzPapHam1.2012-03-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen -S mm10PapHam1
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - Fri Mar  9 09:12:10 PST 2012
+    #	real    596m55.622s
+    cat fb.mm10.chainPapHam1Link.txt 
+    #	900117108 bases of 2652783500 (33.931%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzPapHam1.2012-03-09 lastz.papHam1
+
+    mkdir /hive/data/genomes/papHam1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/papHam1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzPapHam1.2012-03-09/DEF \
+	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    70m30.237s
-    cat fb.mm10.chainRheMac3Link.txt 
+    cat fb.mm10.chainPapHam1Link.txt 
     #	921877558 bases of 2620346127 (35.182%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/papHam1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################
+# Swap ponAbe2 lastz (DONE - 2012-03-09 - Hiram)
+    # original alignment result:
+    cd /hive/data/genomes/ponAbe2/bed/lastzMm10.2012-03-08
+    cat fb.ponAbe2.chainMm10Link.txt
+    #	946932454 bases of 3093572278 (30.610%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/mm10/bed/blastz.ponAbe2.swap
+    cd /hive/data/genomes/mm10/bed/blastz.ponAbe2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ponAbe2/bed/lastzMm10.2012-03-08/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    72m38.550s
+    cat fb.mm10.chainPonAbe2Link.txt 
+    #	915093866 bases of 2652783500 (34.496%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s blastz.ponAbe2.swap lastz.ponAbe2
 
 ##############################################################################
