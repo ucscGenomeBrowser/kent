@@ -5073,6 +5073,23 @@ color 204,121,167
 sex U
 protocol Gingeras:Bladder_Gingeras_protocol.pdf
 
+term BMDM
+tag BMDM
+type Cell Line
+organism mouse
+tissue blood
+category primaryCells
+description Bone marrow derived macrophage
+age ageUnknown
+strain Unknown
+vendorName Genhong Cheng Lab, UCLA
+termId 7058
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
+color 86,180,233
+sex U
+protocol Ren:BMDM_Ren_protocol.pdf
+label Bone marrow derived macrophage
+
 term BoneMarrow
 tag BMARROW
 type Cell Line
@@ -5244,7 +5261,7 @@ tissue duodenum
 category Tissue
 age ageUnknown
 strain Unknown
-description Duodenum PROVSIONAL
+description Duodenum PROVISIONAL
 vendorName CSHL lab
 vendorId Duodenum
 orderUrl  http://gingeraslab.cshl.edu/
@@ -11467,13 +11484,6 @@ type treatment
 description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
 label 120 hour diff protocol C
 
-term diffProtD_7d
-tag DD7D
-type treatment
-description Bone marrow cells were cultured for 7 d in DMEM (Life Technologies, Rockville, MD) containing 10% FBS (Omega Scientific, Tarzana, CA), 1% penicillin/streptomycin (Life Technologies), and 10% conditioned media (CM) from L929 cells overexpressing M-CSF at a cell density of 250, 000 cells/mL on 10cm tissue cultured treated dishes. CM was replaced on day 4 of differentiation and every 2 d thereafter. (Ren) PROVSIONAL
-label 7 day diff protocol D
-#shortened tag from DIFFD7d to DD7D
-
 term DMSO_0.02pct
 tag DM002P1H
 description 1 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
@@ -12447,7 +12457,7 @@ term MethylWgbs
 tag METHYLWGBS
 type dataType
 label Methyl WGBS
-description DNA Methylation Whole Genome Bisulfite Sequencing Provisonal
+description DNA Methylation Whole Genome Bisulfite Sequencing Provisional
 dataGroup DNA Methylation
 
 term NRE

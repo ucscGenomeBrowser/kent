@@ -2242,3 +2242,52 @@ TMPDIR=/scratch/tmp
     #	2437562544 bases of 2822760080 (86.354%) in intersection
 
 ############################################################################
+# LASTZ Mouse Mm10 (DONE - 2012-03-08 - Hiram)
+    mkdir /hive/data/genomes/ponAbe2/bed/lastzMm10.2012-03-08
+    cd /hive/data/genomes/ponAbe2/bed/lastzMm10.2012-03-08
+
+    cat << '_EOF_' > DEF
+# chimp vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# TARGET: Orangutan PonAbe2
+SEQ1_DIR=/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ1_LEN=/scratch/data/ponAbe2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm10
+SEQ2_DIR=/scratch/data/mm10/mm10.2bit
+SEQ2_LEN=/scratch/data/mm10/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ponAbe2/bed/lastzMm10.2012-03-08
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen -S ponAbe2Mm10
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - Thu Mar  8 13:42:55 PST 2012
+    #	 Elapsed time: 17693m37s
+    cat fb.ponAbe2.chainMm10Link.txt 
+    #	929446765 bases of 2900529764 (32.044%) in intersection
+
+    #	running the swap - DONE - 2011-03-08
+    mkdir /hive/data/genomes/mm10/bed/blastz.ponAbe2.swap
+    cd /hive/data/genomes/mm10/bed/blastz.ponAbe2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ponAbe2/bed/lastzMm10.2012-03-08/DEF \
+	-swap -syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    70m30.237s
+    cat fb.mm10.chainPonAbe2Link.txt 
+    #	921877558 bases of 2620346127 (35.182%) in intersection
+
+##############################################################################

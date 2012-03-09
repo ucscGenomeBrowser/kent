@@ -20,7 +20,7 @@ type broadPeak
 noInherit on
 wgEncode 1
 superTrack wgEncodeExonArraySuper dense
-html wgEncodeDukeAffyExon.new
+html wgEncodeDukeAffyExon.release3
 viewUi on
 boxedCfg on
 useScore 1
