@@ -4,7 +4,6 @@ composite wgEncodeCshlShortRnaSeq
 expVars lab,dataType,cell,localization,protocol,rnaExtract
 geoSeriesAccession GSE24565
 origAssembly hg19
-readType 1x36
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep3
 objType table
@@ -2985,12 +2984,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapAlnRep2
 objType table
 bioRep 042WC
-cell CD20+_RO01778
+cell CD20+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
+donorId RO01778
 expId 2602
 fileName wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
@@ -3011,12 +3011,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapMinusRawRep2
 objType table
 bioRep 042WC
-cell CD20+_RO01778
+cell CD20+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
+donorId RO01778
 expId 2602
 fileName wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
@@ -3037,12 +3038,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapPlusRawRep2
 objType table
 bioRep 042WC
-cell CD20+_RO01778
+cell CD20+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
+donorId RO01778
 expId 2602
 fileName wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
@@ -3063,12 +3065,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapRawDataRep2
 objType file
 bioRep 042WC
-cell CD20+_RO01778
+cell CD20+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
+donorId RO01778
 expId 2602
 fileName wgEncodeCshlShortRnaSeqCd20ro01778CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
@@ -3088,12 +3091,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapAlnRep1
 objType table
 bioRep 041WC
-cell CD20+_RO01794
+cell CD20+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
+donorId RO01794
 expId 2603
 fileName wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
@@ -3114,12 +3118,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapMinusRawRep1
 objType table
 bioRep 041WC
-cell CD20+_RO01794
+cell CD20+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
+donorId RO01794
 expId 2603
 fileName wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
@@ -3140,12 +3145,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapPlusRawRep1
 objType table
 bioRep 041WC
-cell CD20+_RO01794
+cell CD20+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
+donorId RO01794
 expId 2603
 fileName wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
@@ -3166,12 +3172,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapRawDataRep1
 objType file
 bioRep 041WC
-cell CD20+_RO01794
+cell CD20+
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-18
 dateUnrestricted 2012-11-18
+donorId RO01794
 expId 2603
 fileName wgEncodeCshlShortRnaSeqCd20ro01794CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
@@ -5474,12 +5481,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2
 objType table
 bioRep 056WC
-cell HAoAF_6090101.11
+cell HAoAF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6090101.11
 fileName wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHaoaf609010111CellTapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
@@ -5498,12 +5506,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHaoaf609010111CellTapMinusRawRep2
 objType table
 bioRep 056WC
-cell HAoAF_6090101.11
+cell HAoAF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6090101.11
 fileName wgEncodeCshlShortRnaSeqHaoaf609010111CellTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -5522,12 +5531,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHaoaf609010111CellTapPlusRawRep2
 objType table
 bioRep 056WC
-cell HAoAF_6090101.11
+cell HAoAF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6090101.11
 fileName wgEncodeCshlShortRnaSeqHaoaf609010111CellTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -5546,12 +5556,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHaoaf609010111CellTapRawDataRep2
 objType file
 bioRep 056WC
-cell HAoAF_6090101.11
+cell HAoAF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6090101.11
 fileName wgEncodeCshlShortRnaSeqHaoaf609010111CellTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -5569,12 +5580,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHaoaf61113019CellTapAlnRep1
 objType table
 bioRep 055WC
-cell HAoAF_6111301.9
+cell HAoAF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 6111301.9
 fileName wgEncodeCshlShortRnaSeqHaoaf61113019CellTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHaoaf61113019CellTapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -5593,12 +5605,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHaoaf61113019CellTapMinusRawRep1
 objType table
 bioRep 055WC
-cell HAoAF_6111301.9
+cell HAoAF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 6111301.9
 fileName wgEncodeCshlShortRnaSeqHaoaf61113019CellTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -5617,12 +5630,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHaoaf61113019CellTapPlusRawRep1
 objType table
 bioRep 055WC
-cell HAoAF_6111301.9
+cell HAoAF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 6111301.9
 fileName wgEncodeCshlShortRnaSeqHaoaf61113019CellTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -5641,12 +5655,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHaoaf61113019CellTapRawDataRep1
 objType file
 bioRep 055WC
-cell HAoAF_6111301.9
+cell HAoAF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 6111301.9
 fileName wgEncodeCshlShortRnaSeqHaoaf61113019CellTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -5664,12 +5679,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHaoec70717061CellTapAlnRep1
 objType table
 bioRep 057WC
-cell HAoEC_7071706.1
+cell HAoEC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 7071706.1
 fileName wgEncodeCshlShortRnaSeqHaoec70717061CellTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHaoec70717061CellTapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -5688,12 +5704,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHaoec70717061CellTapMinusRawRep1
 objType table
 bioRep 057WC
-cell HAoEC_7071706.1
+cell HAoEC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 7071706.1
 fileName wgEncodeCshlShortRnaSeqHaoec70717061CellTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -5712,12 +5729,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHaoec70717061CellTapPlusRawRep1
 objType table
 bioRep 057WC
-cell HAoEC_7071706.1
+cell HAoEC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 7071706.1
 fileName wgEncodeCshlShortRnaSeqHaoec70717061CellTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -5736,12 +5754,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHaoec70717061CellTapRawDataRep1
 objType file
 bioRep 057WC
-cell HAoEC_7071706.1
+cell HAoEC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 7071706.1
 fileName wgEncodeCshlShortRnaSeqHaoec70717061CellTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -5759,12 +5778,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHaoec80611021CellTapAlnRep2
 objType table
 bioRep 058WC
-cell HAoEC_8061102.1
+cell HAoEC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8061102.1
 fileName wgEncodeCshlShortRnaSeqHaoec80611021CellTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHaoec80611021CellTapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
@@ -5783,12 +5803,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHaoec80611021CellTapMinusRawRep2
 objType table
 bioRep 058WC
-cell HAoEC_8061102.1
+cell HAoEC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8061102.1
 fileName wgEncodeCshlShortRnaSeqHaoec80611021CellTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -5807,12 +5828,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHaoec80611021CellTapPlusRawRep2
 objType table
 bioRep 058WC
-cell HAoEC_8061102.1
+cell HAoEC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8061102.1
 fileName wgEncodeCshlShortRnaSeqHaoec80611021CellTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -5831,12 +5853,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHaoec80611021CellTapRawDataRep2
 objType file
 bioRep 058WC
-cell HAoEC_8061102.1
+cell HAoEC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8061102.1
 fileName wgEncodeCshlShortRnaSeqHaoec80611021CellTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -5854,12 +5877,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapAlnRep1
 objType table
 bioRep 059WC
-cell HCH_0011308.2P
+cell HCH
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0011308.2P
 fileName wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -5878,12 +5902,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapMinusRawRep1
 objType table
 bioRep 059WC
-cell HCH_0011308.2P
+cell HCH
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0011308.2P
 fileName wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -5902,12 +5927,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapPlusRawRep1
 objType table
 bioRep 059WC
-cell HCH_0011308.2P
+cell HCH
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0011308.2P
 fileName wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -5926,12 +5952,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapRawDataRep1
 objType file
 bioRep 059WC
-cell HCH_0011308.2P
+cell HCH
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0011308.2P
 fileName wgEncodeCshlShortRnaSeqHch00113082pCellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -5949,12 +5976,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapAlnRep2
 objType table
 bioRep 060WC
-cell HCH_8100808.2
+cell HCH
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8100808.2
 fileName wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
@@ -5973,12 +6001,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapMinusRawRep2
 objType table
 bioRep 060WC
-cell HCH_8100808.2
+cell HCH
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8100808.2
 fileName wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -5997,12 +6026,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapPlusRawRep2
 objType table
 bioRep 060WC
-cell HCH_8100808.2
+cell HCH
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8100808.2
 fileName wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -6021,12 +6051,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapRawDataRep2
 objType file
 bioRep 060WC
-cell HCH_8100808.2
+cell HCH
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8100808.2
 fileName wgEncodeCshlShortRnaSeqHch81008082CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -7377,6 +7408,7 @@ protocol TAP-Only
 readType 1x36
 replicate 1
 rnaExtract shortTotal
+seqPlatform Illumina_GA2x
 subId 4061
 tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapAlnRep1
 view Alignments
@@ -7490,6 +7522,7 @@ protocol TAP-Only
 readType 1x36
 replicate 1
 rnaExtract shortTotal
+seqPlatform Illumina_GA2x
 subId 4061
 tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapMinusRawRep1
 view MinusRawSignal
@@ -7547,6 +7580,7 @@ protocol TAP-Only
 readType 1x36
 replicate 1
 rnaExtract shortTotal
+seqPlatform Illumina_GA2x
 subId 4061
 tableName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalTapPlusRawRep1
 view PlusRawSignal
@@ -7604,6 +7638,7 @@ protocol TAP-Only
 readType 1x36
 replicate 1
 rnaExtract shortTotal
+seqPlatform Illumina_GA2x
 subId 4061
 view RawData
 
@@ -7924,12 +7959,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHfdpc01005032CellTapAlnRep2
 objType table
 bioRep 062WC
-cell HFDPC_0100503.2
+cell HFDPC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0100503.2
 fileName wgEncodeCshlShortRnaSeqHfdpc01005032CellTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHfdpc01005032CellTapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
@@ -7948,12 +7984,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHfdpc01005032CellTapMinusRawRep2
 objType table
 bioRep 062WC
-cell HFDPC_0100503.2
+cell HFDPC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0100503.2
 fileName wgEncodeCshlShortRnaSeqHfdpc01005032CellTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -7972,12 +8009,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHfdpc01005032CellTapPlusRawRep2
 objType table
 bioRep 062WC
-cell HFDPC_0100503.2
+cell HFDPC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0100503.2
 fileName wgEncodeCshlShortRnaSeqHfdpc01005032CellTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -7996,12 +8034,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHfdpc01005032CellTapRawDataRep2
 objType file
 bioRep 062WC
-cell HFDPC_0100503.2
+cell HFDPC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0100503.2
 fileName wgEncodeCshlShortRnaSeqHfdpc01005032CellTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -8019,12 +8058,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHfdpc01027033CellTapAlnRep1
 objType table
 bioRep 061WC
-cell HFDPC_0102703.3
+cell HFDPC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0102703.3
 fileName wgEncodeCshlShortRnaSeqHfdpc01027033CellTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHfdpc01027033CellTapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -8043,12 +8083,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHfdpc01027033CellTapMinusRawRep1
 objType table
 bioRep 061WC
-cell HFDPC_0102703.3
+cell HFDPC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0102703.3
 fileName wgEncodeCshlShortRnaSeqHfdpc01027033CellTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -8067,12 +8108,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHfdpc01027033CellTapPlusRawRep1
 objType table
 bioRep 061WC
-cell HFDPC_0102703.3
+cell HFDPC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0102703.3
 fileName wgEncodeCshlShortRnaSeqHfdpc01027033CellTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -8091,12 +8133,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHfdpc01027033CellTapRawDataRep1
 objType file
 bioRep 061WC
-cell HFDPC_0102703.3
+cell HFDPC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0102703.3
 fileName wgEncodeCshlShortRnaSeqHfdpc01027033CellTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -8114,12 +8157,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHmscat010260412CellTapAlnRep1
 objType table
 bioRep 065WC
-cell hMSC-AT_0102604.12
+cell hMSC-AT
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0102604.12
 fileName wgEncodeCshlShortRnaSeqHmscat010260412CellTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHmscat010260412CellTapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -8138,12 +8182,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHmscat010260412CellTapMinusRawRep1
 objType table
 bioRep 065WC
-cell hMSC-AT_0102604.12
+cell hMSC-AT
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0102604.12
 fileName wgEncodeCshlShortRnaSeqHmscat010260412CellTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -8162,12 +8207,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHmscat010260412CellTapPlusRawRep1
 objType table
 bioRep 065WC
-cell hMSC-AT_0102604.12
+cell hMSC-AT
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0102604.12
 fileName wgEncodeCshlShortRnaSeqHmscat010260412CellTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -8186,12 +8232,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHmscat010260412CellTapRawDataRep1
 objType file
 bioRep 065WC
-cell hMSC-AT_0102604.12
+cell hMSC-AT
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 0102604.12
 fileName wgEncodeCshlShortRnaSeqHmscat010260412CellTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -8209,12 +8256,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHmscat906160112CellTapAlnRep2
 objType table
 bioRep 066WC
-cell hMSC-AT_9061601.12
+cell hMSC-AT
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 9061601.12
 fileName wgEncodeCshlShortRnaSeqHmscat906160112CellTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHmscat906160112CellTapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
@@ -8233,12 +8281,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHmscat906160112CellTapMinusRawRep2
 objType table
 bioRep 066WC
-cell hMSC-AT_9061601.12
+cell hMSC-AT
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 9061601.12
 fileName wgEncodeCshlShortRnaSeqHmscat906160112CellTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -8257,12 +8306,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHmscat906160112CellTapPlusRawRep2
 objType table
 bioRep 066WC
-cell hMSC-AT_9061601.12
+cell hMSC-AT
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 9061601.12
 fileName wgEncodeCshlShortRnaSeqHmscat906160112CellTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -8281,12 +8331,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHmscat906160112CellTapRawDataRep2
 objType file
 bioRep 066WC
-cell hMSC-AT_9061601.12
+cell hMSC-AT
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 9061601.12
 fileName wgEncodeCshlShortRnaSeqHmscat906160112CellTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -8304,12 +8355,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapAlnRep2
 objType table
 bioRep 054WC
-cell HOB_0090202.1
+cell HOB
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 0090202.1
 fileName wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
@@ -8328,12 +8380,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapMinusRawRep2
 objType table
 bioRep 054WC
-cell HOB_0090202.1
+cell HOB
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 0090202.1
 fileName wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -8352,12 +8405,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapPlusRawRep2
 objType table
 bioRep 054WC
-cell HOB_0090202.1
+cell HOB
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 0090202.1
 fileName wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -8376,12 +8430,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapRawDataRep2
 objType file
 bioRep 054WC
-cell HOB_0090202.1
+cell HOB
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 0090202.1
 fileName wgEncodeCshlShortRnaSeqHob00902021CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -8741,12 +8796,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapAlnRep1
 objType table
 bioRep 051WC
-cell HVMF_6091203.3
+cell HVMF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6091203.3
 fileName wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -8765,12 +8821,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapMinusRawRep1
 objType table
 bioRep 051WC
-cell HVMF_6091203.3
+cell HVMF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6091203.3
 fileName wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -8789,12 +8846,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapPlusRawRep1
 objType table
 bioRep 051WC
-cell HVMF_6091203.3
+cell HVMF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6091203.3
 fileName wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -8813,12 +8871,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapRawDataRep1
 objType file
 bioRep 051WC
-cell HVMF_6091203.3
+cell HVMF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6091203.3
 fileName wgEncodeCshlShortRnaSeqHvmf60912033CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -8836,12 +8895,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapAlnRep2
 objType table
 bioRep 052WC
-cell HVMF_6100401.3
+cell HVMF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6100401.3
 fileName wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
@@ -8860,12 +8920,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapMinusRawRep2
 objType table
 bioRep 052WC
-cell HVMF_6100401.3
+cell HVMF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6100401.3
 fileName wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -8884,12 +8945,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapPlusRawRep2
 objType table
 bioRep 052WC
-cell HVMF_6100401.3
+cell HVMF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6100401.3
 fileName wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -8908,12 +8970,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapRawDataRep2
 objType file
 bioRep 052WC
-cell HVMF_6100401.3
+cell HVMF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 6100401.3
 fileName wgEncodeCshlShortRnaSeqHvmf61004013CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -15931,12 +15994,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapAlnRep2
 objType table
 bioRep 050WC
-cell NHDF_0060801.3
+cell NHDF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 0060801.3
 fileName wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapAlnRep2.bam,wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
@@ -15955,12 +16019,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapMinusRawRep2
 objType table
 bioRep 050WC
-cell NHDF_0060801.3
+cell NHDF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 0060801.3
 fileName wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -15979,12 +16044,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapPlusRawRep2
 objType table
 bioRep 050WC
-cell NHDF_0060801.3
+cell NHDF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 0060801.3
 fileName wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -16003,12 +16069,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapRawDataRep2
 objType file
 bioRep 050WC
-cell NHDF_0060801.3
+cell NHDF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 0060801.3
 fileName wgEncodeCshlShortRnaSeqNhdf00608013CellShorttotalTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -16026,12 +16093,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapAlnRep1
 objType table
 bioRep 049WC
-cell NHDF_7071701.2
+cell NHDF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 7071701.2
 fileName wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -16050,12 +16118,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapMinusRawRep1
 objType table
 bioRep 049WC
-cell NHDF_7071701.2
+cell NHDF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 7071701.2
 fileName wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -16074,12 +16143,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapPlusRawRep1
 objType table
 bioRep 049WC
-cell NHDF_7071701.2
+cell NHDF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 7071701.2
 fileName wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -16098,12 +16168,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapRawDataRep1
 objType file
 bioRep 049WC
-cell NHDF_7071701.2
+cell NHDF
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 7071701.2
 fileName wgEncodeCshlShortRnaSeqNhdf70717012CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -16364,6 +16435,7 @@ fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalTapProtocolRep1.pdf.gz
 grant Gingeras
 lab CSHL
 labExpId LID20999
+labProtocolId 007WCs
 localization cell
 md5sum 41b637907fedafb918a7f289fe13107b
 origAssembly hg19
@@ -17291,12 +17363,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqSkmc812190217CellTapAlnRep2
 objType table
 bioRep 048WC
-cell SkMC_8121902.17
+cell SkMC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8121902.17
 fileName wgEncodeCshlShortRnaSeqSkmc812190217CellTapAlnRep2.bam,wgEncodeCshlShortRnaSeqSkmc812190217CellTapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
@@ -17315,12 +17388,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqSkmc812190217CellTapMinusRawRep2
 objType table
 bioRep 048WC
-cell SkMC_8121902.17
+cell SkMC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8121902.17
 fileName wgEncodeCshlShortRnaSeqSkmc812190217CellTapMinusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -17339,12 +17413,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqSkmc812190217CellTapPlusRawRep2
 objType table
 bioRep 048WC
-cell SkMC_8121902.17
+cell SkMC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8121902.17
 fileName wgEncodeCshlShortRnaSeqSkmc812190217CellTapPlusRawRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -17363,12 +17438,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqSkmc812190217CellTapRawDataRep2
 objType file
 bioRep 048WC
-cell SkMC_8121902.17
+cell SkMC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+donorId 8121902.17
 fileName wgEncodeCshlShortRnaSeqSkmc812190217CellTapRawDataRep2.fastq.gz
 grant Gingeras
 lab CSHL
@@ -17386,12 +17462,13 @@ view RawData
 metaObject wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapAlnRep1
 objType table
 bioRep 047WC
-cell SkMC_9011302
+cell SkMC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 9011302
 fileName wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapAlnRep1.bam,wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
@@ -17410,12 +17487,13 @@ view Alignments
 metaObject wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapMinusRawRep1
 objType table
 bioRep 047WC
-cell SkMC_9011302
+cell SkMC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 9011302
 fileName wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapMinusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -17434,12 +17512,13 @@ view MinusRawSignal
 metaObject wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapPlusRawRep1
 objType table
 bioRep 047WC
-cell SkMC_9011302
+cell SkMC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 9011302
 fileName wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapPlusRawRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -17458,12 +17537,13 @@ view PlusRawSignal
 metaObject wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapRawDataRep1
 objType file
 bioRep 047WC
-cell SkMC_9011302
+cell SkMC
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+donorId 9011302
 fileName wgEncodeCshlShortRnaSeqSkmc9011302CellShorttotalTapRawDataRep1.fastq.gz
 grant Gingeras
 lab CSHL
@@ -19452,9 +19532,11 @@ protocol TAP-Only
 readType 1x36
 replicate 1
 rnaExtract shortTotal
+seqPlatform Illumina_GA2x
 subId 3376
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep1
 view Alignments
+seqPlatform Illumina_GA2x
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep2
 objType table
@@ -19565,9 +19647,11 @@ protocol TAP-Only
 readType 1x36
 replicate 1
 rnaExtract shortTotal
+seqPlatform Illumina_GA2x
 subId 3376
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep1
 view MinusRawSignal
+seqPlatform Illumina_GA2x
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep2
 objType table
@@ -19622,9 +19706,11 @@ protocol TAP-Only
 readType 1x36
 replicate 1
 rnaExtract shortTotal
+seqPlatform Illumina_GA2x
 subId 3376
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep1
 view PlusRawSignal
+seqPlatform Illumina_GA2x
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep2
 objType table
@@ -19735,8 +19821,10 @@ protocol TAP-Only
 readType 1x36
 replicate 1
 rnaExtract shortTotal
+seqPlatform Illumina_GA2x
 subId 3376
 view RawData
+seqPlatform Illumina_GA2x
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapRawDataRep2
 objType file
@@ -19766,4 +19854,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 684205327
+# MAGIC: -1246112576
