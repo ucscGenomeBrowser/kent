@@ -4,7 +4,6 @@ composite wgEncodeCshlShortRnaSeq
 expVars lab,dataType,cell,localization,protocol,rnaExtract
 geoSeriesAccession GSE24565
 origAssembly hg19
-readType 1x36
 
 metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep3
 objType table
@@ -19537,6 +19536,7 @@ seqPlatform Illumina_GA2x
 subId 3376
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep1
 view Alignments
+seqPlatform Illumina_GA2x
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapAlnRep2
 objType table
@@ -19651,6 +19651,7 @@ seqPlatform Illumina_GA2x
 subId 3376
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep1
 view MinusRawSignal
+seqPlatform Illumina_GA2x
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapMinusRawRep2
 objType table
@@ -19709,6 +19710,7 @@ seqPlatform Illumina_GA2x
 subId 3376
 tableName wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep1
 view PlusRawSignal
+seqPlatform Illumina_GA2x
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapPlusRawRep2
 objType table
@@ -19822,6 +19824,7 @@ rnaExtract shortTotal
 seqPlatform Illumina_GA2x
 subId 3376
 view RawData
+seqPlatform Illumina_GA2x
 
 metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalTapRawDataRep2
 objType file
@@ -19851,4 +19854,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: 1768539448
+# MAGIC: -1246112576
