@@ -1,5 +1,5 @@
-table ncbiIncidentDb
-"NCBI incident DB, bigBed 4 + with extra field for detail page"
+table grcIncidentDb
+"GRC incident DB, bigBed 4 + with extra field for detail page"
     (
     string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"

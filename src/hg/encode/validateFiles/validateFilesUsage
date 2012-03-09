@@ -1,0 +1,60 @@
+validateFiles - Validates the format of different genomics files.   
+                Exits with a zero status for no errors detected and non-zero for errors.
+                Uses filename 'stdin' to read from stdin.
+                Automatically decompresses files in .gz, .bz2, .zip, or .Z format.
+                Accepts multiple input files of the same type. 
+                Writes error messages to stderr.
+
+usage:
+   validateFiles -type=FILE_TYPE file1 [file2 [...]]
+
+options:
+   -type=(a value from the list below)
+         tagAlign  :
+         pairedTagAlign :
+         broadPeak :
+         narrowPeak:
+         gappedPeak:
+         bedGraph  : see the proper links for all of these  above, needs some research
+         fasta     : Fasta files (only one line of sequence, and no quality scores)
+         fastq     : Fasta with quality scores (see http://maq.sourceforge.net/fastq.shtml)
+         csfasta   : Colorspace fasta (implies -colorSpace) (see link below)
+         csqual    : Colorspace quality 
+                     (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)
+         BAM       : Binary Alignment/Map (see http://samtools.sourceforge.net/SAM1.pdf)
+         bigWig    : Big Wig (see http://genome.ucsc.edu/goldenPath/help/bigWig.html
+
+   -chromDb=db                  Specify DB containing chromInfo table to validate chrom names
+                                  and sizes
+   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes
+   -colorSpace                  Sequences include colorspace values [0-3] (can be used 
+                                  with formats such as tagAlign and pairedTagAlign)
+   -zeroSizeOk                  For BED-type positional data, allow rows with start==end
+                                  otherwise require strictly start < end
+   -genome=path/to/hg18.2bit    Validate tagAlign or pairedTagAlign sequences match genome
+                                  in .2bit file
+   -mismatches=n                Maximum number of mismatches in sequence (or read pair) if 
+                                  validating tagAlign or pairedTagAlign files
+   -mismatchTotalQuality=n      Maximum total quality score at mismatching positions
+   -matchFirst=n                only check the first N bases of the sequence
+   -mmPerPair                   Check either pair dont exceed mismatch count if validating
+                                  pairedTagAlign files (default is the total for the pair)
+   -mmCheckOneInN=n             Check mismatches in only one in 'n' lines (default=1, all)
+   -nMatch                      N's do not count as a mismatch
+   -privateData                 Private data so empty sequence is tolerated
+   -printOkLines                Print lines which pass validation to stdout
+   -quick[=N]                   Just test the first N lines of each file (default 1000)
+   -printFailLines              Print lines which fail validation to stdout
+   -isSort                      input is sorted by chrom
+   -version                     Print version
+   -allowOther                  allow chromosomes that aren't native in BAM's
+   -allowBadLength              allow chromosomes that have the wrong length
+ in BAM
+   -complementMinus             complement the query sequence on the minus strand (for testing BAM)
+   -doReport                    output report in filename.report
+   -showBadAlign                show non-compliant alignments
+   -bamPercent=N.N              percentage of BAM alignments that must be compliant
+   -allowErrors=N               number of errors allowed to still pass (default 0)
+   -maxErrors=N                 Maximum lines with errors to report in one file before 
+                                  stopping (default 10)
+
