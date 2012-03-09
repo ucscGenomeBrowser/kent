@@ -5261,7 +5261,7 @@ tissue duodenum
 category Tissue
 age ageUnknown
 strain Unknown
-description Duodenum PROVSIONAL
+description Duodenum PROVISIONAL
 vendorName CSHL lab
 vendorId Duodenum
 orderUrl  http://gingeraslab.cshl.edu/
@@ -12457,7 +12457,7 @@ term MethylWgbs
 tag METHYLWGBS
 type dataType
 label Methyl WGBS
-description DNA Methylation Whole Genome Bisulfite Sequencing Provisonal
+description DNA Methylation Whole Genome Bisulfite Sequencing Provisional
 dataGroup DNA Methylation
 
 term NRE
@@ -14470,7 +14470,7 @@ tag TYPE
 type typeOfTerm
 label File type
 description The type of the primary file associated with the object
-searchable multiSelect
+searchable no
 cvDefined no
 validate none
 priority 985
