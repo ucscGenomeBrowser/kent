@@ -1,12 +1,9 @@
-validateFiles - Validate format of different track input files
-                Program exits with non-zero status if any errors detected
-                  otherwise exits with zero status
-                Use filename 'stdin' to read from stdin
-                Files can be in .gz, .bz2, .zip, .Z format and are 
-                  automatically decompressed
-                Multiple input files of the same type can be listed
-                Error messages are written to stderr
-                OK or failing file lines can be optionally written to stdout
+validateFiles - Validates the format of different genomics files.   
+                Exits with a zero status for no errors detected and non-zero for errors.
+                Uses filename 'stdin' to read from stdin.
+                Automatically decompresses files in .gz, .bz2, .zip, or .Z format.
+                Accepts multiple input files of the same type. 
+                Writes error messages to stderr.
 usage:
    validateFiles -type=FILE_TYPE file1 [file2 [...]]
 options:
