@@ -436,6 +436,24 @@ html wgEncodeLicrRnaSeq.release2
         color 86,180,233
         # subId=5958 dateSubmitted=2012-02-29
 
+        track wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep1
+        parent wgEncodeLicrRnaSeqViewSignal off
+        shortLabel BAT 24wk Sg 1
+        longLabel BAT adult-24wks RNA-seq Signal Rep 1 from ENCODE/LICR 
+        subGroups view=Signal age=ADULT24WKS cellType=BAT localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
+        type bigWig 0.000000 65489.000000
+        color 189,0,157
+        # subId=5969 dateSubmitted=2012-03-08
+
+        track wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep2
+        parent wgEncodeLicrRnaSeqViewSignal off
+        shortLabel BAT 24wk Sg 2
+        longLabel BAT adult-24wks RNA-seq Signal Rep 2 from ENCODE/LICR
+        subGroups view=Signal age=ADULT24WKS cellType=BAT localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
+        type bigWig 0.000000 65433.000000
+        color 189,0,157
+        # subId=5969 dateSubmitted=2012-03-08
+
 	track wgEncodeLicrRnaSeqViewAlignments
 	shortLabel Alignments
 	view Alignments
@@ -832,3 +850,21 @@ html wgEncodeLicrRnaSeq.release2
         type bam
         color 86,180,233
         # subId=5958 dateSubmitted=2012-02-29
+
+        track wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1
+        parent wgEncodeLicrRnaSeqViewAlignments off
+        shortLabel BAT 24wk Al 1
+        longLabel BAT adult-24wks RNA-seq Alignments Rep 1 from ENCODE/LICR
+        subGroups view=Alignments age=ADULT24WKS cellType=BAT localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
+        type bam
+        color 189,0,157
+        # subId=5969 dateSubmitted=2012-03-08
+
+        track wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep2
+        parent wgEncodeLicrRnaSeqViewAlignments off
+        shortLabel BAT 24wk Al 2
+        longLabel BAT adult-24wks RNA-seq Alignments Rep 2 from ENCODE/LICR
+        subGroups view=Alignments age=ADULT24WKS cellType=BAT localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
+        type bam
+        color 189,0,157
+        # subId=5969 dateSubmitted=2012-03-08
