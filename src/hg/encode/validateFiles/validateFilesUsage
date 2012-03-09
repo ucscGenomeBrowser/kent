@@ -4,21 +4,25 @@ validateFiles - Validates the format of different genomics files.
                 Automatically decompresses files in .gz, .bz2, .zip, or .Z format.
                 Accepts multiple input files of the same type. 
                 Writes error messages to stderr.
+
 usage:
    validateFiles -type=FILE_TYPE file1 [file2 [...]]
+
 options:
    -type=(a value from the list below)
-         tagAlign|pairedTagAlign|broadPeak|narrowPeak|gappedPeak|bedGraph
-                   : see http://genomewiki.cse.ucsc.edu/EncodeDCC/index.php/File_Formats
+         tagAlign  :
+         pairedTagAlign :
+         broadPeak :
+         narrowPeak:
+         gappedPeak:
+         bedGraph  : see the proper links for all of these  above, needs some research
          fasta     : Fasta files (only one line of sequence, and no quality scores)
          fastq     : Fasta with quality scores (see http://maq.sourceforge.net/fastq.shtml)
          csfasta   : Colorspace fasta (implies -colorSpace) (see link below)
-         csqual    : Colorspace quality (see link below)
+         csqual    : Colorspace quality 
                      (see http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm)
-         BAM       : Binary Alignment/Map
-                     (see http://samtools.sourceforge.net/SAM1.pdf)
-         bigWig    : Big Wig
-                     (see http://genome.ucsc.edu/goldenPath/help/bigWig.html
+         BAM       : Binary Alignment/Map (see http://samtools.sourceforge.net/SAM1.pdf)
+         bigWig    : Big Wig (see http://genome.ucsc.edu/goldenPath/help/bigWig.html
 
    -chromDb=db                  Specify DB containing chromInfo table to validate chrom names
                                   and sizes
