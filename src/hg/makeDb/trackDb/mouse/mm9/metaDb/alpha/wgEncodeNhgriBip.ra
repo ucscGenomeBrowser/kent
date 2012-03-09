@@ -1,5 +1,6 @@
 metaObject wgEncodeNhgriBip
 objType table
+composite wgEncodeNhgriBip
 dataType Bip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-01-27
