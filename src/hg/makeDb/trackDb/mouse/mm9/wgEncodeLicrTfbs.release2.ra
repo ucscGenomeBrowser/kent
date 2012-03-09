@@ -406,7 +406,7 @@ html wgEncodeLicrTfbs.release2
 	subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=BMARROW control=STD sex=M strain=C57BL6 
 	type bigWig 0.150000 40.070000
 	color 86,180,233
-	viewLimits 0.2:10
+	viewLimits 0.2:5
 	# subId=3157 dateSubmitted=2011-01-05
 
 
@@ -436,7 +436,7 @@ html wgEncodeLicrTfbs.release2
 	subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=CBELLUM control=STD sex=M strain=C57BL6 
 	type bigWig 0.110000 29.299999
 	color 105,105,105
-	viewLimits 0.2:10
+	viewLimits 0.2:5
 	# subId=3393 dateSubmitted=2011-01-19
 
 	track wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig
@@ -446,7 +446,7 @@ html wgEncodeLicrTfbs.release2
 	subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=CORTEX control=STD sex=M strain=C57BL6 
 	type bigWig 0.130000 58.930000
 	color 105,105,105
-	viewLimits 0.2:10
+	viewLimits 0.2:5
 	# subId=3395 dateSubmitted=2011-01-19
 
 
@@ -486,7 +486,7 @@ html wgEncodeLicrTfbs.release2
 	subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=HEART control=STD sex=M strain=C57BL6 
 	type bigWig 0.120000 52.910000
 	color 153,38,0
-	viewLimits 0.2:10
+	viewLimits 0.2:5
 	# subId=3884 dateSubmitted=2011-04-12
 
 	track wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig
@@ -506,7 +506,7 @@ html wgEncodeLicrTfbs.release2
 	subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=KIDNEY control=STD sex=M strain=C57BL6 
 	type bigWig 0.150000 51.889999
 	color 204,121,167
-	viewLimits 0.2:10
+	viewLimits 0.2:5
 	# subId=3878 dateSubmitted=2011-04-07
 
 	track wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdSig
@@ -571,7 +571,7 @@ html wgEncodeLicrTfbs.release2
         longLabel Lung adult-8wks CTCF TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=LUNG control=STD sex=M strain=C57BL6 
         type bigWig 0.160000 34.049999
-	viewLimits 0.2:10
+	viewLimits 0.2:5
         # subId=3923 dateSubmitted=2011-04-25
 
         track wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdSig
@@ -589,7 +589,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=LIVER control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 52.470001
         color 230,159,0
-	viewLimits 0.2:10
+	viewLimits 0.2:5
         # subId=3925 dateSubmitted=2011-04-25
 
         track wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdSig
@@ -627,7 +627,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=SPLEEN control=STD sex=M strain=C57BL6 
         type bigWig 0.200000 53.349998
         color 86,180,233
-	viewLimits 0.2:3
+	viewLimits 0.2:5
         # subId=3999 dateSubmitted=2011-04-29
 
         track wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdSig
@@ -637,7 +637,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=MEF control=STD sex=M strain=C57BL6 
         type bigWig 0.160000 68.889999
         color 65,105,225
-	viewLimits 0.2:10
+	viewLimits 0.2:5
         # subId=4000 dateSubmitted=2011-04-28
 
         track wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdSig
@@ -705,7 +705,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=E0 factor=CTCF cellType=ESB4 control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 65.250000
         color 65,105,225
-	viewLimits 0.2:10
+	viewLimits 0.2:5
         # subId=4043 dateSubmitted=2011-05-06
 
         track wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdSig
@@ -715,6 +715,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.107427 50.025291
         color 105,105,105
+	viewLimits 0.2:5
         # subId=5277 dateSubmitted=2011-12-21
 
         track wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdSig
@@ -724,6 +725,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=THYMUS control=STD sex=M strain=C57BL6 
         type bigWig 0.191412 108.530518
         color 86,180,233
+	viewLimits 0.2:3
         # subId=5317 dateSubmitted=2011-12-22
 
         track wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdSig
@@ -733,6 +735,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=THYMUS control=STD sex=M strain=C57BL6 
         type bigWig 0.105497 132.820557
         color 86,180,233
+	viewLimits 0.2:5
         # subId=5318 dateSubmitted=2011-12-22
 
         track wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdSig
@@ -742,6 +745,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.128951 53.643612
         color 105,105,105
+	viewLimits 0.2:3
         # subId=5321 dateSubmitted=2011-12-22
 
         track wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdSig
@@ -751,6 +755,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=SMINT control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 56.570000
         color 230,159,0
+	viewLimits 0.2:5
         # subId=5346 dateSubmitted=2011-12-23
         # was wgEncodeLicrTfbsSmintestineCtcfMAdult8wksC57bl6StdSig vsmalladi Tue Jan  3 14:06:43 2012
 
@@ -761,6 +766,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=SMINT control=STD sex=M strain=C57BL6 
         type bigWig 0.120000 35.160000
         color 230,159,0
+	viewLimits 0.2:3
         # subId=5349 dateSubmitted=2011-12-23
         # was wgEncodeLicrTfbsSmintestinePol2MAdult8wksC57bl6StdSig vsmalladi Tue Jan  3 14:08:08 2012
 
@@ -771,6 +777,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=E14HALF factor=CTCF cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type bigWig 0.100000 57.000000
         color 105,105,105
+	viewLimits 0.2:5
         # subId=5362 dateSubmitted=2011-12-23
         # was wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdSig vsmalladi Tue Jan 10 15:20:49 2012
 
@@ -781,6 +788,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=TESTIS control=STD sex=M strain=C57BL6 
         type bigWig 0.120000 43.590000
         color 0,158,115
+	viewLimits 0.2:3
         # subId=5358 dateSubmitted=2011-12-23
 
         track wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdSig
@@ -790,6 +798,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=TESTIS control=STD sex=M strain=C57BL6 
         type bigWig 0.120000 51.270000
         color 0,158,115
+	viewLimits 0.2:5
         # subId=5360 dateSubmitted=2011-12-23
 
         track wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
@@ -799,6 +808,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=E14HALF factor=POL2 cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type bigWig 0.140000 80.190002
         color 105,105,105
+	viewLimits 0.2:3
         # subId=5363 dateSubmitted=2011-12-23
         # was wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdSig vsmalladi Tue Jan 10 15:20:49 2012
 
@@ -809,6 +819,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=E14HALF factor=CTCF cellType=LIMB control=STD sex=U strain=C57BL6 
         type bigWig 0.150000 78.269997
         color 102,50,200
+	viewLimits 0.2:5
         # subId=5368 dateSubmitted=2011-12-23
 
         track wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdSig
@@ -818,6 +829,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=E14HALF factor=POL2 cellType=LIMB control=STD sex=U strain=C57BL6 
         type bigWig 0.160000 84.010002
         color 102,50,200
+	viewLimits 0.2:3
         # subId=5369 dateSubmitted=2011-12-23
 
         track wgEncodeLicrTfbsOlfactInputMAdult8wksC57bl6StdSig
@@ -918,6 +930,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=IMMORTAL factor=POL2 cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.120000 70.449997
         color 86,180,233
+	viewLimits 0.2:3
         # subId=5960 dateSubmitted=2012-02-29
 
         track wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdSig
@@ -927,6 +940,7 @@ html wgEncodeLicrTfbs.release2
         subGroups view=Signal age=IMMORTAL factor=CTCF cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.150000 142.000000
         color 86,180,233
+	viewLimits 0.2:5
         # subId=5959 dateSubmitted=2012-02-29
 
         track wgEncodeLicrTfbsMelInputMImmortalC57bl6StdSig
