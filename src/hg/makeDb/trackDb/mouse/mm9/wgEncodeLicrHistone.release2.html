@@ -1,0 +1,189 @@
+
+<H2> Description </H2>
+
+<P>
+This track shows a comprehensive survey of cis-regulatory elements
+in the mouse genome by using ChIP-seq &#40;Robertson <EM> et al.</EM>, 2007&#41; to identify
+transcription factor binding sites and chromatin modification
+profiles in many mouse &#40;C57Bl/6&#41; tissues and primary cells, 
+including bone marrow, cerebellum, cortex, heart, kidney,
+liver, lung, spleen, mouse embryonic fibroblast cells 
+&#40;MEFs&#41; and embryonic stem &#40;ES&#41; cells.
+</P> 
+<P>
+In specific, the Ren lab examined RNA polymerase II &#40;PolII&#41;, 
+co-activator protein p300, the insulator protein CTCF, and 
+two chromatin modification marks H3K4me3 and H3K4me1 due 
+to their demonstrated utilities in identifying promoters, enhancers 
+and insulator elements &#40;Barski <EM>et al.</EM>, 2007; Blow <EM>et al.</EM>, 2010; 
+Heintzman <EM>et al.</EM>, 2009; Kim <EM>et al.</EM>, 2007; Kim <EM> et al.</EM>,
+2005a; Visel <EM>et al.</EM>, 2009&#41;.
+Enrichment of H3K4me3 or PolII signals is a 
+strong indicator of active promoter, while the 
+presence of p300 or H3K4me1 outside of promoter 
+regions has been used as a mark for enhancers. 
+CTCF binding sites are considered as a mark for 
+potential insulator elements.  For each transcription 
+factor or chromatin mark in each tissue, ChIP-seq was
+carried out with at least two biological 
+replicates. Each experiment produced 20-30 
+million monoclonal, uniquely mapped tags.
+</P>
+
+<H2> Display Conventions and Configuration </H2>
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+This track contains the following views:
+<DL>
+<DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data
+(normalized data from pooled replicates). Intensity is represented in
+grayscale,  darker shading shows higher intensity (a solid vertical line
+	in the peak region represents the the point with the highest signal).
+</DD>
+<DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
+processed data.</DD>
+</DL>
+</P>
+
+<H2> Methods </H2>
+<P>
+Cells were grown according to the approved
+<A HREF="../../ENCODE/protocols/cell/mouse" TARGET=_BLANK>ENCODE cell culture protocols</A>.
+</P>
+
+<P><DT><B><I>Enrichment and Library Preparation</I></B></DT>
+
+Chromatin immunoprecipitation was performed according to 
+<A HREF="http://bioinformatics-renlab.ucsd.edu/RenLabChipProtocolV1.pdf" 
+TARGET=_BLANK>Ren Lab ChIP Protocol</A>.
+</P>
+<P>
+Library construction was performed according to 
+<A HREF="http://bioinformatics-renlab.ucsd.edu/RenLabLibraryProtocolV1.pdf"
+TARGET=_BLANK>Ren Lab Library Protocol</A>.
+</P>
+
+<P><DT><B><I>Sequencing and Analysis</I></B></DT>
+Samples were sequenced on Illumina Genome Analyzer II
+Genome Analyzer IIx, and HiSeq 2000 platforms
+for 36 cycles.  Image analysis, base calling and 
+alignment to the mouse genome version mm9 were performed 
+using Illumina&#39;s RTA and Genome Analyzer Pipeline software. 
+Alignment to the mouse genome was performed using ELAND
+or Bowtie (Langmead <EM>et al.</EM>, 2009) with 
+a seed length of 25 and allowing up to two mismatches. 
+Only the sequences that mapped to one location were used 
+for further analysis.  Of those sequences, clonal reads,
+defined as having the same start position on the same 
+strand, were discarded.  BED and wig files were
+created using custom perl scripts.
+</P>
+
+<H2> Credits </H2>
+
+<P>
+These data were generated and analyzed in
+<A HREF="http://licr-renlab.ucsd.edu/" TARGET=_BLANK>Bing Ren&#39;s laboratory</A>
+at the Ludwig Institute for Cancer Research.
+</P>
+<P>
+Contact: <A HREF="mailto:&#121;&#55;&#115;h&#101;n&#64;&#117;&#99;&#115;&#100;.
+&#101;&#100;u">Yin Shen</A>
+<!-- above address is y7shen at ucsd.edu -->
+</P>
+
+
+<H2> References </H2>
+<P>
+Barski, A., Cuddapah, S., Cui, K., Roh, T.Y., Schones, D.E., 
+Wang, Z., Wei, G., Chepelev, I., and Zhao, K.
+<A HREF="http://www.sciencedirect.com/science?_ob=ArticleURL&_udi=B6WSN-4NRTWPR-T&_user=10&_coverDate=05%2F18%2F2007&_rdoc=1&_fmt=high&_orig=gateway&_origin=gateway&_sort=d&_docanchor=&view=c&_searchStrId=1668878290&_rerunOrigin=scholar.google&_acct=C000050221&_version=1&_urlVersion=0&_userid=10&md5=7983a98dc18b64653189719fdeeeee17&searchtype=a"
+	class="external text"
+	title="http://www.sciencedirect.com/science?_ob=ArticleURL&_udi=B6WSN-4NRTWPR-T&_user=10&_coverDate=05%2F18%2F2007&_rdoc=1&_fmt=high&_orig=gateway&_origin=gateway&_sort=d&_docanchor=&view=c&_searchStrId=1668878290&_rerunOrigin=scholar.google&_acct=C000050221&_version=1&_urlVersion=0&_userid=10&md5=7983a98dc18b64653189719fdeeeee17&searchtype=a"
+	rel="noFollow" TARGET = _BLANK>High-resolution profiling of histone methylations in the human genome</A>.
+<EM>Cell</EM> 2007 May; 129&#40;4&#41;: 823&#45;837.
+</P>
+<P>
+Blow, M.J., McCulley, D.J., Li, Z., Zhang, T., 
+Akiyama, J.A., Holt, A., Plajzer-Frick, I., Shoukry, M., Wright, C., Chen, F., et al. 
+<A HREF="http://www.nature.com/ng/journal/v42/n9/abs/ng.650.html"
+	class="external text"
+	title="http://www.nature.com/ng/journal/v42/n9/abs/ng.650.html"
+	rel="noFollow" TARGET = _BLANK>ChIP-Seq identification of weakly conserved heart enhancers</A>.
+<EM>Nat Genet</EM> 2010 Sep; 42&#40;9&#41;: 806&#45;810.
+</P>
+<P>
+Heintzman, N.D., Hon, G.C., Hawkins, R.D., Kheradpour, P.,
+ Stark, A., Harp, L.F., Ye, Z., Lee, L.K., Stuart, R.K., Ching, C.W., et al.
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/19295514"
+	class="external text"
+	title="http://www.ncbi.nlm.nih.gov/pubmed/19295514"
+	rel="noFollow" TARGET = _BLANK>Histone modifications at human enhancers reflect global 
+cell-type-specific gene expression</A>.
+<EM>Nature</EM> 2009 May; 459&#40;7243&#41;: 108&#45;112.
+</P>
+<P>
+Kim, T.H., Abdullaev, Z.K., Smith, A.D., Ching, K.A.,
+ Loukinov, D.I., Green, R.D., Zhang, M.Q., Lobanenkov, V.V., and Ren, B. 
+<A HREF="http://www.sciencedirect.com/science?_ob=ArticleURL&_udi=B6WSN-4N9WKW2-P&_user=10&_coverDate=03%2F23%2F2007&_rdoc=1&_fmt=high&_orig=gateway&_origin=gateway&_sort=d&_docanchor=&view=c&_acct=C000050221&_version=1&_urlVersion=0&_userid=10&md5=fe34e70d492e05be3da004e893930c8e&searchtype=a"
+	class="external text"
+	title="http://www.sciencedirect.com/science?_ob=ArticleURL&_udi=B6WSN-4N9WKW2-P&_user=10&_coverDate=03%2F23%2F2007&_rdoc=1&_fmt=high&_orig=gateway&_origin=gateway&_sort=d&_docanchor=&view=c&_acct=C000050221&_version=1&_urlVersion=0&_userid=10&md5=fe34e70d492e05be3da004e893930c8e&searchtype=a"
+	rel="noFollow" TARGET = _BLANK>Analysis of the vertebrate insulator protein CTCF-binding 
+sites in the human genome</A>.
+<EM>Cell</EM> 2007 March; 128&#40;6&#41;: 1231&#45;1245.
+</P>
+<P>
+Kim, T.H., Barrera, L.O., Qu, C., Van Calcar, S.,
+Trinklein, N.D., Cooper, S.J., Luna, R.M., Glass, C.K., Rosenfeld, M.G., Myers, R.M., et al. 
+<A HREF="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1142473/"
+	class="external text"
+	title="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1142473/"
+	rel="noFollow" TARGET = _BLANK>Direct isolation and identification of promoters in the human genome</A>.
+<EM>Genome Res</EM> 2005 June; 15&#40;6&#41;: 830&#45;839.
+</P>
+<P>
+Langmead, B., Trapnell, C., Pop, M., and Salzberg, SL.
+<A HREF="http://genomebiology.com/2009/10/3/R25"
+	class="external text"
+    title="http://genomebiology.com/2009/10/3/R25"
+	rel="noFollow" TARGET = _BLANK>Ultrafast and memory-efficient alignment of short DNA sequences to 
+the human genome</A>.
+<EM>Genome Biol</EM> 2009 Mar; 10&#40;3&#41;: R25.
+</P>
+<P>
+Robertson, G., Hirst, M., Bainbridge, M., Bilenky, M., Zhao, Y.,
+ Zeng, T., Euskirchen, G., Bernier, B., Varhol, R., Delaney, A., et al.
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/17558387"
+	class="external text"
+	title="http://www.ncbi.nlm.nih.gov/pubmed/17558387"
+	rel="noFollow" TARGET = _BLANK>Genome-wide profiles of STAT1 DNA association using chromatin immunoprecipitation 
+and massively parallel sequencing</A>.
+<EM>Nat Methods</EM> 2007 Aug; 4&#40;8&#41;: 651&#45;657.
+</P>
+<P>
+Visel, A., Blow, M.J., Li, Z., Zhang, T., Akiyama, J.A.,
+ Holt, A., Plajzer-Frick, I., Shoukry, M., Wright, C., Chen, F., et al.
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/19212405"
+	class="external text"
+	title="http://www.ncbi.nlm.nih.gov/pubmed/19212405"
+	rel="noFollow" TARGET = _BLANK>ChIP-seq accurately predicts tissue-specific activity of enhancers</A>.
+<EM>Nature</EM> 2009 Feb; 457&#40;7231&#41;: 854&#45;858.
+</P>
+
+
+<H2> Data Release Policy </H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column on the track configuration page and
+the download page.  The full data release policy for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
+
+
+
+
+
