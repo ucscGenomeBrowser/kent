@@ -3,6 +3,160 @@ objType composite
 composite wgEncodeLicrRnaSeq
 expVars lab,dataType,cell,age
 
+metaObject wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1
+objType table
+age adult-24wks
+cell BAT
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-08
+dateUnrestricted 2012-12-08
+fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 3A
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 5969
+tableName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep2
+objType table
+age adult-24wks
+cell BAT
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-08
+dateUnrestricted 2012-12-08
+fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 3B
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 5969
+tableName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6RawDataRep1
+objType file
+age adult-24wks
+cell BAT
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-08
+dateUnrestricted 2012-12-08
+fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 3A
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 5969
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6RawDataRep2
+objType file
+age adult-24wks
+cell BAT
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-08
+dateUnrestricted 2012-12-08
+fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 3B
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion HCS
+strain C57BL/6
+subId 5969
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep1
+objType table
+age adult-24wks
+cell BAT
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-08
+dateUnrestricted 2012-12-08
+fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 3A
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 5969
+tableName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep2
+objType table
+age adult-24wks
+cell BAT
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-08
+dateUnrestricted 2012-12-08
+fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 3B
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex M
+softwareVersion TopHat
+strain C57BL/6
+subId 5969
+tableName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
 metaObject wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1
 objType table
 age adult-8wks
@@ -3425,4 +3579,4 @@ tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: -1767548366
+# MAGIC: 519267806
