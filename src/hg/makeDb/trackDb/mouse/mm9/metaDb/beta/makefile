@@ -1,4 +1,3 @@
-
 LIST=\
 wgEncodeCaltechHist.ra \
 wgEncodeCaltechTfbs.ra \
