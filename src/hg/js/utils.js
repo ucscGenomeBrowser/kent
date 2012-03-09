@@ -2017,9 +2017,10 @@ var findTracks = {
     // If index == 0 we update all help items, otherwise we only update the one == index.
         var db = getDb();
         var disabled = {  // blackList
-            'accession': 1, 'dataType':        1, 'dataVersion': 1, 'geoSample':    1, 'grant':     1,
-            'lab':       1, 'labExpId':        1, 'labVersion':  1, 'origAssembly': 1, 'replicate': 1,
-            'setType':   1, 'softwareVersion': 1, 'subId':       1, 'tableName':         1, 'view':         1
+            'accession': 1, 'dataVersion': 1, 'dccAccession':    1, 'expId':           1, 'geoSampleAccession': 1, 
+            'grant':     1, 'lab':         1, 'labExpId':        1, 'labVersion':      1, 'origAssembly':       1,
+            'obtainedBy': 1, 'replicate':  1, 'setType':         1, 'softwareVersion': 1, 'subId':              1, 
+            'tableName':  1, 'view':       1
         }
         var expected = $('tr.mdbSelect').length;
         var ix=1;
