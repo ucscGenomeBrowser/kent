@@ -3535,6 +3535,7 @@ lf->components = sfList;
 linkedFeaturesBoundsAndGrays(lf);
 lf->tallStart = bed->thickStart;
 lf->tallEnd = bed->thickEnd;
+lf->score = bed->score;
 return lf;
 }
 

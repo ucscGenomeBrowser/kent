@@ -1,7 +1,7 @@
 metaObject wgEncodeNhgriBip
 objType table
-cell Reference_Genome
-dataType BiP
+composite wgEncodeNhgriBip
+dataType Bip
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
