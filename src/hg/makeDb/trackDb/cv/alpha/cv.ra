@@ -32,7 +32,7 @@
 # sex (used in documentation and validation.  Should correspond to a "type sex" stanza. required)
 # tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.
 #       Should correspond to a "type tier" stanza. required)
-# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
+# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)/
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human. optional)
 
 term GM12878
@@ -204,18 +204,18 @@ tag NHEMM2
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 PROVISIONAL
+description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 #provisional
 lineage missing
 karyotype normal
 sex B
 tissue skin / cheek / temple
 vendorName PromoCell
-vendorId NHEM#c1420
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM#c1420
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
-protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf,Gingeras:NHEMM27012303_Gingeras_protocol.pdf
+protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf, Gingeras:NHEMM27012303_Gingeras_protocol.pdf
 
 term NHEM_M2_7011001.2
 tag NHEMM270110012
@@ -228,8 +228,8 @@ karyotype normal
 sex M
 tissue skin / cheek
 vendorName PromoCell
-vendorId NHEM#c1420
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM#c1420
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
@@ -246,8 +246,8 @@ karyotype normal
 sex F
 tissue skin / temple
 vendorName PromoCell
-vendorId NHEM#c1420
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM#c1420
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
@@ -258,18 +258,18 @@ tag NHEMFM2
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 PROVISIONAL
+description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 #provisional
 lineage missing
 karyotype normal
 sex M
 tissue skin / foreskin
 vendorName PromoCell
-vendorId NHEM#c1420
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM#c1420
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
-protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf,Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
+protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf, NHEM.fM26022001_Gingeras_protocol.pdf
 
 term NHEM.f_M2_5071302.2
 tag NHEMFM250713022
@@ -282,8 +282,8 @@ karyotype normal
 sex M
 tissue skin / foreskin
 vendorName PromoCell
-vendorId NHEM#c1420
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM#c1420
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
@@ -300,8 +300,8 @@ karyotype normal
 sex M
 tissue skin / foreskin
 vendorName PromoCell
-vendorId NHEM#c1420
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM#c1420
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
@@ -1208,7 +1208,8 @@ tag CD20
 type Cell Line
 tier 3
 organism human
-description B cells from two individuals, RO01778 and RO01794.
+description B cells from donors RO01778 and RO01794.
+deprecated Use donor-specific cell lines
 sex F
 tissue blood
 vendorName Heimfeld Lab, FHCRC
@@ -2288,18 +2289,18 @@ tag HAOAF
 type Cell Line
 tier 3
 organism human
-description Aortic Adventitial Fibroblasts from two individuals, HAoAF_6090101.11 and HAoAF_6111301.9  PROVISIONAL
+description Aortic Adventitial Fibroblasts from two individuals, HAoAF_6090101.11 and HAoAF_6111301.9 #provisional
 lineage missing
 karyotype normal
 sex B
 tissue aorta / tunica adventitia
 vendorName PromoCell
-vendorId HAoAF#c1396
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF#c1396
+vendorId HAoAF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
 termId BTO:0000135
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
 lab Gingeras
-protocol Gingeras:HAoAF6090101.11_Gingeras_protocol.pdf,Gingeras:HAoAF6111301.9_Gingeras_protocol.pdf
+protocol Gingeras:HAoAF6090101.11_Gingeras_protocol.pdf, Gingeras:HAoAF6111301.9_Gingeras_protocol.pdf
 
 term HAoAF_6090101.11
 tag HAOAF609010111
@@ -2312,8 +2313,8 @@ karyotype normal
 sex M
 tissue aorta / tunica adventitia
 vendorName PromoCell
-vendorId HAoAF#c1396
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF#c1396
+vendorId HAoAF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
 termId BTO:0000135
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
 lab Gingeras
@@ -2330,8 +2331,8 @@ karyotype normal
 sex F
 tissue aorta / tunica adventitia
 vendorName PromoCell
-vendorId HAoAF#c1396
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF#c1396
+vendorId HAoAF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
 termId BTO:0000135
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
 lab Gingeras
@@ -2342,18 +2343,18 @@ tag HAOEC
 type Cell Line
 tier 3
 organism human
-description Aortic Endothelial Cells from two individuals, HAoEC_8061102.1 and HAoEC_7071706.1 PROVISIONAL
+description Aortic Endothelial Cells from two individuals, HAoEC_7071706.1 and HAoEC_8061102.1 #provisional
 lineage missing
 karyotype normal
 sex B
-tissue aorta / thoracic
+tissue aorta / - / throracic
 vendorName PromoCell
-vendorId HAoEC#c1324
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC#c1324
+vendorId HAoEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
 termId BTO:0000394
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
 lab Gingeras
-protocol Gingeras:HAoEC8061102.1_Gingeras_protocol.pdf,Gingeras:HAoEC7071706.1_Gingeras_protocol.pdf
+protocol Gingeras:HAoEC7071706.1_Gingeras_protocol.pdf, HAoEC8061102.1_Gingeras_protocol.pdf
 
 term HAoEC_8061102.1
 tag HAOEC80611021
@@ -2366,8 +2367,8 @@ karyotype normal
 sex M
 tissue aorta / thoracic
 vendorName PromoCell
-vendorId HAoEC#c1324
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC#c1324
+vendorId HAoEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
 termId BTO:0000394
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
 lab Gingeras
@@ -2384,8 +2385,8 @@ karyotype normal
 sex F
 tissue aorta / -
 vendorName PromoCell
-vendorId HAoEC#c1324
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC#c1324
+vendorId HAoEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
 termId BTO:0000394
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
 lab Gingeras
@@ -2485,18 +2486,18 @@ tag HCH
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Chondrocytes from two individuals, HCH_8100808.2 and HCH_0011308.2P PROVISIONAL
+description Undifferentiated Chondrocytes from two individuals, HCH_8100808.2 and HCH_0011308.2P #provisional
 lineage missing
 karyotype normal
-sex B
+sex M
 tissue cartilage/ knee joint
 vendorName PromoCell
-vendorId HCH#c1315
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH#c1315
+vendorId HCH
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
 lab Gingeras
-protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf,Gingeras:HCH0011308.2P_Gingeras_protocol.pdf
+protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf, HCH0011308.2P_Gingeras_protocol.pdf
 
 term HCH_8100808.2
 tag HCH81008082
@@ -2509,8 +2510,8 @@ karyotype normal
 sex M
 tissue cartilage/ knee joint
 vendorName PromoCell
-vendorId HCH#c1315
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH#c1315
+vendorId HCH
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
 lab Gingeras
@@ -2527,8 +2528,8 @@ karyotype normal
 sex F
 tissue cartilage/ knee joint
 vendorName PromoCell
-vendorId HCH#c1315
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH#c1315
+vendorId HCH
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
 lab Gingeras
@@ -2700,18 +2701,18 @@ tag HFDPC
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3  PROVISIONAL
+description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3 #provisional
 lineage missing
 karyotype normal
 sex F
-tissue skin / lateral scalp 
+tissue skin / lateral scalp / brown / blond
 vendorName PromoCell
-vendorId HFDPC#c1411
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC#c1411
+vendorId HFDPC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
 termId BTO:0001849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
 lab Gingeras
-protocol Gingeras:HFDPC0100503.2_Gingeras_protocol.pdf,HFDPC0102703.3_Gingeras_protocol.pdf
+protocol Gingeras:HFDPC0100503.2_Gingeras_protocol.pdf, HFDPC0102703.3_Gingeras_protocol.pdf
 
 term HFDPC_0100503.2
 tag HFDPC01005032
@@ -2724,8 +2725,8 @@ karyotype normal
 sex F
 tissue skin / lateral scalp / brown
 vendorName PromoCell
-vendorId HFDPC#c1411
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC#c1411
+vendorId HFDPC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
 termId BTO:0001849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
 lab Gingeras
@@ -2742,8 +2743,8 @@ karyotype normal
 sex F
 tissue skin / lateral scalp / blond
 vendorName PromoCell
-vendorId HFDPC#c1411
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC#c1411
+vendorId HFDPC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
 termId BTO:0001849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
 lab Gingeras
@@ -2902,8 +2903,8 @@ karyotype normal
 sex F
 tissue mammary gland
 vendorName PromoCell
-vendorId HMEpC#c1375
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC#c1375
+vendorId HMEpC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
 lab Gingeras
@@ -2920,8 +2921,8 @@ karyotype normal
 sex F
 tissue mammary gland
 vendorName PromoCell
-vendorId HMEpC#c1375
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC#c1375
+vendorId HMEpC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
 lab Gingeras
@@ -2941,6 +2942,24 @@ tier 3
 protocol Stam:HMF_Stam_protocol.pdf
 # mammary stromal cell line
 
+term hMNC-PB
+tag HMNCPB
+type Cell Line
+tier 3
+organism human
+description Mononuclear Cells from two individuals, hMNC-PB_0022330.9 and hMNC-PB_0082430.9 #provisional
+lineage missing
+karyotype normal
+sex B
+tissue peripheral blood-single donor
+vendorName PromoCell
+vendorId hMNC-PB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
+termId BTO:0001025
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
+lab Gingeras
+protocol Gingeras:hMNCPB0022330.9_Gingeras_protocol.pdf, hMNCPB0082430.9_Gingeras_protocol.pdf
+
 term hMNC-PB_0022330.9
 tag HMNCPB00223309
 type Cell Line
@@ -2952,8 +2971,8 @@ karyotype normal
 sex M
 tissue peripheral blood-single donor
 vendorName PromoCell
-vendorId hMNC-PB#c1487
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB#c1487
+vendorId hMNC-PB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 lab Gingeras
@@ -2970,12 +2989,30 @@ karyotype normal
 sex F
 tissue peripheral blood-single donor
 vendorName PromoCell
-vendorId hMNC-PB#c1487
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB#c1487
+vendorId hMNC-PB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 lab Gingeras
 protocol Gingeras:hMNCPB0082430.9_Gingeras_protocol.pdf
+
+term hMNC-CB
+tag HMNCCB
+type Cell Line
+tier 3
+organism human
+description Mononuclear Cells from two individuals, hMNC-CB_9111701.6 and hMNC-CB_8072802.6 #provisional
+lineage missing
+karyotype normal
+sex B
+tissue umbilical cord blood-single donor
+vendorName PromoCell
+vendorId hMNC-CB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
+termId BTO:0004054
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
+lab Gingeras
+protocol Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf, Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf
 
 term hMNC-CB_9111701.6
 tag HMNCCB91117016
@@ -2988,8 +3025,8 @@ karyotype normal
 sex F
 tissue umbilical cord blood-single donor
 vendorName PromoCell
-vendorId hMNC-CB#c1490
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB#c1490
+vendorId hMNC-CB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
 termId BTO:0004054
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
 lab Gingeras
@@ -3006,30 +3043,84 @@ karyotype normal
 sex M
 tissue umbilical cord blood-single donor
 vendorName PromoCell
-vendorId hMNC-CB#c1490
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB#c1490
+vendorId hMNC-CB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
 termId BTO:0004054
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
 lab Gingeras
 protocol Gingeras:hMNCCB8072802.6_Gingeras_protocol.pdf
+
+term hMSC-BM
+tag HMSCBM
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-BM_0050602.11 and hMSC-BM_0051105.11 #provisional
+lineage missing
+karyotype normal
+sex B
+tissue bone marrow / femoral head
+vendorName PromoCell
+vendorId hMSC-BM
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCBM0050602.11_Gingeras_protocol.pdf, Gingeras:hMSCBM0051105.11_Gingeras_protocol.pdf
+
+term hMSC-BM_0050602.11
+tag HMSCBM005060211
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells
+lineage missing
+karyotype normal
+sex M
+tissue bone marrow / femoral head
+vendorName PromoCell
+vendorId hMSC-BM
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCBM0050602.11_Gingeras_protocol.pdf
+
+term hMSC-BM_0051105.11
+tag HMSCBM005110511
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells
+lineage missing
+karyotype normal
+sex F
+tissue bone marrow / femoral head
+vendorName PromoCell
+vendorId hMSC-BM
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCBM0051105.11_Gingeras_protocol.pdf
 
 term hMSC-AT
 tag HMSCAT
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-AT_9061601.12 and hMSC-AT_0102604.12 PROVISIONAL
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-AT_9061601.12 and hMSC-AT_0102604.12 #provisional
 lineage missing
 karyotype normal
 sex F
 tissue subcutaneous adipose tissue / abdomen
 vendorName PromoCell
-vendorId hMSC-AT#c1472
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT#c1472
+vendorId hMSC-AT
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
 lab Gingeras
-protocol Gingeras:hMSCAT9061601.12_Gingeras_protocol.pdf,Gingeras:hMSCAT0102604.12_Gingeras_protocol.pdf
+protocol Gingeras:hMSCAT0102604.12_Gingeras_protocol.pdf, Gingeras:hMSCAT9061601.12_Gingeras_protocol.pdf
 
 term hMSC-AT_9061601.12
 tag HMSCAT906160112
@@ -3042,8 +3133,8 @@ karyotype normal
 sex F
 tissue subcutaneous adipose tissue / abdomen
 vendorName PromoCell
-vendorId hMSC-AT#c1472
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT#c1472
+vendorId hMSC-AT
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
 lab Gingeras
@@ -3060,84 +3151,31 @@ karyotype normal
 sex F
 tissue subcutaneous adipose tissue / abdomen
 vendorName PromoCell
-vendorId hMSC-AT#c1472
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT#c1472
+vendorId hMSC-AT
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
 lab Gingeras
 protocol Gingeras:hMSCAT0102604.12_Gingeras_protocol.pdf
-
-term hMSC-BM
-tag HMSCBM
-type Cell Line
-tier 3
-organism human
-description Undifferentiated Mesenchymal Stem Cells from two individuals hMSC-BM_0051105.11 and hMSC-BM_0050602.11 PROVISIONAL
-lineage missing
-karyotype normal
-sex B
-tissue bone marrow / femoral head
-vendorName PromoCell
-vendorId human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
-orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
-termId BTO:0003298
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
-lab Gingeras
-protocol Gingeras:hMSCBM0051105.11_Gingeras_protocol.pdf,hMSCBM0050602.11_Gingeras_protocol.pdf
-
-term hMSC-BM_0051105.11
-tag HMSCBM005110511
-type Cell Line
-tier 3
-organism human
-description Undifferentiated Mesenchymal Stem Cells
-lineage missing
-karyotype normal
-sex F
-tissue bone marrow / femoral head
-vendorName PromoCell
-vendorId human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
-orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
-termId BTO:0003298
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
-lab Gingeras
-protocol Gingeras:hMSCBM0051105.11_Gingeras_protocol.pdf
-
-term hMSC-BM_0050602.11
-tag HMSCBM005060211
-type Cell Line
-tier 3
-organism human
-description Undifferentiated Mesenchymal Stem Cells
-lineage missing
-karyotype normal
-sex M
-tissue bone marrow / femoral head
-vendorName PromoCell
-vendorId human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
-orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
-termId BTO:0003298
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
-lab Gingeras
-protocol Gingeras:hMSCBM0050602.11_Gingeras_protocol.pdf
 
 term hMSC-UC
 tag HMSCUC
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-UC_0081101.7 and hMSC-UC_0052501.7 PROVISIONAL
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-UC_0081101.7 and hMSC-UC_0052501.7 #provisional
 lineage missing
 karyotype normal
-sex B
+sex F
 tissue umbilical cord / matrix (Wharton's Jelly)
 vendorName PromoCell
-vendorId hMSC-UC#c1469
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC#c1469
+vendorId hMSC-UC
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
 lab Gingeras
-protocol Gingeras:hMSCUC0081101.7_Gingeras_protocol.pdf,Gingeras:hMSCUC0052501.7_Gingeras_protocol.pdf
+protocol Gingeras:hMSCUC0081101.7_Gingeras_protocol.pdf, Gingeras:hMSCUC0052501.7_Gingeras_protocol.pdf
+
 
 term hMSC-UC_0081101.7
 tag HMSCUC00811017
@@ -3150,8 +3188,8 @@ karyotype normal
 sex F
 tissue umbilical cord / matrix (Wharton's Jelly)
 vendorName PromoCell
-vendorId hMSC-UC#c1469
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC#c1469
+vendorId hMSC-UC
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
 lab Gingeras
@@ -3168,8 +3206,8 @@ karyotype normal
 sex M
 tissue umbilical cord / matrix (Wharton's Jelly)
 vendorName PromoCell
-vendorId hMSC-UC#c1469
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC#c1469
+vendorId hMSC-UC
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
 lab Gingeras
@@ -3313,14 +3351,14 @@ tag HOB
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Osteoblasts from two individuals HOB_0090202.1 and HOB_0091301 PROVISIONAL
+description Undifferentiated Osteoblasts from two individuals, HOB_0090202.1 and HOB_0091301 #provisional
 lineage missing
 karyotype normal
-sex B
+sex M
 tissue cancellous bone / femoral head
 vendorName PromoCell
-vendorId HOB#c1423
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB#c1423
+vendorId HOB
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
 termId BTO:0004324
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
 lab Gingeras
@@ -3337,8 +3375,8 @@ karyotype normal
 sex M
 tissue cancellous bone / femoral head
 vendorName PromoCell
-vendorId HOB#c1423
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB#c1423
+vendorId HOB
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
 termId BTO:0004324
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
 lab Gingeras
@@ -3355,8 +3393,8 @@ karyotype normal
 sex F
 tissue cancellous bone / femoral head
 vendorName PromoCell
-vendorId HOB#c1423
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB#c1423
+vendorId HOB
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
 termId BTO:0004324
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
 lab Gingeras
@@ -3403,24 +3441,6 @@ orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3120
 sex U
 tier 3
 protocol Stam:HPAF_Stam_protocol.pdf
-
-term HPC-PL
-tag HPCPL
-type Cell Line
-tier 3
-organism human
-description Undifferentiated Pericytes from two individuals, HPC-PL_0032601.13 and HPC-PL_0101504.13 PROVISIONAL
-lineage missing
-karyotype normal
-sex B
-tissue placenta
-vendorName PromoCell
-vendorId pericytes
-orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
-termId BTO:0001975
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
-lab Gingeras
-protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf, Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
 
 term HPC-PL_0032601.13
 tag HPCPL003260113
@@ -3500,24 +3520,6 @@ orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3300
 sex U
 tier 3
 protocol Stam:HPF_Stam_protocol.pdf
-
-term HPIEpC
-tag HPIEPC
-type Cell Line
-tier 3
-organism human
-description Placental Epithelial Cells from two individuals, HPIEpC_9012801.2 and HPIEpC_9041503.2 PROVISIONAL
-lineage missing
-karyotype normal
-sex B
-tissue placenta / amniotic membrane
-vendorName PromoCell
-vendorId human-placental-epithelial-cells-hplepc
-orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
-termId BTO:0001975
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
-lab Gingeras
-protocol Gingeras:HPIEpC9012801.2_Gingeras_protocol.pdf,Gingeras:HPIEpC9041503.2_Gingeras_protocol.pdf
 
 term HPIEpC_9012801.2
 tag HPIEPC90128012
@@ -3625,18 +3627,18 @@ tag HSAVEC
 type Cell Line
 tier 3
 organism human
-description Saphenous Vein Endothelial Cells from two individuals, HSaVEC_9100101.15 and HSaVEC_0022202.16 PROVISIONAL
+description Saphenous Vein Endothelial Cells from two individuals, HSaVEC_9100101.15 and HSaVEC_0022202.16 #provisional
 lineage missing
 karyotype normal
 sex M
 tissue saphenous vein / thigh
 vendorName PromoCell
-vendorId HSaVEC#c1333
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC#c1333
+vendorId HSaVEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
 termId BTO:0003275
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
 lab Gingeras
-protocol Gingeras:HSaVEC9100101.15_Gingeras_protocol.pdf,Gingeras:HSaVEC0022202.16_Gingeras_protocol.pdf
+protocol Gingeras:HSaVEC9100101.15_Gingeras_protocol.pdf, Gingeras:HSaVEC0022202.16_Gingeras_protocol.pdf
 
 term HSaVEC_9100101.15
 tag HSAVEC910010115
@@ -3649,8 +3651,8 @@ karyotype normal
 sex M
 tissue saphenous vein / thigh
 vendorName PromoCell
-vendorId HSaVEC#c1333
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC#c1333
+vendorId HSaVEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
 termId BTO:0003275
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
 lab Gingeras
@@ -3667,8 +3669,8 @@ karyotype normal
 sex M
 tissue saphenous vein / thigh
 vendorName PromoCell
-vendorId HSaVEC#c1333
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC#c1333
+vendorId HSaVEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
 termId BTO:0003275
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
 lab Gingeras
@@ -3865,6 +3867,24 @@ sex U
 tier 3
 protocol Stam:HVMF_Stam_protocol.pdf
 
+term HVMF
+tag HVMF
+type Cell Line
+tier 3
+organism human
+description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 #provisional
+lineage missing
+karyotype normal
+sex M
+tissue placenta / villous tissue
+vendorName PromoCell
+vendorId HVMF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
+termId BTO:0001975
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+lab Gingeras
+protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf, Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
+
 term HVMF_6100401.3
 tag HVMF61004013
 type Cell Line
@@ -3876,8 +3896,8 @@ karyotype normal
 sex F
 tissue placenta / villous tissue
 vendorName PromoCell
-vendorId HVMF#c1405
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF#c1405
+vendorId HVMF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
 lab Gingeras
@@ -3894,8 +3914,8 @@ karyotype normal
 sex M
 tissue placenta / villous tissue
 vendorName PromoCell
-vendorId HVMF#c1405
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF#c1405
+vendorId HVMF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
 lab Gingeras
@@ -3906,18 +3926,18 @@ tag HWP
 type Cell Line
 tier 3
 organism human
-description Undifferentiated White Preadipocytes from two individuals HWP_0092205 and HWP_8120201.5 PROVISIONAL
+description Undifferentiated White Preadipocytes from two individuals, HWP_0092205 and HWP_8120201.5 #provisional
 lineage missing
 karyotype normal
 sex B
 tissue subcutaneous adipose tissue / abdomen / upper arm
 vendorName PromoCell
-vendorId HWP#c1426
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP#c1426
+vendorId HWP
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
 termId BTO:0004042
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
 lab Gingeras
-protocol Gingeras:HWP0092205_Gingeras_protocol.pdf,HWP8120201.5_Gingeras_protocol.pdf
+protocol Gingeras:HWP0092205_Gingeras_protocol.pdf
 
 term HWP_0092205
 tag HWP0092205
@@ -3930,12 +3950,12 @@ karyotype normal
 sex M
 tissue subcutaneous adipose tissue / abdomen
 vendorName PromoCell
-vendorId HWP#c1426
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP#c1426
+vendorId HWP
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
 termId BTO:0004042
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
 lab Gingeras
-protocol Gingeras:HWP0092205_Gingeras_protocol.pdf
+protocol Gingeras:HWP0092205_Gingeras_protocol.pdf, Gingeras:HWP8120201.5_Gingeras_protocol.pdf
 
 term HWP_8120201.5
 tag HWP81202015
@@ -3948,8 +3968,8 @@ karyotype normal
 sex F
 tissue subcutaneous adipose tissue / upper arm
 vendorName PromoCell
-vendorId HWP#c1426
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP#c1426
+vendorId HWP
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
 termId BTO:0004042
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
 lab Gingeras
@@ -4467,18 +4487,18 @@ tag NHDF
 type Cell Line
 tier 3
 organism human
-description Dermal Fibroblasts from two individuals, NHDF_0060801.3 and NHDF_7071701.2 PROVISIONAL
+description Dermal Fibroblasts
 lineage missing
 karyotype normal
 sex F
 tissue skin / temple / breast
 vendorName PromoCell
-vendorId NHDF#c1390
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF#c1390
+vendorId NHDF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
 termId BTO:0003185
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
 lab Gingeras
-protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf,Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
+protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf, Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
 
 term NHDF_0060801.3
 tag NHDF00608013
@@ -4491,8 +4511,8 @@ karyotype normal
 sex F
 tissue skin / temple
 vendorName PromoCell
-vendorId NHDF#c1390
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF#c1390
+vendorId NHDF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
 termId BTO:0003185
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
 lab Gingeras
@@ -4509,8 +4529,8 @@ karyotype normal
 sex F
 tissue skin / breast
 vendorName PromoCell
-vendorId NHDF#c1390
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF#c1390
+vendorId NHDF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
 termId BTO:0003185
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
 lab Gingeras
@@ -4900,6 +4920,7 @@ tier 3
 protocol Stam:Stam_15_protocols.pdf
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
 
+#Venkat - old term using SkMC with capital K
 term SKMC
 tag SKMC
 type Cell Line
@@ -4916,6 +4937,24 @@ sex U
 tier 3
 protocol Stam:SkMC_Stam_protocol.pdf
 
+term SkMC
+tag SKMC
+type Cell Line
+tier 3
+organism human
+description Skeletal Muscle Cells from two individuals, SkMC_9011302 SkMC_8121902.17 #provisional
+lineage missing
+karyotype normal
+sex B
+tissue striated muscle / M. pectoralis / Mm. intercostales
+vendorName PromoCell
+vendorId SkMC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
+termId BTO:0002916
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
+lab Gingeras
+protocol Gingeras:SkMC9011302_Gingeras_protocol.pdf, Gingeras:SkMC8121902.17_Gingeras_protocol.pdf
+
 term SkMC_9011302
 tag SKMC9011302
 type Cell Line
@@ -4927,8 +4966,8 @@ karyotype normal
 sex F
 tissue striated muscle / M. pectoralis
 vendorName PromoCell
-vendorId SkMC#c1429
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC#c1429
+vendorId SkMC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
 termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
 lab Gingeras
@@ -4945,8 +4984,8 @@ karyotype normal
 sex M
 tissue striated muscle / Mm. intercostales
 vendorName PromoCell
-vendorId SkMC#c1429
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC#c1429
+vendorId SkMC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
 termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
 lab Gingeras
@@ -6483,7 +6522,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ARID3A
 validation Human_-_ARID3A_(sc-8821)(Immunoprecipitation,ChIP):human_ARID3A_sc-8821_validation_Snyder.pdf
 label ARID3A (sc-8821)
 
-term ATF1_(Millipore_06-325)
+term ATF1_(06-325)
 tag ATF1MILLIPORE06325
 type Antibody
 antibodyDescription Sheep polyclonal, immunogen: CPVTLTSQTTKTDDPQL. Antibody Target: ATF1
@@ -6495,7 +6534,7 @@ orderUrl http://www.millipore.com/catalogue/item/06-325
 lab Struhl
 targetId GeneCard:ATF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF1
-validation Human_-_ATF1_(Millipore_06-325)(Western_blot,ChIP):human_ATF1_Millipore_06-325_validation_Struhl.pdf
+validation Human_-_ATF1_(06-325)(Western_blot,ChIP):human_ATF1_Millipore_06-325_validation_Struhl.pdf
 label ATF1 (06-325)
 
 term ATF2_pT71
@@ -6510,7 +6549,7 @@ orderUrl http://www.cellsignal.com/products/9221.html
 lab Struhl
 targetId GeneCard:ATF2_pT71
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
-validation Human_-_ATF2_pT71_(9221)(Western_Blot,Immunoprecipitation):human_ATF2_pT71_9221_validation_Struhl.pdf
+validation Human_-_ATF2_pT71_(9221)(Western_blot,Immunoprecipitation):human_ATF2_pT71_9221_validation_Struhl.pdf
 label ATF2 (9221)
 
 
@@ -6896,7 +6935,7 @@ orderUrl http://www.abcam.com/Cdk9-antibody-ab6544.html
 lab Struhl
 targetId GeneCard:CDK9
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CDK9&search=cdk9
-validation Human_-_CDK9_(ab75898)(Western_Blot,ChIP):human_CDK9_ab75898_validation_Struhl.pdf
+validation Human_-_CDK9_(ab75898)(Western_blot,ChIP):human_CDK9_ab75898_validation_Struhl.pdf
 label CDK9 (ab75898)
 
 term CEBPB
@@ -7024,7 +7063,7 @@ orderUrl http://www.millipore.com/catalogue/item/06-863
 lab Struhl
 targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation Human_-_CREB1_(06-863)(Western_Blot,ChIP):human_CREB1_06-863_Millipore_06-863_validation_Struhl.pdf
+validation Human_-_CREB1_(06-863)(Western_blot,ChIP):human_CREB1_06-863_Millipore_06-863_validation_Struhl.pdf
 label CREB1 (06-863)
 
 term CREB1_pS133
@@ -7039,7 +7078,7 @@ orderUrl http://www.cellsignal.com/pdf/9198.pdf
 lab Struhl
 targetId GeneCard:CREB1_pS133
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation Human_-_CREB1_pS133_(Cell_Signaling_9198)(Western_Blot,ChIP):human_CREB1_pS133_Cell_Signaling_9198_validation_Struhl.pdf
+validation Human_-_CREB1_pS133_(Cell_Signaling_9198)(Western_blot,ChIP):human_CREB1_pS133_Cell_Signaling_9198_validation_Struhl.pdf
 label CREB1 (9198)
 
 term CREB1_(SC-240)
@@ -7159,13 +7198,13 @@ antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 261-
 target CycT1
 targetDescription Cyclin T1 is a cyclin that forms heterodimers with the cyclin dependent kinase CDK9.  CDK9 is responsible for phosphorylating Ser2 of the heptad repeat of the C-terminal domain of the large subunit of RNA polymerase II, and negative elongation factors NELF and DSIF.   Cyclin T1 makes contacts with RNAPII and nascent mRNA and as such recruits CDK9 to facilitate release of stalled RNAPII and productive elongation.
 vendorName Santa Cruz Biotech
-vendorId CycT1
+vendorId sc-10750
 orderUrl http://www.scbt.com/datasheet-10750-cyclin-t1-h-245-antibody.html
 lab Struhl
 targetId GeneCard:CCNT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNT1
-validation CycT1(Western_Blot,Immunoprecipitation):human_CycT1_validation_Struhl.pdf
-label CycT1
+validation CycT1(Western_blot,Immunoprecipitation):human_CycT1_validation_Struhl.pdf
+label CycT1 (sc-10750)
 
 term E2F1
 tag E2F1
@@ -7656,7 +7695,7 @@ vendorId sc-66882
 targetId GeneCard:ESRRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESRRA
 lab Snyder
-validation Human_-_ERRA(Western_Blot,Motif_Enrichment):human_ERRA_validation_Snyder.pdf
+validation Human_-_ERRA(Western_blot,Motif_Enrichment):human_ERRA_validation_Snyder.pdf
 label ERRA (sc-66882)
 
 term ETS1
@@ -8812,13 +8851,13 @@ antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 502-
 target Med1
 targetDescription Med1 is a core subunit of the large coactivator known as mediator.  Mediator is believed to promote transcription by bridging transcription factors and the RNA polymerase II holoenzyme.
 vendorName Santa Cruz Biotech
-vendorId Med1
+vendorId sc-8998
 orderUrl http://www.scbt.com/datasheet-8998-trap220-m-255-antibody.html
 lab Struhl
 targetId GeneCard:MED1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED1
-validation Med1(Western_Blot,Immunoprecipitation):human_Med1_validation_Struhl.pdf
-label Med1 (Med1)
+validation Med1(Western_blot,Immunoprecipitation):human_Med1_validation_Struhl.pdf
+label Med1 (sc-8998)
 
 term Med26_(sc48776)
 tag MED26SC48776
@@ -8832,7 +8871,7 @@ orderUrl http://www.scbt.com/datasheet-48776-crsp70-h-228-antibody.html
 lab Struhl
 targetId GeneCard:Med26
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26&search=Med26
-validation Med26_(sc48776)(Western_Blot,Immunoprecipitation):human_Med26_sc48776_validation_Struhl.pdf
+validation Med26_(sc48776)(Western_blot,Immunoprecipitation):human_Med26_sc48776_validation_Struhl.pdf
 label Med26 (sc48776)
 
 term MEF2A
@@ -9053,7 +9092,7 @@ orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
 lab Snyder
 targetId GeneCard:NFKB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1
-validation Human_-_NFKB1(Immunoprecipitation,Motif_Enrichment):human_NFKB_p65_validation_Snyder.pdf
+validation Human_-_NFKB(Immunoprecipitation,Motif_Enrichment):human_NFKB_p65_validation_Snyder.pdf
 label NFKB (sc-372)
 
 term NF-YA
@@ -9810,7 +9849,7 @@ lab Snyder
 lots G2406 and K2106
 targetId GeneCard:STAT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1&search=STAT1
-validation Human_-_STAT1(Western_Blot,Motif_Enrichment):human_STAT1_validation_Snyder.pdf
+validation Human_-_STAT1(Western_blot,Motif_Enrichment):human_STAT1_validation_Snyder.pdf
 label STAT1 (sc-345)
 
 term STAT2
@@ -10007,7 +10046,7 @@ orderUrl http://www.scbt.com/datasheet-273-tfiid-tbp-si-1-antibody.html
 lab Struhl
 targetId GeneCard:TBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
-validation Human_-_TBP_(sc273)(Western_Blot,Immunoprecipitation):human_TBP_sc273_validation_Struhl.pdf
+validation Human_-_TBP_(sc273)(Western_blot,Immunoprecipitation):human_TBP_sc273_validation_Struhl.pdf
 label TBP (sc273)
 
 
@@ -10560,7 +10599,7 @@ orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
 lab Struhl
 targetId GeneCard:CREBBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
-validation Human_-_CBP_(sc369)(Western_Blot,ChIP):human_CBP_sc369_validation_Struhl.pdf
+validation Human_-_CBP_(sc369)(Western_blot,ChIP):human_CBP_sc369_validation_Struhl.pdf
 label CBP (sc369)
 
 term CBX3_(SC-101004)
@@ -10638,7 +10677,7 @@ lab Snyder
 lots 834865
 targetId RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
-validation Human_-_COREST(ab24166)(Western Blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
+validation Human_-_COREST(ab24166)(Western_blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
 label COREST (ab24166)
 
 
@@ -10781,13 +10820,13 @@ antibodyDescription Rabbit polyclonal, immunogen= synthetic peptide derived from
 target HMGN1
 targetDescription HMGN1 is one of four members of the high mobility group nucleosome binding proteins.  HMGN1 is ubiquitously expressed and has been implicated in promoting transcription.
 vendorName Abcam
-vendorId HMGN1
+vendorId ab5212
 orderUrl http://www.abcam.com/HMG14-antibody-ab5212.html
 lab Struhl
 targetId GeneCard:HMGN1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN1
-validation Human_-_HMGN1(Western_Blot,Immunoprecipitation):human_HMGN1_validation_Struhl.pdf
-label HMGN1
+validation Human_-_HMGN1(Western_blot,Immunoprecipitation):human_HMGN1_validation_Struhl.pdf
+label HMGN1 (ab5212)
 
 term HNRNPD
 tag HNRNPD
@@ -10835,7 +10874,7 @@ orderUrl http://www.scbt.com/datasheet-28678-spt5-h-300-antibody.html
 lab Struhl
 targetId GeneCard:SUPT5H
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUPT5H
-validation Human_-_hSpt5_(sc28678)(Western_Blot,Immunoprecipitation):human_hSpt5_sc28678_validation_Struhl.pdf
+validation Human_-_hSpt5_(sc28678)(Western_blot,Immunoprecipitation):human_hSpt5_sc28678_validation_Struhl.pdf
 label hSpt5 (sc28678)
 
 
@@ -14739,7 +14778,7 @@ tag TYPE
 type typeOfTerm
 label File type
 description The type of the primary file associated with the object
-searchable no
+searchable multiSelect
 cvDefined no
 validate none
 priority 985
