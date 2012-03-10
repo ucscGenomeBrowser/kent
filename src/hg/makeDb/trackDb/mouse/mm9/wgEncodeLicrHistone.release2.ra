@@ -622,7 +622,7 @@ html wgEncodeLicrHistone.release2
 
         track wgEncodeLicrHistoneLiverH3k09acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks
-        shortLabel Lv 8w H3K9ac Pk
+        shortLabel Lv 8w H3K9a
         longLabel Liver adult-8wks H3K9ac ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K09AC cellType=LIVER control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -658,7 +658,7 @@ html wgEncodeLicrHistone.release2
 
         track wgEncodeLicrHistoneHeartH3k09acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks
-        shortLabel Ht 8w H3K9ac
+        shortLabel Ht 8w H3K9a
         longLabel Heart adult-8wks H3K9ac ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K09AC cellType=HEART control=STD sex=M strain=C57BL6 
         type broadPeak

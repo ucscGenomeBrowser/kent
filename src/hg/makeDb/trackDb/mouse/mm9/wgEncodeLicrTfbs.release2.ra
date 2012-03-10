@@ -52,7 +52,7 @@ html wgEncodeLicrTfbs.release2
 	track wgEncodeLicrTfbsViewPeaks
 	shortLabel Peaks
 	view Peaks
-	visibility pack
+	visibility dense
 	#viewUi on
 	subTrack wgEncodeLicrTfbs
 	signalFilter 0
