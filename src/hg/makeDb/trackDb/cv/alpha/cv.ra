@@ -11893,25 +11893,25 @@ term EtOH_0.01pct
 tag ETOH01
 description 36 h with 0.01% Ethanol (Snyder)
 type treatment
-label EtOH 0.01% 36h #provisional
+label EtOH 0.01% 36h
 
 term EtOH_0.01pct_4hr
 tag ETOH01B
 description 4 h with 0.01% Ethanol (Snyder)
 type treatment
-label EtOH 0.01% 4h #provisional
+label EtOH 0.01% 4h
 
 term EtOH_0.01pct_12hr
 tag ETOH01C
 description 12 h with 0.01% Ethanol (Snyder)
 type treatment
-label EtOH 0.01% 12h #provisional
+label EtOH 0.01% 12h
 
 term EtOH_0.02pct
 tag ETOH02
 description 1 h with 0.02% Ethanol (Myers)
 type treatment
-label EtOH 0.02% 1h #provisional
+label EtOH 0.02% 1h
 
 term forskolin
 tag FORSKLN
@@ -12131,43 +12131,43 @@ term G1
 tag G1
 type phase
 description Flow sorted, G1 phase corresponds to the first DNA content window
-label G1 #provisional
+label G1
 
 term G1b
 tag G1B
 type phase
 description Flow sorted, G1b phase corresponds to the second half of the first DNA content window
-label G1b #provisional
+label G1b
 
 term G2
 tag G2
 type phase
 description Flow sorted, G2 phase corresponds to the second DNA content window
-label G2 #provisional
+label G2
 
 term S1
 tag S1
 type phase
 description Flow sorted, S1 phase corresponds to the third DNA content window
-label S1 #provisional
+label S1
 
 term S2
 tag S2
 type phase
 description Flow sorted, S2 phase corresponds to the fourth DNA content window
-label S2 #provisional
+label S2
 
 term S3
 tag S3
 type phase
 description Flow sorted, S3 phase corresponds to the fifth DNA content window
-label S3 #provisional
+label S3
 
 term S4
 tag S4
 type phase
 description Flow sorted, S4 phase corresponds to the sixth DNA content window
-label S4 #provisional
+label S4
 
 ### region
 # genomic regions used in experiments that are not whole-genome
@@ -12786,7 +12786,7 @@ term MethylWgbs
 tag METHYLWGBS
 type dataType
 label Methyl WGBS
-description DNA Methylation Whole Genome Bisulfite Sequencing Provisional
+description DNA Methylation Whole Genome Bisulfite Sequencing
 dataGroup DNA Methylation
 
 term NRE
@@ -14310,7 +14310,7 @@ term donorId
 tag DONOR
 type typeOfTerm
 label Donor ID
-description The identification of the donor of the tissue sample.  Provisional
+description The identification of the donor of the tissue sample.
 searchable no 
 cvDefined off
 validate none   
