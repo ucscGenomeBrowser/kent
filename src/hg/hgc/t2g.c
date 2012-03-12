@@ -65,7 +65,7 @@ static struct sqlResult* queryMarkerRows(struct sqlConnection* conn, char* marke
 {
 char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
-sqlUpdate(conn, "SET SESSION group_concat_max_len = 40000");
+sqlUpdate(conn, "SET SESSION group_concat_max_len = 100000");
 
 safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation," 
     "group_concat(snippet, section SEPARATOR ' (...) ') FROM %s "
