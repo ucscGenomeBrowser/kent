@@ -11893,21 +11893,25 @@ term EtOH_0.01pct
 tag ETOH01
 description 36 h with 0.01% Ethanol (Snyder)
 type treatment
+label EtOH 0.01 36hr #provisional
 
 term EtOH_0.01pct_4hr
 tag ETOH01B
 description 4 h with 0.01% Ethanol (Snyder)
 type treatment
+label EtOH 0.01 4h #provisional
 
 term EtOH_0.01pct_12hr
 tag ETOH01C
 description 12 h with 0.01% Ethanol (Snyder)
 type treatment
+label EtOH 0.01 12hr #provisional
 
 term EtOH_0.02pct
 tag ETOH02
 description 1 h with 0.02% Ethanol (Myers)
 type treatment
+label EtOH 0.02 1hr #provisional
 
 term forskolin
 tag FORSKLN
