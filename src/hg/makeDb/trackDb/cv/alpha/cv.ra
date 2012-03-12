@@ -1183,6 +1183,23 @@ sex M
 tier 3
 protocol Stam:BJ_Stam_protocol.pdf
 
+#term BMDM
+#tag BMDM
+#type Cell Line
+#organism mouse
+#tissue blood
+#category primaryCells
+#description Bone marrow derived macrophage
+#age ageUnknown
+#strain Unknown
+#vendorName Genhong Cheng Lab, UCLA
+#termId 7058
+#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
+#color 86,180,233
+#sex U
+#protocol Ren:BMDM_Ren_protocol.pdf
+#label Bone marrow derived macrophage
+
 term CD14+
 tag CD14
 type Cell Line
@@ -5318,7 +5335,7 @@ tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
-description Brown adipocytes tissue PROVISIONAL
+description Brown adipocytes tissue
 vendorName Jerrold M. Olefsky Lab, UCSD
 termId 7188
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
@@ -5569,7 +5586,7 @@ tissue duodenum
 category Tissue
 age ageUnknown
 strain Unknown
-description Duodenum PROVISIONAL
+description Duodenum
 vendorName CSHL lab
 vendorId Duodenum
 orderUrl  http://gingeraslab.cshl.edu/
@@ -5999,7 +6016,7 @@ tag MGER
 type Cell Line
 organism mouse
 category cellLine
-description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with &Beta;-estradiol treatment PROVISIONAL
+description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with &Beta;-estradiol treatment
 age immortalized
 strain Unknown
 tissue blood
@@ -6238,7 +6255,7 @@ tissue stomach
 category Tissue
 age ageUnknown
 strain Unknown
-description Stomach PROVISIONAL
+description Stomach
 vendorName CSHL lab
 vendorId Stomach
 orderUrl http://gingeraslab.cshl.edu/
@@ -6256,7 +6273,7 @@ tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
-description Subcutaneous Adipose tissue PROVISIONAL
+description Subcutaneous Adipose tissue
 vendorName CSHL lab
 vendorId Subcutaneous Adipose tissue
 orderUrl http://gingeraslab.cshl.edu/
@@ -6311,7 +6328,7 @@ tissue blood
 age ageUnknown
 strain Unknown
 category primaryCells
-description Activated primary CD4 effector cells, isolated ex vivo PROVISIONAL
+description Activated primary CD4 effector cells, isolated ex vivo
 vendorName Stam lab
 vendorId THelper-Activated
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -6347,7 +6364,7 @@ tissue blood
 age ageUnknown
 strain Unknown
 category primaryCells
-description Activated primary T regulatory cells, isolated ex vivo PROVISIONAL
+description Activated primary T regulatory cells, isolated ex vivo
 vendorName Stam lab
 vendorId TReg-Activated
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -11759,37 +11776,37 @@ label 14 day diff protocol A
 term diffProtB_6hr
 tag DIFFB6H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours. Doxycycline added to a final concentration of 100 ng/ml. (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours. Doxycycline added to a final concentration of 100 ng/ml. (Stam)
 label 6 hour diff protocol B
 
 term diffProtB_24hr
 tag DIFFB24H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam)
 label 24 hour diff protocol B
 
 term diffProtB_72hr
 tag DIFFB72H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam)
 label 72 hour diff protocol B
 
 term diffProtC_24hr
 tag DIFFC24H
 type treatment
-description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration 
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (Stam) 
 label 24 hour diff protocol C
 
 term diffProtC_48hr
 tag DIFFC48H
 type treatment
-description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (Stam)
 label 48 hour diff protocol C
 
 term diffProtC_120hr
 tag DIFFC120H
 type treatment
-description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration 
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (Stam)
 label 120 hour diff protocol C
 
 term DMSO_0.02pct
@@ -12185,15 +12202,15 @@ label UW-5C-Gene-Regions #provisional
 
 term msp
 tag MSP
-description MSP Restriction Enzyme
+description MSPI Restriction Enzyme
 type restrictionEnzyme
-label msp #provisional
+label MSPI 
 
 term hpa
 tag HPA
-description HPA Restriction Enzyme
+description HPAII Restriction Enzyme
 type restrictionEnzyme
-label hpa #provisional
+label HPAII
 
 ### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
 ### term:
@@ -13060,8 +13077,8 @@ term adult-24wks
 tag ADULT24WKS
 type age
 stage Adult
-description Adult 24 weeks PROVISIONAL
-label Adult 24 weeks PROVISIONAL
+description Adult 24 weeks
+label Adult 24 weeks
 
 term immortalized
 tag IMMORTAL
@@ -13249,14 +13266,14 @@ tag ILLUMINAGA2
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer II
-label Illumina Genome AnalyzerII
+label Illumina Genome Analyzer II
 
 term Illumina_GA2e
 tag ILLUMINAGA2E
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe
-label Illumina Genome AnalyzerIIe
+label Illumina Genome Analyzer IIe
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
@@ -13264,7 +13281,7 @@ tag ILLUMINAGA2X
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIx
-label Illumina Genome AnalyzerIIx
+label Illumina Genome Analyzer IIx
 # Matches GA2x that Kate initally indicated as the term
 
 term Illumina_HiSeq_2000
@@ -13272,14 +13289,14 @@ tag ILLUMINAHISEQ2000
 geoPlatformName Illumina HiSeq 2000
 type seqPlatform
 description Illumina HiSeq 2000
-label Illumina HiSeq2000
+label Illumina HiSeq 2000
 
 term 454_GS
 tag 454GS
 geoPlatformName 454 GS
 type seqPlatform
 description Roche 454 Genome Sequencer
-label Roche454 Genome Sequencer
+label Roche 454 Genome Sequencer
 
 term 454_GS_20
 tag 454GS20
@@ -13293,7 +13310,7 @@ tag 454GSFLX
 geoPlatformName 454 GS FLX
 type seqPlatform
 description Roche 454 Genome Sequencer FLX
-label Roche454 Genome Sequencer FLX
+label Roche 454 Genome Sequencer FLX
 
 term AB_SOLiD
 tag ABSOLID
@@ -13307,14 +13324,14 @@ tag ABSOLID2
 geoPlatformName AB_SOLiD System 2.0
 type seqPlatform
 description Applied Biosystems SOLiD System 2.0
-label Applied Biosystems SOLiD System2.0
+label Applied Biosystems SOLiD System 2.0
 
 term AB_SOLiD_3.5
 tag ABSOLID3PLUS
 geoPlatformName AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
-label Applied Biosystems SOLiD System3.5
+label Applied Biosystems SOLiD System 3.5
 
 #Uses the GEO terms to be conistent and help with GEO submissions
 ### Platform
