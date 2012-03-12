@@ -2413,7 +2413,7 @@ noInherit on
 
 #include jkExperiments.ra
 
-track agilentCgh
+track genotypeArrays
 shortLabel Arrays
 longLabel Microarray probesets
 compositeTrack on
@@ -2423,8 +2423,16 @@ noScoreFilter .
 noInherit on
 type bed 3 .
 
+    track affyCytoScan
+    parent genotypeArrays
+    shortLabel Affy CytoScan
+    longLabel Affymetrix Cytoscan CNV and SNP array probeset
+    priority 0
+    itemRgb on
+    type bed 9 .
+
     track agilentCgh1x1m
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 1x1m
     longLabel Agilent SurePrint G3 Human CGH Microarray 1x1M AMADID 021529
     color 0,128,0
@@ -2432,7 +2440,7 @@ type bed 3 .
     priority 1
 
     track agilentHrd1x1m
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag HRD 1x1m
     longLabel Agilent SurePrint G3 Human High-Resolution Microarray 1x1M AMADID 023642
     color 255,128,0
@@ -2440,7 +2448,7 @@ type bed 3 .
     priority 2
 
     track agilentCghSnp2x400k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag SNP 2x400k
     longLabel Agilent SurePrint G3 Human CGH+SNP Microarray 2x400K AMADID 028081
     color 0,0,128
@@ -2449,7 +2457,7 @@ type bed 3 .
     priority 3
 
     track agilentCgh2x400k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 2x400k
     longLabel Agilent SurePrint G3 Human CGH Microarray 2x400K AMADID 021850
     color 0,128,0
@@ -2457,7 +2465,7 @@ type bed 3 .
     priority 4
 
     track agilentCghSnpCancer4x180k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag Can 4x180k
     longLabel Agilent SurePrint G3 Human CGH+SNP Cancer Microarray 4x180K AMADID 030587
     color 0,0,128
@@ -2466,7 +2474,7 @@ type bed 3 .
     priority 5
 
     track agilentCghSnp4x180k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag SNP 4x180k
     longLabel Agilent SurePrint G3 Human CGH+SNP Microarray 4x180K AMADID 029830
     color 0,0,128
@@ -2475,7 +2483,7 @@ type bed 3 .
     priority 6
 
     track agilentCgh4x180k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 4x180k
     longLabel Agilent SurePrint G3 Human CGH Microarray 4x180K AMADID 022060
     color 255,128,0
@@ -2483,7 +2491,7 @@ type bed 3 .
     priority 7
 
     track agilentCgh8x60k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 8x60k
     longLabel Agilent SurePrint G3 Human CGH Microarray 8x60K AMADID 021924
     type bed 4 .
@@ -2491,7 +2499,7 @@ type bed 3 .
     priority 8
 
     track agilentCgh1x244k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 1x244k
     longLabel Agilent SurePrint HD Human CGH Microarray 1x244K AMADID 014693
     color 255,128,0
@@ -2499,7 +2507,7 @@ type bed 3 .
     priority 9
 
     track agilentCgh2x105k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 2x105k
     longLabel Agilent SurePrint HD Human CGH Microarray 2x105K AMADID 014698
     color 0,128,0
@@ -2507,7 +2515,7 @@ type bed 3 .
     priority 10
 
     track agilentCgh4x44k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 4x44k
     longLabel Agilent SurePrint HD Human CGH Microarray 4x44K AMADID 014950
     color 255,128,0
