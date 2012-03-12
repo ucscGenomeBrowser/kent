@@ -784,7 +784,7 @@ type Cell Line
 tier 3
 organism human
 description peripheral blood mononuclear cell, donor UHN00204, age 54, caucasian, DNA extract
-tissue peripheral blood mononuclear cell
+tissue blood
 lineage mesoderm
 karyotype normal
 sex M
@@ -2982,11 +2982,11 @@ tag HMNCPB00223309
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells
+description Mononuclear Cells, peripheral blood-single donor 
 lineage missing
 karyotype normal
 sex M
-tissue peripheral blood-single donor
+tissue blood
 vendorName PromoCell
 vendorId hMNC-PB
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
@@ -3000,11 +3000,11 @@ tag HMNCPB00824309
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells
+description Mononuclear Cells, peripheral blood-single donor 
 lineage missing
 karyotype normal
 sex F
-tissue peripheral blood-single donor
+tissue blood
 vendorName PromoCell
 vendorId hMNC-PB
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
@@ -3036,11 +3036,11 @@ tag HMNCCB91117016
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells
+description Mononuclear Cells, umbilical cord blood-single donor 
 lineage missing
 karyotype normal
 sex F
-tissue umbilical cord blood-single donor
+tissue blood 
 vendorName PromoCell
 vendorId hMNC-CB
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
@@ -3054,11 +3054,11 @@ tag HMNCCB80728026
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells
+description Mononuclear Cells, umbilical cord blood-single donor 
 lineage missing
 karyotype normal
 sex M
-tissue umbilical cord blood-single donor
+tissue blood 
 vendorName PromoCell
 vendorId hMNC-CB
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
