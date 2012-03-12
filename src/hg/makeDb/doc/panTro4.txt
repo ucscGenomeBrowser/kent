@@ -474,3 +474,69 @@ close (FH);
     #	854923909 bases of 3309577922 (25.832%) in intersection
 
 #########################################################################
+# create ucscToEnsembl name mapping (DONE - 2012-03-09 - Hiram)
+    # this allows the "ensembl" blue bar button to appear
+    mkdir /hive/data/genomes/panTro4/bed/ucscToEnsembl
+    cd /hive/data/genomes/panTro4/bed/ucscToEnsembl
+
+cut -f1 ../../chrom.sizes | while read C
+do
+ucName=${C}
+ensName=`echo $C | sed -e 's/^chr[0-9A-Za-z]*_//; s/_random//; s/^chr//; s/^\([GA][LA][CZ0-9]*\)/\1.1/;' | awk '{print $1}'`
+echo -e "$ucName\t$ensName"
+done > ucscToEnsembl.tab
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(18))
+);
+'_EOF_'
+
+    hgsql panTro4 < ucscToEnsembl.sql
+    hgsql panTro4 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+    # verify the blue bar "ensembl" link is now available
+
+#########################################################################
+# construct lift file Ensembl names to UCSC names (DONE - 2012-03-09 - Hiram)
+    cd /hive/data/genomes/panTro4/jkStuff
+
+cat ../chrom.sizes | while read L
+do
+ucName=`echo "${L}" | awk '{print $1}'`
+ucSize=`echo "${L}" | awk '{print $2}'`
+ensName=`echo $L | sed -e 's/^chr[0-9A-Za-z]*_//; s/_random//; s/^chr//; s/^\([GA][LA][CZ0-9]*\)/\1.1/;' | awk '{print $1}'`
+ensSize=`echo $L | sed -e 's/^chr[0-9A-Za-z]*_//; s/_random//; s/^chr//; s/^\([GA][LA][CZ0-9]*\)/\1.1/;' | awk '{print $2}'`
+echo -e "0\t$ensName\t$ensSize\t$ucName\t$ucSize"
+done > ensToUcsc.lift
+
+#########################################################################
+#  panTro4 - Chimp - Ensembl Genes version 65  (DONE - 2012-03-09 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/panTro4
+    cat << '_EOF_' > panTro4.ensGene.ra
+# required db variable
+db panTro4
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+# the liftUp also translates Ensembl names to UCSC names
+liftUp  /hive/data/genomes/panTro4/jkStuff/ensToUcsc.lift
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=65 panTro4.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/panTro4/bed/ensGene.65
+    featureBits panTro4 ensGene
+    # 49232086 bases of 2902338967 (1.696%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/panTro4/bed/ensGene.65
+
+############################################################################

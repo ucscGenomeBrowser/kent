@@ -15,6 +15,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002656
+expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -41,6 +43,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002656
+expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -67,6 +71,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002656
+expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -93,6 +99,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002656
+expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -119,6 +127,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002656
+expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -704,6 +714,482 @@ strain C57BL/6
 subId 3391
 tableName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
 tissueSourceType Pooled
+view Signal
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 5-7
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5961
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 5-8
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5961
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion MACS
+strain C57BL/6
+subId 5961
+tableName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 5-7
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5961
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 5-8
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5961
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5961
+tableName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody Input
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002660
+expId 2660
+fileName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 4/6/2011 Lane 4-4
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5967
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody Input
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002660
+expId 2660
+fileName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/8/2011 Lane 4-12
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5967
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody Input
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002660
+expId 2660
+fileName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 4/6/2011 Lane 4-4
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5967
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody Input
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002660
+expId 2660
+fileName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/8/2011 Lane 4-12
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5967
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Input
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002660
+expId 2660
+fileName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5967
+tableName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 6-11
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5962
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 7-12
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5962
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion MACS
+strain C57BL/6
+subId 5962
+tableName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 6-11
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5962
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 7-12
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5962
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId BMDM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5962
+tableName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdSig
 view Signal
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1
@@ -6173,6 +6659,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -6199,6 +6687,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -6225,6 +6715,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -6251,6 +6743,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -6277,6 +6771,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -6303,6 +6799,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -6329,6 +6827,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002652
+expId 2652
 fileName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsMelInputMImmortalC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -6355,6 +6855,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002652
+expId 2652
 fileName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsMelInputMImmortalC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -6381,6 +6883,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002652
+expId 2652
 fileName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -6407,6 +6911,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002652
+expId 2652
 fileName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -6433,6 +6939,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002652
+expId 2652
 fileName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -6459,6 +6967,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
@@ -6485,6 +6995,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
@@ -6511,6 +7023,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
@@ -6537,6 +7051,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -6563,6 +7079,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -6589,6 +7107,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
@@ -9723,4 +10243,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 91085655
+# MAGIC: -691073446
