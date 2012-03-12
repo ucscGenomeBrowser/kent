@@ -204,11 +204,11 @@ tag NHEMM2
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 #provisional
+description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 from cheek / temple #provisional
 lineage missing
 karyotype normal
 sex B
-tissue skin / cheek / temple
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -222,11 +222,11 @@ tag NHEMM270110012
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (adult)
+description Epidermal Melanocytes (adult) from cheek
 lineage missing
 karyotype normal
 sex M
-tissue skin / cheek
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -240,11 +240,11 @@ tag NHEMM27012303
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (adult)
+description Epidermal Melanocytes (adult) from temple
 lineage missing
 karyotype normal
 sex F
-tissue skin / temple
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -258,11 +258,11 @@ tag NHEMFM2
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 #provisional
+description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin #provisional
 lineage missing
 karyotype normal
 sex M
-tissue skin / foreskin
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -276,11 +276,11 @@ tag NHEMFM250713022
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (foreskin)
+description Epidermal Melanocytes (foreskin) 
 lineage missing
 karyotype normal
 sex M
-tissue skin / foreskin
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -298,7 +298,7 @@ description Epidermal Melanocytes (foreskin)
 lineage missing
 karyotype normal
 sex M
-tissue skin / foreskin
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -2289,11 +2289,11 @@ tag HAOAF
 type Cell Line
 tier 3
 organism human
-description Aortic Adventitial Fibroblasts from two individuals, HAoAF_6090101.11 and HAoAF_6111301.9 #provisional
+description Aortic Adventitial Fibroblasts from two individuals, HAoAF_6090101.11 and HAoAF_6111301.9 from tunica adventitia #provisional
 lineage missing
 karyotype normal
 sex B
-tissue aorta / tunica adventitia
+tissue aorta
 vendorName PromoCell
 vendorId HAoAF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
@@ -2307,11 +2307,11 @@ tag HAOAF609010111
 type Cell Line
 tier 3
 organism human
-description Aortic Adventitial Fibroblasts
+description Aortic Adventitial Fibroblasts from tunica adventitia
 lineage missing
 karyotype normal
 sex M
-tissue aorta / tunica adventitia
+tissue aorta
 vendorName PromoCell
 vendorId HAoAF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
@@ -2325,11 +2325,11 @@ tag HAOAF61113019
 type Cell Line
 tier 3
 organism human
-description Aortic Adventitial Fibroblasts
+description Aortic Adventitial Fibroblasts from tunica adventitia
 lineage missing
 karyotype normal
 sex F
-tissue aorta / tunica adventitia
+tissue aorta
 vendorName PromoCell
 vendorId HAoAF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
@@ -2343,11 +2343,11 @@ tag HAOEC
 type Cell Line
 tier 3
 organism human
-description Aortic Endothelial Cells from two individuals, HAoEC_7071706.1 and HAoEC_8061102.1 #provisional
+description Aortic Endothelial Cells from two individuals, HAoEC_7071706.1 and HAoEC_8061102.1 from throracic #provisional
 lineage missing
 karyotype normal
 sex B
-tissue aorta / - / throracic
+tissue aorta
 vendorName PromoCell
 vendorId HAoEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
@@ -2361,11 +2361,11 @@ tag HAOEC80611021
 type Cell Line
 tier 3
 organism human
-description Aortic Endothelial Cells
+description Aortic Endothelial Cells from throracic
 lineage missing
 karyotype normal
 sex M
-tissue aorta / thoracic
+tissue aorta
 vendorName PromoCell
 vendorId HAoEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
@@ -2383,7 +2383,7 @@ description Aortic Endothelial Cells
 lineage missing
 karyotype normal
 sex F
-tissue aorta / -
+tissue aorta
 vendorName PromoCell
 vendorId HAoEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
@@ -2486,11 +2486,11 @@ tag HCH
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Chondrocytes from two individuals, HCH_8100808.2 and HCH_0011308.2P #provisional
+description Undifferentiated Chondrocytes from two individuals, HCH_8100808.2 and HCH_0011308.2P from knee joint #provisional
 lineage missing
 karyotype normal
 sex M
-tissue cartilage/ knee joint
+tissue cartilage
 vendorName PromoCell
 vendorId HCH
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
@@ -2504,11 +2504,11 @@ tag HCH81008082
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Chondrocytes
+description Undifferentiated Chondrocytes from knee joint
 lineage missing
 karyotype normal
 sex M
-tissue cartilage/ knee joint
+tissue cartilage
 vendorName PromoCell
 vendorId HCH
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
@@ -2522,11 +2522,11 @@ tag HCH00113082P
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Chondrocytes
+description Undifferentiated Chondrocytes from knee joint
 lineage missing
 karyotype normal
 sex F
-tissue cartilage/ knee joint
+tissue cartilage
 vendorName PromoCell
 vendorId HCH
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
@@ -2701,11 +2701,11 @@ tag HFDPC
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3 #provisional
+description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3 from ateral scalp / brown / blond #provisional
 lineage missing
 karyotype normal
 sex F
-tissue skin / lateral scalp / brown / blond
+tissue skin
 vendorName PromoCell
 vendorId HFDPC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
@@ -2719,11 +2719,11 @@ tag HFDPC01005032
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells
+description Follicle Dermal Papilla Cells from lateral scalp / brown
 lineage missing
 karyotype normal
 sex F
-tissue skin / lateral scalp / brown
+tissue skin
 vendorName PromoCell
 vendorId HFDPC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
@@ -2737,11 +2737,11 @@ tag HFDPC01027033
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells
+description Follicle Dermal Papilla Cells from lateral scalp / blond
 lineage missing
 karyotype normal
 sex F
-tissue skin / lateral scalp / blond
+tissue skin
 vendorName PromoCell
 vendorId HFDPC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
@@ -3055,11 +3055,11 @@ tag HMSCBM
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-BM_0050602.11 and hMSC-BM_0051105.11 #provisional
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-BM_0050602.11 and hMSC-BM_0051105.11 femoral head #provisional
 lineage missing
 karyotype normal
 sex B
-tissue bone marrow / femoral head
+tissue bone marrow
 vendorName PromoCell
 vendorId hMSC-BM
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
@@ -3073,11 +3073,11 @@ tag HMSCBM005060211
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells femoral head
 lineage missing
 karyotype normal
 sex M
-tissue bone marrow / femoral head
+tissue bone marrow
 vendorName PromoCell
 vendorId hMSC-BM
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
@@ -3091,11 +3091,11 @@ tag HMSCBM005110511
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells femoral head
 lineage missing
 karyotype normal
 sex F
-tissue bone marrow / femoral head
+tissue bone marrow
 vendorName PromoCell
 vendorId hMSC-BM
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
@@ -3109,11 +3109,11 @@ tag HMSCAT
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-AT_9061601.12 and hMSC-AT_0102604.12 #provisional
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-AT_9061601.12 and hMSC-AT_0102604.12 from abdomen #provisional
 lineage missing
 karyotype normal
 sex F
-tissue subcutaneous adipose tissue / abdomen
+tissue subcutaneous adipose tissue
 vendorName PromoCell
 vendorId hMSC-AT
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
@@ -3127,11 +3127,11 @@ tag HMSCAT906160112
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells from abdomen
 lineage missing
 karyotype normal
 sex F
-tissue subcutaneous adipose tissue / abdomen
+tissue subcutaneous adipose tissue
 vendorName PromoCell
 vendorId hMSC-AT
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
@@ -3145,11 +3145,11 @@ tag HMSCAT010260412
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells from abdomen
 lineage missing
 karyotype normal
 sex F
-tissue subcutaneous adipose tissue / abdomen
+tissue subcutaneous adipose tissue
 vendorName PromoCell
 vendorId hMSC-AT
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
@@ -3163,11 +3163,11 @@ tag HMSCUC
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-UC_0081101.7 and hMSC-UC_0052501.7 #provisional
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-UC_0081101.7 and hMSC-UC_0052501.7 from matrix (Wharton's Jelly) #provisional
 lineage missing
 karyotype normal
 sex F
-tissue umbilical cord / matrix (Wharton's Jelly)
+tissue umbilical cord
 vendorName PromoCell
 vendorId hMSC-UC
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
@@ -3182,11 +3182,11 @@ tag HMSCUC00811017
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells from matrix (Wharton's Jelly)
 lineage missing
 karyotype normal
 sex F
-tissue umbilical cord / matrix (Wharton's Jelly)
+tissue umbilical cord
 vendorName PromoCell
 vendorId hMSC-UC
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
@@ -3200,11 +3200,11 @@ tag HMSCUC00525017
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells from matrix (Wharton's Jelly)
 lineage missing
 karyotype normal
 sex M
-tissue umbilical cord / matrix (Wharton's Jelly)
+tissue umbilical cord
 vendorName PromoCell
 vendorId hMSC-UC
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
@@ -3351,11 +3351,11 @@ tag HOB
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Osteoblasts from two individuals, HOB_0090202.1 and HOB_0091301 #provisional
+description Undifferentiated Osteoblasts from two individuals, HOB_0090202.1 and HOB_0091301 from femoral head #provisional
 lineage missing
 karyotype normal
 sex M
-tissue cancellous bone / femoral head
+tissue cancellous bone
 vendorName PromoCell
 vendorId HOB
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
@@ -3369,11 +3369,11 @@ tag HOB00902021
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Osteoblasts
+description Undifferentiated Osteoblasts from femoral head
 lineage missing
 karyotype normal
 sex M
-tissue cancellous bone / femoral head
+tissue cancellous bone
 vendorName PromoCell
 vendorId HOB
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
@@ -3387,11 +3387,11 @@ tag HOB0091301
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Osteoblasts
+description Undifferentiated Osteoblasts from femoral head
 lineage missing
 karyotype normal
 sex F
-tissue cancellous bone / femoral head
+tissue cancellous bone
 vendorName PromoCell
 vendorId HOB
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
@@ -3526,11 +3526,11 @@ tag HPIEPC90128012
 type Cell Line
 tier 3
 organism human
-description Placental Epithelial Cells
+description Placental Epithelial Cells amniotic membrane
 lineage missing
 karyotype normal
 sex F
-tissue placenta / amniotic membrane
+tissue placenta
 vendorName PromoCell
 vendorId human-placental-epithelial-cells-hplepc
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
@@ -3544,11 +3544,11 @@ tag HPIEPC90415032
 type Cell Line
 tier 3
 organism human
-description Placental Epithelial Cells
+description Placental Epithelial Cells amniotic membrane
 lineage missing
 karyotype normal
 sex M
-tissue placenta / amniotic membrane
+tissue placenta
 vendorName PromoCell
 vendorId human-placental-epithelial-cells-hplepc
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
@@ -3627,11 +3627,11 @@ tag HSAVEC
 type Cell Line
 tier 3
 organism human
-description Saphenous Vein Endothelial Cells from two individuals, HSaVEC_9100101.15 and HSaVEC_0022202.16 #provisional
+description Saphenous Vein Endothelial Cells from two individuals, HSaVEC_9100101.15 and HSaVEC_0022202.16 from thigh #provisional
 lineage missing
 karyotype normal
 sex M
-tissue saphenous vein / thigh
+tissue saphenous vein
 vendorName PromoCell
 vendorId HSaVEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
@@ -3645,11 +3645,11 @@ tag HSAVEC910010115
 type Cell Line
 tier 3
 organism human
-description Saphenous Vein Endothelial Cells
+description Saphenous Vein Endothelial Cells from thigh
 lineage missing
 karyotype normal
 sex M
-tissue saphenous vein / thigh
+tissue saphenous vein
 vendorName PromoCell
 vendorId HSaVEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
@@ -3663,11 +3663,11 @@ tag HSAVEC002220216
 type Cell Line
 tier 3
 organism human
-description Saphenous Vein Endothelial Cells
+description Saphenous Vein Endothelial Cells from thigh
 lineage missing
 karyotype normal
 sex M
-tissue saphenous vein / thigh
+tissue saphenous vein
 vendorName PromoCell
 vendorId HSaVEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
@@ -3872,11 +3872,11 @@ tag HVMF
 type Cell Line
 tier 3
 organism human
-description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 #provisional
+description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 from villous tissue #provisional
 lineage missing
 karyotype normal
 sex M
-tissue placenta / villous tissue
+tissue placenta
 vendorName PromoCell
 vendorId HVMF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
@@ -3890,11 +3890,11 @@ tag HVMF61004013
 type Cell Line
 tier 3
 organism human
-description Villous Mesenchymal Fibroblasts
+description Villous Mesenchymal Fibroblasts from villous tissue
 lineage missing
 karyotype normal
 sex F
-tissue placenta / villous tissue
+tissue placenta
 vendorName PromoCell
 vendorId HVMF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
@@ -3908,11 +3908,11 @@ tag HVMF60912033
 type Cell Line
 tier 3
 organism human
-description Villous Mesenchymal Fibroblasts
+description Villous Mesenchymal Fibroblasts from villous tissue
 lineage missing
 karyotype normal
 sex M
-tissue placenta / villous tissue
+tissue placenta
 vendorName PromoCell
 vendorId HVMF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
@@ -3926,11 +3926,11 @@ tag HWP
 type Cell Line
 tier 3
 organism human
-description Undifferentiated White Preadipocytes from two individuals, HWP_0092205 and HWP_8120201.5 #provisional
+description Undifferentiated White Preadipocytes from two individuals, HWP_0092205 and HWP_8120201.5 from abdomen / upper arm #provisional
 lineage missing
 karyotype normal
 sex B
-tissue subcutaneous adipose tissue / abdomen / upper arm
+tissue subcutaneous adipose tissue
 vendorName PromoCell
 vendorId HWP
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
@@ -3944,11 +3944,11 @@ tag HWP0092205
 type Cell Line
 tier 3
 organism human
-description Undifferentiated White Preadipocytes
+description Undifferentiated White Preadipocytes from abdomen
 lineage missing
 karyotype normal
 sex M
-tissue subcutaneous adipose tissue / abdomen
+tissue subcutaneous adipose tissue
 vendorName PromoCell
 vendorId HWP
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
@@ -3962,11 +3962,11 @@ tag HWP81202015
 type Cell Line
 tier 3
 organism human
-description Undifferentiated White Preadipocytes
+description Undifferentiated White Preadipocytes from upper arm
 lineage missing
 karyotype normal
 sex F
-tissue subcutaneous adipose tissue / upper arm
+tissue subcutaneous adipose tissue
 vendorName PromoCell
 vendorId HWP
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
@@ -4487,11 +4487,11 @@ tag NHDF
 type Cell Line
 tier 3
 organism human
-description Dermal Fibroblasts
+description Dermal Fibroblasts from temple / breast
 lineage missing
 karyotype normal
 sex F
-tissue skin / temple / breast
+tissue skin
 vendorName PromoCell
 vendorId NHDF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
@@ -4505,11 +4505,11 @@ tag NHDF00608013
 type Cell Line
 tier 3
 organism human
-description Dermal Fibroblasts
+description Dermal Fibroblasts from temple
 lineage missing
 karyotype normal
 sex F
-tissue skin / temple
+tissue skin
 vendorName PromoCell
 vendorId NHDF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
@@ -4523,11 +4523,11 @@ tag NHDF70717012
 type Cell Line
 tier 3
 organism human
-description Dermal Fibroblasts
+description Dermal Fibroblasts from breast
 lineage missing
 karyotype normal
 sex F
-tissue skin / breast
+tissue skin
 vendorName PromoCell
 vendorId NHDF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
@@ -4942,11 +4942,11 @@ tag SKMC
 type Cell Line
 tier 3
 organism human
-description Skeletal Muscle Cells from two individuals, SkMC_9011302 SkMC_8121902.17 #provisional
+description Skeletal Muscle Cells from two individuals, SkMC_9011302 SkMC_8121902.17 from M. pectoralis / Mm. intercostales #provisional
 lineage missing
 karyotype normal
 sex B
-tissue striated muscle / M. pectoralis / Mm. intercostales
+tissue striated muscle
 vendorName PromoCell
 vendorId SkMC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
@@ -4960,11 +4960,11 @@ tag SKMC9011302
 type Cell Line
 tier 3
 organism human
-description Skeletal Muscle Cells
+description Skeletal Muscle Cells from M. pectoralis
 lineage missing
 karyotype normal
 sex F
-tissue striated muscle / M. pectoralis
+tissue striated muscle
 vendorName PromoCell
 vendorId SkMC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
@@ -4978,11 +4978,11 @@ tag SKMC812190217
 type Cell Line
 tier 3
 organism human
-description Skeletal Muscle Cells
+description Skeletal Muscle Cells from Mm. intercostales
 lineage missing
 karyotype normal
 sex M
-tissue striated muscle / Mm. intercostales
+tissue striated muscle
 vendorName PromoCell
 vendorId SkMC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
