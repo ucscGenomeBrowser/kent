@@ -30,7 +30,7 @@ shortLabel LICR Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
+subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow BMDM=BMDM CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
 subGroup3 factor Factor H3K04ME1=H3K4me1 H3K04ME3=H3K4me3 H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 H3K79ME2=H3K79me2 H3K09AC=H3K9ac H3K27AC=H3K27ac INPUT=Input
 subGroup4 sex Sex M=M F=F U=U
 subGroup5 age Age ADULT8WKS=adult-8wks ADULT24WKS=adult-24wks E0=E0 E14HALF=E14.5 IMMORTAL=immortalized
@@ -53,7 +53,7 @@ html wgEncodeLicrHistone.release2
 	track wgEncodeLicrHistoneViewPeaks
 	shortLabel Peaks
 	view Peaks
-	visibility dense
+	visibility pack
 	#viewUi on
 	subTrack wgEncodeLicrHistone
 	signalFilter 0
@@ -727,6 +727,33 @@ html wgEncodeLicrHistone.release2
         type broadPeak
         color 86,180,233
         # subId=5906 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneBmdmH3k04me3FAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel BMDM 8w H3K4m3 
+        longLabel BMDM adult-8wks H3K4me3 ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=BMDM control=STD sex=F strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5963 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrHistoneBmdmH3k27acFAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel BMDM 8w H3K27a
+        longLabel BMDM adult-8wks H3K27ac ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=BMDM control=STD sex=F strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5964 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrHistoneBmdmH3k04me1FAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel BMDM 8w H3K4m1
+        longLabel BMDM adult-8wks H3K4me1 ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=BMDM control=STD sex=F strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5965 dateSubmitted=2012-03-10
 
 	#######	Signal Tracks###########
 	track wgEncodeLicrHistoneViewSignal
@@ -1668,4 +1695,43 @@ html wgEncodeLicrHistone.release2
         color 86,180,233
 	viewLimits 0.2:2
         # subId=5906 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneBmdmH3k04me3FAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel BMDM 8w H3K4m3
+        longLabel BMDM adult-8wks H3K4me3 ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=BMDM control=STD sex=F strain=C57BL6
+        type bigWig 0.110000 77.830002
+        color 86,180,233
+	viewLimits 0.2:10
+        # subId=5963 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrHistoneBmdmH3k27acFAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel BMDM 8w H3K27a
+        longLabel BMDM adult-8wks H3K27ac ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=BMDM control=STD sex=F strain=C57BL6
+        type bigWig 0.110000 57.849998
+        color 86,180,233
+	viewLimits 0.2:5
+        # subId=5964 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrHistoneBmdmH3k04me1FAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel BMDM 8w H3K4m1
+        longLabel BMDM adult-8wks H3K4me1 ChIP-seq Signal from ENCODE/LICR 
+        subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=BMDM control=STD sex=F strain=C57BL6
+        type bigWig 0.110000 9.030000
+        color 86,180,233
+	viewLimits 0.2:3
+        # subId=5965 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrHistoneBmdmInputFAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel BMDM 8w Input
+        longLabel BMDM adult-8wks Input ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=BMDM control=STD sex=F strain=C57BL6
+        type bigWig 0.140000 48.919998
+        color 86,180,233
+        # subId=5968 dateSubmitted=2012-03-10
 
