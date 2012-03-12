@@ -41,6 +41,9 @@ errAbort(
   "    testing gene predictions by RT-PCR.\n"
   "   -genomeSeqs=spec - get genome sequences from the specified nib directory\n"
   "    or 2bit file instead of going though the path found in chromInfo.\n"
+  "   -includeCoords - include the genomic coordinates as a comment in the\n"
+  "    fasta header.  This is necessary when there are multiple genePreds\n"
+  "    with the same name.\n"
   "   -genePredExt - (for use with -peptides) use extended genePred format,\n"
   "    and consider frame information when translating (Warning: only\n"
   "    considers offset at 5' end, not frameshifts between blocks)\n"
@@ -63,6 +66,7 @@ static struct optionSpec options[] = {
    {"pslOut", OPTION_STRING},
    {"suffix", OPTION_STRING},
    {"peptides", OPTION_BOOLEAN},
+   {"includeCoords", OPTION_BOOLEAN},
    {"exonIndices", OPTION_BOOLEAN},
    {"maxSize", OPTION_INT},
    {"genePredExt", OPTION_BOOLEAN},
@@ -72,7 +76,7 @@ static struct optionSpec options[] = {
 
 
 /* parsed from command line */
-boolean weird, cdsUpper, cdsOnly, peptides, keepMasking, exonIndices, 
+boolean weird, cdsUpper, cdsOnly, peptides, keepMasking, includeCoords, exonIndices,
   genePredExt;
 char *cdsOut = NULL;
 char *pslOut = NULL;
@@ -286,21 +290,22 @@ faWriteNext(faFh, name, cdsBuf->string, strlen(cdsBuf->string));
 }
 
 void processGenePred(char *db, struct genePred *gp, struct dyString *dnaBuf, 
-                     struct dyString *cdsBuf, struct dyString *indBuf,
+                     struct dyString *cdsBuf, struct dyString *nameBuf,
                      FILE* faFh, FILE* cdsFh, FILE* pslFh)
 /* output genePred DNA, check for weird splice sites if requested */
 {
 int i;
-char name[1024];
 int index = 0;
 
 /* Load exons one by one into dna string. */
 dyStringClear(dnaBuf);
-if (exonIndices)
-    {
-    dyStringClear(indBuf);
-    dyStringPrintf(indBuf, " %s", db);  /* we'll also include the db */
-    }
+dyStringClear(nameBuf);
+dyStringAppend(nameBuf, gp->name);
+dyStringAppend(nameBuf, suffix);
+if (exonIndices || includeCoords)
+    dyStringPrintf(nameBuf, " %s", db);  /* we'll also include the db */
+if (includeCoords)
+    dyStringPrintf(nameBuf, " %s:%d-%d", gp->chrom, gp->txStart, gp->txEnd);
 for (i=0; i<gp->exonCount; ++i)
     {
     int start = gp->exonStarts[i];
@@ -332,7 +337,7 @@ if (exonIndices)
         {
         index += gp->exonEnds[i] - gp->exonStarts[i];
         if (maxSize != -1 && index > maxSize) index = maxSize;
-        dyStringPrintf(indBuf, " %d", index);
+        dyStringPrintf(nameBuf, " %d", index);
         if (index == maxSize) break; /* can only happen if maxSize != -1 */
         }
     } 
@@ -341,16 +346,14 @@ if ((gp->cdsStart < gp->cdsEnd)
     && (cdsUpper || cdsOnly || peptides || (cdsFh != NULL)))
     processCds(gp, dnaBuf, cdsBuf, cdsFh);
 
-safef(name, sizeof(name), "%s%s%s", gp->name, suffix, 
-      exonIndices ? indBuf->string : "");
 if (cdsOnly)
-    faWriteNext(faFh, name, cdsBuf->string, 
+    faWriteNext(faFh, nameBuf->string, cdsBuf->string, 
                 (maxSize != -1 && cdsBuf->stringSize > maxSize) ? maxSize : 
                 cdsBuf->stringSize);
 else if (peptides)
-    outputPeptide(gp, name, cdsBuf, faFh);
+    outputPeptide(gp, nameBuf->string, cdsBuf, faFh);
 else
-    faWriteNext(faFh, name, dnaBuf->string, 
+    faWriteNext(faFh, nameBuf->string, dnaBuf->string, 
                 (maxSize != -1 && dnaBuf->stringSize > maxSize) ? maxSize : 
                 dnaBuf->stringSize);
 
@@ -359,7 +362,7 @@ if (pslFh != NULL)
 }
 
 void getRnaForTable(char *db, char *table, char *chrom, struct dyString *dnaBuf, 
-                    struct dyString *cdsBuf, struct dyString *indBuf,
+                    struct dyString *cdsBuf, struct dyString *nameBuf,
                     FILE *faFh, FILE *cdsFh, FILE* pslFh)
 /* get RNA for a genePred table */
 {
@@ -381,7 +384,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
       gp = genePredLoad(row+rowOffset);
     if ((!weird) || hasWeirdSplice(db, gp))
-        processGenePred(db, gp, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
+        processGenePred(db, gp, dnaBuf, cdsBuf, nameBuf, faFh, cdsFh, pslFh);
     genePredFree(&gp);
     }
 sqlFreeResult(&sr);
@@ -389,7 +392,7 @@ hFreeConn(&conn);
 }
 
 void getRnaForTables(char *db, char *table, char *chrom, struct dyString *dnaBuf, 
-                     struct dyString *cdsBuf, struct dyString *indBuf,
+                     struct dyString *cdsBuf, struct dyString *nameBuf,
                      FILE *faFh, FILE *cdsFh, FILE* pslFh)
 /* get RNA for one for possibly splite genePred table */
 {
@@ -399,11 +402,11 @@ if (sameString(chrom, "all"))
 else
     chroms = slNameNew(chrom);
 for (chr = chroms; chr != NULL; chr = chr->next)
-    getRnaForTable(db, table, chr->name, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
+    getRnaForTable(db, table, chr->name, dnaBuf, cdsBuf, nameBuf, faFh, cdsFh, pslFh);
 }
 
 void getRnaForFile(char *db, char *table, char *chrom, struct dyString *dnaBuf, 
-                   struct dyString *cdsBuf, struct dyString *indBuf,
+                   struct dyString *cdsBuf, struct dyString *nameBuf,
                    FILE *faFh, FILE* cdsFh, FILE* pslFh)
 /* get RNA for a genePred file */
 {
@@ -419,7 +422,7 @@ while (lineFileNextRowTab(lf, row, genePredExt ?
     else 
       gp = genePredLoad(row);
     if (all || sameString(gp->chrom, chrom))
-        processGenePred(db, gp, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
+        processGenePred(db, gp, dnaBuf, cdsBuf, nameBuf, faFh, cdsFh, pslFh);
     genePredFree(&gp);
     }
 lineFileClose(&lf); 
@@ -430,7 +433,7 @@ void getRnaPred(char *db, char *table, char *chrom, char *faOut)
 {
 struct dyString *dnaBuf = dyStringNew(16*1024);
 struct dyString *cdsBuf = NULL;
-struct dyString *indBuf = NULL;
+struct dyString *nameBuf = dyStringNew(64);
 FILE *faFh = mustOpen(faOut, "w");
 FILE *cdsFh = NULL;
 FILE *pslFh = NULL;
@@ -442,16 +445,16 @@ if (cdsOut != NULL)
 if (pslOut != NULL)
     pslFh = mustOpen(pslOut, "w");
 if (exonIndices)
-   indBuf = dyStringNew(512);
+   nameBuf = dyStringNew(512);
 
 if (fileExists(table))
-    getRnaForFile(db, table, chrom, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
+    getRnaForFile(db, table, chrom, dnaBuf, cdsBuf, nameBuf, faFh, cdsFh, pslFh);
 else
-    getRnaForTables(db, table, chrom, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
+    getRnaForTables(db, table, chrom, dnaBuf, cdsBuf, nameBuf, faFh, cdsFh, pslFh);
 
 dyStringFree(&dnaBuf);
 dyStringFree(&cdsBuf);
-dyStringFree(&indBuf);
+dyStringFree(&nameBuf);
 carefulClose(&pslFh);
 carefulClose(&cdsFh);
 carefulClose(&faFh);
@@ -472,6 +475,7 @@ keepMasking = optionExists("keepMasking");
 pslOut = optionVal("pslOut", NULL); 
 suffix = optionVal("suffix", suffix); 
 peptides = optionExists("peptides");
+includeCoords = optionExists("includeCoords");
 exonIndices = optionExists("exonIndices");
 maxSize = optionInt("maxSize", -1);
 genePredExt = optionExists("genePredExt");

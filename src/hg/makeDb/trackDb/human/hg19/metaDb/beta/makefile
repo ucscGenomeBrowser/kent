@@ -8,9 +8,9 @@ wgEncodeCaltechRnaSeq.ra \
 wgEncodeCshlLongRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \
 wgEncodeDukeAffyExon.ra \
-wgEncodeGencodeV4.ra \
 wgEncodeGencodeV7.ra \
 wgEncodeGencodeV10.ra \
+wgEncodeGencodeV11.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaPet.ra \
 wgEncodeGisRnaSeq.ra \

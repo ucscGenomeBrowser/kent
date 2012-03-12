@@ -4,13 +4,13 @@ include wgEncodeSuper.ra
 
 # GENCODE genes (wrangler: braney,cricket)
 include wgEncodeGencodeV3.ra alpha
-include wgEncodeGencodeV4.ra
+include wgEncodeGencodeV4.ra alpha
 
 #include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV9.ra alpha
 include wgEncodeGencodeV10.ra
-include wgEncodeGencodeV11.ra alpha
+include wgEncodeGencodeV11.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.ra beta,public
@@ -81,8 +81,7 @@ include wgEncodeOpenChromDnase.release2.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.release3.ra public
-include wgEncodeUwDnase.release4.ra alpha,beta
+include wgEncodeUwDnase.release4.ra
 
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.release3.ra
@@ -132,8 +131,7 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra 
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra beta,public
-include wgEncodeHaibMethylRrbs.release3.ra alpha
+include wgEncodeHaibMethylRrbs.ra
 #HAIB Bisulfite test track
 include wgEncodeHaibMethylWgbs.ra alpha
 

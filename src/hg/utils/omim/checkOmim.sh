@@ -1,26 +1,27 @@
-#!/bin/sh
+#!/bin/sh -e
 
 #	Do not modify this script, modify the source tree copy:
 #	src/utils/omim/checkOmim.sh
 #	This script is used via a cron job and kept in $HOME/bin/scripts/
 
 # set EMAIL here for notification list
-EMAIL="braney@soe.ucsc.edu"
+#EMAIL="braney@soe.ucsc.edu"
 # set DEBUG_EMAIL here for notification of potential errors in the process
-DEBUG_EMAIL="braney@soe.ucsc.edu"
+#DEBUG_EMAIL="braney@soe.ucsc.edu"
 
 #	cron jobs need to ensure this is true
 umask 002
 
-WORKDIR="/hive/data/outside/otto/omim"
+WORKDIR=$1
 export WORKDIR
 export PATH=$WORKDIR":$PATH"
 
 #	this is where we are going to work
 if [ ! -d "${WORKDIR}" ]; then
-    echo "ERROR in OMIM release watch, Can not find the directory:
-    ${WORKDIR}" \
-	| mail -s "ERROR: OMIM watch" ${DEBUG_EMAIL}
+    echo "ERROR in OMIM release watch, Can not find the directory:     ${WORKDIR}" 
+#    echo "ERROR in OMIM release watch, Can not find the directory:
+#    ${WORKDIR}" \
+#	| mail -s "ERROR: OMIM watch" ${DEBUG_EMAIL}
     exit 255
 fi
 
@@ -54,19 +55,19 @@ chmod o+w release.list
 WC=`cat release.list | wc -l`
 if [ "${WC}" -lt 1 ]; then
     echo "potential error in OMIM release watch,
-check release.list in ${WORKDIR}" \
-	| mail -s "ERROR: OMIM watch" ${DEBUG_EMAIL}
+check release.list in ${WORKDIR}" 
+#	| mail -s "ERROR: OMIM watch" ${DEBUG_EMAIL}
     exit 255
 fi
 
 #	see if anything is changing, if so, email notify, download, and build
 
-diff prev.release.list release.list  >release.diff
+diff prev.release.list release.list  >release.diff || true
 WC=`cat release.diff | wc -l`
 if [ "${WC}" -gt 1 ]; then
     echo -e "New OMIM update noted at:\n" \
-"ftp://grcf.jhmi.edu/\n"`comm -13 prev.release.list release.list`"/" \
-    | mail -s "OMIM update watch" ${EMAIL}
+"ftp://grcf.jhmi.edu/\n"`comm -13 prev.release.list release.list`"/" 
+#    | mail -s "OMIM update watch" ${EMAIL}
 
 FN=`cat release.diff |grep omim-|sed -e 's/omim-/\tomim-/'|cut -f 2`
 
@@ -104,6 +105,7 @@ bye" > ftp.omim.rsp
 ftp -n -v -i grcf.jhmi.edu  < ftp.omim.rsp > ftp.log
 
 # build the new OMIM track tables for hg18
+rm -rf hg18
 mkdir -p hg18
 cd hg18
 
@@ -113,9 +115,11 @@ ln -s ../mim2gene.txt ./mim2gene.txt
 ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
 
 ../../buildOmimTracks.csh hg18
+../../validateOmim.sh hg18
 cd ..
 
 # build the new OMIM track tables for hg19
+rm -rf hg19
 mkdir -p hg19
 cd hg19
 
@@ -125,6 +129,21 @@ ln -s ../mim2gene.txt ./mim2gene.txt
 ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
 
 ../../buildOmimTracks.csh hg19
+../../validateOmim.sh hg19
+cd ..
 
+# now install for both hg18 and hg19
+for i in `cat ../omim.tables`
+do 
+    n=$i"New"
+    o=$i"Old"
+    hgsqlSwapTables hg18 $n $i $o -dropTable3
+    hgsqlSwapTables hg19 $n $i $o -dropTable3
+done
+
+echo "Omim Installed `date`" 
+
+else
+    echo "No update `date` "
 fi
 

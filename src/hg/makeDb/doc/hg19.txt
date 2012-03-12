@@ -82,7 +82,7 @@ do
 "s/^GL000250.1/chr6_apd_hap1/" -e \
 "s/^GL000251.1/chr6_cox_hap2/" -e \
 "s/^GL000252.1/chr6_dbb_hap3/" -e \
-"s/^GL000253.1/chr6_mann_hap4/" -e \ 
+"s/^GL000253.1/chr6_mann_hap4/" -e \
 "s/^GL000254.1/chr6_mcf_hap5/" -e \
 "s/^GL000255.1/chr6_qbl_hap6/" -e \
 "s/^GL000256.1/chr6_ssto_hap7/" -e \
@@ -93,7 +93,7 @@ done > scaffolds.agp
     find ../unlocalized_scaffolds -type f | grep ".agp$" \
 | while read F
 do
-    C=`basename ${F}`   
+    C=`basename ${F}`
     C=${C/.unlocalized.scaf.agp}
     grep "^GL" ${F} | sed -e "s/^GL\([0-9]*\).1/${C}_gl\1_random/"
 done >> scaffolds.agp
@@ -106,7 +106,7 @@ done >> scaffolds.agp
 
     rm -f scaffolds.fa
     find ../alternate_loci -type f | grep ".fa$" | while read F
-do  
+do
     sed -e \
 "s/>.*GL000250.*/>chr6_apd_hap1/" -e \
 "s/>.*GL000251.*/>chr6_cox_hap2/" -e \
@@ -196,9 +196,9 @@ do
     hgsql -e "drop table ${T};" hg19
 done
     hgLoadOut -nosplit -verbose=2 -table=rmsk hg19 hg19.fa.out
-bad rep range [4385, 4384] line 1348605 of hg19.fa.out 
-bad rep range [5563, 5562] line 1563988 of hg19.fa.out 
-bad rep range [4539, 4538] line 3111186 of hg19.fa.out 
+bad rep range [4385, 4384] line 1348605 of hg19.fa.out
+bad rep range [5563, 5562] line 1563988 of hg19.fa.out
+bad rep range [4539, 4538] line 3111186 of hg19.fa.out
     #	featureBits still reports 1465724774 bases in rmsk table
     #	cleaning the hg19.fa.out file:
     cp hg19.fa.out hg19.clean.out
@@ -314,7 +314,7 @@ done | faToTwoBit stdin hg19.scaffolds.2bit
     sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
     mv tmp.c cpg_lh.c
     make
-    cd ../../ 
+    cd ../../
     ln -s hg3rdParty/cpgIslands/cpglh.exe
     mkdir -p hardMaskedFa
     cut -f1 ../../chrom.sizes | while read C
@@ -512,7 +512,7 @@ doBlastzChainNet.pl `pwd`/DEF \
 BLASTZ=lastz
 # maximum M allowed with lastz is only 255
 BLASTZ_M=254
-# lastz does not like the O= and E= lines in the matrix file 
+# lastz does not like the O= and E= lines in the matrix file
 #       this copy has that removed from /scratch/data/scratch/human_chimp.v2.q
 BLASTZ_Q=/hive/data/genomes/hg19/bed/lastzHg19Haps.2009-03-09/human_chimp.v2.q
 # and place those items here
@@ -529,14 +529,14 @@ SEQ1_LEN=/scratch/data/hg19/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 SEQ1_IN_CONTIGS=0
-    
+ 
 # QUERY: Human Hg19
 SEQ2_DIR=/scratch/data/hg19/hg19.2bit
 SEQ2_LEN=/scratch/data/hg19/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 SEQ2_IN_CONTIGS=0
-    
+ 
 BASE=/hive/data/genomes/hg19/bed/lastzSelf.2009-03-19
 TMPDIR=/scratch/tmp
 '_EOF_'
@@ -637,7 +637,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	> load.log 2>&1 &
     #	real    47m17.871s
-    cat fb.hg19.chainPanTro2Link.txt 
+    cat fb.hg19.chainPanTro2Link.txt
     #	2747983350 bases of 2897316137 (94.846%) in intersection
 
     #	running the swap - DONE - 2009-05-24
@@ -650,7 +650,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    723m41.377s
-    cat fb.panTro2.chainHg19Link.txt 
+    cat fb.panTro2.chainHg19Link.txt
     #	2761343871 bases of 2909485072 (94.908%) in intersection
 
 ############################################################################
@@ -735,7 +735,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-    cat fb.hg19.chainGorGor1Link.txt 
+    cat fb.hg19.chainGorGor1Link.txt
     #	1723432141 bases of 2897316137 (59.484%) in intersection
     doRecipBest.pl -buildDir=`pwd` hg19 gorGor1 > rbest.log 2>&1
 
@@ -771,7 +771,7 @@ split.csh $(root1) {check out line+ splitOut/$(root1).out}
 # Average job time:                 186s       3.10m     0.05h    0.00d
 # Longest finished job:             224s       3.73m     0.06h    0.00d
 # Submission to last job:           280s       4.67m     0.08h    0.00d
-    
+
     #	now, we can date and process each of those .out files
     #	this really should be a single creation of notInOthers
     #	These four different ones all end up to be the same anyhow
@@ -1349,7 +1349,7 @@ Became:
 
     # Convert the title line of the dbSTS.fa file
     #	Verify that column 3 only contains gb emb dbj
-    grep "^>" dbSTS.fa | awk -F'|' '{print $3}' | sort | uniq -c 
+    grep "^>" dbSTS.fa | awk -F'|' '{print $3}' | sort | uniq -c
 #   39124 dbj
 #   57375 emb
 # 1212541 gb
@@ -17411,7 +17411,7 @@ TMPDIR=/scratch/tmp
     #	2571797450 bases of 2822760080 (91.109%) in intersection
 
 ############################################################################
-# ISCA FROM DBVAR (DONE 10/18/11 angie)
+# ISCA FROM DBVAR (DONE 3/2/12 angie)
     # Redmine: Track #34 (dbVar for human)
     set today = `date +%Y_%m_%d`
     mkdir /hive/data/genomes/hg19/bed/isca/$today
@@ -17452,71 +17452,71 @@ TMPDIR=/scratch/tmp
         print join("\t", @bed8Attrs) . "\n";' \
       > isca.bed
     wc -l isca.bed
-#11542 isca.bed
+#12008 isca.bed
     # Split into subtracks by clinical_int value.
     zcat nstd37_ISCA*.gvf.gz \
     | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
-#   4250 Benign
-#   4063 Pathogenic
-#   2835 Uncertain Significance
-#    333 Uncertain Significance: likely benign
-#     61 Uncertain Significance: likely pathogenic
+#   4323 Benign
+#   4267 Pathogenic
+#   2908 Uncertain significance
+#    396 Uncertain significance: likely benign
+#    114 Uncertain significance: likely pathogenic
     foreach subtrack (Benign Pathogenic)
       grep -w  $subtrack isca.bed > isca$subtrack.bed
       hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
         -allowStartEqualEnd hg19 isca$subtrack isca$subtrack.bed
     end
-#Loaded 4250 elements of size 11
-#Loaded 4063 elements of size 11
+#Read 4323 elements of size 11 from iscaBenign.bed
+#Read 4267 elements of size 11 from iscaPathogenic.bed
 
     # The subcategories of Uncertain need a bit more sophisticated treatment:
     set subtrack = Uncertain
     grep -w $subtrack isca.bed \
-    | grep -v 'Uncertain Significance: likely' \
+    | grep -vi 'Uncertain Significance: likely' \
       > isca$subtrack.bed
     hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
       -allowStartEqualEnd hg19 isca$subtrack isca$subtrack.bed
-#Loaded 2835 elements of size 11
+#Read 2908 elements of size 11 from iscaUncertain.bed
+
     foreach unc (benign pathogenic)
       set subtrack = Likely`perl -we 'print ucfirst("'$unc'");'`
-      grep -w "Uncertain Significance: likely $unc" isca.bed \
+      grep -wi "Uncertain Significance: likely $unc" isca.bed \
         > isca$subtrack.bed
       hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
         -allowStartEqualEnd hg19 isca$subtrack isca$subtrack.bed
     end
-#Loaded 333 elements of size 11
-#Loaded 61 elements of size 11
+#Read 396 elements of size 11 from iscaLikelyBenign.bed
+#Read 114 elements of size 11 from iscaLikelyPathogenic.bed
 
 
 ############################################################################
 # ISCA AGGREGATE PATHOGENIC TRACKS (DONE 2012-02-08 b0b)
+# ISCA AGGREGATE PATHOGENIC TRACKS (UPDATE DONE 2012-03-03 b0b)
 
   # get files of ISCA Pathogenic Gain and Loss  
-    set today = `date +%Y_%m_%d`
-    mkdir /hive/data/genomes/hg19/bed/isca/$today
-    cd /hive/data/genomes/hg19/bed/isca/$today
-    hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
-      WHERE attrVals LIKE '%number_loss%'" hg19 > hg19.iscaPathLoss
-    hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
-      WHERE attrVals LIKE '%number_gain%'" hg19 > hg19.iscaPathGain
+    # set today = `date +%Y_%m_%d`
+    # mkdir /hive/data/genomes/hg19/bed/isca/$today
+    # cd /hive/data/genomes/hg19/bed/isca/$today
+    # using angie's dir for update
+    cd /hive/data/genomes/hg19/bed/isca/2012_03_02
 
   # make bedGraphs
-    sort hg19.iscaPathGain | bedItemOverlapCount hg19 stdin > hg19.iscaPathGain.bedGraph
-    wc -l hg19.iscaPathGain.bedGraph
-#   1857 hg19.iscaPathGain.bedGraph
+      hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
+        WHERE attrVals LIKE '%number_gain%'" hg19 | sort \
+        | bedItemOverlapCount hg19 stdin > iscaPathGain.bedGraph 
 
-    sort hg19.iscaPathLoss | bedItemOverlapCount hg19 stdin > hg19.iscaPathLoss.bedGraph
-    wc -l hg19.iscaPathLoss.bedGraph
-#   3237 hg19.iscaPathLoss.bedGraph
+      hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenic \
+        WHERE attrVals LIKE '%number_loss%'" hg19 | sort \
+        | bedItemOverlapCount hg19 stdin > iscaPathLoss.bedGraph 
 
   # load tables
     hgLoadBed -bedGraph=4 hg19 iscaPathGainCum hg19.iscaPathGain.bedGraph
-#   Read 1857 elements of size 4 from hg19.iscaPathGain.bedGraph
+#   Read 1919 elements of size 4 from hg19.iscaPathGain.bedGraph
 
     hgLoadBed -bedGraph=4 hg19 iscaPathLossCum hg19.iscaPathLoss.bedGraph
-#   Read 3237 elements of size 4 from hg19.iscaPathLoss.bedGraph
+#   Read 3352 elements of size 4 from hg19.iscaPathLoss.bedGraph
  
-  # trackDb
+  # trackDb (these values from original load, not update)
   # get 2 stdDev value to set default maxHeightPixels 
     # use average of: median + 2 SD - would mean be better?
     # use same viewLimit for both:  average the two
@@ -18338,4 +18338,64 @@ cat table.info | while read -a line; do
      echo "        type bigWig "$min" "$max
      echo
   done >> ${db}.ra 
-done 
+done
+
+##############################################################################
+# LASTZ MOUSE Mm10 (DONE - 2012-03-08 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
+    cd /hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
+
+    cat << '_EOF_' > DEF
+# human vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_SMSK=/scratch/data/hg19/lineageSpecificRepeats
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm9
+SEQ2_DIR=/scratch/data/mm10/nib
+SEQ2_SMSK=/scratch/data/mm10/notInOthers
+SEQ2_LEN=/scratch/data/mm10/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzMm10.2012-03-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    197m23.436s
+    cat fb.hg19.chainMm10Link.txt
+    #	1021265143 bases of 2897316137 (35.249%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzMm10.2012-03-07 lastz.mm10
+
+    #	and the swap
+    mkdir /hive/data/genomes/mm10/bed/blastz.hg19.swap
+    cd /hive/data/genomes/mm10/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzMm10.2012-03-07/DEF \
+	-swap -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    72m32.794s
+    cat fb.mm10.chainHg19Link.txt
+    #	1014045890 bases of 2652783500 (38.226%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+#########################################################################

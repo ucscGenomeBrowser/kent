@@ -10,7 +10,7 @@ cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId SL335
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqA549ControlPcr2xDex100nmAlnRep1.bam
@@ -32,7 +32,7 @@ cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId SL335
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqA549ControlPcr2xDex100nmRawDataRep1.fastq.gz
@@ -54,7 +54,7 @@ cell A549
 composite wgEncodeHudsonalphaChipSeq
 controlId SL335
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqA549ControlPcr2xDex100nmRawRep1.bigWig
@@ -565,7 +565,7 @@ cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId SL516
 dataType ChipSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-03-25
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
@@ -2467,7 +2467,7 @@ cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId SL517
 dataType ChipSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-03-25
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
@@ -3909,7 +3909,7 @@ cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId SL678
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqGm12878ControlPcr1xAlnRep2.bam
@@ -3931,7 +3931,7 @@ cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId SL678
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqGm12878ControlPcr1xRawDataRep2.fastq.gz
@@ -3953,7 +3953,7 @@ cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId SL678
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqGm12878ControlPcr1xRawRep2.bigWig
@@ -3975,7 +3975,7 @@ cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL294
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xAlnRep1.bam
@@ -3997,7 +3997,7 @@ cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL295
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xAlnRep2.bam
@@ -4019,7 +4019,7 @@ cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL294
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawDataRep1.fastq.gz
@@ -4041,7 +4041,7 @@ cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL295
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawDataRep2.fastq.gz
@@ -4063,7 +4063,7 @@ cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL294
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawRep1.bigWig
@@ -4085,7 +4085,7 @@ cell HepG2
 composite wgEncodeHudsonalphaChipSeq
 controlId SL295
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 fileName wgEncodeHudsonalphaChipSeqHepg2ControlPcr2xRawRep2.bigWig
@@ -7333,7 +7333,7 @@ cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL16
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 expId 1673
@@ -7356,7 +7356,7 @@ cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL412
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 expId 1673
@@ -7379,7 +7379,7 @@ cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL16
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 expId 1673
@@ -7402,7 +7402,7 @@ cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL412
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 expId 1673
@@ -7425,7 +7425,7 @@ cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL16
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 expId 1673
@@ -7448,7 +7448,7 @@ cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
 controlId SL412
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 expId 1673
@@ -10624,7 +10624,7 @@ cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId SL516
 dataType ChipSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-03-25
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
@@ -12527,7 +12527,7 @@ cell GM12878
 composite wgEncodeHudsonalphaChipSeq
 controlId SL517
 dataType ChipSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-03-25
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
