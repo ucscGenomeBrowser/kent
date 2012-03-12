@@ -1,3 +1,8 @@
+metaObject wgEncodeChromatinMap
+objType composite
+composite wgEncodeChromatinMap
+expVars lab,dataType,cell,treatment,antibody
+
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep1AosmcSerumfree
 objType file
 cell AoSMC
@@ -73,23 +78,6 @@ labVersion align_on_cluster.pl v 1
 project wgEncode
 replicate 1
 subId 960
-view Alignments
-
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep1Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType DnaseSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-11-08
-dateUnrestricted 2009-08-08
-fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm12878.tagAlign.gz
-grant Crawford
-lab Duke
-project wgEncode
-replicate 1
-subId 31
 view Alignments
 
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep1Gm12878V2
@@ -264,24 +252,6 @@ replicate 1
 subId 877
 view Alignments
 
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep1Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeDukeDNaseSeqAlignmentsRep1Helas3.tagAlign.gz
-grant Crawford
-lab Duke
-labVersion Maq 0.7.1
-project wgEncode
-replicate 1
-subId 280
-view Alignments
-
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep1Helas3Ifna4h
 objType file
 cell HeLa-S3
@@ -321,24 +291,6 @@ project wgEncode
 replicate 1
 subId 495
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep1Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType DnaseSeq
-dataVersion ENCODE May 2009 Freeze
-dateSubmitted 2009-03-11
-dateUnrestricted 2010-01-15
-fileName wgEncodeDukeDNaseSeqAlignmentsRep1Hepg2.tagAlign.gz
-grant Crawford
-lab Duke
-labVersion Maq 0.7.1
-project wgEncode
-replicate 1
-subId 272
 view Alignments
 
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep1Hepg2V2
@@ -417,24 +369,6 @@ labVersion align_on_cluster.pl v 1
 project wgEncode
 replicate 1
 subId 545
-view Alignments
-
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep1K562
-objType file
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType DnaseSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-12-07
-dateUnrestricted 2009-08-07
-fileName wgEncodeDukeDNaseSeqAlignmentsRep1K562.tagAlign.gz
-grant Crawford
-lab Duke
-labVersion Maq 0.6.5
-project wgEncode
-replicate 1
-subId 112
 view Alignments
 
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep1K562V2
@@ -707,23 +641,6 @@ replicate 2
 subId 960
 view Alignments
 
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep2Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType DnaseSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-11-08
-dateUnrestricted 2009-08-08
-fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm12878.tagAlign.gz
-grant Crawford
-lab Duke
-project wgEncode
-replicate 2
-subId 31
-view Alignments
-
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep2Gm12878V2
 objType file
 cell GM12878
@@ -897,24 +814,6 @@ replicate 2
 subId 877
 view Alignments
 
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep2Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeDukeDNaseSeqAlignmentsRep2Helas3.tagAlign.gz
-grant Crawford
-lab Duke
-labVersion Maq 0.7.1
-project wgEncode
-replicate 2
-subId 280
-view Alignments
-
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep2Helas3Ifna4h
 objType file
 cell HeLa-S3
@@ -954,24 +853,6 @@ project wgEncode
 replicate 2
 subId 495
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep2Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-11
-dateUnrestricted 2009-12-11
-fileName wgEncodeDukeDNaseSeqAlignmentsRep2Hepg2.tagAlign.gz
-grant Crawford
-lab Duke
-labVersion Maq 0.7.1
-project wgEncode
-replicate 2
-subId 272
 view Alignments
 
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep2Hepg2V2
@@ -1050,24 +931,6 @@ labVersion align_on_cluster.pl v 1
 project wgEncode
 replicate 2
 subId 545
-view Alignments
-
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep2K562
-objType file
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType DnaseSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-12-07
-dateUnrestricted 2009-08-07
-fileName wgEncodeDukeDNaseSeqAlignmentsRep2K562.tagAlign.gz
-grant Crawford
-lab Duke
-labVersion Maq 0.6.5
-project wgEncode
-replicate 2
-subId 112
 view Alignments
 
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep2K562V2
@@ -1282,23 +1145,6 @@ replicate 3
 subId 960
 view Alignments
 
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep3Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType DnaseSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-11-08
-dateUnrestricted 2009-08-08
-fileName wgEncodeDukeDNaseSeqAlignmentsRep3Gm12878.tagAlign.gz
-grant Crawford
-lab Duke
-project wgEncode
-replicate 3
-subId 31
-view Alignments
-
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep3Gm12878V2
 objType file
 cell GM12878
@@ -1339,24 +1185,6 @@ replicate 3
 subId 850
 view Alignments
 
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep3Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeDukeDNaseSeqAlignmentsRep3Helas3.tagAlign.gz
-grant Crawford
-lab Duke
-labVersion Maq 0.7.1
-project wgEncode
-replicate 3
-subId 280
-view Alignments
-
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep3Helas3V2
 objType file
 cell HeLa-S3
@@ -1376,24 +1204,6 @@ project wgEncode
 replicate 3
 subId 495
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeDukeDNaseSeqAlignmentsRep3Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-11
-dateUnrestricted 2009-12-11
-fileName wgEncodeDukeDNaseSeqAlignmentsRep3Hepg2.tagAlign.gz
-grant Crawford
-lab Duke
-labVersion Maq 0.7.1
-project wgEncode
-replicate 3
-subId 272
 view Alignments
 
 metaObject wgEncodeDukeDNaseSeqAlignmentsRep3Hepg2V2
@@ -2659,24 +2469,6 @@ replicate 1
 subId 881
 view RawData
 
-metaObject wgEncodeDukeDNaseSeqRawDataRep1Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2008-12-11
-dateUnrestricted 2009-08-11
-fileName wgEncodeDukeDNaseSeqRawDataRep1Gm12878.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 1
-subId 131
-view RawData
-
 metaObject wgEncodeDukeDNaseSeqRawDataRep1Gm12878V2
 objType file
 cell GM12878
@@ -2842,24 +2634,6 @@ replicate 1
 subId 877
 view RawData
 
-metaObject wgEncodeDukeDNaseSeqRawDataRep1Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeDukeDNaseSeqRawDataRep1Helas3.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 1
-subId 280
-view RawData
-
 metaObject wgEncodeDukeDNaseSeqRawDataRep1Helas3Ifna4h
 objType file
 cell HeLa-S3
@@ -2899,24 +2673,6 @@ subId 495
 submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeDukeDNaseSeqRawDataRep1Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-11
-dateUnrestricted 2009-12-11
-fileName wgEncodeDukeDNaseSeqRawDataRep1Hepg2.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 1
-subId 272
-view RawData
-
 metaObject wgEncodeDukeDNaseSeqRawDataRep1Hepg2V2
 objType file
 cell HepG2
@@ -2953,24 +2709,6 @@ lab Duke
 project wgEncode
 replicate 1
 subId 545
-view RawData
-
-metaObject wgEncodeDukeDNaseSeqRawDataRep1K562
-objType file
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2008-12-10
-dateUnrestricted 2009-08-10
-fileName wgEncodeDukeDNaseSeqRawDataRep1K562.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 1
-subId 127
 view RawData
 
 metaObject wgEncodeDukeDNaseSeqRawDataRep1K562V2
@@ -3118,24 +2856,6 @@ lab Duke
 project wgEncode
 replicate 2
 subId 881
-view RawData
-
-metaObject wgEncodeDukeDNaseSeqRawDataRep2Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2008-12-11
-dateUnrestricted 2009-08-11
-fileName wgEncodeDukeDNaseSeqRawDataRep2Gm12878.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 2
-subId 131
 view RawData
 
 metaObject wgEncodeDukeDNaseSeqRawDataRep2Gm12878V2
@@ -3303,24 +3023,6 @@ replicate 2
 subId 877
 view RawData
 
-metaObject wgEncodeDukeDNaseSeqRawDataRep2Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeDukeDNaseSeqRawDataRep2Helas3.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 2
-subId 280
-view RawData
-
 metaObject wgEncodeDukeDNaseSeqRawDataRep2Helas3Ifna4h
 objType file
 cell HeLa-S3
@@ -3360,24 +3062,6 @@ subId 495
 submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeDukeDNaseSeqRawDataRep2Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-11
-dateUnrestricted 2009-12-11
-fileName wgEncodeDukeDNaseSeqRawDataRep2Hepg2.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 2
-subId 272
-view RawData
-
 metaObject wgEncodeDukeDNaseSeqRawDataRep2Hepg2V2
 objType file
 cell HepG2
@@ -3414,24 +3098,6 @@ lab Duke
 project wgEncode
 replicate 2
 subId 545
-view RawData
-
-metaObject wgEncodeDukeDNaseSeqRawDataRep2K562
-objType file
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2008-12-10
-dateUnrestricted 2009-08-10
-fileName wgEncodeDukeDNaseSeqRawDataRep2K562.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 2
-subId 127
 view RawData
 
 metaObject wgEncodeDukeDNaseSeqRawDataRep2K562V2
@@ -3563,24 +3229,6 @@ replicate 2
 subId 594
 view RawData
 
-metaObject wgEncodeDukeDNaseSeqRawDataRep3Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2008-12-11
-dateUnrestricted 2009-08-11
-fileName wgEncodeDukeDNaseSeqRawDataRep3Gm12878.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 3
-subId 131
-view RawData
-
 metaObject wgEncodeDukeDNaseSeqRawDataRep3Gm12878V2
 objType file
 cell GM12878
@@ -3619,24 +3267,6 @@ replicate 3
 subId 850
 view RawData
 
-metaObject wgEncodeDukeDNaseSeqRawDataRep3Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeDukeDNaseSeqRawDataRep3Helas3.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 3
-subId 280
-view RawData
-
 metaObject wgEncodeDukeDNaseSeqRawDataRep3Helas3V2
 objType file
 cell HeLa-S3
@@ -3655,24 +3285,6 @@ project wgEncode
 replicate 3
 subId 495
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeDukeDNaseSeqRawDataRep3Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType DnaseSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-11
-dateUnrestricted 2009-12-11
-fileName wgEncodeDukeDNaseSeqRawDataRep3Hepg2.fastq.gz
-grant Crawford
-lab Duke
-labVersion Illumina
-project wgEncode
-replicate 3
-subId 272
 view RawData
 
 metaObject wgEncodeDukeDNaseSeqRawDataRep3Hepg2V2
@@ -4294,23 +3906,6 @@ project wgEncode
 subId 686
 view Alignments
 
-metaObject wgEncodeUncFAIREseqAlignmentsRep1Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeUncFAIREseqAlignmentsRep1Gm12878.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 1
-subId 231
-view Alignments
-
 metaObject wgEncodeUncFAIREseqAlignmentsRep1Gm12878V2
 objType file
 cell GM12878
@@ -4389,23 +3984,6 @@ replicate 1
 subId 629
 view Alignments
 
-metaObject wgEncodeUncFAIREseqAlignmentsRep1Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUncFAIREseqAlignmentsRep1Helas3.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 1
-subId 285
-view Alignments
-
 metaObject wgEncodeUncFAIREseqAlignmentsRep1Helas3Ifna4h
 objType file
 cell HeLa-S3
@@ -4467,23 +4045,6 @@ subId 639
 submittedDataVersion V2 - new sequences generated
 view Alignments
 
-metaObject wgEncodeUncFAIREseqAlignmentsRep1Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType FaireSeq
-dataVersion ENCODE May 2009 Freeze
-dateSubmitted 2009-04-17
-dateUnrestricted 2010-01-17
-fileName wgEncodeUncFAIREseqAlignmentsRep1Hepg2.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 1
-subId 286
-view Alignments
-
 metaObject wgEncodeUncFAIREseqAlignmentsRep1Hepg2V2
 objType file
 cell HepG2
@@ -4522,24 +4083,6 @@ labVersion align_on_cluster.pl v 1
 project wgEncode
 replicate 1
 subId 546
-view Alignments
-
-metaObject wgEncodeUncFAIREseqAlignmentsRep1K562
-objType file
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType FaireSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-12-07
-dateUnrestricted 2009-08-07
-fileName wgEncodeUncFAIREseqAlignmentsRep1K562.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 1
-softwareVersion Maq 0.6.5
-subId 113
 view Alignments
 
 metaObject wgEncodeUncFAIREseqAlignmentsRep1K562V2
@@ -4640,23 +4183,6 @@ replicate 1
 subId 630
 view Alignments
 
-metaObject wgEncodeUncFAIREseqAlignmentsRep2Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeUncFAIREseqAlignmentsRep2Gm12878.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 2
-subId 231
-view Alignments
-
 metaObject wgEncodeUncFAIREseqAlignmentsRep2Gm12878V2
 objType file
 cell GM12878
@@ -4735,23 +4261,6 @@ replicate 2
 subId 629
 view Alignments
 
-metaObject wgEncodeUncFAIREseqAlignmentsRep2Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUncFAIREseqAlignmentsRep2Helas3.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 2
-subId 285
-view Alignments
-
 metaObject wgEncodeUncFAIREseqAlignmentsRep2Helas3Ifna4h
 objType file
 cell HeLa-S3
@@ -4814,23 +4323,6 @@ subId 639
 submittedDataVersion V2 - new sequences generated
 view Alignments
 
-metaObject wgEncodeUncFAIREseqAlignmentsRep2Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType FaireSeq
-dataVersion ENCODE May 2009 Freeze
-dateSubmitted 2009-04-17
-dateUnrestricted 2010-01-17
-fileName wgEncodeUncFAIREseqAlignmentsRep2Hepg2.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 2
-subId 286
-view Alignments
-
 metaObject wgEncodeUncFAIREseqAlignmentsRep2Hepg2V2
 objType file
 cell HepG2
@@ -4869,24 +4361,6 @@ labVersion align_on_cluster.pl v 1
 project wgEncode
 replicate 2
 subId 546
-view Alignments
-
-metaObject wgEncodeUncFAIREseqAlignmentsRep2K562
-objType file
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType FaireSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-12-07
-dateUnrestricted 2009-08-07
-fileName wgEncodeUncFAIREseqAlignmentsRep2K562.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 2
-softwareVersion Maq 0.6.5
-subId 113
 view Alignments
 
 metaObject wgEncodeUncFAIREseqAlignmentsRep2K562V2
@@ -4988,23 +4462,6 @@ replicate 2
 subId 630
 view Alignments
 
-metaObject wgEncodeUncFAIREseqAlignmentsRep3Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeUncFAIREseqAlignmentsRep3Gm12878.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 3
-subId 231
-view Alignments
-
 metaObject wgEncodeUncFAIREseqAlignmentsRep3Gm12878V2
 objType file
 cell GM12878
@@ -5024,23 +4481,6 @@ project wgEncode
 replicate 3
 subId 471
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeUncFAIREseqAlignmentsRep3Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUncFAIREseqAlignmentsRep3Helas3.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 3
-subId 285
 view Alignments
 
 metaObject wgEncodeUncFAIREseqAlignmentsRep3Helas3V2
@@ -5065,23 +4505,6 @@ subId 494
 submittedDataVersion V2 - new sequences generated
 view Alignments
 
-metaObject wgEncodeUncFAIREseqAlignmentsRep3Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType FaireSeq
-dataVersion ENCODE May 2009 Freeze
-dateSubmitted 2009-04-17
-dateUnrestricted 2010-01-17
-fileName wgEncodeUncFAIREseqAlignmentsRep3Hepg2.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 3
-subId 286
-view Alignments
-
 metaObject wgEncodeUncFAIREseqAlignmentsRep3Hepg2V2
 objType file
 cell HepG2
@@ -5101,24 +4524,6 @@ project wgEncode
 replicate 3
 subId 557
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeUncFAIREseqAlignmentsRep3K562
-objType file
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType FaireSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-12-07
-dateUnrestricted 2009-08-07
-fileName wgEncodeUncFAIREseqAlignmentsRep3K562.tagAlign.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 3
-softwareVersion Maq 0.6.5
-subId 113
 view Alignments
 
 metaObject wgEncodeUncFAIREseqAlignmentsRep3K562V2
@@ -5762,23 +5167,6 @@ project wgEncode
 subId 686
 view RawData
 
-metaObject wgEncodeUncFAIREseqRawDataRep1Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeUncFAIREseqRawDataRep1Gm12878.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 1
-subId 231
-view RawData
-
 metaObject wgEncodeUncFAIREseqRawDataRep1Gm12878V2
 objType file
 cell GM12878
@@ -5853,23 +5241,6 @@ replicate 1
 subId 629
 view RawData
 
-metaObject wgEncodeUncFAIREseqRawDataRep1Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUncFAIREseqRawDataRep1Helas3.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 1
-subId 285
-view RawData
-
 metaObject wgEncodeUncFAIREseqRawDataRep1Helas3Ifna4h
 objType file
 cell HeLa-S3
@@ -5928,23 +5299,6 @@ subId 639
 submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeUncFAIREseqRawDataRep1Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType FaireSeq
-dataVersion ENCODE May 2009 Freeze
-dateSubmitted 2009-04-17
-dateUnrestricted 2010-01-17
-fileName wgEncodeUncFAIREseqRawDataRep1Hepg2.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 1
-subId 286
-view RawData
-
 metaObject wgEncodeUncFAIREseqRawDataRep1Hepg2V2
 objType file
 cell HepG2
@@ -5981,24 +5335,6 @@ lab UNC
 project wgEncode
 replicate 1
 subId 546
-view RawData
-
-metaObject wgEncodeUncFAIREseqRawDataRep1K562
-objType file
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType FaireSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-12-07
-dateUnrestricted 2009-08-07
-fileName wgEncodeUncFAIREseqRawDataRep1K562.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 1
-softwareVersion Illumina
-subId 113
 view RawData
 
 metaObject wgEncodeUncFAIREseqRawDataRep1K562V2
@@ -6094,23 +5430,6 @@ replicate 1
 subId 630
 view RawData
 
-metaObject wgEncodeUncFAIREseqRawDataRep2Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeUncFAIREseqRawDataRep2Gm12878.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 2
-subId 231
-view RawData
-
 metaObject wgEncodeUncFAIREseqRawDataRep2Gm12878V2
 objType file
 cell GM12878
@@ -6185,23 +5504,6 @@ replicate 2
 subId 629
 view RawData
 
-metaObject wgEncodeUncFAIREseqRawDataRep2Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUncFAIREseqRawDataRep2Helas3.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 2
-subId 285
-view RawData
-
 metaObject wgEncodeUncFAIREseqRawDataRep2Helas3Ifna4h
 objType file
 cell HeLa-S3
@@ -6261,23 +5563,6 @@ subId 639
 submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeUncFAIREseqRawDataRep2Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType FaireSeq
-dataVersion ENCODE May 2009 Freeze
-dateSubmitted 2009-04-17
-dateUnrestricted 2010-01-17
-fileName wgEncodeUncFAIREseqRawDataRep2Hepg2.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 2
-subId 286
-view RawData
-
 metaObject wgEncodeUncFAIREseqRawDataRep2Hepg2V2
 objType file
 cell HepG2
@@ -6314,24 +5599,6 @@ lab UNC
 project wgEncode
 replicate 2
 subId 546
-view RawData
-
-metaObject wgEncodeUncFAIREseqRawDataRep2K562
-objType file
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType FaireSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-12-07
-dateUnrestricted 2009-08-07
-fileName wgEncodeUncFAIREseqRawDataRep2K562.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 2
-softwareVersion Illumina
-subId 113
 view RawData
 
 metaObject wgEncodeUncFAIREseqRawDataRep2K562V2
@@ -6428,23 +5695,6 @@ replicate 2
 subId 630
 view RawData
 
-metaObject wgEncodeUncFAIREseqRawDataRep3Gm12878
-objType file
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeUncFAIREseqRawDataRep3Gm12878.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 3
-subId 231
-view RawData
-
 metaObject wgEncodeUncFAIREseqRawDataRep3Gm12878V2
 objType file
 cell GM12878
@@ -6463,23 +5713,6 @@ project wgEncode
 replicate 3
 subId 471
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeUncFAIREseqRawDataRep3Helas3
-objType file
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType FaireSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUncFAIREseqRawDataRep3Helas3.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 3
-subId 285
 view RawData
 
 metaObject wgEncodeUncFAIREseqRawDataRep3Helas3V2
@@ -6503,23 +5736,6 @@ subId 494
 submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeUncFAIREseqRawDataRep3Hepg2
-objType file
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType FaireSeq
-dataVersion ENCODE May 2009 Freeze
-dateSubmitted 2009-04-17
-dateUnrestricted 2010-01-17
-fileName wgEncodeUncFAIREseqRawDataRep3Hepg2.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 3
-subId 286
-view RawData
-
 metaObject wgEncodeUncFAIREseqRawDataRep3Hepg2V2
 objType file
 cell HepG2
@@ -6538,24 +5754,6 @@ project wgEncode
 replicate 3
 subId 557
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeUncFAIREseqRawDataRep3K562
-objType file
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType FaireSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-12-07
-dateUnrestricted 2009-08-07
-fileName wgEncodeUncFAIREseqRawDataRep3K562.fastq.gz
-grant Crawford
-lab UNC
-project wgEncode
-replicate 3
-softwareVersion Illumina
-subId 113
 view RawData
 
 metaObject wgEncodeUncFAIREseqRawDataRep3K562V2
@@ -6881,7 +6079,7 @@ cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 533
@@ -6900,7 +6098,7 @@ cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 557
@@ -6919,7 +6117,7 @@ cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 544
@@ -6938,7 +6136,7 @@ cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 546
@@ -6957,7 +6155,7 @@ cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 549
@@ -6976,7 +6174,7 @@ cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 531
@@ -6995,7 +6193,7 @@ cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
 dataType FaireSeq
-dataVersion post ENCODE Jan 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
 expId 558
@@ -7107,25 +6305,6 @@ project wgEncode
 replicate 1
 setType exp
 subId 472
-view Alignments
-
-metaObject wgEncodeUtaChIPseqAlignmentsRep1Gm12878Ctcf
-objType file
-antibody CTCF
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12878Ctcf.tagAlign.gz
-grant Crawford
-lab UT-A
-project wgEncode
-replicate 1
-setType exp
-subId 228
 view Alignments
 
 metaObject wgEncodeUtaChIPseqAlignmentsRep1Gm12878CtcfV2
@@ -7277,26 +6456,6 @@ setType exp
 subId 650
 view Alignments
 
-metaObject wgEncodeUtaChIPseqAlignmentsRep1Helas3Cmyc
-objType file
-antibody c-Myc
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqAlignmentsRep1Helas3Cmyc.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.7.1
-project wgEncode
-replicate 1
-setType exp
-subId 282
-view Alignments
-
 metaObject wgEncodeUtaChIPseqAlignmentsRep1Helas3CmycV2
 objType file
 antibody c-Myc
@@ -7318,26 +6477,6 @@ replicate 1
 setType exp
 subId 642
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeUtaChIPseqAlignmentsRep1Helas3Ctcf
-objType file
-antibody CTCF
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqAlignmentsRep1Helas3Ctcf.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.7.1
-project wgEncode
-replicate 1
-setType exp
-subId 281
 view Alignments
 
 metaObject wgEncodeUtaChIPseqAlignmentsRep1Helas3CtcfV2
@@ -7383,26 +6522,6 @@ setType exp
 subId 885
 view Alignments
 
-metaObject wgEncodeUtaChIPseqAlignmentsRep1Hepg2Cmyc
-objType file
-antibody c-Myc
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUtaChIPseqAlignmentsRep1Hepg2Cmyc.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.7.1
-project wgEncode
-replicate 1
-setType exp
-subId 284
-view Alignments
-
 metaObject wgEncodeUtaChIPseqAlignmentsRep1Hepg2CmycV2
 objType file
 antibody c-Myc
@@ -7424,26 +6543,6 @@ replicate 1
 setType exp
 subId 593
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeUtaChIPseqAlignmentsRep1Hepg2Ctcf
-objType file
-antibody CTCF
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqAlignmentsRep1Hepg2Ctcf.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.7.1
-project wgEncode
-replicate 1
-setType exp
-subId 283
 view Alignments
 
 metaObject wgEncodeUtaChIPseqAlignmentsRep1Hepg2CtcfV2
@@ -7532,26 +6631,6 @@ setType exp
 subId 552
 view Alignments
 
-metaObject wgEncodeUtaChIPseqAlignmentsRep1K562Cmyc
-objType file
-antibody c-Myc
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqAlignmentsRep1K562Cmyc.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.6.5
-project wgEncode
-replicate 1
-setType exp
-subId 245
-view Alignments
-
 metaObject wgEncodeUtaChIPseqAlignmentsRep1K562CmycV2
 objType file
 antibody c-Myc
@@ -7573,26 +6652,6 @@ replicate 1
 setType exp
 subId 482
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeUtaChIPseqAlignmentsRep1K562Ctcf
-objType file
-antibody CTCF
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqAlignmentsRep1K562Ctcf.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.6.5
-project wgEncode
-replicate 1
-setType exp
-subId 244
 view Alignments
 
 metaObject wgEncodeUtaChIPseqAlignmentsRep1K562CtcfV2
@@ -7765,25 +6824,6 @@ setType exp
 subId 472
 view Alignments
 
-metaObject wgEncodeUtaChIPseqAlignmentsRep2Gm12878Ctcf
-objType file
-antibody CTCF
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12878Ctcf.tagAlign.gz
-grant Crawford
-lab UT-A
-project wgEncode
-replicate 2
-setType exp
-subId 228
-view Alignments
-
 metaObject wgEncodeUtaChIPseqAlignmentsRep2Gm12878CtcfV2
 objType file
 antibody CTCF
@@ -7933,26 +6973,6 @@ setType exp
 subId 650
 view Alignments
 
-metaObject wgEncodeUtaChIPseqAlignmentsRep2Helas3Cmyc
-objType file
-antibody c-Myc
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqAlignmentsRep2Helas3Cmyc.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.7.1
-project wgEncode
-replicate 2
-setType exp
-subId 282
-view Alignments
-
 metaObject wgEncodeUtaChIPseqAlignmentsRep2Helas3CmycV2
 objType file
 antibody c-Myc
@@ -7974,26 +6994,6 @@ replicate 2
 setType exp
 subId 642
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeUtaChIPseqAlignmentsRep2Helas3Ctcf
-objType file
-antibody CTCF
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqAlignmentsRep2Helas3Ctcf.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.7.1
-project wgEncode
-replicate 2
-setType exp
-subId 281
 view Alignments
 
 metaObject wgEncodeUtaChIPseqAlignmentsRep2Helas3CtcfV2
@@ -8039,26 +7039,6 @@ setType exp
 subId 885
 view Alignments
 
-metaObject wgEncodeUtaChIPseqAlignmentsRep2Hepg2Cmyc
-objType file
-antibody c-Myc
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUtaChIPseqAlignmentsRep2Hepg2Cmyc.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.7.1
-project wgEncode
-replicate 2
-setType exp
-subId 284
-view Alignments
-
 metaObject wgEncodeUtaChIPseqAlignmentsRep2Hepg2CmycV2
 objType file
 antibody c-Myc
@@ -8080,26 +7060,6 @@ replicate 2
 setType exp
 subId 593
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeUtaChIPseqAlignmentsRep2Hepg2Ctcf
-objType file
-antibody CTCF
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqAlignmentsRep2Hepg2Ctcf.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.7.1
-project wgEncode
-replicate 2
-setType exp
-subId 283
 view Alignments
 
 metaObject wgEncodeUtaChIPseqAlignmentsRep2Hepg2CtcfV2
@@ -8188,26 +7148,6 @@ setType exp
 subId 552
 view Alignments
 
-metaObject wgEncodeUtaChIPseqAlignmentsRep2K562Cmyc
-objType file
-antibody c-Myc
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqAlignmentsRep2K562Cmyc.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.6.5
-project wgEncode
-replicate 2
-setType exp
-subId 245
-view Alignments
-
 metaObject wgEncodeUtaChIPseqAlignmentsRep2K562CmycV2
 objType file
 antibody c-Myc
@@ -8229,26 +7169,6 @@ replicate 2
 setType exp
 subId 482
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeUtaChIPseqAlignmentsRep2K562Ctcf
-objType file
-antibody CTCF
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqAlignmentsRep2K562Ctcf.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.6.5
-project wgEncode
-replicate 2
-setType exp
-subId 244
 view Alignments
 
 metaObject wgEncodeUtaChIPseqAlignmentsRep2K562CtcfV2
@@ -8400,25 +7320,6 @@ setType exp
 subId 969
 view Alignments
 
-metaObject wgEncodeUtaChIPseqAlignmentsRep3Gm12878Ctcf
-objType file
-antibody CTCF
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeUtaChIPseqAlignmentsRep3Gm12878Ctcf.tagAlign.gz
-grant Crawford
-lab UT-A
-project wgEncode
-replicate 3
-setType exp
-subId 228
-view Alignments
-
 metaObject wgEncodeUtaChIPseqAlignmentsRep3Gm12878CtcfV2
 objType file
 antibody CTCF
@@ -8440,26 +7341,6 @@ replicate 3
 setType exp
 subId 468
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeUtaChIPseqAlignmentsRep3Hepg2Cmyc
-objType file
-antibody c-Myc
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUtaChIPseqAlignmentsRep3Hepg2Cmyc.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.7.1
-project wgEncode
-replicate 3
-setType exp
-subId 284
 view Alignments
 
 metaObject wgEncodeUtaChIPseqAlignmentsRep3Hepg2CmycV2
@@ -8506,26 +7387,6 @@ setType exp
 subId 589
 view Alignments
 
-metaObject wgEncodeUtaChIPseqAlignmentsRep3K562Cmyc
-objType file
-antibody c-Myc
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqAlignmentsRep3K562Cmyc.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.6.5
-project wgEncode
-replicate 3
-setType exp
-subId 245
-view Alignments
-
 metaObject wgEncodeUtaChIPseqAlignmentsRep3K562CmycV2
 objType file
 antibody c-Myc
@@ -8547,26 +7408,6 @@ replicate 3
 setType exp
 subId 482
 submittedDataVersion V2 - new sequences generated
-view Alignments
-
-metaObject wgEncodeUtaChIPseqAlignmentsRep3K562Ctcf
-objType file
-antibody CTCF
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqAlignmentsRep3K562Ctcf.tagAlign.gz
-grant Crawford
-lab UT-A
-labVersion Maq 0.6.5
-project wgEncode
-replicate 3
-setType exp
-subId 244
 view Alignments
 
 metaObject wgEncodeUtaChIPseqAlignmentsRep3K562CtcfV2
@@ -9934,25 +8775,6 @@ setType exp
 subId 472
 view RawData
 
-metaObject wgEncodeUtaChIPseqRawDataRep1Gm12878Ctcf
-objType file
-antibody CTCF
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeUtaChIPseqRawDataRep1Gm12878Ctcf.fastq.gz
-grant Crawford
-lab UT-A
-project wgEncode
-replicate 1
-setType exp
-subId 228
-view RawData
-
 metaObject wgEncodeUtaChIPseqRawDataRep1Gm12878CtcfV2
 objType file
 antibody CTCF
@@ -10095,26 +8917,6 @@ setType exp
 subId 650
 view RawData
 
-metaObject wgEncodeUtaChIPseqRawDataRep1Helas3Cmyc
-objType file
-antibody c-Myc
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqRawDataRep1Helas3Cmyc.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 1
-setType exp
-subId 282
-view RawData
-
 metaObject wgEncodeUtaChIPseqRawDataRep1Helas3CmycV2
 objType file
 antibody c-Myc
@@ -10135,26 +8937,6 @@ replicate 1
 setType exp
 subId 642
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeUtaChIPseqRawDataRep1Helas3Ctcf
-objType file
-antibody CTCF
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqRawDataRep1Helas3Ctcf.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 1
-setType exp
-subId 281
 view RawData
 
 metaObject wgEncodeUtaChIPseqRawDataRep1Helas3CtcfV2
@@ -10199,26 +8981,6 @@ setType exp
 subId 885
 view RawData
 
-metaObject wgEncodeUtaChIPseqRawDataRep1Hepg2Cmyc
-objType file
-antibody c-Myc
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUtaChIPseqRawDataRep1Hepg2Cmyc.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 1
-setType exp
-subId 284
-view RawData
-
 metaObject wgEncodeUtaChIPseqRawDataRep1Hepg2CmycV2
 objType file
 antibody c-Myc
@@ -10239,26 +9001,6 @@ replicate 1
 setType exp
 subId 593
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeUtaChIPseqRawDataRep1Hepg2Ctcf
-objType file
-antibody CTCF
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqRawDataRep1Hepg2Ctcf.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 1
-setType exp
-subId 283
 view RawData
 
 metaObject wgEncodeUtaChIPseqRawDataRep1Hepg2CtcfV2
@@ -10343,26 +9085,6 @@ setType exp
 subId 552
 view RawData
 
-metaObject wgEncodeUtaChIPseqRawDataRep1K562Cmyc
-objType file
-antibody c-Myc
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqRawDataRep1K562Cmyc.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 1
-setType exp
-subId 245
-view RawData
-
 metaObject wgEncodeUtaChIPseqRawDataRep1K562CmycV2
 objType file
 antibody c-Myc
@@ -10383,26 +9105,6 @@ replicate 1
 setType exp
 subId 482
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeUtaChIPseqRawDataRep1K562Ctcf
-objType file
-antibody CTCF
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqRawDataRep1K562Ctcf.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 1
-setType exp
-subId 244
 view RawData
 
 metaObject wgEncodeUtaChIPseqRawDataRep1K562CtcfV2
@@ -10525,25 +9227,6 @@ project wgEncode
 replicate 2
 setType exp
 subId 472
-view RawData
-
-metaObject wgEncodeUtaChIPseqRawDataRep2Gm12878Ctcf
-objType file
-antibody CTCF
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeUtaChIPseqRawDataRep2Gm12878Ctcf.fastq.gz
-grant Crawford
-lab UT-A
-project wgEncode
-replicate 2
-setType exp
-subId 228
 view RawData
 
 metaObject wgEncodeUtaChIPseqRawDataRep2Gm12878CtcfV2
@@ -10688,26 +9371,6 @@ setType exp
 subId 650
 view RawData
 
-metaObject wgEncodeUtaChIPseqRawDataRep2Helas3Cmyc
-objType file
-antibody c-Myc
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqRawDataRep2Helas3Cmyc.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 2
-setType exp
-subId 282
-view RawData
-
 metaObject wgEncodeUtaChIPseqRawDataRep2Helas3CmycV2
 objType file
 antibody c-Myc
@@ -10728,26 +9391,6 @@ replicate 2
 setType exp
 subId 642
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeUtaChIPseqRawDataRep2Helas3Ctcf
-objType file
-antibody CTCF
-cell HeLa-S3
-composite wgEncodeChromatinMap
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqRawDataRep2Helas3Ctcf.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 2
-setType exp
-subId 281
 view RawData
 
 metaObject wgEncodeUtaChIPseqRawDataRep2Helas3CtcfV2
@@ -10792,26 +9435,6 @@ setType exp
 subId 885
 view RawData
 
-metaObject wgEncodeUtaChIPseqRawDataRep2Hepg2Cmyc
-objType file
-antibody c-Myc
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUtaChIPseqRawDataRep2Hepg2Cmyc.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 2
-setType exp
-subId 284
-view RawData
-
 metaObject wgEncodeUtaChIPseqRawDataRep2Hepg2CmycV2
 objType file
 antibody c-Myc
@@ -10832,26 +9455,6 @@ replicate 2
 setType exp
 subId 593
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeUtaChIPseqRawDataRep2Hepg2Ctcf
-objType file
-antibody CTCF
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeUtaChIPseqRawDataRep2Hepg2Ctcf.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 2
-setType exp
-subId 283
 view RawData
 
 metaObject wgEncodeUtaChIPseqRawDataRep2Hepg2CtcfV2
@@ -10936,26 +9539,6 @@ setType exp
 subId 552
 view RawData
 
-metaObject wgEncodeUtaChIPseqRawDataRep2K562Cmyc
-objType file
-antibody c-Myc
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqRawDataRep2K562Cmyc.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 2
-setType exp
-subId 245
-view RawData
-
 metaObject wgEncodeUtaChIPseqRawDataRep2K562CmycV2
 objType file
 antibody c-Myc
@@ -10976,26 +9559,6 @@ replicate 2
 setType exp
 subId 482
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeUtaChIPseqRawDataRep2K562Ctcf
-objType file
-antibody CTCF
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqRawDataRep2K562Ctcf.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 2
-setType exp
-subId 244
 view RawData
 
 metaObject wgEncodeUtaChIPseqRawDataRep2K562CtcfV2
@@ -11100,25 +9663,6 @@ setType exp
 subId 624
 view RawData
 
-metaObject wgEncodeUtaChIPseqRawDataRep3Gm12878Ctcf
-objType file
-antibody CTCF
-cell GM12878
-composite wgEncodeChromatinMap
-controlId GM12878/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-24
-dateUnrestricted 2009-11-24
-fileName wgEncodeUtaChIPseqRawDataRep3Gm12878Ctcf.fastq.gz
-grant Crawford
-lab UT-A
-project wgEncode
-replicate 3
-setType exp
-subId 228
-view RawData
-
 metaObject wgEncodeUtaChIPseqRawDataRep3Gm12878CtcfV2
 objType file
 antibody CTCF
@@ -11139,26 +9683,6 @@ replicate 3
 setType exp
 subId 468
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeUtaChIPseqRawDataRep3Hepg2Cmyc
-objType file
-antibody c-Myc
-cell HepG2
-composite wgEncodeChromatinMap
-controlId HepG2/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeUtaChIPseqRawDataRep3Hepg2Cmyc.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 3
-setType exp
-subId 284
 view RawData
 
 metaObject wgEncodeUtaChIPseqRawDataRep3Hepg2CmycV2
@@ -11203,26 +9727,6 @@ setType exp
 subId 589
 view RawData
 
-metaObject wgEncodeUtaChIPseqRawDataRep3K562Cmyc
-objType file
-antibody c-Myc
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqRawDataRep3K562Cmyc.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 3
-setType exp
-subId 245
-view RawData
-
 metaObject wgEncodeUtaChIPseqRawDataRep3K562CmycV2
 objType file
 antibody c-Myc
@@ -11243,26 +9747,6 @@ replicate 3
 setType exp
 subId 482
 submittedDataVersion V2 - new sequences generated
-view RawData
-
-metaObject wgEncodeUtaChIPseqRawDataRep3K562Ctcf
-objType file
-antibody CTCF
-cell K562
-composite wgEncodeChromatinMap
-controlId K562/Input
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeUtaChIPseqRawDataRep3K562Ctcf.fastq.gz
-grant Crawford
-lab UT-A
-labVersion Illumina
-project wgEncode
-replicate 3
-setType exp
-subId 244
 view RawData
 
 metaObject wgEncodeUtaChIPseqRawDataRep3K562CtcfV2
@@ -12292,4 +10776,4 @@ subId 871
 tableName wgEncodeUtaustinChIPseqSignalProgfib
 view Signal
 
-# MAGIC: -359811030
+# MAGIC: 409049379

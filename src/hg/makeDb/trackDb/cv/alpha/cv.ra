@@ -5601,11 +5601,11 @@ tag ESE14
 type Cell Line
 organism mouse
 category primaryCells
-description E14 mouse ES line PROVISIONAL
-age E14
+description mouse embryonic stem cell line E14
+age E0
 strain 129/Ola
 vendorName Santos lab
-vendorId E0
+vendorId E14
 orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
 color 65,105,225
 sex M
@@ -11777,19 +11777,19 @@ label 72 hour diff protocol B
 term diffProtC_24hr
 tag DIFFC24H
 type treatment
-description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration 
 label 24 hour diff protocol C
 
 term diffProtC_48hr
 tag DIFFC48H
 type treatment
-description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration
 label 48 hour diff protocol C
 
 term diffProtC_120hr
 tag DIFFC120H
 type treatment
-description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration 
 label 120 hour diff protocol C
 
 term DMSO_0.02pct
