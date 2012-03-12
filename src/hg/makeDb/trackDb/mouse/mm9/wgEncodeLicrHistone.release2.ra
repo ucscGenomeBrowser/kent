@@ -53,7 +53,7 @@ html wgEncodeLicrHistone.release2
 	track wgEncodeLicrHistoneViewPeaks
 	shortLabel Peaks
 	view Peaks
-	visibility dense
+	visibility pack
 	#viewUi on
 	subTrack wgEncodeLicrHistone
 	signalFilter 0
