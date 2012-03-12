@@ -529,6 +529,9 @@ encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	#	return
 
 	betaMdb = genNotes.newMdb
+	if args.composite not in c.alphaMetaDb:
+		print "FATAL ERROR: There is no composite level stanza in the alpha metaDb."
+		return
 	betaMdb[args.composite] = c.alphaMetaDb[args.composite]
 	writeBetaMdb(betaMdb, qaDir)
 	
