@@ -3215,15 +3215,35 @@ identifier consIndelsId
     hg17,hg18,hg19.consIndelsHgMmCanFam.name
     hg17,hg18,hg19.consIndelsHgMmCanFamConf.id
 
-identifier text2GenomeArticle
-"Article abstracts from publications"
-    $gbd.t2g.name dupeOk
-    $gbd.t2gArticle.displayId minCheck=0.82
+identifier text2genomeBlat
+"genome location to article relationship as mapped by BLAT"
+    $gbd.t2gBlat.name dupeOk
+    hgFixed.t2gArticle.displayId
 
 identifier text2GenomeSequence
-"Article to sequence relationship as mapped from publications"
-    $gbd.t2gArticle.pmcId
-    $gbd.t2gSequence.pmcId minCheck=0.99
+"article to sequence relationship"
+    hgFixed.t2gArticle.articleId
+    hgFixed.t2gSequenceAnnot.articleId
+
+identifier text2GenomeBandMatch
+"band match to article relationship"
+    $gbd.t2gMarkerBand.name dupeOk
+    hgFixed.t2gMarkerAnnot.markerId
+
+identifier text2GenomeSnpMatch
+"snp match to article relationship"
+    $gbd.t2gMarkerSnp.name dupeOk
+    hgFixed.t2gMarkerAnnot.markerId
+
+identifier text2GenomeGeneMatch
+"gene match to article relationship"
+    $gbd.t2gMarkerGene.name dupeOk
+    hgFixed.t2gMarkerAnnot.markerId
+
+identifier text2GenomeMarker
+"marker match annotation to article data"
+    hgFixed.t2gMarkerAnnot.articleId dupeOk
+    hgFixed.t2gArticle.articleId
 
 identifier ceuBcellRNASeqId
 "ID of ceuBcellRNASeq"

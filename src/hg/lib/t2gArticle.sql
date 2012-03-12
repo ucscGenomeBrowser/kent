@@ -1,15 +1,17 @@
 #Text to Genome project article data table
 CREATE TABLE t2gArticle (
-    pmcId bigint not null,	# PubMedCentral ID
-    displayId varchar(255) not null,	# display ID shown on browser
-    authors varchar(6000) default null,	# author list for this article
-    title varchar(2000) default null,	# article title
-    journal varchar(1000) default null,	# source journal
-    year varchar(255) default null,	# publication year
-    pages varchar(255) default null,	# publication pages
-    pmid varchar(255) default null,	# Pubmed ID
-    abstract blob not null,	# article abstract
+    articleId bigint not null,	# internal article ID, created during download
+    displayId varchar(255) not null,	# display ID shown on browser, format: <author><year><letters>
+    extId varchar(255) not null,	# publisher ID e.g. PMCxxxx or doi 
+    citation varchar(2000) default null,	# source journal citation
+    year int not null,	# year of publication or 0 if not defined
+    title varchar(6000) default null,	# article title
+    authors varchar(12000) default null,	# author list for this article
+    abstract varchar(32000) not null,	# article abstract
+    url varchar(1000) default null,	# url to fulltext of article
+    dbs varchar(500) default null,      # list of DBs with matches to this article
               #Indices
-    PRIMARY KEY(pmcId),
-    KEY displayIdx(displayId)
+    PRIMARY KEY(articleId),
+    KEY displayIdx(displayId),
+    KEY extIdx(extId)
 );
