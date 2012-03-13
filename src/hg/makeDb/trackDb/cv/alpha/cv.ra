@@ -5602,10 +5602,10 @@ type Cell Line
 organism mouse
 category primaryCells
 description E14 mouse ES line PROVISIONAL
-age E14
+age E0
 strain 129/Ola
 vendorName Santos lab
-vendorId E0
+vendorId E14
 orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
 color 65,105,225
 sex M
