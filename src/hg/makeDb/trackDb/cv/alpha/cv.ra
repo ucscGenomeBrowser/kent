@@ -9651,7 +9651,7 @@ label  SETDB1 (sc-66884)
 #lots
 
 term SIN3A_(NB600-1263)
-tag SIN3A NB6001263
+tag SIN3ANB6001263
 type Antibody
 antibodyDescription Rabbit polyclonal, Immunogen: Synthetic peptide: MKRRLDDQESDVYAAQQRR, corresponding to amino acids 1-19 of Mouse mSin3A. Antibody Target: SIN3A (NB600-1263)
 target SIN3A
