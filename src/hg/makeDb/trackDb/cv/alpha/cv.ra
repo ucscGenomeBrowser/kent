@@ -1226,7 +1226,6 @@ type Cell Line
 tier 3
 organism human
 description B cells from donors RO01778 and RO01794.
-deprecated Use donor-specific cell lines
 sex F
 tissue blood
 vendorName Heimfeld Lab, FHCRC
