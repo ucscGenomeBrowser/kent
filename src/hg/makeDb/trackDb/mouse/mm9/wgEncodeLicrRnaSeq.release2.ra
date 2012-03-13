@@ -25,10 +25,10 @@
 track wgEncodeLicrRnaSeq
 compositeTrack on
 shortLabel LICR RNA-seq
-longLabel C57BL/6 RNA-seq from ENCODE/LICR
+longLabel RNA-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
-subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine  SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
+subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow BMDM=BMDM CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine  SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
 subGroup3 localization Localization CELL=Whole_cell
 subGroup4 rnaExtract RnaExtract PAP=PolyA+
 subGroup5 rep Replicate rep1=1 rep2=2
@@ -51,14 +51,14 @@ html wgEncodeLicrRnaSeq.release2
 	view Signal
 	visibility full
 	subTrack wgEncodeLicrRnaSeq
-	viewLimits 0:500
+	viewLimits 0:50
 	autoScale off
 	transformFunc NONE
 	windowingFunction mean+whiskers
 	maxHeightPixels 100:24:16
 
         track wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep1
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off
         shortLabel BM 8wk Sg 1
         longLabel Bone Marrow adult-8wks RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=BMARROW localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
@@ -67,7 +67,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4094 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off
         shortLabel BM 8wk Sg 2
         longLabel Bone Marrow adult-8wks RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=BMARROW localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -76,7 +76,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4094 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep1
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal
         shortLabel Crbellum 8wk Sg 1
         longLabel Cerebellum adult-8wks RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=CBELLUM localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
@@ -85,7 +85,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4095 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCbellumCellPapMAdult8wksC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal
         shortLabel Crbellum 8wk Sg 2
         longLabel Cerebellum adult-8wks RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=CBELLUM localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -94,7 +94,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4095 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep1
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off
         shortLabel Cortex 8wk Sg 1
         longLabel Cortex adult-8wks RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=CORTEX localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
@@ -103,7 +103,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4096 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqCortexCellPapMAdult8wksC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off 
         shortLabel Cortex 8wk Sg 2
         longLabel Cortex adult-8wks RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=CORTEX localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -121,7 +121,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4097 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal
         shortLabel Heart 8wk Sg 2
         longLabel Heart adult-8wks RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=HEART localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -130,7 +130,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4097 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep1
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off 
         shortLabel Kidney 8wk Sg 1
         longLabel Kidney adult-8wks RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=KIDNEY localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
@@ -139,7 +139,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4098 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off 
         shortLabel Kidney 8wk Sg 2
         longLabel Kidney adult-8wks RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=KIDNEY localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -157,7 +157,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4099 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal
         shortLabel Liver 8wk Sg 2
         longLabel Liver adult-8wks RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=LIVER localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -166,7 +166,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4099 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep1
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off 
         shortLabel Lung 8wk Sg 1
         longLabel Lung adult-8wks RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=LUNG localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
@@ -174,7 +174,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4100 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqLungCellPapMAdult8wksC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off 
         shortLabel Lung 8wk Sg 2
         longLabel Lung adult-8wks RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=LUNG localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -182,7 +182,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4100 dateSubmitted=2011-05-12
 
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep1
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off 
         shortLabel MEF 8wk Sg 1
         longLabel MEF adult-8wks RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=MEF localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
@@ -191,7 +191,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4101 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqMefCellPapMAdult8wksC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off
         shortLabel MEF 8wk Sg 2
         longLabel MEF adult-8wks RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=MEF localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -200,7 +200,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4101 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep1
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off 
         shortLabel ES-Bruce4 E0 Sg 1
         longLabel ES-Bruce4 E0 RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=E0 cellType=ESB4 localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
@@ -209,7 +209,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4102 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqEsb4CellPapME0C57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off 
         shortLabel ES-Bruce4 E0 Sg 2
         longLabel ES-Bruce4 E0 RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=E0 cellType=ESB4 localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -218,7 +218,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4102 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep1
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off 
         shortLabel Spleen 8wk Sg 1
         longLabel Spleen adult-8wks RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=SPLEEN localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
@@ -227,7 +227,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=4103 dateSubmitted=2011-05-11
 
         track wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal 
+        parent wgEncodeLicrRnaSeqViewSignal off 
         shortLabel Spleen 8wk Sg 2
         longLabel Spleen adult-8wks RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=SPLEEN localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -276,7 +276,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=5274 dateSubmitted=2011-12-21
 
         track wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep1
-        parent wgEncodeLicrRnaSeqViewSignal off
+        parent wgEncodeLicrRnaSeqViewSignal
         ##shortLabel WholeBrain cell longPolyA sg 1
         shortLabel Brain E14.5 Sg 1
         longLabel WholeBrain E14.5 RNA-seq Signal Rep 1 from ENCODE/LICR
@@ -287,7 +287,7 @@ html wgEncodeLicrRnaSeq.release2
         # was wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6SigRep1 vsmalladi Tue Jan 10 15:20:48 2012
 
         track wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal off
+        parent wgEncodeLicrRnaSeqViewSignal
         ##shortLabel WholeBrain cell longPolyA sg 2
         shortLabel Brain E14.5 Sg 2
         longLabel WholeBrain E14.5 RNA-seq Signal Rep 2 from ENCODE/LICR 
@@ -418,7 +418,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=5445 dateSubmitted=2012-01-06
 
         track wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6SigRep1
-        parent wgEncodeLicrRnaSeqViewSignal off
+        parent wgEncodeLicrRnaSeqViewSignal
         shortLabel MEL Sg 1
         ##longLabel MEL immortalized cell longPolyA RNA-seq Signal Rep 1 from ENCODE/LICR
         longLabel MEL immortalized cell RNA-seq Signal Rep 1 from ENCODE/LICR
@@ -428,7 +428,7 @@ html wgEncodeLicrRnaSeq.release2
         # subId=5958 dateSubmitted=2012-02-29
 
         track wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6SigRep2
-        parent wgEncodeLicrRnaSeqViewSignal off
+        parent wgEncodeLicrRnaSeqViewSignal
         shortLabel MEL Sg 2
         longLabel MEL immortalized cell RNA-seq Signal Rep 2 from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL cellType=MEL localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep2
@@ -453,6 +453,24 @@ html wgEncodeLicrRnaSeq.release2
         type bigWig 0.000000 65433.000000
         color 189,0,157
         # subId=5969 dateSubmitted=2012-03-08
+
+        track wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6SigRep1
+        parent wgEncodeLicrRnaSeqViewSignal off
+        shortLabel BMDM 8wk Sg 1
+        longLabel BMDM adult-8wks RNA-seq Signal Rep 1 from ENCODE/LICR
+        subGroups view=Signal age=ADULT8WKS cellType=BMDM localization=CELL rnaExtract=PAP sex=F strain=C57BL6 rep=rep1
+        type bigWig 0.000000 64770.000000
+        color 86,180,233
+        # subId=5966 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6SigRep2
+        parent wgEncodeLicrRnaSeqViewSignal off
+        shortLabel BMDM 8wk Sg 2
+        longLabel BMDM adult-8wks RNA-seq Signal Rep 2 from ENCODE/LICR 
+        subGroups view=Signal age=ADULT8WKS cellType=BMDM localization=CELL rnaExtract=PAP sex=F strain=C57BL6 rep=rep2
+        type bigWig 0.000000 33962.000000
+        color 86,180,233
+        # subId=5966 dateSubmitted=2012-03-10
 
 	track wgEncodeLicrRnaSeqViewAlignments
 	shortLabel Alignments
@@ -868,3 +886,21 @@ html wgEncodeLicrRnaSeq.release2
         type bam
         color 189,0,157
         # subId=5969 dateSubmitted=2012-03-08
+
+        track wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep1
+        parent wgEncodeLicrRnaSeqViewAlignments off
+        shortLabel BMDM 8wk Al 1
+        longLabel BMDM adult-8wks RNA-seq Alignments Rep 1 from ENCODE/LICR
+        subGroups view=Alignments age=ADULT8WKS cellType=BMDM localization=CELL rnaExtract=PAP sex=F strain=C57BL6 rep=rep1
+        type bam
+        color 86,180,233
+        # subId=5966 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep2
+        parent wgEncodeLicrRnaSeqViewAlignments off
+        shortLabel BMDM 8wk Al 2
+        longLabel BMDM adult-8wks RNA-seq Alignments Rep 2 from ENCODE/LICR 
+        subGroups view=Alignments age=ADULT8WKS cellType=BMDM localization=CELL rnaExtract=PAP sex=F strain=C57BL6 rep=rep2
+        type bam
+        color 86,180,233
+        # subId=5966 dateSubmitted=2012-03-10

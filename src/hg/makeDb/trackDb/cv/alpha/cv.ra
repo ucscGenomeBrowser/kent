@@ -204,11 +204,11 @@ tag NHEMM2
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 #provisional
+description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 from cheek / temple
 lineage missing
 karyotype normal
 sex B
-tissue skin / cheek / temple
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -222,11 +222,11 @@ tag NHEMM270110012
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (adult)
+description Epidermal Melanocytes (adult) from cheek
 lineage missing
 karyotype normal
 sex M
-tissue skin / cheek
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -240,11 +240,11 @@ tag NHEMM27012303
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (adult)
+description Epidermal Melanocytes (adult) from temple
 lineage missing
 karyotype normal
 sex F
-tissue skin / temple
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -258,11 +258,11 @@ tag NHEMFM2
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 #provisional
+description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001
 lineage missing
 karyotype normal
 sex M
-tissue skin / foreskin
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -276,11 +276,11 @@ tag NHEMFM250713022
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (foreskin)
+description Epidermal Melanocytes (foreskin) 
 lineage missing
 karyotype normal
 sex M
-tissue skin / foreskin
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -298,7 +298,7 @@ description Epidermal Melanocytes (foreskin)
 lineage missing
 karyotype normal
 sex M
-tissue skin / foreskin
+tissue skin
 vendorName PromoCell
 vendorId NHEM
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
@@ -784,7 +784,7 @@ type Cell Line
 tier 3
 organism human
 description peripheral blood mononuclear cell, donor UHN00204, age 54, caucasian, DNA extract
-tissue peripheral blood mononuclear cell
+tissue blood
 lineage mesoderm
 karyotype normal
 sex M
@@ -1182,6 +1182,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol Stam:BJ_Stam_protocol.pdf
+
+#term BMDM
+#tag BMDM
+#type Cell Line
+#organism mouse
+#tissue blood
+#category primaryCells
+#description Bone marrow derived macrophage
+#age ageUnknown
+#strain Unknown
+#vendorName Genhong Cheng Lab, UCLA
+#termId 7058
+#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
+#color 86,180,233
+#sex U
+#protocol Ren:BMDM_Ren_protocol.pdf
+#label Bone marrow derived macrophage
 
 term CD14+
 tag CD14
@@ -2289,11 +2306,11 @@ tag HAOAF
 type Cell Line
 tier 3
 organism human
-description Aortic Adventitial Fibroblasts from two individuals, HAoAF_6090101.11 and HAoAF_6111301.9 #provisional
+description Aortic Adventitial Fibroblasts from two individuals, HAoAF_6090101.11 and HAoAF_6111301.9 from tunica adventitia
 lineage missing
 karyotype normal
 sex B
-tissue aorta / tunica adventitia
+tissue aorta
 vendorName PromoCell
 vendorId HAoAF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
@@ -2307,11 +2324,11 @@ tag HAOAF609010111
 type Cell Line
 tier 3
 organism human
-description Aortic Adventitial Fibroblasts
+description Aortic Adventitial Fibroblasts from tunica adventitia
 lineage missing
 karyotype normal
 sex M
-tissue aorta / tunica adventitia
+tissue aorta
 vendorName PromoCell
 vendorId HAoAF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
@@ -2325,11 +2342,11 @@ tag HAOAF61113019
 type Cell Line
 tier 3
 organism human
-description Aortic Adventitial Fibroblasts
+description Aortic Adventitial Fibroblasts from tunica adventitia
 lineage missing
 karyotype normal
 sex F
-tissue aorta / tunica adventitia
+tissue aorta
 vendorName PromoCell
 vendorId HAoAF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
@@ -2343,11 +2360,11 @@ tag HAOEC
 type Cell Line
 tier 3
 organism human
-description Aortic Endothelial Cells from two individuals, HAoEC_7071706.1 and HAoEC_8061102.1 #provisional
+description Aortic Endothelial Cells (thoracic) from two individuals, HAoEC_7071706.1 and HAoEC_8061102.1
 lineage missing
 karyotype normal
 sex B
-tissue aorta / - / throracic
+tissue aorta
 vendorName PromoCell
 vendorId HAoEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
@@ -2361,11 +2378,11 @@ tag HAOEC80611021
 type Cell Line
 tier 3
 organism human
-description Aortic Endothelial Cells
+description Aortic Endothelial Cells from throracic
 lineage missing
 karyotype normal
 sex M
-tissue aorta / thoracic
+tissue aorta
 vendorName PromoCell
 vendorId HAoEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
@@ -2383,7 +2400,7 @@ description Aortic Endothelial Cells
 lineage missing
 karyotype normal
 sex F
-tissue aorta / -
+tissue aorta
 vendorName PromoCell
 vendorId HAoEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
@@ -2486,11 +2503,11 @@ tag HCH
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Chondrocytes from two individuals, HCH_8100808.2 and HCH_0011308.2P #provisional
+description Undifferentiated Chondrocytes from two individuals, HCH_8100808.2 and HCH_0011308.2P from knee joint
 lineage missing
 karyotype normal
 sex M
-tissue cartilage/ knee joint
+tissue cartilage
 vendorName PromoCell
 vendorId HCH
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
@@ -2504,11 +2521,11 @@ tag HCH81008082
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Chondrocytes
+description Undifferentiated Chondrocytes from knee joint
 lineage missing
 karyotype normal
 sex M
-tissue cartilage/ knee joint
+tissue cartilage
 vendorName PromoCell
 vendorId HCH
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
@@ -2522,11 +2539,11 @@ tag HCH00113082P
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Chondrocytes
+description Undifferentiated Chondrocytes from knee joint
 lineage missing
 karyotype normal
 sex F
-tissue cartilage/ knee joint
+tissue cartilage
 vendorName PromoCell
 vendorId HCH
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
@@ -2701,11 +2718,11 @@ tag HFDPC
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3 #provisional
+description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3 from ateral scalp / brown / blond
 lineage missing
 karyotype normal
 sex F
-tissue skin / lateral scalp / brown / blond
+tissue skin
 vendorName PromoCell
 vendorId HFDPC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
@@ -2719,11 +2736,11 @@ tag HFDPC01005032
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells
+description Follicle Dermal Papilla Cells from lateral scalp / brown
 lineage missing
 karyotype normal
 sex F
-tissue skin / lateral scalp / brown
+tissue skin
 vendorName PromoCell
 vendorId HFDPC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
@@ -2737,11 +2754,11 @@ tag HFDPC01027033
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells
+description Follicle Dermal Papilla Cells from lateral scalp / blond
 lineage missing
 karyotype normal
 sex F
-tissue skin / lateral scalp / blond
+tissue skin
 vendorName PromoCell
 vendorId HFDPC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
@@ -2947,11 +2964,11 @@ tag HMNCPB
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells from two individuals, hMNC-PB_0022330.9 and hMNC-PB_0082430.9 #provisional
+description Mononuclear Cells (peripheral blood-single donor) from two individuals, hMNC-PB_0022330.9 and hMNC-PB_0082430.9
 lineage missing
 karyotype normal
 sex B
-tissue peripheral blood-single donor
+tissue blood
 vendorName PromoCell
 vendorId hMNC-PB
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
@@ -2965,11 +2982,11 @@ tag HMNCPB00223309
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells
+description Mononuclear Cells, peripheral blood-single donor 
 lineage missing
 karyotype normal
 sex M
-tissue peripheral blood-single donor
+tissue blood
 vendorName PromoCell
 vendorId hMNC-PB
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
@@ -2983,11 +3000,11 @@ tag HMNCPB00824309
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells
+description Mononuclear Cells, peripheral blood-single donor 
 lineage missing
 karyotype normal
 sex F
-tissue peripheral blood-single donor
+tissue blood
 vendorName PromoCell
 vendorId hMNC-PB
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
@@ -3001,11 +3018,11 @@ tag HMNCCB
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells from two individuals, hMNC-CB_9111701.6 and hMNC-CB_8072802.6 #provisional
+description Mononuclear Cells (umbilical cord blood-single donor) from two individuals, hMNC-CB_9111701.6 and hMNC-CB_8072802.6
 lineage missing
 karyotype normal
 sex B
-tissue umbilical cord blood-single donor
+tissue blood
 vendorName PromoCell
 vendorId hMNC-CB
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
@@ -3019,11 +3036,11 @@ tag HMNCCB91117016
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells
+description Mononuclear Cells, umbilical cord blood-single donor 
 lineage missing
 karyotype normal
 sex F
-tissue umbilical cord blood-single donor
+tissue blood 
 vendorName PromoCell
 vendorId hMNC-CB
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
@@ -3037,11 +3054,11 @@ tag HMNCCB80728026
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells
+description Mononuclear Cells, umbilical cord blood-single donor 
 lineage missing
 karyotype normal
 sex M
-tissue umbilical cord blood-single donor
+tissue blood 
 vendorName PromoCell
 vendorId hMNC-CB
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
@@ -3055,11 +3072,11 @@ tag HMSCBM
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-BM_0050602.11 and hMSC-BM_0051105.11 #provisional
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-BM_0050602.11 and hMSC-BM_0051105.11 from femoral head
 lineage missing
 karyotype normal
 sex B
-tissue bone marrow / femoral head
+tissue bone marrow
 vendorName PromoCell
 vendorId hMSC-BM
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
@@ -3073,11 +3090,11 @@ tag HMSCBM005060211
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells femoral head
 lineage missing
 karyotype normal
 sex M
-tissue bone marrow / femoral head
+tissue bone marrow
 vendorName PromoCell
 vendorId hMSC-BM
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
@@ -3091,11 +3108,11 @@ tag HMSCBM005110511
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells from femoral head
 lineage missing
 karyotype normal
 sex F
-tissue bone marrow / femoral head
+tissue bone marrow
 vendorName PromoCell
 vendorId hMSC-BM
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
@@ -3109,11 +3126,11 @@ tag HMSCAT
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-AT_9061601.12 and hMSC-AT_0102604.12 #provisional
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-AT_9061601.12 and hMSC-AT_0102604.12 from subcutaneous abdomen adipose tissue
 lineage missing
 karyotype normal
 sex F
-tissue subcutaneous adipose tissue / abdomen
+tissue adipose
 vendorName PromoCell
 vendorId hMSC-AT
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
@@ -3127,11 +3144,11 @@ tag HMSCAT906160112
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells from abdomen
 lineage missing
 karyotype normal
 sex F
-tissue subcutaneous adipose tissue / abdomen
+tissue subcutaneous adipose tissue
 vendorName PromoCell
 vendorId hMSC-AT
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
@@ -3145,11 +3162,11 @@ tag HMSCAT010260412
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells from subcutaneous abdomen adipose tissue 
 lineage missing
 karyotype normal
 sex F
-tissue subcutaneous adipose tissue / abdomen
+tissue adipose
 vendorName PromoCell
 vendorId hMSC-AT
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
@@ -3163,11 +3180,11 @@ tag HMSCUC
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-UC_0081101.7 and hMSC-UC_0052501.7 #provisional
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-UC_0081101.7 and hMSC-UC_0052501.7 from matrix (Wharton's Jelly)
 lineage missing
 karyotype normal
 sex F
-tissue umbilical cord / matrix (Wharton's Jelly)
+tissue umbilical cord
 vendorName PromoCell
 vendorId hMSC-UC
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
@@ -3182,11 +3199,11 @@ tag HMSCUC00811017
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells from matrix (Wharton's Jelly)
 lineage missing
 karyotype normal
 sex F
-tissue umbilical cord / matrix (Wharton's Jelly)
+tissue umbilical cord
 vendorName PromoCell
 vendorId hMSC-UC
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
@@ -3200,11 +3217,11 @@ tag HMSCUC00525017
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells
+description Undifferentiated Mesenchymal Stem Cells from matrix (Wharton's Jelly)
 lineage missing
 karyotype normal
 sex M
-tissue umbilical cord / matrix (Wharton's Jelly)
+tissue umbilical cord
 vendorName PromoCell
 vendorId hMSC-UC
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
@@ -3351,11 +3368,11 @@ tag HOB
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Osteoblasts from two individuals, HOB_0090202.1 and HOB_0091301 #provisional
+description Undifferentiated Osteoblasts from two individuals, HOB_0090202.1 and HOB_0091301 from femoral head
 lineage missing
 karyotype normal
 sex M
-tissue cancellous bone / femoral head
+tissue cancellous bone
 vendorName PromoCell
 vendorId HOB
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
@@ -3369,11 +3386,11 @@ tag HOB00902021
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Osteoblasts
+description Undifferentiated Osteoblasts from femoral head
 lineage missing
 karyotype normal
 sex M
-tissue cancellous bone / femoral head
+tissue cancellous bone
 vendorName PromoCell
 vendorId HOB
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
@@ -3387,11 +3404,11 @@ tag HOB0091301
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Osteoblasts
+description Undifferentiated Osteoblasts from femoral head
 lineage missing
 karyotype normal
 sex F
-tissue cancellous bone / femoral head
+tissue cancellous bone
 vendorName PromoCell
 vendorId HOB
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
@@ -3526,11 +3543,11 @@ tag HPIEPC90128012
 type Cell Line
 tier 3
 organism human
-description Placental Epithelial Cells
+description Placental Epithelial Cells amniotic membrane
 lineage missing
 karyotype normal
 sex F
-tissue placenta / amniotic membrane
+tissue placenta
 vendorName PromoCell
 vendorId human-placental-epithelial-cells-hplepc
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
@@ -3544,11 +3561,11 @@ tag HPIEPC90415032
 type Cell Line
 tier 3
 organism human
-description Placental Epithelial Cells
+description Placental Epithelial Cells amniotic membrane
 lineage missing
 karyotype normal
 sex M
-tissue placenta / amniotic membrane
+tissue placenta
 vendorName PromoCell
 vendorId human-placental-epithelial-cells-hplepc
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
@@ -3627,11 +3644,11 @@ tag HSAVEC
 type Cell Line
 tier 3
 organism human
-description Saphenous Vein Endothelial Cells from two individuals, HSaVEC_9100101.15 and HSaVEC_0022202.16 #provisional
+description Saphenous Vein Endothelial Cells from two individuals, HSaVEC_9100101.15 and HSaVEC_0022202.16 from thigh
 lineage missing
 karyotype normal
 sex M
-tissue saphenous vein / thigh
+tissue saphenous vein
 vendorName PromoCell
 vendorId HSaVEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
@@ -3645,11 +3662,11 @@ tag HSAVEC910010115
 type Cell Line
 tier 3
 organism human
-description Saphenous Vein Endothelial Cells
+description Saphenous Vein Endothelial Cells from thigh
 lineage missing
 karyotype normal
 sex M
-tissue saphenous vein / thigh
+tissue saphenous vein
 vendorName PromoCell
 vendorId HSaVEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
@@ -3663,11 +3680,11 @@ tag HSAVEC002220216
 type Cell Line
 tier 3
 organism human
-description Saphenous Vein Endothelial Cells
+description Saphenous Vein Endothelial Cells from thigh
 lineage missing
 karyotype normal
 sex M
-tissue saphenous vein / thigh
+tissue saphenous vein
 vendorName PromoCell
 vendorId HSaVEC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
@@ -3872,11 +3889,11 @@ tag HVMF
 type Cell Line
 tier 3
 organism human
-description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 #provisional
+description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 from villous tissue
 lineage missing
 karyotype normal
 sex M
-tissue placenta / villous tissue
+tissue placenta
 vendorName PromoCell
 vendorId HVMF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
@@ -3890,11 +3907,11 @@ tag HVMF61004013
 type Cell Line
 tier 3
 organism human
-description Villous Mesenchymal Fibroblasts
+description Villous Mesenchymal Fibroblasts from villous tissue
 lineage missing
 karyotype normal
 sex F
-tissue placenta / villous tissue
+tissue placenta
 vendorName PromoCell
 vendorId HVMF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
@@ -3908,11 +3925,11 @@ tag HVMF60912033
 type Cell Line
 tier 3
 organism human
-description Villous Mesenchymal Fibroblasts
+description Villous Mesenchymal Fibroblasts from villous tissue
 lineage missing
 karyotype normal
 sex M
-tissue placenta / villous tissue
+tissue placenta
 vendorName PromoCell
 vendorId HVMF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
@@ -3926,11 +3943,11 @@ tag HWP
 type Cell Line
 tier 3
 organism human
-description Undifferentiated White Preadipocytes from two individuals, HWP_0092205 and HWP_8120201.5 #provisional
+description Undifferentiated White Preadipocytes from two individuals, HWP_0092205 and HWP_8120201.5, subcutaneous adipose tissue from abdomen / upper arm
 lineage missing
 karyotype normal
 sex B
-tissue subcutaneous adipose tissue / abdomen / upper arm
+tissue adipose
 vendorName PromoCell
 vendorId HWP
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
@@ -3944,11 +3961,11 @@ tag HWP0092205
 type Cell Line
 tier 3
 organism human
-description Undifferentiated White Preadipocytes
+description Undifferentiated White Preadipocytes from abdomen
 lineage missing
 karyotype normal
 sex M
-tissue subcutaneous adipose tissue / abdomen
+tissue subcutaneous adipose tissue
 vendorName PromoCell
 vendorId HWP
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
@@ -3962,11 +3979,11 @@ tag HWP81202015
 type Cell Line
 tier 3
 organism human
-description Undifferentiated White Preadipocytes
+description Undifferentiated White Preadipocytes from upper arm
 lineage missing
 karyotype normal
 sex F
-tissue subcutaneous adipose tissue / upper arm
+tissue subcutaneous adipose tissue
 vendorName PromoCell
 vendorId HWP
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
@@ -4487,11 +4504,11 @@ tag NHDF
 type Cell Line
 tier 3
 organism human
-description Dermal Fibroblasts
+description Dermal Fibroblasts from temple / breast
 lineage missing
 karyotype normal
 sex F
-tissue skin / temple / breast
+tissue skin
 vendorName PromoCell
 vendorId NHDF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
@@ -4505,11 +4522,11 @@ tag NHDF00608013
 type Cell Line
 tier 3
 organism human
-description Dermal Fibroblasts
+description Dermal Fibroblasts from temple
 lineage missing
 karyotype normal
 sex F
-tissue skin / temple
+tissue skin
 vendorName PromoCell
 vendorId NHDF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
@@ -4523,11 +4540,11 @@ tag NHDF70717012
 type Cell Line
 tier 3
 organism human
-description Dermal Fibroblasts
+description Dermal Fibroblasts from breast
 lineage missing
 karyotype normal
 sex F
-tissue skin / breast
+tissue skin
 vendorName PromoCell
 vendorId NHDF
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
@@ -4942,11 +4959,11 @@ tag SKMC
 type Cell Line
 tier 3
 organism human
-description Skeletal Muscle Cells from two individuals, SkMC_9011302 SkMC_8121902.17 #provisional
+description Skeletal Striated Muscle Cells from two individuals, SkMC_9011302 SkMC_8121902.17 from M. pectoralis / Mm. intercostales
 lineage missing
 karyotype normal
 sex B
-tissue striated muscle / M. pectoralis / Mm. intercostales
+tissue muscle
 vendorName PromoCell
 vendorId SkMC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
@@ -4960,11 +4977,11 @@ tag SKMC9011302
 type Cell Line
 tier 3
 organism human
-description Skeletal Muscle Cells
+description Skeletal Muscle Cells from M. pectoralis
 lineage missing
 karyotype normal
 sex F
-tissue striated muscle / M. pectoralis
+tissue striated muscle
 vendorName PromoCell
 vendorId SkMC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
@@ -4978,11 +4995,11 @@ tag SKMC812190217
 type Cell Line
 tier 3
 organism human
-description Skeletal Muscle Cells
+description Skeletal Muscle Cells from Mm. intercostales
 lineage missing
 karyotype normal
 sex M
-tissue striated muscle / Mm. intercostales
+tissue striated muscle
 vendorName PromoCell
 vendorId SkMC
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
@@ -5318,7 +5335,7 @@ tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
-description Brown adipocytes tissue PROVISIONAL
+description Brown adipocytes tissue
 vendorName Jerrold M. Olefsky Lab, UCSD
 termId 7188
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7118
@@ -5569,7 +5586,7 @@ tissue duodenum
 category Tissue
 age ageUnknown
 strain Unknown
-description Duodenum PROVISIONAL
+description Duodenum
 vendorName CSHL lab
 vendorId Duodenum
 orderUrl  http://gingeraslab.cshl.edu/
@@ -5601,7 +5618,7 @@ tag ESE14
 type Cell Line
 organism mouse
 category primaryCells
-description E14 mouse ES line PROVISIONAL
+description mouse embryonic stem cell line E14
 age E0
 strain 129/Ola
 vendorName Santos lab
@@ -5999,7 +6016,7 @@ tag MGER
 type Cell Line
 organism mouse
 category cellLine
-description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with &Beta;-estradiol treatment PROVISIONAL
+description MEL-GATA-1-ER, This is a mouse suspension cell line derived from MEL cells by stable transfection with a GATA-1-ER fusion protein construct as described by Choe et al., 2003 (Cancer Res 63, 6363-6369, 2003). These cells can be terminally differentiated into mature erythroid cells with &Beta;-estradiol treatment
 age immortalized
 strain Unknown
 tissue blood
@@ -6238,7 +6255,7 @@ tissue stomach
 category Tissue
 age ageUnknown
 strain Unknown
-description Stomach PROVISIONAL
+description Stomach
 vendorName CSHL lab
 vendorId Stomach
 orderUrl http://gingeraslab.cshl.edu/
@@ -6256,7 +6273,7 @@ tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
-description Subcutaneous Adipose tissue PROVISIONAL
+description Subcutaneous Adipose tissue
 vendorName CSHL lab
 vendorId Subcutaneous Adipose tissue
 orderUrl http://gingeraslab.cshl.edu/
@@ -6311,7 +6328,7 @@ tissue blood
 age ageUnknown
 strain Unknown
 category primaryCells
-description Activated primary CD4 effector cells, isolated ex vivo PROVISIONAL
+description Activated primary CD4 effector cells, isolated ex vivo
 vendorName Stam lab
 vendorId THelper-Activated
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -6347,7 +6364,7 @@ tissue blood
 age ageUnknown
 strain Unknown
 category primaryCells
-description Activated primary T regulatory cells, isolated ex vivo PROVISIONAL
+description Activated primary T regulatory cells, isolated ex vivo
 vendorName Stam lab
 vendorId TReg-Activated
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -11204,19 +11221,19 @@ term 400
 tag IL400
 type insertLength
 description insert length of 400nt
-label 400 #provisional
+label 400
 
 term 200
 tag IL200
 type insertLength
 description insert length of 200nt
-label 200 #provisional
+label 200
 
 term ilNA
 tag ILNA
 type insertLength
 description insert length not applicable
-label N/A #provisional
+label N/A
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 
@@ -11224,25 +11241,25 @@ term 1k
 tag F1K
 type fragSize
 description 1 kb DNA fragments
-label 1k #provisional
+label 1k
 
 term 5k
 tag F5K
 type fragSize
 description 5 kb DNA fragments
-label 5k #provisional
+label 5k
 
 term 10k
 tag F10K
 type fragSize
 description 10 kb DNA fragments
-label 10k #provisional
+label 10k
 
 term 20k
 tag F20K
 type fragSize
 description 20 kb DNA fragments
-label 20k #provisional
+label 20k
 
 ### localization
 # term (human-readable name)
@@ -11258,7 +11275,7 @@ type localization
 description Whole cell
 termId GO:0005623
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
-label cell GO:0005623 #provisional
+label cell GO:0005623
 
 term nucleus
 tag NUCLEUS
@@ -11266,7 +11283,7 @@ type localization
 description Large membrane bound part of cell containing chromosomes and the bulk of the cell's DNA
 termId GO:0005634
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005634
-label nucleus GO:0005634 #provisional
+label nucleus GO:0005634
 
 term cytosol
 tag CYTOSOL
@@ -11274,7 +11291,7 @@ type localization
 description The fluid between the cells outer membrane and the nucleus
 termId GO:0005829
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005829
-label cytosol GO:0005829 #provisional
+label cytosol GO:0005829
 
 term polysome
 tag POLYSOME
@@ -11282,7 +11299,7 @@ type localization
 description Strand of mRNA with ribosomes attached
 termId GO:0005844
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
-label polysome GO:0005844 #provisional
+label polysome GO:0005844
 
 term chromatin
 tag CHROMATIN
@@ -11290,7 +11307,7 @@ type localization
 description Nuclear DNA and associated proteins
 termId GO:0000790
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0000790
-label chromatin GO:0000790 #provisional
+label chromatin GO:0000790
 
 term nucleolus
 tag NUCLEOLUS
@@ -11298,7 +11315,7 @@ type localization
 description The part of the nucleus where ribosomal RNA is actively transcribed
 termId GO:0005730
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
-label nucleolus GO:0005730 #provisional
+label nucleolus GO:0005730
 
 term nucleoplasm
 tag NUCLEOPLASM
@@ -11306,7 +11323,7 @@ type localization
 description That part of the nuclear content other than the chromosomes or the nucleolus
 termId GO:0005654
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005654
-label nucleoplasm GO:0005654 #provisional
+label nucleoplasm GO:0005654
 
 term nuclearMatrix
 tag NUCLEARMATRIX
@@ -11322,7 +11339,7 @@ type localization
 description That fraction of cells, prepared by disruptive biochemical methods, that includes the plasma and other membranes.
 termId GO:0005624
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
-label membraneFraction GO:0005624 #provisional
+label membraneFraction GO:0005624
 
 term mitochondria
 tag MITO
@@ -11330,7 +11347,7 @@ type localization
 description Mitochondria
 termId GO:0005739
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
-label mitochondria GO:0005739 #provisional
+label mitochondria GO:0005739
 
 ### RNA extracts
 
@@ -11406,187 +11423,187 @@ term Control
 tag CONTROL
 type control
 description This data represents a control being compared with the other tracks in the set.
-label Control #provisional
+label Control
 
 term Control_eGFP-BACH1
 tag CONTROLBACH1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-BACH1
-label eGFP-BACH1 #provisional
+label eGFP-BACH1
 
 term Control_eGFP-CCNE1
 tag CONTROLCCNE1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-CCNE1
-label eGFP-CCNE1 #provisional
+label eGFP-CCNE1
 
 term Control_eGFP-CDKN1B
 tag CONTROLCDKN1B
 type control
 description This data represents a control being compared to experiments using antibody eGFP-CDKN1B
-label eGFP-CDKN1B #provisional
+label eGFP-CDKN1B
 
 term Control_eGFP-E2F1
 tag CONTROLE2F1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-E2F1
-label eGFP-E2F1 #provisional
+label eGFP-E2F1
 
 term Control_eGFP-EKLF1
 tag CONTROLEKLF1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-EKLF1
-label eGFP-EKLF1 #provisional
+label eGFP-EKLF1
 
 term Control_eGFP-ELF1
 tag CONTROLELF1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ELF1
-label eGFP-ELF1 #provisional
+label eGFP-ELF1
 
 term Control_eGFP-ESR
 tag CONTROLESR
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ESR
-label eGFP-ESR #provisional
+label eGFP-ESR
 
 term Control_eGFP-FOS
 tag CONTROLFOS
 type control
 description This data represents a control being compared to experiments using antibody eGFP-FOS
-label eGFP-FOS #provisional
+label eGFP-FOS
 
 term Control_eGFP-GATA2
 tag CONTROLGATA2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-GATA2
-label eGFP-GATA2 #provisional
+label eGFP-GATA2
 
 term Control_eGFP-HDAC8
 tag CONTROLHDAC8
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HDAC8
-label eGFP-HDAC8 #provisional
+label eGFP-HDAC8
 
 term Control_eGFP-HMGB1
 tag CONTROLHMGB1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HMGB1
-label eGFP-HMGB1 #provisional
+label eGFP-HMGB1
 
 term Control_eGFP-ILF2
 tag CONTROLILF2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ILF2
-label eGFP-ILF2 #provisional
+label eGFP-ILF2
 
 term Control_eGFP-JunB
 tag CONTROLJUNB
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunB
-label eGFP-JunB #provisional
+label eGFP-JunB
 
 term Control_eGFP-JunD
 tag CONTROLJUND
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunD
-label eGFP-JunD #provisional
+label eGFP-JunD
 
 term Control_eGFP-MLL5
 tag CONTROLMLL5
 type control
 description This data represents a control being compared to experiments using antibody eGFP-MLL5
-label eGFP-MLL5 #provisional
+label eGFP-MLL5
 
 term Control_eGFP-NCOR1
 tag CONTROLNCOR1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NCOR1
-label eGFP-NCOR1 #provisional
+label eGFP-NCOR1
 
 term Control_eGFP-NF90
 tag CONTROLNF90
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NF90
-label eGFP-NF90 #provisional
+label eGFP-NF90
 
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
-label eGFP-NR4A1 #provisional
+label eGFP-NR4A1
 
 term Control_eGFP-SMARCA1
 tag CONTROLSMARCA1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-SMARCA1
-label eGFP-SMARCA1 #provisional
+label eGFP-SMARCA1
 
 term Control_eGFP-SMARCA2
 tag CONTROLSMARCA2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-SMARCA2
-label eGFP-SMARCA2 #provisional
+label eGFP-SMARCA2
 
 term Control_eGFP-STAT1
 tag CONTROLSTAT1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-STAT1
-label eGFP-STAT1 #provisional
+label eGFP-STAT1
 
 term Control_32bp
 tag CNTRL32B
 type control
 description This data represents a control being compared to experiments using read length of 32 bp
-label 32bp #provisional
+label 32bp
 
 term Control_36bp
 tag CNTRL36B
 type control
 description This data represents a control being compared to experiments using read length of 36 bp
-label 36bp #provisional
+label 36bp
 
 term Control_50bp
 tag CNTRL50B
 type control
 description This data represents a control being compared to experiments using read length of 50 bp
-label 50bp #provisional
+label 50bp
 
 term Input
 tag INPUT
 type control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
-label Input  #provisional
+label Input
 
 term Large_Fragment
 tag LARGEFRAGMENT
 type control
 description Control signal from sonication into large fragments of DNA (350-800 bp).
-label Large_Fragment #provisional
+label Large_Fragment
 
 term Naked_DNA
 tag NAKEDDNA
 type control
 description Control signal from Naked DNA.
-label Naked_DNA #provisional
+label Naked_DNA
 
 term Reference_Genome
 tag REFERENCEGENOME
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
-label Reference_Genome #provisional
+label Reference_Genome
 
 term RevXlinkChromatin
 tag RXLCH
 type control
 description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling.
-label RevXlinkChromatin #provisional
+label RevXlinkChromatin
 
 term None
 tag NONE
 description No special treatment or protocol applies
 type control
-label None #provisional
+label None
 
 ### Inputs which are a special type of control
 
@@ -11594,49 +11611,49 @@ term std
 tag STD
 type control
 description Standard input signal for most experiments.
-label std #provisional
+label std
 
 term IgG-goat
 tag IGGGOAT
 type control
 description Input signal from Normal Goat IgG ChIP-seq.
-label IgG-goat #provisional
+label IgG-goat
 
 term IgG-mus
 tag IGGMUS
 type control
 description Input signal from Normal Mouse IgG ChIP-seq.
-label IgG-mus #provisional
+label IgG-mus
 
 term IgG-rab
 tag IGGRAB
 type control
 description Input signal from Normal Rabbit IgG ChIP-seq.
-label IgG-rab #provisional
+label IgG-rab
 
 term IgG-rat
 tag IGGRAT
 type control
 description Input signal from Normal Rat IgG ChIP-seq
-label IgG-rat #provisional
+label IgG-rat
 
 term IgG-Yale
 tag IGGYALE
 type control
 description Input signal from Mouse IgG ChIP-seq prepared at Yale
-label IgG-Yale #provisional
+label IgG-Yale
 
 term MNase
 tag MNASE
 type control
 description Input signal from MNase digested DNA.
-label MNase #provisional
+label MNase
 
 term UCDavis
 tag UCD
 type control
 description Input library was prepared at UC Davis.
-label UCDavis #provisional
+label UCDavis
 
 ### Treatments
 
@@ -11699,7 +11716,7 @@ type treatment
 
 term CTCF_shRNA_knockdown
 tag CTCFSHRNA
-description CTCF (CCCTC-binding factor) transcript levels were knocked down in MCF7 cells using lentiviral transduction to express an shRNA targeting the CTCF gene. The lentiviral construct also contained a puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct. By western blot, CTCF protein levels in the knockdown cells were <10% of MCF7 cell lines transduced with a randomized shRNA lentiviral construct.
+description CTCF (CCCTC-binding factor) transcript levels were knocked down in cells using lentiviral transduction to express an shRNA targeting the CTCF gene. The lentiviral construct also contained a puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct. By western blot, CTCF protein levels in the knockdown cells were <10% of cell lines transduced with a randomized shRNA lentiviral construct.
 type treatment
 
 term DEX_100nM
@@ -11759,37 +11776,37 @@ label 14 day diff protocol A
 term diffProtB_6hr
 tag DIFFB6H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours. Doxycycline added to a final concentration of 100 ng/ml. (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 6 hours. Doxycycline added to a final concentration of 100 ng/ml. (Stam)
 label 6 hour diff protocol B
 
 term diffProtB_24hr
 tag DIFFB24H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 24 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam)
 label 24 hour diff protocol B
 
 term diffProtB_72hr
 tag DIFFB72H
 type treatment
-description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam) PROVISIONAL
+description Oct4 repression with Doxycycline in ZhBTc4 ES cell culture harvested at 72 hours. Doxycycline added to a final concentration of 100 ng/ml (Stam)
 label 72 hour diff protocol B
 
 term diffProtC_24hr
 tag DIFFC24H
 type treatment
-description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (Stam) 
 label 24 hour diff protocol C
 
 term diffProtC_48hr
 tag DIFFC48H
 type treatment
-description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (Stam)
 label 48 hour diff protocol C
 
 term diffProtC_120hr
 tag DIFFC120H
 type treatment
-description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam) PROVISIONAL
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (Stam)
 label 120 hour diff protocol C
 
 term DMSO_0.02pct
@@ -11876,21 +11893,25 @@ term EtOH_0.01pct
 tag ETOH01
 description 36 h with 0.01% Ethanol (Snyder)
 type treatment
+label EtOH 0.01% 36h
 
 term EtOH_0.01pct_4hr
 tag ETOH01B
 description 4 h with 0.01% Ethanol (Snyder)
 type treatment
+label EtOH 0.01% 4h
 
 term EtOH_0.01pct_12hr
 tag ETOH01C
 description 12 h with 0.01% Ethanol (Snyder)
 type treatment
+label EtOH 0.01% 12h
 
 term EtOH_0.02pct
 tag ETOH02
 description 1 h with 0.02% Ethanol (Myers)
 type treatment
+label EtOH 0.02% 1h
 
 term forskolin
 tag FORSKLN
@@ -11985,7 +12006,7 @@ type treatment
 
 term Randomized_shRNA_control
 tag RANDSHRNA
-description MCF7 cells were transduced with a lentivirus expressing an shRNA containing a randomized DNA sequence generated by the siRNA Wizard v3.1 (http://www.sirnawizard.com/scrambled2.php) program. Lentiviral constructs also contained the puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct.
+description Cells were transduced with a lentivirus expressing an shRNA containing a randomized DNA sequence generated by the siRNA Wizard v3.1 (http://www.sirnawizard.com/scrambled2.php) program. Lentiviral constructs also contained the puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct.
 type treatment
 
 term serum_free_media
@@ -12042,7 +12063,7 @@ term FASP
 tag FASP
 description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
-label FASP proteomics #provisional
+label FASP proteomics
 
 term In-gel
 tag INGEL
@@ -12052,15 +12073,15 @@ label In-gel digestion
 
 term PCR1x
 tag PCR1X
-description 1-cycle of PCR (Myers)
+description one 15-cycle round of PCR (Myers)
 type protocol
-label PCR 1-cycle #provisional
+label PCR 1-round
 
 term PCR2x
 tag PCR2X
-description 2-cycles of PCR (Myers)
+description a 25-cycle round of PCR and an additional 15-cycle round of PCR after gel size selection (Myers)
 type protocol
-label PCR 2-cycle #provisional
+label PCR 2-round
 
 term SDS-Page
 tag SDSPAGE
@@ -12072,37 +12093,37 @@ term v041610.1
 tag V0416101
 description 2x10^7 cells, fragmentation by bioruptor, one 15-cycle round of PCR (Myers)
 type protocol
-label biorupter, PCR 1-cycle #provisional
+label biorupter, PCR 1-round
 
 term v041610.2
 tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
 type protocol 
-label sonicator, PCR 1-cycle #provisional
+label sonicator, PCR 1-round
 
 term v042211.1
 tag V0422111
 description Faster ChIP protocol & AMpure XP size selection for ChIP-seq (Myers)
 type protocol
-label ChIP AMpure XP #provisional
+label ChIP AMpure XP
 
 term v042211.2
 tag V0422112
 description Faster ChIP protocol & gel size selection for ChIP-seq (Myers)
 type protocol
-label ChIP gel #provisional
+label ChIP gel
 
 term TAP-Only
 tag TAP
 description This kind of library was made from RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
 type protocol
-label Tobacco Acid Pyrophosphatase Only #provisional
+label Tobacco Acid Pyrophosphatase Only
 
 term CIP-TAP
 tag CIPTAP
 description This kind of library was made from RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
 type protocol
-label CIP-TAP #provisional
+label CIP-TAP
 
 ### phase
 
@@ -12110,43 +12131,43 @@ term G1
 tag G1
 type phase
 description Flow sorted, G1 phase corresponds to the first DNA content window
-label G1 #provisional
+label G1
 
 term G1b
 tag G1B
 type phase
 description Flow sorted, G1b phase corresponds to the second half of the first DNA content window
-label G1b #provisional
+label G1b
 
 term G2
 tag G2
 type phase
 description Flow sorted, G2 phase corresponds to the second DNA content window
-label G2 #provisional
+label G2
 
 term S1
 tag S1
 type phase
 description Flow sorted, S1 phase corresponds to the third DNA content window
-label S1 #provisional
+label S1
 
 term S2
 tag S2
 type phase
 description Flow sorted, S2 phase corresponds to the fourth DNA content window
-label S2 #provisional
+label S2
 
 term S3
 tag S3
 type phase
 description Flow sorted, S3 phase corresponds to the fifth DNA content window
-label S3 #provisional
+label S3
 
 term S4
 tag S4
 type phase
 description Flow sorted, S4 phase corresponds to the sixth DNA content window
-label S4 #provisional
+label S4
 
 ### region
 # genomic regions used in experiments that are not whole-genome
@@ -12155,45 +12176,45 @@ term chr21
 tag CHR21
 type region
 description Chromsome 21
-label chr21 #provisional
+label chr21
 
 term ENM
 tag ENM
 type region
 description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
-label ENM #provisional
+label ENM
 
 term ENR
 tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
-label ENR #provisional
+label ENR
 
 term UW-5C-Myc-Region
 tag UW5CMYC
 type region
 description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
-label UW-5C-Myc-Region #provisional
+label UW-5C-Myc-Region
 
 term UW-5C-Gene-Regions
 tag UW5CGENE
 type region
 description Set of 25 regions interrogated in UW 5C gene-targeted experiments
-label UW-5C-Gene-Regions #provisional
+label UW-5C-Gene-Regions
 
 ### restrictionEnzyme
 
 term msp
 tag MSP
-description MSP Restriction Enzyme
+description MSPI Restriction Enzyme
 type restrictionEnzyme
-label msp #provisional
+label MSPI 
 
 term hpa
 tag HPA
-description HPA Restriction Enzyme
+description HPAII Restriction Enzyme
 type restrictionEnzyme
-label hpa #provisional
+label HPAII
 
 ### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
 ### term:
@@ -12765,7 +12786,7 @@ term MethylWgbs
 tag METHYLWGBS
 type dataType
 label Methyl WGBS
-description DNA Methylation Whole Genome Bisulfite Sequencing Provisional
+description DNA Methylation Whole Genome Bisulfite Sequencing
 dataGroup DNA Methylation
 
 term NRE
@@ -13060,8 +13081,8 @@ term adult-24wks
 tag ADULT24WKS
 type age
 stage Adult
-description Adult 24 weeks PROVISIONAL
-label Adult 24 weeks PROVISIONAL
+description Adult 24 weeks
+label Adult 24 weeks
 
 term immortalized
 tag IMMORTAL
@@ -13249,14 +13270,14 @@ tag ILLUMINAGA2
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer II
-label Illumina Genome AnalyzerII
+label Illumina Genome Analyzer II
 
 term Illumina_GA2e
 tag ILLUMINAGA2E
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe
-label Illumina Genome AnalyzerIIe
+label Illumina Genome Analyzer IIe
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
@@ -13264,7 +13285,7 @@ tag ILLUMINAGA2X
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIx
-label Illumina Genome AnalyzerIIx
+label Illumina Genome Analyzer IIx
 # Matches GA2x that Kate initally indicated as the term
 
 term Illumina_HiSeq_2000
@@ -13272,14 +13293,14 @@ tag ILLUMINAHISEQ2000
 geoPlatformName Illumina HiSeq 2000
 type seqPlatform
 description Illumina HiSeq 2000
-label Illumina HiSeq2000
+label Illumina HiSeq 2000
 
 term 454_GS
 tag 454GS
 geoPlatformName 454 GS
 type seqPlatform
 description Roche 454 Genome Sequencer
-label Roche454 Genome Sequencer
+label Roche 454 Genome Sequencer
 
 term 454_GS_20
 tag 454GS20
@@ -13293,7 +13314,7 @@ tag 454GSFLX
 geoPlatformName 454 GS FLX
 type seqPlatform
 description Roche 454 Genome Sequencer FLX
-label Roche454 Genome Sequencer FLX
+label Roche 454 Genome Sequencer FLX
 
 term AB_SOLiD
 tag ABSOLID
@@ -13307,14 +13328,14 @@ tag ABSOLID2
 geoPlatformName AB_SOLiD System 2.0
 type seqPlatform
 description Applied Biosystems SOLiD System 2.0
-label Applied Biosystems SOLiD System2.0
+label Applied Biosystems SOLiD System 2.0
 
 term AB_SOLiD_3.5
 tag ABSOLID3PLUS
 geoPlatformName AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
-label Applied Biosystems SOLiD System3.5
+label Applied Biosystems SOLiD System 3.5
 
 #Uses the GEO terms to be conistent and help with GEO submissions
 ### Platform
@@ -14282,6 +14303,17 @@ description This replicate number is based on submission to the UCSC browser, it
 searchable yes
 cvDefined off
 validate integer
+hidden no
+priority 241
+
+term donorId
+tag DONOR
+type typeOfTerm
+label Donor ID
+description The identification of the donor of the tissue sample.
+searchable no 
+cvDefined off
+validate none   
 hidden no
 priority 241
 
