@@ -38,7 +38,7 @@ shortLabel UW CTCF Binding
 longLabel CTCF Binding Sites by ChIP-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2c BJ=BJ CACO2=Caco-2 CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD20RO01794=CD20+&nbsp;(RO&nbsp;01794) GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12866=GM12866 GM12867=GM12867 GM12868=GM12868 GM12869=GM12869 GM12870=GM12870 GM12871=GM12871 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 H7ES=H7-HESC HA-sp=HA-sp HAC=HAc HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HCPE=HCPEpIC HCT116=HCT-116 HEE=HEEpIC HEK293=HEK293 HFF=HFF HFFMYC=HFF-Myc HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF Jurkat=Jurkat LNCAP=LNCaP MCF7=MCF-7 MONOCD14RO1746=Monocytes-CD14+&nbsp;(RO&nbsp;01794) NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1 WI38=WI-38
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2&#95;C BJ=BJ CACO2=Caco-2 CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD20RO01794=CD20+&nbsp;(RO&nbsp;01794) GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12866=GM12866 GM12867=GM12867 GM12868=GM12868 GM12869=GM12869 GM12870=GM12870 GM12871=GM12871 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 H7ES=H7-HESC HA-sp=HA-sp HAC=HAc HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HCPE=HCPEpIC HCT116=HCT-116 HEE=HEEpIC HEK293=HEK293 HFF=HFF HFFMYC=HFF-Myc HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF Jurkat=Jurkat LNCAP=LNCaP MCF7=MCF-7 MONOCD14RO1746=Monocytes-CD14+&nbsp;(RO&nbsp;01794) NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 RPTEC=RPTEC SAEC=SAEC SK-NMC=SK-N-MC SK-NSHRA=SK-N-SH&#95;RA SKMC=SKMC WERIRb1=WERI-Rb-1 WI38=WI-38
 subGroup3 treatment Treatment aNone=None DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_5d DIFFA9D=diffProtA_9d OHTAM=OH-tamoxifen_20nM
 subGroup4 factor Factor CTCF=CTCF  zInput=Input
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3
@@ -216,7 +216,7 @@ html wgEncodeUwTfbs.release3
         parent wgEncodeUwTfbsViewHot off
         shortLabel SKRA CTCF Ht 1
         longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=SK-NSHRA rep=rep1 treatment=aNone
         type broadPeak
         # subId=1313 dateSubmitted=2010-06-10
 
@@ -350,7 +350,7 @@ html wgEncodeUwTfbs.release3
         parent wgEncodeUwTfbsViewHot off
         shortLabel SKRA CTCF Ht 2
         longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=SK-NSHRA rep=rep2 treatment=aNone
         type broadPeak
         # subId=1314 dateSubmitted=2010-06-10
 
@@ -1205,7 +1205,7 @@ html wgEncodeUwTfbs.release3
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel SKRA CTCF Pk 1
         longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=SK-NSHRA rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1313 dateSubmitted=2010-06-10
 
@@ -1339,7 +1339,7 @@ html wgEncodeUwTfbs.release3
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel SKRA CTCF Pk 2
         longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=SK-NSHRA rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1314 dateSubmitted=2010-06-10
 
@@ -2198,7 +2198,7 @@ html wgEncodeUwTfbs.release3
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SKRA CTCF Sg 1
         longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=SK-NSHRA rep=rep1 treatment=aNone
         type bigWig 1.000000 3210.000000
         # subId=1313 dateSubmitted=2010-06-10
 
@@ -2332,7 +2332,7 @@ html wgEncodeUwTfbs.release3
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SKRA CTCF Sg 2
         longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=SK-NSHRA rep=rep2 treatment=aNone
         type bigWig 1.000000 3470.000000
         # subId=1314 dateSubmitted=2010-06-10
 
@@ -2528,7 +2528,7 @@ html wgEncodeUwTfbs.release3
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SKRA In Sg 1
         longLabel SK-N-SH_RA Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=SK-NSHRA rep=rep1 treatment=aNone
         type bigWig 1.000000 12154.000000
         # subId=1319 dateSubmitted=2010-06-10
 
@@ -3030,9 +3030,9 @@ html wgEncodeUwTfbs.release3
 
         track wgEncodeUwTfbsSknmcInputStdRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKMC In Sg 1
+        shortLabel SKNMC In Sg 1
         longLabel SK-N-MC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=SKNMC rep=rep1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=SK-NMC rep=rep1 treatment=aNone
         type bigWig 1.000000 15364.000000
         origAssembly hg19
         # subId=4364 dateSubmitted=2011-06-25

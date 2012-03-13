@@ -1,3 +1,8 @@
+metaObject wgEncodeHaibMethylWgbs
+objType composite
+composite wgEncodeHaibMethylWgbs
+expVars lab,cell,dataType
+
 metaObject wgEncodeHaibMethylWgbsGm12878CpGSites
 objType table
 cell GM12878
@@ -10,6 +15,7 @@ fileName wgEncodeHaibMethylWgbsGm12878CpGSites.bigBed
 grant Myers
 lab HudsonAlpha
 labExpId SL8614_SL8615
+md5sum 58997f28f0b2fc113a49ff7ad2159c85
 project wgEncode
 subId 5890
 tableName wgEncodeHaibMethylWgbsGm12878CpGSites
@@ -27,6 +33,7 @@ fileName wgEncodeHaibMethylWgbsGm12878NonCpGSites.bigBed
 grant Myers
 lab HudsonAlpha
 labExpId SL8614_SL8615
+md5sum 07b6360e8b36d897ea1341f3836622ab
 project wgEncode
 subId 5890
 tableName wgEncodeHaibMethylWgbsGm12878NonCpGSites
@@ -44,6 +51,7 @@ fileName wgEncodeHaibMethylWgbsH1hescCpGSites.bigBed
 grant Myers
 lab HudsonAlpha
 labExpId SL8616_SL8617
+md5sum 4a558597eb3c34f859e6dbaf8322ac1a
 project wgEncode
 subId 5890
 tableName wgEncodeHaibMethylWgbsH1hescCpGSites
@@ -61,9 +69,10 @@ fileName wgEncodeHaibMethylWgbsH1hescNonCpGSites.bigBed
 grant Myers
 lab HudsonAlpha
 labExpId SL8616_SL8617
+md5sum 6fa4c0427d6853891d4467d0df242e99
 project wgEncode
 subId 5890
 tableName wgEncodeHaibMethylWgbsH1hescNonCpGSites
 view NonCpG_Sites
 
-# MAGIC: 2092282052
+# MAGIC: -1641040060

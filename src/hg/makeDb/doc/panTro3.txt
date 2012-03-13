@@ -3061,3 +3061,53 @@ TMPDIR=/scratch/tmp
     ln -s blastz.panTro3.swap lastz.panTro3
 
 ############################################################################
+# LASTZ Mouse Mm10 (DONE - 2012-03-08 - Hiram)
+    # this works better if Mm10 is the primary target and this panTro3
+    #	genome is the query.  It goes much faster
+    mkdir /hive/data/genomes/panTro3/bed/lastzMm10.2012-03-08
+    cd /hive/data/genomes/panTro3/bed/lastzMm10.2012-03-08
+
+    cat << '_EOF_' > DEF
+# chimp vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm10
+SEQ2_DIR=/scratch/data/mm10/mm10.2bit
+SEQ2_LEN=/scratch/data/mm10/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzMm10.2012-03-08
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen -S panTro3Mm10
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    5043m15.440s
+    cat fb.panTro3.chainMm10Link.txt 
+    #	929073028 bases of 2900529764 (32.031%) in intersection
+
+    mkdir /hive/data/genomes/mm10/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/mm10/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzMm10.2012-03-08/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+XXX - running - Mon Mar 12 09:01:03 PDT 2012
+    #	real    70m30.237s
+    cat fb.mm10.chainPanTro3Link.txt 
+    #	921877558 bases of 2620346127 (35.182%) in intersection
+
+##############################################################################

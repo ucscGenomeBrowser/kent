@@ -30,13 +30,14 @@ shortLabel LICR Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
+subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow BMDM=BMDM CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
 subGroup3 factor Factor H3K04ME1=H3K4me1 H3K04ME3=H3K4me3 H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 H3K79ME2=H3K79me2 H3K09AC=H3K9ac H3K27AC=H3K27ac INPUT=Input
 subGroup4 sex Sex M=M F=F U=U
-subGroup5 age Age ADULT8WKS=adult-8wks ADULT24WKS=adult-24wks E0=E0 E14HALF=E14.5
+subGroup5 age Age ADULT8WKS=adult-8wks ADULT24WKS=adult-24wks E0=E0 E14HALF=E14.5 IMMORTAL=immortalized
 subGroup6 strain Strain C57BL6=C57BL/6
 subGroup7 control Control STD=std
-dimensions dimensionX=cellType dimensionY=factor 
+dimensions dimensionX=cellType dimensionY=factor dimensionA=age 
+filterComposite dimensionA=multi
 sortOrder cellType=+ factor=+ view=+ age=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target sex=Sex age=Age replicate=Replicate view=View dccAccession=UCSC_Accession geoSeriesAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex age=age strain=strain control=control:wq
@@ -46,12 +47,13 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
+html wgEncodeLicrHistone.release2
 
 	#####Peak Tracks###########
 	track wgEncodeLicrHistoneViewPeaks
 	shortLabel Peaks
 	view Peaks
-	visibility dense
+	visibility pack
 	#viewUi on
 	subTrack wgEncodeLicrHistone
 	signalFilter 0
@@ -61,8 +63,8 @@ noInherit on
         scoreMin 0
 
 	track wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdPk
-	parent wgEncodeLicrHistoneViewPeaks 
-	shortLabel BM H3K4m1 8w
+	parent wgEncodeLicrHistoneViewPeaks off
+	shortLabel BM 8w H3K4m1
         longLabel Bone Marrow adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=BMARROW control=STD sex=M strain=C57BL6
 	type broadPeak
@@ -71,8 +73,8 @@ noInherit on
 
 
 	track wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdPk
-	parent wgEncodeLicrHistoneViewPeaks 
-	shortLabel BM H3K4m3 8w
+	parent wgEncodeLicrHistoneViewPeaks off 
+	shortLabel BM 8w H3K4m3
         longLabel Bone Marrow adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=BMARROW control=STD sex=M strain=C57BL6
 	type broadPeak
@@ -82,7 +84,7 @@ noInherit on
 
 	track wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdPk
 	parent wgEncodeLicrHistoneViewPeaks 
-	shortLabel Cb H3K4m3 8w
+	shortLabel Cb 8w H3K4m3
         longLabel Cerebellum adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=CBELLUM control=STD sex=M strain=C57BL6 
 	type broadPeak
@@ -90,8 +92,8 @@ noInherit on
 	# subId=3394 dateSubmitted=2011-01-20
 
 	track wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdPk
-	parent wgEncodeLicrHistoneViewPeaks
-	shortLabel Crx H3K4m1 8w
+	parent wgEncodeLicrHistoneViewPeaks off
+	shortLabel Crx 8w H3K4m1
         longLabel Cortex adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=CORTEX control=STD sex=M strain=C57BL6 
 	type broadPeak
@@ -99,8 +101,8 @@ noInherit on
 	# subId=3396 dateSubmitted=2011-01-19
 
 	track wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdPk
-	parent wgEncodeLicrHistoneViewPeaks
-	shortLabel Crx H3K4m3 8w
+	parent wgEncodeLicrHistoneViewPeaks off
+	shortLabel Crx 8w H3K4m3
         longLabel Cortex adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=CORTEX control=STD sex=M strain=C57BL6 
 	type broadPeak
@@ -109,7 +111,7 @@ noInherit on
 
 	track wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdPk
 	parent wgEncodeLicrHistoneViewPeaks
-	shortLabel Cb H3K4m1 8w
+	shortLabel Cb 8w H3K4m1
         longLabel Cerebellum adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=CBELLUM control=STD sex=M strain=C57BL6 
 	type broadPeak
@@ -117,8 +119,8 @@ noInherit on
 	# subId=3812 dateSubmitted=2011-03-08
 
 	track wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdPk
-	parent wgEncodeLicrHistoneViewPeaks
-	shortLabel Ht H3K4m1 8w
+	parent wgEncodeLicrHistoneViewPeaks 
+	shortLabel Ht 8w H3K4m1
         longLabel Heart adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=HEART control=STD sex=M strain=C57BL6 
 	type broadPeak
@@ -126,8 +128,8 @@ noInherit on
 	# subId=3885 dateSubmitted=2011-04-12
 
 	track wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdPk
-	parent wgEncodeLicrHistoneViewPeaks
-	shortLabel Kdy H3K4m1 8w
+	parent wgEncodeLicrHistoneViewPeaks off
+	shortLabel Kdy 8w H3K4m1 
         longLabel Kidney adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=KIDNEY control=STD sex=M strain=C57BL6 
 	type broadPeak
@@ -136,7 +138,7 @@ noInherit on
 
 	track wgEncodeLicrHistoneLiverH3k4me1MAdult8wksC57bl6StdPk
 	parent wgEncodeLicrHistoneViewPeaks
-	shortLabel Lv H3K4m1 8w
+	shortLabel Lv 8w H3K4m1
         longLabel Liver adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=LIVER control=STD sex=M strain=C57BL6 
 	type broadPeak
@@ -145,7 +147,7 @@ noInherit on
 
 	track wgEncodeLicrHistoneLiverH3k4me3MAdult8wksC57bl6StdPk
 	parent wgEncodeLicrHistoneViewPeaks
-	shortLabel Lv H3K4m3 8w
+	shortLabel Lv 8w H3K4m3
         longLabel Liver adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=LIVER control=STD sex=M strain=C57BL6 
 	type broadPeak
@@ -153,8 +155,8 @@ noInherit on
 	# subId=3882 dateSubmitted=2011-04-12
 
 	track wgEncodeLicrHistoneKidneyH3k4me3MAdult8wksC57bl6StdPk
-	parent wgEncodeLicrHistoneViewPeaks
-	shortLabel Kdy H3K4m3 8w
+	parent wgEncodeLicrHistoneViewPeaks off
+	shortLabel Kdy 8w H3K4m3
         longLabel Kidney adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=KIDNEY control=STD sex=M strain=C57BL6 
 	type broadPeak
@@ -163,7 +165,7 @@ noInherit on
 
 	track wgEncodeLicrHistoneHeartH3k4me3MAdult8wksC57bl6StdPk
 	parent wgEncodeLicrHistoneViewPeaks
-	shortLabel Ht H3K4m3 8w
+	shortLabel Ht 8w H3K4m3
         longLabel Heart adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 	subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=HEART control=STD sex=M strain=C57BL6 
 	type broadPeak
@@ -171,24 +173,24 @@ noInherit on
 	# subId=2790 dateSubmitted=2011-04-12
 
         track wgEncodeLicrHistoneLungH3k4me3MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks
-        shortLabel Ln H3K4m3 8w
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel Ln 8w H3K4m3
         longLabel Lung adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=LUNG control=STD sex=M strain=C57BL6 
         type broadPeak
         # subId=3887 dateSubmitted=2011-04-15
 
         track wgEncodeLicrHistoneLungH3k4me1MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks
-        shortLabel Ln H3K4m1 8w
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel Ln 8w H3K4m1
         longLabel Lung adult8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=LUNG control=STD sex=M strain=C57BL6 
         type broadPeak
         # subId=3886 dateSubmitted=2011-04-15
 
         track wgEncodeLicrHistoneMefH3k4me3MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks 
-        shortLabel MEF H3K4m3 8w
+        parent wgEncodeLicrHistoneViewPeaks off 
+        shortLabel MEF 8w H3K4m3 
         longLabel MEF adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=MEF control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -196,8 +198,8 @@ noInherit on
         # subId=4005 dateSubmitted=2011-04-29
 
         track wgEncodeLicrHistoneMefH3k4me1MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks 
-        shortLabel MEF H3K4m1 8w
+        parent wgEncodeLicrHistoneViewPeaks off 
+        shortLabel MEF 8w H3K4m1
         longLabel MEF adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=MEF control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -205,8 +207,8 @@ noInherit on
         # subId=4001 dateSubmitted=2011-04-28
 
         track wgEncodeLicrHistoneSpleenH3k4me3MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks
-        shortLabel Sp H3K4m3 8w
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel Sp 8w H3K4m3
         longLabel Spleen adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=SPLEEN control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -214,8 +216,8 @@ noInherit on
         # subId=4034 dateSubmitted=2011-05-02
 
         track wgEncodeLicrHistoneSpleenH3k4me1MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks
-        shortLabel Sp H3K4m1 8w
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel Sp 8w H3K4m1
         longLabel Spleen adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=SPLEEN control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -223,8 +225,8 @@ noInherit on
         # subId=4033 dateSubmitted=2011-05-02
 
         track wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks 
-        shortLabel ESB4 H3K4m3 E0
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel ESB4 E0 H3K4m3 
         longLabel ES-Bruce4 E0 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E0 factor=H3K04ME3 cellType=ESB4 control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -232,8 +234,8 @@ noInherit on
         # subId=4045 dateSubmitted=2011-05-06
 
         track wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks 
-        shortLabel ESB4 H3K4m1 E0
+        parent wgEncodeLicrHistoneViewPeaks off 
+        shortLabel ESB4 E0 H3K4m1
         longLabel ES-Bruce4 E0 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=ESB4 control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -242,7 +244,7 @@ noInherit on
 
         track wgEncodeLicrHistoneThymusH3k04me1MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Thm H3K4m1 8w
+        shortLabel Thm 8w H3K4m1
         longLabel Thymus adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=THYMUS control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -251,7 +253,7 @@ noInherit on
 
         track wgEncodeLicrHistoneThymusH3k04me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Thm H3K4m3 8w
+        shortLabel Thm 8w H3K4m3
         longLabel Thymus adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=THYMUS control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -260,7 +262,7 @@ noInherit on
 
         track wgEncodeLicrHistoneThymusH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Thm H3K27a 8w
+        shortLabel Thm 8w H3K27a
         longLabel Thymus adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=THYMUS control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -269,7 +271,7 @@ noInherit on
 
         track wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Pt H3K4m3 8w
+        shortLabel Pt 8w H3K4m3
         longLabel Placenta adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=PLAC control=STD sex=F strain=C57BL6 
         type broadPeak
@@ -278,7 +280,7 @@ noInherit on
 
         track wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Pt H3K4m1 8w
+        shortLabel Pt 8w H3K4m1 
         longLabel Placenta adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=PLAC control=STD sex=F strain=C57BL6 
         type broadPeak
@@ -287,7 +289,7 @@ noInherit on
 
         track wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Pt H3K27a 8w
+        shortLabel Pt 8w H3K27a
         longLabel Placenta adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=PLAC control=STD sex=F strain=C57BL6 
         type broadPeak
@@ -296,7 +298,7 @@ noInherit on
 
         track wgEncodeLicrHistoneTestisH3k04me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Ts H3K4m3 8w
+        shortLabel Ts 8w H3K4m3
         longLabel Testis adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=TESTIS control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -305,7 +307,7 @@ noInherit on
 
         track wgEncodeLicrHistoneTestisH3k04me1MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Ts H3K4m1 8w
+        shortLabel Ts 8w H3K4m1
         longLabel Testis adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=TESTIS control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -314,7 +316,7 @@ noInherit on
 
         track wgEncodeLicrHistoneTestisH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Ts H3K27a 8w
+        shortLabel Ts 8w H3K27a
         longLabel Testis adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=TESTIS control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -323,7 +325,7 @@ noInherit on
 
         track wgEncodeLicrHistoneSpleenH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Sp H3K27a 8w
+        shortLabel Sp 8w H3K27a 
         longLabel Spleen adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=SPLEEN control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -332,7 +334,7 @@ noInherit on
 
         track wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel OB H3K4m3 8w
+        shortLabel OB 8w H3K4m3 
         longLabel Olfactory Bulb adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=OLFACT control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -341,7 +343,7 @@ noInherit on
 
         track wgEncodeLicrHistoneOlfactH3k04me1MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel OB H3K4m1 8w
+        shortLabel OB 8w H3K4m1
         longLabel Olfactory Bulb adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=OLFACT control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -350,7 +352,7 @@ noInherit on
 
         track wgEncodeLicrHistoneOlfactH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel OB H3K27a 8w
+        shortLabel OB 8w H3K27a
         longLabel Olfactory Bulb adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=OLFACT control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -359,7 +361,7 @@ noInherit on
 
         track wgEncodeLicrHistoneEsb4H3k27acME0C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel ESB4 H3K27a E0
+        shortLabel ESB4 E0 H3K27a 
         longLabel ES-Bruce4 E0 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E0 factor=H3K27AC cellType=ESB4 control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -368,7 +370,7 @@ noInherit on
 
         track wgEncodeLicrHistoneMefH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel MEF H3K27a 8w
+        shortLabel MEF 8w H3K27a
         longLabel MEF adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=MEF control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -376,8 +378,8 @@ noInherit on
         # subId=5728 dateSubmitted=2012-02-15
 
         track wgEncodeLicrHistoneLiverH3k27acMAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Lv H3K27a 8w
+        parent wgEncodeLicrHistoneViewPeaks 
+        shortLabel Lv 8w H3K27a 
         longLabel Liver adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=LIVER control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -386,7 +388,7 @@ noInherit on
 
         track wgEncodeLicrHistoneKidneyH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Kdy H3K27a 8w
+        shortLabel Kdy 8w H3K27a 
         longLabel Kidney adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=KIDNEY control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -395,7 +397,7 @@ noInherit on
 
         track wgEncodeLicrHistoneSmintH3k04me3MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel SI H3K4m3 8w
+        shortLabel SI 8w H3K4m3 
         longLabel Small Intestine adult-8wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=SMINT control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -404,7 +406,7 @@ noInherit on
 
         track wgEncodeLicrHistoneSmintH3k04me1MAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel SI H3K4m1 8w
+        shortLabel SI 8w H3K4m1 
         longLabel Small Intestine adult-8wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=SMINT control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -413,7 +415,7 @@ noInherit on
 
         track wgEncodeLicrHistoneSmintH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel SI H3K27a 8w
+        shortLabel SI 8w H3K27a 
         longLabel Small Intestine adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=SMINT control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -421,8 +423,8 @@ noInherit on
         # subId=5721 dateSubmitted=2012-02-15
 
         track wgEncodeLicrHistoneHeartH3k27acMAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Ht H3K27a 8w
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Ht 8w H3K27a 
         longLabel Heart adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=HEART control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -431,7 +433,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLimbH3k04me1UE14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Lb H3K4m1 14.5
+        shortLabel Lb 14.5 H3K4m1 
         longLabel Limb E14.5 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=LIMB control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -440,7 +442,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLimbH3k04me3UE14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Lb H3K4m3 14.5
+        shortLabel Lb 14.5 H3K4m3
         longLabel Limb E14.5 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=LIMB control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -449,7 +451,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLimbH3k27acUE14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Lb H3K27a 14.5
+        shortLabel Lb 14.5 H3K27a
         longLabel Limb E14.5 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K27AC cellType=LIMB control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -458,7 +460,7 @@ noInherit on
 
         track wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Ht H3K4m1 14.5
+        shortLabel Ht 14.5 H3K4m1
         longLabel Heart E14.5 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=HEART control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -467,7 +469,7 @@ noInherit on
 
         track wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Ht H3K4m3 14.5
+        shortLabel Ht 14.5 H3K4m3
         longLabel Heart E14.5 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=HEART control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -476,7 +478,7 @@ noInherit on
 
         track wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Ht H3K27a 14.5
+        shortLabel Ht 14.5 H3K27a
         longLabel Heart E14.5 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K27AC cellType=HEART control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -484,8 +486,8 @@ noInherit on
         # subId=5662 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Bn H3K4m3 14.5
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Bn 14.5 H3K4m3 
         longLabel WholeBrain E14.5 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -493,8 +495,8 @@ noInherit on
         # subId=5660 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Bn H3K4m1 14.5
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Bn 14.5 H3K4m1
         longLabel WholeBrain E14.5 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -502,8 +504,8 @@ noInherit on
         # subId=5659 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Bn H3K27a 14.5
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Bn 14.5 H3K27a
         longLabel WholeBrain E14.5 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K27AC cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -512,7 +514,7 @@ noInherit on
 
         track wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Crx H3K27a 8w
+        shortLabel Crx 8w H3K27a
         longLabel Cortex adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=CORTEX control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -520,8 +522,8 @@ noInherit on
         # subId=5656 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneCbellumH3k27acMAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Cb H3K27a 8w
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Cb 8w H3K27a
         longLabel Cerebellum adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=CBELLUM control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -530,7 +532,7 @@ noInherit on
 
         track wgEncodeLicrHistoneBmarrowH3k27acMAdult8wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel BM H3K27a 8w
+        shortLabel BM 8w H3K27a
         longLabel Bone Marrow adult-8wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=BMARROW control=STD sex=M strain=C57BL6 
         type broadPeak
@@ -539,7 +541,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Lv H3K27a 14.5
+        shortLabel Lv 14.5 H3K27a
         longLabel Liver E14.5 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K27AC cellType=LIVER control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -548,7 +550,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Lv H3K4m1 14.5
+        shortLabel Lv 14.5 H3K4m1
         longLabel Liver E14.5 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=LIVER control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -557,7 +559,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Lv H3K4me3 14.5
+        shortLabel Lv 14.5 H3K4m3
         longLabel Liver E14.5 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=LIVER control=STD sex=U strain=C57BL6 
         type broadPeak
@@ -566,8 +568,8 @@ noInherit on
 
         track wgEncodeLicrHistoneBatH3k04me1MAdult24wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel BAT H3K4me1 Pk
-        longLabel BAT adult-24wks C57BL/6 H3K4me1 std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        shortLabel BAT 24w H3K4m1
+        longLabel BAT adult-24wks H3K4me1 ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT24WKS factor=H3K04ME1 cellType=BAT control=STD sex=M strain=C57BL6 
         type broadPeak
         color 189,0,157
@@ -575,8 +577,8 @@ noInherit on
 
         track wgEncodeLicrHistoneBatH3k04me3MAdult24wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel BAT H3K4me3 Pk
-        longLabel BAT adult-24wks C57BL/6 H3K4me3 std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        shortLabel BAT 24w H3K4m3 
+        longLabel BAT adult-24wks H3K4me3 ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT24WKS factor=H3K04ME3 cellType=BAT control=STD sex=M strain=C57BL6 
         type broadPeak
         color 189,0,157
@@ -584,84 +586,174 @@ noInherit on
 
         track wgEncodeLicrHistoneBatH3k27acMAdult24wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel BAT H3K27ac Pk
-        longLabel BAT adult-24wks C57BL/6 H3K27ac std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        shortLabel BAT 24w H3K27a
+        longLabel BAT adult-24wks H3K27ac ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT24WKS factor=H3K27AC cellType=BAT control=STD sex=M strain=C57BL6 
         type broadPeak
         color 189,0,157
         # subId=5972 dateSubmitted=2012-03-01
 
         track wgEncodeLicrHistoneLiverH3k79me2MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Liver H3K79me2 Pk
-        longLabel Liver adult-8wks C57BL/6 H3K79me2 std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Lv 8w H3K79m2 
+        longLabel Liver adult-8wks H3K79me2 ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K79ME2 cellType=LIVER control=STD sex=M strain=C57BL6 
         type broadPeak
         color 230,159,0
         # subId=5911 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneLiverH3k36me3MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Liver H3K36me3 Pk
-        longLabel Liver adult-8wks C57BL/6 H3K36me3 std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Lv 8w H3K36m3 
+        longLabel Liver adult-8wks H3K36me3 ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K36ME3 cellType=LIVER control=STD sex=M strain=C57BL6 
         type broadPeak
         color 230,159,0
         # subId=5908 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneLiverH3k27me3MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Liver H3K27me3 Pk
-        longLabel Liver adult-8wks C57BL/6 H3K27me3 std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Lv 8w H3K27m3
+        longLabel Liver adult-8wks H3K27me3 ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K27ME3 cellType=LIVER control=STD sex=M strain=C57BL6 
         type broadPeak
         color 230,159,0
         # subId=5907 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneLiverH3k09acMAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Liver H3K9ac Pk
-        longLabel Liver adult-8wks C57BL/6 H3K9ac std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Lv 8w H3K9a
+        longLabel Liver adult-8wks H3K9ac ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K09AC cellType=LIVER control=STD sex=M strain=C57BL6 
         type broadPeak
         color 230,159,0
         # subId=5905 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneHeartH3k79me2MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Heart H3K79me2 Pk
-        longLabel Heart adult-8wks C57BL/6 H3K79me2 std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Ht 8w H3K79m2
+        longLabel Heart adult-8wks H3K79me2 ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K79ME2 cellType=HEART control=STD sex=M strain=C57BL6 
         type broadPeak
         color 153,38,0
         # subId=5903 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneHeartH3k36me3MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Heart H3K36me3 Pk
-        longLabel Heart adult-8wks C57BL/6 H3K36me3 std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Ht 8w H3K36m3
+        longLabel Heart adult-8wks H3K36me3 ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=H3K36ME3 cellType=HEART control=STD sex=M strain=C57BL6 
         type broadPeak
         color 153,38,0
         # subId=5902 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneHeartH3k27me3MAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Heart H3K27me3 Pk
-        longLabel Heart adult-8wks C57BL/6 H3K27me3 std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Ht 8w H3K27m3 
+        longLabel Heart adult-8wks H3K27me3 ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K27ME3 cellType=HEART control=STD sex=M strain=C57BL6 
         type broadPeak
         color 153,38,0
         # subId=5900 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneHeartH3k09acMAdult8wksC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks off
-        shortLabel Heart H3K9ac Pk
-        longLabel Heart adult-8wks C57BL/6 H3K9ac std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel Ht 8w H3K9a
+        longLabel Heart adult-8wks H3K9ac ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=H3K09AC cellType=HEART control=STD sex=M strain=C57BL6 
         type broadPeak
         color 153,38,0
         # subId=5899 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneMelH3k04me3MImmortalC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks 
+        shortLabel MEL H3K4m3 
+        longLabel MEL immortalized H3K4me3 ChIP-seq Peaks from ENCODE/LICR 
+        subGroups view=Peaks age=IMMORTAL factor=H3K04ME3 cellType=MEL control=STD sex=M strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5916 dateSubmitted=2012-02-29
+
+        track wgEncodeLicrHistoneMelH3k27acMImmortalC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel MEL H3K27a 
+        longLabel MEL immortalized H3K27ac ChIP-seq Peaks from ENCODE/LICR 
+        subGroups view=Peaks age=IMMORTAL factor=H3K27AC cellType=MEL control=STD sex=M strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5915 dateSubmitted=2012-02-29
+
+        track wgEncodeLicrHistoneMelH3k04me1MImmortalC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel MEL H3K4m1 
+        longLabel MEL immortalized H3K4me1 ChIP-seq Peaks from ENCODE/LICR 
+        subGroups view=Peaks age=IMMORTAL factor=H3K04ME1 cellType=MEL control=STD sex=M strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5914 dateSubmitted=2012-02-29
+
+        track wgEncodeLicrHistoneMelH3k09acMImmortalC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel MEL H3K9a 
+        longLabel MEL immortalized H3K9ac ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=IMMORTAL factor=H3K09AC cellType=MEL control=STD sex=M strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5912 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneMelH3k79me2MImmortalC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks 
+        shortLabel MEL H3K79m2 
+        longLabel MEL immortalized H3K79me2 ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=IMMORTAL factor=H3K79ME2 cellType=MEL control=STD sex=M strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5910 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneMelH3k36me3MImmortalC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel MEL H3K36m3 
+        longLabel MEL immortalized H3K36me3 std ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=IMMORTAL factor=H3K36ME3 cellType=MEL control=STD sex=M strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5909 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneMelH3k27me3MImmortalC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks
+        shortLabel MEL H3K27m3
+        longLabel MEL immortalized H3K27me3 ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=IMMORTAL factor=H3K27ME3 cellType=MEL control=STD sex=M strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5906 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneBmdmH3k04me3FAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel BMDM 8w H3K4m3 
+        longLabel BMDM adult-8wks H3K4me3 ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=BMDM control=STD sex=F strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5963 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrHistoneBmdmH3k27acFAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel BMDM 8w H3K27a
+        longLabel BMDM adult-8wks H3K27ac ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=ADULT8WKS factor=H3K27AC cellType=BMDM control=STD sex=F strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5964 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrHistoneBmdmH3k04me1FAdult8wksC57bl6StdPk
+        parent wgEncodeLicrHistoneViewPeaks off
+        shortLabel BMDM 8w H3K4m1
+        longLabel BMDM adult-8wks H3K4me1 ChIP-seq Peaks from ENCODE/LICR
+        subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=BMDM control=STD sex=F strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5965 dateSubmitted=2012-03-10
 
 	#######	Signal Tracks###########
 	track wgEncodeLicrHistoneViewSignal
@@ -677,8 +769,8 @@ noInherit on
 	windowingFunction mean+whiskers
 
 	track wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal
-	shortLabel BM H3K4m1 8w
+	parent wgEncodeLicrHistoneViewSignal off
+	shortLabel BM 8w H3K4m1
         longLabel Bone Marrow adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=BMARROW control=STD sex=M strain=C57BL6 
 	type bigWig 0.120000 20.459999
@@ -687,8 +779,8 @@ noInherit on
 	# subId=3387 dateSubmitted=2011-01-19
 
 	track wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal
-	shortLabel BM H3K4m3 8w
+	parent wgEncodeLicrHistoneViewSignal off
+	shortLabel BM 8w H3K4m3
         longLabel Bone Marrow adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=BMARROW control=STD sex=M strain=C57BL6 
 	type bigWig 0.120000 50.509998
@@ -697,8 +789,8 @@ noInherit on
 	# subId=3388 dateSubmitted=2011-01-19
 
 	track wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal 
-	shortLabel Cb H3K4m3 8w
+	parent wgEncodeLicrHistoneViewSignal
+	shortLabel Cb 8w H3K4m3
         longLabel Cerebellum adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=CBELLUM control=STD sex=M strain=C57BL6 
 	type bigWig 0.140000 49.660000
@@ -707,8 +799,8 @@ noInherit on
 	# subId=3394 dateSubmitted=2011-01-20
 
 	track wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal 
-	shortLabel Crx H3K4m1 8w
+	parent wgEncodeLicrHistoneViewSignal off 
+	shortLabel Crx 8w H3K4m1
         longLabel Cortex adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=CORTEX control=STD sex=M strain=C57BL6 
 	type bigWig 0.110000 8.410000
@@ -717,8 +809,8 @@ noInherit on
 	# subId=3396 dateSubmitted=2011-01-19
 
 	track wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal 
-	shortLabel Crx H3K4m3 8w
+	parent wgEncodeLicrHistoneViewSignal off 
+	shortLabel Crx 8w H3K4m3
         longLabel Cortex adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=CORTEX control=STD sex=M strain=C57BL6 
 	type bigWig 0.110000 44.410000
@@ -728,7 +820,7 @@ noInherit on
 
 	track wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdSig
 	parent wgEncodeLicrHistoneViewSignal
-	shortLabel Cb H3K4m1 8w
+	shortLabel Cb 8w H3K4m1
         longLabel Cerebellum adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=CBELLUM control=STD sex=M strain=C57BL6 
 	type bigWig 0.120000 18.879999
@@ -737,8 +829,8 @@ noInherit on
 	# subId=3812 dateSubmitted=2011-03-08
 
 	track wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal 
-	shortLabel Ht H3K4m1 8w
+	parent wgEncodeLicrHistoneViewSignal
+	shortLabel Ht 8w H3K4m1
         longLabel Heart adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=HEART control=STD sex=M strain=C57BL6 
 	type bigWig 0.130000 15.600000
@@ -747,8 +839,8 @@ noInherit on
 	# subId=3885 dateSubmitted=2011-04-12
 
 	track wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal 
-	shortLabel Kdy H3K4m1 8w
+	parent wgEncodeLicrHistoneViewSignal off 
+	shortLabel Kdy 8w H3K4m1
         longLabel Kidney adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=KIDNEY control=STD sex=M strain=C57BL6 
 	type bigWig 0.130000 16.070000
@@ -757,8 +849,8 @@ noInherit on
 	# subId=3879 dateSubmitted=2011-04-07
 
 	track wgEncodeLicrHistoneLiverH3k4me1MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal 
-	shortLabel Lv H3K4m1 8w
+	parent wgEncodeLicrHistoneViewSignal
+	shortLabel Lv 8w H3K4m1
         longLabel Liver adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=LIVER control=STD sex=M strain=C57BL6 
 	type bigWig 0.140000 31.250000
@@ -767,8 +859,8 @@ noInherit on
 	# subId=3881 dateSubmitted=2011-04-12
 
 	track wgEncodeLicrHistoneLiverH3k4me3MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal 
-	shortLabel Lv H3K4m3 8w
+	parent wgEncodeLicrHistoneViewSignal
+	shortLabel Lv 8w H3K4m3
         longLabel Liver adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=LIVER control=STD sex=M strain=C57BL6 
 	type bigWig 0.140000 72.970001
@@ -777,8 +869,8 @@ noInherit on
 	# subId=3882 dateSubmitted=2011-04-12
 
 	track wgEncodeLicrHistoneKidneyH3k4me3MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal 
-	shortLabel Kdy H3K4m3 8w
+	parent wgEncodeLicrHistoneViewSignal off 
+	shortLabel Kdy 8w H3K4m3
         longLabel Kidney adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=KIDNEY control=STD sex=M strain=C57BL6 
 	type bigWig 0.110000 57.959999
@@ -787,8 +879,8 @@ noInherit on
 	# subId=3003 dateSubmitted=2011-04-12
 
 	track wgEncodeLicrHistoneHeartH3k4me3MAdult8wksC57bl6StdSig
-	parent wgEncodeLicrHistoneViewSignal 
-	shortLabel Ht H3K4m3 8w
+	parent wgEncodeLicrHistoneViewSignal
+	shortLabel Ht 8w H3K4m3
         longLabel Heart adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 	subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=HEART control=STD sex=M strain=C57BL6 
 	type bigWig 0.130000 67.910004
@@ -797,8 +889,8 @@ noInherit on
 	# subId=2790 dateSubmitted=2011-04-12
 
         track wgEncodeLicrHistoneLungH3k4me3MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal 
-        shortLabel Ln H3K4m3 8w
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Ln 8w H3K4m3
         longLabel Lung adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=LUNG control=STD sex=M strain=C57BL6 
         type bigWig 0.120000 55.680000
@@ -806,17 +898,17 @@ noInherit on
         # subId=3887 dateSubmitted=2011-04-15
 
         track wgEncodeLicrHistoneLungH3k4me1MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal 
-        shortLabel Ln H3K4m1 8w
+        parent wgEncodeLicrHistoneViewSignal off 
+        shortLabel Ln 8w H3K4m1
         longLabel Lung adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=LUNG control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 25.240000
-	viewLimits 0.2:10
+	viewLimits 0.2:3
         # subId=3886 dateSubmitted=2011-04-15
 
         track wgEncodeLicrHistoneBmarrowInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel BM Input 8w
+        shortLabel BM 8w Input 
         longLabel Bone Marrow adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=BMARROW control=STD sex=M strain=C57BL6 
         type bigWig 0.150000 34.869999
@@ -824,8 +916,8 @@ noInherit on
         # subId=3928 dateSubmitted=2011-04-27
 
         track wgEncodeLicrHistoneCbellumInputMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Cb Input 8w
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Cb 8w Input
         longLabel Cerebellum adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=CBELLUM control=STD sex=M strain=C57BL6 
         type bigWig 0.140000 41.009998
@@ -834,7 +926,7 @@ noInherit on
 
         track wgEncodeLicrHistoneCortexInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Crx Input 8w
+        shortLabel Crx 8w Input
         longLabel Cortex adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=CORTEX control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 61.080002
@@ -842,8 +934,8 @@ noInherit on
         # subId=3930 dateSubmitted=2011-04-27
 
         track wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ht Input 8w
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Ht 8w Input
         longLabel Heart adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=HEART control=STD sex=M strain=C57BL6 
         type bigWig 0.140000 73.459999
@@ -852,7 +944,7 @@ noInherit on
 
         track wgEncodeLicrHistoneKidneyInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Kdy Input 8w
+        shortLabel Kdy 8w Input 
         longLabel Kidney adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=KIDNEY control=STD sex=M strain=C57BL6 
         type bigWig 0.140000 51.650002
@@ -860,8 +952,8 @@ noInherit on
         # subId=3932 dateSubmitted=2011-04-27
 
         track wgEncodeLicrHistoneLiverInputMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lv Input 8w
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Lv 8w Input 
         longLabel Liver adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=LIVER control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 65.070000
@@ -870,7 +962,7 @@ noInherit on
 
         track wgEncodeLicrHistoneLungInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ln Input 8w
+        shortLabel Ln 8w Input
         longLabel Lung adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=LUNG control=STD sex=M strain=C57BL6 
         type bigWig 0.150000 39.330002
@@ -878,7 +970,7 @@ noInherit on
 
         track wgEncodeLicrHistoneMefInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel MEF Input 8w
+        shortLabel MEF 8w Input
         longLabel  MEF adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=MEF control=STD sex=M strain=C57BL6 
         type bigWig 0.140000 50.770000
@@ -886,8 +978,8 @@ noInherit on
         # subId=4008 dateSubmitted=2011-04-29
 
         track wgEncodeLicrHistoneMefH3k4me3MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal 
-        shortLabel MEF H3K4m3 8w
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel MEF 8w H3K4m3
         longLabel MEF adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=MEF control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 71.599998
@@ -896,8 +988,8 @@ noInherit on
         # subId=4005 dateSubmitted=2011-04-29
 
         track wgEncodeLicrHistoneMefH3k4me1MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal 
-        shortLabel MEF H3K4m1 8w
+        parent wgEncodeLicrHistoneViewSignal off 
+        shortLabel MEF 8w H3K4m1 
         longLabel MEF adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=MEF control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 21.290001
@@ -907,7 +999,7 @@ noInherit on
 
         track wgEncodeLicrHistoneSpleenInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Sp Input 8w
+        shortLabel Sp 8w Input 
         longLabel Spleen adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=SPLEEN control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 31.219999
@@ -915,8 +1007,8 @@ noInherit on
         # subId=4035 dateSubmitted=2011-05-02
 
         track wgEncodeLicrHistoneSpleenH3k4me3MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal
-        shortLabel Sp H3K4m3 8w
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Sp 8w H3K4m3
         longLabel Spleen adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=SPLEEN control=STD sex=M strain=C57BL6 
         type bigWig 0.160000 65.190002
@@ -925,8 +1017,8 @@ noInherit on
         # subId=4034 dateSubmitted=2011-05-02
 
         track wgEncodeLicrHistoneSpleenH3k4me1MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal
-        shortLabel Sp H3K4m1 8w
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel Sp 8w H3K4m1
         longLabel Spleen adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=SPLEEN control=STD sex=M strain=C57BL6 
         type bigWig 0.140000 55.639999
@@ -935,8 +1027,8 @@ noInherit on
         # subId=4033 dateSubmitted=2011-05-02
 
         track wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal 
-        shortLabel ESB4 H3K4m3 E0
+        parent wgEncodeLicrHistoneViewSignal off 
+        shortLabel ESB4 E0 H3K4m3 
         longLabel ES-Bruce4 E0 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E0 factor=H3K04ME3 cellType=ESB4 control=STD sex=M strain=C57BL6 
         type bigWig 0.120000 46.810001
@@ -946,7 +1038,7 @@ noInherit on
 
         track wgEncodeLicrHistoneEsb4InputME0C57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel ESB4 Input E0
+        shortLabel ESB4 E0 Input
         longLabel ES-Bruce4 E0 Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E0 factor=INPUT cellType=ESB4 control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 64.720001
@@ -954,8 +1046,8 @@ noInherit on
         # subId=4046 dateSubmitted=2011-05-06
 
         track wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal
-        shortLabel ESB4 H3K4m1 E0
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel ESB4 E0 H3K4m1 
         longLabel ES-Bruce4 E0 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E0 factor=H3K04ME1 cellType=ESB4 control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 38.650002
@@ -965,34 +1057,37 @@ noInherit on
 
         track wgEncodeLicrHistoneThymusH3k04me1MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Thm H3K4m1 8w
+        shortLabel Thm 8w H3K4m1 
         longLabel Thymus adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=THYMUS control=STD sex=M strain=C57BL6 
         type bigWig 0.116118 35.880478
         color 86,180,233
+	viewLimits 0.2:3
         # subId=5315 dateSubmitted=2011-12-22
 
         track wgEncodeLicrHistoneOlfactH3k04me1MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel OB H3K4m1 8w
+        shortLabel OB 8w H3K4m1 
         longLabel Olfactory Bulb adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.133084 34.513157
         color 105,105,105
+	viewLimits 0.2:3
         # subId=5314 dateSubmitted=2011-12-22
 
         track wgEncodeLicrHistoneThymusH3k04me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Thm H3K4m3 8w
+        shortLabel Thm 8w H3K4m3
         longLabel Thymus adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=THYMUS control=STD sex=M strain=C57BL6 
         type bigWig 0.121863 86.035187
         color 86,180,233
+	viewLimits 0.2:10
         # subId=5316 dateSubmitted=2011-12-22
 
         track wgEncodeLicrHistoneThymusInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Thm Input 8w
+        shortLabel Thm 8w Input 
         longLabel Thymus adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=THYMUS control=STD sex=M strain=C57BL6 
         type bigWig 0.122860 69.354546
@@ -1001,27 +1096,27 @@ noInherit on
 
         track wgEncodeLicrHistoneOlfactH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel OB H3K27a 8w
+        shortLabel OB 8w H3K27a 
         longLabel Olfactory Bulb adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.117609 27.520395
         color 105,105,105
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5342 dateSubmitted=2011-12-22
 
         track wgEncodeLicrHistoneThymusH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Thm H3K27a 8w
+        shortLabel Thm 8w H3K27a
         longLabel Thymus adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=THYMUS control=STD sex=M strain=C57BL6 
         type bigWig 0.103252 37.652710
         color 86,180,233
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5343 dateSubmitted=2011-12-22
 
         track wgEncodeLicrHistoneOlfactInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel OB Input 8w
+        shortLabel OB 8w Input 
         longLabel Olfactory Bulb adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.102227 41.708450
@@ -1030,63 +1125,67 @@ noInherit on
 
         track wgEncodeLicrHistoneSmintH3k04me1MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel SI H3K4m1 8w
+        shortLabel SI 8w H3K4m1 
         longLabel Small Intestine adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=SMINT control=STD sex=M strain=C57BL6 
         type bigWig 0.150000 54.160000
         color 230,159,0
+	viewLimits 0.2:3
         # subId=5347 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneSmintH3k04me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel SI H3K4m3 8w
+        shortLabel SI 8w H3K4m3 
         longLabel Small Intestine adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=SMINT control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 74.949997
         color 230,159,0
+	viewLimits 0.2:10
         # subId=5348 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneSmintH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel SI H3K27a 8w
+        shortLabel SI 8w H3K27a 
         longLabel Small Intestine adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=SMINT control=STD sex=M strain=C57BL6 
         type bigWig 0.120000 35.220001
         color 230,159,0
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5350 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneTestisH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ts H3K27a 8w
+        shortLabel Ts 8w H3K27a     
         longLabel Testis adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=TESTIS control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 55.549999
         color 0,158,115
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5351 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneTestisH3k04me1MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ts H3K4m1 8w
+        shortLabel Ts 8w H3K4m1
         longLabel Testis adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=TESTIS control=STD sex=M strain=C57BL6 
         type bigWig 0.120000 62.349998
         color 0,158,115
+	viewLimits 0.2:3
         # subId=5352 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneTestisH3k04me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ts H3K4m3 8w
+        shortLabel Ts 8w H3K4m3
         longLabel Testis adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=TESTIS control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 48.570000
         color 0,158,115
+	viewLimits 0.2:10
         # subId=5353 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneTestisInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ts Input 8w
+        shortLabel Ts 8w Input
         longLabel Testis adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=TESTIS control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 59.860001
@@ -1095,7 +1194,7 @@ noInherit on
 
         track wgEncodeLicrHistoneSmintInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel SI Input 8w
+        shortLabel SI 8w Input 
         longLabel Small Intestine adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=SMINT control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 33.189999
@@ -1103,19 +1202,19 @@ noInherit on
         # subId=5361 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Bn H3K27a 14.5
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Bn 14.5 H3K27a 
         longLabel WholeBrain E14.5 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type bigWig 0.110000 47.540001
         color 105,105,105
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5366 dateSubmitted=2011-12-23
         # was wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdSig vsmalladi Tue Jan 10 15:20:48 2012
 
         track wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Bn Input 14.5
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Bn 14.5 Input 
         longLabel WholeBrain E14.5 Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=INPUT cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type bigWig 0.130000 22.879999
@@ -1125,35 +1224,37 @@ noInherit on
 
         track wgEncodeLicrHistoneLimbH3k27acUE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lb H3K27a 14.5
+        shortLabel Lb 14.5 H3K27a
         longLabel Limb E14.5 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=LIMB control=STD sex=U strain=C57BL6 
         type bigWig 0.120000 48.669998
         color 102,50,20
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5370 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneLimbH3k04me1UE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lb H3K4m1 14.5
+        shortLabel Lb 14.5 H3K4m1 
         longLabel Limb E14.5 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K04ME1 cellType=LIMB control=STD sex=U strain=C57BL6 
         type bigWig 0.130000 25.370001
         color 102,50,200
+	viewLimits 0.2:3
         # subId=5371 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneLimbH3k04me3UE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lb H3K4m3 14.5
+        shortLabel Lb 14.5 H3K4m3 
         longLabel Limb E14.5 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K04ME3 cellType=LIMB control=STD sex=U strain=C57BL6 
         type bigWig 0.130000 47.400002
         color 102,50,200
+	viewLimits 0.2:10
         # subId=5372 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneLimbInputUE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lb Input 14.5
+        shortLabel Lb 14.5 Input
         longLabel Limb E14.5 Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=INPUT cellType=LIMB control=STD sex=U strain=C57BL6 
         type bigWig 0.150000 46.419998
@@ -1162,125 +1263,127 @@ noInherit on
 
         track wgEncodeLicrHistoneBmarrowH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel BM H3K27a 8w
+        shortLabel BM 8w H3K27a
         longLabel BoneMarrow adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=BMARROW control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 49.990002
         color 86,180,233
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5374 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneCbellumH3k27acMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Cb H3K27a 8w
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Cb 8w H3K27a 
         longLabel Cerebellum adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=CBELLUM control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 27.700001
         color 105,105,105
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5375 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneHeartH3k27acMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ht H3K27a 8w
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Ht 8w H3K27a
         longLabel Heart adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=HEART control=STD sex=M strain=C57BL6 
         type bigWig 0.100000 33.759998
         color 153,38,0
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5377 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneKidneyH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Kdy H3K27a 8w
+        shortLabel Kdy 8w H3K27a
         longLabel Kidney adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=KIDNEY control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 37.259998
         color 204,121,16
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5378 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneLiverH3k27acMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lv H3K27a 8w
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Lv 8w H3K27a
         longLabel Liver adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=LIVER control=STD sex=M strain=C57BL6 
         type bigWig 0.140000 42.110001
         color 230,159,0
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5379 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneMefH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel MEF H3K27a 8w
+        shortLabel MEF 8w H3K27a 
         longLabel MEF adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=MEF control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 43.160000
         color 65,105,225
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5380 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneEsb4H3k27acME0C57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel ESB4 H3K27a E0
+        shortLabel ESB4 E0 H3K27a
         longLabel ES-Bruce4 E0 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E0 factor=H3K27AC cellType=ESB4 control=STD sex=M strain=C57BL6 
         type bigWig 0.140000 42.669998
         color 65,105,225
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5381 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneSpleenH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Sp H3K27a 8w
+        shortLabel Sp 8w H3K27a
         longLabel Spleen adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=SPLEEN control=STD sex=M strain=C57BL6 
         type bigWig 0.120000 46.990002
         color 86,180,233
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5382 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Crx H3K27a 8w
+        shortLabel Crx 8w H3K27a
         longLabel Cortex adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=CORTEX control=STD sex=M strain=C57BL6 
         type bigWig 0.140000 26.379999
         color 105,105,105
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5376 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ht H3K4m1 14.5
+        shortLabel Ht 14.5 H3K4m1 
         longLabel Heart E14.5 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K04ME1 cellType=HEART control=STD sex=U strain=C57BL6 
         type bigWig 0.100000 18.980000
         color 153,38,0
+	viewLimits 0.2:3
         # subId=5415 dateSubmitted=2012-01-04
 
         track wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ht H3K4m3 14.5
+        shortLabel Ht 14.5 H3K4m3 
         longLabel Heart E14.5 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K04ME3 cellType=HEART control=STD sex=U strain=C57BL6 
         type bigWig 0.110000 72.550003
         color 153,38,0
+	viewLimits 0.2:10
         # subId=5414 dateSubmitted=2012-01-04
 
         track wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ht H3K27a 14.5
+        shortLabel Ht 14.5 H3K27a 
         longLabel Heart E14.5 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=HEART control=STD sex=U strain=C57BL6 
         type bigWig 0.110000 38.139999
         color 153,38,0
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5416 dateSubmitted=2012-01-04
 
         track wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Ht Input 14.5
+        shortLabel Ht 14.5 Input 
         longLabel Heart E14.5 Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=INPUT cellType=HEART control=STD sex=U strain=C57BL6 
         type bigWig 0.140000 48.220001
@@ -1289,44 +1392,47 @@ noInherit on
 
         track wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel OB H3K4m3 8w
+        shortLabel OB 8w H3K4m3 
         longLabel Olfactory Bulb adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=OLFACT control=STD sex=M strain=C57BL6 
         type bigWig 0.121283 73.194351
         color 105,105,105
+	viewLimits 0.2:10
         # subId=5446 dateSubmitted=2012-01-07
 
         track wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Pt H3K27a 8w
+        shortLabel Pt 8w H3K27a 
         longLabel Placenta adult-8wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=PLAC control=STD sex=F strain=C57BL6 
         type bigWig 0.130000 51.709999
         color 153,38,0
-        viewLimits 0:5
+        viewLimits 0.2:5
         # subId=5441 dateSubmitted=2012-01-05
 
         track wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Pt H3K4m1 8w
+        shortLabel Pt 8w H3K4m1
         longLabel Placenta adult-8wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=PLAC control=STD sex=F strain=C57BL6 
         type bigWig 0.150000 46.540001
         color 153,38,0
+	viewLimits 0.2:3
         # subId=5442 dateSubmitted=2012-01-05
 
         track wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Pt H3K4m3 8w
+        shortLabel Pt 8w H3K4m3
         longLabel Placenta adult-8wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=PLAC control=STD sex=F strain=C57BL6 
         type bigWig 0.180000 128.720001
         color 153,38,0
+	viewLimits 0.2:10
         # subId=5443 dateSubmitted=2012-01-05
 
         track wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Pt Input 8w
+        shortLabel Pt 8w Input 
         longLabel Placenta adult-8wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=PLAC control=STD sex=F strain=C57BL6 
         type bigWig 0.120000 60.020000
@@ -1334,26 +1440,28 @@ noInherit on
         # subId=5444 dateSubmitted=2012-01-05
 
         track wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Bn H3K4m3 14.5
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Bn 14.5 H3K4m3 
         longLabel WholeBrain E14.5 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K04ME3 cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type bigWig 0.120000 50.209999
         color 105,105,105
+	viewLimits 0.2:10
         # subId=5365 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Bn H3K4m1 14.5
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Bn 14.5 H3K4m1
         longLabel WholeBrain E14.5 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K04ME1 cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type bigWig 0.110000 18.080000
         color 105,105,105
+	viewLimits 0.2:3
         # subId=5364 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneLiverInputUE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lv Input 14.5
+        shortLabel Lv 14.5 Input
         longLabel Liver E14.5 Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E14HALF factor=INPUT cellType=LIVER control=STD sex=U strain=C57BL6 
         type bigWig 0.130000 48.360001
@@ -1362,35 +1470,38 @@ noInherit on
 
         track wgEncodeLicrHistoneLiverH3k27acUE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lv H3K27a 14.5
+        shortLabel Lv 14.5 H3K27a 
         longLabel Liver E14.5 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=LIVER control=STD sex=U strain=C57BL6 
         type bigWig 0.100000 59.410000
         color 230,159,0
+	viewLimits 0.2:5
         # subId=5670 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneLiverH3k04me1UE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lv H3K4m1 14.5
+        shortLabel Lv 14.5 H3K4m1
         longLabel Liver E14.5 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K04ME1 cellType=LIVER control=STD sex=U strain=C57BL6 
         type bigWig 0.120000 12.900000
         color 230,159,0
+	viewLimits 0.2:3
         # subId=5671 dateSubmitted=2012-02-15
 
         track wgEncodeLicrHistoneLiverH3k04me3UE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Lv H3K4m3 14.5
+        shortLabel Lv 14.5 H3K4m3 
         longLabel Liver E14.5 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E14HALF factor=H3K04ME3 cellType=LIVER control=STD sex=U strain=C57BL6 
         type bigWig 0.140000 58.919998
         color 230,159,0
+	viewLimits 0.2:10
         # subId=5672 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneBatInputMAdult24wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel BAT Input Sig
-        longLabel BAT adult-24wks C57BL/6 Input std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        shortLabel BAT 24w Input
+        longLabel BAT adult-24wks Input ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT24WKS factor=INPUT cellType=BAT control=STD sex=M strain=C57BL6 
         type bigWig 0.100000 50.900002
         color 189,0,157
@@ -1398,100 +1509,229 @@ noInherit on
 
         track wgEncodeLicrHistoneBatH3k04me1MAdult24wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel BAT H3K4me1 Sig
-        longLabel BAT adult-24wks C57BL/6 H3K4me1 std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        shortLabel BAT 24w H3K4m1 
+        longLabel BAT adult-24wks H3K4me1 ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT24WKS factor=H3K04ME1 cellType=BAT control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 14.560000
         color 189,0,157
+	viewLimits 0.2:3
         # subId=5970 dateSubmitted=2012-03-01
 
         track wgEncodeLicrHistoneBatH3k04me3MAdult24wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel BAT H3K4me3 Sig
-        longLabel BAT adult-24wks C57BL/6 H3K4me3 std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        shortLabel BAT 24w H3K4m3 
+        longLabel BAT adult-24wks H3K4me3 ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT24WKS factor=H3K04ME3 cellType=BAT control=STD sex=M strain=C57BL6 
         type bigWig 0.160000 60.709999
         color 189,0,157
+	viewLimits 0.2:10
         # subId=5971 dateSubmitted=2012-03-01
 
         track wgEncodeLicrHistoneBatH3k27acMAdult24wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
-        shortLabel BAT H3K27ac Sig
-        longLabel BAT adult-24wks C57BL/6 H3K27ac std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        shortLabel BAT 24w H3K27a
+        longLabel BAT adult-24wks H3K27ac ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT24WKS factor=H3K27AC cellType=BAT control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 46.150002
         color 189,0,157
+	viewLimits 0.2:5
         # subId=5972 dateSubmitted=2012-03-01
 
         track wgEncodeLicrHistoneLiverH3k79me2MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Liver H3K79me2 Sig
-        longLabel Liver adult-8wks C57BL/6 H3K79me2 std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Lv 8w H3K79m2 
+        longLabel Liver adult-8wks H3K79me2 ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K79ME2 cellType=LIVER control=STD sex=M strain=C57BL6 
         type bigWig 0.120000 51.799999
         color 230,159,0
+	viewLimits 0.2:3
         # subId=5911 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneLiverH3k36me3MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Liver H3K36me3 Sig
-        longLabel Liver adult-8wks C57BL/6 H3K36me3 std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Lv 8w H3K36m3
+        longLabel Liver adult-8wks H3K36me3 ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K36ME3 cellType=LIVER control=STD sex=M strain=C57BL6 
         type bigWig 0.120000 21.610001
         color 230,159,0
+	viewLimits 0.2:3
         # subId=5908 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneLiverH3k27me3MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Liver H3K27me3 Sig
-        longLabel Liver adult-8wks C57BL/6 H3K27me3 std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Lv 8w H3K27m3
+        longLabel Liver adult-8wks H3K27me3 ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K27ME3 cellType=LIVER control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 64.220001
         color 230,159,0
+	viewLimits 0.2:2
         # subId=5907 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneLiverH3k09acMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Liver H3K9ac Sig
-        longLabel Liver adult-8wks C57BL/6 H3K9ac std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Lv 8w H3K9a
+        longLabel Liver adult-8wks H3K9ac ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K09AC cellType=LIVER control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 42.980000
         color 230,159,0
+	viewLimits 0.2:5
         # subId=5905 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneHeartH3k79me2MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Heart H3K79me2 Sig
-        longLabel Heart adult-8wks C57BL/6 H3K79me2 std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Ht 8w H3K79m2 
+        longLabel Heart adult-8wks H3K79me2 ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K79ME2 cellType=HEART control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 40.750000
         color 153,38,0
+	viewLimits 0.2:3
         # subId=5903 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneHeartH3k36me3MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Heart H3K36me3 Sig
-        longLabel Heart adult-8wks C57BL/6 H3K36me3 std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Ht 8w H3K36m3
+        longLabel Heart adult-8wks H3K36me3 ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=H3K36ME3 cellType=HEART control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 18.590000
         color 153,38,0
+	viewLimits 0.2:3
         # subId=5902 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneHeartH3k27me3MAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Heart H3K27me3 Sig
-        longLabel Heart adult-8wks C57BL/6 H3K27me3 std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Ht 8w H3K27m3
+        longLabel Heart adult-8wks H3K27me3 ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K27ME3 cellType=HEART control=STD sex=M strain=C57BL6 
         type bigWig 0.140000 52.110001
         color 153,38,0
+	viewLimits 0.2:2
         # subId=5900 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneHeartH3k09acMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal off
-        shortLabel Heart H3K9ac Sig
-        longLabel Heart adult-8wks C57BL/6 H3K9ac std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel Ht 8w H3K9a
+        longLabel Heart adult-8wks H3K9ac ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K09AC cellType=HEART control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 32.660000
         color 153,38,0
+	viewLimits 0.2:5
         # subId=5899 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneMelInputMImmortalC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel MEL Input
+        longLabel MEL immortalized Input ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=IMMORTAL factor=INPUT cellType=MEL control=STD sex=M strain=C57BL6
+        type bigWig 0.150000 92.559998
+        color 86,180,233
+        # subId=5957 dateSubmitted=2012-02-29
+
+        track wgEncodeLicrHistoneMelH3k04me3MImmortalC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel MEL H3K4m3 
+        longLabel MEL immortalized H3K4me3 ChIP-seq Signal from ENCODE/LICR 
+        subGroups view=Signal age=IMMORTAL factor=H3K04ME3 cellType=MEL control=STD sex=M strain=C57BL6
+        type bigWig 0.110000 82.040001
+        color 86,180,233
+	viewLimits 0.2:10
+        # subId=5916 dateSubmitted=2012-02-29
+
+        track wgEncodeLicrHistoneMelH3k27acMImmortalC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel MEL H3K27a
+        longLabel MEL immortalized H3K27ac ChIP-seq Signal from ENCODE/LICR 
+        subGroups view=Signal age=IMMORTAL factor=H3K27AC cellType=MEL control=STD sex=M strain=C57BL6
+        type bigWig 0.150000 73.129997
+        color 86,180,233
+	viewLimits 0.2:5
+        # subId=5915 dateSubmitted=2012-02-29
+
+        track wgEncodeLicrHistoneMelH3k04me1MImmortalC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel MEL H3K4m1
+        longLabel MEL immortalized H3K4me1 ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=IMMORTAL factor=H3K04ME1 cellType=MEL control=STD sex=M strain=C57BL6
+        type bigWig 0.150000 33.680000
+        color 86,180,233
+	viewLimits 0.2:3
+        # subId=5914 dateSubmitted=2012-02-29
+
+        track wgEncodeLicrHistoneMelH3k09acMImmortalC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel MEL H3K9a
+        longLabel MEL immortalized H3K9ac ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=IMMORTAL factor=H3K09AC cellType=MEL control=STD sex=M strain=C57BL6
+        type bigWig 0.130000 69.959999
+        color 86,180,233
+	viewLimits 0.2:5
+        # subId=5912 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneMelH3k79me2MImmortalC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel MEL H3K79m2
+        longLabel MEL immortalized H3K79me2 ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=IMMORTAL factor=H3K79ME2 cellType=MEL control=STD sex=M strain=C57BL6
+        type bigWig 0.110000 44.459999
+        color 86,180,233
+	viewLimits 0.2:3
+        # subId=5910 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneMelH3k36me3MImmortalC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel MEL H3K36m3
+        longLabel MEL immortalized H3K36me3 ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=IMMORTAL factor=H3K36ME3 cellType=MEL control=STD sex=M strain=C57BL6
+        type bigWig 0.110000 21.510000
+        color 86,180,233
+	viewLimits 0.2:3
+        # subId=5909 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneMelH3k27me3MImmortalC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal
+        shortLabel MEL H3K27m3
+        longLabel MEL immortalized H3K27me3 ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=IMMORTAL factor=H3K27ME3 cellType=MEL control=STD sex=M strain=C57BL6
+        type bigWig 0.110000 35.549999
+        color 86,180,233
+	viewLimits 0.2:2
+        # subId=5906 dateSubmitted=2012-02-28
+
+        track wgEncodeLicrHistoneBmdmH3k04me3FAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel BMDM 8w H3K4m3
+        longLabel BMDM adult-8wks H3K4me3 ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=BMDM control=STD sex=F strain=C57BL6
+        type bigWig 0.110000 77.830002
+        color 86,180,233
+	viewLimits 0.2:10
+        # subId=5963 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrHistoneBmdmH3k27acFAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel BMDM 8w H3K27a
+        longLabel BMDM adult-8wks H3K27ac ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=BMDM control=STD sex=F strain=C57BL6
+        type bigWig 0.110000 57.849998
+        color 86,180,233
+	viewLimits 0.2:5
+        # subId=5964 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrHistoneBmdmH3k04me1FAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel BMDM 8w H3K4m1
+        longLabel BMDM adult-8wks H3K4me1 ChIP-seq Signal from ENCODE/LICR 
+        subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=BMDM control=STD sex=F strain=C57BL6
+        type bigWig 0.110000 9.030000
+        color 86,180,233
+	viewLimits 0.2:3
+        # subId=5965 dateSubmitted=2012-03-10
+
+        track wgEncodeLicrHistoneBmdmInputFAdult8wksC57bl6StdSig
+        parent wgEncodeLicrHistoneViewSignal off
+        shortLabel BMDM 8w Input
+        longLabel BMDM adult-8wks Input ChIP-seq Signal from ENCODE/LICR
+        subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=BMDM control=STD sex=F strain=C57BL6
+        type bigWig 0.140000 48.919998
+        color 86,180,233
+        # subId=5968 dateSubmitted=2012-03-10
 

@@ -13,6 +13,7 @@ lab Sanger
 labExpId V4
 level 3
 md5sum d9ab71aba73feeec2fcdc3481e55b566
+objStatus replaced by V11
 project wgEncode
 subId 2094
 tableName wgEncodeGencode2wayConsPseudoV4
@@ -32,6 +33,7 @@ lab Sanger
 labExpId V4
 level 3
 md5sum 73f99245e3c965ddeea833cb4cea4b46
+objStatus replaced by V11
 project wgEncode
 subId 2094
 tableName wgEncodeGencodeAutoV4
@@ -49,6 +51,7 @@ grant Hubbard
 lab Sanger
 labExpId V4
 md5sum 8bdefa36c611e608c33cd8496821da58
+objStatus replaced by V11
 project wgEncode
 subId 2094
 tableName wgEncodeGencodeClassesV4
@@ -68,6 +71,7 @@ lab Sanger
 labExpId V4
 level 1-2
 md5sum 641475f0b3e587056505ebc4ea520e70
+objStatus replaced by V11
 project wgEncode
 subId 2094
 tableName wgEncodeGencodeManualV4
@@ -87,6 +91,7 @@ lab Sanger
 labExpId V4
 level 2
 md5sum 053e158a4c29c0dc81401a44b01749b9
+objStatus replaced by V11
 project wgEncode
 subId 2094
 tableName wgEncodeGencodePolyaV4
@@ -94,7 +99,7 @@ tableName wgEncodeGencodePolyaV4
 metaObject wgEncodeGencodeV4
 objType composite
 composite wgEncodeGencodeV4
-expVars lab,dataType,labExpId
+expVars lab,objStatus replaced by V11
 
 metaObject wgEncodeGencodeYalePseudoV4
 objType table
@@ -109,8 +114,9 @@ grant Hubbard
 lab Sanger
 labExpId V4
 md5sum 6832a5362ffaa7f0f660c6f666436a68
+objStatus replaced by V11
 project wgEncode
 subId 2094
 tableName wgEncodeGencodeYalePseudoV4
 
-# MAGIC: -548690092
+# MAGIC: 1432048470

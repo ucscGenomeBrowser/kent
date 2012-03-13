@@ -79,15 +79,24 @@ $(function () {
             }
         });
         // fill in tables and activate buttons
-        tableOut("#refGenomeTable", refGenomeTypes, refGenomeExps, false);
-        tableOut("#elementTable", elementTypes, cellAssayExps, false);
-        $("#buttonDataMatrix").click(function () {
-            window.location = "encodeDataMatrixHuman.html";
+        tableOut('#refGenomeTable', refGenomeTypes, refGenomeExps, false);
+        tableOut('#elementTable', elementTypes, cellAssayExps, false);
+        $('#buttonDataMatrix').click(function () {
+            window.location = 'encodeDataMatrixHuman.html';
         });
         // TODO: enable selectable items in antibody table
-        tableOut("#tfbsTable", tfbsTypes, tfbsExps, true);
-        $("#buttonChipMatrix").click(function () {
-            window.location = "encodeChipMatrixHuman.html";
+        tableOut('#tfbsTable', tfbsTypes, tfbsExps, true);
+        $('#buttonChipMatrix').click(function () {
+            window.location = 'encodeChipMatrixHuman.html';
+        });
+
+        // add row highlight
+        $('.summaryTable').delegate('.even, .odd', 'mouseover mouseleave', function (ev) {
+            if (ev.type == 'mouseover') {
+                $(this).addClass('rowHighlight');
+            } else {
+                $(this).removeClass('rowHighlight');
+            }
         });
     }
 
@@ -121,19 +130,19 @@ $(function () {
             row++;
         });
 
-        $(".dataItem").addClass("selectable");
-        $(".dataItem").click(function () {
+        /* $(".dataItem").addClass("selectable"); */
+        $(".even, .odd").click(function () {
             // TODO: base on preview ?
             var url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
             if (isChipSeq) {
-                target = $(this).attr("id");
+                target = $(this).children('.dataItem').attr("id");
                 url += '&hgt_mdbVar1=antibody';
                 antibodyTarget = encodeProject.getAntibodyTarget(target);
                 $.each(antibodyTarget.antibodies, function (i, antibody) {
                     url += '&hgt_mdbVal1=' + antibody;
                 });
             } else {
-                dataType = $(this).attr("id");
+                dataType = $(this).children('.dataItem').attr("id");
                 url += '&hgt_mdbVar1=dataType&hgt_mdbVal1=' + dataType;
             }
             url += '&hgt_mdbVar2=view&hgt_mdbVal2=Any';
@@ -155,3 +164,4 @@ $(function () {
     // load data from server
     encodeProject.loadAllFromServer(requests, handleServerData);
 });
+

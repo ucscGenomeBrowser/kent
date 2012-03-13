@@ -19,7 +19,6 @@ scripts: ${SCRIPT_FILES:%=${SCRIPTS}/%}
 
 ${SCRIPTS}/%: %
 	@mkdir -p $(dir $@)
-	perl -c $<
 	chmod +x $<
 	cp -p $< $@.tmp
 	mv -f $@.tmp $@
