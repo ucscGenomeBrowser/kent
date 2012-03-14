@@ -14335,6 +14335,16 @@ cvDefined no
 validate exists
 priority 980
 
+term files
+tag FILES
+type typeOfTerm
+label DDF defined files
+description The name of the files defined in the DDF by the lab
+searchable no
+cvDefined no
+validate none
+priority 990
+
 term fragLength
 tag FRAGLENGTH
 type typeOfTerm
