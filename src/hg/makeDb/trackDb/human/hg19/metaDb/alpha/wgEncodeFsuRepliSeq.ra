@@ -1,0 +1,386 @@
+metaObject wgEncodeFsuRepliSeq
+objType composite
+composite wgEncodeFsuRepliSeq
+expVars lab,dataType,cell
+
+metaObject wgEncodeFsuRepliSeqBg02esRawDataRep1
+objType file
+attic auxSup
+cell BG02ES
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqBg02esRawDataRep1.pair.tar.gz
+grant Gilbert
+lab FSU
+labExpId BG02hESC_R1_293676
+platform GPL13190
+project wgEncode
+replicate 1
+subId 5976
+view RawData
+
+metaObject wgEncodeFsuRepliSeqBg02esRawDataRep2
+objType file
+attic auxSup
+cell BG02ES
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqBg02esRawDataRep2.pair.tar.gz
+grant Gilbert
+lab FSU
+labExpId BG02hESC_R2_294988
+platform GPL13190
+project wgEncode
+replicate 2
+subId 5976
+view RawData
+
+metaObject wgEncodeFsuRepliSeqBg02esWaveSignalRep1
+objType table
+cell BG02ES
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqBg02esWaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId BG02hESC_R1_293676
+platform GPL13190
+project wgEncode
+replicate 1
+subId 5976
+tableName wgEncodeFsuRepliSeqBg02esWaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliSeqBg02esWaveSignalRep2
+objType table
+cell BG02ES
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqBg02esWaveSignalRep2.bigWig
+grant Gilbert
+lab FSU
+labExpId BG02hESC_R2_294988
+platform GPL13190
+project wgEncode
+replicate 2
+subId 5976
+tableName wgEncodeFsuRepliSeqBg02esWaveSignalRep2
+view WaveSignal
+
+metaObject wgEncodeFsuRepliSeqGm06990RawDataRep1
+objType file
+attic auxSup
+cell GM06990
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqGm06990RawDataRep1.pair.tar.gz
+grant Gilbert
+lab FSU
+labExpId GM06990_R1_434444_A01_62510
+platform GPL14965
+project wgEncode
+replicate 1
+subId 5976
+view RawData
+
+metaObject wgEncodeFsuRepliSeqGm06990RawDataRep2
+objType file
+attic auxSup
+cell GM06990
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqGm06990RawDataRep2.pair.tar.gz
+grant Gilbert
+lab FSU
+labExpId GM06990_R2_434444_A02_62510
+platform GPL14965
+project wgEncode
+replicate 2
+subId 5976
+view RawData
+
+metaObject wgEncodeFsuRepliSeqGm06990WaveSignalRep1
+objType table
+cell GM06990
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqGm06990WaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId GM06990_R1_434444_A01_62510
+platform GPL14965
+project wgEncode
+replicate 1
+subId 5976
+tableName wgEncodeFsuRepliSeqGm06990WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliSeqGm06990WaveSignalRep2
+objType table
+cell GM06990
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqGm06990WaveSignalRep2.bigWig
+grant Gilbert
+lab FSU
+labExpId GM06990_R2_434444_A02_62510
+platform GPL14965
+project wgEncode
+replicate 2
+subId 5976
+tableName wgEncodeFsuRepliSeqGm06990WaveSignalRep2
+view WaveSignal
+
+metaObject wgEncodeFsuRepliSeqH1hescRawDataRep1
+objType file
+attic auxSup
+cell H1-hESC
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqH1hescRawDataRep1.pair.tar.gz
+grant Gilbert
+lab FSU
+labExpId H1hESC_R1_15470602
+platform GPL13190
+project wgEncode
+replicate 1
+subId 5976
+view RawData
+
+metaObject wgEncodeFsuRepliSeqH1hescRawDataRep2
+objType file
+attic auxSup
+cell H1-hESC
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqH1hescRawDataRep2.pair.tar.gz
+grant Gilbert
+lab FSU
+labExpId H1hESC_R2_293676
+platform GPL13190
+project wgEncode
+replicate 2
+subId 5976
+view RawData
+
+metaObject wgEncodeFsuRepliSeqH1hescWaveSignalRep1
+objType table
+cell H1-hESC
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqH1hescWaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId H1hESC_R1_15470602
+platform GPL13190
+project wgEncode
+replicate 1
+subId 5976
+tableName wgEncodeFsuRepliSeqH1hescWaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliSeqH1hescWaveSignalRep2
+objType table
+cell H1-hESC
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqH1hescWaveSignalRep2.bigWig
+grant Gilbert
+lab FSU
+labExpId H1hESC_R2_293676
+platform GPL13190
+project wgEncode
+replicate 2
+subId 5976
+tableName wgEncodeFsuRepliSeqH1hescWaveSignalRep2
+view WaveSignal
+
+metaObject wgEncodeFsuRepliSeqH7esRawDataRep1
+objType file
+attic auxSup
+cell H7-hESC
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqH7esRawDataRep1.pair.tar.gz
+grant Gilbert
+lab FSU
+labExpId H7hESC_R1_294986
+platform GPL13190
+project wgEncode
+replicate 1
+subId 5976
+view RawData
+
+metaObject wgEncodeFsuRepliSeqH7esWaveSignalRep1
+objType table
+cell H7-hESC
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqH7esWaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId H7hESC_R1_294986
+platform GPL13190
+project wgEncode
+replicate 1
+subId 5976
+tableName wgEncodeFsuRepliSeqH7esWaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliSeqH9esRawDataRep1
+objType file
+attic auxSup
+cell H9ES
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqH9esRawDataRep1.pair.tar.gz
+grant Gilbert
+lab FSU
+labExpId H9hESC_R1_294986
+platform GPL13190
+project wgEncode
+replicate 1
+subId 5976
+view RawData
+
+metaObject wgEncodeFsuRepliSeqH9esWaveSignalRep1
+objType table
+cell H9ES
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqH9esWaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId H9hESC_R1_294986
+platform GPL13190
+project wgEncode
+replicate 1
+subId 5976
+tableName wgEncodeFsuRepliSeqH9esWaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliSeqHelas3RawDataRep1
+objType file
+attic auxSup
+cell HeLa-S3
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqHelas3RawDataRep1.pair.tar.gz
+grant Gilbert
+lab FSU
+labExpId HeLaS3_R1_369858A02_2
+platform GPL14965
+project wgEncode
+replicate 1
+subId 5976
+view RawData
+
+metaObject wgEncodeFsuRepliSeqHelas3WaveSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqHelas3WaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId HeLaS3_R1_369858A02_2
+platform GPL14965
+project wgEncode
+replicate 1
+subId 5976
+tableName wgEncodeFsuRepliSeqHelas3WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeFsuRepliSeqImr90RawDataRep1
+objType file
+attic auxSup
+cell IMR90
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqImr90RawDataRep1.pair.tar.gz
+grant Gilbert
+lab FSU
+labExpId IMR90_R1_369858-3A01
+platform GPL14965
+project wgEncode
+replicate 1
+subId 5976
+view RawData
+
+metaObject wgEncodeFsuRepliSeqImr90WaveSignalRep1
+objType table
+cell IMR90
+composite wgEncodeFsuRepliSeq
+dataType RepliSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-02
+dateUnrestricted 2012-12-02
+fileName wgEncodeFsuRepliSeqImr90WaveSignalRep1.bigWig
+grant Gilbert
+lab FSU
+labExpId IMR90_R1_369858-3A01
+platform GPL14965
+project wgEncode
+replicate 1
+subId 5976
+tableName wgEncodeFsuRepliSeqImr90WaveSignalRep1
+view WaveSignal
+
+# MAGIC: -1630151754
