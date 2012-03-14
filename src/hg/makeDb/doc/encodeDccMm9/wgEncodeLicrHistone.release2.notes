@@ -1,0 +1,72 @@
+Errors (60):
+metaDb:
+ wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneBmarrowInputMAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneBmarrowInputMAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCbellumH3k4me1MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCbellumInputMAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCbellumInputMAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCortexInputMAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneCortexInputMAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneEsb4H3k4me1ME0C57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneEsb4H3k4me3ME0C57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneEsb4InputME0C57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneEsb4InputME0C57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneHeartH3k4me3MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneHeartH3k4me3MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneKidneyH3k4me3MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneKidneyH3k4me3MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneKidneyInputMAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneKidneyInputMAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLiverH3k4me1MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLiverH3k4me1MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLiverH3k4me3MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLiverH3k4me3MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLiverInputMAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLiverInputMAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLungH3k4me1MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLungH3k4me1MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLungH3k4me3MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLungH3k4me3MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLungInputMAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneLungInputMAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneMefH3k4me1MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneMefH3k4me1MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneMefH3k4me3MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneMefH3k4me3MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneMefInputMAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneMefInputMAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneSpleenH3k4me1MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneSpleenH3k4me1MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneSpleenH3k4me3MAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneSpleenH3k4me3MAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneSpleenInputMAdult8wksC57bl6StdAlnRep1.bam.bai is not mentioned in public metaDb
+ wgEncodeLicrHistoneSpleenInputMAdult8wksC57bl6StdAlnRep2.bam.bai is not mentioned in public metaDb
+
+
+Files that dropped between releases (3):
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrHistone/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrHistone/release1/md5sum.history
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrHistone/release1/preamble.html
+
+
+
+
