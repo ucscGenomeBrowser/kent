@@ -11205,19 +11205,19 @@ term 400
 tag IL400
 type insertLength
 description insert length of 400nt
-label 400
+label insert len 400
 
 term 200
 tag IL200
 type insertLength
 description insert length of 200nt
-label 200
+label insert len 200
 
 term ilNA
 tag ILNA
 type insertLength
 description insert length not applicable
-label N/A
+label insert len N/A
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 
@@ -11225,25 +11225,25 @@ term 1k
 tag F1K
 type fragSize
 description 1 kb DNA fragments
-label 1k
+label 1kb fragments
 
 term 5k
 tag F5K
 type fragSize
 description 5 kb DNA fragments
-label 5k
+label 5kb fragments
 
 term 10k
 tag F10K
 type fragSize
 description 10 kb DNA fragments
-label 10k
+label 10kb fragments
 
 term 20k
 tag F20K
 type fragSize
 description 20 kb DNA fragments
-label 20k
+label 20kb fragments
 
 ### localization
 # term (human-readable name)
@@ -11545,37 +11545,37 @@ term Control_36bp
 tag CNTRL36B
 type control
 description This data represents a control being compared to experiments using read length of 36 bp
-label 36bp
+label Control 36bp
 
 term Control_50bp
 tag CNTRL50B
 type control
 description This data represents a control being compared to experiments using read length of 50 bp
-label 50bp
+label Control 50bp
 
 term Input
 tag INPUT
 type control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
-label Input
+label Input Control
 
 term Large_Fragment
 tag LARGEFRAGMENT
 type control
 description Control signal from sonication into large fragments of DNA (350-800 bp).
-label Large_Fragment
+label Large Fragment
 
 term Naked_DNA
 tag NAKEDDNA
 type control
 description Control signal from Naked DNA.
-label Naked_DNA
+label Naked DNA
 
 term Reference_Genome
 tag REFERENCEGENOME
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
-label Reference_Genome
+label Reference Genome
 
 term RevXlinkChromatin
 tag RXLCH
@@ -11587,7 +11587,7 @@ term None
 tag NONE
 description No special treatment or protocol applies
 type control
-label None
+label No treatment or prot
 
 ### Inputs which are a special type of control
 
@@ -11595,7 +11595,7 @@ term std
 tag STD
 type control
 description Standard input signal for most experiments.
-label std
+label Standard Control
 
 term IgG-goat
 tag IGGGOAT
@@ -11631,13 +11631,13 @@ term MNase
 tag MNASE
 type control
 description Input signal from MNase digested DNA.
-label MNase
+label MNase Input Control
 
 term UCDavis
 tag UCD
 type control
 description Input library was prepared at UC Davis.
-label UCDavis
+label UCDavis Input Control
 
 ### Treatments
 
@@ -12166,13 +12166,13 @@ term ENM
 tag ENM
 type region
 description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
-label ENM
+label ENCODE pilot regions
 
 term ENR
 tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
-label ENR
+label ENCODE pilot random
 
 term UW-5C-Myc-Region
 tag UW5CMYC
