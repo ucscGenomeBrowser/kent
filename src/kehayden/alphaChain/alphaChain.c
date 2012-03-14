@@ -304,14 +304,8 @@ struct wordTree *wordTreeForChainsInFile(char *fileName, int chainSize, struct l
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
 
-/* We'll keep a chain of three or so words in a doubly linked list. */
-struct dlNode *node;
-struct dlList *chain = dlListNew();
-int curSize = 0;
-
 /* We'll build up the tree starting with an empty root node. */
 struct wordTree *wt = wordTreeNew("");	
-int wordCount = 0;
 
 /* Save time/space by sharing stack between all "following" rbTrees. */
 struct rbTreeNode **stack;	
@@ -322,26 +316,18 @@ lmAllocArray(lm, stack, 256);
  * processing each word. */
 while (lineFileNext(lf, &line, NULL))
     {
-    if (lower)
-        tolowers(line);
+      /* KEH NOTES: change 3/14/12: before process beginning and end of a file, now happens at the beginning and end of each line */
+      /* We'll keep a chain of three or so words in a doubly linked list. */
+      struct dlNode *node;
+      struct dlList *chain = dlListNew();
+      int curSize = 0;
+      int wordCount = 0;
+
+      /* skipping the first word which is the read id */
+      word = nextWord(&line);
+
     while ((word = nextWord(&line)) != NULL)
 	{
-	if (unpunc)
-	    {
-	    stripChar(word, ',');
-	    stripChar(word, '.');
-	    stripChar(word, ';');
-	    stripChar(word, '-');
-	    stripChar(word, '"');
-	    stripChar(word, '?');
-	    stripChar(word, '!');
-	    stripChar(word, '(');
-	    stripChar(word, ')');
-	    if (word[0] == 0)
-	         continue;
-	    }
-	verbose(2, "%s\n", word);
-
 	/* We come to this point in the code for each word in the file. 
 	 * Here we want to maintain a chain of sequential words up to
 	 * chainSize long.  We do this with a doubly-linked list structure.
@@ -350,6 +336,9 @@ while (lineFileNext(lf, &line, NULL))
 	 * chain size.  Once past the initial section of the file we'll be
 	 * getting rid of the first link in the chain as well as adding a new
 	 * last link in the chain with each new word we see. */
+
+
+
 	if (curSize < chainSize)
 	    {
 	    dlAddValTail(chain, cloneString(word));
@@ -369,25 +358,25 @@ while (lineFileNext(lf, &line, NULL))
 	    }
 	++wordCount;
 	}
+    /* Handle last few words in line, where can't make a chain of full size.  Also handles       
+     * lines that have fewer than chain size words. */
+    if (curSize < chainSize)
+      addChainToTree(wt, chain, lm, stack);
+    while ((node = dlPopHead(chain)) != NULL)
+      {
+	addChainToTree(wt, chain, lm, stack);
+	freeMem(node->val);
+	freeMem(node);
+      }
+    dlListFree(&chain);
     }
 
-/* Handle last few words in file, where can't make a chain of full size.  Need
- * a special case for file that has fewer than chain size words too. */
-if (curSize < chainSize)
-    addChainToTree(wt, chain, lm, stack);
-while ((node = dlPopHead(chain)) != NULL)
-    {
-    addChainToTree(wt, chain, lm, stack);
-    freeMem(node->val);
-    freeMem(node);
-    }
-dlListFree(&chain);
 lineFileClose(&lf);
 return wt;
 }
 
-void wordChain(char *inFile, int maxSize)
-/* wordChain - Create Markov chain of words and optionally output chain in two formats. */
+void alphaChain(char *inFile, int maxSize)
+/* alphaChain - Create Markov chain of words and optionally output chain in two formats. */
 {
 struct lm *lm = lmInit(0);
 struct wordTree *wt = wordTreeForChainsInFile(inFile, maxSize, lm);
@@ -424,6 +413,6 @@ maxNonsenseSize = optionInt("maxNonsenseSize", maxNonsenseSize);
 lower = optionExists("lower");
 unpunc = optionExists("unpunc");
 fullOnly = optionExists("fullOnly");
-wordChain(argv[1], maxChainSize);
+alphaChain(argv[1], maxChainSize);
 return 0;
 }
