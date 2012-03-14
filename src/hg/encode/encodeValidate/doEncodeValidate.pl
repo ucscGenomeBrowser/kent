@@ -195,7 +195,7 @@ our %validators = (
     tissueSourceType => \&validateControlledVocabOrNone,
     spikeInPool => \&validateNoValidation,
     readType => \&validateControlledVocabOrNone,
-	region => \&validateControlledVocabOrNone,
+    region => \&validateControlledVocabOrNone,
     default => \&validateControlledVocab,
     );
 
@@ -311,6 +311,17 @@ sub validateControlledVocabOrControl {
 
 sub validateControlledVocab {
     my ($val, $type) = @_;
+
+    if (not defined $terms{'typeOfTerm'}->{$type}) {
+        return ("Controlled Vocabulary \'$type\' is not a defined type");
+    }   
+    if (not defined $terms{'typeOfTerm'}->{$type}->{'cvDefined'}) {
+        return ("Controlled Vocabulary \'$type\' has no cvDefined field");
+    }
+
+    if ($terms{'typeOfTerm'}->{$type}->{'cvDefined'} eq "no") {
+        return &validateNoValidation();
+    }
     return defined($terms{$type}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
@@ -1156,6 +1167,29 @@ sub isDeprecated {
     }
 }
 
+sub validateDdfHeader {
+
+    my @ddfHeader = @{$_[0]};
+    #can't use %terms becuase it's global, not falling into that trap.
+    my %cv = %{$_[1]};
+    my @localerrors;
+
+    foreach my $column (@ddfHeader) {
+        if ($column eq "cell") {
+            $column = "cellType";
+        }
+        if ($column eq "antibody") {
+            $column = "Antibody";
+        }
+        unless (defined $cv{'typeOfTerm'}->{$column}) {
+            push @localerrors, "The term '$column' is not in the Controlled Vocabulary";
+        }
+    }
+
+    return (\@localerrors);
+
+}
+
 sub validateDdfField {
     # validate value for type of field
     # Venkat: Added $sex to accomadate tissues for mouse
@@ -1683,7 +1717,13 @@ while(@{$lines}) {
     last;
 }
 
-my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
+%terms = Encode::getControlledVocab($configPath);
+
+#my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
+
+#the ddf header should not validate against fields.ra, so it now validates against the CV
+my @errors = @{&validateDdfHeader(\@ddfHeader, \%terms)};
+
 
 # Special cases to handle conditionally required fields
 if(!defined($ddfHeader{controlId})) {
@@ -1700,7 +1740,6 @@ if(@errors) {
     die "ERROR in DDF '$ddfFile':\n" . join("\n", @errors) . "\n";
 }
 
-%terms = Encode::getControlledVocab($configPath);
 
 my @variables;
 if (defined($daf->{variables})) {
@@ -1799,7 +1838,10 @@ while (@{$lines}) {
             }
             my $cell = $line{cell};
             my $sex = $line{sex};
-            my $category = $terms{'Cell Line'}->{$cell}->{'category'};
+            my $category;
+            if (defined $terms{'Cell Line'}->{$cell}) {
+                $category = $terms{'Cell Line'}->{$cell}->{'category'};
+            }
             if (defined $category && $category eq "Tissue" && not defined $sex) {
                 push (@errors, "Cell '$cell' is a tissue; the sex must be defined in the DDF.");
             }

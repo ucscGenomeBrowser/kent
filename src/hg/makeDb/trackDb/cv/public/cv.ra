@@ -8611,7 +8611,7 @@ lab Snyder
 lots LB140235
 targetId SIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
-validation Human_-_:SIN3A(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_:mouse_SIN3A_NB600-1263_validation_Snyder.pdf
+validation Human_-_SIN3A_(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_SIN3A_(NB600-1263)(Immunoprecipitation):mouse_SIN3A_NB600-1263_validation_Snyder.pdf
 label SIN3A (NB600-1263)
 
 term Sin3Ak-20
@@ -9185,7 +9185,9 @@ target TRIM28
 targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors.  The protein localizes to the nucleus and is thought to associate with specific chromatin regions.  The protein is a member of the tripartite motif family.  This tripartite motif includes three zinc-binding domains, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-81411
-orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.htmllab Myerslots L0309
+orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.html
+lab Myers
+lots L0309
 targetId GeneCard:TRIM28
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation Human_-_TRIM28_(sc-81411)(Western_blot,ChIP):human_TRIM28_sc-81411_validation_Myers.pdf
