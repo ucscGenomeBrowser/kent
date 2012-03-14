@@ -14285,7 +14285,7 @@ type typeOfTerm
 label UCSC replicate number
 description This replicate number is based on submission to the UCSC browser, it may not reflect the replicate number assigned by the contributing lab.
 searchable yes
-cvDefined off
+cvDefined no 
 validate integer
 hidden no
 priority 241
@@ -14296,7 +14296,7 @@ type typeOfTerm
 label Donor ID
 description The identification of the donor of the tissue sample.
 searchable no 
-cvDefined off
+cvDefined no 
 validate none   
 hidden no
 priority 241
