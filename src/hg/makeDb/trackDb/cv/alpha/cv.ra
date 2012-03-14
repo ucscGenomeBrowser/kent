@@ -258,7 +258,7 @@ tag NHEMFM2
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001
+description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin
 lineage missing
 karyotype normal
 sex M
@@ -2700,7 +2700,7 @@ tag HFDPC
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3 from ateral scalp / brown / blond
+description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3 from lateral scalp (brown, blond)
 lineage missing
 karyotype normal
 sex F
@@ -2718,7 +2718,7 @@ tag HFDPC01005032
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells from lateral scalp / brown
+description Follicle Dermal Papilla Cells from lateral scalp (brown)
 lineage missing
 karyotype normal
 sex F
@@ -2736,7 +2736,7 @@ tag HFDPC01027033
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells from lateral scalp / blond
+description Follicle Dermal Papilla Cells from lateral scalp (blond)
 lineage missing
 karyotype normal
 sex F
@@ -3072,7 +3072,7 @@ tag HMSCBM005060211
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells femoral head
+description Undifferentiated Mesenchymal Stem Cells from femoral head
 lineage missing
 karyotype normal
 sex M
