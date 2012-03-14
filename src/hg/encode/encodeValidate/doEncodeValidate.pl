@@ -1838,7 +1838,10 @@ while (@{$lines}) {
             }
             my $cell = $line{cell};
             my $sex = $line{sex};
-            my $category = $terms{'Cell Line'}->{$cell}->{'category'};
+            my $category;
+            if (defined $terms{'Cell Line'}->{$cell}) {
+                $category = $terms{'Cell Line'}->{$cell}->{'category'};
+            }
             if (defined $category && $category eq "Tissue" && not defined $sex) {
                 push (@errors, "Cell '$cell' is a tissue; the sex must be defined in the DDF.");
             }
