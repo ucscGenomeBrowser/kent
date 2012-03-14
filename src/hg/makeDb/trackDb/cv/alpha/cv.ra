@@ -1183,23 +1183,6 @@ sex M
 tier 3
 protocol Stam:BJ_Stam_protocol.pdf
 
-#term BMDM
-#tag BMDM
-#type Cell Line
-#organism mouse
-#tissue blood
-#category primaryCells
-#description Bone marrow derived macrophage
-#age ageUnknown
-#strain Unknown
-#vendorName Genhong Cheng Lab, UCLA
-#termId 7058
-#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
-#color 86,180,233
-#sex U
-#protocol Ren:BMDM_Ren_protocol.pdf
-#label Bone marrow derived macrophage
-
 term CD14+
 tag CD14
 type Cell Line
@@ -6539,7 +6522,7 @@ validation Human_-_ARID3A_(sc-8821)(Immunoprecipitation,ChIP):human_ARID3A_sc-88
 label ARID3A (sc-8821)
 
 term ATF1_(06-325)
-tag ATF1MILLIPORE06325
+tag ATF106325
 type Antibody
 antibodyDescription Sheep polyclonal, immunogen: CPVTLTSQTTKTDDPQL. Antibody Target: ATF1
 target ATF1
@@ -6550,11 +6533,11 @@ orderUrl http://www.millipore.com/catalogue/item/06-325
 lab Struhl
 targetId GeneCard:ATF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF1
-validation Human_-_ATF1_(06-325)(Western_blot,ChIP):human_ATF1_Millipore_06-325_validation_Struhl.pdf
+validation Human_-_ATF1_(06-325)(Western_blot,ChIP):human_ATF1_06-325_validation_Struhl.pdf
 label ATF1 (06-325)
 
-term ATF2_pT71
-tag ATF2PT71
+term ATF2_(9221)
+tag ATF29221
 type Antibody
 antibodyDescription Rabbit polyclonal, antibodies are produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Thr71 of human ATF2. Antibodies are purified by protein A and peptide affinity chromatography. Antibody Target: ATF2
 target ATF2
@@ -6565,7 +6548,7 @@ orderUrl http://www.cellsignal.com/products/9221.html
 lab Struhl
 targetId GeneCard:ATF2_pT71
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
-validation Human_-_ATF2_pT71_(9221)(Western_blot,Immunoprecipitation):human_ATF2_pT71_9221_validation_Struhl.pdf
+validation Human_-_ATF2_(9221)(Western_blot,Immunoprecipitation):human_ATF2_9221_validation_Struhl.pdf
 label ATF2 (9221)
 
 
@@ -7082,8 +7065,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
 validation Human_-_CREB1_(06-863)(Western_blot,ChIP):human_CREB1_06-863_Millipore_06-863_validation_Struhl.pdf
 label CREB1 (06-863)
 
-term CREB1_pS133
-tag CREB1PS133
+term CREB1_(9198)
+tag CREB19198
 type Antibody
 antibodyDescription Rabbit monoclonal antibody is produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Ser133 of human CREB. Antibody Target: CREB1
 target CREB1
@@ -7092,9 +7075,9 @@ vendorName Cell Signaling
 vendorId 9198
 orderUrl http://www.cellsignal.com/pdf/9198.pdf
 lab Struhl
-targetId GeneCard:CREB1_pS133
+targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation Human_-_CREB1_pS133_(Cell_Signaling_9198)(Western_blot,ChIP):human_CREB1_pS133_Cell_Signaling_9198_validation_Struhl.pdf
+validation Human_-_CREB1_(9188)_(Cell_Signaling_9198)(Western_blot,ChIP):human_CREB1_9198_validation_Struhl.pdf
 label CREB1 (9198)
 
 term CREB1_(SC-240)
@@ -7207,8 +7190,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2
 validation Human_-_CtBP2(Western_blot,siRna):human_CtBP2_validation_Farnham.pdf
 label CtBP2 (612044)
 
-term CycT1
-tag CYCT1
+term CycT1_(sc-10750)
+tag CYCT1SC10750
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 261-505 mapping to an internal region of cyclin T1 of human origin. Antibody Target: CycT1
 target CycT1
@@ -7219,7 +7202,7 @@ orderUrl http://www.scbt.com/datasheet-10750-cyclin-t1-h-245-antibody.html
 lab Struhl
 targetId GeneCard:CCNT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNT1
-validation CycT1(Western_blot,Immunoprecipitation):human_CycT1_validation_Struhl.pdf
+validation Human_-_CycT1_(sc-10750)(Western_blot,Immunoprecipitation):human_CycT1_sc-10750_validation_Struhl.pdf
 label CycT1 (sc-10750)
 
 term E2F1
@@ -8860,8 +8843,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MBD4
 validation Human_-_MBD4_(SC-271530)(Western_blot,IP-MassSpec):human_MBD4_SC-271530_sc-271530_validation_Myers.pdf
 label MBD4 (sc-271530)
 
-term Med1
-tag MED1
+term Med1_(sc-8998)
+tag MED1SC8998
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 502-756 of TRAP220 of mouse origin. Antibody Target: Med1
 target Med1
@@ -8872,23 +8855,23 @@ orderUrl http://www.scbt.com/datasheet-8998-trap220-m-255-antibody.html
 lab Struhl
 targetId GeneCard:MED1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED1
-validation Med1(Western_blot,Immunoprecipitation):human_Med1_validation_Struhl.pdf
+validation Human_-_Med1_(sc-8998)(Western_blot,Immunoprecipitation):human_Med1_sc-8998_validation_Struhl.pdf
 label Med1 (sc-8998)
 
-term Med26_(sc48776)
+term Med26_(sc-48776)
 tag MED26SC48776
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 373-600 mapping at the C-terminus of CRSP70 of human origin. Antibody Target: Med26
 target Med26
 targetDescription Med26 is a subunit of the large coactivator known as mediator. Med26 is subunit found to be mutually exclusive from the CDK8 module of mediator. Med26 has been associated with activating effects on transcription in context specific manner. Mediator is believed to promote transcription by bridging transcription factors and the RNA polymerase II holoenzyme.
 vendorName Santa Cruz Biotech
-vendorId sc48776
+vendorId sc-48776
 orderUrl http://www.scbt.com/datasheet-48776-crsp70-h-228-antibody.html
 lab Struhl
 targetId GeneCard:Med26
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26&search=Med26
-validation Med26_(sc48776)(Western_blot,Immunoprecipitation):human_Med26_sc48776_validation_Struhl.pdf
-label Med26 (sc48776)
+validation Human_-_Med26_(sc-48776)(Western_blot,Immunoprecipitation):human_Med26_sc-48776_validation_Struhl.pdf
+label Med26 (sc-48776)
 
 term MEF2A
 tag MEF2A
@@ -9667,7 +9650,7 @@ label  SETDB1 (sc-66884)
 #lots
 
 term SIN3A_(NB600-1263)
-tag SIN3A NB6001263
+tag SIN3ANB6001263
 type Antibody
 antibodyDescription Rabbit polyclonal, Immunogen: Synthetic peptide: MKRRLDDQESDVYAAQQRR, corresponding to amino acids 1-19 of Mouse mSin3A. Antibody Target: SIN3A (NB600-1263)
 target SIN3A
@@ -9679,7 +9662,7 @@ lab Snyder
 lots LB140235
 targetId SIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
-validation Human_-_:SIN3A(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_:mouse_SIN3A_NB600-1263_validation_Snyder.pdf
+validation Human_-_SIN3A_(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_SIN3A_(NB600-1263)(Immunoprecipitation):mouse_SIN3A_NB600-1263_validation_Snyder.pdf
 label SIN3A (NB600-1263)
 
 term Sin3Ak-20
@@ -10050,20 +10033,20 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
 validation Human_-_TBP(Immunoblot):human_TBP_validation_Snyder.pdf Mouse_-_:missing
 label TBP (ab62126)
 
-term TBP_(sc273)
+term TBP_(sc-273)
 tag TBPSC273
 type Antibody
 antibodyDescription Rabbit polyclonal, raised against full length TFIID of human origin. Antibody Target: TBP
 target TBP
 targetDescription TBP is an integral subunit of the TFIID complex. TBP recognizes the TATA box and helps to recruit and orient the RNA poymerase II initiation complex and RNA polymerase III.
 vendorName Santa Cruz Biotech
-vendorId sc273
+vendorId sc-273
 orderUrl http://www.scbt.com/datasheet-273-tfiid-tbp-si-1-antibody.html
 lab Struhl
 targetId GeneCard:TBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
-validation Human_-_TBP_(sc273)(Western_blot,Immunoprecipitation):human_TBP_sc273_validation_Struhl.pdf
-label TBP (sc273)
+validation Human_-_TBP_(sc-273)(Western_blot,Immunoprecipitation):human_TBP_sci273_validation_Struhl.pdf
+label TBP (sc-273)
 
 
 term TCF12
@@ -10265,7 +10248,9 @@ target TRIM28
 targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors.  The protein localizes to the nucleus and is thought to associate with specific chromatin regions.  The protein is a member of the tripartite motif family.  This tripartite motif includes three zinc-binding domains, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-81411
-orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.htmllab Myerslots L0309
+orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.html
+lab Myers
+lots L0309
 targetId GeneCard:TRIM28
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation Human_-_TRIM28_(sc-81411)(Western_blot,ChIP):human_TRIM28_sc-81411_validation_Myers.pdf 
@@ -10603,7 +10588,7 @@ label ZZZ3
 ### These are all for the  experiments.
 ### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
 
-term CBP_(sc369)
+term CBP_(sc-369)
 tag CBPSC369
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CBP
@@ -10615,8 +10600,8 @@ orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
 lab Struhl
 targetId GeneCard:CREBBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
-validation Human_-_CBP_(sc369)(Western_blot,ChIP):human_CBP_sc369_validation_Struhl.pdf
-label CBP (sc369)
+validation Human_-_CBP_(sc-369)(Western_blot,ChIP):human_CBP_sc-369_validation_Struhl.pdf
+label CBP (sc-369)
 
 term CBX3_(SC-101004)
 tag CBX3SC101004
@@ -10693,12 +10678,12 @@ lab Snyder
 lots 834865
 targetId RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
-validation Human_-_COREST(ab24166)(Western_blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
+validation Human_-_COREST_(ab24166)(Western_blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
 label COREST (ab24166)
 
 
-term COREST_(sc30189)
-tag COREST SC30189
+term COREST_(sc-30189)
+tag CORESTSC30189
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 246-310 mapping within an internal region of CoREST of human origin recommended for detection of CoREST of mouse, rat and human origin. Antibody Target: COREST (sc30189)
 target COREST
@@ -10710,7 +10695,7 @@ lab Snyder
 lots C0806
 targetId RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
-validation Human_-_COREST_(sc30189)(Immunoprecipitation,ChIP):human_COREST_sc30189_validation_Snyder.pdf Mouse_-_COREST_sc30189(Immunoprecipitation,ChIP):mouse_COREST_sc30189_validation_Snyder.pdf
+validation Human_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):human_COREST_sc-30189_validation_Snyder.pdf Mouse_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):mouse_COREST_sc-30189_validation_Snyder.pdf
 label COREST (sc30189)
 
 # lots
@@ -10829,8 +10814,8 @@ targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
 validation 
 label Hexim1 (07-955)
 
-term HMGN1
-tag HMGN1
+term HMGN1_(ab51212)
+tag HMGN1AB51212
 type Antibody
 antibodyDescription Rabbit polyclonal, immunogen= synthetic peptide derived from residues 50 to the C-terminus of Human HMGN1 / HMG14. Antibody Target: HMGN1
 target HMGN1
@@ -10841,7 +10826,7 @@ orderUrl http://www.abcam.com/HMG14-antibody-ab5212.html
 lab Struhl
 targetId GeneCard:HMGN1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN1
-validation Human_-_HMGN1(Western_blot,Immunoprecipitation):human_HMGN1_validation_Struhl.pdf
+validation Human_-_HMGN1_(ab51212)(Western_blot,Immunoprecipitation):human_HMGN1_ab51212_validation_Struhl.pdf
 label HMGN1 (ab5212)
 
 term HNRNPD
@@ -10878,7 +10863,7 @@ label hnRNPM (05-620)
 # lots
 ##This does not appear in metaDb
 
-term hSpt5_(sc28678)
+term hSpt5_(sc-28678)
 tag HSPT5SC28678
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin. Antibody Target: hSpt5
@@ -10890,7 +10875,7 @@ orderUrl http://www.scbt.com/datasheet-28678-spt5-h-300-antibody.html
 lab Struhl
 targetId GeneCard:SUPT5H
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUPT5H
-validation Human_-_hSpt5_(sc28678)(Western_blot,Immunoprecipitation):human_hSpt5_sc28678_validation_Struhl.pdf
+validation Human_-_hSpt5_(sc-28678)(Western_blot,Immunoprecipitation):human_hSpt5_sc-28678_validation_Struhl.pdf
 label hSpt5 (sc28678)
 
 
