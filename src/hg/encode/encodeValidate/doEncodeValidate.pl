@@ -195,7 +195,7 @@ our %validators = (
     tissueSourceType => \&validateControlledVocabOrNone,
     spikeInPool => \&validateNoValidation,
     readType => \&validateControlledVocabOrNone,
-	region => \&validateControlledVocabOrNone,
+    region => \&validateControlledVocabOrNone,
     default => \&validateControlledVocab,
     );
 
@@ -311,6 +311,17 @@ sub validateControlledVocabOrControl {
 
 sub validateControlledVocab {
     my ($val, $type) = @_;
+
+    if (not defined $terms{'typeOfTerm'}->{$type}) {
+        return ("Controlled Vocabulary \'$type\' is not a defined type");
+    }   
+    if (not defined $terms{'typeOfTerm'}->{$type}->{'cvDefined'}) {
+        return ("Controlled Vocabulary \'$type\' has no cvDefined field");
+    }
+
+    if ($terms{'typeOfTerm'}->{$type}->{'cvDefined'} eq "no") {
+        return &validateNoValidation();
+    }
     return defined($terms{$type}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
