@@ -29,7 +29,7 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sper
 #	max 58279134 (gi|358364222|gb|JH393279.1|) median 3276
 
 #############################################################################
-# process into UCSC naming scheme (DONE - 2012-03-12 - Hiram)
+# process into UCSC naming scheme (DONE - 2012-03-14 - Hiram)
     cd /hive/data/genomes/speTri2/genbank
     # watch out for the pattern match below: s/.*gb\|//;
     #	depends upon what string is in the header of the fasta file
@@ -90,7 +90,7 @@ close (UC);
 speTri1 Feb. 2008 (Broad/speTri1)       /gbdb/speTri1   Squirrel        scaffold_113960:498395-508394   1       1910    Squirrel        Spermophilus tridecemlineatus   /gbdb/speTri1/html/description.html     0       0       Broad Institute speTri1 43179
 
 #############################################################################
-#  Initial database build (DONE - 2012-03-12 - Hiram)
+#  Initial database build (DONE - 2012-03-14 - Hiram)
     cd /hive/data/genomes/speTri2
     cat << '_EOF_' > speTri2.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -127,15 +127,15 @@ ncbiAssemblyName SpeTri2.0
     #	to the trackDb/makefile
 
 #############################################################################
-# running repeat masker (DONE - 2012-03-12 - Hiram)
+# running repeat masker (DONE - 2012-03-14 - Hiram)
+    # construct a screen to keep this process under
+    screen -S speTri2RM
     mkdir /hive/data/genomes/speTri2/bed/repeatMasker
     cd /hive/data/genomes/speTri2/bed/repeatMasker
-    # had a missing i from the name in the dbDb table, fixed that after
-    #	started with this species argument.
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
-	-species "otolemur garnettii" \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek speTri2 > do.log 2>&1 &
+XXX - running - Wed Mar 14 16:11:15 PDT 2012
     #	real    1015m56.518s
     cat faSize.rmsk.txt
     # 2519724550 bases (160194097 N's 2359530453 real 1427970093 upper
@@ -156,7 +156,7 @@ ncbiAssemblyName SpeTri2.0
     #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
-# running simple repeat (DONE - 2012-03-12 - Hiram)
+# running simple repeat (DONE - 2012-03-14 - Hiram)
     mkdir /hive/data/genomes/speTri2/bed/simpleRepeat
     cd /hive/data/genomes/speTri2/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
@@ -185,17 +185,18 @@ ncbiAssemblyName SpeTri2.0
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(DONE - 2012-03-12 - Hiram)
+#	(DONE - 2012-03-14 - Hiram)
     mkdir /hive/data/genomes/speTri2/bed/gap
     cd /hive/data/genomes/speTri2/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../speTri2.unmasked.2bit > findMotif.txt 2>&1
-    #	real    real    1m7.907s
+    #	real    0m20.648s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     time featureBits speTri2 -not gap -bed=notGap.bed
     #	real    0m14.265s
-    #	2359530453 bases of 2359530453 (100.000%) in intersection
+    #	2311060300 bases of 2311060300 (100.000%) in intersection
     time featureBits speTri2 allGaps.bed notGap.bed -bed=new.gaps.bed
+XXX - running - Wed Mar 14 16:15:13 PDT 2012
     #	real    174m56.543s
     #	0 bases of 2359530453 (0.000%) in intersection
 
@@ -205,11 +206,12 @@ ncbiAssemblyName SpeTri2.0
     #	192447 yes
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2012-03-12 - Hiram)
+## WINDOWMASKER (DONE - 2012-03-14 - Hiram)
     mkdir /hive/data/genomes/speTri2/bed/windowMasker
     cd /hive/data/genomes/speTri2/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev speTri2 > do.log 2>&1 &
+XXX - running - Wed Mar 14 16:12:09 PDT 2012
     # about 235 minutes
 
     # Masking statistics
