@@ -7837,7 +7837,7 @@ lab Myers
 lots C1909
 targetId GeneCard:FOXM1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXM1
-validation Human_-_FOXM1_(sc-502):human_FOXM1_sc-502_validation_Myers.pdf
+validation Human_-_FOXM1_(sc-502)(Western_blot,ChIP):human_FOXM1_sc-502_validation_Myers.pdf
 label FOXM1 (sc-502)
 
 term FOXP2
