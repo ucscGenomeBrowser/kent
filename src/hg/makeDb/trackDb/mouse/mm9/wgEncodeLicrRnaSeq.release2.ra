@@ -28,16 +28,16 @@ shortLabel LICR RNA-seq
 longLabel RNA-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
-subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow BMDM=BMDM CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine  SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
+subGroup2 cellType Cell_Line BAT=Brown_Adipose_Tissue BMARROW=Bone_Marrow BMDM=Bone_Marrow_Derived_Macrophage CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=Olfactory_Bulb PLAC=Placenta SMINT=Smll_Intestine  SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=Whole_Brain
 subGroup3 localization Localization CELL=Whole_cell
 subGroup4 rnaExtract RnaExtract PAP=PolyA+
 subGroup5 rep Replicate rep1=1 rep2=2
 subGroup6 sex Sex M=M F=F U=U
-subGroup7 age Age E0=E0 E14HALF=E14.5 ADULT8WKS=adult-8wks ADULT24WKS=adult-24wks IMMORTAL=immortalized
+subGroup7 age Age E0=Embryonic_day_0 E14HALF=Embryonic_day_14.5 ADULT8WKS=Adult_8_weeks ADULT24WKS=Adult_24_weeks IMMORTAL=immortal_cells
 subGroup8 strain Strain C57BL6=C57BL/6 
 dimensions dimensionX=cellType dimensionY=age
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+ age=+ rep=+
-fileSortOrder cell=Cell_Line rnaExtract=RNA<BR>Extract age=Age view=View dccAccession=UCSC_Accession geoSeriesAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+sortOrder cellType=+ view=+ age=+ rep=+
+fileSortOrder cell=Cell_Line age=Age view=View dccAccession=UCSC_Accession geoSeriesAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract sex=sex age=age strain=strain
 dragAndDrop subTracks
 priority 0
@@ -798,7 +798,7 @@ html wgEncodeLicrRnaSeq.release2
 
         track wgEncodeLicrRnaSeqPlacCellPapFAdult8wksC57bl6AlnRep1
         parent wgEncodeLicrRnaSeqViewAlignments off
-        shortLabel PLAC 8wk Al 1
+        shortLabel Placenta 8wk Al 1
         longLabel Placenta Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=ADULT8WKS cellType=PLAC localization=CELL rnaExtract=PAP sex=F strain=C57BL6 rep=rep1
         type bam
@@ -807,7 +807,7 @@ html wgEncodeLicrRnaSeq.release2
 
         track wgEncodeLicrRnaSeqPlacCellPapFAdult8wksC57bl6AlnRep2
         parent wgEncodeLicrRnaSeqViewAlignments off
-        shortLabel PLAC 8wk Al 2
+        shortLabel Placenta 8wk Al 2
         longLabel Placenta Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/LICR 
         subGroups view=Alignments age=ADULT8WKS cellType=PLAC localization=CELL rnaExtract=PAP sex=F strain=C57BL6 rep=rep2
         type bam
