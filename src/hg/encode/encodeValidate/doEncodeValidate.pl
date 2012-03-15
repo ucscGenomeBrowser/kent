@@ -2498,7 +2498,6 @@ if($submitPath =~ /(\d+)$/) {
     }
 }
 
-#matt made this
 sub generateLongLabel {
     my $lab = $_[0];
     my %vars = %{$_[1]};
