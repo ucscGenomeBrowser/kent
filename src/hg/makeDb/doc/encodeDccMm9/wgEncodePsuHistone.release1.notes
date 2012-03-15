@@ -1,6 +1,6 @@
 mkChangeNotes v2
 mm9 wgEncodePsuHistone Release 1
-2012-01-24
+2012-03-14
 
 QA Count Summaries for Release 1:
 Tables: 55
@@ -15,12 +15,12 @@ Files: 0
 Gbdbs: 0
 
 Sizes of New:
-Table: 79 MB
-Files: 900754 MB (880 GB)
+Table: 91 MB
+Files: 900760 MB (880 GB)
 Gbdbs: 168639 MB (165 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 1069473 MB (1.02 TB)
+Total: 1069491 MB (1.02 TB)
 
 
 New Tables (55):
