@@ -28,7 +28,7 @@ shortLabel LICR RNA-seq
 longLabel RNA-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
-subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow BMDM=BMDM CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine  SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
+subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow BMDM=BMDM CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine  SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=Whole Brain
 subGroup3 localization Localization CELL=Whole_cell
 subGroup4 rnaExtract RnaExtract PAP=PolyA+
 subGroup5 rep Replicate rep1=1 rep2=2
