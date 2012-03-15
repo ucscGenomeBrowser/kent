@@ -725,7 +725,87 @@ XXXX 2012-02-16 TODO: read all the do.log and edit README before push!!
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
 
-#######################################################################
+#########################################################################
+# GENSCAN GENE PREDICTIONS (DONE 2012-03-15 - Chin)
+    mkdir /hive/data/genomes/sarHar1/bed/genscan
+    cd /hive/data/genomes/sarHar1/bed/genscan
+
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/genscanlinux
+
+    # create hard masked .fa files
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../sarHar1.2bit:$C stdout \
+        | maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    # Generate a list file, genome.list, of all the hard-masked contig
+    # chunks:
+    find ./hardMaskedFa/ -type f | sed -e 's#^./##' > genome.list
+
+    wc -l genome.list
+    #   35974 genome.list
+
+    # Run on small cluster (more mem than big cluster).
+    ssh swarm
+    cd /hive/data/genomes/sarHar1/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Create template file, template, for gensub2.  For example (3-line
+    # file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in exists+ $(path1)} {check out exists gtf/$(root1).gtf} -trans={check out exists pep/$(root1).pep} -subopt={check out exists subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 genome.list single template jobList
+    para create jobList
+    para try
+    para check ... etc...
+    para time
+    # Completed: 35974 of 35974 jobs
+    # CPU time in finished jobs:  42777s     712.95m    11.88h    0.50d 0.001 y
+    # IO & Wait Time:            129825s    2163.75m    36.06h    1.50d 0.004 y
+    # Average job time:               5s       0.08m     0.00h    0.00d
+    # Longest finished job:         112s       1.87m     0.03h    0.00d
+    # Submission to last job        306s       5.10m     0.09h    0.00d
+
+    # Make sure all files ended with linefeed 
+    # this did not work, runs out of file handles ?
+    # run endsInLf in batch of 256 files
+    find ./gtf -type f | xargs -n 256 endsInLf -zeroOk
+
+    # Concatenate results:
+    cd /hive/data/genomes/sarHar1/bed/genscan
+    find ./gtf -type f | xargs cat > genscan.gtf
+    find ./pep -type f | xargs cat > genscan.pep
+    find ./subopt -type f | xargs cat > genscanSubopt.bed
+
+    # Load into the database (without -genePredExt because no frame
+    # info):
+    ssh hgwdev
+    cd /hive/data/genomes/sarHar1/bed/genscan
+    # to construct a local file with the genePred business:
+    gtfToGenePred genscan.gtf genscan.gp
+    # this produces exactly the same thing and loads the table:
+    ldHgGene -gtf sarHar1 genscan genscan.gtf
+    # Read 29306 transcripts in 167329 lines in 1 files
+    #  29306 groups 6967 seqs 1 sources 1 feature types
+    #  29306 gene predictions
+    #  Don't load the Pep anymore -- redundant since it's from
+    # genomic.
+    hgPepPred sarHar1 generic genscanPep genscan.pep
+    # Processing genscan.pep
+    hgLoadBed sarHar1 genscanSubopt genscanSubopt.bed
+    # Reading genscanSubopt.bed
+    # Read 347922 elements of size 6 from genscanSubopt.bed
+    featureBits sarHar1 genscan
+    # 26054613 bases of 2931539702 (0.889%) in intersection
+
 #########################################################################
 
 
