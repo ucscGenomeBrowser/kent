@@ -33,7 +33,7 @@ subGroup3 localization Localization CELL=Whole_cell
 subGroup4 rnaExtract RnaExtract PAP=PolyA+
 subGroup5 rep Replicate rep1=1 rep2=2
 subGroup6 sex Sex M=M F=F U=U
-subGroup7 age Age E0=Embryonic_day_0 E14HALF=Embryonic_day_14.5 ADULT8WKS=Adult_8_weeks ADULT24WKS=Adult_24_weeks IMMORTAL=immortal_cells
+subGroup7 age Age E0=Embryonic_day_0 E14HALF=Embryonic_day_14.5 ADULT8WKS=Adult_8_weeks ADULT24WKS=Adult_24_weeks IMMORTAL=Immortal_cells
 subGroup8 strain Strain C57BL6=C57BL/6 
 dimensions dimensionX=cellType dimensionY=age
 sortOrder cellType=+ view=+ age=+ rep=+
