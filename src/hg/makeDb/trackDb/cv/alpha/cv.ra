@@ -5238,6 +5238,24 @@ protocol Stam:WI38_Stam_protocol.pdf
 # category: (T for tissue, L for cell line, or P for primary cells.  optional)
 # tier is NOT used in mouse
 
+term 10T1/2
+tag 10T12
+type Cell Line
+organism mouse
+tissue embryonic
+age immortalized
+strain C3H
+category cellLine
+description Multipotential cell line that can be converted by 5-azacytidine into three mesodermal stem cell lineages.
+vendorName ATCC
+vendorId    CCL-226
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-226&Template=cellBiology
+termId 96
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=96
+color 65,105,225
+sex U
+protocol Wold:10ToneHalf_Wold_protocol.pdf 
+
 term 3134
 tag 3134
 type Cell Line
