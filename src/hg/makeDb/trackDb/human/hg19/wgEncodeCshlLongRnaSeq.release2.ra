@@ -5624,7 +5624,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=6020 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqImr90CellTotalContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel IMR90 cell total
         longLabel IMR90 whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3IMR90 localization=CELL rnaExtract=TOTAL
@@ -5632,7 +5632,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=6021 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel Monocytes-CD14+_RO01746 cell longPolyA
         longLabel Monocytes-CD14+ RO01746 whole cell longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3MONOCD14RO1746 localization=CELL rnaExtract=PAP
@@ -5784,7 +5784,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=6041 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel Monocytes-CD14+_RO01746 cell longNonPolyA
         longLabel Monocytes-CD14+ RO01746 whole cell longNonPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3MONOCD14RO1746 localization=CELL rnaExtract=PAM
@@ -5800,7 +5800,7 @@ html wgEncodeCshlLongRnaSeq.release2
         # subId=6043 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqImr90CellPapContigs
-        parent wgEncodeCshlLongRnaSeqViewContigs off
+        parent wgEncodeCshlLongRnaSeqViewContigs on
         shortLabel IMR90 cell longPolyA
         longLabel IMR90 whole cell longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3IMR90 localization=CELL rnaExtract=PAP
