@@ -4258,7 +4258,7 @@ view TranscriptGencV7
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPamAlnRep2
 objType table
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4286,7 +4286,7 @@ view Alignments
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPamFastqRd1Rep2
 objType file
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4313,7 +4313,7 @@ view FastqRd1
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPamFastqRd2Rep2
 objType file
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4340,7 +4340,7 @@ view FastqRd2
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPamMinusRawRep2
 objType table
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4368,7 +4368,7 @@ view MinusRawSignal
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPamPlusRawRep2
 objType table
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4396,7 +4396,7 @@ view PlusRawSignal
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPamSpikeinsRep2
 objType file
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4423,7 +4423,7 @@ view Spikeins
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPapAlnRep2
 objType table
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4451,7 +4451,7 @@ view Alignments
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPapFastqRd1Rep2
 objType file
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4478,7 +4478,7 @@ view FastqRd1
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPapFastqRd2Rep2
 objType file
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4505,7 +4505,7 @@ view FastqRd2
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPapMinusRawRep2
 objType table
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4533,7 +4533,7 @@ view MinusRawSignal
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPapPlusRawRep2
 objType table
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4561,7 +4561,7 @@ view PlusRawSignal
 metaObject wgEncodeCshlLongRnaSeqCd20ro01778CellPapSpikeinsRep2
 objType file
 bioRep 042WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4588,7 +4588,7 @@ view Spikeins
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamAlnRep1
 objType table
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4616,7 +4616,7 @@ view Alignments
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamFastqRd1Rep1
 objType file
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4643,7 +4643,7 @@ view FastqRd1
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamFastqRd2Rep1
 objType file
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4670,7 +4670,7 @@ view FastqRd2
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamMinusRawRep1
 objType table
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4698,7 +4698,7 @@ view MinusRawSignal
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamPlusRawRep1
 objType table
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4726,7 +4726,7 @@ view PlusRawSignal
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPamSpikeinsRep1
 objType file
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4753,7 +4753,7 @@ view Spikeins
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPapAlnRep1
 objType table
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4781,7 +4781,7 @@ view Alignments
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPapFastqRd1Rep1
 objType file
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4808,7 +4808,7 @@ view FastqRd1
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPapFastqRd2Rep1
 objType file
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4835,7 +4835,7 @@ view FastqRd2
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPapMinusRawRep1
 objType table
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4863,7 +4863,7 @@ view MinusRawSignal
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPapPlusRawRep1
 objType table
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -4891,7 +4891,7 @@ view PlusRawSignal
 metaObject wgEncodeCshlLongRnaSeqCd20ro01794CellPapSpikeinsRep1
 objType file
 bioRep 041WC
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -22764,7 +22764,7 @@ view Spikeins
 metaObject wgEncodeCshlLongRnaSeqHpcpl003260113CellTotalAlnRep2
 objType table
 bioRep 072WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -22790,7 +22790,7 @@ view Alignments
 metaObject wgEncodeCshlLongRnaSeqHpcpl003260113CellTotalFastqRd1Rep2
 objType file
 bioRep 072WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -22815,7 +22815,7 @@ view FastqRd1
 metaObject wgEncodeCshlLongRnaSeqHpcpl003260113CellTotalFastqRd2Rep2
 objType file
 bioRep 072WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -22840,7 +22840,7 @@ view FastqRd2
 metaObject wgEncodeCshlLongRnaSeqHpcpl003260113CellTotalMinusRawRep2
 objType table
 bioRep 072WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -22866,7 +22866,7 @@ view MinusRawSignal
 metaObject wgEncodeCshlLongRnaSeqHpcpl003260113CellTotalPlusRawRep2
 objType table
 bioRep 072WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -22892,7 +22892,7 @@ view PlusRawSignal
 metaObject wgEncodeCshlLongRnaSeqHpcpl003260113CellTotalSpikeinsRep2
 objType file
 bioRep 072WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -22917,7 +22917,7 @@ view Spikeins
 metaObject wgEncodeCshlLongRnaSeqHpcpl010150413CellTotalAlnRep1
 objType table
 bioRep 071WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -22942,7 +22942,7 @@ view Alignments
 metaObject wgEncodeCshlLongRnaSeqHpcpl010150413CellTotalFastqRd1Rep1
 objType file
 bioRep 071WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -22966,7 +22966,7 @@ view FastqRd1
 metaObject wgEncodeCshlLongRnaSeqHpcpl010150413CellTotalFastqRd2Rep1
 objType file
 bioRep 071WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -22990,7 +22990,7 @@ view FastqRd2
 metaObject wgEncodeCshlLongRnaSeqHpcpl010150413CellTotalMinusRawRep1
 objType table
 bioRep 071WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -23015,7 +23015,7 @@ view MinusRawSignal
 metaObject wgEncodeCshlLongRnaSeqHpcpl010150413CellTotalPlusRawRep1
 objType table
 bioRep 071WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -23040,7 +23040,7 @@ view PlusRawSignal
 metaObject wgEncodeCshlLongRnaSeqHpcpl010150413CellTotalSpikeinsRep1
 objType file
 bioRep 071WC
-cell HPC-PL
+cell HPC-PL_0032601.13
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -23064,7 +23064,7 @@ view Spikeins
 metaObject wgEncodeCshlLongRnaSeqHpiepc90128012CellTotalAlnRep2
 objType table
 bioRep 074WC
-cell HPIEpC
+cell HPIEpC_9012801.2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -23090,7 +23090,7 @@ view Alignments
 metaObject wgEncodeCshlLongRnaSeqHpiepc90128012CellTotalFastqRd1Rep2
 objType file
 bioRep 074WC
-cell HPIEpC
+cell HPIEpC_9012801.2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -23115,7 +23115,7 @@ view FastqRd1
 metaObject wgEncodeCshlLongRnaSeqHpiepc90128012CellTotalFastqRd2Rep2
 objType file
 bioRep 074WC
-cell HPIEpC
+cell HPIEpC_9012801.2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -23140,7 +23140,7 @@ view FastqRd2
 metaObject wgEncodeCshlLongRnaSeqHpiepc90128012CellTotalMinusRawRep2
 objType table
 bioRep 074WC
-cell HPIEpC
+cell HPIEpC_9012801.2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -23166,7 +23166,7 @@ view MinusRawSignal
 metaObject wgEncodeCshlLongRnaSeqHpiepc90128012CellTotalPlusRawRep2
 objType table
 bioRep 074WC
-cell HPIEpC
+cell HPIEpC_9012801.2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
@@ -23192,7 +23192,7 @@ view PlusRawSignal
 metaObject wgEncodeCshlLongRnaSeqHpiepc90128012CellTotalSpikeinsRep2
 objType file
 bioRep 074WC
-cell HPIEpC
+cell HPIEpC_9012801.2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
