@@ -422,9 +422,8 @@ html wgEncodeLicrRnaSeq.release2
         shortLabel BAT 24wk Sg 1
         longLabel Brown Adipose Tissue Adult 24 weeks RNA-seq Signal Rep 1 from ENCODE/LICR 
         subGroups view=Signal age=ADULT24WKS cellType=BAT localization=CELL rnaExtract=PAP sex=M strain=C57BL6 rep=rep1
-        type bigWig 0.000000 65489.000000
+        type bigWig 3.000000 65489.000000
         color 189,0,157
-	viewLimits 0:500
         # subId=5969 dateSubmitted=2012-03-08
 
         track wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep2
