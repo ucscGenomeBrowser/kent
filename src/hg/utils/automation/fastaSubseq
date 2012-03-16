@@ -27,9 +27,6 @@ fi
 
 export sequenceName="${file}:${start}-${end}:___"
 
-echo "/cluster/bin/penn/x86_64/fasta-subseq $file $start $end $strand" 1>&2
-# /cluster/bin/penn/x86_64/fasta-subseq $file $start $end
-
 export startZero=`echo $start | awk '{print $1-1}'`
 
 case $file in
