@@ -12180,15 +12180,41 @@ return articleTable;
 static void t2gLoadItems(struct track *tg)
 /* apply filter to t2g items */
 {
-loadGappedBed(tg);
-struct linkedFeatures *lf, *next, *newList = NULL;
 struct sqlConnection *conn = hAllocConn(database);
-
-char *articleTable = t2gArticleTable(tg);
 char *keyWords = cartOptionalString(cart, "t2gKeywords");
+char *yearFilter = cartOptionalString(cart, "t2gYear");
+char *articleTable = t2gArticleTable(tg);
+
+if(isEmpty(yearFilter))
+    loadGappedBed(tg);
+else
+    {
+    // code based on loadGappedBed
+    char extra[256];
+    char **row;
+    int rowOffset;
+    struct linkedFeatures *lfList = NULL;
+    struct trackDb *tdb = tg->tdb;
+    int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
+    int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
+    boolean useItemRgb = bedItemRgb(tdb);
+    safef(extra, sizeof(extra), "name in (select displayId from %s where %s.year >= '%s')", articleTable, articleTable, sqlEscapeString(yearFilter));
+    struct sqlResult *sr = hExtendedRangeQuery(conn, tg->table, chromName, winStart, winEnd, extra,
+                                               FALSE, NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+        struct bed *bed = bedLoad12(row+rowOffset);
+        slAddHead(&lfList, bedMungToLinkedFeatures(&bed, tdb, 12, scoreMin, scoreMax, useItemRgb));
+        }
+    sqlFreeResult(&sr);
+    slReverse(&lfList);
+    slSort(&lfList, linkedFeaturesCmp);
+    tg->items = lfList;
+    }
 
 if(isNotEmpty(keyWords))
     {
+    struct linkedFeatures *lf, *next, *newList = NULL;
     for( lf = tg->items; lf != NULL; lf = next)
         {
         char query[512];
@@ -12197,6 +12223,7 @@ if(isNotEmpty(keyWords))
         next = lf->next;
         lf->next = NULL;
 
+        // we should consider doing this more efficiently using a FULLTEXT based search in above item loading code.
         safef(query, sizeof(query), "select authors, title, citation, abstract from %s where displayId = '%s'", articleTable, lf->name);
         sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
