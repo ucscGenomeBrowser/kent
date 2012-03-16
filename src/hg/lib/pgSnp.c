@@ -448,6 +448,8 @@ for (el = th; el != NULL; el = el->next)
             reverseComplement(allele[i], strlen(allele[i]));
         safef(a, sizeof(a), "<B>%s</B>", allele[i]);
         char *rep = replaceString(cod->seq, (cod->regStart - cod->cdStart), (cod->regEnd - cod->cdStart), a);
+	if (sameString(bold, rep))
+	    continue;
         printf("%s &gt; %s<BR>\n", bold, rep);
 
         if (item->chromStart == item->chromEnd &&
@@ -470,20 +472,34 @@ for (el = th; el != NULL; el = el->next)
                 dnaseq = newDnaSeq(rep2, strlen(rep2), "rep2");
                 aaSeq *repAa = translateSeq(dnaseq, 0, FALSE);
                 //freeDnaSeq(&dnaseq);
-                if (!strstr(repAa->dna, "X") && isNotEmpty(repAa->dna))
+		if (!strstr(rep2, "-") && strlen(allele[i]) != (item->chromEnd - item->chromStart)) 
+		    { //indel
+		    int diff = abs((item->chromEnd - item->chromStart) - strlen(allele[i]));
+		    if (diff % 3 == 0) 
+			printf("&nbsp;&nbsp;&nbsp;&nbsp;in-frame indel<BR>\n");
+		    else 
+			printf("&nbsp;&nbsp;&nbsp;&nbsp;frameshift indel<BR>\n");
+		    }
+                else if (!strstr(rep2, "-") && isNotEmpty(repAa->dna))
                     {
                     printf("&nbsp;&nbsp;&nbsp;&nbsp;%s &gt; %s<BR>\n",
                         origAa->dna, repAa->dna);
                     if (differentString(origAa->dna, repAa->dna))
                         aaProperties(origAa->dna, repAa->dna);
                     }
-                else if ((countChars(rep2, '-')) % 3 != 0)
+                else if (strstr(rep2, "-") && (item->chromEnd - item->chromStart) % 3 != 0)
                     {
                     printf("&nbsp;&nbsp;&nbsp;&nbsp;frameshift<BR>\n");
+                    }
+                else if (strstr(rep2, "-") && (item->chromEnd - item->chromStart) % 3 == 0)
+                    {
+                    printf("&nbsp;&nbsp;&nbsp;&nbsp;in-frame deletion<BR>\n");
                     }
                 }
             }
         }
+    /* print a hr between gene models */
+    printf("<hr style=\"width:30%%;text-align:left;margin-left:0\" />\n");
     }
 bedFreeList(&list);
 }
