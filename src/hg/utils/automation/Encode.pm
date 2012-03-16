@@ -28,7 +28,8 @@ our $mdbFile = "mdb.txt";
 our $pushQFile = "pushQ.sql";
 #our $dafVersion = "0.2.2";
 #our $dafVersion = "1.1";
-our $dafVersion = "2.0";
+our $dafVersionOld = "2.0";
+our $dafVersion = "3.0"
 
 # Prefix for table and filenames (was 'wgEncode' in v1 pipeline)
 our $compositePrefix = "wgEncode";
@@ -381,7 +382,7 @@ sub parseDaf
     # Validate DAF version, and return immediately if not current (production)
     # OR:  During beta test, provide notice about this instead of error
 
-    if($daf{dafVersion} ne $dafVersion) {
+    if($daf{dafVersion} ne $dafVersion || $daf{dafVersion} ne $dafVersionOld) {
         die "NOTICE:\n\n" .
                 "ENCODE pipeline 2.0 beta testing is in progress." .
                 "Your wrangler will complete this submission and provide you" .
