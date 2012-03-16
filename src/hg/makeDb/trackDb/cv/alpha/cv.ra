@@ -5414,7 +5414,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
 color 86,180,233
 sex U
 protocol Ren:BMDM_Ren_protocol.pdf
-label Bone marrow derived macrophage
+label Bone Marrow Derived Macrophage
 
 term BoneMarrow
 tag BMARROW
