@@ -12157,19 +12157,19 @@ return articleTable;
 
 static char *makeMysqlMatchStr(char *str)
 {
-// return a string with all words prefixed with a '+' to force a boolean AND query
+// return a string with all words prefixed with a '+' to force a boolean AND query;
+// we also strip leading/trailing spaces.
 char *matchStr = needMem(strlen(str) * 2 + 1);
 int i = 0;
+for(;*str && isspace(*str);str++)
+    ;
 while(*str)
     {
-    for(;*str && isspace(*str);str++)
+    matchStr[i++] = '+';
+    for(; *str && !isspace(*str);str++)
         matchStr[i++] = *str;
-    if(*str)
-        {
-        matchStr[i++] = '+';
-        for(; *str && !isspace(*str);str++)
-            matchStr[i++] = *str;
-        }
+    for(;*str && isspace(*str);str++)
+        ;
     }
 matchStr[i++] = 0;
 return matchStr;
@@ -12184,6 +12184,8 @@ char *yearFilter = cartOptionalString(cart, "t2gYear");
 char *articleTable = t2gArticleTable(tg);
 if(yearFilter != NULL && sameWord(yearFilter, "anytime"))
     yearFilter = NULL;
+if(isNotEmpty(keywords))
+    keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
 if(isEmpty(yearFilter) && isEmpty(keywords))
     loadGappedBed(tg);
 else
@@ -12199,7 +12201,7 @@ else
 
     safef(prefix, sizeof(prefix),  "name IN (SELECT displayId FROM %s WHERE", articleTable);
     if(isNotEmpty(keywords))
-        safef(keywordsWhere, sizeof(keywordsWhere), "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", makeMysqlMatchStr(sqlEscapeString(keywords)));
+        safef(keywordsWhere, sizeof(keywordsWhere), "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", keywords);
     if(isNotEmpty(yearFilter))
         safef(yearWhere, sizeof(yearWhere), "year >= '%s'", sqlEscapeString(yearFilter));
     if(isEmpty(keywords))
