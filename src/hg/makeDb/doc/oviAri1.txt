@@ -5,6 +5,9 @@
 
 # Ovis aries (domestic sheep) --  ISGC Ovis_aries_1.0 (2010-02-01)
 
+#	http://www.ncbi.nlm.nih.gov/genome/83
+#	http://www.ncbi.nlm.nih.gov/bioproject/33937
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ACIV01
 
 # file template copied from susScr2.txt
 

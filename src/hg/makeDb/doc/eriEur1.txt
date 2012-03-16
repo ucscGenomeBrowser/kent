@@ -2,6 +2,12 @@
 # Erinaceus europaeus -- European Hedgehog
 # Broad eriEur1 2X release
 
+#	http://www.ncbi.nlm.nih.gov/genome/227
+#	http://www.ncbi.nlm.nih.gov/bioproject/74585 - Illumina
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AANN00 - the 2X
+
+#	http://www.ncbi.nlm.nih.gov/bioproject/11862 - chrMt
+
 #########################################################################
 # Download sequence (2006-03-04 kate)
 

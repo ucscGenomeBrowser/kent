@@ -5,6 +5,10 @@
 # Sus scrofa - SGSC Sscrofa9.2 NCBI project 10718, CM000812
 #   ftp://ftp.ncbi.nlm.nih.gov:genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa9.2/
 
+#	http://www.ncbi.nlm.nih.gov/bioproject/13421
+#	http://www.ncbi.nlm.nih.gov/genome/84
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AEMK01
+
 ##########################################################################
 # Download sequence (DONE - 2010-03-25 - Hiram)
     mkdir /hive/data/genomes/susScr2
