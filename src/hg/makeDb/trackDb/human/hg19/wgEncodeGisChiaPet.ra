@@ -11,7 +11,7 @@ subGroup4 rep Replicate rep1=1  rep2=2  rep3=3 rep4=4  Pooled=Pooled
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=rep
 dimensionZchecked rep1
 sortOrder cellType=+ factor=+ rep=+
-fileSortOrder cell=Cell_Line antibody=Factor replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
+fileSortOrder cell=Cell_Line antibody=Factor replicate=Replicate view=View labExpId=Lab_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
