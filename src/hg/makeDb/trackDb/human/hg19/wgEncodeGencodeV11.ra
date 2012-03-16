@@ -8,7 +8,7 @@ shortLabel GENCODE Genes V11
 longLabel Gene Annotations from ENCODE/GENCODE Version 11
 group genes
 dragAndDrop subTracks
-priority 34.304
+priority 34.3
 visibility hide
 ensemblTranscriptIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
 ensemblGeneIdUrl http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s
