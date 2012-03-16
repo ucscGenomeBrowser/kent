@@ -2,6 +2,10 @@
 
 # Vicugna pacos
 
+#	http://www.ncbi.nlm.nih.gov/bioproject/30567
+#	http://www.ncbi.nlm.nih.gov/genome/905
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABRR01
+
 #########################################################################
 # DOWNLOAD SEQUENCE  (DONE braney 2008-10-07)
     ssh kolossus

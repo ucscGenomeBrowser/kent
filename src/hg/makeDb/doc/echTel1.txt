@@ -4,6 +4,11 @@
 # Tenrec July 2005 Broad Assembly
 #
 
+#	http://www.ncbi.nlm.nih.gov/genome/234
+#	http://www.ncbi.nlm.nih.gov/bioproject/60557
+#	http://www.ncbi.nlm.nih.gov/bioproject/12590 - 2X coverage
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAIY00
+
 
 # DOWNLOAD SEQUENCE 
     ssh kkstore02

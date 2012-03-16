@@ -195,7 +195,7 @@ our %validators = (
     tissueSourceType => \&validateControlledVocabOrNone,
     spikeInPool => \&validateNoValidation,
     readType => \&validateControlledVocabOrNone,
-	region => \&validateControlledVocabOrNone,
+    region => \&validateControlledVocabOrNone,
     default => \&validateControlledVocab,
     );
 
@@ -311,6 +311,17 @@ sub validateControlledVocabOrControl {
 
 sub validateControlledVocab {
     my ($val, $type) = @_;
+
+    if (not defined $terms{'typeOfTerm'}->{$type}) {
+        return ("Controlled Vocabulary \'$type\' is not a defined type");
+    }   
+    if (not defined $terms{'typeOfTerm'}->{$type}->{'cvDefined'}) {
+        return ("Controlled Vocabulary \'$type\' has no cvDefined field");
+    }
+
+    if ($terms{'typeOfTerm'}->{$type}->{'cvDefined'} eq "no") {
+        return &validateNoValidation();
+    }
     return defined($terms{$type}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
@@ -754,7 +765,7 @@ sub getInfoFiles
     my $category = $terms{'Cell Line'}->{$cell}->{'category'};
 
     # Can be a better design, but need to flesh out design more.
-    if (defined $category && $category eq "Tissue") {
+    if (defined $category && $category eq "Tissue" && defined $sex) {
         $cellLineSex=$sex;
     }
 
@@ -1154,6 +1165,29 @@ sub isDeprecated {
     else {
         return ();
     }
+}
+
+sub validateDdfHeader {
+
+    my @ddfHeader = @{$_[0]};
+    #can't use %terms becuase it's global, not falling into that trap.
+    my %cv = %{$_[1]};
+    my @localerrors;
+
+    foreach my $column (@ddfHeader) {
+        if ($column eq "cell") {
+            $column = "cellType";
+        }
+        if ($column eq "antibody") {
+            $column = "Antibody";
+        }
+        unless (defined $cv{'typeOfTerm'}->{$column}) {
+            push @localerrors, "The term '$column' is not in the Controlled Vocabulary";
+        }
+    }
+
+    return (\@localerrors);
+
 }
 
 sub validateDdfField {
@@ -1683,7 +1717,13 @@ while(@{$lines}) {
     last;
 }
 
-my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
+%terms = Encode::getControlledVocab($configPath);
+
+#my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
+
+#the ddf header should not validate against fields.ra, so it now validates against the CV
+my @errors = @{&validateDdfHeader(\@ddfHeader, \%terms)};
+
 
 # Special cases to handle conditionally required fields
 if(!defined($ddfHeader{controlId})) {
@@ -1700,7 +1740,6 @@ if(@errors) {
     die "ERROR in DDF '$ddfFile':\n" . join("\n", @errors) . "\n";
 }
 
-%terms = Encode::getControlledVocab($configPath);
 
 my @variables;
 if (defined($daf->{variables})) {
@@ -1799,6 +1838,13 @@ while (@{$lines}) {
             }
             my $cell = $line{cell};
             my $sex = $line{sex};
+            my $category;
+            if (defined $terms{'Cell Line'}->{$cell}) {
+                $category = $terms{'Cell Line'}->{$cell}->{'category'};
+            }
+            if (defined $category && $category eq "Tissue" && not defined $sex) {
+                push (@errors, "Cell '$cell' is a tissue; the sex must be defined in the DDF.");
+            }
             my $mdbError = validateDdfField($field, $line{$field}, $view, $daf, $cell, $sex, \%terms);
             if ($mdbError) {
                 push(@metadataErrors, $mdbError);
@@ -1969,6 +2015,13 @@ my $compositeTrack = Encode::compositeTrackName($daf);
 my $compositeExists = $db->quickQuery("select count(*) from trackDb where tableName = ?", $compositeTrack);
 
 if(@errors) {
+    #collapse identical errors into one line
+    my %errors;
+    foreach my $line (@errors) {
+        $errors{$line}++;
+    }
+    @errors = keys(%errors);
+
     my $prefix = @errors > 1 ? "Error(s)" : "Error";
     die "$prefix:\n\n" . join("\n\n", @errors) . "\n";
 }
@@ -2248,8 +2301,8 @@ foreach my $ddfLine (@ddfLines) {
         }
         if($prevTableFound) {
             my $oldSettings = $db->quickQuery("select settings from trackDb where tableName = '$prevTableName'");
-            if( $oldSettings ) {
-                $oldSettings =~ m/metadata (.*?)\n/;    # Is this throwing away all but the contents of the metadata line?
+            if( $oldSettings =~ m/metadata (.*?)\n/ ) {
+                #$oldSettings =~ m/metadata (.*?)\n/;    # Is this throwing away all but the contents of the metadata line?
                 my ( $tagRef, $valRef ) = Encode::metadataLineToArrays($1);
                 my @tags = @{$tagRef};
                 my @vals = @{$valRef};
@@ -2445,7 +2498,6 @@ if($submitPath =~ /(\d+)$/) {
     }
 }
 
-#matt made this
 sub generateLongLabel {
     my $lab = $_[0];
     my %vars = %{$_[1]};

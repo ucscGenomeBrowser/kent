@@ -1,6 +1,11 @@
 # Tupaia belangeri -- 2X Tree Shrew 2X assembly from the Broad
 # Assembly named:  tupBel1
 # Sequence downloaded and masked by Robert Baertsch, 12/06
+
+#	http://www.ncbi.nlm.nih.gov/bioproject/13971
+#	http://www.ncbi.nlm.nih.gov/genome/473
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAPY00
+
 ################################################
 
 # DOWNLOADS (2007-06-05 kate)

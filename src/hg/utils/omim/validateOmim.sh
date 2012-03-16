@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 db=$1
-tooMuch=0.2500   # how much change (either gain or loss) is too much
+tooMuch=0.1000   # how much change (either gain or loss) is too much
 
 for i in `cat ../../omim.tables`
 do 
@@ -21,7 +21,7 @@ cat newOmim.stats | awk -v db=$db -v tooMuch=$tooMuch '
 {
     if (($4/$6 > tooMuch) || ($10/$6 > tooMuch))
 	{
-	print "valdate on " db "." $1 " failed:" $4,$6,$4/$6,$10,$6,$10/$6;
+	print "validate on " db "." $1 " failed:" $4,$6,$4/$6,$10,$6,$10/$6;
 	exit 1
 	}
 }'

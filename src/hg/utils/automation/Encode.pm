@@ -104,10 +104,15 @@ sub validateFieldList {
 # validate the entries in a RA record or DDF header using fields.ra
 # $file s/d be 'ddf' or 'dafHeader' or 'dafList'
 # Returns list of any errors that are found.
+#
+# Removed ddf header validation function (3-14-12)
+# due to the fact that the ddf header should validate against the cv.
     my ($fields, $schema, $file) = @_;
     my %hash = map {$_ => 1} @{$fields};
     my @errors;
-    if($file ne 'ddf' && $file ne 'dafHeader' && $file ne 'dafList') {
+    if ($file eq 'ddf') {
+        push (@errors, "fields.ra is no longer used to validate ddf headers")
+    } elsif ($file ne 'dafHeader' && $file ne 'dafList') {
         push(@errors, "file argument '$file' is invalid");
     } else {
         # look for missing required fields

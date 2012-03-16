@@ -1890,13 +1890,38 @@ puts("&nbsp;<B>position</B>");
 
 }
 
+#define NUM_YEARS 30  // similar to google scholar, which goes back to 20 years
+
 void t2gUi(struct trackDb *tdb)
 /* UI for t2g match track */
 {
 char* keywordTag = "t2gKeywords";
+char* yearTag = "t2gYear";
 char *keywords = cartUsualString(cart, keywordTag, "");
+char *text[NUM_YEARS + 1];
+char *values[NUM_YEARS + 1];
+char *yearFilter = cartUsualString(cart, yearTag, "anytime");
+int i;
 puts("<P><B>Filter articles by keywords in abstract, title or authors:</B>");
 cgiMakeTextVar(keywordTag, keywords, 45);
+text[0] = "anytime";
+values[0] = "anytime";
+time_t nowTime = time(NULL);
+struct tm *tm = localtime(&nowTime);
+int nowYear = 1900 + tm->tm_year;
+
+for(i = 0; i < NUM_YEARS; i++)
+    {
+    char buf[20];
+    safef(buf, sizeof(buf), "since %d", nowYear - i);
+    text[i + 1] = cloneString(buf);
+    safef(buf, sizeof(buf), "%d", nowYear - i);
+    values[i + 1] = cloneString(buf);
+    }
+
+puts("</P><P>\n");
+cgiDropDownWithTextValsAndExtra(yearTag, text, values, NUM_YEARS + 1, yearFilter, NULL);
+puts("</P>\n");
 }
 
 

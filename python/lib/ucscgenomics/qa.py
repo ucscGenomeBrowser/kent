@@ -7,6 +7,8 @@ import sys, os, re, argparse, subprocess, math, threading, datetime, time, signa
 	Programs known to be dependent on it:
 	mkChangeNotes
 	qaInit
+        qaEncodeTracks2
+        qaGbTracks
 
 	Functions:
 	getGbdbTables - takes in a database and a set of tables,
