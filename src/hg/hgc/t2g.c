@@ -123,7 +123,7 @@ printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%s\" />\n", cgiString("o"));
 printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n", cgiString("g"));
 printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%s\" />\n", cgiString("t"));
 printf("<INPUT TYPE=\"hidden\" name=\"i\" value=\"%s\" />\n", cgiString("i"));
-printf("<INPUT TYPE=\"hidden\" name=\"hgsid\" value=\"%s\" />\n", cgiString("hgsid"));
+printf("<INPUT TYPE=\"hidden\" name=\"hgsid\" value=\"%d\" />\n", cart->sessionId);
 printf("<BR>");
 printf("<INPUT TYPE=\"submit\" VALUE=\"Submit\" />\n");
 printf("</FORM><P>\n");
