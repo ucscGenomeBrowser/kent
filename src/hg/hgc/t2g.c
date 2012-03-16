@@ -164,7 +164,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     char* authors = row[3];
     char* citation = row[4];
     char* snippets = row[5];
-    printf("<A HREF=\"%s\">%s</A> ", url, title);
+    char* addParam = "";
+    if (strstrNoCase(url, "sciencedirect.com"))
+        addParam = "?svAppaddApp=298535"; // add the "UCSC matches" sciverse application to article view
+    printf("<A HREF=\"%s%s\">%s</A> ", url, addParam, title);
     printf("<SMALL>%s</SMALL>; ", authors);
     printf("<SMALL>%s</SMALL><BR>", citation);
     if (t2gDebug)
