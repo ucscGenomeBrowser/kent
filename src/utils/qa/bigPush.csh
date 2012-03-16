@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/bin/tcsh -e
 source `which qaConfig.csh`
 
 
@@ -17,6 +17,7 @@ source `which qaConfig.csh`
 #  also records total size of the push
 #
 ################################
+onintr cleanup
 
 set db=""
 set tablelist=""
@@ -91,3 +92,9 @@ echo
 echo
 
 echo end.
+
+cleanup:
+rm -f $db.$trackName.push
+rm -f $db.$trackName.pushSize
+
+exit 0
