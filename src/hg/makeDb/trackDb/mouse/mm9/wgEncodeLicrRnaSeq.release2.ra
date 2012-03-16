@@ -28,10 +28,10 @@ shortLabel LICR RNA-seq
 longLabel RNA-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
-subGroup2 cellType Cell_Line BAT=Brown_Adipose_Tissue BMARROW=Bone_Marrow BMDM=Bone_Marrow_Derived_Macrophage CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=Olfactory_Bulb PLAC=Placenta SMINT=Smll_Intestine  SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=Whole_Brain
+subGroup2 cellType Cell_Line BAT=Brown_Adipose_Tissue BMARROW=Bone_Marrow BMDM=Bone_Marrow_Derived_Macrophage CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=Olfactory_Bulb PLAC=Placenta SMINT=Small_Intestine  SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=Whole_Brain
 subGroup3 localization Localization CELL=Whole_cell
 subGroup4 rnaExtract RnaExtract PAP=PolyA+
-subGroup5 rep Replicate rep1=1 rep2=2
+subGroup5 rep Rep rep1=1 rep2=2
 subGroup6 sex Sex M=M F=F U=U
 subGroup7 age Age E0=Embryonic_day_0 E14HALF=Embryonic_day_14.5 ADULT8WKS=Adult_8_weeks ADULT24WKS=Adult_24_weeks IMMORTAL=Immortal_cells
 subGroup8 strain Strain C57BL6=C57BL/6 
@@ -438,7 +438,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6SigRep1
         parent wgEncodeLicrRnaSeqViewSignal off
         shortLabel BMDM 8wk Sg 1
-        longLabel Bone Marrow Derived Macrophage Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/LICR
+        longLabel BMDM Adult 8 weeks RNA-seq Signal Rep 1 from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS cellType=BMDM localization=CELL rnaExtract=PAP sex=F strain=C57BL6 rep=rep1
         type bigWig 0.000000 64770.000000
         color 86,180,233
@@ -447,7 +447,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6SigRep2
         parent wgEncodeLicrRnaSeqViewSignal off
         shortLabel BMDM 8wk Sg 2
-        longLabel Bone Marrow Derived Macrophage Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/LICR 
+        longLabel BMDM Adult 8 weeks RNA-seq Signal Rep 2 from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS cellType=BMDM localization=CELL rnaExtract=PAP sex=F strain=C57BL6 rep=rep2
         type bigWig 0.000000 33962.000000
         color 86,180,233
@@ -853,7 +853,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep1
         parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel BMDM 8wk Al 1
-        longLabel Bone Marrow Derived Macrophage Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/LICR
+        longLabel BMDM Adult 8 weeks RNA-seq Alignments Rep 1 from ENCODE/LICR
         subGroups view=Alignments age=ADULT8WKS cellType=BMDM localization=CELL rnaExtract=PAP sex=F strain=C57BL6 rep=rep1
         type bam
         color 86,180,233
@@ -862,7 +862,7 @@ html wgEncodeLicrRnaSeq.release2
         track wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep2
         parent wgEncodeLicrRnaSeqViewAlignments off
         shortLabel BMDM 8wk Al 2
-        longLabel Bone Marrow Derived Macrophage Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/LICR 
+        longLabel BMDM Adult 8 weeks RNA-seq Alignments Rep 2 from ENCODE/LICR 
         subGroups view=Alignments age=ADULT8WKS cellType=BMDM localization=CELL rnaExtract=PAP sex=F strain=C57BL6 rep=rep2
         type bam
         color 86,180,233
