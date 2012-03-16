@@ -3441,6 +3441,24 @@ sex U
 tier 3
 protocol Stam:HPAF_Stam_protocol.pdf
 
+term HPC-PL
+tag HPCPL
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Pericytes from HPC-PL_0032601.13 and HPC-PL_0101504.13
+lineage missing
+karyotype normal
+sex B
+tissue placenta
+vendorName PromoCell
+vendorId pericytes
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
+termId BTO:0001975
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+lab Gingeras
+protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf,Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
+
 term HPC-PL_0032601.13
 tag HPCPL003260113
 type Cell Line
@@ -5237,6 +5255,24 @@ protocol Stam:WI38_Stam_protocol.pdf
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
 # category: (T for tissue, L for cell line, or P for primary cells.  optional)
 # tier is NOT used in mouse
+
+term 10T1/2
+tag 10T12
+type Cell Line
+organism mouse
+tissue embryonic
+age immortalized
+strain C3H
+category cellLine
+description Multipotential cell line that can be converted by 5-azacytidine into three mesodermal stem cell lineages.
+vendorName ATCC
+vendorId    CCL-226
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-226&Template=cellBiology
+termId 96
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=96
+color 65,105,225
+sex U
+protocol Wold:10ToneHalf_Wold_protocol.pdf 
 
 term 3134
 tag 3134

@@ -4,6 +4,9 @@
 
 # Macropus eugenii (wallaby) - TWGSC  Meug_1.1 (2009-09-29)
 
+#	http://www.ncbi.nlm.nih.gov/genome/233
+#	http://www.ncbi.nlm.nih.gov/bioproject/12587
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABQO01
 
 # file template copied from susScr2.txt
 

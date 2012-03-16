@@ -5,6 +5,10 @@
 #    Project website:
 #    ftp://ftp.broad.mit.edu/pub/assemblies/mammals/rabbit/oryCun2/
 
+#	http://www.ncbi.nlm.nih.gov/bioproject/12819
+#	http://www.ncbi.nlm.nih.gov/genome/316
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAGW00
+
 ############################################################################
 # Download files from Broad (DONE - 2009-08-11 - Hiram)
     mkdir /hive/data/genomes/oryCun2

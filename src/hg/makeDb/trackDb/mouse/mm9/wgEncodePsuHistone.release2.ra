@@ -31,7 +31,7 @@ shortLabel PSU Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/PSU
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line CH12=CH12  G1E=G1E G1E_ER4_E2=G1E-ER4+E2 ERYTHROBL=Erythroblast MEGAKARYO=Megakaryocyte MEL=MEL
+subGroup2 cellType Cell_Line CH12=CH12 ERYTHROBL=Erythroblast G1E=G1E G1E_ER4_E2=G1E-ER4+E2 MEGAKARYO=Megakaryocyte MEL=MEL
 subGroup3 factor Factor H3K04ME1=H3K4me1 H3K04ME3=H3K4me3 H3K09ME3=H3K9me3  H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 zINPUT=Input 
 subGroup4 sex Sex F=F  M=M B=B U=U
 subGroup5 age Age E0=E0 E14HALF=E14.5 IMMORTAL=immortalized

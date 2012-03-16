@@ -135,21 +135,21 @@ ncbiAssemblyName SpeTri2.0
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek speTri2 > do.log 2>&1 &
-XXX - running - Wed Mar 14 16:11:15 PDT 2012
-    #	real    1015m56.518s
+    #	real    444m26.325s
     cat faSize.rmsk.txt
-    # 2519724550 bases (160194097 N's 2359530453 real 1427970093 upper
-    # 931560360 lower) in 7793 sequences in 1 files
-    #	Total size: mean 323331.8 sd 2530369.2 min 1000 (AAQR03200240)
-    #	max 73491278 (GL873520) median 1593
+    #	2478393770 bases (167333470 N's 2311060300 real 1473623875 upper
+    #	837436425 lower) in 12483 sequences in 1 files
+    #	Total size: mean 198541.5 sd 1542819.5 min 1000 (AGTP01153276)
+    #	max 58279134 (JH393279) median 3276
+    #	%33.79 masked total, %36.24 masked real
 
     grep -i versi do.log
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
 
     time featureBits -countGaps speTri2 rmsk
-    #	933290813 bases of 2519724550 (37.039%) in intersection
-    #	real    0m28.081s
+    #	839787873 bases of 2478393770 (33.884%) in intersection
+    #	real    0m28.253s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -162,9 +162,9 @@ XXX - running - Wed Mar 14 16:11:15 PDT 2012
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	speTri2 > do.log 2>&1 &
-    #	real    11m58.743s
+    #	real    27m3.355s
     cat fb.simpleRepeat 
-    #	27508759 bases of 2359530453 (1.166%) in intersection
+    #	40145040 bases of 2311060300 (1.737%) in intersection
 
     # add to rmsk after it is done:
     cd /hive/data/genomes/speTri2
@@ -174,11 +174,11 @@ XXX - running - Wed Mar 14 16:11:15 PDT 2012
 
     twoBitToFa speTri2.2bit stdout | faSize stdin > faSize.speTri2.2bit.txt
     cat faSize.speTri2.2bit.txt
-# 2519724550 bases (160194097 N's 2359530453 real 1427186952 upper
-#	932343501 lower) in 7793 sequences in 1 files
-# Total size: mean 323331.8 sd 2530369.2 min 1000 (AAQR03200240)
-#	max 73491278 (GL873520) median 1593
-# %37.00 masked total, %39.51 masked real
+# 2478393770 bases (167333470 N's 2311060300 real 1472783000 upper
+#	838277300 lower) in 12483 sequences in 1 files
+# Total size: mean 198541.5 sd 1542819.5 min 1000 (AGTP01153276)
+#	max 58279134 (JH393279) median 3276
+# %33.82 masked total, %36.27 masked real
 
     rm /gbdb/speTri2/speTri2.2bit
     ln -s `pwd`/speTri2.2bit /gbdb/speTri2/speTri2.2bit
@@ -196,14 +196,12 @@ XXX - running - Wed Mar 14 16:11:15 PDT 2012
     #	real    0m14.265s
     #	2311060300 bases of 2311060300 (100.000%) in intersection
     time featureBits speTri2 allGaps.bed notGap.bed -bed=new.gaps.bed
-XXX - running - Wed Mar 14 16:15:13 PDT 2012
-    #	real    174m56.543s
-    #	0 bases of 2359530453 (0.000%) in intersection
+    #	0 bases of 2311060300 (0.000%) in intersection
 
-    # no new gaps here
+    # no new gaps here, nothing to do for this.
 
     hgsql -N -e "select bridge from gap;" speTri2 | sort | uniq -c
-    #	192447 yes
+    #	141005 yes
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2012-03-14 - Hiram)
@@ -211,46 +209,46 @@ XXX - running - Wed Mar 14 16:15:13 PDT 2012
     cd /hive/data/genomes/speTri2/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev speTri2 > do.log 2>&1 &
-XXX - running - Wed Mar 14 16:12:09 PDT 2012
-    # about 235 minutes
+    #	real    166m6.383s
 
     # Masking statistics
     twoBitToFa speTri2.wmsk.2bit stdout | faSize stdin
-    #	2519724550 bases (160194097 N's 2359530453 real 1606796836 upper
-    #	752733617 lower) in 7793 sequences in 1 files
-    #	Total size: mean 323331.8 sd 2530369.2 min 1000 (AAQR03200240)
-    #	max 73491278 (GL873520) median 1593
-    #	%29.87 masked total, %31.90 masked real
+    #	2478393770 bases (167333470 N's 2311060300 real 1631445412 upper
+    #	679614888 lower) in 12483 sequences in 1 files
+    #	Total size: mean 198541.5 sd 1542819.5 min 1000 (AGTP01153276)
+    #	max 58279134 (JH393279) median 3276
+    #	%27.42 masked total, %29.41 masked real
 
     twoBitToFa speTri2.wmsk.sdust.2bit stdout | faSize stdin
-    #	2519724550 bases (160194097 N's 2359530453 real 1594373851 upper
-    #	765156602 lower) in 7793 sequences in 1 files
-    #	Total size: mean 323331.8 sd 2530369.2 min 1000 (AAQR03200240)
-    #	max 73491278 (GL873520) median 1593
-    #	%30.37 masked total, %32.43 masked real
+# 2478393770 bases (167333470 N's 2311060300 real 1619347498 upper
+#	691712802 lower) in 12483 sequences in 1 files
+# Total size: mean 198541.5 sd 1542819.5 min 1000 (AGTP01153276)
+#	max 58279134 (JH393279) median 3276
+# %27.91 masked total, %29.93 masked real
 
     hgLoadBed speTri2 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 13510985 elements of size 3
+    #	Loaded 14098318 elements of size 3
 
     time featureBits -countGaps speTri2 windowmaskerSdust
-    #	925350699 bases of 2519724550 (36.724%) in intersection
+    #	859046272 bases of 2478393770 (34.661%) in intersection
     #	real    1m16.823s
 
     #	eliminate the gaps from the masking
     time featureBits speTri2 -not gap -bed=notGap.bed
-    #	2359530453 bases of 2359530453 (100.000%) in intersection
-    #	real    0m16.975s
+    #	2311060300 bases of 2311060300 (100.000%) in intersection
+    #	real    0m17.884s
 
     time nice -n +19 featureBits speTri2 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	765156602 bases of 2359530453 (32.428%) in intersection
-    #	real    5m47.021s
+    #	691712802 bases of 2311060300 (29.931%) in intersection
+    #	real    6m49.209s
 
     hgLoadBed speTri2 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 13582557 elements of size 4
+    #	Loaded 14116066 elements of size 4
 
     featureBits -countGaps speTri2 windowmaskerSdust
-    #	765156602 bases of 2519724550 (30.367%) in intersection
+    #	691712802 bases of 2478393770 (27.910%) in intersection
+
     #	DO NOT NEED TO mask the sequence with this clean mask
     #	The RepeatMasker did a good job, using that masked sequence.
 #    zcat cleanWMask.bed.gz \
@@ -265,10 +263,9 @@ XXX - running - Wed Mar 14 16:12:09 PDT 2012
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps speTri2 rmsk windowmaskerSdust
-    #	487674435 bases of 2519724550 (19.354%) in intersection
+    #	404169457 bases of 2478393770 (16.308%) in intersection
 
 #########################################################################
 # MASK SEQUENCE WITH WM+TRF (DONE - 2012-03-14 - Hiram)
     # Do not need to do this since Repeat Masker was used
 ########################################################################
-
