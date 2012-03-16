@@ -5,6 +5,10 @@
 # Panda sequence: http://panda.genomics.org.cn/page/panda/download.jsp
 #	Ailuropoda melanoleuca
 
+#	http://www.ncbi.nlm.nih.gov/genome/2702
+#	http://www.ncbi.nlm.nih.gov/bioproject/38683
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ACTA00
+
 ##########################################################################
 # Download sequence (DONE - 2009-12-17 - Hiram)
     mkdir /hive/data/genomes/ailMel1

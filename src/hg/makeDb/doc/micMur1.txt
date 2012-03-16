@@ -3,6 +3,9 @@
 # Mouse lemur ( Microcebus murinus)
 
 #	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABDC00
+#	http://www.ncbi.nlm.nih.gov/bioproject/19967
+#	http://www.ncbi.nlm.nih.gov/genome/777
+#	http://www.ncbi.nlm.nih.gov/genome/assembly/200518/
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-07-28 )
