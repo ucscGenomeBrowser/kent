@@ -25242,9 +25242,9 @@ else if (sameString("par", table))
     {
     doParDetails(tdb, item);
     }
-else if (startsWith("t2g", table))
+else if (startsWith("pubs", table))
     {
-    doT2gDetails(tdb, item);
+    doPubsDetails(tdb, item);
     }
 else if (tdb != NULL && startsWith("bedDetail", tdb->type))
     {
