@@ -186,14 +186,17 @@ static char* printArticleInfo(struct sqlConnection *conn, char* item)
 {
     char query[512];
 
-    safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract FROM %s WHERE displayId='%s'", pubsArticleTable, item);
+    safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid FROM %s WHERE displayId='%s'", pubsArticleTable, item);
 
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     char *articleId=NULL;
     if ((row = sqlNextRow(sr)) != NULL)
     {
+        char* cit = row[4];
         char* abstract = row[5];
+        char* pmid = row[6];
+
         if (strlen(abstract)==0) 
             {
                 abstract = "(No abstract found for this article. Please use the link to the fulltext above.)";
@@ -201,7 +204,10 @@ static char* printArticleInfo(struct sqlConnection *conn, char* item)
         articleId = cloneString(row[0]);
         printf("<P>%s</P>\n", row[3]);
         printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B></A>\n", row[1], row[2]);
-        printf("<P style=\"width:800px; font-size:80%%\">%s</P>\n", row[4]);
+        printf("<P style=\"width:800px; font-size:80%%\">%s", cit);
+        if (nullIfAllSpace(pmid)!=NULL)
+            printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
+        printf("</P>\n");
         printf("<P style=\"width:800px; font-size:100%%\">%s</P>\n", abstract);
 	}
     sqlFreeResult(&sr);
@@ -275,9 +281,15 @@ int i;
 i = 0;
 char* c;
 c = text;
+bool doNotBreak = FALSE;
 while (*c != 0){
     {
-    if (i % distance == 0) 
+    if (*c=='&')
+       doNotBreak = TRUE;
+    if (*c==';')
+       doNotBreak = FALSE;
+
+    if (i % distance == 0 && ! doNotBreak) 
         printf("<wbr>");
     printf("%c", *c);
     c++;
