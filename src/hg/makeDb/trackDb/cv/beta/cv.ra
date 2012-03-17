@@ -3884,23 +3884,24 @@ sex U
 tier 3
 protocol Stam:HVMF_Stam_protocol.pdf
 
-term HVMF
-tag HVMF
-type Cell Line
-tier 3
-organism human
-description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 from villous tissue
-lineage missing
-karyotype normal
-sex M
-tissue placenta
-vendorName PromoCell
-vendorId HVMF
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
-termId BTO:0001975
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
-lab Gingeras
-protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf, Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
+#Cricket - duplicate term, need plan to resolve error
+#term HVMF
+#tag HVMF
+#type Cell Line
+#tier 3
+#organism human
+#description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 from villous tissue
+#lineage missing
+#karyotype normal
+#sex M
+#tissue placenta
+#vendorName PromoCell
+#vendorId HVMF
+#orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
+#termId BTO:0001975
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+#lab Gingeras
+#protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf, Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
 
 term HVMF_6100401.3
 tag HVMF61004013

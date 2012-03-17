@@ -14621,7 +14621,7 @@ ln -s /gbdb/hg18/fosends/fosEnds.fa /gbdb/hg19/fosEnds.fromHg18.fa
 hgLoadSeq hg19 /gbdb/hg19/fosends/fosEnds.fromHg18.fa
 
 #############################################################################
-# DECIPHER LIFT FORM HG18 (DONE 2010-12-27, Andy)
+# DECIPHER LIFT FROM HG18 (DONE 2010-12-27, Andy)
 
 cd /hive/data/genomes/hg19/bed/hg18MassiveLift/
 mkdir decipher

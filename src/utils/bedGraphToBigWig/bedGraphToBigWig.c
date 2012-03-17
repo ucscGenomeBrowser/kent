@@ -35,7 +35,7 @@ errAbort(
   "Use the script: fetchChromSizes to obtain the actual chrom.sizes information\n"
   "from UCSC, please do not make up a chrom sizes from your own information.\n"
   "The input bedGraph file must be sorted, use the unix sort command:\n"
-  "  sort -k1,1 -k2,2 unsorted.bedGraph > sorted.bedGraph\n"
+  "  sort -k1,1 -k2,2n unsorted.bedGraph > sorted.bedGraph\n"
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"

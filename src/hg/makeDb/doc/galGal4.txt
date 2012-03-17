@@ -7,9 +7,10 @@
 # http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AADN00
 #	12X coverage via a variety of methods
 
-#	I can't tell the difference here:
-#	http://www.ncbi.nlm.nih.gov/bioproject/10808
-#	http://www.ncbi.nlm.nih.gov/bioproject/13342
+#	http://www.ncbi.nlm.nih.gov/genome/111
+#	http://www.ncbi.nlm.nih.gov/bioproject/13342 - WashU
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AADN00
+#	http://www.ncbi.nlm.nih.gov/bioproject/10808 - Montreal - chrMt
 
 #############################################################################
 # Fetch sequence from genbank (DONE - 2011-12-22 - Hiram)

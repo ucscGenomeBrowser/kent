@@ -32,6 +32,7 @@
 # sex (used in documentation and validation.  Should correspond to a "type sex" stanza. required)
 # tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.
 #       Should correspond to a "type tier" stanza. required)
+# protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)/
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human. optional)
 
@@ -198,6 +199,114 @@ color 179,0,134
 sex U
 tier 3
 protocol ENCODE:Keratinocyte_protocol.pdf
+
+term NHEM_M2
+tag NHEMM2
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 from cheek / temple
+lineage missing
+karyotype normal
+sex B
+tissue skin
+vendorName PromoCell
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf, Gingeras:NHEMM27012303_Gingeras_protocol.pdf
+
+term NHEM_M2_7011001.2
+tag NHEMM270110012
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (adult) from cheek
+lineage missing
+karyotype normal
+sex M
+tissue skin
+vendorName PromoCell
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf
+
+term NHEM_M2_7012303
+tag NHEMM27012303
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (adult) from temple
+lineage missing
+karyotype normal
+sex F
+tissue skin
+vendorName PromoCell
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEMM27012303_Gingeras_protocol.pdf
+
+term NHEM.f_M2
+tag NHEMFM2
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001
+lineage missing
+karyotype normal
+sex M
+tissue skin
+vendorName PromoCell
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf, NHEM.fM26022001_Gingeras_protocol.pdf
+
+term NHEM.f_M2_5071302.2
+tag NHEMFM250713022
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (foreskin)
+lineage missing
+karyotype normal
+sex M
+tissue skin
+vendorName PromoCell
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf
+
+term NHEM.f_M2_6022001
+tag NHEMFM26022001
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (foreskin)
+lineage missing
+karyotype normal
+sex M
+tissue skin
+vendorName PromoCell
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
 
 term H1-hESC
 tag H1HESC
@@ -676,7 +785,7 @@ type Cell Line
 tier 3
 organism human
 description peripheral blood mononuclear cell, donor UHN00204, age 54, caucasian, DNA extract
-tissue peripheral blood mononuclear cell
+tissue blood
 lineage mesoderm
 karyotype normal
 sex M
@@ -2177,6 +2286,114 @@ orderUrl http://www.asterand.com/Asterand/
 sex U
 protocol Myers:HAL_Myers_protocol.pdf
 
+term HAoAF
+tag HAOAF
+type Cell Line
+tier 3
+organism human
+description Aortic Adventitial Fibroblasts from two individuals, HAoAF_6090101.11 and HAoAF_6111301.9 from tunica adventitia
+lineage missing
+karyotype normal
+sex B
+tissue aorta
+vendorName PromoCell
+vendorId HAoAF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
+termId BTO:0000135
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
+lab Gingeras
+protocol Gingeras:HAoAF6090101.11_Gingeras_protocol.pdf, Gingeras:HAoAF6111301.9_Gingeras_protocol.pdf
+
+term HAoAF_6090101.11
+tag HAOAF609010111
+type Cell Line
+tier 3
+organism human
+description Aortic Adventitial Fibroblasts from tunica adventitia
+lineage missing
+karyotype normal
+sex M
+tissue aorta
+vendorName PromoCell
+vendorId HAoAF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
+termId BTO:0000135
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
+lab Gingeras
+protocol Gingeras:HAoAF6090101.11_Gingeras_protocol.pdf
+
+term HAoAF_6111301.9
+tag HAOAF61113019
+type Cell Line
+tier 3
+organism human
+description Aortic Adventitial Fibroblasts from tunica adventitia
+lineage missing
+karyotype normal
+sex F
+tissue aorta
+vendorName PromoCell
+vendorId HAoAF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
+termId BTO:0000135
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
+lab Gingeras
+protocol Gingeras:HAoAF6111301.9_Gingeras_protocol.pdf
+
+term HAoEC
+tag HAOEC
+type Cell Line
+tier 3
+organism human
+description Aortic Endothelial Cells (thoracic) from two individuals, HAoEC_7071706.1 and HAoEC_8061102.1
+lineage missing
+karyotype normal
+sex B
+tissue aorta
+vendorName PromoCell
+vendorId HAoEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
+termId BTO:0000394
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
+lab Gingeras
+protocol Gingeras:HAoEC7071706.1_Gingeras_protocol.pdf, HAoEC8061102.1_Gingeras_protocol.pdf
+
+term HAoEC_8061102.1
+tag HAOEC80611021
+type Cell Line
+tier 3
+organism human
+description Aortic Endothelial Cells from throracic
+lineage missing
+karyotype normal
+sex M
+tissue aorta
+vendorName PromoCell
+vendorId HAoEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
+termId BTO:0000394
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
+lab Gingeras
+protocol Gingeras:HAoEC8061102.1_Gingeras_protocol.pdf
+
+term HAoEC_7071706.1
+tag HAOEC70717061
+type Cell Line
+tier 3
+organism human
+description Aortic Endothelial Cells
+lineage missing
+karyotype normal
+sex F
+tissue aorta
+vendorName PromoCell
+vendorId HAoEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
+termId BTO:0000394
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
+lab Gingeras
+protocol Gingeras:HAoEC7071706.1_Gingeras_protocol.pdf
+
 term HA-sp
 tag HASP
 type Cell Line
@@ -2265,6 +2482,60 @@ orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6300
 sex U
 tier 3
 protocol Stam:HCF_Stam_protocol.pdf
+
+term HCH
+tag HCH
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Chondrocytes from two individuals, HCH_8100808.2 and HCH_0011308.2P from knee joint
+lineage missing
+karyotype normal
+sex M
+tissue cartilage
+vendorName PromoCell
+vendorId HCH
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
+termId BTO:0000249
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
+lab Gingeras
+protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf, HCH0011308.2P_Gingeras_protocol.pdf
+
+term HCH_8100808.2
+tag HCH81008082
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Chondrocytes from knee joint
+lineage missing
+karyotype normal
+sex M
+tissue cartilage
+vendorName PromoCell
+vendorId HCH
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
+termId BTO:0000249
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
+lab Gingeras
+protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf
+
+term HCH_0011308.2P
+tag HCH00113082P
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Chondrocytes from knee joint
+lineage missing
+karyotype normal
+sex F
+tissue cartilage
+vendorName PromoCell
+vendorId HCH
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
+termId BTO:0000249
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
+lab Gingeras
+protocol Gingeras:HCH0011308.2P_Gingeras_protocol.pdf
 
 term HConF
 tag HCONF
@@ -2427,6 +2698,60 @@ termId BTO:0000575
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000575
 protocol Crawford:Hepatocytes_Crawford_protocol.pdf
 
+term HFDPC
+tag HFDPC
+type Cell Line
+tier 3
+organism human
+description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3 from ateral scalp / brown / blond
+lineage missing
+karyotype normal
+sex F
+tissue skin
+vendorName PromoCell
+vendorId HFDPC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
+termId BTO:0001849
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
+lab Gingeras
+protocol Gingeras:HFDPC0100503.2_Gingeras_protocol.pdf, HFDPC0102703.3_Gingeras_protocol.pdf
+
+term HFDPC_0100503.2
+tag HFDPC01005032
+type Cell Line
+tier 3
+organism human
+description Follicle Dermal Papilla Cells from lateral scalp / brown
+lineage missing
+karyotype normal
+sex F
+tissue skin
+vendorName PromoCell
+vendorId HFDPC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
+termId BTO:0001849
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
+lab Gingeras
+protocol Gingeras:HFDPC0100503.2_Gingeras_protocol.pdf
+
+term HFDPC_0102703.3
+tag HFDPC01027033
+type Cell Line
+tier 3
+organism human
+description Follicle Dermal Papilla Cells from lateral scalp / blond
+lineage missing
+karyotype normal
+sex F
+tissue skin
+vendorName PromoCell
+vendorId HFDPC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
+termId BTO:0001849
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
+lab Gingeras
+protocol Gingeras:HFDPC0102703.3_Gingeras_protocol.pdf
+
 term HFF
 tag HFF
 type Cell Line
@@ -2569,6 +2894,42 @@ sex U
 tier 3
 protocol Bernstein:HMEC_Bernstein_protocol.pdf Crawford:HMEC_Crawford_protocol.pdf Stam:HMEC_Stam_protocol.pdf
 
+term HMEpC
+tag HMEPC
+type Cell Line
+tier 3
+organism human
+description Mammary Epithelial Cells (placeholder, waiting on second lot/donor from PromoCell)
+lineage missing
+karyotype normal
+sex F
+tissue mammary gland
+vendorName PromoCell
+vendorId HMEpC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC
+termId BTO:0002178
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
+lab Gingeras
+protocol Gingeras:HMEpC_Gingeras_protocol.pdf
+
+term HMEpC_6022801.3
+tag HMEPC60228013
+type Cell Line
+tier 3
+organism human
+description Mammary Epithelial Cells
+lineage missing
+karyotype normal
+sex F
+tissue mammary gland
+vendorName PromoCell
+vendorId HMEpC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC
+termId BTO:0002178
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
+lab Gingeras
+protocol Gingeras:HMEpC6022801.3_Gingeras_protocol.pdf
+
 term HMF
 tag HMF
 type Cell Line
@@ -2584,23 +2945,276 @@ tier 3
 protocol Stam:HMF_Stam_protocol.pdf
 # mammary stromal cell line
 
+term hMNC-PB
+tag HMNCPB
+type Cell Line
+tier 3
+organism human
+description Mononuclear Cells (peripheral blood-single donor) from two individuals, hMNC-PB_0022330.9 and hMNC-PB_0082430.9
+lineage missing
+karyotype normal
+sex B
+tissue blood
+vendorName PromoCell
+vendorId hMNC-PB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
+termId BTO:0001025
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
+lab Gingeras
+protocol Gingeras:hMNCPB0022330.9_Gingeras_protocol.pdf, hMNCPB0082430.9_Gingeras_protocol.pdf
+
 term hMNC-PB_0022330.9
 tag HMNCPB00223309
 type Cell Line
 tier 3
 organism human
-description Mononuclear Cells
+description Mononuclear Cells, peripheral blood-single donor
 lineage missing
 karyotype normal
 sex M
-tissue peripheral blood-single donor
+tissue blood
 vendorName PromoCell
-vendorId hMNC-PB#c1487
-orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB#c1487
+vendorId hMNC-PB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 lab Gingeras
 protocol Gingeras:hMNCPB0022330.9_Gingeras_protocol.pdf
+
+term hMNC-PB_0082430.9
+tag HMNCPB00824309
+type Cell Line
+tier 3
+organism human
+description Mononuclear Cells, peripheral blood-single donor
+lineage missing
+karyotype normal
+sex F
+tissue blood
+vendorName PromoCell
+vendorId hMNC-PB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
+termId BTO:0001025
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
+lab Gingeras
+protocol Gingeras:hMNCPB0082430.9_Gingeras_protocol.pdf
+
+term hMNC-CB
+tag HMNCCB
+type Cell Line
+tier 3
+organism human
+description Mononuclear Cells (umbilical cord blood-single donor) from two individuals, hMNC-CB_9111701.6 and hMNC-CB_8072802.6
+lineage missing
+karyotype normal
+sex B
+tissue blood
+vendorName PromoCell
+vendorId hMNC-CB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
+termId BTO:0004054
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
+lab Gingeras
+protocol Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf, Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf
+
+term hMNC-CB_9111701.6
+tag HMNCCB91117016
+type Cell Line
+tier 3
+organism human
+description Mononuclear Cells, umbilical cord blood-single donor
+lineage missing
+karyotype normal
+sex F
+tissue blood
+vendorName PromoCell
+vendorId hMNC-CB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
+termId BTO:0004054
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
+lab Gingeras
+protocol Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf
+
+term hMNC-CB_8072802.6
+tag HMNCCB80728026
+type Cell Line
+tier 3
+organism human
+description Mononuclear Cells, umbilical cord blood-single donor
+lineage missing
+karyotype normal
+sex M
+tissue blood
+vendorName PromoCell
+vendorId hMNC-CB
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
+termId BTO:0004054
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
+lab Gingeras
+protocol Gingeras:hMNCCB8072802.6_Gingeras_protocol.pdf
+
+term hMSC-BM
+tag HMSCBM
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-BM_0050602.11 and hMSC-BM_0051105.11 from femoral head
+lineage missing
+karyotype normal
+sex B
+tissue bone marrow
+vendorName PromoCell
+vendorId hMSC-BM
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCBM0050602.11_Gingeras_protocol.pdf, Gingeras:hMSCBM0051105.11_Gingeras_protocol.pdf
+
+term hMSC-BM_0050602.11
+tag HMSCBM005060211
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells femoral head
+lineage missing
+karyotype normal
+sex M
+tissue bone marrow
+vendorName PromoCell
+vendorId hMSC-BM
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCBM0050602.11_Gingeras_protocol.pdf
+
+term hMSC-BM_0051105.11
+tag HMSCBM005110511
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells from femoral head
+lineage missing
+karyotype normal
+sex F
+tissue bone marrow
+vendorName PromoCell
+vendorId hMSC-BM
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCBM0051105.11_Gingeras_protocol.pdf
+
+term hMSC-AT
+tag HMSCAT
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-AT_9061601.12 and hMSC-AT_0102604.12 from subcutaneous abdomen adipose tissue
+lineage missing
+karyotype normal
+sex F
+tissue adipose
+vendorName PromoCell
+vendorId hMSC-AT
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCAT0102604.12_Gingeras_protocol.pdf, Gingeras:hMSCAT9061601.12_Gingeras_protocol.pdf
+
+term hMSC-AT_9061601.12
+tag HMSCAT906160112
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells from abdomen
+lineage missing
+karyotype normal
+sex F
+tissue subcutaneous adipose tissue
+vendorName PromoCell
+vendorId hMSC-AT
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCAT9061601.12_Gingeras_protocol.pdf
+
+term hMSC-AT_0102604.12
+tag HMSCAT010260412
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells from subcutaneous abdomen adipose tissue
+lineage missing
+karyotype normal
+sex F
+tissue adipose
+vendorName PromoCell
+vendorId hMSC-AT
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCAT0102604.12_Gingeras_protocol.pdf
+
+term hMSC-UC
+tag HMSCUC
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-UC_0081101.7 and hMSC-UC_0052501.7 from matrix (Wharton's Jelly)
+lineage missing
+karyotype normal
+sex F
+tissue umbilical cord
+vendorName PromoCell
+vendorId hMSC-UC
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCUC0081101.7_Gingeras_protocol.pdf, Gingeras:hMSCUC0052501.7_Gingeras_protocol.pdf
+
+
+term hMSC-UC_0081101.7
+tag HMSCUC00811017
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells from matrix (Wharton's Jelly)
+lineage missing
+karyotype normal
+sex F
+tissue umbilical cord
+vendorName PromoCell
+vendorId hMSC-UC
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCUC0081101.7_Gingeras_protocol.pdf
+
+term hMSC-UC_0052501.7
+tag HMSCUC00525017
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Mesenchymal Stem Cells from matrix (Wharton's Jelly)
+lineage missing
+karyotype normal
+sex M
+tissue umbilical cord
+vendorName PromoCell
+vendorId hMSC-UC
+orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
+termId BTO:0003298
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
+lab Gingeras
+protocol Gingeras:hMSCUC0052501.7_Gingeras_protocol.pdf
 
 term HMVEC-dAd
 tag HMVECDAD
@@ -2735,6 +3349,60 @@ sex U
 tier 3
 protocol Stam:HNPCEpiC_Stam_protocol.pdf
 
+term HOB
+tag HOB
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Osteoblasts from two individuals, HOB_0090202.1 and HOB_0091301 from femoral head
+lineage missing
+karyotype normal
+sex M
+tissue cancellous bone
+vendorName PromoCell
+vendorId HOB
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
+termId BTO:0004324
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
+lab Gingeras
+protocol Gingeras:HOB0090202.1_Gingeras_protocol.pdf, Gingeras:HOB0091301_Gingeras_protocol.pdf
+
+term HOB_0090202.1
+tag HOB00902021
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Osteoblasts from femoral head
+lineage missing
+karyotype normal
+sex M
+tissue cancellous bone
+vendorName PromoCell
+vendorId HOB
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
+termId BTO:0004324
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
+lab Gingeras
+protocol Gingeras:HOB0090202.1_Gingeras_protocol.pdf
+
+term HOB_0091301
+tag HOB0091301
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Osteoblasts from femoral head
+lineage missing
+karyotype normal
+sex F
+tissue cancellous bone
+vendorName PromoCell
+vendorId HOB
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
+termId BTO:0004324
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
+lab Gingeras
+protocol Gingeras:HOB0091301_Gingeras_protocol.pdf
+
 term HPAEC
 tag HPAEC
 type Cell Line
@@ -2862,11 +3530,11 @@ tag HPIEPC90128012
 type Cell Line
 tier 3
 organism human
-description Placental Epithelial Cells
+description Placental Epithelial Cells amniotic membrane
 lineage missing
 karyotype normal
 sex F
-tissue placenta / amniotic membrane
+tissue placenta
 vendorName PromoCell
 vendorId human-placental-epithelial-cells-hplepc
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
@@ -2880,11 +3548,11 @@ tag HPIEPC90415032
 type Cell Line
 tier 3
 organism human
-description Placental Epithelial Cells
+description Placental Epithelial Cells amniotic membrane
 lineage missing
 karyotype normal
 sex M
-tissue placenta / amniotic membrane
+tissue placenta
 vendorName PromoCell
 vendorId human-placental-epithelial-cells-hplepc
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
@@ -2957,6 +3625,60 @@ orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6540
 sex U
 tier 3
 protocol Stam:HRPEpiC_Stam_protocol.pdf
+
+term HSaVEC
+tag HSAVEC
+type Cell Line
+tier 3
+organism human
+description Saphenous Vein Endothelial Cells from two individuals, HSaVEC_9100101.15 and HSaVEC_0022202.16 from thigh
+lineage missing
+karyotype normal
+sex M
+tissue saphenous vein
+vendorName PromoCell
+vendorId HSaVEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
+termId BTO:0003275
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
+lab Gingeras
+protocol Gingeras:HSaVEC9100101.15_Gingeras_protocol.pdf, Gingeras:HSaVEC0022202.16_Gingeras_protocol.pdf
+
+term HSaVEC_9100101.15
+tag HSAVEC910010115
+type Cell Line
+tier 3
+organism human
+description Saphenous Vein Endothelial Cells from thigh
+lineage missing
+karyotype normal
+sex M
+tissue saphenous vein
+vendorName PromoCell
+vendorId HSaVEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
+termId BTO:0003275
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
+lab Gingeras
+protocol Gingeras:HSaVEC9100101.15_Gingeras_protocol.pdf
+
+term HSaVEC_0022202.16
+tag HSAVEC002220216
+type Cell Line
+tier 3
+organism human
+description Saphenous Vein Endothelial Cells from thigh
+lineage missing
+karyotype normal
+sex M
+tissue saphenous vein
+vendorName PromoCell
+vendorId HSaVEC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
+termId BTO:0003275
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
+lab Gingeras
+protocol Gingeras:HSaVEC0022202.16_Gingeras_protocol.pdf
 
 term HSMM
 tag HSMM
@@ -3149,6 +3871,96 @@ sex U
 tier 3
 protocol Stam:HVMF_Stam_protocol.pdf
 
+term HVMF_6100401.3
+tag HVMF61004013
+type Cell Line
+tier 3
+organism human
+description Villous Mesenchymal Fibroblasts from villous tissue
+lineage missing
+karyotype normal
+sex F
+tissue placenta
+vendorName PromoCell
+vendorId HVMF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
+termId BTO:0001975
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+lab Gingeras
+protocol Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
+
+term HVMF_6091203.3
+tag HVMF60912033
+type Cell Line
+tier 3
+organism human
+description Villous Mesenchymal Fibroblasts from villous tissue
+lineage missing
+karyotype normal
+sex M
+tissue placenta
+vendorName PromoCell
+vendorId HVMF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
+termId BTO:0001975
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+lab Gingeras
+protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf
+
+term HWP
+tag HWP
+type Cell Line
+tier 3
+organism human
+description Undifferentiated White Preadipocytes from two individuals, HWP_0092205 and HWP_8120201.5, subcutaneous adipose tissue from abdomen / upper arm
+lineage missing
+karyotype normal
+sex B
+tissue adipose
+vendorName PromoCell
+vendorId HWP
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
+termId BTO:0004042
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
+lab Gingeras
+protocol Gingeras:HWP0092205_Gingeras_protocol.pdf
+
+term HWP_0092205
+tag HWP0092205
+type Cell Line
+tier 3
+organism human
+description Undifferentiated White Preadipocytes from abdomen
+lineage missing
+karyotype normal
+sex M
+tissue subcutaneous adipose tissue
+vendorName PromoCell
+vendorId HWP
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
+termId BTO:0004042
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
+lab Gingeras
+protocol Gingeras:HWP0092205_Gingeras_protocol.pdf, Gingeras:HWP8120201.5_Gingeras_protocol.pdf
+
+term HWP_8120201.5
+tag HWP81202015
+type Cell Line
+tier 3
+organism human
+description Undifferentiated White Preadipocytes from upper arm
+lineage missing
+karyotype normal
+sex F
+tissue subcutaneous adipose tissue
+vendorName PromoCell
+vendorId HWP
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
+termId BTO:0004042
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
+lab Gingeras
+protocol Gingeras:HWP8120201.5_Gingeras_protocol.pdf
+
 term IMR90
 tag IMR90
 type Cell Line
@@ -3200,7 +4012,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 lab Crawford
-protocol missing
+protocol Crawford:iPS_Crawford_protocol.pdf
 
 term iPS_NIHi7
 tag IPSNIHI7
@@ -3217,7 +4029,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 lab Crawford
-protocol missing
+protocol Crawford:iPS_Crawford_protocol.pdf
 
 term iPS_NIHi11
 tag IPSNIHI11
@@ -3234,7 +4046,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 lab Crawford
-protocol missing
+protocol Crawford:iPS_Crawford_protocol.pdf
 
 term Ishikawa
 tag ISHIKAWA
@@ -3657,6 +4469,60 @@ sex U
 tier 3
 protocol Stam:NHDF-neo_Stam_protocol.pdf
 
+term NHDF
+tag NHDF
+type Cell Line
+tier 3
+organism human
+description Dermal Fibroblasts from temple / breast
+lineage missing
+karyotype normal
+sex F
+tissue skin
+vendorName PromoCell
+vendorId NHDF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
+termId BTO:0003185
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
+lab Gingeras
+protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf, Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
+
+term NHDF_0060801.3
+tag NHDF00608013
+type Cell Line
+tier 3
+organism human
+description Dermal Fibroblasts from temple
+lineage missing
+karyotype normal
+sex F
+tissue skin
+vendorName PromoCell
+vendorId NHDF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
+termId BTO:0003185
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
+lab Gingeras
+protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf
+
+term NHDF_7071701.2
+tag NHDF70717012
+type Cell Line
+tier 3
+organism human
+description Dermal Fibroblasts from breast
+lineage missing
+karyotype normal
+sex F
+tissue skin
+vendorName PromoCell
+vendorId NHDF
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
+termId BTO:0003185
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
+lab Gingeras
+protocol Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
+
 term NHLF
 tag NHLF
 type Cell Line
@@ -4041,6 +4907,7 @@ tier 3
 protocol Stam:Stam_15_protocols.pdf
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
 
+#Venkat - old term using SkMC with capital K
 term SKMC
 tag SKMC
 type Cell Line
@@ -4073,6 +4940,23 @@ orderUrl http://www.dukehealth.org/physicians/steve_s_choi
 termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Crawford:Stellate_Crawford_protocol.pdf
+
+term T98G
+tag T98G
+type Cell Line
+organism human
+description fibroblast cell line derived from a glioblastoma multiforme. (PMID: 222778)
+karyotype cancer
+tissue brain
+lineage ectoderm
+vendorName ATCC
+vendorId CRL-1690
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
+termId BTO:0001583
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
+sex M
+tier 3
+protocol Myers:T98G_Myers_protocol.pdf
 
 # Never submitted data. ~Jeff
 #term T98G
@@ -4449,6 +5333,23 @@ color 204,121,167
 sex U
 protocol Gingeras:Bladder_Gingeras_protocol.pdf
 
+term BMDM
+tag BMDM
+type Cell Line
+organism mouse
+tissue blood
+category primaryCells
+description Bone marrow derived macrophage
+age ageUnknown
+strain Unknown
+vendorName Genhong Cheng Lab, UCLA
+termId 7058
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
+color 86,180,233
+sex U
+protocol Ren:BMDM_Ren_protocol.pdf
+label Bone marrow derived macrophage
+
 term BoneMarrow
 tag BMARROW
 type Cell Line
@@ -4612,6 +5513,24 @@ color 105,105,105
 sex U
 protocol Ren:Cortex_Ren_protocol.pdf Gingeras:Cortex_Gingeras_protocol.pdf
 
+term Duodenum
+tag DUOD
+type Cell Line
+organism mouse
+tissue duodenum
+category Tissue
+age ageUnknown
+strain Unknown
+description Duodenum
+vendorName CSHL lab
+vendorId Duodenum
+orderUrl  http://gingeraslab.cshl.edu/
+termId 6977
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6977
+color 230,159,0
+sex U
+protocol Gingeras:Duodenum_Gingeras_protocol.pdf
+
 term ES-Bruce4
 tag ESB4
 type Cell Line
@@ -4638,7 +5557,7 @@ description mouse embryonic stem cell line E14
 age E0
 strain 129/Ola
 vendorName Santos lab
-vendorId E0
+vendorId E14
 orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
 color 65,105,225
 sex M
@@ -5827,14 +6746,14 @@ type Antibody
 target BRG1
 antibodyDescription Brg-1 (G-7) is a mouse monoclonal antibody raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin. Antibody Target: BRG1
 targetDescription Brg1 (SMARCA4) is an ATPase subunit of the SWI/SNF chromatin-remodeling complex.
-orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
+orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
 vendorName Santa Cruz Biotech
-vendorId 16189
+vendorId sc-17796
 lab Snyder
 targetId GeneCard:SMARCA4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
 validation Human_-_BRG1(Immunoprecipitation,IP-Mass_spec):human_BRG1_validation_Snyder.pdf
-label BRG1 (16189)
+label BRG1 (sc-17796)
 
 term BTF3_(SC-166093)
 tag BTF3SC166093
@@ -5941,7 +6860,7 @@ orderUrl http://www.abcam.com/Cdk9-antibody-ab6544.html
 lab Struhl
 targetId GeneCard:CDK9
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CDK9&search=cdk9
-validation Human_-_CDK9_(ab75898)(Western_Blot,ChIP):human_CDK9_ab75898_validation_Struhl.pdf
+validation Human_-_CDK9_(ab75898)(Western_blot,ChIP):human_CDK9_ab75898_validation_Struhl.pdf
 label CDK9 (ab75898)
 
 term CEBPB
@@ -6657,7 +7576,7 @@ vendorId sc-66882
 targetId GeneCard:ESRRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESRRA
 lab Snyder
-validation Human_-_ERRA(Western_Blot,Motif_Enrichment):human_ERRA_validation_Snyder.pdf
+validation Human_-_ERRA(Western_blot,Motif_Enrichment):human_ERRA_validation_Snyder.pdf
 label ERRA (sc-66882)
 
 term ETS1
@@ -7594,14 +8513,14 @@ type Antibody
 target INI1
 antibodyDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin. Antibody Target: INI1
 targetDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
-orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
+orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
 vendorName Santa Cruz Biotech
-vendorId sc-17796
+vendorId sc-16189
 lab Snyder
 targetId GeneCard:SMARCB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCB1
 validation Human_-_INI1(Immunoprecipitation,IP-Mass_spec):human_INI1_validation_Snyder.pdf
-label INI1 (sc-17796)
+label INI1 (sc-16189)
 
 term IRF1
 tag IRF1
@@ -7806,21 +8725,6 @@ targetId GeneCard:MBD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MBD4
 validation Human_-_MBD4_(SC-271530)(Western_blot,IP-MassSpec):human_MBD4_SC-271530_sc-271530_validation_Myers.pdf
 label MBD4 (sc-271530)
-
-term Med26_(sc48776)
-tag MED26SC48776
-type Antibody
-antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 373-600 mapping at the C-terminus of CRSP70 of human origin. Antibody Target: Med26
-target Med26
-targetDescription Med26 is a subunit of the large coactivator known as mediator. Med26 is subunit found to be mutually exclusive from the CDK8 module of mediator. Med26 has been associated with activating effects on transcription in context specific manner. Mediator is believed to promote transcription by bridging transcription factors and the RNA polymerase II holoenzyme.
-vendorName Santa Cruz Biotech
-vendorId sc48776
-orderUrl http://www.scbt.com/datasheet-48776-crsp70-h-228-antibody.html
-lab Struhl
-targetId GeneCard:Med26
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26&search=Med26
-validation Med26_(sc48776)(Western_Blot,Immunoprecipitation):human_Med26_sc48776_validation_Struhl.pdf
-label Med26 (sc48776)
 
 term MEF2A
 tag MEF2A
@@ -8511,7 +9415,7 @@ type Antibody
 target RFX5
 targetDescription Activates transcription from class II MHC promoters. Recognizes X-boxes. Mediates cooperative binding betweenRFX and NF-Y. RFX binds the X1 box of MHC-II promoters
 antibodyDescription Rabbit polyclonal against RFX5 peptide corresponding to a region at amino acids 320 to 494 of the human protein conjugated to Keyhole Limpet Hemocyanin. Antibody Target: RFX5
-orderUrl http://www.rockland-inc.com//store/200-401-194-14562-O4L_9248.aspx
+orderUrl http://rockland-inc.com/store/Transcription-Factor-Antibodies-200-401-194-O4L_9248.aspx
 vendorName Rockland Immunochemicals
 vendorId 200-401-194
 lab Snyder
@@ -8611,7 +9515,7 @@ lab Snyder
 lots LB140235
 targetId SIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
-validation Human_-_:SIN3A(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_:mouse_SIN3A_NB600-1263_validation_Snyder.pdf
+validation Human_-_SIN3A_(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_SIN3A_(NB600-1263)(Immunoprecipitation):mouse_SIN3A_NB600-1263_validation_Snyder.pdf
 label SIN3A (NB600-1263)
 
 term Sin3Ak-20
@@ -8733,7 +9637,6 @@ vendorId missing
 orderUrl http://www.igbmc.fr/Tora
 lab Struhl
 targetId GeneCard:FAM48A
-targetId GeneCards:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
 validation Human_-_:missing
 label SPT20
@@ -8798,7 +9701,7 @@ lab Snyder
 lots G2406 and K2106
 targetId GeneCard:STAT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1&search=STAT1
-validation Human_-_STAT1(Western_Blot,Motif_Enrichment):human_STAT1_validation_Snyder.pdf
+validation Human_-_STAT1(Western_blot,Motif_Enrichment):human_STAT1_validation_Snyder.pdf
 label STAT1 (sc-345)
 
 term STAT2
@@ -9185,7 +10088,9 @@ target TRIM28
 targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors.  The protein localizes to the nucleus and is thought to associate with specific chromatin regions.  The protein is a member of the tripartite motif family.  This tripartite motif includes three zinc-binding domains, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-81411
-orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.htmllab Myerslots L0309
+orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.html
+lab Myers
+lots L0309
 targetId GeneCard:TRIM28
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation Human_-_TRIM28_(sc-81411)(Western_blot,ChIP):human_TRIM28_sc-81411_validation_Myers.pdf
@@ -9524,11 +10429,26 @@ label ZZZ3
 ### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
 ##This does not appear in metaDb
 
+term CBP_(sc369)
+tag CBPSC369
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CBP
+target CBP
+targetDescription CBP is a histone acetyl transferase that promotes transcription.  CBP is recruited by a variety of transcription factors to promoters and enhancers.
+vendorName Santa Cruz Biotech
+vendorId sc369
+orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
+lab Struhl
+targetId GeneCard:CREBBP
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
+validation Human_-_CBP_(sc369)(Western_blot,ChIP):human_CBP_sc369_validation_Struhl.pdf
+label CBP (sc369)
+
 term CBX3_(SC-101004)
 tag CBX3SC101004
 type Antibody
 target CBX3
-targetDescription At the nuclear envelope, the nuclear lamina and heterochromatin are adjacent to the inner nuclear membrane. The protein encoded by this gene binds DNA and is a component of heterochromatin. This protein also can bind lamin B receptor, an integral membrane protein found in the inner nuclear membrane. The dual binding functions of the encoded protein may explain the association of heterochromatin with the inner nuclear membrane. This protein binds histone H3 tails methylated at Lys-9 sites. This protein is also recruited to sites of ultraviolet-induced DNA damage and double-strand breaks. Two transcript variants encoding the same protein but differing in the 5' UTR, have been found for this gene.
+targetDescription At the nuclear envelope, the nuclear lamina and heterochromatin are adjacent to the inner nuclear membrane. The protein encoded by this gene binds DNA and is a component of heterochromatin. This protein also can bind lamin B receptor, an integral membrane. The dual binding functions of the encoded protein may explain the association of heterochromatin with the inner nuclear membrane. This protein binds histone H3 tails methylated at Lys-9 sites. This protein is also recruited to sites of ultraviolet-induced DNA damage and double-strand breaks. Two transcript variants encoding the same protein but differing in the 5' UTR, have been found for this gene.
 antibodyDescription Mouse monoclonal IgG, raised against recombinant CBX3 of human origin. Antibody Target: CBX3
 vendorName Santa Cruz Biotech
 vendorId sc-101004
@@ -9552,7 +10472,7 @@ orderUrl http://www.millipore.com/catalogue/item/05-689
 lab Tenenbaum
 targetId GeneCard:CBX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
-validation 
+validation
 label CBX5 (05-689)
 #lots
 
@@ -9572,7 +10492,7 @@ validation Human_-_:missing
 label CELF1 (05-621)
 # lots
 
-term CELF2
+term CELF2 
 tag CELF2
 type Antibody
 target CELF2
@@ -9584,10 +10504,24 @@ orderUrl http://www.millipore.com/catalogue/item/04-047
 lab Tenenbaum
 targetId GeneCard:CELF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
-validation 
+validation
 label CELF2 (04-047)
-# lots
-##This does not appear in metaDb
+
+
+term COREST_(ab24166)
+tag CORESTAB24166
+type Antibody
+antibodyDescription Synthetic peptide conjugated to KLH derived from within residues 400 to the C-terminus of Human CoREST.   Note: This antibody has since been discontinued.  Full product information is attached as part of validation document. Antibody Target: COREST_(ab24166)
+target COREST
+targetDescription Essential component of the BHC complex, a corepressor complex that represses transcription of neuron-specific genes in non-neuronal cells.  In the BHC complex, it serves as a molecular beacon for the recruitment of molecular machinery, including MeCP2 and SUV39H1, that imposes silencing across a chromosomal interval. Plays a central role in demethylation of Lys-4 of histone H3 by promoting demethylase activity of KDM1A on core histones and nucleosomal substrates.
+vendorName Abcam
+vendorId ab24166
+lab Snyder
+lots 834865
+targetId RCOR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
+validation Human_-_COREST(ab24166)(Western_blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
+label COREST (ab24166)
 
 # lots
 ##This does not appear in metaDb
@@ -9716,13 +10650,13 @@ antibodyDescription Rabbit polyclonal, immunogen= synthetic peptide derived from
 target HMGN1
 targetDescription HMGN1 is one of four members of the high mobility group nucleosome binding proteins.  HMGN1 is ubiquitously expressed and has been implicated in promoting transcription.
 vendorName Abcam
-vendorId HMGN1
+vendorId ab5212
 orderUrl http://www.abcam.com/HMG14-antibody-ab5212.html
 lab Struhl
 targetId GeneCard:HMGN1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN1
-validation Human_-_HMGN1(Western_Blot,Immunoprecipitation):human_HMGN1_validation_Struhl.pdf
-label HMGN1
+validation Human_-_HMGN1(Western_blot,Immunoprecipitation):human_HMGN1_validation_Struhl.pdf
+label HMGN1 (ab5212)
 
 term HNRNPD
 tag HNRNPD
@@ -10086,16 +11020,19 @@ term 400
 tag IL400
 type insertLength
 description insert length of 400nt
+label 400
 
 term 200
 tag IL200
 type insertLength
 description insert length of 200nt
+label 200
 
 term ilNA
 tag ILNA
 type insertLength
 description insert length not applicable
+label N/A
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 
@@ -10103,21 +11040,25 @@ term 1k
 tag F1K
 type fragSize
 description 1 kb DNA fragments
+label 1k
 
 term 5k
 tag F5K
 type fragSize
 description 5 kb DNA fragments
+label 5k
 
 term 10k
 tag F10K
 type fragSize
 description 10 kb DNA fragments
+label 10k
 
 term 20k
 tag F20K
 type fragSize
 description 20 kb DNA fragments
+label 20k
 
 ### localization
 # term (human-readable name)
@@ -10133,7 +11074,7 @@ type localization
 description Whole cell
 termId GO:0005623
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
-label Whole cell
+label cell GO:0005623
 
 term nucleus
 tag NUCLEUS
@@ -10141,6 +11082,7 @@ type localization
 description Large membrane bound part of cell containing chromosomes and the bulk of the cell's DNA
 termId GO:0005634
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005634
+label nucleus GO:0005634
 
 term cytosol
 tag CYTOSOL
@@ -10148,6 +11090,7 @@ type localization
 description The fluid between the cells outer membrane and the nucleus
 termId GO:0005829
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005829
+label cytosol GO:0005829
 
 term polysome
 tag POLYSOME
@@ -10155,6 +11098,7 @@ type localization
 description Strand of mRNA with ribosomes attached
 termId GO:0005844
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
+label polysome GO:0005844
 
 term chromatin
 tag CHROMATIN
@@ -10162,6 +11106,7 @@ type localization
 description Nuclear DNA and associated proteins
 termId GO:0000790
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0000790
+label chromatin GO:0000790
 
 term nucleolus
 tag NUCLEOLUS
@@ -10169,6 +11114,7 @@ type localization
 description The part of the nucleus where ribosomal RNA is actively transcribed
 termId GO:0005730
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
+label nucleolus GO:0005730
 
 term nucleoplasm
 tag NUCLEOPLASM
@@ -10176,6 +11122,7 @@ type localization
 description That part of the nuclear content other than the chromosomes or the nucleolus
 termId GO:0005654
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005654
+label nucleoplasm GO:0005654
 
 term nuclearMatrix
 tag NUCLEARMATRIX
@@ -10190,6 +11137,7 @@ type localization
 description That fraction of cells, prepared by disruptive biochemical methods, that includes the plasma and other membranes.
 termId GO:0005624
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
+label membraneFraction GO:0005624
 
 term mitochondria
 tag MITO
@@ -10197,6 +11145,7 @@ type localization
 description Mitochondria
 termId GO:0005739
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
+label mitochondria GO:0005739
 
 ### RNA extracts
 
@@ -10272,156 +11221,187 @@ term Control
 tag CONTROL
 type control
 description This data represents a control being compared with the other tracks in the set.
+label Control
 
 term Control_eGFP-BACH1
 tag CONTROLBACH1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-BACH1
+label eGFP-BACH1
 
 term Control_eGFP-CCNE1
 tag CONTROLCCNE1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-CCNE1
+label eGFP-CCNE1
 
 term Control_eGFP-CDKN1B
 tag CONTROLCDKN1B
 type control
 description This data represents a control being compared to experiments using antibody eGFP-CDKN1B
+label eGFP-CDKN1B
 
 term Control_eGFP-E2F1
 tag CONTROLE2F1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-E2F1
+label eGFP-E2F1
 
 term Control_eGFP-EKLF1
 tag CONTROLEKLF1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-EKLF1
+label eGFP-EKLF1
 
 term Control_eGFP-ELF1
 tag CONTROLELF1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ELF1
+label eGFP-ELF1
 
 term Control_eGFP-ESR
 tag CONTROLESR
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ESR
+label eGFP-ESR
 
 term Control_eGFP-FOS
 tag CONTROLFOS
 type control
 description This data represents a control being compared to experiments using antibody eGFP-FOS
+label eGFP-FOS
 
 term Control_eGFP-GATA2
 tag CONTROLGATA2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-GATA2
+label eGFP-GATA2
 
 term Control_eGFP-HDAC8
 tag CONTROLHDAC8
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HDAC8
+label eGFP-HDAC8
 
 term Control_eGFP-HMGB1
 tag CONTROLHMGB1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-HMGB1
+label eGFP-HMGB1
 
 term Control_eGFP-ILF2
 tag CONTROLILF2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-ILF2
+label eGFP-ILF2
 
 term Control_eGFP-JunB
 tag CONTROLJUNB
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunB
+label eGFP-JunB
 
 term Control_eGFP-JunD
 tag CONTROLJUND
 type control
 description This data represents a control being compared to experiments using antibody eGFP-JunD
+label eGFP-JunD
 
 term Control_eGFP-MLL5
 tag CONTROLMLL5
 type control
 description This data represents a control being compared to experiments using antibody eGFP-MLL5
+label eGFP-MLL5
 
 term Control_eGFP-NCOR1
 tag CONTROLNCOR1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NCOR1
+label eGFP-NCOR1
 
 term Control_eGFP-NF90
 tag CONTROLNF90
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NF90
+label eGFP-NF90
 
 term Control_eGFP-NR4A1
 tag CONTROLNR4A1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-NR4A1
+label eGFP-NR4A1
 
 term Control_eGFP-SMARCA1
 tag CONTROLSMARCA1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-SMARCA1
+label eGFP-SMARCA1
 
 term Control_eGFP-SMARCA2
 tag CONTROLSMARCA2
 type control
 description This data represents a control being compared to experiments using antibody eGFP-SMARCA2
+label eGFP-SMARCA2
 
 term Control_eGFP-STAT1
 tag CONTROLSTAT1
 type control
 description This data represents a control being compared to experiments using antibody eGFP-STAT1
+label eGFP-STAT1
 
 term Control_32bp
 tag CNTRL32B
 type control
 description This data represents a control being compared to experiments using read length of 32 bp
+label 32bp
 
 term Control_36bp
 tag CNTRL36B
 type control
 description This data represents a control being compared to experiments using read length of 36 bp
+label 36bp
 
 term Control_50bp
 tag CNTRL50B
 type control
 description This data represents a control being compared to experiments using read length of 50 bp
+label 50bp
 
 term Input
 tag INPUT
 type control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
+label Input
 
 term Large_Fragment
 tag LARGEFRAGMENT
 type control
 description Control signal from sonication into large fragments of DNA (350-800 bp).
+label Large_Fragment
 
 term Naked_DNA
 tag NAKEDDNA
 type control
 description Control signal from Naked DNA.
+label Naked_DNA
 
 term Reference_Genome
 tag REFERENCEGENOME
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
+label Reference_Genome
 
 term RevXlinkChromatin
 tag RXLCH
 type control
 description Sequencing library made from sonicated chromatin whose formaldehyde cross-links have been reversed.  These samples serve as controls for peak-calling.
+label RevXlinkChromatin
 
 term None
 tag NONE
 description No special treatment or protocol applies
 type control
+label None
 
 ### Inputs which are a special type of control
 
@@ -10429,43 +11409,82 @@ term std
 tag STD
 type control
 description Standard input signal for most experiments.
+label std
 
 term IgG-goat
 tag IGGGOAT
 type control
 description Input signal from Normal Goat IgG ChIP-seq.
+label IgG-goat
 
 term IgG-mus
 tag IGGMUS
 type control
 description Input signal from Normal Mouse IgG ChIP-seq.
+label IgG-mus
 
 term IgG-rab
 tag IGGRAB
 type control
 description Input signal from Normal Rabbit IgG ChIP-seq.
+label IgG-rab
 
 term IgG-rat
 tag IGGRAT
 type control
 description Input signal from Normal Rat IgG ChIP-seq
+label IgG-rat
 
 term IgG-Yale
 tag IGGYALE
 type control
 description Input signal from Mouse IgG ChIP-seq prepared at Yale
+label IgG-Yale
 
 term MNase
 tag MNASE
 type control
 description Input signal from MNase digested DNA.
+label MNase
 
 term UCDavis
 tag UCD
 type control
 description Input library was prepared at UC Davis.
+label UCDavis
 
 ### Treatments
+
+term 4OHTAM_1uM_4hr
+tag TAM14H
+description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
+type treatment
+label 4-OHTAM_1uM_4hr
+
+term 4OHTAM_1uM_12hr
+tag TAM112H
+description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
+type treatment
+label 4-OHTAM_1uM_12hr
+
+term 4OHTAM_1uM_36hr
+tag TAM
+description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
+type treatment
+label 4-OHTAM_1uM_36hr
+# Changed tag from OHTAM1: 6/9/11
+
+term 4OHTAM_20nM_72hr
+tag OHTAM
+description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
+type treatment
+label 4-OHTAM_20nM_72hr
+
+term 4OHTAM_100nM_30m
+tag TAM10030
+description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
+type treatment
+label 4-OHTAM_100nM_30m
 
 term androgen
 tag ANDRO
@@ -10491,6 +11510,11 @@ type treatment
 term BPA_100nM_4hr
 tag BPA14H
 description 4 h with 100 nM Bisphenol A (Myers)
+type treatment
+
+term CTCF_shRNA_knockdown
+tag CTCFSHRNA
+description CTCF (CCCTC-binding factor) transcript levels were knocked down in cells using lentiviral transduction to express an shRNA targeting the CTCF gene. The lentiviral construct also contained a puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct. By western blot, CTCF protein levels in the knockdown cells were <10% of cell lines transduced with a randomized shRNA lentiviral construct.
 type treatment
 
 term DEX_100nM
@@ -10568,19 +11592,19 @@ label 72 hour diff protocol B
 term diffProtC_24hr
 tag DIFFC24H
 type treatment
-description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam)
+description 24 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (Stam)
 label 24 hour diff protocol C
 
 term diffProtC_48hr
 tag DIFFC48H
 type treatment
-description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam)
+description 48 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (Stam)
 label 48 hour diff protocol C
 
 term diffProtC_120hr
 tag DIFFC120H
 type treatment
-description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (freshly thawed 10^-4 M stock from -20&deg;C storage, made according to Sigma-Aldrich specifications for solubilization and storage). (Stam)
+description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (Stam)
 label 120 hour diff protocol C
 
 term DMSO_0.02pct
@@ -10667,21 +11691,25 @@ term EtOH_0.01pct
 tag ETOH01
 description 36 h with 0.01% Ethanol (Snyder)
 type treatment
+label EtOH 0.01% 36h
 
 term EtOH_0.01pct_4hr
 tag ETOH01B
 description 4 h with 0.01% Ethanol (Snyder)
 type treatment
+label EtOH 0.01% 4h
 
 term EtOH_0.01pct_12hr
 tag ETOH01C
 description 12 h with 0.01% Ethanol (Snyder)
 type treatment
+label EtOH 0.01% 12h
 
 term EtOH_0.02pct
 tag ETOH02
 description 1 h with 0.02% Ethanol (Myers)
 type treatment
+label EtOH 0.02% 1h
 
 term forskolin
 tag FORSKLN
@@ -10774,6 +11802,11 @@ tag PREDNIS
 description 1 h with 100 nM Prednisolone (Myers)
 type treatment
 
+term Randomized_shRNA_control
+tag RANDSHRNA
+description Cells were transduced with a lentivirus expressing an shRNA containing a randomized DNA sequence generated by the siRNA Wizard v3.1 (http://www.sirnawizard.com/scrambled2.php) program. Lentiviral constructs also contained the puromycin resistance selectable marker and cells were treated 2 times, for three days each, to select for cells containing the retroviral construct.
+type treatment
+
 term serum_free_media
 tag SERUMFREE
 description Grown with growth factors, then switched to media that contains no FBS for 36 hours (Crawford)
@@ -10791,37 +11824,6 @@ tag SERUMSTIM
 description Grown with normal serum levels (10%), then switched back to normal serum levels (10% FBS) for 3 hours.
 type treatment
 label serum-stimulated media
-
-term 4OHTAM_1uM_4hr
-tag TAM14H
-description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
-type treatment
-label 4-OHTAM_1uM_4hr
-
-term 4OHTAM_1uM_12hr
-tag TAM112H
-description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl)
-type treatment
-label 4-OHTAM_1uM_12hr
-
-term 4OHTAM_1uM_36hr
-tag TAM
-description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
-type treatment
-label 4-OHTAM_1uM_36hr
-# Changed tag from OHTAM1: 6/9/11
-
-term 4OHTAM_20nM_72hr
-tag OHTAM
-description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
-type treatment
-label 4-OHTAM_20nM_72hr
-
-term 4OHTAM_100nM_30m
-tag TAM10030
-description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
-type treatment
-label 4-OHTAM_100nM_30m
 
 term Taxol_500nM_24hr
 tag TAX24H
@@ -10859,6 +11861,7 @@ term FASP
 tag FASP
 description Filter-Assisted Sample Preparation (FASP) proteomics protocol (Giddings)
 type protocol
+label FASP proteomics
 
 term In-gel
 tag INGEL
@@ -10868,48 +11871,57 @@ label In-gel digestion
 
 term PCR1x
 tag PCR1X
-description 1-cycle of PCR (Myers)
+description one 15-cycle round of PCR (Myers)
 type protocol
+label PCR 1-round
 
 term PCR2x
 tag PCR2X
-description 2-cycles of PCR (Myers)
+description a 25-cycle round of PCR and an additional 15-cycle round of PCR after gel size selection (Myers)
 type protocol
+label PCR 2-round
 
 term SDS-Page
 tag SDSPAGE
 description SDS-Page proteomics sample preparation protocol (Giddings)
 type protocol
+label SDS-Page proteomics sample
 
 term v041610.1
 tag V0416101
 description 2x10^7 cells, fragmentation by bioruptor, one 15-cycle round of PCR (Myers)
 type protocol
+label biorupter, PCR 1-round
 
 term v041610.2
 tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
 type protocol
+label sonicator, PCR 1-round
 
 term v042211.1
 tag V0422111
 description Faster ChIP protocol & AMpure XP size selection for ChIP-seq (Myers)
 type protocol
+label ChIP AMpure XP
 
 term v042211.2
 tag V0422112
 description Faster ChIP protocol & gel size selection for ChIP-seq (Myers)
 type protocol
+label ChIP gel
 
 term TAP-Only
 tag TAP
 description This kind of library was made from RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
 type protocol
+label Tobacco Acid Pyrophosphatase Only
 
 term CIP-TAP
 tag CIPTAP
 description This kind of library was made from RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
 type protocol
+label CIP-TAP
 
 ### phase
 
@@ -10917,36 +11929,43 @@ term G1
 tag G1
 type phase
 description Flow sorted, G1 phase corresponds to the first DNA content window
+label G1
 
 term G1b
 tag G1B
 type phase
 description Flow sorted, G1b phase corresponds to the second half of the first DNA content window
+label G1b
 
 term G2
 tag G2
 type phase
 description Flow sorted, G2 phase corresponds to the second DNA content window
+label G2
 
 term S1
 tag S1
 type phase
 description Flow sorted, S1 phase corresponds to the third DNA content window
+label S1
 
 term S2
 tag S2
 type phase
 description Flow sorted, S2 phase corresponds to the fourth DNA content window
+label S2
 
 term S3
 tag S3
 type phase
 description Flow sorted, S3 phase corresponds to the fifth DNA content window
+label S3
 
 term S4
 tag S4
 type phase
 description Flow sorted, S4 phase corresponds to the sixth DNA content window
+label S4
 
 ### region
 # genomic regions used in experiments that are not whole-genome
@@ -10955,38 +11974,45 @@ term chr21
 tag CHR21
 type region
 description Chromsome 21
+label chr21
 
 term ENM
 tag ENM
 type region
 description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENM
 
 term ENR
 tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+label ENR
 
 term UW-5C-Myc-Region
 tag UW5CMYC
 type region
 description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+label UW-5C-Myc-Region
 
 term UW-5C-Gene-Regions
 tag UW5CGENE
 type region
 description Set of 25 regions interrogated in UW 5C gene-targeted experiments
+label UW-5C-Gene-Regions
 
 ### restrictionEnzyme
 
 term msp
 tag MSP
-description MSP Restriction Enzyme
+description MSPI Restriction Enzyme
 type restrictionEnzyme
+label MSPI
 
 term hpa
 tag HPA
-description HPA Restriction Enzyme
+description HPAII Restriction Enzyme
 type restrictionEnzyme
+label HPAII
 
 ### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
 ### term:
@@ -11006,7 +12032,7 @@ label Alignments
 description Shows individual reads mapped to the genome and indicates where bases may mismatch
 
 term Base_Overlap_Signal
-tag  SIGBO
+tag SIGBO
 type view
 label Base overlap signal
 description An alternative version of the F-Seq Density Signal track annotation that provides a higher resolution view of the raw sequence data. This track also includes the combined set of sequences from all replicates. For each sequence, the aligned read is extended 5 bp in both directions from its 5' aligned end where DNase cut the DNA. The score at each base pair represents the number of extended fragments that overlap the base pair.
@@ -11355,7 +12381,6 @@ tag TRANSFRAGS
 type view
 label Transfrags
 description Transcribed fragments
-description Transfrags
 
 term TssGencV3c
 tag TssV3c
@@ -11555,6 +12580,13 @@ label Methyl RRBS
 description DNA Methylation Reduced Representation Bisulfite Sequencing
 dataGroup DNA Methylation
 
+term MethylWgbs
+tag METHYLWGBS
+type dataType
+label Methyl WGBS
+description DNA Methylation Whole Genome Bisulfite Sequencing
+dataGroup DNA Methylation
+
 term NRE
 tag NRE
 type dataType
@@ -11667,72 +12699,86 @@ description version
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be strain)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional
 
 term B10.H-2aH-4bp/Wts
 tag 2A4B
 type strain
 description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
+label B10.H-2aH-4bp/Wts
 # Used for the CH12 Cell Line
 
 term B6D2F1/J
 tag B6D2F1J
 type strain
 description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
+label B6D2F1/J
 
 term BALB/cAnN
 tag BALBCANN
 type strain
 description ccMyeloma high incidence H2d
+label BALB/cAnN
 
 term C3H
 tag C3H
 type strain
 description Strain C3H, Very related to C57BL/6
+label C3H
 
 term C57BL/6
 tag C57BL6
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
+label C57BL/6
 
 term C57BL/6J
 tag C57BL6J
 type strain
 description C57 black 6, the most common inbred strain of laboratory mouse
+label C57BL/6J
 
 term CD-1
 tag CD1
 type strain
 description Multipurpose mouse used for safety testing, aging studies, surgical models and pseudopregnancy.
+label CD-1
 
 term NIH/Swiss
 tag NIHS
 type strain
 description An outbred Swiss mouse  used as a general-purpose stock. Used extensively for pertussis HSF testing.
+label NIH/Swiss
 
 term RIII
 tag RIII
 type strain
 description High mammary tumor incidence in unfostered substrains.
+label RIII
 
 term 129
 tag S129
 type strain
 description Strain 129, has widely available embryonic stem cells
+label 129
 
 term 129/Ola
 tag 129OLA
 type strain
 description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
+label 129/Ola
 
 term Spretus.BL6-Xist
 tag SPBL6
 type strain
 description M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
+label Spretus.BL6-Xist
 
 term Unknown
 tag UKN
 type strain
 description Unknown strain origin
+label Unknown
 
 ### Age
 # Used in conjunction with mouse submissions
@@ -11842,6 +12888,7 @@ type age
 stage Cell Line
 description Immortal cells
 label Immortal cells
+# shortened tag from IMMORTAL to IMMOR to fit better.
 
 term ageUnknown
 tag AGEUNKN
@@ -11857,26 +12904,31 @@ label the age when the real age is unknown
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be attic)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional, same as term
 
 term supplemental
 tag SUP
 type attic
 description Files supplemental at composite level
+label supplemental
 
 term auxSup
 tag AUXSUP
 type attic
 description Unverified files supplemental at experiment level
+label auxSup
 
 term auxValid
 tag AUXVAL
 type attic
 description Validated files supplemental to experiments
+label auxValid
 
 term auxExp
 tag AUXEXP
 type attic
 description Supplemental experiments
+label auxExp
 
 # Expected fields:
 # ----------------
@@ -11884,6 +12936,7 @@ description Supplemental experiments
 # tag (machine-readable name, no special characters. uppercase)
 # type (informs pipeline code of stanza type.  Should always be sex)
 # description (human-readable description.  Can't say where/how it's used)
+# label provisional, same as description
 #
 # Category: T for tissue, L for cell Line, P for Primary cell
 
@@ -11891,16 +12944,19 @@ term Tissue
 tag T
 type category
 description Tissue
+label Tissue
 
 term cellLine
 tag L
 type category
 description cell line
+label cell line
 
 term primaryCells
 tag P
 type category
 description primary cells
+label primary cells
 
 term M
 tag M
@@ -12013,14 +13069,14 @@ tag ILLUMINAGA2
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer II
-label Illumina Genome AnalyzerII
+label Illumina Genome Analyzer II
 
 term Illumina_GA2e
 tag ILLUMINAGA2E
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe
-label Illumina Genome AnalyzerIIe
+label Illumina Genome Analyzer IIe
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
@@ -12028,7 +13084,7 @@ tag ILLUMINAGA2X
 geoPlatformName Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIx
-label Illumina Genome AnalyzerIIx
+label Illumina Genome Analyzer IIx
 # Matches GA2x that Kate initally indicated as the term
 
 term Illumina_HiSeq_2000
@@ -12036,14 +13092,14 @@ tag ILLUMINAHISEQ2000
 geoPlatformName Illumina HiSeq 2000
 type seqPlatform
 description Illumina HiSeq 2000
-label Illumina HiSeq2000
+label Illumina HiSeq 2000
 
 term 454_GS
 tag 454GS
 geoPlatformName 454 GS
 type seqPlatform
 description Roche 454 Genome Sequencer
-label Roche454 Genome Sequencer
+label Roche 454 Genome Sequencer
 
 term 454_GS_20
 tag 454GS20
@@ -12057,7 +13113,7 @@ tag 454GSFLX
 geoPlatformName 454 GS FLX
 type seqPlatform
 description Roche 454 Genome Sequencer FLX
-label Roche454 Genome Sequencer FLX
+label Roche 454 Genome Sequencer FLX
 
 term AB_SOLiD
 tag ABSOLID
@@ -12071,14 +13127,14 @@ tag ABSOLID2
 geoPlatformName AB_SOLiD System 2.0
 type seqPlatform
 description Applied Biosystems SOLiD System 2.0
-label Applied Biosystems SOLiD System2.0
+label Applied Biosystems SOLiD System 2.0
 
 term AB_SOLiD_3.5
 tag ABSOLID3PLUS
 geoPlatformName AB SOLiD 3 Plus
 type seqPlatform
 description Applied Biosystems SOLiD System 3.5
-label Applied Biosystems SOLiD System3.5
+label Applied Biosystems SOLiD System 3.5
 
 #Uses the GEO terms to be conistent and help with GEO submissions
 ### Platform
@@ -13060,6 +14116,17 @@ validate integer
 hidden no
 priority 241
 
+term donorId
+tag DONOR
+type typeOfTerm
+label Donor ID
+description The identification of the donor of the tissue sample.
+searchable no
+cvDefined off
+validate none
+hidden no
+priority 241
+
 term expId
 tag EXPID
 type typeOfTerm
@@ -13579,6 +14646,7 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 035
+
 
 
 

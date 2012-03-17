@@ -12140,28 +12140,6 @@ track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
 }
 
-static void tokenizeAndAddToHash(struct hash *hash, char *str)
-{
-// Pull all words out of a string and add them to an existence hash.
-char *s;
-str = htmlTextReplaceTagsWithChar(str, ' ');
-
-// strip out chars that crash kxTokenize
-for(s = str; *s; s++)
-    {
-    if(*s < 32 || !isalnum(*s))
-        *s = ' ';
-    }
-
-struct kxTok *kx = kxTokenize(str, FALSE);
-for( ; kx != NULL; kx = kx->next)
-    {
-    char *str = kx->string;
-    toLowerN(str, strlen(str));
-    hashAddInt(hash, str, 1);
-    }
-}
-
 char* t2gArticleTable(struct track *tg)
 /* return the name of the t2g articleTable, either
  * the value from the trackDb statement 'articleTable'
@@ -12177,54 +12155,72 @@ if (articleTable == NULL)
 return articleTable;
 }
 
+static char *makeMysqlMatchStr(char *str)
+{
+// return a string with all words prefixed with a '+' to force a boolean AND query;
+// we also strip leading/trailing spaces.
+char *matchStr = needMem(strlen(str) * 2 + 1);
+int i = 0;
+for(;*str && isspace(*str);str++)
+    ;
+while(*str)
+    {
+    matchStr[i++] = '+';
+    for(; *str && !isspace(*str);str++)
+        matchStr[i++] = *str;
+    for(;*str && isspace(*str);str++)
+        ;
+    }
+matchStr[i++] = 0;
+return matchStr;
+}
+
 static void t2gLoadItems(struct track *tg)
 /* apply filter to t2g items */
 {
-loadGappedBed(tg);
-struct linkedFeatures *lf, *next, *newList = NULL;
 struct sqlConnection *conn = hAllocConn(database);
-
+char *keywords = cartOptionalString(cart, "t2gKeywords");
+char *yearFilter = cartOptionalString(cart, "t2gYear");
 char *articleTable = t2gArticleTable(tg);
-char *keyWords = cartOptionalString(cart, "t2gKeywords");
-
-if(isNotEmpty(keyWords))
+if(yearFilter != NULL && sameWord(yearFilter, "anytime"))
+    yearFilter = NULL;
+if(isNotEmpty(keywords))
+    keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
+if(isEmpty(yearFilter) && isEmpty(keywords))
+    loadGappedBed(tg);
+else
     {
-    for( lf = tg->items; lf != NULL; lf = next)
-        {
-        char query[512];
-        struct sqlResult *sr;
-        char **row;
-        next = lf->next;
-        lf->next = NULL;
+    char extra[2048], yearWhere[256], keywordsWhere[1024], prefix[256];
+    char **row;
+    int rowOffset;
+    struct linkedFeatures *lfList = NULL;
+    struct trackDb *tdb = tg->tdb;
+    int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
+    int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
+    boolean useItemRgb = bedItemRgb(tdb);
 
-        safef(query, sizeof(query), "select authors, title, citation, abstract from %s where displayId = '%s'", articleTable, lf->name);
-        sr = sqlGetResult(conn, query);
-        if ((row = sqlNextRow(sr)) != NULL)
-            {
-            struct hash *hash = newHash(0);
-            boolean pass = TRUE;
-            struct kxTok *kx;
-
-            tokenizeAndAddToHash(hash, row[0]);
-            tokenizeAndAddToHash(hash, row[1]);
-            tokenizeAndAddToHash(hash, row[2]);
-            tokenizeAndAddToHash(hash, row[3]);
-
-            // we pass articles where keywords is a subset of words in article metadata.
-            kx = kxTokenize(keyWords, FALSE);
-            for( ; pass && kx != NULL; kx = kx->next)
-                {
-                toLowerN(kx->string, strlen(kx->string));
-                pass = hashLookup(hash, kx->string) != NULL;
-                }
-            if(pass)
-                slAddTail(&newList, lf);
-            }
-        else
-            errAbort("Couldn't find article with displayId: '%s'", lf->name);
-        sqlFreeResult(&sr);
+    safef(prefix, sizeof(prefix),  "name IN (SELECT displayId FROM %s WHERE", articleTable);
+    if(isNotEmpty(keywords))
+        safef(keywordsWhere, sizeof(keywordsWhere), "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", keywords);
+    if(isNotEmpty(yearFilter))
+        safef(yearWhere, sizeof(yearWhere), "year >= '%s'", sqlEscapeString(yearFilter));
+    if(isEmpty(keywords))
+        safef(extra, sizeof(extra), "%s %s)", prefix, yearWhere);
+    else if(isEmpty(yearFilter))
+        safef(extra, sizeof(extra), "%s %s)", prefix, keywordsWhere);
+    else
+        safef(extra, sizeof(extra), "%s %s AND %s)", prefix, yearWhere, keywordsWhere);
+    struct sqlResult *sr = hExtendedRangeQuery(conn, tg->table, chromName, winStart, winEnd, extra,
+                                               FALSE, NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+        struct bed *bed = bedLoad12(row+rowOffset);
+        slAddHead(&lfList, bedMungToLinkedFeatures(&bed, tdb, 12, scoreMin, scoreMax, useItemRgb));
         }
-    tg->items = newList;
+    sqlFreeResult(&sr);
+    slReverse(&lfList);
+    slSort(&lfList, linkedFeaturesCmp);
+    tg->items = lfList;
     }
 hFreeConn(&conn);
 }

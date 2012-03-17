@@ -2,6 +2,9 @@
 
 # Ornithorhynchus anatinus -- WUSTL version 5.0 (Dec. 2006)
 
+#	http://www.ncbi.nlm.nih.gov/genome/110
+#	http://www.ncbi.nlm.nih.gov/bioproject/12885
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAPN00
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE 12/15/06 angie - REDONE 2/5/07 angie)

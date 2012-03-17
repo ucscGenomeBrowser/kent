@@ -11,7 +11,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esG1bAlnRep1.bam,wgEncodeUwRepliSeqBg02esG1bAlnRep1.bam.bai
@@ -33,7 +32,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esG1bPctSignalRep1.bigWig
@@ -56,7 +54,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esG1bRawDataRep1.fastq.gz
@@ -78,7 +75,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esG2AlnRep1.bam,wgEncodeUwRepliSeqBg02esG2AlnRep1.bam.bai
@@ -100,7 +96,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esG2PctSignalRep1.bigWig
@@ -123,7 +118,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esG2RawDataRep1.fastq.tgz
@@ -145,7 +139,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esPkRep1.bed.gz
@@ -168,7 +161,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS1AlnRep1.bam,wgEncodeUwRepliSeqBg02esS1AlnRep1.bam.bai
@@ -190,7 +182,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS1PctSignalRep1.bigWig
@@ -213,7 +204,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS1RawDataRep1.fastq.gz
@@ -235,7 +225,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS2AlnRep1.bam,wgEncodeUwRepliSeqBg02esS2AlnRep1.bam.bai
@@ -257,7 +246,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS2PctSignalRep1.bigWig
@@ -280,7 +268,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS2RawDataRep1.fastq.gz
@@ -302,7 +289,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS3AlnRep1.bam,wgEncodeUwRepliSeqBg02esS3AlnRep1.bam.bai
@@ -324,7 +310,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS3PctSignalRep1.bigWig
@@ -347,7 +332,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS3RawDataRep1.fastq.gz
@@ -369,7 +353,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS4AlnRep1.bam,wgEncodeUwRepliSeqBg02esS4AlnRep1.bam.bai
@@ -391,7 +374,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS4PctSignalRep1.bigWig
@@ -414,7 +396,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esS4RawDataRep1.fastq.gz
@@ -436,7 +417,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esSumSignalRep1.bigWig
@@ -459,7 +439,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esValleysRep1.bed.gz
@@ -482,7 +461,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-01
-dateUnrestricted 2012-07-31
 dccAccession wgEncodeEH002250
 expId 2250
 fileName wgEncodeUwRepliSeqBg02esWaveSignalRep1.bigWig
@@ -505,7 +483,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG1bAlnRep1.bam,wgEncodeUwRepliSeqBjG1bAlnRep1.bam.bai
@@ -527,7 +504,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG1bAlnRep2.bam,wgEncodeUwRepliSeqBjG1bAlnRep2.bam.bai
@@ -549,7 +525,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG1bPctSignalRep1.bigWig
@@ -572,7 +547,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG1bPctSignalRep2.bigWig
@@ -595,7 +569,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG1bRawDataRep1.fastq.gz
@@ -617,7 +590,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG1bRawDataRep2.fastq.gz
@@ -639,7 +611,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG2AlnRep1.bam,wgEncodeUwRepliSeqBjG2AlnRep1.bam.bai
@@ -661,7 +632,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG2AlnRep2.bam,wgEncodeUwRepliSeqBjG2AlnRep2.bam.bai
@@ -683,7 +653,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG2PctSignalRep1.bigWig
@@ -706,7 +675,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG2PctSignalRep2.bigWig
@@ -729,7 +697,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG2RawDataRep1.fastq.gz
@@ -751,7 +718,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjG2RawDataRep2.fastq.gz
@@ -773,7 +739,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjPkRep1.bed.gz
@@ -796,7 +761,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjPkRep2.bed.gz
@@ -819,7 +783,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS1AlnRep1.bam,wgEncodeUwRepliSeqBjS1AlnRep1.bam.bai
@@ -841,7 +804,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS1AlnRep2.bam,wgEncodeUwRepliSeqBjS1AlnRep2.bam.bai
@@ -863,7 +825,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS1PctSignalRep1.bigWig
@@ -886,7 +847,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS1PctSignalRep2.bigWig
@@ -909,7 +869,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS1RawDataRep1.fastq.gz
@@ -931,7 +890,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS1RawDataRep2.fastq.gz
@@ -953,7 +911,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS2AlnRep1.bam,wgEncodeUwRepliSeqBjS2AlnRep1.bam.bai
@@ -975,7 +932,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS2AlnRep2.bam,wgEncodeUwRepliSeqBjS2AlnRep2.bam.bai
@@ -997,7 +953,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS2PctSignalRep1.bigWig
@@ -1020,7 +975,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS2PctSignalRep2.bigWig
@@ -1043,7 +997,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS2RawDataRep1.fastq.gz
@@ -1065,7 +1018,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS2RawDataRep2.fastq.gz
@@ -1087,7 +1039,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS3AlnRep1.bam,wgEncodeUwRepliSeqBjS3AlnRep1.bam.bai
@@ -1109,7 +1060,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS3AlnRep2.bam,wgEncodeUwRepliSeqBjS3AlnRep2.bam.bai
@@ -1131,7 +1081,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS3PctSignalRep1.bigWig
@@ -1154,7 +1103,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS3PctSignalRep2.bigWig
@@ -1177,7 +1125,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS3RawDataRep1.fastq.gz
@@ -1199,7 +1146,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS3RawDataRep2.fastq.gz
@@ -1221,7 +1167,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS4AlnRep1.bam,wgEncodeUwRepliSeqBjS4AlnRep1.bam.bai
@@ -1243,7 +1188,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS4AlnRep2.bam,wgEncodeUwRepliSeqBjS4AlnRep2.bam.bai
@@ -1265,7 +1209,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS4PctSignalRep1.bigWig
@@ -1288,7 +1231,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS4PctSignalRep2.bigWig
@@ -1311,7 +1253,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS4RawDataRep1.fastq.gz
@@ -1333,7 +1274,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjS4RawDataRep2.fastq.gz
@@ -1355,7 +1295,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjSumSignalRep1.bigWig
@@ -1378,7 +1317,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjSumSignalRep2.bigWig
@@ -1401,7 +1339,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjValleysRep1.bed.gz
@@ -1424,7 +1361,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjValleysRep2.bed.gz
@@ -1447,7 +1383,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjWaveSignalRep1.bigWig
@@ -1470,7 +1405,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002236
 expId 2236
 fileName wgEncodeUwRepliSeqBjWaveSignalRep2.bigWig
@@ -1493,7 +1427,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990G1bAlnRep1.bam,wgEncodeUwRepliSeqGm06990G1bAlnRep1.bam.bai
@@ -1515,7 +1448,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990G1bPctSignalRep1.bigWig
@@ -1538,7 +1470,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990G1bRawDataRep1.fastq.tgz
@@ -1560,7 +1491,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990G2AlnRep1.bam,wgEncodeUwRepliSeqGm06990G2AlnRep1.bam.bai
@@ -1582,7 +1512,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990G2PctSignalRep1.bigWig
@@ -1605,7 +1534,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990G2RawDataRep1.fastq.tgz
@@ -1627,7 +1555,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990PkRep1.bed.gz
@@ -1650,7 +1577,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S1AlnRep1.bam,wgEncodeUwRepliSeqGm06990S1AlnRep1.bam.bai
@@ -1672,7 +1598,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S1PctSignalRep1.bigWig
@@ -1695,7 +1620,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S1RawDataRep1.fastq.tgz
@@ -1717,7 +1641,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S2AlnRep1.bam,wgEncodeUwRepliSeqGm06990S2AlnRep1.bam.bai
@@ -1739,7 +1662,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S2PctSignalRep1.bigWig
@@ -1762,7 +1684,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S2RawDataRep1.fastq.tgz
@@ -1784,7 +1705,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S3AlnRep1.bam,wgEncodeUwRepliSeqGm06990S3AlnRep1.bam.bai
@@ -1806,7 +1726,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S3PctSignalRep1.bigWig
@@ -1829,7 +1748,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S3RawDataRep1.fastq.tgz
@@ -1851,7 +1769,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S4AlnRep1.bam,wgEncodeUwRepliSeqGm06990S4AlnRep1.bam.bai
@@ -1873,7 +1790,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S4PctSignalRep1.bigWig
@@ -1896,7 +1812,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990S4RawDataRep1.fastq.tgz
@@ -1918,7 +1833,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990SumSignalRep1.bigWig
@@ -1941,7 +1855,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990ValleysRep1.bed.gz
@@ -1964,7 +1877,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002237
 expId 2237
 fileName wgEncodeUwRepliSeqGm06990WaveSignalRep1.bigWig
@@ -5939,7 +5851,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562G1AlnRep1.bam,wgEncodeUwRepliSeqK562G1AlnRep1.bam.bai
@@ -5961,7 +5872,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562G1PctSignalRep1.bigWig
@@ -5984,7 +5894,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562G1RawDataRep1.fastq.tgz
@@ -6006,7 +5915,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562G2AlnRep1.bam,wgEncodeUwRepliSeqK562G2AlnRep1.bam.bai
@@ -6028,7 +5936,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562G2PctSignalRep1.bigWig
@@ -6051,7 +5958,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562G2RawDataRep1.fastq.tgz
@@ -6073,7 +5979,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562PkRep1.bed.gz
@@ -6096,7 +6001,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S1AlnRep1.bam,wgEncodeUwRepliSeqK562S1AlnRep1.bam.bai
@@ -6118,7 +6022,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S1PctSignalRep1.bigWig
@@ -6141,7 +6044,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S1RawDataRep1.fastq.tgz
@@ -6163,7 +6065,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S2AlnRep1.bam,wgEncodeUwRepliSeqK562S2AlnRep1.bam.bai
@@ -6185,7 +6086,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S2PctSignalRep1.bigWig
@@ -6208,7 +6108,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S2RawDataRep1.fastq.gz
@@ -6230,7 +6129,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S3AlnRep1.bam,wgEncodeUwRepliSeqK562S3AlnRep1.bam.bai
@@ -6252,7 +6150,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S3PctSignalRep1.bigWig
@@ -6275,7 +6172,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S3RawDataRep1.fastq.gz
@@ -6297,7 +6193,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S4AlnRep1.bam,wgEncodeUwRepliSeqK562S4AlnRep1.bam.bai
@@ -6319,7 +6214,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S4PctSignalRep1.bigWig
@@ -6342,7 +6236,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562S4RawDataRep1.fastq.gz
@@ -6364,7 +6257,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562SumSignalRep1.bigWig
@@ -6387,7 +6279,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562ValleysRep1.bed.gz
@@ -6410,7 +6301,6 @@ composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002246
 expId 2246
 fileName wgEncodeUwRepliSeqK562WaveSignalRep1.bigWig
@@ -7930,4 +7820,4 @@ subId 4862
 tableName wgEncodeUwRepliSeqSknshWaveSignalRep1
 view WaveSignal
 
-# MAGIC: 896596068
+# MAGIC: 139125790
