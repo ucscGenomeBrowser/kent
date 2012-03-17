@@ -14,5 +14,6 @@ CREATE TABLE t2gArticle (
               #Indices
     PRIMARY KEY(articleId),
     KEY displayIdx(displayId),
-    KEY extIdx(extId)
+    KEY extIdx(extId),
+    FULLTEXT INDEX (citation, title, authors, abstract)
 );
