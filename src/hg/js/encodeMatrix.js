@@ -190,7 +190,7 @@ var encodeMatrix = (function () {
                 $row = $('<tr>' +
                     '<th class="elementType">' +
                     '<span style="float:right; text-align: right;" title="karyotype: ' + karyotype + '" class="karyotype ' + karyotype + '">&bull;</span>' +
-                    '<span title="' + cellType.description + '"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' + cellType.term + '">' + cellType.term + '</a>' +
+                    '<span title="' + cellType.description + '"><a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' + cellType.term + '">' + cellType.term + '</a>' +
                     '</th>'
                     );
                 maxLen = Math.max(maxLen, cellType.term.length);
