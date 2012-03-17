@@ -17,6 +17,29 @@ $(function () {
 
     var $summaryTables = $('.summaryTable');
 
+    function addDataType(dataTypeName, expList, isChip) {
+        // Helper function to fill datatype lists that are used to make tables
+
+        var dataType, dataTypeLabel;
+
+        if (!isChip) {
+            // get data type label
+            dataType = encodeProject.getDataType(dataTypeName);
+            if (dataType !== undefined) {
+                dataTypeLabel = dataType.label;
+            }
+        }
+        if (dataTypeLabel === undefined) {
+            // if there is a mismatch between experiment table and CV we might not
+            // find dataType for the experiment
+            dataTypeLabel = dataTypeName;
+        }
+        if (!expList[dataTypeLabel]) {
+            expList[dataTypeLabel] = 0;
+        }
+        expList[dataTypeLabel]++;
+    }
+
     function handleServerData(responses) {
         // Main actions, called when loading data from server is complete
         var experiments = responses[0], 
@@ -26,7 +49,7 @@ $(function () {
 
         var cellAssayExps = {}, tfbsExps = {},  refGenomeExps = {};
         var refGenomeTypes = [], elementTypes = [], tfbsTypes = [];
-        var dataType, antibody, target;
+        var antibody, dataType;
 
         encodeMatrix.show($summaryTables);
 
@@ -37,47 +60,39 @@ $(function () {
         expIdHash = encodeProject.getExpIdHash(expIds);
 
         $.each(experiments, function (i, exp) {
-            // experiment not in this assembly
+            // exlude experiment not in this assembly
             if (expIdHash[exp.ix] === undefined) {
                 return true;
             }
-            antibody = encodeProject.antibodyFromExp(exp);
-            if (antibody) {
-                target = encodeProject.targetFromAntibody(antibody);
+            if (exp.dataType === undefined) {
+                return true;
             }
-            // add experiments into the appropriate table object
+            // add experiment into the appropriate list
             if (exp.cellType === 'None') {
-                dataType = encodeProject.getDataType(exp.dataType);
-                if (dataType !== undefined) {
-                    dataType = dataType.label;
-                } else {
-                    dataType = exp.dataType;
-                }
-                if (!refGenomeExps[dataType]) {
-                    refGenomeExps[dataType] = 0;
-                }
-                refGenomeExps[dataType]++;
+                addDataType(exp.dataType, refGenomeExps, false);
             } else if (exp.dataType === 'ChipSeq') {
-                if (!target) {
+                antibody = encodeProject.antibodyFromExp(exp);
+                if (!antibody) {
                     return true;
                 }
-                if (!tfbsExps[target]) {
-                    tfbsExps[target] = 0;
+                dataType = encodeProject.targetFromAntibody(antibody);
+                if (!dataType) {
+                    // this excludes controls
+                    return true;
                 }
-                tfbsExps[target]++;
+                addDataType(dataType, tfbsExps, true);
             } else {
-                dataType = encodeProject.getDataType(exp.dataType);
-                if (dataType !== undefined) {
-                    dataType = dataType.label;
-                } else {
-                    dataType = exp.dataType;
-                }
-                if (!cellAssayExps[dataType]) {
-                    cellAssayExps[dataType] = 0;
-                }
-                cellAssayExps[dataType]++;
+                addDataType(exp.dataType, cellAssayExps, false);
             }
         });
+        // work-around for some supplementary files being accessioned as experiments (5C)
+        // they show up in both reference genome and cell assay lists incorrectly
+        // remove them from refGenome list of they are in cellAssayExps
+        for (dataType in refGenomeExps) {
+            if (cellAssayExps[dataType] !== undefined) {
+                delete refGenomeExps[dataType];
+            }
+        }
         // fill in tables and activate buttons
         tableOut('#refGenomeTable', refGenomeTypes, refGenomeExps, false);
         tableOut('#elementTable', elementTypes, cellAssayExps, false);
