@@ -119,6 +119,7 @@ $(function () {
         // Helper function to output tables to document
         var total = 0, row = 0;
         var dataType, antibodyTarget;
+        var description, term;
 
         $.each(exps, function (key, value) {
             types.push(key);
@@ -129,41 +130,43 @@ $(function () {
         // lay out table
         $.each(types, function (i, value) {
             description = '';
+            term = '';
             if (isChipSeq) {
                 antibodyTarget = encodeProject.getAntibodyTarget(value);
                 if (antibodyTarget !== undefined) {
                     description = antibodyTarget.description;
+                    term = value;
                 }
             } else {
                 dataType = encodeProject.getDataTypeByLabel(value);
                 if (dataType !== undefined) {
                     description = dataType.description;
+                    term = dataType.term;
                 }
             }
             // quote the end tags so HTML validator doesn't whine
-            $(table).append("<tr class='" + (row % 2 === 0 ? "even" : "odd") + "'><td title='" + description + "'>" + value + "<\/td><td id='" + value + "' class='dataItem' title='Click to search for " + value + " data'>" + exps[value] + "<\/td><\/tr>");
+            $(table).append("<tr class='" + (row % 2 === 0 ? "even" : "odd") + "'><td title='" + description + "'>" + value + "<\/td><td id='" + term + "' class='dataItem' title='Click to search for " + value + " data'>" + exps[value] + "<\/td><\/tr>");
             row++;
         });
 
-        /* $(".dataItem").addClass("selectable"); */
         $(".even, .odd").click(function () {
             // TODO: base on preview ?
-            var url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
-            if (isChipSeq) {
-                target = $(this).children('.dataItem').attr("id");
+            var dataType, target, url, antibodyTarget;
+            url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
+            if ($(this).parents('table').attr('id') === 'tfbsTable') {
+                target = $(this).children('.dataItem').attr('id');
                 url += '&hgt_mdbVar1=antibody';
                 antibodyTarget = encodeProject.getAntibodyTarget(target);
                 $.each(antibodyTarget.antibodies, function (i, antibody) {
                     url += '&hgt_mdbVal1=' + antibody;
                 });
             } else {
-                dataType = $(this).children('.dataItem').attr("id");
+                dataType = $(this).children('.dataItem').attr('id');
                 url += '&hgt_mdbVar1=dataType&hgt_mdbVal1=' + dataType;
             }
             url += '&hgt_mdbVar2=view&hgt_mdbVal2=Any';
             // TODO: open search window 
             window.open(url, "searchWindow");
-            //window.location = url;
         });
 
         $(table).append("<tr><td class='totals'>Total: " + types.length + "<\/td><td class='totals'>" + total + "<\/td><\/tr>");
