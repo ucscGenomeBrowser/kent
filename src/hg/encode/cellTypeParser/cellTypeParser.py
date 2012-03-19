@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 #
 # cellType.py: parse any to-be-registered cell type from the wiki,
