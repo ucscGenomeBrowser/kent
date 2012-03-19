@@ -51,7 +51,7 @@ html wgEncodeLicrRnaSeq.release2
 	view Signal
 	visibility full
 	subTrack wgEncodeLicrRnaSeq
-	viewLimits 2:50
+	viewLimits 0:50
 	autoScale off
 	transformFunc NONE
 	windowingFunction mean+whiskers
