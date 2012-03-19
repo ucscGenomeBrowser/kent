@@ -3520,6 +3520,24 @@ sex U
 tier 3
 protocol Stam:HPF_Stam_protocol.pdf
 
+term HPIEpC
+tag HPIEPC
+type Cell Line
+tier 3
+organism human
+description Placental Epithelial Cells amniotic membrane
+lineage missing
+karyotype normal
+sex B
+tissue placenta
+vendorName PromoCell
+vendorId human-placental-epithelial-cells-hplepc
+orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
+termId BTO:0001975
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+lab Gingeras
+protocol Gingeras:HPIEpC9012801.2_Gingeras_protocol.pdf, Gingeras:HPIEpC9041503.2_Gingeras_protocol.pdf
+
 term HPIEpC_9012801.2
 tag HPIEPC90128012
 type Cell Line
