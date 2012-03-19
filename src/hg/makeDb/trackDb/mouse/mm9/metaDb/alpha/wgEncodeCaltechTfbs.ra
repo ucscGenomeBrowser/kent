@@ -2,6 +2,7 @@ metaObject wgEncodeCaltechTfbs
 objType composite
 composite wgEncodeCaltechTfbs
 expVars lab,dataType,cell,antibody,control,treatment
+geoSeriesAccession GSE36024
 
 metaObject wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xAlnRep1
 objType file
@@ -3755,4 +3756,4 @@ tableName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-# MAGIC: -509844767
+# MAGIC: -93138701
