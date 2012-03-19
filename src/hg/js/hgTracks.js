@@ -301,6 +301,16 @@ var makeItemsByDrag = {
             minHeight: imgHeight, maxHeight: imgHeight, onSelectEnd: makeItemsByDrag.end,
             autoHide: true, movable: false}));
         }
+    },
+    
+    load: function ()
+    {
+        for (var id in hgTracks.trackDb) {
+            var rec = hgTracks.trackDb[id];
+            if(rec.type.indexOf("makeItems") == 0) {
+                makeItemsByDrag.init(id);
+            }
+        }
     }
 }
 
@@ -2542,6 +2552,7 @@ var imageV2 = {
             $("div.scroller").panImages();
         }
         imageV2.loadRemoteTracks();
+        makeItemsByDrag.load();
         imageV2.markAsDirtyPage();
     },
 
@@ -2610,6 +2621,15 @@ var imageV2 = {
                 });
     },
 
+    fullReload: function()
+    {
+        // force reload of whole page via trackform submit
+        // This function does not return
+        jQuery('body').css('cursor', 'wait');
+        document.TrackHeaderForm.submit();
+
+    },
+    
     updateImgAndMap: function (response, status)
     {   // Handle ajax response with an updated trackMap image, map and optional ideogram.
         //
@@ -2673,8 +2693,7 @@ var imageV2 = {
                     if(json.cgiVersion != hgTracks.cgiVersion) {
                         // Must reload whole page because of a new version on the server; this should happen very rarely.
                         // Note that we have already updated position based on the user's action.
-                        jQuery('body').css('cursor', 'wait');
-                        document.TrackHeaderForm.submit();
+                        imageV2.fullReload();
                     } else {
                         // We update rows one at a time (b/c updating the whole imgTable at one time doesn't work in IE).
                         for (var id in hgTracks.trackDb) {
@@ -3150,6 +3169,7 @@ $(document).ready(function()
             });
         }
         imageV2.loadRemoteTracks();
+        makeItemsByDrag.load();
     }
 
     // Drag select in chromIdeogram
