@@ -131,21 +131,21 @@ ncbiAssemblyName OtoGar3
 	-species "otolemur garnettii" \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek otoGar3 > do.log 2>&1 &
-XXX - running - Mon Mar 12 13:34:57 PDT 2012
-    #	real    265m32.852s
+    #	real    1015m56.518s
     cat faSize.rmsk.txt
-    #	824327835 bases (216289280 N's 608038555 real 541851562 upper
-    #	66186993 lower) in 427428 sequences in 1 files
-    #	%8.03 masked total, %10.89 masked real
-
+    # 2519724550 bases (160194097 N's 2359530453 real 1427970093 upper
+    # 931560360 lower) in 7793 sequences in 1 files
+    #	Total size: mean 323331.8 sd 2530369.2 min 1000 (AAQR03200240)
+    #	max 73491278 (GL873520) median 1593
 
     grep -i versi do.log
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
 
     time featureBits -countGaps otoGar3 rmsk
-    #	real    3m0.062s
-    #	66224843 bases of 824327835 (8.034%) in intersection
+    #	933290813 bases of 2519724550 (37.039%) in intersection
+    #	real    0m28.081s
+
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
     #	separates out the N's from the bases, it doesn't show lower case N's
@@ -157,53 +157,10 @@ XXX - running - Mon Mar 12 13:34:57 PDT 2012
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	otoGar3 > do.log 2>&1 &
-XXX - running - Mon Mar 12 13:36:49 PDT 2012
-    #	real    2177m47.881s
-    # two failed jobs, running them on hgwdev to see what fails:
-./TrfRun.csh /hive/data/genomes/otoGar3/TrfPart/013/013.lst.bed > 013.log 2>&1 &
-./TrfRun.csh /hive/data/genomes/otoGar3/TrfPart/015/015.lst.bed > 015.log 2>&1
-    #	real    347m1.394s
-    # These two jobs are failing because the lift file splits in so many
-    #	pieces that there is a name SplitLft.gz which is interpreted as
-    #	a gzipped file to the liftUp command.  These needed to be done
-    #	manually with numeric extensions to three places:
-    cd /scratch/tmp/doSimpleRepeat.cluster.M32046
-    split -a 3 -d -l 500 \
-	/hive/data/genomes/otoGar3/TrfPart/013/013.lft SplitLft.
-foreach splitLft (SplitLft.*)
-  set bedFiles = `awk '{print $2 ".bed"};' $splitLft`
-  endsInLf -zeroOk $bedFiles
-  cat $bedFiles \
-  | liftUp -type=.bed tmpOut.$splitLft $splitLft error stdin
-end
-    cat tmpOut.* > tmpOut__bed
-
-    endsInLf -zeroOk tmpOut*
-    cp -p tmpOut__bed /hive/data/genomes/otoGar3/TrfPart/013/013.lst.bed
-    cd /scratch/tmp/doSimpleRepeat.cluster.L32048
-    split -a 3 -d -l 500 \
-	/hive/data/genomes/otoGar3/TrfPart/015/015.lft SplitLft.
-foreach splitLft (SplitLft.*)
-  set bedFiles = `awk '{print $2 ".bed"};' $splitLft`
-  endsInLf -zeroOk $bedFiles
-  cat $bedFiles \
-  | liftUp -type=.bed tmpOut.$splitLft $splitLft error stdin
-end
-    cat tmpOut.* > tmpOut__bed
-
-    endsInLf -zeroOk tmpOut*
-    cp -p tmpOut__bed /hive/data/genomes/otoGar3/TrfPart/015/015.lst.bed
-
-    time doSimpleRepeat.pl -continue=filter -buildDir=`pwd` \
-	-bigClusterHub=swarm \
-	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
-	otoGar3 > filter.log 2>&1 &
-    #	real    3m29.203s
+    #	real    11m58.743s
     cat fb.simpleRepeat 
-    #	62230728 bases of 608038597 (10.235%) in intersection
+    #	27508759 bases of 2359530453 (1.166%) in intersection
 
-    #	do *not* add this to rmsk here since we are going to use
-    #	windowMasker instead of rmsk
     # add to rmsk after it is done:
     cd /hive/data/genomes/otoGar3
     twoBitMask otoGar3.rmsk.2bit \
@@ -212,6 +169,11 @@ end
 
     twoBitToFa otoGar3.2bit stdout | faSize stdin > faSize.otoGar3.2bit.txt
     cat faSize.otoGar3.2bit.txt
+# 2519724550 bases (160194097 N's 2359530453 real 1427186952 upper
+#	932343501 lower) in 7793 sequences in 1 files
+# Total size: mean 323331.8 sd 2530369.2 min 1000 (AAQR03200240)
+#	max 73491278 (GL873520) median 1593
+# %37.00 masked total, %39.51 masked real
 
     rm /gbdb/otoGar3/otoGar3.2bit
     ln -s `pwd`/otoGar3.2bit /gbdb/otoGar3/otoGar3.2bit
@@ -229,71 +191,13 @@ end
     #	real    0m14.265s
     #	2359530453 bases of 2359530453 (100.000%) in intersection
     time featureBits otoGar3 allGaps.bed notGap.bed -bed=new.gaps.bed
-XXX - running - Mon Mar 12 13:40:47 PDT 2012
-    #	real    681m9.272s
-    #	7969 bases of 608046566 (0.001%) in intersection
+    #	real    174m56.543s
+    #	0 bases of 2359530453 (0.000%) in intersection
 
-    #	what is the highest index in the existing gap table:
-    hgsql -N -e "select ix from gap;" otoGar3 | sort -n | tail -1
-    #	1942
-    cat << '_EOF_' > mkGap.pl
-#!/bin/env perl
+    # no new gaps here
 
-use strict;
-use warnings;
-
-my $ix=`hgsql -N -e "select ix from gap;" otoGar3 | sort -n | tail -1`;
-chomp $ix;
-
-open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
-while (my $line = <FH>) {
-    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
-    ++$ix;
-    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
-        $chromEnd, $ix, $chromEnd-$chromStart;
-}
-close (FH);
-'_EOF_'
-    # << happy emacs
-    chmod +x ./mkGap.pl
-    ./mkGap.pl > other.bed
-    featureBits -countGaps otoGar3 other.bed
-    #	real    8m36.778s
-    #	7969 bases of 824327835 (0.001%) in intersection
-    wc -l other.bed
-    #	7853
-    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
-	-noLoad otoGar3 otherGap other.bed
-    # profile of sizes:
-    awk '{print $3-$2}' other.bed | sort | uniq -c
-    #	7763 1
-    #	78 2
-    #	5 3
-    #	3 4
-    #	2 5
-    #	1 6
-    #	1 7
-
-    #	starting with this many
-    hgsql -e "select count(*) from gap;" otoGar3
-    #	127442
-    hgsql otoGar3 -e 'load data local infile "bed.tab" into table gap;'
-    #	result count:
-    hgsql -e "select count(*) from gap;" otoGar3
-    #	135295
-    # == 127442 + 7853
-    # verify we aren't adding gaps where gaps already exist
-    # this would output errors if that were true:
-    gapToLift -minGap=1 otoGar3 nonBridged.lift -bedFile=nonBridged.bed
-    # these warnings are misleading, they aren't overlapping gaps, they
-    # are merely adjacent to existing gaps:
-# WARNING: overlapping gap at HE572041:1726761-1727075(other) and HE572041:1727075-1727076(other)
-# WARNING: overlapping gap at HE572319:1050744-1050745(other) and HE572319:1050745-1050904(fragment)
-    # there are 27 of these locations
-
-    # there are no non-bridged gaps here:
     hgsql -N -e "select bridge from gap;" otoGar3 | sort | uniq -c
-    #	135295 yes
+    #	192447 yes
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2012-03-12 - Hiram)
@@ -301,71 +205,62 @@ close (FH);
     cd /hive/data/genomes/otoGar3/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev otoGar3 > do.log 2>&1 &
-XXX - running - Mon Mar 12 13:37:23 PDT 2012
-    #	real    73m45.656s
+    # about 235 minutes
 
     # Masking statistics
     twoBitToFa otoGar3.wmsk.2bit stdout | faSize stdin
-    #	824327835 bases (216289280 N's 608038555 real 427305862 upper
-    #	180732693 lower) in 427428 sequences in 1 files
-    #	%21.92 masked total, %29.72 masked real
+    #	2519724550 bases (160194097 N's 2359530453 real 1606796836 upper
+    #	752733617 lower) in 7793 sequences in 1 files
+    #	Total size: mean 323331.8 sd 2530369.2 min 1000 (AAQR03200240)
+    #	max 73491278 (GL873520) median 1593
+    #	%29.87 masked total, %31.90 masked real
 
     twoBitToFa otoGar3.wmsk.sdust.2bit stdout | faSize stdin
-    #	824327835 bases (216289280 N's 608038555 real 418637635 upper
-    #	189400920 lower) in 427428 sequences in 1 files
-    #	%22.98 masked total, %31.15 masked real
+    #	2519724550 bases (160194097 N's 2359530453 real 1594373851 upper
+    #	765156602 lower) in 7793 sequences in 1 files
+    #	Total size: mean 323331.8 sd 2530369.2 min 1000 (AAQR03200240)
+    #	max 73491278 (GL873520) median 1593
+    #	%30.37 masked total, %32.43 masked real
 
     hgLoadBed otoGar3 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 3422833 elements of size 3
+    #	Loaded 13510985 elements of size 3
 
-    featureBits -countGaps otoGar3 windowmaskerSdust
-    #	real    5m27.388s
-    #	405686830 bases of 824327835 (49.214%) in intersection
+    time featureBits -countGaps otoGar3 windowmaskerSdust
+    #	925350699 bases of 2519724550 (36.724%) in intersection
+    #	real    1m16.823s
 
     #	eliminate the gaps from the masking
-    featureBits otoGar3 -not gap -bed=notGap.bed
-    #	real    3m11.708s
-    #	608038597 bases of 608038597 (100.000%) in intersection
+    time featureBits otoGar3 -not gap -bed=notGap.bed
+    #	2359530453 bases of 2359530453 (100.000%) in intersection
+    #	real    0m16.975s
+
     time nice -n +19 featureBits otoGar3 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	real    577m19.317s
-    #	189400922 bases of 608038597 (31.149%) in intersection
+    #	765156602 bases of 2359530453 (32.428%) in intersection
+    #	real    5m47.021s
 
     hgLoadBed otoGar3 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 3485901 elements of size 4
+    #	Loaded 13582557 elements of size 4
 
     featureBits -countGaps otoGar3 windowmaskerSdust
-    #	714075485 bases of 1799143587 (39.690%) in intersection
-    #	mask the sequence with this clean mask
-    zcat cleanWMask.bed.gz \
-	| twoBitMask ../../otoGar3.unmasked.2bit stdin \
-	    -type=.bed otoGar3.cleanWMSdust.2bit
-    twoBitToFa otoGar3.cleanWMSdust.2bit stdout | faSize stdin \
-        > otoGar3.cleanWMSdust.faSize.txt
-    cat otoGar3.cleanWMSdust.faSize.txt
+    #	765156602 bases of 2519724550 (30.367%) in intersection
+    #	DO NOT NEED TO mask the sequence with this clean mask
+    #	The RepeatMasker did a good job, using that masked sequence.
+#    zcat cleanWMask.bed.gz \
+#	| twoBitMask ../../otoGar3.unmasked.2bit stdin \
+#	    -type=.bed otoGar3.cleanWMSdust.2bit
+#    twoBitToFa otoGar3.cleanWMSdust.2bit stdout | faSize stdin \
+#        > otoGar3.cleanWMSdust.faSize.txt
+#    cat otoGar3.cleanWMSdust.faSize.txt
     #	824327835 bases (216289280 N's 608038555 real 418637635 upper
     #	189400920 lower) in 427428 sequences in 1 files
     #	%22.98 masked total, %31.15 masked real
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps otoGar3 rmsk windowmaskerSdust
-    #	280229203 bases of 1511735326 (18.537%) in intersection
+    #	487674435 bases of 2519724550 (19.354%) in intersection
 
 #########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2011-12-04 - Hiram)
-    cd /hive/data/genomes/otoGar3
-    twoBitMask -add bed/windowMasker/otoGar3.cleanWMSdust.2bit \
-	bed/simpleRepeat/trfMask.bed otoGar3.2bit
-    #	safe to ignore the warnings about BED file with >=13 fields
-    twoBitToFa otoGar3.2bit stdout | faSize stdin > faSize.otoGar3.txt
-    cat faSize.otoGar3.txt
-    #	824327835 bases (216289280 N's 608038555 real 418051473 upper
-    #	189987082 lower) in 427428 sequences in 1 files
-    #	%23.05 masked total, %31.25 masked real
-
-    #	create symlink to gbdb
-    ssh hgwdev
-    rm /gbdb/otoGar3/otoGar3.2bit
-    ln -s `pwd`/otoGar3.2bit /gbdb/otoGar3/otoGar3.2bit
-
+# MASK SEQUENCE WITH WM+TRF (DONE - 2012-03-14 - Hiram)
+    # Do not need to do this since Repeat Masker was used
 ########################################################################

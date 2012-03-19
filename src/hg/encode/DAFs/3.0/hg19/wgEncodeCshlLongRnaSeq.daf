@@ -1,4 +1,4 @@
-# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.9 $
+# Data Agreement File for CSHL Long RNA-seq project $Revision: 2.0 $
 
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -40,11 +40,43 @@ sql		 bedRnaElements
 hasReplicates    no
 required         no
 
+view             Junctions
+type             bedRnaElements
+sql              bedRnaElements
+hasReplicates    no
+required         no
+downloadOnly     yes
+
 view             ExonsGencV7
 type             gtf
 hasReplicates    no
 required         no
-downloadOnly     yes 
+downloadOnly     yes
+
+view             GeneGencV7
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     yes
+
+view             TranscriptGencV7
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     no
+
+view             GeneDeNovo
+type             gff
+hasReplicates    no
+required         no
+downloadOnly     yes
+
+view             TranscriptDeNovo
+type             gtf
+hasReplicates    no
+required         no
+downloadOnly     no
+
 
 # Individual Replicates
 view             PlusRawSignal

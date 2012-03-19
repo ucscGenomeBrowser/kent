@@ -2408,7 +2408,7 @@ foreach my $ddfLine (@ddfLines) {
     }
     print LOADER_RA "files @{$ddfLine->{files}}\n";
     print LOADER_RA "downloadOnly $downloadOnly\n";
-    print LOADER_RA "pushQDescription $pushQDescription\n";
+    print LOADER_RA "pushQDescription 1\n";
     print LOADER_RA "targetFile $targetFile\n";
     print LOADER_RA "\n";
 
@@ -2498,7 +2498,6 @@ if($submitPath =~ /(\d+)$/) {
     }
 }
 
-#matt made this
 sub generateLongLabel {
     my $lab = $_[0];
     my %vars = %{$_[1]};

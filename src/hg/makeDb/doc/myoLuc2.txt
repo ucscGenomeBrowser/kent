@@ -3,6 +3,10 @@
 
 # Myotis lucifugus (microbat) --  Broad Institute of MIT and Harvard
 
+#	http://www.ncbi.nlm.nih.gov/genome/614
+#	http://www.ncbi.nlm.nih.gov/bioproject/16951
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABVD00
+#	2.18X WGS
 
 # file template copied from susScr2.txt
 

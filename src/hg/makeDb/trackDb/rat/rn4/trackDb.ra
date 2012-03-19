@@ -187,6 +187,15 @@ xrefQuery select rgdId,geneSymbol from %s where geneSymbol like '%%%s%%'
 termRegex [A-Za-z0-9_\.-]+
 searchPriority 0.9
 
+searchName rgdGene2ToDescription
+searchTable rgdGene2
+searchType genePred
+searchMethod fuzzy
+xrefTable rgdGene2ToDescription
+xrefQuery select name, value from %s where value like '%%%s%%'
+searchDescription Description of RGD Genes
+searchPriority 0.9
+
 searchName knownGeneAcc
 searchTable knownGene
 searchMethod exact

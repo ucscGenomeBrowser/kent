@@ -3097,6 +3097,9 @@ TMPDIR=/scratch/tmp
     #	real    5043m15.440s
     cat fb.panTro3.chainMm10Link.txt 
     #	929073028 bases of 2900529764 (32.031%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/panTro3/bed
+    ln -s lastzMm10.2012-03-08 lastz.mm10
 
     mkdir /hive/data/genomes/mm10/bed/blastz.panTro3.swap
     cd /hive/data/genomes/mm10/bed/blastz.panTro3.swap
@@ -3105,9 +3108,11 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Mon Mar 12 09:01:03 PDT 2012
-    #	real    70m30.237s
+    #	real    68m46.408s
     cat fb.mm10.chainPanTro3Link.txt 
-    #	921877558 bases of 2620346127 (35.182%) in intersection
+    #	922491113 bases of 2652783500 (34.774%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s blastz.panTro3.swap lastz.panTro3
 
 ##############################################################################

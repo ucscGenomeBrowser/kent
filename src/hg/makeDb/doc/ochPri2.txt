@@ -1,6 +1,11 @@
 # for emacs: -*- mode: sh; -*-
 
 # Pika "Ochotona princeps"
+
+#	http://www.ncbi.nlm.nih.gov/genome/771
+#	http://www.ncbi.nlm.nih.gov/bioproject/74593
+#	http://www.ncbi.nlm.nih.gov/bioproject/12210 - chrMt - Italy
+
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-07-11)
     ssh kkstore05

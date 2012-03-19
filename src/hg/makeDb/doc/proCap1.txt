@@ -1,6 +1,11 @@
 # for emacs: -*- mode: sh; -*-
 
 # rock hyrax ( Procavia capensis )
+
+#	http://www.ncbi.nlm.nih.gov/genome/2488
+#	http://www.ncbi.nlm.nih.gov/bioproject/13972
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABRQ00
+
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-10-07)
     ssh kkstore05

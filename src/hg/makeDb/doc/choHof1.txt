@@ -1,5 +1,9 @@
 # for emacs: -*- mode: sh; -*-
 
+#	http://www.ncbi.nlm.nih.gov/bioproject/30809
+#	http://www.ncbi.nlm.nih.gov/genome/907
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABVD00
+
 # sloth ( Choloepus hoffmanni )
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-10-07)

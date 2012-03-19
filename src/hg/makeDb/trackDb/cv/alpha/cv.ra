@@ -3441,6 +3441,24 @@ sex U
 tier 3
 protocol Stam:HPAF_Stam_protocol.pdf
 
+term HPC-PL
+tag HPCPL
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Pericytes from HPC-PL_0032601.13 and HPC-PL_0101504.13
+lineage missing
+karyotype normal
+sex B
+tissue placenta
+vendorName PromoCell
+vendorId pericytes
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
+termId BTO:0001975
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+lab Gingeras
+protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf,Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
+
 term HPC-PL_0032601.13
 tag HPCPL003260113
 type Cell Line
@@ -3884,23 +3902,24 @@ sex U
 tier 3
 protocol Stam:HVMF_Stam_protocol.pdf
 
-term HVMF
-tag HVMF
-type Cell Line
-tier 3
-organism human
-description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 from villous tissue
-lineage missing
-karyotype normal
-sex M
-tissue placenta
-vendorName PromoCell
-vendorId HVMF
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
-termId BTO:0001975
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
-lab Gingeras
-protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf, Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
+#Cricket - duplicate term, need plan to resolve error
+#term HVMF
+#tag HVMF
+#type Cell Line
+#tier 3
+#organism human
+#description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 from villous tissue
+#lineage missing
+#karyotype normal
+#sex M
+#tissue placenta
+#vendorName PromoCell
+#vendorId HVMF
+#orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
+#termId BTO:0001975
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+#lab Gingeras
+#protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf, Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
 
 term HVMF_6100401.3
 tag HVMF61004013
@@ -5237,6 +5256,24 @@ protocol Stam:WI38_Stam_protocol.pdf
 # category: (T for tissue, L for cell line, or P for primary cells.  optional)
 # tier is NOT used in mouse
 
+term 10T1/2
+tag 10T12
+type Cell Line
+organism mouse
+tissue embryonic
+age immortalized
+strain C3H
+category cellLine
+description Multipotential cell line that can be converted by 5-azacytidine into three mesodermal stem cell lineages.
+vendorName ATCC
+vendorId    CCL-226
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-226&Template=cellBiology
+termId 96
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=96
+color 65,105,225
+sex U
+protocol Wold:10ToneHalf_Wold_protocol.pdf 
+
 term 3134
 tag 3134
 type Cell Line
@@ -5413,7 +5450,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
 color 86,180,233
 sex U
 protocol Ren:BMDM_Ren_protocol.pdf
-label Bone marrow derived macrophage
+label Bone Marrow Derived Macrophage
 
 term BoneMarrow
 tag BMARROW
@@ -7080,7 +7117,7 @@ orderUrl http://www.millipore.com/catalogue/item/06-863
 lab Struhl
 targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation Human_-_CREB1_(06-863)(Western_blot,ChIP):human_CREB1_06-863_Millipore_06-863_validation_Struhl.pdf
+validation Human_-_CREB1_(06-863)(Western_blot,ChIP):human_CREB1_06-863_validation_Struhl.pdf
 label CREB1 (06-863)
 
 term CREB1_(9198)
@@ -9109,7 +9146,7 @@ orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
 lab Snyder
 targetId GeneCard:NFKB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1
-validation Human_-_NFKB(Immunoprecipitation,Motif_Enrichment):human_NFKB_p65_validation_Snyder.pdf
+validation Human_-_NFKB(Immunoprecipitation,Motif_Enrichment):human_NFKB_sc-372_validation_Snyder.pdf
 label NFKB (sc-372)
 
 term NF-YA
@@ -11333,7 +11370,6 @@ type localization
 description The dense fibrillar network lying on the inner side of the nuclear membrane
 termId GO:0016363
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0016363
-term nuclearMatrix GO:0016363
 
 term membraneFraction
 tag MEMBRANEFRACTION
