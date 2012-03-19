@@ -2,6 +2,7 @@ metaObject wgEncodeBuOrchid
 objType composite
 composite wgEncodeBuOrchid
 expVars lab,dataType
+geoSeriesAccession GSE35583
 
 metaObject wgEncodeBuOrchidV1
 objType table
@@ -43,4 +44,4 @@ subId 3118
 tableName wgEncodeBuOrchidV2
 view Signal
 
-# MAGIC: 509686399
+# MAGIC: 926392513
