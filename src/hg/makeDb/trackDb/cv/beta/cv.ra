@@ -228,7 +228,7 @@ karyotype normal
 sex M
 tissue skin
 vendorName PromoCell
-vendorId NHEM
+vendorId C-14043 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
@@ -246,7 +246,7 @@ karyotype normal
 sex F
 tissue skin
 vendorName PromoCell
-vendorId NHEM
+vendorId C-14043
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
@@ -258,7 +258,7 @@ tag NHEMFM2
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001
+description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin
 lineage missing
 karyotype normal
 sex M
@@ -282,7 +282,7 @@ karyotype normal
 sex M
 tissue skin
 vendorName PromoCell
-vendorId NHEM
+vendorId C-14042 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
@@ -300,7 +300,7 @@ karyotype normal
 sex M
 tissue skin
 vendorName PromoCell
-vendorId NHEM
+vendorId C-14042
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
@@ -1183,23 +1183,6 @@ sex M
 tier 3
 protocol Stam:BJ_Stam_protocol.pdf
 
-#term BMDM
-#tag BMDM
-#type Cell Line
-#organism mouse
-#tissue blood
-#category primaryCells
-#description Bone marrow derived macrophage
-#age ageUnknown
-#strain Unknown
-#vendorName Genhong Cheng Lab, UCLA
-#termId 7058
-#termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
-#color 86,180,233
-#sex U
-#protocol Ren:BMDM_Ren_protocol.pdf
-#label Bone marrow derived macrophage
-
 term CD14+
 tag CD14
 type Cell Line
@@ -1226,7 +1209,6 @@ type Cell Line
 tier 3
 organism human
 description B cells from donors RO01778 and RO01794.
-deprecated Use donor-specific cell lines
 sex F
 tissue blood
 vendorName Heimfeld Lab, FHCRC
@@ -2330,7 +2312,7 @@ karyotype normal
 sex M
 tissue aorta
 vendorName PromoCell
-vendorId HAoAF
+vendorId C-14037 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
 termId BTO:0000135
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
@@ -2348,7 +2330,7 @@ karyotype normal
 sex F
 tissue aorta
 vendorName PromoCell
-vendorId HAoAF
+vendorId C-14037 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
 termId BTO:0000135
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
@@ -2384,7 +2366,7 @@ karyotype normal
 sex M
 tissue aorta
 vendorName PromoCell
-vendorId HAoEC
+vendorId C-14023 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
 termId BTO:0000394
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
@@ -2402,7 +2384,7 @@ karyotype normal
 sex F
 tissue aorta
 vendorName PromoCell
-vendorId HAoEC
+vendorId C-14023
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
 termId BTO:0000394
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
@@ -2527,7 +2509,7 @@ karyotype normal
 sex M
 tissue cartilage
 vendorName PromoCell
-vendorId HCH
+vendorId C-14070 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
@@ -2545,7 +2527,7 @@ karyotype normal
 sex F
 tissue cartilage
 vendorName PromoCell
-vendorId HCH
+vendorId C-14070
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
@@ -2718,7 +2700,7 @@ tag HFDPC
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3 from ateral scalp / brown / blond
+description Follicle Dermal Papilla Cells from two individuals, HFDPC_0100503.2 and HFDPC_0102703.3 from lateral scalp (brown, blond)
 lineage missing
 karyotype normal
 sex F
@@ -2736,13 +2718,13 @@ tag HFDPC01005032
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells from lateral scalp / brown
+description Follicle Dermal Papilla Cells from lateral scalp (brown)
 lineage missing
 karyotype normal
 sex F
 tissue skin
 vendorName PromoCell
-vendorId HFDPC
+vendorId C-14005 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
 termId BTO:0001849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
@@ -2754,13 +2736,13 @@ tag HFDPC01027033
 type Cell Line
 tier 3
 organism human
-description Follicle Dermal Papilla Cells from lateral scalp / blond
+description Follicle Dermal Papilla Cells from lateral scalp (blond)
 lineage missing
 karyotype normal
 sex F
 tissue skin
 vendorName PromoCell
-vendorId HFDPC
+vendorId C-14005
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
 termId BTO:0001849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
@@ -2938,7 +2920,7 @@ karyotype normal
 sex F
 tissue mammary gland
 vendorName PromoCell
-vendorId HMEpC
+vendorId C-14066
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
@@ -2988,7 +2970,7 @@ karyotype normal
 sex M
 tissue blood
 vendorName PromoCell
-vendorId hMNC-PB
+vendorId C-14098
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
@@ -3006,7 +2988,7 @@ karyotype normal
 sex F
 tissue blood
 vendorName PromoCell
-vendorId hMNC-PB
+vendorId C-14098 
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
@@ -3042,7 +3024,7 @@ karyotype normal
 sex F
 tissue blood 
 vendorName PromoCell
-vendorId hMNC-CB
+vendorId C-14096 
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
 termId BTO:0004054
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
@@ -3060,7 +3042,7 @@ karyotype normal
 sex M
 tissue blood 
 vendorName PromoCell
-vendorId hMNC-CB
+vendorId C-14096
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
 termId BTO:0004054
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
@@ -3090,13 +3072,13 @@ tag HMSCBM005060211
 type Cell Line
 tier 3
 organism human
-description Undifferentiated Mesenchymal Stem Cells femoral head
+description Undifferentiated Mesenchymal Stem Cells from femoral head
 lineage missing
 karyotype normal
 sex M
 tissue bone marrow
 vendorName PromoCell
-vendorId hMSC-BM
+vendorId C-14090 
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3114,7 +3096,7 @@ karyotype normal
 sex F
 tissue bone marrow
 vendorName PromoCell
-vendorId hMSC-BM
+vendorId C-14090
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3150,7 +3132,7 @@ karyotype normal
 sex F
 tissue subcutaneous adipose tissue
 vendorName PromoCell
-vendorId hMSC-AT
+vendorId C-14092
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3168,7 +3150,7 @@ karyotype normal
 sex F
 tissue adipose
 vendorName PromoCell
-vendorId hMSC-AT
+vendorId C-14092
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3205,7 +3187,7 @@ karyotype normal
 sex F
 tissue umbilical cord
 vendorName PromoCell
-vendorId hMSC-UC
+vendorId C-14091
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3223,7 +3205,7 @@ karyotype normal
 sex M
 tissue umbilical cord
 vendorName PromoCell
-vendorId hMSC-UC
+vendorId C-14091
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3392,7 +3374,7 @@ karyotype normal
 sex M
 tissue cancellous bone
 vendorName PromoCell
-vendorId HOB
+vendorId C-14071
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
 termId BTO:0004324
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
@@ -3410,7 +3392,7 @@ karyotype normal
 sex F
 tissue cancellous bone
 vendorName PromoCell
-vendorId HOB
+vendorId C-14071 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
 termId BTO:0004324
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
@@ -3459,6 +3441,24 @@ sex U
 tier 3
 protocol Stam:HPAF_Stam_protocol.pdf
 
+term HPC-PL
+tag HPCPL
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Pericytes from HPC-PL_0032601.13 and HPC-PL_0101504.13
+lineage missing
+karyotype normal
+sex B
+tissue placenta
+vendorName PromoCell
+vendorId pericytes
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
+termId BTO:0001975
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+lab Gingeras
+protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf,Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
+
 term HPC-PL_0032601.13
 tag HPCPL003260113
 type Cell Line
@@ -3470,7 +3470,7 @@ karyotype normal
 sex M
 tissue placenta
 vendorName PromoCell
-vendorId pericytes
+vendorId C-14095 
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3488,7 +3488,7 @@ karyotype normal
 sex F
 tissue placenta
 vendorName PromoCell
-vendorId pericytes
+vendorId C-14095
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3538,6 +3538,24 @@ sex U
 tier 3
 protocol Stam:HPF_Stam_protocol.pdf
 
+term HPIEpC
+tag HPIEPC
+type Cell Line
+tier 3
+organism human
+description Placental Epithelial Cells amniotic membrane
+lineage missing
+karyotype normal
+sex B
+tissue placenta
+vendorName PromoCell
+vendorId human-placental-epithelial-cells-hplepc
+orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
+termId BTO:0001975
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+lab Gingeras
+protocol Gingeras:HPIEpC9012801.2_Gingeras_protocol.pdf, Gingeras:HPIEpC9041503.2_Gingeras_protocol.pdf
+
 term HPIEpC_9012801.2
 tag HPIEPC90128012
 type Cell Line
@@ -3549,7 +3567,7 @@ karyotype normal
 sex F
 tissue placenta
 vendorName PromoCell
-vendorId human-placental-epithelial-cells-hplepc
+vendorId C-14069 
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3567,7 +3585,7 @@ karyotype normal
 sex M
 tissue placenta
 vendorName PromoCell
-vendorId human-placental-epithelial-cells-hplepc
+vendorId C-14069 
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3668,7 +3686,7 @@ karyotype normal
 sex M
 tissue saphenous vein
 vendorName PromoCell
-vendorId HSaVEC
+vendorId C-14025
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
 termId BTO:0003275
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
@@ -3686,7 +3704,7 @@ karyotype normal
 sex M
 tissue saphenous vein
 vendorName PromoCell
-vendorId HSaVEC
+vendorId C-14025
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
 termId BTO:0003275
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
@@ -3884,23 +3902,24 @@ sex U
 tier 3
 protocol Stam:HVMF_Stam_protocol.pdf
 
-term HVMF
-tag HVMF
-type Cell Line
-tier 3
-organism human
-description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 from villous tissue
-lineage missing
-karyotype normal
-sex M
-tissue placenta
-vendorName PromoCell
-vendorId HVMF
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
-termId BTO:0001975
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
-lab Gingeras
-protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf, Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
+#Cricket - duplicate term, need plan to resolve error
+#term HVMF
+#tag HVMF
+#type Cell Line
+#tier 3
+#organism human
+#description Villous Mesenchymal Fibroblasts from two individuals, HVMF_6100401.3 and HVMF_6091203.3 from villous tissue
+#lineage missing
+#karyotype normal
+#sex M
+#tissue placenta
+#vendorName PromoCell
+#vendorId HVMF
+#orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
+#termId BTO:0001975
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+#lab Gingeras
+#protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf, Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
 
 term HVMF_6100401.3
 tag HVMF61004013
@@ -3913,7 +3932,7 @@ karyotype normal
 sex F
 tissue placenta
 vendorName PromoCell
-vendorId HVMF
+vendorId C-14034 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3931,7 +3950,7 @@ karyotype normal
 sex M
 tissue placenta
 vendorName PromoCell
-vendorId HVMF
+vendorId C-14034
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3967,7 +3986,7 @@ karyotype normal
 sex M
 tissue subcutaneous adipose tissue
 vendorName PromoCell
-vendorId HWP
+vendorId C-14072 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
 termId BTO:0004042
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
@@ -3985,7 +4004,7 @@ karyotype normal
 sex F
 tissue subcutaneous adipose tissue
 vendorName PromoCell
-vendorId HWP
+vendorId C-14072 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
 termId BTO:0004042
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
@@ -4528,7 +4547,7 @@ karyotype normal
 sex F
 tissue skin
 vendorName PromoCell
-vendorId NHDF
+vendorId C-14031
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
 termId BTO:0003185
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
@@ -4546,7 +4565,7 @@ karyotype normal
 sex F
 tissue skin
 vendorName PromoCell
-vendorId NHDF
+vendorId C-14031
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
 termId BTO:0003185
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
@@ -4983,7 +5002,7 @@ karyotype normal
 sex F
 tissue striated muscle
 vendorName PromoCell
-vendorId SkMC
+vendorId C-14060
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
 termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
@@ -5001,7 +5020,7 @@ karyotype normal
 sex M
 tissue striated muscle
 vendorName PromoCell
-vendorId SkMC
+vendorId C-14060
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
 termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
@@ -5237,6 +5256,24 @@ protocol Stam:WI38_Stam_protocol.pdf
 # category: (T for tissue, L for cell line, or P for primary cells.  optional)
 # tier is NOT used in mouse
 
+term 10T1/2
+tag 10T12
+type Cell Line
+organism mouse
+tissue embryonic
+age immortalized
+strain C3H
+category cellLine
+description Multipotential cell line that can be converted by 5-azacytidine into three mesodermal stem cell lineages.
+vendorName ATCC
+vendorId    CCL-226
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-226&Template=cellBiology
+termId 96
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=96
+color 65,105,225
+sex U
+protocol Wold:10ToneHalf_Wold_protocol.pdf 
+
 term 3134
 tag 3134
 type Cell Line
@@ -5413,7 +5450,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7058
 color 86,180,233
 sex U
 protocol Ren:BMDM_Ren_protocol.pdf
-label Bone marrow derived macrophage
+label Bone Marrow Derived Macrophage
 
 term BoneMarrow
 tag BMARROW
@@ -6540,7 +6577,7 @@ validation Human_-_ARID3A_(sc-8821)(Immunoprecipitation,ChIP):human_ARID3A_sc-88
 label ARID3A (sc-8821)
 
 term ATF1_(06-325)
-tag ATF1MILLIPORE06325
+tag ATF106325
 type Antibody
 antibodyDescription Sheep polyclonal, immunogen: CPVTLTSQTTKTDDPQL. Antibody Target: ATF1
 target ATF1
@@ -6551,11 +6588,11 @@ orderUrl http://www.millipore.com/catalogue/item/06-325
 lab Struhl
 targetId GeneCard:ATF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF1
-validation Human_-_ATF1_(06-325)(Western_blot,ChIP):human_ATF1_Millipore_06-325_validation_Struhl.pdf
+validation Human_-_ATF1_(06-325)(Western_blot,ChIP):human_ATF1_06-325_validation_Struhl.pdf
 label ATF1 (06-325)
 
-term ATF2_pT71
-tag ATF2PT71
+term ATF2_(9221)
+tag ATF29221
 type Antibody
 antibodyDescription Rabbit polyclonal, antibodies are produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Thr71 of human ATF2. Antibodies are purified by protein A and peptide affinity chromatography. Antibody Target: ATF2
 target ATF2
@@ -6566,7 +6603,7 @@ orderUrl http://www.cellsignal.com/products/9221.html
 lab Struhl
 targetId GeneCard:ATF2_pT71
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
-validation Human_-_ATF2_pT71_(9221)(Western_blot,Immunoprecipitation):human_ATF2_pT71_9221_validation_Struhl.pdf
+validation Human_-_ATF2_(9221)(Western_blot,Immunoprecipitation):human_ATF2_9221_validation_Struhl.pdf
 label ATF2 (9221)
 
 
@@ -7080,11 +7117,11 @@ orderUrl http://www.millipore.com/catalogue/item/06-863
 lab Struhl
 targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation Human_-_CREB1_(06-863)(Western_blot,ChIP):human_CREB1_06-863_Millipore_06-863_validation_Struhl.pdf
+validation Human_-_CREB1_(06-863)(Western_blot,ChIP):human_CREB1_06-863_validation_Struhl.pdf
 label CREB1 (06-863)
 
-term CREB1_pS133
-tag CREB1PS133
+term CREB1_(9198)
+tag CREB19198
 type Antibody
 antibodyDescription Rabbit monoclonal antibody is produced by immunizing animals with a synthetic phosphopeptide corresponding to residues surrounding Ser133 of human CREB. Antibody Target: CREB1
 target CREB1
@@ -7093,9 +7130,9 @@ vendorName Cell Signaling
 vendorId 9198
 orderUrl http://www.cellsignal.com/pdf/9198.pdf
 lab Struhl
-targetId GeneCard:CREB1_pS133
+targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation Human_-_CREB1_pS133_(Cell_Signaling_9198)(Western_blot,ChIP):human_CREB1_pS133_Cell_Signaling_9198_validation_Struhl.pdf
+validation Human_-_CREB1_(9188)_(Cell_Signaling_9198)(Western_blot,ChIP):human_CREB1_9198_validation_Struhl.pdf
 label CREB1 (9198)
 
 term CREB1_(SC-240)
@@ -7208,8 +7245,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2
 validation Human_-_CtBP2(Western_blot,siRna):human_CtBP2_validation_Farnham.pdf
 label CtBP2 (612044)
 
-term CycT1
-tag CYCT1
+term CycT1_(sc-10750)
+tag CYCT1SC10750
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 261-505 mapping to an internal region of cyclin T1 of human origin. Antibody Target: CycT1
 target CycT1
@@ -7220,7 +7257,7 @@ orderUrl http://www.scbt.com/datasheet-10750-cyclin-t1-h-245-antibody.html
 lab Struhl
 targetId GeneCard:CCNT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNT1
-validation CycT1(Western_blot,Immunoprecipitation):human_CycT1_validation_Struhl.pdf
+validation Human_-_CycT1_(sc-10750)(Western_blot,Immunoprecipitation):human_CycT1_sc-10750_validation_Struhl.pdf
 label CycT1 (sc-10750)
 
 term E2F1
@@ -7855,7 +7892,7 @@ lab Myers
 lots C1909
 targetId GeneCard:FOXM1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXM1
-validation Human_-_FOXM1_(sc-502):human_FOXM1_sc-502_validation_Myers.pdf
+validation Human_-_FOXM1_(sc-502)(Western_blot,ChIP):human_FOXM1_sc-502_validation_Myers.pdf
 label FOXM1 (sc-502)
 
 term FOXP2
@@ -8861,8 +8898,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MBD4
 validation Human_-_MBD4_(SC-271530)(Western_blot,IP-MassSpec):human_MBD4_SC-271530_sc-271530_validation_Myers.pdf
 label MBD4 (sc-271530)
 
-term Med1
-tag MED1
+term Med1_(sc-8998)
+tag MED1SC8998
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 502-756 of TRAP220 of mouse origin. Antibody Target: Med1
 target Med1
@@ -8873,23 +8910,23 @@ orderUrl http://www.scbt.com/datasheet-8998-trap220-m-255-antibody.html
 lab Struhl
 targetId GeneCard:MED1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED1
-validation Med1(Western_blot,Immunoprecipitation):human_Med1_validation_Struhl.pdf
+validation Human_-_Med1_(sc-8998)(Western_blot,Immunoprecipitation):human_Med1_sc-8998_validation_Struhl.pdf
 label Med1 (sc-8998)
 
-term Med26_(sc48776)
+term Med26_(sc-48776)
 tag MED26SC48776
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 373-600 mapping at the C-terminus of CRSP70 of human origin. Antibody Target: Med26
 target Med26
 targetDescription Med26 is a subunit of the large coactivator known as mediator. Med26 is subunit found to be mutually exclusive from the CDK8 module of mediator. Med26 has been associated with activating effects on transcription in context specific manner. Mediator is believed to promote transcription by bridging transcription factors and the RNA polymerase II holoenzyme.
 vendorName Santa Cruz Biotech
-vendorId sc48776
+vendorId sc-48776
 orderUrl http://www.scbt.com/datasheet-48776-crsp70-h-228-antibody.html
 lab Struhl
 targetId GeneCard:Med26
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MED26&search=Med26
-validation Med26_(sc48776)(Western_blot,Immunoprecipitation):human_Med26_sc48776_validation_Struhl.pdf
-label Med26 (sc48776)
+validation Human_-_Med26_(sc-48776)(Western_blot,Immunoprecipitation):human_Med26_sc-48776_validation_Struhl.pdf
+label Med26 (sc-48776)
 
 term MEF2A
 tag MEF2A
@@ -9109,7 +9146,7 @@ orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
 lab Snyder
 targetId GeneCard:NFKB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1
-validation Human_-_NFKB(Immunoprecipitation,Motif_Enrichment):human_NFKB_p65_validation_Snyder.pdf
+validation Human_-_NFKB(Immunoprecipitation,Motif_Enrichment):human_NFKB_sc-372_validation_Snyder.pdf
 label NFKB (sc-372)
 
 term NF-YA
@@ -9668,7 +9705,7 @@ label  SETDB1 (sc-66884)
 #lots
 
 term SIN3A_(NB600-1263)
-tag SIN3A NB6001263
+tag SIN3ANB6001263
 type Antibody
 antibodyDescription Rabbit polyclonal, Immunogen: Synthetic peptide: MKRRLDDQESDVYAAQQRR, corresponding to amino acids 1-19 of Mouse mSin3A. Antibody Target: SIN3A (NB600-1263)
 target SIN3A
@@ -9680,7 +9717,7 @@ lab Snyder
 lots LB140235
 targetId SIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
-validation Human_-_:SIN3A(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_:mouse_SIN3A_NB600-1263_validation_Snyder.pdf
+validation Human_-_SIN3A_(NB600-1263)(Immunoprecipitation,ChIP):human_SIN3A_NB600-1263_validation_Snyder.pdf Mouse_-_SIN3A_(NB600-1263)(Immunoprecipitation):mouse_SIN3A_NB600-1263_validation_Snyder.pdf
 label SIN3A (NB600-1263)
 
 term Sin3Ak-20
@@ -10051,20 +10088,20 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
 validation Human_-_TBP(Immunoblot):human_TBP_validation_Snyder.pdf Mouse_-_:missing
 label TBP (ab62126)
 
-term TBP_(sc273)
+term TBP_(sc-273)
 tag TBPSC273
 type Antibody
 antibodyDescription Rabbit polyclonal, raised against full length TFIID of human origin. Antibody Target: TBP
 target TBP
 targetDescription TBP is an integral subunit of the TFIID complex. TBP recognizes the TATA box and helps to recruit and orient the RNA poymerase II initiation complex and RNA polymerase III.
 vendorName Santa Cruz Biotech
-vendorId sc273
+vendorId sc-273
 orderUrl http://www.scbt.com/datasheet-273-tfiid-tbp-si-1-antibody.html
 lab Struhl
 targetId GeneCard:TBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
-validation Human_-_TBP_(sc273)(Western_blot,Immunoprecipitation):human_TBP_sc273_validation_Struhl.pdf
-label TBP (sc273)
+validation Human_-_TBP_(sc-273)(Western_blot,Immunoprecipitation):human_TBP_sci273_validation_Struhl.pdf
+label TBP (sc-273)
 
 
 term TCF12
@@ -10266,7 +10303,9 @@ target TRIM28
 targetDescription The protein encoded by this gene mediates transcriptional control by interaction with the Kruppel-associated box repression domain found in many transcription factors.  The protein localizes to the nucleus and is thought to associate with specific chromatin regions.  The protein is a member of the tripartite motif family.  This tripartite motif includes three zinc-binding domains, a RING, a B-box type 1 and a B-box type 2, and a coiled-coil region. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-81411
-orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.htmllab Myerslots L0309
+orderUrl http://www.scbt.com/datasheet-81411-tif1beta-tri5i093-antibody.html
+lab Myers
+lots L0309
 targetId GeneCard:TRIM28
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation Human_-_TRIM28_(sc-81411)(Western_blot,ChIP):human_TRIM28_sc-81411_validation_Myers.pdf 
@@ -10604,7 +10643,7 @@ label ZZZ3
 ### These are all for the  experiments.
 ### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
 
-term CBP_(sc369)
+term CBP_(sc-369)
 tag CBPSC369
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope mapping at the N-terminus of CBP of human origin. Antibody Target: CBP
@@ -10616,8 +10655,8 @@ orderUrl http://www.scbt.com/datasheet-369-cbp-a-22-antibody.html
 lab Struhl
 targetId GeneCard:CREBBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREBBP
-validation Human_-_CBP_(sc369)(Western_blot,ChIP):human_CBP_sc369_validation_Struhl.pdf
-label CBP (sc369)
+validation Human_-_CBP_(sc-369)(Western_blot,ChIP):human_CBP_sc-369_validation_Struhl.pdf
+label CBP (sc-369)
 
 term CBX3_(SC-101004)
 tag CBX3SC101004
@@ -10694,12 +10733,12 @@ lab Snyder
 lots 834865
 targetId RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
-validation Human_-_COREST(ab24166)(Western_blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
+validation Human_-_COREST_(ab24166)(Western_blot,ChIP):human_COREST_ab24166_validation_Snyder.pdf
 label COREST (ab24166)
 
 
-term COREST_(sc30189)
-tag COREST SC30189
+term COREST_(sc-30189)
+tag CORESTSC30189
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 246-310 mapping within an internal region of CoREST of human origin recommended for detection of CoREST of mouse, rat and human origin. Antibody Target: COREST (sc30189)
 target COREST
@@ -10711,7 +10750,7 @@ lab Snyder
 lots C0806
 targetId RCOR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RCOR1
-validation Human_-_COREST_(sc30189)(Immunoprecipitation,ChIP):human_COREST_sc30189_validation_Snyder.pdf Mouse_-_COREST_sc30189(Immunoprecipitation,ChIP):mouse_COREST_sc30189_validation_Snyder.pdf
+validation Human_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):human_COREST_sc-30189_validation_Snyder.pdf Mouse_-_COREST_(sc-30189)(Immunoprecipitation,ChIP):mouse_COREST_sc-30189_validation_Snyder.pdf
 label COREST (sc30189)
 
 # lots
@@ -10830,8 +10869,8 @@ targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
 validation 
 label Hexim1 (07-955)
 
-term HMGN1
-tag HMGN1
+term HMGN1_(ab51212)
+tag HMGN1AB51212
 type Antibody
 antibodyDescription Rabbit polyclonal, immunogen= synthetic peptide derived from residues 50 to the C-terminus of Human HMGN1 / HMG14. Antibody Target: HMGN1
 target HMGN1
@@ -10842,7 +10881,7 @@ orderUrl http://www.abcam.com/HMG14-antibody-ab5212.html
 lab Struhl
 targetId GeneCard:HMGN1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN1
-validation Human_-_HMGN1(Western_blot,Immunoprecipitation):human_HMGN1_validation_Struhl.pdf
+validation Human_-_HMGN1_(ab51212)(Western_blot,Immunoprecipitation):human_HMGN1_ab51212_validation_Struhl.pdf
 label HMGN1 (ab5212)
 
 term HNRNPD
@@ -10879,7 +10918,7 @@ label hnRNPM (05-620)
 # lots
 ##This does not appear in metaDb
 
-term hSpt5_(sc28678)
+term hSpt5_(sc-28678)
 tag HSPT5SC28678
 type Antibody
 antibodyDescription Rabbit polyclonal, epitope corresponding to amino acids 61-360 mapping near the N-terminus of SPT5 of human origin. Antibody Target: hSpt5
@@ -10891,7 +10930,7 @@ orderUrl http://www.scbt.com/datasheet-28678-spt5-h-300-antibody.html
 lab Struhl
 targetId GeneCard:SUPT5H
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUPT5H
-validation Human_-_hSpt5_(sc28678)(Western_blot,Immunoprecipitation):human_hSpt5_sc28678_validation_Struhl.pdf
+validation Human_-_hSpt5_(sc-28678)(Western_blot,Immunoprecipitation):human_hSpt5_sc-28678_validation_Struhl.pdf
 label hSpt5 (sc28678)
 
 
@@ -11221,19 +11260,19 @@ term 400
 tag IL400
 type insertLength
 description insert length of 400nt
-label 400
+label insert len 400
 
 term 200
 tag IL200
 type insertLength
 description insert length of 200nt
-label 200
+label insert len 200
 
 term ilNA
 tag ILNA
 type insertLength
 description insert length not applicable
-label N/A
+label insert len N/A
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 
@@ -11241,25 +11280,25 @@ term 1k
 tag F1K
 type fragSize
 description 1 kb DNA fragments
-label 1k
+label 1kb fragments
 
 term 5k
 tag F5K
 type fragSize
 description 5 kb DNA fragments
-label 5k
+label 5kb fragments
 
 term 10k
 tag F10K
 type fragSize
 description 10 kb DNA fragments
-label 10k
+label 10kb fragments
 
 term 20k
 tag F20K
 type fragSize
 description 20 kb DNA fragments
-label 20k
+label 20kb fragments
 
 ### localization
 # term (human-readable name)
@@ -11331,7 +11370,6 @@ type localization
 description The dense fibrillar network lying on the inner side of the nuclear membrane
 termId GO:0016363
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0016363
-term nuclearMatrix GO:0016363
 
 term membraneFraction
 tag MEMBRANEFRACTION
@@ -11561,37 +11599,37 @@ term Control_36bp
 tag CNTRL36B
 type control
 description This data represents a control being compared to experiments using read length of 36 bp
-label 36bp
+label Control 36bp
 
 term Control_50bp
 tag CNTRL50B
 type control
 description This data represents a control being compared to experiments using read length of 50 bp
-label 50bp
+label Control 50bp
 
 term Input
 tag INPUT
 type control
 description Control signal which may be subtracted from experimental raw signal before peaks are called.
-label Input
+label Input Control
 
 term Large_Fragment
 tag LARGEFRAGMENT
 type control
 description Control signal from sonication into large fragments of DNA (350-800 bp).
-label Large_Fragment
+label Large Fragment
 
 term Naked_DNA
 tag NAKEDDNA
 type control
 description Control signal from Naked DNA.
-label Naked_DNA
+label Naked DNA
 
 term Reference_Genome
 tag REFERENCEGENOME
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
-label Reference_Genome
+label Reference Genome
 
 term RevXlinkChromatin
 tag RXLCH
@@ -11603,7 +11641,7 @@ term None
 tag NONE
 description No special treatment or protocol applies
 type control
-label None
+label No treatment or prot
 
 ### Inputs which are a special type of control
 
@@ -11611,7 +11649,7 @@ term std
 tag STD
 type control
 description Standard input signal for most experiments.
-label std
+label Standard Control
 
 term IgG-goat
 tag IGGGOAT
@@ -11647,13 +11685,13 @@ term MNase
 tag MNASE
 type control
 description Input signal from MNase digested DNA.
-label MNase
+label MNase Input Control
 
 term UCDavis
 tag UCD
 type control
 description Input library was prepared at UC Davis.
-label UCDavis
+label UCDavis Input Control
 
 ### Treatments
 
@@ -12182,13 +12220,13 @@ term ENM
 tag ENM
 type region
 description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
-label ENM
+label ENCODE pilot regions
 
 term ENR
 tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
-label ENR
+label ENCODE pilot random
 
 term UW-5C-Myc-Region
 tag UW5CMYC
@@ -12641,14 +12679,14 @@ term 5C
 tag 5C
 type dataType
 label 5C
-description Chromosome Conformation Capture Carbon Copy Genomic Interactions
+description 5C Chromatin Interactions
 dataGroup Other
 
 term AffyExonArray
 tag AFFYEXONARRAY
 type dataType
-label Exon-array
-description Affymetrix Exon Array
+label Exon Array
+description Affymetrix Exon Microarray
 dataGroup RNA Profiling
 
 term Bip
@@ -12663,21 +12701,21 @@ term Cage
 tag CAGE
 type dataType
 label CAGE
-description CAGE
+description CAGE 5' RNA Tags
 dataGroup RNA Profiling
 
 term ChipSeq
 tag CHIPSEQ
 type dataType
 label ChIP-seq
-description Chromatin Immunoprecipitation followed by sequencing
-dataGroup TFBS/Histones
+description Chromatin IP Sequencing
+dataGroup TFBS & Histones
 
 term Cluster
 tag CLUSTER
 type dataType
 label Integ Cluster
-description Element cluster by integrative analysis
+description Element Clusters by Integrative Analysis
 dataGroup Other
 
 #term Cnv
@@ -12692,7 +12730,7 @@ term Combined
 tag COMBO
 type dataType
 label Combined
-description Synthesis of multiple types of data
+description Multi-assay Synthesis
 dataGroup Other
 # Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType (01/14/2011)
 
@@ -12708,29 +12746,29 @@ term DnaPet
 tag DNAPET
 type dataType
 label DNA-PET
-description DNA Paired End Tag
+description DNA Paired-End Tags
 dataGroup Other
 
 term DnaseSeq
 tag DNASESEQ
 type dataType
 label DNase-seq
-description DNase digestion followed by sequencing
+description DNaseI HS Sequencing
 dataGroup Open Chromatin
 
 term FaireSeq
 tag FAIRESEQ
 type dataType
 label FAIRE-seq
-description Formaldehyde-Assisted Isolation of Regulatory Elements followed by sequencing
+description FAIRE-seq Open Chromatin
 dataGroup Open Chromatin
 #The tag is not standard Camel case to be consistent with hg18
 
 term Genotype
 tag GENOTYPE
 type dataType
-label Genotype
-description Genotyping experiments including copy nummber variants and SNPs
+label GENCODE Genes
+description Genotype CNV and SNP
 dataGroup Other
 
 term Gencode
@@ -12744,42 +12782,42 @@ term ChiaPet
 tag CHIAPET
 type dataType
 label ChIA-PET
-description Chromatin Interaction Analysis Paired-End Tags
+description Chromatin Interaction Paired-End Tags
 dataGroup Other
 
 term Orchid
 tag ORCHID
 type dataType
 label ORChID
-description OH Radical Cleavage Intensity Database
+description ORChID DNA Cleavage
 dataGroup Other
 
 term Mapability
 tag MAPABILITY
 type dataType
 label Mapability
-description Uniqueness of n-mer sequence fragments across the genome
+description Short Read Mapability
 dataGroup Other
 
 term MethylArray
 tag METHYLARRAY
 type dataType
 label Methyl Array
-description DNA Methylation Bead Array
+description DNA Methylation Array
 dataGroup DNA Methylation
 
 term MethylSeq
 tag METHYLSEQ
 type dataType
 label Methyl-seq
-description DNA Methylation Sequencing
+description DNA Methyl Reduced Rep Bisulfite Seq
 dataGroup DNA Methylation
 
 term MethylRrbs
 tag METHYLRRBS
 type dataType
 label Methyl RRBS
-description DNA Methylation Reduced Representation Bisulfite Sequencing
+description DNA Methyl WG Bisulfite Seq Provisional
 dataGroup DNA Methylation
 
 term MethylWgbs
@@ -12792,7 +12830,7 @@ dataGroup DNA Methylation
 term NRE
 tag NRE
 type dataType
-label Neg Regulatory
+label Negative Regulatory Elements
 description Negative Regulatory Elements
 dataGroup Other
 # tag not standard to match hg18
@@ -12801,7 +12839,7 @@ term Nucleosome
 tag NUCLEOSOME
 type dataType
 label Nucleosome
-description Nucleosome positioning data
+description Nucleosome Positio
 dataGroup Other
 
 term Proteogenomics
@@ -12822,7 +12860,7 @@ term RnaPet
 tag PET
 type dataType
 label RNA-PET
-description RNA Paired-End Tag
+description RNA Paired-End Tags
 dataGroup RNA Profiling
 # tag not standard to match hg18
 
@@ -12830,7 +12868,7 @@ term RnaChip
 tag RNACHIP
 type dataType
 label RNA-chip
-description microarray analysis of RNA expression
+description RNA Expression Microarray
 dataGroup RNA Profiling
 
 term RnaSeq
@@ -12846,43 +12884,43 @@ dataGroup RNA Profiling
 term RipGeneSt
 tag GENEST
 type dataType
-label RIP-chip Gene ST
-description RIP-Chip on Affymetrix GeneChip (R) Human Gene 1.0 ST Arrays
+label RIP Gene ST
+description RNA IP Gene Array
 dataGroup RNA Binding Proteins
 
 term RipTiling
 tag TILING
 type dataType
-label RIP-chip Tiling Array
-description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays
+label RIP Tiling Array
+description RNA IP Tiling Array
 dataGroup RNA Binding Proteins
 
 term RipChip
 tag RIPCHIP
 type dataType
 label RIP-chip
-description RNA Immunoprecipitation measured on microarray
+description RNA IP Microarray
 dataGroup RNA Binding Proteins
 
 term RipSeq
 tag  RIPSEQ
 type dataType
 label RIP-seq
-description RNA binding protein associated mRNA sequencing
+description RNA IP Sequencing
 dataGroup RNA Binding Proteins
 
 term Switchgear
 tag SWITCHGEAR
 type dataType
-label SwitchGear
-description SwitchGear Genomics 3' UTR reporter assay
+label RIP Validation
+description RNA IP SwitchGear Validation
 dataGroup RNA Binding Proteins
 
 term TfbsValid
 tag TFBSVALID
 type dataType
-label TFBS-Valid
-description Valid Transcription Factor Binding Sites
+label TFBS Validation
+description Validation of Transcription Factor Binding
 dataGroup Other
 #This is not in the metaDB currently
 
@@ -14301,7 +14339,7 @@ type typeOfTerm
 label UCSC replicate number
 description This replicate number is based on submission to the UCSC browser, it may not reflect the replicate number assigned by the contributing lab.
 searchable yes
-cvDefined off
+cvDefined no 
 validate integer
 hidden no
 priority 241
@@ -14312,7 +14350,7 @@ type typeOfTerm
 label Donor ID
 description The identification of the donor of the tissue sample.
 searchable no 
-cvDefined off
+cvDefined no 
 validate none   
 hidden no
 priority 241
@@ -14350,6 +14388,16 @@ searchable no
 cvDefined no
 validate exists
 priority 980
+
+term files
+tag FILES
+type typeOfTerm
+label DDF defined files
+description The name of the files defined in the DDF by the lab
+searchable no
+cvDefined no
+validate none
+priority 990
 
 term fragLength
 tag FRAGLENGTH

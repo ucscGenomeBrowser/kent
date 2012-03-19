@@ -7,6 +7,12 @@
 #       "$Id: petMar1.txt,v 1.23 2009/11/25 21:48:41 hiram Exp $"
 #
 
+#	http://www.ncbi.nlm.nih.gov/genome/287
+#	http://www.ncbi.nlm.nih.gov/bioproject/50489 - Mich. State
+#	http://www.ncbi.nlm.nih.gov/bioproject/12880 - WashU - SRA
+#	http://www.ncbi.nlm.nih.gov/sra/SRX028154 - SRA records
+#	http://www.ncbi.nlm.nih.gov/bioproject/11809 - NCBI 2004 chrMt
+
 ##########################################################################
 ### Fetch sequence       (DONE - 2008-01-14 - Hiram)
     #	determine estimated disk usage, from example genome like this one,

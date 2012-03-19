@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# fastaSubseq - shell script to replace the fasta-subseq command from
+#	ancient blastz source - using nibFrag and faFrag to reproduce the
+#	same behavior.  Almost, doesn't honor negative strand fasta files,
+#	will error out in that case.
+
+set -beEu -o pipefail
+
+if [ $# -lt 3 -o $# -gt 4 ]; then
+    echo "usage: fastaSubseq seqfile lo hi [strand] (1 indexed)" 1>&2
+    exit 255
+fi
+export file=$1
+export start=$2
+export end=$3
+export strand="+"
+
+if [ $# -eq 4 ]; then
+    strand=$4
+fi
+
+if [ $start -lt 1 ]; then
+    echo "ERROR: fastaSubseq: start coordinate can not be less than zero: '$start'" 1>&2
+    exit 255
+fi
+
+export sequenceName="${file}:${start}-${end}:___"
+
+export startZero=`echo $start | awk '{print $1-1}'`
+
+case $file in
+    *nib) nibFrag -name="$sequenceName" -masked \
+	$file $startZero $end $strand stdout ;;
+    *fa)
+	if [ $strand != "+" ]; then
+	    echo "ERROR: fastaSubseq: sorry, can only work with strand +, given: '$strand'" 1>&2
+	    exit 255
+	fi
+	faFrag -mixed $file $startZero $end stdout \
+	    | sed -e "s/^>.*/>$sequenceName/" ;;
+    *) echo "ERROR: fastaSubseq: can not recognize input file as .nib or .fa, given:" 1>&2
+	echo $file 1>&2
+	exit 255
+	;;
+esac

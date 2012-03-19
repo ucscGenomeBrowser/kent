@@ -1,12 +1,14 @@
 # for emacs: -*- mode: sh; -*-
 
 # This file describes browser build for the canFam3
-#	Canus Gallus Gallus genome: Nov. 2011
+#	Canis lupus familiaris genome: Nov. 2011
 
 # http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAEX00
 #	7X coverage via a variety of methods
 
+#	http://www.ncbi.nlm.nih.gov/genome/85
 #	http://www.ncbi.nlm.nih.gov/bioproject/13179
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAEX00
 
 #############################################################################
 # Fetch sequence from genbank (DONE - 2012-01-04 - Hiram)
