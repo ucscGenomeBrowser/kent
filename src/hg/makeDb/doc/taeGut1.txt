@@ -2,6 +2,10 @@
 
 # zebra finch ( Taeniopygia guttata )
 
+#	http://www.ncbi.nlm.nih.gov/genome/367
+#	http://www.ncbi.nlm.nih.gov/bioproject/17289
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABQF00
+
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-08-05)
     ssh kkstore03

@@ -6,7 +6,7 @@ longLabel Gene Annotations from ENCODE/GENCODE Version 7
 group genes
 #visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 dragAndDrop subTracks
-priority 34.3
+priority 34.305
 visibility hide
 ensemblTranscriptIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
 ensemblGeneIdUrl http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;t=%s
