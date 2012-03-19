@@ -2,6 +2,7 @@ metaObject wgEncodePsuHistone
 objType composite
 composite wgEncodePsuHistone
 expVars lab,dataType,cell,antibody
+geoSeriesAccession GSE36028
 
 metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep1
 objType file
@@ -7983,4 +7984,4 @@ subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -380620722
+# MAGIC: 36085352

@@ -443,12 +443,12 @@ type bed 4 .
 otherDb rn4
 url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
 
-track t2g
+track pubs
 shortLabel Publications
-longLabel Publications: Sequences found in scientific articles
+longLabel Publications: Sequences in scientific articles
 group map
 priority 12
-visibility pack
+visibility hide
 color 100,0,0
 altColor 100,0,0
 type bed 12 .
@@ -457,62 +457,49 @@ release alpha
 nextExonText Next Match
 prevExonText Prev Match
 
-    track t2gBlat
+    track pubsBlat
     shortLabel Sequences
     longLabel Sequences in Articles: PubmedCentral (OA subset) and Elsevier
-    parent t2g
+    parent pubs
     type bed 12 .
     visibility pack
     priority 1
     color 0,0,100
-    t2gArticleTable hgFixed.t2gArticle
-    t2gSequenceTable hgFixed.t2gSequenceAnnot
+    pubsArticleTable hgFixed.pubsArticle
+    pubsSequenceTable hgFixed.pubsSequenceAnnot
     release alpha
 
-    #track t2gElsevier
-    #shortLabel Sequences (Elsevier)
-    #longLabel Sequences from Elsevier Articles
-    #parent t2g
-    #priority 2
-    #visibility hide
-    #type bed 12 .
-    #release alpha
-    #color 0,100,0
-    #t2gArticleTable hgFixed.t2gElsevierArticle
-    #t2gSequenceTable hgFixed.t2gElsevierSequence
-    #maxItems 300
-
-    track t2gMarkerSnp
+    track pubsMarkerSnp
     shortLabel SNPs
-    longLabel SNPs mentioned in Publications
-    parent t2g
+    longLabel SNPs in Publications
+    parent pubs
     visibility pack
     priority 3
     type bed 4 +
-    t2gArticleTable hgFixed.t2gArticle
-    t2gMarkerTable hgFixed.t2gMarkerAnnot
+    pubsArticleTable hgFixed.pubsArticle
+    pubsMarkerTable hgFixed.pubsMarkerAnnot
     release alpha
 
-    track t2gMarkerBand
+    track pubsMarkerBand
     shortLabel Bands
-    longLabel Cytogenetic bands mentioned in Publications
-    parent t2g
+    longLabel Cytogenetic bands in Publications
+    parent pubs
     visibility pack
     priority 3
     type bed 4 +
-    t2gArticleTable hgFixed.t2gArticle
-    t2gMarkerTable hgFixed.t2gMarkerAnnot
+    pubsArticleTable hgFixed.pubsArticle
+    pubsMarkerTable hgFixed.pubsMarkerAnnot
     release alpha
 
-    track t2gMarkerGene
+    track pubsMarkerGene
     shortLabel Genes
-    longLabel Gene symbols mentioned in Publications
-    parent t2g
+    longLabel Gene symbols in Publications
+    parent pubs
     priority 3
     visibility pack
     type bed 4 +
-    t2gArticleTable hgFixed.t2gArticle
-    t2gMarkerTable hgFixed.t2gMarkerAnnot
+    pubsArticleTable hgFixed.pubsArticle
+    pubsMarkerTable hgFixed.pubsMarkerAnnot
     release alpha
 
 track transMap

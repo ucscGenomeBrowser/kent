@@ -2,6 +2,7 @@ metaObject wgEncodeHaibRnaSeq
 objType composite
 composite wgEncodeHaibRnaSeq
 expVars lab,dataType,cell,treatment,rnaExtract
+geoSeriesAccession GSE35584
 
 metaObject wgEncodeHaibRnaSeqA549Dex100nmAlnRep1
 objType table
@@ -4720,4 +4721,4 @@ submittedDataVersion V2 - Remapping U87 due to cell being incorrect sex original
 treatment None
 view TranscriptGencV7
 
-# MAGIC: 344177256
+# MAGIC: 760883372

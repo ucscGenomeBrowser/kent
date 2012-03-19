@@ -63,6 +63,7 @@ snpVersion 135
 release alpha
 
 track ucscRetroAli1
+release alpha
 shortLabel Retroposed Genes
 longLabel Retroposed GenesV1, Including Pseudogenes - November 2010 
 group genes
@@ -73,7 +74,7 @@ visibility hide
 ucscRetroInfo ucscRetroInfo1
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds
-baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
+baseColorUseSequence extFile ucscRetroSeq1 ucscRetroExtFile1
 indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
@@ -113,6 +114,73 @@ dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo1
 xrefQuery select ucscRetroInfo1.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
+
+track ucscRetroAli2
+release alpha
+shortLabel Retroposed Genes 2.0
+longLabel Retroposed Genes, Including Pseudogenes 2011-10-22 [ucscRetroAli2]
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+ucscRetroInfo ucscRetroInfo2
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds2
+baseColorUseSequence extFile ucscRetroSeq2 ucscRetroExtFile2
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+searchName ucscRetroInfoRefSeq2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes - 2011-10-22
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo2
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo2.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes - 2011-10-22
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes - 2011-10-22
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo2
+xrefQuery select ucscRetroInfo2.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes - 2011-10-22
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo2
+xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
+
+track tRNAs
+release alpha
+shortLabel tRNA Genes
+longLabel Transfer RNA genes identified with tRNAscan-SE 
+group genes
+priority 53.5
+visibility hide
+color 0,20,150
+type bed 6 +
+nextItemButton on
+noScoreFilter .
 
 track illuminaProbes override
 origAssembly hg18

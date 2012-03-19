@@ -170,7 +170,7 @@ static char* gbMiscDiffCreate =
 static char* gbWarnCreate = 
 "CREATE TABLE gbWarn ("
 "    acc char(12) not null,"
-"    reason enum(\"invitroNorm\", \"athRage\", \"orestes\") not null,"
+"    reason enum(\"athRage\", \"orestes\") not null,"
 "    PRIMARY KEY(acc)"
 ");";
 
