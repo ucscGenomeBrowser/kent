@@ -5,6 +5,11 @@
 
 #	"$Id: loxAfr3.txt,v 1.5 2009/09/20 17:16:45 markd Exp $";
 
+#	http://www.ncbi.nlm.nih.gov/bioproject/70973 - ?
+#	http://www.ncbi.nlm.nih.gov/bioproject/12569
+#	http://www.ncbi.nlm.nih.gov/genome/224
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAGU00
+
 #############################################################################
 # Download sequence (DONE - 2009-07-15 - Hiram)
     mkdir -p /hive/data/genomes/loxAfr3/broad

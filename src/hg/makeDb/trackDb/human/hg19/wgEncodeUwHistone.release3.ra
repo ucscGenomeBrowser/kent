@@ -55,7 +55,7 @@ shortLabel UW Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2c BJ=BJ Caco2=Caco-2 CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD20RO01794=CD20+&nbsp;(RO&nbsp;01794) GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12866=GM12866 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 H7ES=H7-hESC HAC=HAc HA-sp=HA-sp HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpIC HEK293=HEK293 HFF=HFF HFFMYC=HFFMyc HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF Jurkat=Jurkat LNCAP=LNCaP MCF7=MCF-7 MONOCD14RO1746=Monocytes-CD14+&nbsp;(RO&nbsp;01746) NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA WERIRB1=WERI-Rb-1 WI38=WI-38
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2&#95;C BJ=BJ Caco2=Caco-2 CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD20RO01794=CD20+&nbsp;(RO&nbsp;01794) GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12866=GM12866 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 H7ES=H7-hESC HA-sp=HA-sp HAC=HAc HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpIC HEK293=HEK293 HFF=HFF HFFMYC=HFFMyc HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF Jurkat=Jurkat LNCAP=LNCaP MCF7=MCF-7 MONOCD14RO1746=Monocytes-CD14+&nbsp;(RO&nbsp;01746) NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 RPTEC=RPTEC SAEC=SAEC SK-NMC=SK-N-MC SK-NSHRA=SK-N-SH&#95;RA SKMC=SKMC WERIRB1=WERI-Rb-1 WI38=WI-38
 subGroup3 treatment Treatment aNone=None DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_5d DIFFA9D=diffProtA_9d DIFFA14D=diffProtA_14d OHTAM=OH-tam_20nM
 subGroup4 factor Factor H3K04ME3=H3K4me3 H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 zInput=Input
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3
@@ -471,7 +471,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K4M3 Ht 1
         longLabel SK-N-SH_RA H3K4me3 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=Hot factor=H3K04ME3 cellType=SK-NSHRA rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg18
         # subId=1472 dateSubmitted=2010-06-15
@@ -480,7 +480,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K27M3 Ht 1
         longLabel SK-N-SH_RA H3K27me3 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K27ME3 cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=Hot factor=H3K27ME3 cellType=SK-NSHRA rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg18
         # subId=1474 dateSubmitted=2010-06-15
@@ -489,7 +489,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K36M3 Ht 1
         longLabel SK-N-SH_RA H3K36ME3 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K36ME3 cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=Hot factor=H3K36ME3 cellType=SK-NSHRA rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg18
         # subId=1477 dateSubmitted=2010-06-15
@@ -739,7 +739,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K4M3 Ht 2
         longLabel SK-N-SH_RA H3K4me3 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=Hot factor=H3K04ME3 cellType=SK-NSHRA rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg18
         # subId=1473 dateSubmitted=2010-06-15
@@ -748,7 +748,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K27M3 Ht 2
         longLabel SK-N-SH_RA H3K27me3 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K27ME3 cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=Hot factor=H3K27ME3 cellType=SK-NSHRA rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg18
         # subId=1475 dateSubmitted=2010-06-15
@@ -757,7 +757,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K36M3 Ht 2
         longLabel SK-N-SH_RA H3K36ME3 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K36ME3 cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=Hot factor=H3K36ME3 cellType=SK-NSHRA rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg18
         # subId=1476 dateSubmitted=2010-06-15
@@ -1391,7 +1391,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKNMC H3K4M3 Ht 1
         longLabel SK-N-MC H3K4me3 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=SKNMC rep=rep1 treatment=aNone
+        subGroups view=Hot factor=H3K04ME3 cellType=SK-NMC rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4378 dateSubmitted=2011-06-25
@@ -1409,7 +1409,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKNMC H3K4M3 Ht 2
         longLabel SK-N-MC H3K4me3 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=SKNMC rep=rep2 treatment=aNone
+        subGroups view=Hot factor=H3K04ME3 cellType=SK-NMC rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4379 dateSubmitted=2011-06-25
@@ -2237,7 +2237,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K4M3 Pk 1
         longLabel SK-N-SH_RA H3K4me3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=Peaks factor=H3K04ME3 cellType=SK-NSHRA rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg18
         # subId=1472 dateSubmitted=2010-06-15
@@ -2246,7 +2246,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K27M3 Pk 1
         longLabel SK-N-SH_RA H3K27me3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K27ME3 cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=Peaks factor=H3K27ME3 cellType=SK-NSHRA rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg18
         # subId=1474 dateSubmitted=2010-06-15
@@ -2255,7 +2255,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K36M3 Pk 1
         longLabel SK-N-SH_RA H3K36ME3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K36ME3 cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=Peaks factor=H3K36ME3 cellType=SK-NSHRA rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg18
         # subId=1477 dateSubmitted=2010-06-15
@@ -2505,7 +2505,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K4M3 Pk 2
         longLabel SK-N-SH_RA H3K4me3 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=Peaks factor=H3K04ME3 cellType=SK-NSHRA rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg18
         # subId=1473 dateSubmitted=2010-06-15
@@ -2514,7 +2514,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K27M3 Pk 2
         longLabel SK-N-SH_RA H3K27me3 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K27ME3 cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=Peaks factor=H3K27ME3 cellType=SK-NSHRA rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg18
         # subId=1475 dateSubmitted=2010-06-15
@@ -2523,7 +2523,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K36M3 Pk 2
         longLabel SK-N-SH_RA H3K36ME3 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K36ME3 cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=Peaks factor=H3K36ME3 cellType=SK-NSHRA rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg18
         # subId=1476 dateSubmitted=2010-06-15
@@ -3157,7 +3157,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKNMC H3K4M3 Pk 1
         longLabel SK-N-MC H3K4me3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=SKNMC rep=rep1 treatment=aNone
+        subGroups view=Peaks factor=H3K04ME3 cellType=SK-NMC rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4378 dateSubmitted=2011-06-25
@@ -3175,7 +3175,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKNMC H3K4M3 Pk 2
         longLabel SK-N-MC H3K4me3 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=SKNMC rep=rep2 treatment=aNone
+        subGroups view=Peaks factor=H3K04ME3 cellType=SK-NMC rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4379 dateSubmitted=2011-06-25
@@ -3733,7 +3733,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA In Sg 1
         longLabel SK-N-SH_RA Input Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=SK-NSHRA rep=rep1 treatment=aNone
         type bigWig 1.000000 12154.000000
         origAssembly hg18
         # subId=1319 dateSubmitted=2010-06-10
@@ -4151,7 +4151,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K4M3 Sg 1
         longLabel SK-N-SH_RA H3K4me3 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=zRSig factor=H3K04ME3 cellType=SK-NSHRA rep=rep1 treatment=aNone
         type bigWig 1.000000 1354.000000
         origAssembly hg18
         # subId=1472 dateSubmitted=2010-06-15
@@ -4160,7 +4160,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K27M3 Sg 1
         longLabel SK-N-SH_RA H3K27me3 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K27ME3 cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=zRSig factor=H3K27ME3 cellType=SK-NSHRA rep=rep1 treatment=aNone
         type bigWig 1.000000 3475.000000
         origAssembly hg18
         # subId=1474 dateSubmitted=2010-06-15
@@ -4169,7 +4169,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K36M3 Sg 1
         longLabel SK-N-SH_RA H3K36ME3 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K36ME3 cellType=SKNSHRA rep=rep1 treatment=aNone
+        subGroups view=zRSig factor=H3K36ME3 cellType=SK-NSHRA rep=rep1 treatment=aNone
         type bigWig 1.000000 6275.000000
         origAssembly hg18
         # subId=1477 dateSubmitted=2010-06-15
@@ -4419,7 +4419,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K4M3 Sg 2
         longLabel SK-N-SH_RA H3K4me3 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=zRSig factor=H3K04ME3 cellType=SK-NSHRA rep=rep2 treatment=aNone
         type bigWig 1.000000 1287.000000
         origAssembly hg18
         # subId=1473 dateSubmitted=2010-06-15
@@ -4428,7 +4428,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K27M3 Sg 2
         longLabel SK-N-SH_RA H3K27me3 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K27ME3 cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=zRSig factor=H3K27ME3 cellType=SK-NSHRA rep=rep2 treatment=aNone
         type bigWig 1.000000 5070.000000
         origAssembly hg18
         # subId=1475 dateSubmitted=2010-06-15
@@ -4437,7 +4437,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K36M3 Sg 2
         longLabel SK-N-SH_RA H3K36ME3 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K36ME3 cellType=SKNSHRA rep=rep2 treatment=aNone
+        subGroups view=zRSig factor=H3K36ME3 cellType=SK-NSHRA rep=rep2 treatment=aNone
         type bigWig 1.000000 6465.000000
         origAssembly hg18
         # subId=1476 dateSubmitted=2010-06-15
@@ -5215,7 +5215,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKNMC In Sg 1
         longLabel SK-N-MC Input Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=SKNMC rep=rep1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=SK-NMC rep=rep1 treatment=aNone
         type bigWig 1.000000 15364.000000
         origAssembly hg19
         # subId=4357 dateSubmitted=2011-06-25
@@ -5352,7 +5352,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKNMC H3K4M3 Sg 1
         longLabel SK-N-MC H3K4me3 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=SKNMC rep=rep1 treatment=aNone
+        subGroups view=zRSig factor=H3K04ME3 cellType=SK-NMC rep=rep1 treatment=aNone
         type bigWig 1.000000 2362.000000
         origAssembly hg19
         # subId=4378 dateSubmitted=2011-06-25
@@ -5370,7 +5370,7 @@ html wgEncodeUwHistone.release3
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKNMC H3K4M3 Sg 2
         longLabel SK-N-MC H3K4me3 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=SKNMC rep=rep2 treatment=aNone
+        subGroups view=zRSig factor=H3K04ME3 cellType=SK-NMC rep=rep2 treatment=aNone
         type bigWig 1.000000 5544.000000
         origAssembly hg19
         # subId=4379 dateSubmitted=2011-06-25

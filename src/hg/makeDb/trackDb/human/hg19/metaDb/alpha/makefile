@@ -8,6 +8,7 @@ wgEncodeCaltechRnaSeq.ra \
 wgEncodeCshlLongRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \
 wgEncodeDukeAffyExon.ra \
+wgEncodeFsuRepliSeq.ra \
 wgEncodeGencodeV3.ra \
 wgEncodeGencodeV4.ra \
 wgEncodeGencodeV7.ra \

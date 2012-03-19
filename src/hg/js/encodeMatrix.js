@@ -15,7 +15,7 @@ var encodeMatrix = (function () {
     function addSearchPanel($div) {
         // Create panel of radio buttons for user to select search type
         // Add to passed in div ID; e.g. #searchTypePanel
-        $div.append('<span id="searchPanelInstructions">Search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">tracks<input type="radio" name="searchType" id="searchFiles" value="files">files');
+        $div.append('<span id="searchPanelInstructions">search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">tracks<input type="radio" name="searchType" id="searchFiles" value="files">files');
     }
 
     return {
@@ -190,7 +190,7 @@ var encodeMatrix = (function () {
                 $row = $('<tr>' +
                     '<th class="elementType">' +
                     '<span style="float:right; text-align: right;" title="karyotype: ' + karyotype + '" class="karyotype ' + karyotype + '">&bull;</span>' +
-                    '<span title="' + cellType.description + '"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' + cellType.term + '">' + cellType.term + '</a>' +
+                    '<span title="' + cellType.description + '"><a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' + cellType.term + '">' + cellType.term + '</a>' +
                     '</th>'
                     );
                 maxLen = Math.max(maxLen, cellType.term.length);

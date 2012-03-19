@@ -10,7 +10,7 @@ shortLabel Duke DNaseI HS
 longLabel Open Chromatin by DNaseI HS from ENCODE/OpenChrom(Duke University)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLa-S3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 ADULTCD4TH0=Adult_CD4_Th0 ADULTCD4TH1=Adult_CD4_Th1 AOSMC=AoSMC CHORN=Chorion CLL=CLL COLO829=Colo829 ECC1=ECC-1 FIBRO=Fibrobl FIBROP=FibroP FIBROPAG08395=FibroP_AG08395 FIBROPAG08396=FibroP_AG08396 FIBROPAG20443=FibroP_AG20443 Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7ES=H7-hESC H9=H9-hESC HEK293=HEK293 HEK293T=HEK293T Hepatocytes=Hepatocytes HMEC=HMEC HSMMFSHD=HSMM_FSHD HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMEMB=HSMM_emb HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 IPS=iPS IPSCWRU1=iPS_CWRU1 IPSNIHI7=iPS_NIHi7 IPSNIHI11=iPS_NIHi11 ISHIKAWA=Ishikawa LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MEL2183=Mel-2183 MYOMETR=Myometr NHBE=NHBE NHEK=NHEK  Osteobl=Osteobl 8988T=PA-TU-8988T PANI=PanIslets PanIsD=PanIsletD pHTE=pHTE PROG=ProgFib RWPE1=RWPE1 Stellate=Stellate T47D=T-47D TH1=Th1 UROtsa=Urothelia
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLa-S3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 ADULTCD4TH0=Adult_CD4_Th0 ADULTCD4TH1=Adult_CD4_Th1 AOSMC=AoSMC CHORN=Chorion CLL=CLL COLO829=Colo829 ECC1=ECC-1 FIBRO=Fibrobl FIBROP=FibroP FIBROPAG08395=FibroP_AG08395 FIBROPAG08396=FibroP_AG08396 FIBROPAG20443=FibroP_AG20443 Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7ES=H7-hESC H9=H9-hESC HEK293=HEK293 HEK293T=HEK293T Hepatocytes=Hepatocytes HMEC=HMEC HSMMFSHD=HSMM_FSHD HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMEMB=HSMM_emb HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 IPS=iPS IPSCWRU1=iPS_CWRU1 IPSNIHI7=iPS_NIHi7 IPSNIHI11=iPS_NIHi11 ISHIKAWA=Ishikawa LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MEDULLOD341=Medullo&#95;D341 MELANO=Melano MEL2183=Mel-2183 MYOMETR=Myometr NHBE=NHBE NHEK=NHEK Osteobl=Osteobl 8988T=PA-TU-8988T PANI=PanIslets PanIsD=PanIsletD pHTE=pHTE PROG=ProgFib RWPE1=RWPE1 Stellate=Stellate T47D=T-47D TH1=Th1 UROTHEL=Urothelia
 subGroup3 treatment Treatment AANONE=None DM002P1H=DMSO_0.02pct EST10NM1H=Estradiol_10nM_1h EST10NM30M=Estradiol_10nM_30m ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs METHYLT=Methyltrienolone&nbsp;(androgen) NABUT=NaBut SERUMFREE=Serum_Free_Media TAM10030=4-hydroxytamoxifen_100nM_30min UT189=UT189_E.coli
 sortOrder cellType=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -409,20 +409,20 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type narrowPeak
         # subId=3078 dateSubmitted=2010-12-06
 
-        track wgEncodeOpenChromDnaseUrotsaPk
-        parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel Urothelia Pk
-        longLabel Urothelia DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=UROtsa treatment=AANONE
-        type narrowPeak
+        #track wgEncodeOpenChromDnaseUrotsaPk
+        #parent wgEncodeOpenChromDnaseViewPeaks off
+        #shortLabel Urothelia Pk
+        #longLabel Urothelia DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        #subGroups view=Peaks cellType=UROtsa treatment=AANONE
+        #type narrowPeak
         # subId=3217 dateSubmitted=2011-01-11
 
-        track wgEncodeOpenChromDnaseUrotsaUt189Pk
-        parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel Urothelia Pk
-        longLabel Urothelia UT189 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=UROtsa treatment=UT189
-        type narrowPeak
+        #track wgEncodeOpenChromDnaseUrotsaUt189Pk
+        #parent wgEncodeOpenChromDnaseViewPeaks off
+        #shortLabel Urothelia Pk
+        #longLabel Urothelia UT189 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        #subGroups view=Peaks cellType=UROtsa treatment=UT189
+        #type narrowPeak
         # subId=3218 dateSubmitted=2011-01-11
 
         track wgEncodeOpenChromDnaseMcf7HypoxlacPk
@@ -522,7 +522,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         # subId=5387 dateSubmitted=2012-01-31
 
         track wgEncodeOpenChromDnaseK562NabutPk
-        parent wgEncodeOpenChromDnaseViewPeaks
+        parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel K562 Pk
         longLabel K562 NaBut DNaseI HS Peaks from ENCODE/OpenChrom-Duke
         subGroups view=Peaks cellType=1K562 treatment=NABUT
@@ -610,6 +610,30 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type narrowPeak
         color 46,0,184
         # subId=5901 dateSubmitted=2012-02-28
+
+        track wgEncodeOpenChromDnaseMedullod341Pk
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel Medul_D341 DNs Pk
+        longLabel Medullo_D341 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        subGroups view=Peaks cellType=MEDULLOD341 treatment=AANONE
+        type narrowPeak
+        # subId=5991 dateSubmitted=2012-03-13
+
+        track wgEncodeOpenChromDnaseUrothelPkV2
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel Urothelia Dnse Pk
+        longLabel Urothelia DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        subGroups view=Peaks cellType=UROTHEL treatment=AANONE
+        type narrowPeak
+        # subId=5990 dateSubmitted=2012-03-13
+
+        track wgEncodeOpenChromDnaseUrothelUt189PkV2
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel Urothel UT DNs Pk
+        longLabel Urothelia UT189 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        subGroups view=Peaks cellType=UROTHEL treatment=UT189
+        type narrowPeak
+        # subId=5992 dateSubmitted=2012-03-13
 
     track wgEncodeOpenChromDnaseViewSignal
     shortLabel DNase F-Seq Density Signal
@@ -995,20 +1019,20 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 1.376400
         # subId=3078 dateSubmitted=2010-12-06
 
-        track wgEncodeOpenChromDnaseUrotsaSig
-        parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel Urothelia DS
-        longLabel Urothelia DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=UROtsa treatment=AANONE
-        type bigWig 0.000000 0.851700
+        #track wgEncodeOpenChromDnaseUrotsaSig
+        #parent wgEncodeOpenChromDnaseViewSignal off
+        #shortLabel Urothelia DS
+        #longLabel Urothelia DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIG cellType=UROtsa treatment=AANONE
+        #type bigWig 0.000000 0.851700
         # subId=3217 dateSubmitted=2011-01-11
 
-        track wgEncodeOpenChromDnaseUrotsaUt189Sig
-        parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel Urothelia DS
-        longLabel Urothelia UT189 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=UROtsa treatment=UT189
-        type bigWig 0.000000 0.981900
+        #track wgEncodeOpenChromDnaseUrotsaUt189Sig
+        #parent wgEncodeOpenChromDnaseViewSignal off
+        #shortLabel Urothelia DS
+        #longLabel Urothelia UT189 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIG cellType=UROtsa treatment=UT189
+        #type bigWig 0.000000 0.981900
         # subId=3218 dateSubmitted=2011-01-11
 
         track wgEncodeOpenChromDnaseMcf7HypoxlacSig
@@ -1108,7 +1132,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         # subId=5387 dateSubmitted=2012-01-31
 
         track wgEncodeOpenChromDnaseK562NabutSig
-        parent wgEncodeOpenChromDnaseViewSignal
+        parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel K562 DS
         longLabel K562 NaBut DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIG cellType=1K562 treatment=NABUT
@@ -1196,6 +1220,30 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 1.153500
         color 46,0,184
         # subId=5901 dateSubmitted=2012-02-28
+
+        track wgEncodeOpenChromDnaseMedullod341Sig
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel Medul_D341 DNs DS
+        longLabel Medullo_D341 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIG cellType=MEDULLOD341 treatment=AANONE
+        type bigWig 0.000000 1.422500
+        # subId=5991 dateSubmitted=2012-03-13
+
+        track wgEncodeOpenChromDnaseUrothelSigV2
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel Urothelia Dnse DS
+        longLabel Urothelia DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIG cellType=UROTHEL treatment=AANONE
+        type bigWig 0.000000 0.874300
+        # subId=5990 dateSubmitted=2012-03-13
+
+        track wgEncodeOpenChromDnaseUrothelUt189SigV2
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel Urothel UT DNs DS
+        longLabel Urothelia UT189 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIG cellType=UROTHEL treatment=UT189
+        type bigWig 0.000000 0.876800
+        # subId=5992 dateSubmitted=2012-03-13
 
 
     track wgEncodeOpenChromDnaseViewSigBo
@@ -1583,20 +1631,20 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 251.000000
         # subId=3078 dateSubmitted=2010-12-06
 
-        track wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal
-        parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel Urothelia OS
-        longLabel Urothelia DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=UROtsa treatment=AANONE
-        type bigWig 0.000000 196.000000
+        #track wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal
+        #parent wgEncodeOpenChromDnaseViewSigBo off
+        #shortLabel Urothelia OS
+        #longLabel Urothelia DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIGBO cellType=UROtsa treatment=AANONE
+        #type bigWig 0.000000 196.000000
         # subId=3217 dateSubmitted=2011-01-11
 
-        track wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal
-        parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel Urothelia OS
-        longLabel Urothelia UT189 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=UROtsa treatment=UT189
-        type bigWig 0.000000 210.000000
+        #track wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal
+        #parent wgEncodeOpenChromDnaseViewSigBo off
+        #shortLabel Urothelia OS
+        #longLabel Urothelia UT189 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        #subGroups view=SIGBO cellType=UROtsa treatment=UT189
+        #type bigWig 0.000000 210.000000
         # subId=3218 dateSubmitted=2011-01-11
 
         track wgEncodeOpenChromDnaseMcf7HypoxlacBaseOverlapSignal
@@ -1696,7 +1744,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         # subId=5387 dateSubmitted=2012-01-31
 
         track wgEncodeOpenChromDnaseK562NabutBaseOverlapSignal
-        parent wgEncodeOpenChromDnaseViewSigBo
+        parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel K562 OS
         longLabel K562 NaBut DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIGBO cellType=1K562 treatment=NABUT
@@ -1784,4 +1832,28 @@ dataVersion through the ENCODE Mar 2012 Freeze
         type bigWig 0.000000 352.000000
         color 46,0,184
         # subId=5901 dateSubmitted=2012-02-28
+
+        track wgEncodeOpenChromDnaseMedullod341BaseOverlapSignal
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel Medul_D341 DNs OS
+        longLabel Medullo_D341 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIGBO cellType=MEDULLOD341 treatment=AANONE
+        type bigWig 0.000000 220.000000
+        # subId=5991 dateSubmitted=2012-03-13
+
+        track wgEncodeOpenChromDnaseUrothelBaseOverlapSignalV2
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel Urothelia DNse OS
+        longLabel Urothelia DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIGBO cellType=UROTHEL treatment=AANONE
+        type bigWig 0.000000 209.000000
+        # subId=5990 dateSubmitted=2012-03-13
+
+        track wgEncodeOpenChromDnaseUrothelUt189BaseOverlapSignalV2
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel Urothel UT DNs OS
+        longLabel Urothelia UT189 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIGBO cellType=UROTHEL treatment=UT189
+        type bigWig 0.000000 206.000000
+        # subId=5992 dateSubmitted=2012-03-13
 

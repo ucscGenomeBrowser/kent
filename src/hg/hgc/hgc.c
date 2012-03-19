@@ -2628,11 +2628,12 @@ if (!foundPep)
 	puts("<LI>\n");
 	/* put out correct message to describe translated mRNA */
         if ((sameString(geneTable, "ensGene")) || (sameString(geneTable, "vegaGene")) || (sameString(geneTable, "vegaPseudoGene"))
+      || (genbankIsRefSeqNonCodingMRnaAcc(geneName))
       || (sameString(geneTable, "lincRNAsTranscripts")) )
 	    {
 	    printf("Non-protein coding gene or gene fragment, no protein prediction available.");
 	    }
-	else if (!genbankIsRefSeqNonCodingMRnaAcc(geneName))
+	else 
 	    {
 	    hgcAnchorSomewhere("htcTranslatedPredMRna", geneName,
 		"translate", seqName);
@@ -25242,9 +25243,9 @@ else if (sameString("par", table))
     {
     doParDetails(tdb, item);
     }
-else if (startsWith("t2g", table))
+else if (startsWith("pubs", table))
     {
-    doT2gDetails(tdb, item);
+    doPubsDetails(tdb, item);
     }
 else if (tdb != NULL && startsWith("bedDetail", tdb->type))
     {

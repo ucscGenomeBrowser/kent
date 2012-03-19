@@ -2,6 +2,7 @@ metaObject wgEncodeOpenChromFaire
 objType composite
 composite wgEncodeOpenChromFaire
 expVars lab,dataType,cell,treatment
+geoSeriesAccession GSE35239
 
 metaObject wgEncodeOpenChromFaireA549AlnRep1
 objType file
@@ -15,6 +16,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001126
 expId 1126
 fileName wgEncodeOpenChromFaireA549AlnRep1.bam,wgEncodeOpenChromFaireA549AlnRep1.bam.bai
+geoSampleAccession GSM864345
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -37,6 +39,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001126
 expId 1126
 fileName wgEncodeOpenChromFaireA549AlnRep2.bam,wgEncodeOpenChromFaireA549AlnRep2.bam.bai
+geoSampleAccession GSM864345
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -59,6 +62,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001126
 expId 1126
 fileName wgEncodeOpenChromFaireA549BaseOverlapSignal.bigWig
+geoSampleAccession GSM864345
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -81,6 +85,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001126
 expId 1126
 fileName wgEncodeOpenChromFaireA549Pk.narrowPeak.gz
+geoSampleAccession GSM864345
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -103,6 +108,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001126
 expId 1126
 fileName wgEncodeOpenChromFaireA549RawDataRep1.fastq.gz
+geoSampleAccession GSM864345
 grant Crawford
 lab UNC
 md5sum 960ba52e575d97091184f587d063fa7b
@@ -124,6 +130,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001126
 expId 1126
 fileName wgEncodeOpenChromFaireA549RawDataRep2.fastq.gz
+geoSampleAccession GSM864345
 grant Crawford
 lab UNC
 md5sum a88ba29c275b421a9f9886a7d3b0fa46
@@ -145,6 +152,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001126
 expId 1126
 fileName wgEncodeOpenChromFaireA549Sig.bigWig
+geoSampleAccession GSM864345
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
@@ -167,6 +175,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam,wgEncodeOpenChromFaireAstrocyAlnRep1.bam.bai
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -190,6 +199,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam,wgEncodeOpenChromFaireAstrocyAlnRep2.bam.bai
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -213,6 +223,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireAstrocyBaseOverlapSignal.bigWig
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -236,6 +247,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireAstrocyPk.narrowPeak.gz
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -259,6 +271,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireAstrocyRawDataRep1.fastq.gz
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 md5sum 1bb75a8f015446653fb3f480a2331a4a
@@ -281,6 +294,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireAstrocyRawDataRep2.fastq.gz
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 md5sum b7aba10557ac577dede15283f1b890ec
@@ -303,6 +317,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireAstrocySig.bigWig
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
@@ -326,6 +341,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
 fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam,wgEncodeOpenChromFaireGlioblaAlnRep1.bam.bai
+geoSampleAccession GSM864350
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -348,6 +364,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
 fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam,wgEncodeOpenChromFaireGlioblaAlnRep2.bam.bai
+geoSampleAccession GSM864350
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -370,6 +387,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
 fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam,wgEncodeOpenChromFaireGlioblaAlnRep3.bam.bai
+geoSampleAccession GSM864350
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -392,6 +410,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
 fileName wgEncodeOpenChromFaireGlioblaBaseOverlapSignal.bigWig
+geoSampleAccession GSM864350
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -414,6 +433,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
 fileName wgEncodeOpenChromFaireGlioblaPk.narrowPeak.gz
+geoSampleAccession GSM864350
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -436,6 +456,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep1.fastq.gz
+geoSampleAccession GSM864350
 grant Crawford
 lab UNC
 md5sum dbf8e7a9b14cc3c3b2f089f3b55b0eb3
@@ -457,6 +478,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep2.fastq.gz
+geoSampleAccession GSM864350
 grant Crawford
 lab UNC
 md5sum 192bd961597223d11b9998371cf77359
@@ -478,6 +500,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep3.fastq.gz
+geoSampleAccession GSM864350
 grant Crawford
 lab UNC
 md5sum 341f63c36bd929483788975cf24a736a
@@ -499,6 +522,7 @@ dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
 fileName wgEncodeOpenChromFaireGlioblaSig.bigWig
+geoSampleAccession GSM864350
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_H54
@@ -522,6 +546,7 @@ dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeOpenChromFaireGm12878AlnRep1.bam,wgEncodeOpenChromFaireGm12878AlnRep1.bam.bai
+geoSampleAccession GSM864360
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -545,6 +570,7 @@ dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeOpenChromFaireGm12878AlnRep2.bam,wgEncodeOpenChromFaireGm12878AlnRep2.bam.bai
+geoSampleAccession GSM864360
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -568,6 +594,7 @@ dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeOpenChromFaireGm12878AlnRep3.bam,wgEncodeOpenChromFaireGm12878AlnRep3.bam.bai
+geoSampleAccession GSM864360
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -591,6 +618,7 @@ dateUnrestricted 2009-11-25
 dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeOpenChromFaireGm12878BaseOverlapSignal.bigWig
+geoSampleAccession GSM864360
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -614,6 +642,7 @@ dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeOpenChromFaireGm12878Pk.narrowPeak.gz
+geoSampleAccession GSM864360
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.05
@@ -637,6 +666,7 @@ dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeOpenChromFaireGm12878RawDataRep1.fastq.gz
+geoSampleAccession GSM864360
 grant Crawford
 lab UNC
 md5sum 17c19d3a3d170cde765525ef36b680e3
@@ -659,6 +689,7 @@ dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeOpenChromFaireGm12878RawDataRep2.fastq.gz
+geoSampleAccession GSM864360
 grant Crawford
 lab UNC
 md5sum 79c0190f63835050ceb0e671372df4df
@@ -681,6 +712,7 @@ dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeOpenChromFaireGm12878RawDataRep3.fastq.gz
+geoSampleAccession GSM864360
 grant Crawford
 lab UNC
 md5sum 42fb50a697886948c2576767bab52c1e
@@ -703,6 +735,7 @@ dateUnrestricted 2009-11-25
 dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeOpenChromFaireGm12878Sig.bigWig
+geoSampleAccession GSM864360
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_GM12878
@@ -725,6 +758,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000533
 expId 533
 fileName wgEncodeOpenChromFaireGm12878Validation.tgz
+geoSampleAccession GSM864360
 grant Crawford
 lab UNC
 labVersion 1% ENCODE array platform validation tests
@@ -745,6 +779,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
 fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam,wgEncodeOpenChromFaireGm12891AlnRep1.bam.bai
+geoSampleAccession GSM864349
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -767,6 +802,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
 fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam,wgEncodeOpenChromFaireGm12891AlnRep2.bam.bai
+geoSampleAccession GSM864349
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -789,6 +825,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
 fileName wgEncodeOpenChromFaireGm12891BaseOverlapSignal.bigWig
+geoSampleAccession GSM864349
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -811,6 +848,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
 fileName wgEncodeOpenChromFaireGm12891Pk.narrowPeak.gz
+geoSampleAccession GSM864349
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -833,6 +871,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
 fileName wgEncodeOpenChromFaireGm12891RawDataRep1.fastq.gz
+geoSampleAccession GSM864349
 grant Crawford
 lab UNC
 md5sum a4cbaa786de75356d33e30204176e05d
@@ -854,6 +893,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
 fileName wgEncodeOpenChromFaireGm12891RawDataRep2.fastq.gz
+geoSampleAccession GSM864349
 grant Crawford
 lab UNC
 md5sum 681177d49c7dc8f1ce94d2dbd9239c4f
@@ -875,6 +915,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
 fileName wgEncodeOpenChromFaireGm12891Sig.bigWig
+geoSampleAccession GSM864349
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
@@ -897,6 +938,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
 fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam,wgEncodeOpenChromFaireGm12892AlnRep1.bam.bai
+geoSampleAccession GSM864357
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -919,6 +961,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
 fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam,wgEncodeOpenChromFaireGm12892AlnRep2.bam.bai
+geoSampleAccession GSM864357
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -941,6 +984,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
 fileName wgEncodeOpenChromFaireGm12892BaseOverlapSignal.bigWig
+geoSampleAccession GSM864357
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -963,6 +1007,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
 fileName wgEncodeOpenChromFaireGm12892Pk.narrowPeak.gz
+geoSampleAccession GSM864357
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -985,6 +1030,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
 fileName wgEncodeOpenChromFaireGm12892RawDataRep1.fastq.gz
+geoSampleAccession GSM864357
 grant Crawford
 lab UNC
 md5sum 9c3d8c312d9a74afd8e473e27dbcff7a
@@ -1006,6 +1052,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
 fileName wgEncodeOpenChromFaireGm12892RawDataRep2.fastq.gz
+geoSampleAccession GSM864357
 grant Crawford
 lab UNC
 md5sum 6c315586629f4ff35e36c94fda92732e
@@ -1027,6 +1074,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
 fileName wgEncodeOpenChromFaireGm12892Sig.bigWig
+geoSampleAccession GSM864357
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_female
@@ -1049,6 +1097,7 @@ dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001117
 expId 1117
 fileName wgEncodeOpenChromFaireGm12892Validation.tgz
+geoSampleAccession GSM864357
 grant Crawford
 lab UNC
 labVersion 1% ENCODE array platform validation tests
@@ -1071,6 +1120,7 @@ dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeOpenChromFaireGm18507AlnRep1.bam,wgEncodeOpenChromFaireGm18507AlnRep1.bam.bai
+geoSampleAccession GSM864355
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1094,6 +1144,7 @@ dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeOpenChromFaireGm18507AlnRep2.bam,wgEncodeOpenChromFaireGm18507AlnRep2.bam.bai
+geoSampleAccession GSM864355
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1117,6 +1168,7 @@ dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeOpenChromFaireGm18507BaseOverlapSignal.bigWig
+geoSampleAccession GSM864355
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -1140,6 +1192,7 @@ dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeOpenChromFaireGm18507Pk.narrowPeak.gz
+geoSampleAccession GSM864355
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -1163,6 +1216,7 @@ dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeOpenChromFaireGm18507RawDataRep1.fastq.gz
+geoSampleAccession GSM864355
 grant Crawford
 lab UNC
 md5sum d3da693577eb4b22e7a373f221cf1f58
@@ -1186,6 +1240,7 @@ dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeOpenChromFaireGm18507RawDataRep2.fastq.gz
+geoSampleAccession GSM864355
 grant Crawford
 lab UNC
 md5sum f548ade8f98bb57a2c693feaa741b74a
@@ -1209,6 +1264,7 @@ dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeOpenChromFaireGm18507Sig.bigWig
+geoSampleAccession GSM864355
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
@@ -1231,6 +1287,7 @@ dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000586
 expId 586
 fileName wgEncodeOpenChromFaireGm18507Validation.tgz
+geoSampleAccession GSM864355
 grant Crawford
 lab UNC
 labVersion 1% ENCODE array platform validation tests
@@ -1253,6 +1310,7 @@ dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeOpenChromFaireGm19239AlnRep1.bam,wgEncodeOpenChromFaireGm19239AlnRep1.bam.bai
+geoSampleAccession GSM864358
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1276,6 +1334,7 @@ dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeOpenChromFaireGm19239AlnRep2.bam,wgEncodeOpenChromFaireGm19239AlnRep2.bam.bai
+geoSampleAccession GSM864358
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1299,6 +1358,7 @@ dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeOpenChromFaireGm19239BaseOverlapSignal.bigWig
+geoSampleAccession GSM864358
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -1322,6 +1382,7 @@ dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeOpenChromFaireGm19239Pk.narrowPeak.gz
+geoSampleAccession GSM864358
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.05
@@ -1345,6 +1406,7 @@ dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeOpenChromFaireGm19239RawDataRep1.fastq.gz
+geoSampleAccession GSM864358
 grant Crawford
 lab UNC
 md5sum f32d6651b22a113a2835b1c8338d22c7
@@ -1368,6 +1430,7 @@ dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeOpenChromFaireGm19239RawDataRep2.fastq.gz
+geoSampleAccession GSM864358
 grant Crawford
 lab UNC
 md5sum 94ce53b7bfe54fd87276c33e26c733f1
@@ -1391,6 +1454,7 @@ dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeOpenChromFaireGm19239Sig.bigWig
+geoSampleAccession GSM864358
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
@@ -1413,6 +1477,7 @@ dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000580
 expId 580
 fileName wgEncodeOpenChromFaireGm19239Validation.tgz
+geoSampleAccession GSM864358
 grant Crawford
 lab UNC
 labVersion 1% ENCODE array platform validation tests
@@ -1435,6 +1500,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeOpenChromFaireH1hescAlnRep1.bam,wgEncodeOpenChromFaireH1hescAlnRep1.bam.bai
+geoSampleAccession GSM864341
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1458,6 +1524,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeOpenChromFaireH1hescAlnRep2.bam,wgEncodeOpenChromFaireH1hescAlnRep2.bam.bai
+geoSampleAccession GSM864341
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1481,6 +1548,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeOpenChromFaireH1hescBaseOverlapSignal.bigWig
+geoSampleAccession GSM864341
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -1504,6 +1572,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeOpenChromFaireH1hescPk.narrowPeak.gz
+geoSampleAccession GSM864341
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.05
@@ -1527,6 +1596,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeOpenChromFaireH1hescRawDataRep1.fastq.gz
+geoSampleAccession GSM864341
 grant Crawford
 lab UNC
 md5sum 03c44abaacefb6a4a284b0b3f1e61419
@@ -1550,6 +1620,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeOpenChromFaireH1hescRawDataRep2.fastq.gz
+geoSampleAccession GSM864341
 grant Crawford
 lab UNC
 md5sum d5e9e8e0cf5d7044f8381a37bc566539
@@ -1573,6 +1644,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
 fileName wgEncodeOpenChromFaireH1hescSig.bigWig
+geoSampleAccession GSM864341
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
@@ -1596,6 +1668,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeOpenChromFaireHelas3AlnRep1.bam,wgEncodeOpenChromFaireHelas3AlnRep1.bam.bai
+geoSampleAccession GSM864348
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1619,6 +1692,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeOpenChromFaireHelas3AlnRep2.bam,wgEncodeOpenChromFaireHelas3AlnRep2.bam.bai
+geoSampleAccession GSM864348
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1642,6 +1716,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeOpenChromFaireHelas3BaseOverlapSignal.bigWig
+geoSampleAccession GSM864348
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -1665,6 +1740,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam,wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam.bai
+geoSampleAccession GSM864356
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1689,6 +1765,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam,wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam.bai
+geoSampleAccession GSM864356
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1713,6 +1790,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal.bigWig
+geoSampleAccession GSM864356
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -1737,6 +1815,7 @@ dateUnrestricted 2010-09-20
 dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hPk.narrowPeak.gz
+geoSampleAccession GSM864356
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.05
@@ -1761,6 +1840,7 @@ dateUnrestricted 2010-09-20
 dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep1.fastq.gz
+geoSampleAccession GSM864356
 grant Crawford
 lab UNC
 md5sum 42121a10c1a7e8ca14272aa265464302
@@ -1784,6 +1864,7 @@ dateUnrestricted 2010-09-20
 dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep2.fastq.gz
+geoSampleAccession GSM864356
 grant Crawford
 lab UNC
 md5sum 4b3557617496aca5a33b8a90c82e0298
@@ -1807,6 +1888,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000587
 expId 587
 fileName wgEncodeOpenChromFaireHelas3Ifna4hSig.bigWig
+geoSampleAccession GSM864356
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_HelaS3
@@ -1831,6 +1913,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam,wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam.bai
+geoSampleAccession GSM864359
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1855,6 +1938,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam,wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam.bai
+geoSampleAccession GSM864359
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1879,6 +1963,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal.bigWig
+geoSampleAccession GSM864359
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -1903,6 +1988,7 @@ dateUnrestricted 2010-09-20
 dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hPk.narrowPeak.gz
+geoSampleAccession GSM864359
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.05
@@ -1927,6 +2013,7 @@ dateUnrestricted 2010-09-20
 dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep1.fastq.gz
+geoSampleAccession GSM864359
 grant Crawford
 lab UNC
 md5sum 24a9768bc98080d7e6f6ee30f38785f3
@@ -1950,6 +2037,7 @@ dateUnrestricted 2010-09-20
 dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep2.fastq.gz
+geoSampleAccession GSM864359
 grant Crawford
 lab UNC
 md5sum a7d10014d552b5d23b4f9bbdc6c1de85
@@ -1973,6 +2061,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000588
 expId 588
 fileName wgEncodeOpenChromFaireHelas3Ifng4hSig.bigWig
+geoSampleAccession GSM864359
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_HelaS3
@@ -1997,6 +2086,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeOpenChromFaireHelas3Pk.narrowPeak.gz
+geoSampleAccession GSM864348
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.05
@@ -2020,6 +2110,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeOpenChromFaireHelas3RawDataRep1.fastq.gz
+geoSampleAccession GSM864348
 grant Crawford
 lab UNC
 md5sum a41e3cfc86b78a97dbdb66d04dbcb529
@@ -2042,6 +2133,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeOpenChromFaireHelas3RawDataRep2.fastq.gz
+geoSampleAccession GSM864348
 grant Crawford
 lab UNC
 md5sum bf442bc1cb3c61509ec0a6528b456662
@@ -2064,6 +2156,7 @@ dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeOpenChromFaireHelas3Sig.bigWig
+geoSampleAccession GSM864348
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_HelaS3
@@ -2086,6 +2179,7 @@ dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000544
 expId 544
 fileName wgEncodeOpenChromFaireHelas3Validation.tgz
+geoSampleAccession GSM864348
 grant Crawford
 lab UNC
 labVersion 1% ENCODE array platform validation tests
@@ -2108,6 +2202,7 @@ dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeOpenChromFaireHepg2AlnRep1.bam,wgEncodeOpenChromFaireHepg2AlnRep1.bam.bai
+geoSampleAccession GSM864354
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2131,6 +2226,7 @@ dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeOpenChromFaireHepg2AlnRep2.bam,wgEncodeOpenChromFaireHepg2AlnRep2.bam.bai
+geoSampleAccession GSM864354
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2154,6 +2250,7 @@ dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeOpenChromFaireHepg2AlnRep3.bam,wgEncodeOpenChromFaireHepg2AlnRep3.bam.bai
+geoSampleAccession GSM864354
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2177,6 +2274,7 @@ dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeOpenChromFaireHepg2BaseOverlapSignal.bigWig
+geoSampleAccession GSM864354
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -2200,6 +2298,7 @@ dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeOpenChromFaireHepg2Pk.narrowPeak.gz
+geoSampleAccession GSM864354
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.05
@@ -2223,6 +2322,7 @@ dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeOpenChromFaireHepg2RawDataRep1.fastq.gz
+geoSampleAccession GSM864354
 grant Crawford
 lab UNC
 md5sum f7d9bd78fb2d22a29650acd1fc790dd2
@@ -2245,6 +2345,7 @@ dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeOpenChromFaireHepg2RawDataRep2.fastq.gz
+geoSampleAccession GSM864354
 grant Crawford
 lab UNC
 md5sum 4aef0691de66dcbb1d3dfd7385ec57e3
@@ -2267,6 +2368,7 @@ dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeOpenChromFaireHepg2RawDataRep3.fastq.gz
+geoSampleAccession GSM864354
 grant Crawford
 lab UNC
 md5sum 1f5108421d141e787deb663887f6d7f0
@@ -2289,6 +2391,7 @@ dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeOpenChromFaireHepg2Sig.bigWig
+geoSampleAccession GSM864354
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_HepG2
@@ -2311,6 +2414,7 @@ dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000546
 expId 546
 fileName wgEncodeOpenChromFaireHepg2Validation.tgz
+geoSampleAccession GSM864354
 grant Crawford
 lab UNC
 labVersion 1% ENCODE array platform validation tests
@@ -2332,6 +2436,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001124
 expId 1124
 fileName wgEncodeOpenChromFaireHtr8AlnRep1.bam,wgEncodeOpenChromFaireHtr8AlnRep1.bam.bai
+geoSampleAccession GSM864343
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2354,6 +2459,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001124
 expId 1124
 fileName wgEncodeOpenChromFaireHtr8AlnRep2.bam,wgEncodeOpenChromFaireHtr8AlnRep2.bam.bai
+geoSampleAccession GSM864343
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2376,6 +2482,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001124
 expId 1124
 fileName wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig
+geoSampleAccession GSM864343
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -2398,6 +2505,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001124
 expId 1124
 fileName wgEncodeOpenChromFaireHtr8Pk.narrowPeak.gz
+geoSampleAccession GSM864343
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -2420,6 +2528,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001124
 expId 1124
 fileName wgEncodeOpenChromFaireHtr8RawDataRep1.fastq.gz
+geoSampleAccession GSM864343
 grant Crawford
 lab UNC
 md5sum 5509247ec7069c389461578678a1566a
@@ -2441,6 +2550,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001124
 expId 1124
 fileName wgEncodeOpenChromFaireHtr8RawDataRep2.fastq.gz
+geoSampleAccession GSM864343
 grant Crawford
 lab UNC
 md5sum 70a56a42b70335c071b5b8c56d1d9ee3
@@ -2462,6 +2572,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001124
 expId 1124
 fileName wgEncodeOpenChromFaireHtr8Sig.bigWig
+geoSampleAccession GSM864343
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_female
@@ -2485,6 +2596,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeOpenChromFaireHuvecAlnRep1.bam,wgEncodeOpenChromFaireHuvecAlnRep1.bam.bai
+geoSampleAccession GSM864352
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2508,6 +2620,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeOpenChromFaireHuvecAlnRep2.bam,wgEncodeOpenChromFaireHuvecAlnRep2.bam.bai
+geoSampleAccession GSM864352
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2531,6 +2644,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeOpenChromFaireHuvecBaseOverlapSignal.bigWig
+geoSampleAccession GSM864352
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -2554,6 +2668,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeOpenChromFaireHuvecPk.narrowPeak.gz
+geoSampleAccession GSM864352
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.05
@@ -2577,6 +2692,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeOpenChromFaireHuvecRawDataRep1.fastq.gz
+geoSampleAccession GSM864352
 grant Crawford
 lab UNC
 md5sum 157fde32e322261ab6ed78bdd7c1ef24
@@ -2600,6 +2716,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeOpenChromFaireHuvecRawDataRep2.fastq.gz
+geoSampleAccession GSM864352
 grant Crawford
 lab UNC
 md5sum deea2d8d35d27220f7f3870d82ad521e
@@ -2623,6 +2740,7 @@ dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeOpenChromFaireHuvecSig.bigWig
+geoSampleAccession GSM864352
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_HUVEC
@@ -2645,6 +2763,7 @@ dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000549
 expId 549
 fileName wgEncodeOpenChromFaireHuvecValidation.tgz
+geoSampleAccession GSM864352
 grant Crawford
 lab UNC
 labVersion 1% ENCODE array platform validation tests
@@ -2667,6 +2786,7 @@ dateUnrestricted 2009-08-09
 dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeOpenChromFaireK562AlnRep1.bam,wgEncodeOpenChromFaireK562AlnRep1.bam.bai
+geoSampleAccession GSM864361
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2690,6 +2810,7 @@ dateUnrestricted 2009-08-09
 dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeOpenChromFaireK562AlnRep2.bam,wgEncodeOpenChromFaireK562AlnRep2.bam.bai
+geoSampleAccession GSM864361
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2713,6 +2834,7 @@ dateUnrestricted 2009-08-09
 dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeOpenChromFaireK562BaseOverlapSignal.bigWig
+geoSampleAccession GSM864361
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -2735,6 +2857,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
 fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam,wgEncodeOpenChromFaireK562NabutAlnRep1.bam.bai
+geoSampleAccession GSM864339
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2758,6 +2881,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
 fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam,wgEncodeOpenChromFaireK562NabutAlnRep2.bam.bai
+geoSampleAccession GSM864339
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2781,6 +2905,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
 fileName wgEncodeOpenChromFaireK562NabutBaseOverlapSignal.bigWig
+geoSampleAccession GSM864339
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -2804,6 +2929,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
 fileName wgEncodeOpenChromFaireK562NabutPk.narrowPeak.gz
+geoSampleAccession GSM864339
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -2827,6 +2953,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
 fileName wgEncodeOpenChromFaireK562NabutRawDataRep1.fastq.gz
+geoSampleAccession GSM864339
 grant Crawford
 lab UNC
 md5sum 6b79cc3343929c20e9046b26ef5ca445
@@ -2849,6 +2976,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
 fileName wgEncodeOpenChromFaireK562NabutRawDataRep2.fastq.gz
+geoSampleAccession GSM864339
 grant Crawford
 lab UNC
 md5sum 3084bef94596be6396be303285a69018
@@ -2871,6 +2999,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
 fileName wgEncodeOpenChromFaireK562NabutSig.bigWig
+geoSampleAccession GSM864339
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_K562
@@ -2894,6 +3023,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam,wgEncodeOpenChromFaireK562OhureaAlnRep1.bam.bai
+geoSampleAccession GSM864340
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2917,6 +3047,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam,wgEncodeOpenChromFaireK562OhureaAlnRep2.bam.bai
+geoSampleAccession GSM864340
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2940,6 +3071,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal.bigWig
+geoSampleAccession GSM864340
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -2963,6 +3095,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaPk.narrowPeak.gz
+geoSampleAccession GSM864340
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -2986,6 +3119,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaRawDataRep1.fastq.gz
+geoSampleAccession GSM864340
 grant Crawford
 lab UNC
 md5sum 254376fb8ddbfc6fdbacf6eb2a2c7f38
@@ -3008,6 +3142,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaRawDataRep2.fastq.gz
+geoSampleAccession GSM864340
 grant Crawford
 lab UNC
 md5sum f7f4428330e2504f54329c67a8095415
@@ -3030,6 +3165,7 @@ dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
 fileName wgEncodeOpenChromFaireK562OhureaSig.bigWig
+geoSampleAccession GSM864340
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_K562
@@ -3054,6 +3190,7 @@ dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeOpenChromFaireK562Pk.narrowPeak.gz
+geoSampleAccession GSM864361
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.05
@@ -3077,6 +3214,7 @@ dateUnrestricted 2009-08-09
 dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeOpenChromFaireK562RawDataRep1.fastq.gz
+geoSampleAccession GSM864361
 grant Crawford
 lab UNC
 md5sum bfb7552975d93cc94a8374befd3c7fbf
@@ -3099,6 +3237,7 @@ dateUnrestricted 2009-08-09
 dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeOpenChromFaireK562RawDataRep2.fastq.gz
+geoSampleAccession GSM864361
 grant Crawford
 lab UNC
 md5sum 98a2b866132fcc071f030a952ebe39b7
@@ -3121,6 +3260,7 @@ dateUnrestricted 2009-11-26
 dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeOpenChromFaireK562Sig.bigWig
+geoSampleAccession GSM864361
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_K562
@@ -3143,6 +3283,7 @@ dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000531
 expId 531
 fileName wgEncodeOpenChromFaireK562Validation.tgz
+geoSampleAccession GSM864361
 grant Crawford
 lab UNC
 labVersion 1% ENCODE array platform validation tests
@@ -3163,6 +3304,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001125
 expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam,wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam.bai
+geoSampleAccession GSM864344
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3186,6 +3328,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001125
 expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam,wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam.bai
+geoSampleAccession GSM864344
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3209,6 +3352,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001125
 expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig
+geoSampleAccession GSM864344
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -3232,6 +3376,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001125
 expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacPk.narrowPeak.gz
+geoSampleAccession GSM864344
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -3255,6 +3400,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001125
 expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep1.fastq.gz
+geoSampleAccession GSM864344
 grant Crawford
 lab UNC
 md5sum 86ddfb2ea4b6609c982d772ec5dc3c44
@@ -3277,6 +3423,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001125
 expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep2.fastq.gz
+geoSampleAccession GSM864344
 grant Crawford
 lab UNC
 md5sum c25998c05140c22093088ad104ac5735
@@ -3299,6 +3446,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001125
 expId 1125
 fileName wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
+geoSampleAccession GSM864344
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_MCF7
@@ -3322,6 +3470,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
 fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam,wgEncodeOpenChromFaireMedulloAlnRep1.bam.bai
+geoSampleAccession GSM864351
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3344,6 +3493,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
 fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam,wgEncodeOpenChromFaireMedulloAlnRep2.bam.bai
+geoSampleAccession GSM864351
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3366,6 +3516,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
 fileName wgEncodeOpenChromFaireMedulloBaseOverlapSignal.bigWig
+geoSampleAccession GSM864351
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -3388,6 +3539,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
 fileName wgEncodeOpenChromFaireMedulloPk.narrowPeak.gz
+geoSampleAccession GSM864351
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -3410,6 +3562,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
 fileName wgEncodeOpenChromFaireMedulloRawDataRep1.fastq.gz
+geoSampleAccession GSM864351
 grant Crawford
 lab UNC
 md5sum edab30f64e7a48d2eefa1ee17f1c727e
@@ -3431,6 +3584,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
 fileName wgEncodeOpenChromFaireMedulloRawDataRep2.fastq.gz
+geoSampleAccession GSM864351
 grant Crawford
 lab UNC
 md5sum e42d3c8be1353960eac19e9c48265738
@@ -3452,6 +3606,7 @@ dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
 fileName wgEncodeOpenChromFaireMedulloSig.bigWig
+geoSampleAccession GSM864351
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
@@ -3474,6 +3629,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireNhaAlnRep1.bam,wgEncodeOpenChromFaireNhaAlnRep1.bam.bai
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3496,6 +3652,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireNhaAlnRep2.bam,wgEncodeOpenChromFaireNhaAlnRep2.bam.bai
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3518,6 +3675,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireNhaBaseOverlapSignal.bigWig
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -3540,6 +3698,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireNhaPk.narrowPeak.gz
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -3562,6 +3721,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireNhaRawDataRep1.fastq.gz
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 md5sum 1bb75a8f015446653fb3f480a2331a4a
@@ -3583,6 +3743,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireNhaRawDataRep2.fastq.gz
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 md5sum b7aba10557ac577dede15283f1b890ec
@@ -3604,6 +3765,7 @@ dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
 fileName wgEncodeOpenChromFaireNhaSig.bigWig
+geoSampleAccession GSM864347
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
@@ -3626,6 +3788,7 @@ dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam,wgEncodeOpenChromFaireNhbeAlnRep1.bam.bai
+geoSampleAccession GSM864337
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3648,6 +3811,7 @@ dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam,wgEncodeOpenChromFaireNhbeAlnRep2.bam.bai
+geoSampleAccession GSM864337
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3670,6 +3834,7 @@ dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
+geoSampleAccession GSM864337
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -3692,6 +3857,7 @@ dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeOpenChromFaireNhbePk.narrowPeak.gz
+geoSampleAccession GSM864337
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -3715,6 +3881,7 @@ dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeOpenChromFaireNhbeRawDataRep1.fastq.gz
+geoSampleAccession GSM864337
 grant Crawford
 lab UNC
 labVersion input was generic_male (should have been female)
@@ -3739,6 +3906,7 @@ dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeOpenChromFaireNhbeRawDataRep2.fastq.gz
+geoSampleAccession GSM864337
 grant Crawford
 lab UNC
 labVersion input was generic_male (should have been female)
@@ -3762,6 +3930,7 @@ dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000604
 expId 604
 fileName wgEncodeOpenChromFaireNhbeSig.bigWig
+geoSampleAccession GSM864337
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_female
@@ -3785,6 +3954,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeOpenChromFaireNhekAlnRep1.bam,wgEncodeOpenChromFaireNhekAlnRep1.bam.bai
+geoSampleAccession GSM864338
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3808,6 +3978,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeOpenChromFaireNhekAlnRep2.bam,wgEncodeOpenChromFaireNhekAlnRep2.bam.bai
+geoSampleAccession GSM864338
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3831,6 +4002,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeOpenChromFaireNhekBaseOverlapSignal.bigWig
+geoSampleAccession GSM864338
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -3854,6 +4026,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeOpenChromFaireNhekPk.narrowPeak.gz
+geoSampleAccession GSM864338
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.05
@@ -3877,6 +4050,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeOpenChromFaireNhekRawDataRep1.fastq.gz
+geoSampleAccession GSM864338
 grant Crawford
 lab UNC
 md5sum 3100f7822292165d38a8a66e386f7938
@@ -3900,6 +4074,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeOpenChromFaireNhekRawDataRep2.fastq.gz
+geoSampleAccession GSM864338
 grant Crawford
 lab UNC
 md5sum a168e13c77af7fd73f9185ff037f540a
@@ -3923,6 +4098,7 @@ dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeOpenChromFaireNhekSig.bigWig
+geoSampleAccession GSM864338
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_female
@@ -3945,6 +4121,7 @@ dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000558
 expId 558
 fileName wgEncodeOpenChromFaireNhekValidation.tgz
+geoSampleAccession GSM864338
 grant Crawford
 lab UNC
 labVersion 1% ENCODE array platform validation tests
@@ -3967,6 +4144,7 @@ dateUnrestricted 2010-07-14
 dccAccession wgEncodeEH000573
 expId 573
 fileName wgEncodeOpenChromFairePanisletsAlnRep1.bam,wgEncodeOpenChromFairePanisletsAlnRep1.bam.bai
+geoSampleAccession GSM864346
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3990,6 +4168,7 @@ dateUnrestricted 2010-07-14
 dccAccession wgEncodeEH000573
 expId 573
 fileName wgEncodeOpenChromFairePanisletsBaseOverlapSignal.bigWig
+geoSampleAccession GSM864346
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -4013,6 +4192,7 @@ dateUnrestricted 2010-07-14
 dccAccession wgEncodeEH000573
 expId 573
 fileName wgEncodeOpenChromFairePanisletsPk.narrowPeak.gz
+geoSampleAccession GSM864346
 grant Crawford
 lab UNC
 labVersion Lieb Lab peaks
@@ -4036,6 +4216,7 @@ dateUnrestricted 2010-07-14
 dccAccession wgEncodeEH000573
 expId 573
 fileName wgEncodeOpenChromFairePanisletsRawDataRep1.fastq.gz
+geoSampleAccession GSM864346
 grant Crawford
 lab UNC
 md5sum 65254bb191bb9d80315738760257d37e
@@ -4059,6 +4240,7 @@ dateUnrestricted 2010-07-14
 dccAccession wgEncodeEH000573
 expId 573
 fileName wgEncodeOpenChromFairePanisletsSig.bigWig
+geoSampleAccession GSM864346
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
@@ -4081,6 +4263,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001122
 expId 1122
 fileName wgEncodeOpenChromFaireUrotsaAlnRep1.bam,wgEncodeOpenChromFaireUrotsaAlnRep1.bam.bai
+geoSampleAccession GSM864353
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -4103,6 +4286,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001122
 expId 1122
 fileName wgEncodeOpenChromFaireUrotsaAlnRep2.bam,wgEncodeOpenChromFaireUrotsaAlnRep2.bam.bai
+geoSampleAccession GSM864353
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -4125,6 +4309,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001122
 expId 1122
 fileName wgEncodeOpenChromFaireUrotsaBaseOverlapSignal.bigWig
+geoSampleAccession GSM864353
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -4147,6 +4332,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001122
 expId 1122
 fileName wgEncodeOpenChromFaireUrotsaPk.narrowPeak.gz
+geoSampleAccession GSM864353
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -4169,6 +4355,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001122
 expId 1122
 fileName wgEncodeOpenChromFaireUrotsaRawDataRep1.fastq.gz
+geoSampleAccession GSM864353
 grant Crawford
 lab UNC
 md5sum 770e54766a32f8ee5df891d784b635cf
@@ -4190,6 +4377,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001122
 expId 1122
 fileName wgEncodeOpenChromFaireUrotsaRawDataRep2.fastq.gz
+geoSampleAccession GSM864353
 grant Crawford
 lab UNC
 md5sum 7d8f8af35681f35ad13b2b050f117471
@@ -4211,6 +4399,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001122
 expId 1122
 fileName wgEncodeOpenChromFaireUrotsaSig.bigWig
+geoSampleAccession GSM864353
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_female
@@ -4233,6 +4422,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001123
 expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep1.bam,wgEncodeOpenChromFaireUrotsaUt189AlnRep1.bam.bai
+geoSampleAccession GSM864342
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -4256,6 +4446,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001123
 expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep2.bam,wgEncodeOpenChromFaireUrotsaUt189AlnRep2.bam.bai
+geoSampleAccession GSM864342
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -4279,6 +4470,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001123
 expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal.bigWig
+geoSampleAccession GSM864342
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
@@ -4302,6 +4494,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001123
 expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189Pk.narrowPeak.gz
+geoSampleAccession GSM864342
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
@@ -4325,6 +4518,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001123
 expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189RawDataRep1.fastq.gz
+geoSampleAccession GSM864342
 grant Crawford
 lab UNC
 md5sum eec284472ce635f6f6b8f5e1f20dc580
@@ -4347,6 +4541,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001123
 expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189RawDataRep2.fastq.gz
+geoSampleAccession GSM864342
 grant Crawford
 lab UNC
 md5sum 3e1ca62306ad7eca4207a75cef1f29cd
@@ -4369,6 +4564,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001123
 expId 1123
 fileName wgEncodeOpenChromFaireUrotsaUt189Sig.bigWig
+geoSampleAccession GSM864342
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_female
@@ -4380,4 +4576,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1495780414
+# MAGIC: 1675362508

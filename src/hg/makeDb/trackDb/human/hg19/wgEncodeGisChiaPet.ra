@@ -11,7 +11,7 @@ subGroup4 rep Replicate rep1=1  rep2=2  rep3=3 rep4=4  Pooled=Pooled
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=rep
 dimensionZchecked rep1
 sortOrder cellType=+ factor=+ rep=+
-fileSortOrder cell=Cell_Line antibody=Factor replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
+fileSortOrder cell=Cell_Line antibody=Factor replicate=Replicate view=View labExpId=Lab_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
@@ -80,7 +80,7 @@ noInherit on
         # subId=4305 dateSubmitted=2011-08-30
 
         track wgEncodeGisChiaPetK562Pol2SigRep1
-        parent wgEncodeGisChiaPetSignal off
+        parent wgEncodeGisChiaPetSignal on
         shortLabel K562 Pol2 Sig 1
         longLabel K562 Pol2 ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=POL2 cellType=1K562 rep=rep1
@@ -89,7 +89,7 @@ noInherit on
         # subId=4299 dateSubmitted=2011-08-23
 
         track wgEncodeGisChiaPetK562Pol2SigRep2
-        parent wgEncodeGisChiaPetSignal off
+        parent wgEncodeGisChiaPetSignal on
         shortLabel K562 Pol2 Sig 2
         longLabel K562 Pol2 ChIA-PET Signal Rep 2 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=POL2 cellType=1K562 rep=rep2
@@ -122,7 +122,7 @@ noInherit on
         # subId=4843 dateSubmitted=2011-09-20
 
         track wgEncodeGisChiaPetK562CtcfSigRep1
-        parent wgEncodeGisChiaPetSignal off
+        parent wgEncodeGisChiaPetSignal on
         shortLabel K562 CTCF Sig 1
         longLabel K562 CTCF ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=CTCF cellType=1K562 rep=rep1
@@ -131,7 +131,7 @@ noInherit on
         # subId=4307 dateSubmitted=2011-08-30
 
         track wgEncodeGisChiaPetHelas3Pol2SigRep1
-        parent wgEncodeGisChiaPetSignal off
+        parent wgEncodeGisChiaPetSignal on
         shortLabel HeLa-S3 Pol2 Sig 1
         longLabel HeLa-S3 Pol2 ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=POL2 cellType=2HELAS3 rep=rep1

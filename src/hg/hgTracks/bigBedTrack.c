@@ -111,6 +111,10 @@ struct trackDb *tdb = track->tdb;
 struct bigBedInterval *bb, *bbList = bigBedSelectRange(track, chrom, start, end, lm);
 char *bedRow[32];
 char startBuf[16], endBuf[16];
+char *scoreFilter = cartOrTdbString(cart, track->tdb, "scoreFilter", NULL);
+int minScore = 0;
+if (scoreFilter)
+    minScore = atoi(scoreFilter);
 
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
@@ -118,7 +122,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct bed *bed = bedLoadN(bedRow, fieldCount);
     struct linkedFeatures *lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
     	scoreMin, scoreMax, useItemRgb);
-    slAddHead(pLfList, lf);
+    if (scoreFilter == NULL || lf->score >= minScore)
+	slAddHead(pLfList, lf);
     }
 lmCleanup(&lm);
 }

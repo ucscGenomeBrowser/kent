@@ -1,11 +1,11 @@
-#!/bin/tcsh -ex
+#!/bin/tcsh -e
 # BUILD $db OMIM RELATED TRACKS
 
 set db=$1
 
 cat genemap|sed -e 's/|/\t/g' > genemap.tab
 
-hgLoadSqlTab -warn $db omimGeneMapNew ~/kent/src/hg/lib/omimGeneMap.sql genemap.tab
+hgLoadSqlTab -verbose=0 -warn $db omimGeneMapNew ~/kent/src/hg/lib/omimGeneMap.sql genemap.tab 
 
 # Load mim2gene table
 
@@ -35,14 +35,14 @@ cut -f 3 mim2gene.updated.txt >j3
 
 paste j1 j3 j2 >mim2gene.tab
 
-# BRIAN tail -n +2 mim2gene.tab | hgLoadSqlTab -warn $db omim2geneNew ~/kent/src/hg/lib/omim2gene.sql stdin
+# BRIAN tail -n +2 mim2gene.tab | hgLoadSqlTab -verbose=0 -warn $db omim2geneNew ~/kent/src/hg/lib/omim2gene.sql stdin
 #hgsql $db -e 'drop table mim2geneNew'
 #hgsql $db < ~/kent/src/hg/lib/mim2gene.sql
 
 #hgsql $db -e 'load data local infile "mim2gene.tab" into table mim2gene ignore 1 lines'
 
 
-tail -n +2 mim2gene.updated.txt | hgLoadSqlTab -warn $db omim2geneNew ~/kent/src/hg/lib/omim2gene.sql stdin
+tail -n +2 mim2gene.updated.txt | hgLoadSqlTab -verbose=0 -warn $db omim2geneNew ~/kent/src/hg/lib/omim2gene.sql stdin 
 # hgsql $db -e 'drop table omim2gene'
 # hgsql $db < ~/kent/src/hg/lib/omim2gene.sql
 
@@ -53,11 +53,11 @@ tail -n +2 mim2gene.updated.txt | hgLoadSqlTab -warn $db omim2geneNew ~/kent/src
 ../../doOmimGeneSymbols $db j.out
 cat j.out |sort -u >omimGeneSymbol.tab
 
-hgLoadSqlTab -warn $db omimGeneSymbolNew ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab 
+hgLoadSqlTab -verbose=0 -warn $db omimGeneSymbolNew ~/kent/src/hg/lib/omimGeneSymbol.sql omimGeneSymbol.tab  
 
 perl ./parseGeneMap.pl --gene-map-file=genemap >omimPhenotype.tab
 
-hgLoadSqlTab -warn $db omimPhenotypeNew ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab 
+hgLoadSqlTab -verbose=0 -warn $db omimPhenotypeNew ~/kent/src/hg/lib/omimPhenotype.sql omimPhenotype.tab  
 
 hgsql $db -e 'update omimPhenotypeNew set omimPhenoMapKey = -1 where omimPhenoMapKey=0'
 hgsql $db -e 'update omimPhenotypeNew set phenotypeId = -1 where phenotypeId=0'
@@ -65,7 +65,7 @@ hgsql $db -e 'update omimPhenotypeNew set phenotypeId = -1 where phenotypeId=0'
 ../../doOmimGene2 $db j.tmp
 cat j.tmp |sort -u > omimGene2.tab
 
-hgLoadBed $db omimGene2New omimGene2.tab
+hgLoadBed -verbose=0 $db omimGene2New omimGene2.tab 
 
 rm j.tmp
 ##############################################################
@@ -92,7 +92,7 @@ cut -f 2 j4-2 >j4.2
 
 paste j1 j1.2 j3 j4 j4.1 j4.2 j5 j2 >omimAv.tab
 
-tail -n +2  omimAv.tab | hgLoadSqlTab -warn $db omimAvNew ~/kent/src/hg/lib/omimAv.sql stdin
+tail -n +2  omimAv.tab | hgLoadSqlTab -verbose=0 -warn $db omimAvNew ~/kent/src/hg/lib/omimAv.sql stdin 
 #hgsql $db -e 'drop table omimAv'
 #hgsql $db < ~/src/hg/lib/omimAv.sql
 #hgsql $db -e 'load data local infile "omimAv.tab" into table omimAv ignore 1 lines'
@@ -101,7 +101,7 @@ hgsql $db -e 'update omimAvNew set repl2 = rtrim(ltrim(repl2))'
 
 ../../../doOmimAv $db omimAvRepl.tab j.err
 
-tail -n +2  omimAvRepl.tab | hgLoadSqlTab -warn $db omimAvReplNew ~/kent/src/hg/lib/omimAvRepl.sql stdin
+tail -n +2  omimAvRepl.tab | hgLoadSqlTab -verbose=0 -warn $db omimAvReplNew ~/kent/src/hg/lib/omimAvRepl.sql stdin 
 # hgsql $db -e "drop table omimAvRepl"
 # hgsql $db < ~/kent/src/hg/lib/omimAvRepl.sql
 # hgsql $db -e 'load data local infile "omimAvRepl.tab" into table omimAvRepl'
@@ -111,10 +111,10 @@ rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
 if ($db == "hg18") then
    hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp130 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
 else
-   hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp135 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
+   hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp132 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
 endif
 
-hgLoadBed -allowStartEqualEnd  $db omimAvSnpNew omimAvSnp.tab
+hgLoadBed -verbose=0 -allowStartEqualEnd  $db omimAvSnpNew omimAvSnp.tab 
 cd ..
 
 ##############################################################
@@ -126,7 +126,7 @@ cd location
 # ../../../doOmimLocation $db omimLocation.bed j.err
 ../../../doOmimLocation $db omimLocation.bed 
 
-hgLoadBed $db omimLocationNew omimLocation.bed
+hgLoadBed -verbose=0 $db omimLocationNew omimLocation.bed 
 
 # Remove all gene entries in omimGene2 from omimLocation table
 

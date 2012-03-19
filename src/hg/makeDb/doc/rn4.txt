@@ -5455,8 +5455,28 @@ hgsql rn4 -e 'drop table rgdGene2ToUniProt'
 hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToUniProt.sql
 hgsql rn4 -e "load data local infile 'rgdGene2ToUniProt.tab' into table rgdGene2ToUniProt"
 
+hgsql rn4 -N -e \
+'select name, u.val from rgdGene2ToUniProt, uniProt.protein u where acc=value' > rgdGene2Pep.tab
+
+hgsql rn4 -e 'drop table rgdGene2Pep'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGene2Pep.sql
+hgsql rn4 -e 'load data local infile "rgdGene2Pep.tab" into table rgdGene2Pep'
+
+    hgMapToGene rn4 gnfAtlas2 rgdGene2 rgdGene2ToGnfAtlas2 '-type=bed 12'
+    hgExpDistance rn4 hgFixed.gnfRatAtlas2MedianRatio \
+        hgFixed.gnfRatAtlas2MedianExps gnfAtlas2Distance \
+        -lookup=knownToGnfAtlas2
+
+    hgMapToGene rn4 affyRAE230 rgdGene2 rgdGene2ToRAE230
+
+    hgMapToGene rn4 affyU34A rgdGene2 rgdGene2ToU34A
+
+# looking for this doRgdGene2Col program and files
+# doRgdGene2Col rn4 entrez_gene rgdGene2ToLl.txt
+# hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToLocusLink -lookup=rgdGene2ToLl.txt
+
 #############################################################################
-# continue rgdGenes2 (WORKING - Hiram - 2012-01-26)
+# continue rgdGenes2 (DONE - Hiram - 2012-01-26)
 #   change genes_rat table name to be rgdGene2Raw
     # fixup source code in src/hg/lib/ from genes_rat to be rgdGene2Raw
     # and in hg/oneShot/doRgdGene2UniProt/doRgdGene2UniProt.c
@@ -5574,6 +5594,206 @@ done | sort > corrected.rgdGene2ToUniProt.tab
 
     ### XXX ### the following below was a different path to try this elimination
     ### check this file history to see that business
+
+#############################################################################
+# cleaning hgNear related tables for rgdGenes2 (DONE - Hiram - 2012-03-02)
+    mkdir /hive/data/genomes/rn4/bed/rgdGene/093010/cleaningTables
+    cd /hive/data/genomes/rn4/bed/rgdGene/093010/cleaningTables
+
+    hgsql -N -e "select name from rgdGene2;" rn4 | sort > name.rgdGene2.rn4
+    hgsql -N -e "select * from affyExonTissuesGsMedianDistRgdGene2;" rn4 \
+	| sort > affyExonTissuesGsMedianDistRgdGene2.tab
+    join name.rgdGene2.rn4 affyExonTissuesGsMedianDistRgdGene2.tab | sort -k2 \
+        > col1.clean.tab
+    join name.rgdGene2.rn4 -2 2 col1.clean.tab -o "2.1,2.2,2.3" | sort \
+        > col2.clean.tab
+    awk '{printf "%s\n%s\n", $1,$2}' col2.clean.tab | sort -u > col1.col2.list
+    wc -l col1.col2.list name.rgdGene2.rn4
+#       17406 col1.col2.list
+#       17487 name.rgdGene2.rn4
+#       34893 total
+    comm -12 col1.col2.list name.rgdGene2.rn4 | wc
+#       17406   17406  201414
+
+    hgsqldump --create-options --no-data --tab=. rn4 affyExonTissuesGsMedianDistRgdGene2
+    hgsql -e "drop table affyExonTissuesGsMedianDistRgdGene2;" rn4
+    cat col2.clean.tab | tr '[ ]' '[\t]' > toLoad.tab
+    hgsql rn4 < affyExonTissuesGsMedianDistRgdGene2.sql
+    hgsql -e 'load data local infile "toLoad.tab" into table affyExonTissuesGsMedianDistRgdGene2;' rn4
+
+    hgsql -N -e "select * from gnfAtlas2RgdGene2Distance;" rn4 | sort > gnfAtlas2RgdGene2Distance.tab
+
+    join name.rgdGene2.rn4 gnfAtlas2RgdGene2Distance.tab | sort -k2 \
+        > col1.gnfAtlas2RgdGene2Distance.tab
+
+    join name.rgdGene2.rn4 -2 2 col1.gnfAtlas2RgdGene2Distance.tab -o "2.1,2.2,2.3" | sort \
+        > col2.gnfAtlas2RgdGene2Distance.tab
+
+    awk '{printf "%s\n%s\n", $1,$2}' col2.gnfAtlas2RgdGene2Distance.tab | sort -u > col2.gnfAtlas2RgdGene2Distance.list
+    wc -l col2.gnfAtlas2RgdGene2Distance.list name.rgdGene2.rn4
+#       17406 col1.col2.list
+#       17487 name.rgdGene2.rn4
+#       34893 total
+    comm -12 col2.gnfAtlas2RgdGene2Distance.list name.rgdGene2.rn4 | wc
+#       17406   17406  201414
+
+    hgsql -e "drop table gnfAtlas2RgdGene2Distance;" rn4
+    cat col2.gnfAtlas2RgdGene2Distance.tab | tr '[ ]' '[\t]' \
+	> toLoad.gnfAtlas2RgdGene2Distance.tab
+    hgsqldump --create-options --no-data --tab=. rn4 gnfAtlas2RgdGene2Distance
+    hgsql rn4 < gnfAtlas2RgdGene2Distance.sql
+    hgsql -e 'load data local infile "toLoad.gnfAtlas2RgdGene2Distance.tab" into table gnfAtlas2RgdGene2Distance;' rn4
+
+    hgsql -N -e "select * from rgdGene2BlastTab;" rn4 \
+       | sort > rgdGene2BlastTab.tab
+    join name.rgdGene2.rn4 rgdGene2BlastTab.tab | sort -k2 \
+       > col1.rgdGene2BlastTab.tab
+    join -2 2 name.rgdGene2.rn4 col1.rgdGene2BlastTab.tab \
+	-o "2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12" \
+	| tr '[ ]' '[\t]' | sort > col2.rgdGene2BlastTab.tab
+    awk '{printf "%s\n%s\n", $1,$2}' col2.rgdGene2BlastTab.tab | sort -u \
+        > col.rgdGene2BlastTab.list
+    wc -l col.rgdGene2BlastTab.list name.rgdGene2.rn4
+    comm -12 col.rgdGene2BlastTab.list name.rgdGene2.rn4 | wc
+
+    hgsqldump --create-options --no-data --tab=. rn4 rgdGene2BlastTab
+    hgsql rn4 < rgdGene2BlastTab.sql
+
+    hgsql -e 'load data local infile "col2.rgdGene2BlastTab.tab" into table rgdGene2BlastTab;' rn4
+
+    hgsql -N -e "select * from rgdGene2ToPfam;" rn4 | sort > rgdGene2ToPfam.tab
+join name.rgdGene2.rn4 rgdGene2ToPfam.tab | sort | tr '[ ]' '[\t]' \
+        > clean.rgdGene2ToPfam.tab
+
+    hgsqldump --create-options --no-data --tab=. rn4 rgdGene2ToPfam
+    hgsql rn4 < rgdGene2ToPfam.sql
+
+    hgsql -e 'load data local infile "clean.rgdGene2ToPfam.tab" into table rgdGene2ToPfam;' rn4
+
+    hgsql -N -e "select * from rgdGene2ToSymbol;" rn4 | sort > rgdGene2ToSymbol.tab
+    join name.rgdGene2.rn4 rgdGene2ToSymbol.tab | sort | tr '[ ]' '[\t]' \
+        > clean.rgdGene2ToSymbol.tab
+
+    hgsqldump --create-options --no-data --tab=. rn4 rgdGene2ToSymbol
+    hgsql rn4 < rgdGene2ToSymbol.sql
+
+    hgsql -e 'load data local infile "clean.rgdGene2ToSymbol.tab" into table rgdGene2ToSymbol;' rn4
+
+    # verified that rgdGene2ToUniProt was already OK, then to reload
+    #	both rgdGene2Isoforms and rgdGene2Canonical:
+    hgClusterGenes rn4 rgdGene2 rgdGene2Isoforms rgdGene2Canonical \
+      -protAccQuery='select name,value from rgdGene2ToUniProt'
+
+    hgMapToGene rn4 ensGene rgdGene2 rgdGene2ToEnsembl
+
+    hgsql rn4 -N -e \
+	'select gene_rgd_id,gene_desc from rgdGene2Raw where gene_desc <>""'\
+	| sed -e 's/^/RGD:/' | sort -u > raw.rgdGene2ToDescription.tab
+    join name.rgdGene2.rn4 raw.rgdGene2ToDescription.tab | sed -e 's/ /\t/' \
+	> rgdGene2ToDescription.tab
+    hgsql -e "delete from rgdGene2ToDescription;" rn4
+    hgsql rn4 -e 'load data local infile "rgdGene2ToDescription.tab" into table rgdGene2ToDescription'
+
+    hgsql -N -e "select * from rgdGene2Xref;" rn4 | sort > rgdGene2Xref.tab.0
+    # sed the first two blanks to tabs
+    join name.rgdGene2.rn4 rgdGene2Xref.tab.0 | sed -e 's/ /\t/' \
+	| sed -e 's/ /\t/' > rgdGene2Xref.tab
+    hgsql -e "delete from rgdGene2Xref;" rn4
+    hgsql rn4 -e 'load data local infile "rgdGene2Xref.tab" into table rgdGene2Xref'
+
+    hgsql -N -e "select * from rgdGene2KeggPathway;" rn4 | sort -u \
+	> rgdGene2KeggPathway.tab.0
+    join name.rgdGene2.rn4 rgdGene2KeggPathway.tab.0 | sed -e 's/ /\t/g' \
+	> rgdGene2KeggPathway.tab
+    hgsql -e "delete from rgdGene2KeggPathway;" rn4
+    hgsql rn4 -e 'load data local infile "rgdGene2KeggPathway.tab" into table rgdGene2KeggPathway'
+
+    hgsql -N -e "select * from rgdGene2ToKeggEntrez;" rn4 | sort -u \
+	> rgdGene2ToKeggEntrez.tab.0
+
+    hgsql rn4 -N -e \
+	'select rgdId, mapID, mapID, "+", locusID from rgdGene2KeggPathway' \
+	| sort -u | sed -e 's/\t+\t/+/' > rgdGene2ToKeggEntrez.tab
+
+    hgsql rn4 -e 'delete from rgdGene2ToKeggEntrez'
+    hgsql rn4 -e 'load data local infile "rgdGene2ToKeggEntrez.tab" into table rgdGene2ToKeggEntrez'
+
+    hgsql -N -e "select * from rgdGene2ToGenbankAll;" rn4 | sort \
+	> rgdGene2ToGenbankAll.tab.0
+    join name.rgdGene2.rn4 rgdGene2ToGenbankAll.tab.0 | sed -e 's/ /\t/g' \
+	> rgdGene2ToGenbankAll.tab
+    hgsql rn4 -e 'delete from  rgdGene2ToGenbankAll'
+    hgsql rn4 -e 'load data local infile "rgdGene2ToGenbankAll.tab" into table  rgdGene2ToGenbankAll'
+
+    # this small script takes a two column input, the second column may
+    # be a comma separated list.  It will break up the second column and
+    # print out each with the first column.
+    cat << '_EOF_' > comma.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+while (my $line = <>) {
+    chomp $line;
+    my ($rgdId, $other) = split('\s+', $line);
+    if ($other =~ m/,/) {
+        my @a = split(',', $other);
+        for (my $i = 0; $i < scalar(@a); ++$i) {
+            printf "%s\t%s\n", $rgdId, $a[$i];
+        }
+    } else {
+        printf "%s\t%s\n", $rgdId, $other;
+    }
+}
+'_EOF_'
+    # << happy emacs
+
+    # this select is the equivalent of Fan's command:
+    #	doRgdGene2Col rn4 entrez_gene rgdGene2ToLl.txt
+    hgsql -N -e 'select gene_rgd_id,entrez_gene from rgdGene2Raw where entrez_gene<>"";' rn4 \
+	| sed -e "s/^/RGD:/" | ./comma.pl | sort -u > rgdGene2ToLl.txt
+    hgsql -N -e "select * from rgdGene2ToLocusLink;" rn4 \
+	| sort > rgdGene2ToLocusLink.tab.0
+    hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToLocusLink \
+	-lookup=rgdGene2ToLl.txt
+
+    # this select is the equivalent of Fan's command:
+    #	doRgdGene2Col rn4 genbank_nucleotide j
+    hgsql -N -e 'select gene_rgd_id,genbank_nucleotide from rgdGene2Raw where genbank_nucleotide<>"";' rn4 \
+	| sed -e "s/^/RGD:/" | grep "NM_" | ./comma.pl | grep "NM_" \
+	| sort -u > rgdGene2ToRefseq.txt
+    hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToRefSeq \
+	-lookup=rgdGene2ToRefseq.txt
+
+# build rgdGene2ToGenbank table
+
+    # this select is the equivalent of Fan's command:
+    #	doRgdGene2Col rn4 genbank_nucleotide j.tmp
+    hgsql -N -e 'select gene_rgd_id,genbank_nucleotide from rgdGene2Raw where genbank_nucleotide<>"";' rn4 \
+	| sed -e "s/^/RGD:/" |  ./comma.pl | grep -v "_" \
+	| sort -u > rgdGene2ToGenbank.txt
+    hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToGenbank \
+	-lookup=rgdGene2ToGenbank.txt
+
+    hgsql rn4 -N -e\
+'select name, val from rgdGene2ToUniProt, uniProt.displayId where acc=value' \
+	| sort > rgdGene2ToDisplayId.tab
+    hgsql rn4 -e 'delete from rgdGene2ToDisplayId'
+    hgsql rn4 -e 'load data local infile "rgdGene2ToDisplayId.tab" into table rgdGene2ToDisplayId'
+
+
+    hgsql rn4 -N -e\
+    'select name, extAC from rgdGene2ToUniProt, proteome.spXref2 where value=accession and extDB="PDB"' | sort > rgdGene2ToPDB.tab
+    hgsql rn4 -e 'delete from rgdGene2ToPDB'
+    hgsql rn4 -e 'load data local infile "rgdGene2ToPDB.tab" into table rgdGene2ToPDB'
+
+    hgsql -N -e "select * from rgdGene2ToSuper;" rn4 \
+	| sort > rgdGene2ToSuper.tab.0
+    join name.rgdGene2.rn4 rgdGene2ToSuper.tab.0 | tr '[ ]' '[\t]' \
+	> rgdGene2ToSuper.tab
+    hgsql rn4 -e 'delete from rgdGene2ToSuper'
+    hgsql rn4 -e 'load data local infile "rgdGene2ToSuper.tab" into table rgdGene2ToSuper'
 
 #############################################################################
 # RE-BUILD HGNEAR PROTEIN BLAST TABLES for RGD GENES -- TARGET (DONE 10/18/10, Fan)

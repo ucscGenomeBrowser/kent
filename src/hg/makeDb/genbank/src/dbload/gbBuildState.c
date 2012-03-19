@@ -205,13 +205,8 @@ status->metaRelease = gbStatusTblGetStr(statusTbl,
 status->metaUpdate = gbStatusTblGetStr(statusTbl,
                                        aligned->update->shortName);
 flagUpdate(processed, aligned, FALSE);
-#if 0
 if (gbVerbose >= 5)
     traceSelect("rebuildDerived", status);
-#else
-if (gbVerbose >= 1)
-    traceSelect("rebuildDerived", status);
-#endif
 }
 
 static void markNoChange(struct gbStatusTbl* statusTbl,

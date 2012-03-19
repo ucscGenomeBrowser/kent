@@ -146,6 +146,7 @@ noInherit on
 
 
 # ENCODE NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
+# MetaData for this track: project=wgEncode grant=Elnitski lab=NHGRI-Elnitski dataType=Bip dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.rn4.bed8.gz
 track wgEncodeNhgriBip
 shortLabel NHGRI BiP
 longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
@@ -160,7 +161,6 @@ noScoreFilter on
 #scoreFilterByRange on
 compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
 wgEncode 1
-metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=rn4 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.rn4.bed8.gz
 
 searchTable gold
 searchMethod prefix
@@ -185,6 +185,15 @@ semiShortCircuit 1
 xrefTable rgdGene2ToSymbol
 xrefQuery select rgdId,geneSymbol from %s where geneSymbol like '%%%s%%'
 termRegex [A-Za-z0-9_\.-]+
+searchPriority 0.9
+
+searchName rgdGene2ToDescription
+searchTable rgdGene2
+searchType genePred
+searchMethod fuzzy
+xrefTable rgdGene2ToDescription
+xrefQuery select name, value from %s where value like '%%%s%%'
+searchDescription Description of RGD Genes
 searchPriority 0.9
 
 searchName knownGeneAcc

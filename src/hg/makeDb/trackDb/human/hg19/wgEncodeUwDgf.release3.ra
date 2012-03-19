@@ -31,7 +31,7 @@ longLabel DNaseI Digital Genomic Footprinting from ENCODE/University of Washingt
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
-subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) AG10803=AG10803 AOAF=AoAF CD20RO01778=CD20&nbsp;(RO_01778) GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC HAH=HA-h HASP=HA-sp HCF=HCF HCM=HCM HCPE=HCPEpiC HEE=HEEpiC HFF=HFF HIPE=HIPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECd=HMVEC-dBl-Neo HMVECf=HMVEC-dLy-Neo HMVECb=HMVEC-LLy HPAF=HPAF HPDLF=HPdLF HPF=HPF HRCE=HRCEpiC HSMM=HSMM HVMF=HVMF MONOCD14=Monocytes-CD14+ NB4=NB4 NHDF-Ad=NHDF-Ad NHDFNEO=NHDF-neo NHLF=NHLF NHA=NH-A SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH&#95;RA Th1=Th1
+subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) AG10803=AG10803 AOAF=AoAF CD20RO01778=CD20&nbsp;(RO_01778) GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAAH=HA-h HAASP=HA-sp HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HEE=HEEpiC HFF=HFF HIPE=HIPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECd=HMVEC-dBl-Neo HMVECf=HMVEC-dLy-Neo HMVECb=HMVEC-LLy HPAF=HPAF HPDLF=HPdLF HPF=HPF HRCE=HRCEpiC HSMM=HSMM HVMF=HVMF MONOCD14=Monocytes-CD14+ NB4=NB4 NHA=NH-A NHDF-Ad=NHDF-Ad NHDFNEO=NHDF-neo NHLF=NHLF SAEC=SAEC SKANSHRA=SK-N-SH&#95;RA SKMC=SKMC Th1=Th1
 dimensions dimensionY=cellType
 sortOrder cellType=+ view=+
 fileSortOrder cell=Cell_Line view=View origAssembly=Original_Assembly dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -67,7 +67,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel SK-N-SH_RA Hot
         longLabel SK-N-SH_RA DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=SKNSHRA
+        subGroups view=Hotspots cellType=SKANSHRA
         type broadPeak
         # subId=1795 dateSubmitted=2010-06-21
 
@@ -332,7 +332,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HA-h Hot
         longLabel HA-h DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=HAH
+        subGroups view=Hotspots cellType=HAAH
         type broadPeak
         origAssembly Illumina_HiSeq_2000
         # subId=4895 dateSubmitted=2011-09-29
@@ -386,7 +386,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HA-sp Hot
         longLabel HA-sp DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=HASP
+        subGroups view=Hotspots cellType=HAASP
         type broadPeak
         origAssembly Illumina_HiSeq_2000
         # subId=5232 dateSubmitted=2011-12-16
@@ -426,7 +426,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel SK-N-SH_RA Pk
         longLabel SK-N-SH_RA DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=SKNSHRA
+        subGroups view=Peaks cellType=SKANSHRA
         type narrowPeak
         # subId=1795 dateSubmitted=2010-06-21
 
@@ -698,7 +698,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HA-h Pk
         longLabel HA-h DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=HAH
+        subGroups view=Peaks cellType=HAAH
         type narrowPeak
         origAssembly Illumina_HiSeq_2000
         # subId=4895 dateSubmitted=2011-09-29
@@ -752,7 +752,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HA-sp Pk
         longLabel HA-sp DNaseI DGF Peaks from ENCODE/UW
-        subGroups view=Peaks cellType=HASP
+        subGroups view=Peaks cellType=HAASP
         type narrowPeak
         origAssembly Illumina_HiSeq_2000
         # subId=5232 dateSubmitted=2011-12-16
@@ -792,7 +792,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel SK-N-SH_RA Sig
         longLabel SK-N-SH_RA DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=SKNSHRA
+        subGroups view=Signal cellType=SKANSHRA
         type bigWig 1.000000 6713.000000
         # subId=1795 dateSubmitted=2010-06-21
 
@@ -1057,7 +1057,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel HA-h Sig
         longLabel HA-h DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=HAH
+        subGroups view=Signal cellType=HAAH
         type bigWig 1.000000 63740.000000
         origAssembly Illumina_HiSeq_2000
         # subId=4895 dateSubmitted=2011-09-29
@@ -1111,7 +1111,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal off
         shortLabel HA-sp Sig
         longLabel HA-sp DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=HASP
+        subGroups view=Signal cellType=HAASP
         type bigWig 1.000000 92887.000000
         origAssembly Illumina_HiSeq_2000
         # subId=5232 dateSubmitted=2011-12-16
@@ -1151,7 +1151,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewzRaw off
         shortLabel SK-N-SH_RA Raw
         longLabel SK-N-SH_RA DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=SKNSHRA
+        subGroups view=zRaw cellType=SKANSHRA
         type bigWig 1.000000 36298.000000
         # subId=1795 dateSubmitted=2010-06-21
 
@@ -1416,7 +1416,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewzRaw off
         shortLabel HA-h Raw
         longLabel HA-h DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=HAH
+        subGroups view=zRaw cellType=HAAH
         type bigWig 1.000000 318524.000000
         origAssembly Illumina_HiSeq_2000
         # subId=4895 dateSubmitted=2011-09-29
@@ -1470,7 +1470,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewzRaw off
         shortLabel HA-sp Raw
         longLabel HA-sp DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=HASP
+        subGroups view=zRaw cellType=HAASP
         type bigWig 1.000000 218346.000000
         origAssembly Illumina_HiSeq_2000
         # subId=5232 dateSubmitted=2011-12-16
