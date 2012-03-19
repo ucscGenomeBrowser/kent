@@ -1892,11 +1892,11 @@ puts("&nbsp;<B>position</B>");
 
 #define NUM_YEARS 30  // similar to google scholar, which goes back to 20 years
 
-void t2gUi(struct trackDb *tdb)
-/* UI for t2g match track */
+void pubsUi(struct trackDb *tdb)
+/* UI for pubs match track */
 {
-char* keywordTag = "t2gKeywords";
-char* yearTag = "t2gYear";
+char* keywordTag = "pubsKeywords";
+char* yearTag = "pubsYear";
 char *keywords = cartUsualString(cart, keywordTag, "");
 char *text[NUM_YEARS + 1];
 char *values[NUM_YEARS + 1];
@@ -2546,8 +2546,8 @@ else if (sameString(track, "vegaGeneComposite"))
     vegaGeneUI(tdb);
 else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
-else if (startsWith("t2g", track))
-        t2gUi(tdb);
+else if (startsWith("pubs", track))
+        pubsUi(tdb);
 else if (startsWith("blastDm", track))
     blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))

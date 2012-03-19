@@ -3441,6 +3441,24 @@ sex U
 tier 3
 protocol Stam:HPAF_Stam_protocol.pdf
 
+term HPC-PL
+tag HPCPL
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Pericytes from HPC-PL_0032601.13 and HPC-PL_0101504.13
+lineage missing
+karyotype normal
+sex B
+tissue placenta
+vendorName PromoCell
+vendorId pericytes
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
+termId BTO:0001975
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+lab Gingeras
+protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf,Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
+
 term HPC-PL_0032601.13
 tag HPCPL003260113
 type Cell Line
