@@ -12767,7 +12767,7 @@ dataGroup Open Chromatin
 term Genotype
 tag GENOTYPE
 type dataType
-label GENCODE Genes
+label Genotype
 description Genotype CNV and SNP
 dataGroup Other
 
