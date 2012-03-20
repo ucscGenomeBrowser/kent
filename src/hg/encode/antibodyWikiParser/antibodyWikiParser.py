@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/cluster/software/bin/python2.7
 
 #
 # antibodyWikiParser.py: parse any to-be-registered antibodies from the wiki,

@@ -12146,7 +12146,7 @@ char* pubsArticleTable(struct track *tg)
  * or the default value: <trackName>Article */
 {
 char *articleTable = trackDbSetting(tg->tdb, "pubsArticleTable");
-if (articleTable == NULL)
+if (isEmpty(articleTable))
     {
     char buf[256];
     safef(buf, sizeof(buf), "%sArticle", tg->track);
@@ -12162,8 +12162,7 @@ static char *makeMysqlMatchStr(char *str)
 char *matchStr = needMem(strlen(str) * 2 + 1);
 int i = 0;
 for(;*str && isspace(*str);str++)
-    ;
-while(*str)
+    ; while(*str)
     {
     matchStr[i++] = '+';
     for(; *str && !isspace(*str);str++)
@@ -12175,17 +12174,90 @@ matchStr[i++] = 0;
 return matchStr;
 }
 
-static void pubsLoadItems(struct track *tg)
-/* apply filter to pubs items */
+struct pubsExtra 
+/* additional info needed for publication blat linked features: author+year and title */
+{
+    char* authorYear;
+    char* title;
+};
+
+static char* pubsGetFirstAuthor(char* authors) 
+/* return first author from author field */
+{
+char* author = firstWordInLine(authors);
+stripChar(author, ',');
+stripChar(author, ';');
+
+if (isEmpty(author))
+    author = "NoAuthor";
+return author;
+}
+
+static struct pubsExtra *pubsMakeExtra(char* articleTable, struct sqlConnection* conn, 
+    struct linkedFeatures* lf)
+{
+char query[LARGEBUF];
+safef(query, sizeof(query), "SELECT authors, year, title FROM %s WHERE articleId = '%s'", 
+    articleTable, lf->name);
+struct sqlResult *sr = NULL;
+char **row = NULL;
+sr = sqlGetResult(conn, query);
+struct pubsExtra *extra = NULL;
+if ((row = sqlNextRow(sr)) != NULL)
+{
+    char* author =  pubsGetFirstAuthor(row[0]);
+    char* year    = row[1];
+    char* title   = row[2];
+    if (isEmpty(year))
+        year = "NoYear";
+
+    extra = needMem(sizeof(struct pubsExtra));
+    extra->authorYear  = catTwoStrings(author, year);
+    if (isEmpty(title))
+        extra->title = extra->authorYear;
+    else
+        extra->title = cloneString(title);
+}
+
+sqlFreeResult(&sr);
+return extra;
+}
+
+static void pubsLookupAuthors(struct track *tg)
+/* add authorYear and title to all linkedFeatures->extra */
+{
+enum trackVisibility vis = tg->visibility;
+if (vis == tvDense || vis == tvSquish) 
+    return;
+
+char *articleTable = pubsArticleTable(tg);
+if(isEmpty(articleTable))
+    return;
+
+struct linkedFeatures *lf = NULL;
+
+struct sqlConnection *conn = hAllocConn(database);
+for (lf = tg->items; lf != NULL; lf = lf->next)
+{
+    struct pubsExtra* extra = pubsMakeExtra(articleTable, conn, lf);
+    lf->extra = extra;
+}
+hFreeConn(&conn);
+}
+
+static void pubsLoadKeywordYearItems(struct track *tg)
+/* load items that fulfill keyword and year filter */
 {
 struct sqlConnection *conn = hAllocConn(database);
 char *keywords = cartOptionalString(cart, "pubsKeywords");
 char *yearFilter = cartOptionalString(cart, "pubsYear");
 char *articleTable = pubsArticleTable(tg);
+
 if(yearFilter != NULL && sameWord(yearFilter, "anytime"))
     yearFilter = NULL;
 if(isNotEmpty(keywords))
     keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
+
 if(isEmpty(yearFilter) && isEmpty(keywords))
     loadGappedBed(tg);
 else
@@ -12199,11 +12271,12 @@ else
     int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
     boolean useItemRgb = bedItemRgb(tdb);
 
-    safef(prefix, sizeof(prefix),  "name IN (SELECT displayId FROM %s WHERE", articleTable);
+    safef(prefix, sizeof(prefix),  "name IN (SELECT articleId FROM %s WHERE", articleTable);
     if(isNotEmpty(keywords))
         safef(keywordsWhere, sizeof(keywordsWhere), "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", keywords);
     if(isNotEmpty(yearFilter))
         safef(yearWhere, sizeof(yearWhere), "year >= '%s'", sqlEscapeString(yearFilter));
+
     if(isEmpty(keywords))
         safef(extra, sizeof(extra), "%s %s)", prefix, yearWhere);
     else if(isEmpty(yearFilter))
@@ -12225,49 +12298,52 @@ else
 hFreeConn(&conn);
 }
 
+static void pubsLoadItems(struct track *tg)
+/* filter items and stuff item data from other tables (author name, title) into extra field */
+{
+pubsLoadKeywordYearItems(tg);
+pubsLookupAuthors(tg);
+}
+
+char *pubsItemName(struct track *tg, void *item)
+/* get author/year from extra field */
+{
+struct linkedFeatures *lf = item;
+struct pubsExtra* extra = lf->extra;
+if (extra!=NULL)
+    return extra->authorYear;
+else
+    return lf->name;
+}
+
 static void pubsMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
-/* create mouse overs with titles for pubs bed features */
+/* create mouse over with title for pubs blat features. */
 {
-if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb)) 
+{
+    struct linkedFeatures *lf = item;
+    char* mouseOver = NULL;
+    if (lf->extra != NULL) 
     {
-    char query[1024], title[4096];
-    char *label = NULL;
-    char *articleTable = pubsArticleTable(tg);
-    if(!isEmpty(articleTable))
-        {
-        struct sqlConnection *conn = hAllocConn(database);
-        safef(query, sizeof(query), "select title from %s where displayId = '%s'", articleTable, mapItemName);
-        label = sqlQuickQuery(conn, query, title, sizeof(title));
-        hFreeConn(&conn);
-        }
-    if(isEmpty(label))
-        label = mapItemName;
-    mapBoxHc(hvg, start, end, x, y, width, height, tg->track, mapItemName, label);
+        struct pubsExtra *extra = lf->extra;
+        mouseOver = extra->title;
     }
+    else
+        mouseOver = itemName;
+
+    mapBoxHc(hvg, start, end, x, y, width, height, tg->track, mapItemName, mouseOver); 
+}
 }
 
-char* pubsLastMarkerName;
-
 char *pubsMarkerItemName(struct track *tg, void *item)
-/* retrieve article count from extra field, and return
- * side effect: save original name in global var for mapItem
- * Is this too hacky? No idea where I could save the original name otherwise... */
+/* retrieve article count from score field and return.*/
 {
 struct bed *bed = item;
-char query[256];
-char *escName = sqlEscapeString(bed->name);
-safef(query, sizeof(query), "select matchCount from %s where name = '%s'", tg->table, escName);
-
-char *articleCount = NULL;
-struct sqlConnection *conn = hAllocConn(database);
-articleCount = sqlQuickString(conn, query);
-char* newName = catTwoStrings(articleCount, " articles");
-freeMem(articleCount);
-hFreeConn(&conn);
-pubsLastMarkerName = bed->name;
-return newName;
+char newName[64];
+safef(newName, sizeof(newName), "%d articles", (int) bed->score);
+return cloneString(newName);
 }
 
 static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -12276,24 +12352,24 @@ static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* use previously saved itemName for the mouseOver */
 {
 genericMapItem(tg, hvg, item,
-		    pubsLastMarkerName, mapItemName, start, end,
+		    itemName, mapItemName, start, end,
 		    x, y, width, height);
 }
 
-static void pubsMethods(struct track *tg)
-{
-if (startsWith("pubsMarker", tg->table))
-{
-    tg->mapItem = pubsMarkerMapItem;
-    tg->itemName = pubsMarkerItemName;
-}
-else
+static void pubsBlatMethods(struct track *tg)
+/* publication blat tracks are bed12+2 tracks of sequences in text, mapped with BLAT */
 {
     tg->loadItems = pubsLoadItems;
-    tg->mapItem = pubsMapItem;
-}
+    tg->itemName  = pubsItemName;
+    tg->mapItem   = pubsMapItem;
 }
 
+static void pubsMarkerMethods(struct track *tg)
+/* publication marker tracks are bed5 tracks of genome marker occurences like rsXXXX found in text*/
+{
+    tg->mapItem  = pubsMarkerMapItem;
+    tg->itemName = pubsMarkerItemName;
+}
 
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
@@ -12316,8 +12392,10 @@ if (sameWord(type, "bed"))
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
 
-    if (startsWith("pubs", track->table) )
-        pubsMethods(track);
+    if (hashFindVal(tdb->settingsHash, "pubsMarkerTable"))
+        pubsMarkerMethods(track);
+    if (hashFindVal(tdb->settingsHash, "pubsSequenceTable"))
+        pubsBlatMethods(track);
     }
 /*
 else if (sameWord(type, "bedLogR"))

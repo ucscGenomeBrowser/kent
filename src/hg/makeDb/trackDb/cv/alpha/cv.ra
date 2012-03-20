@@ -5803,7 +5803,7 @@ strain Unknown
 description Genital Adipose tissue
 vendorName 1)Stam lab; 2)CSHL lab
 vendorId Genital Fat Pad; Gonadal Adipose Tissue
-orderUrl http://www.gs.washington.edu/faculty/stamj.html; http://gingeraslab.cshl.edu/
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 16230
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=16230
 color 189,0,157
@@ -12767,7 +12767,7 @@ dataGroup Open Chromatin
 term Genotype
 tag GENOTYPE
 type dataType
-label GENCODE Genes
+label Genotype
 description Genotype CNV and SNP
 dataGroup Other
 

@@ -2,6 +2,7 @@ metaObject wgEncodeLicrTfbs
 objType composite
 composite wgEncodeLicrTfbs
 expVars lab,dataType,cell,antibody,age
+geoSeriesAccession GSE36027
 
 metaObject wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep1
 objType file
@@ -10282,4 +10283,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1435502567
+# MAGIC: -1018796495

@@ -40,10 +40,10 @@ This consists of two basic steps: chromatin immunoprecipitation &#40;ChIP&#41; i
 enrich genomic DNA for the segments bound by specific proteins &#40;the antigens 
 recognized by the antibodies&#41; followed by massively parallel short read sequencing to 
 tag the enriched DNA segments. Sequencing is done on the Illumina GAIIx and HiSeq. 
-The sequence tags are mapped back to the mouse genome &#40;Langmead<EM> et al.</EM> 2009&#41;, 
+The sequence tags are mapped back to the mouse genome &#40;Langmead<EM> et al.</EM>, 2009&#41;, 
 and a graph of the enrichment for histone modifications are displayed as the &#34;Signal&#34;
 track &#40;essentially the counts of mapped reads per interval&#41; and the deduced probable 
-binding sites from the MACS program &#40;Zhang <EM> et al. </EM> 2008&#41; are shown in the &#34;Peaks&#34;
+binding sites from the MACS program &#40;Zhang <EM> et al. </EM>, 2008&#41; are shown in the &#34;Peaks&#34;
 track. Each experiment is associated with an input signal, which represents the control 
 condition where immunoprecipitation with non-specific immunoglobulin was performed in 
 the same cell type. The sequence reads, quality scores, and alignment coordinates from
@@ -77,7 +77,7 @@ Cells were grown according to the approved
 <A HREF="../../ENCODE/protocols/cell/mouse" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 </P>
 <P>
-The chromatin immunoprecipitation followed published methods &#40;Welch <EM>et al.</EM> 2004&#41;.
+The chromatin immunoprecipitation followed published methods &#40;Welch <EM>et al.</EM>, 2004&#41;.
 Information on antibodies used is available via the hyperlinks in the &#34;Select
 subtracks&#34; menu. Samples passing initial quality thresholds &#40;enrichment and depletion 
 for positive and negative controls &#45; if available &#45; by quantitative PCR of ChIP material&#41;
@@ -98,10 +98,10 @@ individual replicates are available by download.
 <P>
 The resulting 36-nucleotide sequence reads &#40;fastq files&#41; were moved to a data 
 library in Galaxy, and the tools implemented in Galaxy were used for further processing 
-via workflows &#40;Blankenberg <EM>et al.</EM> 2010&#41;. The reads were mapped to the mouse genome 
-&#40;mm9 assembly&#41; using the program bowtie &#40;Langmead <EM>et al.</EM> 2009&#41;, and the files of 
+via workflows &#40;Blankenberg <EM>et al.</EM>, 2010&#41;. The reads were mapped to the mouse genome 
+&#40;mm9 assembly&#41; using the program bowtie &#40;Langmead <EM>et al.</EM>, 2009&#41;, and the files of 
 mapped reads for the ChIP sample and from the &#34;input&#34; control &#40;no antibody&#41; were 
-processed by MACs &#40;Zhang <EM>et al.</EM> 2008&#41; to call peaks for occupancy by transcription 
+processed by MACs &#40;Zhang <EM>et al.</EM>, 2008&#41; to call peaks for occupancy by transcription 
 factors, using the parameters mfold=15, bandwidth=125. Since, the signal for some histone 
 modifications is not expected to be tightly localized &#40;compared to a transcription factor&#41;,
 peak calling programs may not be appropriate. Thus in addition, we provide wiggle 
