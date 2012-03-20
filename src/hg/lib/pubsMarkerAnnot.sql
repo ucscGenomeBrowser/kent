@@ -1,5 +1,5 @@
 #Text to Genome project, matches to markers (snp, gene, band) in text
-CREATE TABLE t2gMarker (
+CREATE TABLE pubsMarkerAnnot (
     articleId bigint not null,	# internal article ID, created during download
     fileId int not null,        # identifier of the file where the marker was found
     annotId int not null,	# unique identifier of this marker within a file
