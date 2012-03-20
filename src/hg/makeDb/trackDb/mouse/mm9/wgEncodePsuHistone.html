@@ -40,10 +40,10 @@ This consists of two basic steps: chromatin immunoprecipitation &#40;ChIP&#41; i
 enrich genomic DNA for the segments bound by specific proteins &#40;the antigens 
 recognized by the antibodies&#41; followed by massively parallel short read sequencing to 
 tag the enriched DNA segments. Sequencing is done on the Illumina GAIIx and HiSeq. 
-The sequence tags are mapped back to the mouse genome &#40;Langmead<EM> et al.</EM> 2009&#41;, 
+The sequence tags are mapped back to the mouse genome &#40;Langmead<EM> et al.</EM>, 2009&#41;, 
 and a graph of the enrichment for histone modifications are displayed as the &#34;Signal&#34;
 track &#40;essentially the counts of mapped reads per interval&#41; and the deduced probable 
-binding sites from the MACS program &#40;Zhang <EM> et al. </EM> 2008&#41; are shown in the &#34;Peaks&#34;
+binding sites from the MACS program &#40;Zhang <EM> et al. </EM>, 2008&#41; are shown in the &#34;Peaks&#34;
 track. Each experiment is associated with an input signal, which represents the control 
 condition where immunoprecipitation with non-specific immunoglobulin was performed in 
 the same cell type. The sequence reads, quality scores, and alignment coordinates from
@@ -77,7 +77,7 @@ Cells were grown according to the approved
 <A HREF="../../ENCODE/protocols/cell/mouse" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 </P>
 <P>
-The chromatin immunoprecipitation followed published methods &#40;Welch <EM>et al.</EM> 2004&#41;.
+The chromatin immunoprecipitation followed published methods &#40;Welch <EM>et al.</EM>, 2004&#41;.
 Information on antibodies used is available via the hyperlinks in the &#34;Select
 subtracks&#34; menu. Samples passing initial quality thresholds &#40;enrichment and depletion 
 for positive and negative controls &#45; if available &#45; by quantitative PCR of ChIP material&#41;
@@ -98,11 +98,11 @@ individual replicates are available by download.
 <P>
 The resulting 36-nucleotide sequence reads &#40;fastq files&#41; were moved to a data 
 library in Galaxy, and the tools implemented in Galaxy were used for further processing 
-via workflows &#40;Blankenberg <EM>et al.</EM> 2010&#41;. The reads were mapped to the mouse genome 
-&#40;mm9 assembly&#41; using the program bowtie &#40;Langmead <EM>et al.</EM> 2009&#41;, and the files of 
+via workflows &#40;Blankenberg <EM>et al.</EM>, 2010&#41;. The reads were mapped to the mouse genome 
+&#40;mm9 assembly&#41; using the program bowtie &#40;Langmead <EM>et al.</EM>, 2009&#41;, and the files of 
 mapped reads for the ChIP sample and from the &#34;input&#34; control &#40;no antibody&#41; were 
-processed by MACs &#40;Zhang <EM>et al.</EM> 2008&#41; to call peaks for occupancy by transcription 
-factors, using the parameters mfold=15, bandwidth=125.  Because the signal for some histone 
+processed by MACs &#40;Zhang <EM>et al.</EM>, 2008&#41; to call peaks for occupancy by transcription 
+factors, using the parameters mfold=15, bandwidth=125. Since, the signal for some histone 
 modifications is not expected to be tightly localized &#40;compared to a transcription factor&#41;,
 peak calling programs may not be appropriate. Thus in addition, we provide wiggle 
 tracks with tag counts for every 10 bp segment. Per-replicate
@@ -131,114 +131,92 @@ title="mailto:&#114;&#99;h&#56;&#64;&#112;&#115;&#117;.
 </p>
 
 <H2> References </H2>
-<P>
-Bernstein BE, Mikkelsen TS, Xie X, Kamal M, Huebert DJ, Cuff J, Fry B, Meissner A, Wernig M, Plath K <em>et al.</em>
- <A HREF="http://www.cell.com/abstract/S0092-8674%2806%2900380-1"
-          class="external text"
-	  title="http://www.cell.com/abstract/S0092-8674%2806%2900380-1"
-	  rel="noFollow" TARGET = _BLANK>A bivalent chromatin structure marks key 
-developmental genes in embryonic stem cells</A>.
-<EM>Cell</EM>. 2006 April;125&#40;2&#41;:315&#45;326.
-</P>
+<p>
+Bernstein BE, Mikkelsen TS, Xie X, Kamal M, Huebert DJ, Cuff J, Fry B, Meissner A, Wernig M, Plath K <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16630819"
+rel="nofollow" target="_blank">
+A bivalent chromatin structure marks key developmental genes in embryonic stem cells</a>.
+<em>Cell</em>. 2006 Apr 21;125(2):315-26.
+</p>
 
-<P>
-Birney E, Stamatoyannopoulos JA, Dutta A, Guigo R, Gingeras TR, Margulies EH,
-       Weng Z, Snyder M, Dermitzakis ET, Thurman RE <em>et al.</em>
- <A HREF="http://www.nature.com/nature/journal/v447/n7146/full/nature05874.html"
-          class="external text"
-	  title="http://www.nature.com/nature/journal/v447/n7146/full/nature05874.html"
-	  rel="noFollow" TARGET = _BLANK>Identification and analysis of functional elements 
-in 1% of the human genome by the ENCODE pilot project</A>.
-<EM>Nature</EM>. 2007 June;447&#40;7146&#41;:799&#45;816.
-</P>
+<p>
+Blankenberg D, Gordon A, Von Kuster G, Coraor N, Taylor J, Nekrutenko A, Galaxy Team.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/20562416"
+rel="nofollow" target="_blank">
+Manipulation of FASTQ data with Galaxy</a>.
+<em>Bioinformatics</em>. 2010 Jul 15;26(14):1783-5.
+</p>
 
-<P>
-Blankenberg D, Gordon A, Von Kuster G, Coraor N, Taylor J, Nekrutenko A.
- <A HREF="http://bioinformatics.oxfordjournals.org/content/26/14/1783.short"
-          class="external text"
-	  title="http://bioinformatics.oxfordjournals.org/content/26/14/1783.short"
-	  rel="noFollow" TARGET = _BLANK>Manipulation of FASTQ data with Galaxy</A>.
-<EM>Bioinformatics</EM>. 2010 June 18;26&#40;14&#41;:1783&#45;1785.
-</P>
+<p>
+ENCODE Project Consortium, Birney E, Stamatoyannopoulos JA, Dutta A, Guig&#243; R, Gingeras TR, Margulies EH, Weng Z, Snyder M, Dermitzakis ET <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17571346"
+rel="nofollow" target="_blank">
+Identification and analysis of functional elements in 1% of the human genome by the ENCODE pilot project</a>.
+<em>Nature</em>. 2007 Jun 14;447(7146):799-816.
+</p>
 
-<P>
-Heintzman ND, Stuart RK, Hon G, Fu Y, Ching CW, Hawkins RD, Barrera LO, Van Calcar S, Qu C, Ching KA <em>et al.</em>
- <A HREF="http://www.nature.com/ng/journal/v39/n3/abs/ng1966.html"
-          class="external text"
-	  title="http://www.nature.com/ng/journal/v39/n3/abs/ng1966.html"
-	  rel="noFollow" TARGET = _BLANK> Distinct and predictive chromatin signatures of 
-transcriptional promoters and enhancers in the human genome</A>.
-<EM>Nat Genet</EM>. 2007 Feb;39&#40;3&#41;:311&#45;318.
-</P>
+<p>
+Heintzman ND, Stuart RK, Hon G, Fu Y, Ching CW, Hawkins RD, Barrera LO, Van Calcar S, Qu C, Ching KA <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17277777"
+rel="nofollow" target="_blank">
+Distinct and predictive chromatin signatures of transcriptional promoters and enhancers in the human genome</a>.
+<em>Nat Genet</em>. 2007 Mar;39(3):311-8.
+</p>
 
-<P>
+<p>
 Langmead B, Trapnell C, Pop M, Salzberg SL.
- <A HREF="http://genomebiology.com/2009/10/3/R25"
-          class="external text"
-	  title="http://genomebiology.com/2009/10/3/R25"
-	  rel="noFollow" TARGET = _BLANK>Ultrafast and memory-efficient alignment of 
-short DNA sequences to the human genome</A>.
-<EM>Genome Biol</EM>. 2009 March;10&#40;3&#41;:R25.
-</P>
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19261174"
+rel="nofollow" target="_blank">
+Ultrafast and memory-efficient alignment of short DNA sequences to the human genome</a>.
+<em>Genome Biol</em>. 2009;10(3):R25.
+</p>
 
-<P>
-Muller J, Hart CM, Francis NJ, Vargas ML, Sengupta A, Wild B, Miller EL, O'Connor MB, Kingston RE, Simon JA.
- <A HREF="http://www.cell.com/abstract/S0092-8674%2802%2900976-5"
-          class="external text"
-	  title="http://www.cell.com/abstract/S0092-8674%2802%2900976-5"
-	  rel="noFollow" TARGET = _BLANK>Histone methyltransferase activity of a 
-Drosophila Polycomb group repressor complex</A>.
-<EM>Cell</EM>. 2002 Oct;111&#40;2&#41;:197&#45;208.
-</P>
+<p>
+M&#252;ller J, Hart CM, Francis NJ, Vargas ML, Sengupta A, Wild B, Miller EL, O'Connor MB, Kingston RE, Simon JA.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/12408864"
+rel="nofollow" target="_blank">
+Histone methyltransferase activity of a Drosophila Polycomb group repressor complex</a>.
+<em>Cell</em>. 2002 Oct 18;111(2):197-208.
+</p>
 
-<P>
+<p>
 Rando OJ, Chang HY.
- <A HREF="http://www.annualreviews.org/doi/abs/10.1146/annurev.biochem.78.071107.134639"
-          class="external text"
-	  title="http://www.annualreviews.org/doi/abs/10.1146/annurev.biochem.78.071107.134639"
-	  rel="noFollow" TARGET = _BLANK>Genome-wide views of chromatin structure</A>.
-<EM>Annu Rev Biochem</EM>. 2009 July;78:245&#45;271.
-</P>
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19317649"
+rel="nofollow" target="_blank">
+Genome-wide views of chromatin structure</a>.
+<em>Annu Rev Biochem</em>. 2009;78:245-71.
+</p>
 
-
-
-<P>
+<p>
 Weiss MJ, Yu C, Orkin SH.
- <A HREF="http://mcb.asm.org/content/17/3/1642.abstract"
-          class="external text"
-	  title="http://mcb.asm.org/content/17/3/1642.abstract"
-	  rel="noFollow" TARGET = _BLANK>Erythroid-cell-specific properties of transcription factor 
-GATA-1 revealed by phenotypic rescue of a gene-targeted cell line</A>.
-<EM>Mol Cell Biol</EM>. 1997 March;16:3145&#45;3157.
-</P>
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/9032291"
+rel="nofollow" target="_blank">
+Erythroid-cell-specific properties of transcription factor GATA-1 revealed by phenotypic rescue of a gene-targeted cell line</a>.
+<em>Mol Cell Biol</em>. 1997 Mar;17(3):1642-51.
+</p>
 
-<P>
+<p>
 Welch JJ, Watts JA, Vakoc CR, Yao Y, Wang H, Hardison RC, Blobel GA, Chodosh LA, Weiss MJ.
- <A HREF="http://bloodjournal.hematologylibrary.org/content/104/10/3136.short"
-          class="external text"
-	  title="http://bloodjournal.hematologylibrary.org/content/104/10/3136.short"
-	  rel="noFollow" TARGET = _BLANK>Global regulation of erythroid gene expression by
- transcription factor GATA-1</A>.
-<EM>Blood</EM>. 2004 Nov;104&#40;10&#41;:3136&#45;3147.
-</P>
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/15297311"
+rel="nofollow" target="_blank">
+Global regulation of erythroid gene expression by transcription factor GATA-1</a>.
+<em>Blood</em>. 2004 Nov 15;104(10):3136-47.
+</p>
 
-
-<P>
-Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein BE, Nussbaum C, Myers RM, Brown M, Li W <em> et al.</em>
- <A HREF="http://genomebiology.com/2008/9/9/R137"
-          class="external text"
-	  title="http://genomebiology.com/2008/9/9/R137"
-	  rel="noFollow" TARGET = _BLANK>Model-based analysis of ChIP-Seq (MACS)</A>.
-<EM>Genome Biol</EM>. 2008 September;9&#40;9&#41;:R137.
-</P>
-
+<p>
+Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein BE, Nusbaum C, Myers RM, Brown M, Li W <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18798982"
+rel="nofollow" target="_blank">
+Model-based analysis of ChIP-Seq (MACS)</a>.
+<em>Genome Biol</em>. 2008;9(9):R137.
+</p>
 
 <H2> Data Release Policy </H2>
 
-<P>Data users may freely use ENCODE data, but may not, without prior
-consent, submit publications that use an unpublished ENCODE dataset until
-nine months following the release of the dataset.  This date is listed in
-the <EM>Restricted Until</EM> column on the track configuration page and
-the download page.  The full data release policy for ENCODE is available
+<P>
+Data users may freely use ENCODE data, but may not, without prior consent, 
+submit publications that use an unpublished ENCODE dataset until nine months 
+following the release of the dataset. This date is listed in the <em>Restricted Until</em> column, 
+above. The full data release policy for ENCODE is available
 <A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
 

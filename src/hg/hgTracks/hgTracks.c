@@ -4394,18 +4394,6 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
 void printTrackInitJavascript(struct track *trackList)
 {
 hPrintf("<input type='hidden' id='%s' name='%s' value=''>\n", hgtJsCommand, hgtJsCommand);
-hPrintf("<script type='text/javascript'>\n");
-hPrintf( "function hgTracksInitTracks()\n{\n");
-
-struct track *track;
-for (track = trackList; track != NULL; track = track->next)
-    {
-    if (startsWithWord("makeItems", track->tdb->type) )
-        hPrintf("makeItemsByDrag.init(\"%s\");\n", track->track);
-    }
-
-hPrintf( "}\n");
-hPrintf("</script>\n");
 }
 
 void jsCommandDispatch(char *command, struct track *trackList)

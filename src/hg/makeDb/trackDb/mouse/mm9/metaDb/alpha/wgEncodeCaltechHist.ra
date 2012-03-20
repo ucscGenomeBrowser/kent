@@ -2,6 +2,7 @@ metaObject wgEncodeCaltechHist
 objType composite
 composite wgEncodeCaltechHist
 expVars lab,dataType,cell,antibody,control,treatment
+geoSeriesAccession GSE36023
 
 metaObject wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xAlnRep1
 objType file
@@ -1922,4 +1923,4 @@ tableName wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-# MAGIC: 377965028
+# MAGIC: 794671092

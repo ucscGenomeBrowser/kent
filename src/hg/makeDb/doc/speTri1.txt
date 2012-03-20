@@ -1,5 +1,10 @@
 # for emacs: -*- mode: sh; -*-
 
+#	http://www.ncbi.nlm.nih.gov/bioproject/13937
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAQQ01
+#	http://www.ncbi.nlm.nih.gov/nuccore/107785164
+#	http://www.ncbi.nlm.nih.gov/genome/472
+
 # squirrel ( Spermophilus tridecemlineatus)
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-07-31)

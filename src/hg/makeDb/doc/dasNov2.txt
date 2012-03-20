@@ -1,6 +1,11 @@
 # for emacs: -*- mode: sh; -*-
 
 # armadillo ( Dasypus novemcinctus )
+
+#	http://www.ncbi.nlm.nih.gov/bioproject/12594
+#	http://www.ncbi.nlm.nih.gov/genome/235
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAGV00
+
 #########################################################################
 # DOWNLOAD SEQUENCE (working braney 
     ssh kolossus

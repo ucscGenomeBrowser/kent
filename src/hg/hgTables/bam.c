@@ -21,6 +21,7 @@
 #include "hubConnect.h"
 #include "hgTables.h"
 #include "asFilter.h"
+#include "xmlEscape.h"
 #include "hgBam.h"
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
@@ -33,7 +34,7 @@ boolean isBamTable(char *table)
 {
 if (isHubTrack(table))
     {
-    struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+    struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
     return startsWithWord("bam", tdb->type);
     }
 else
@@ -386,7 +387,9 @@ for (sam=samList; sam != NULL; sam = sam->next)
     hPrintf("<TR>");
     for (colIx=0; colIx<colCount; ++colIx)
         {
-	writeHtmlCell(row[colIx]);
+        hPrintf("<TD>");
+        xmlEscapeStringToFile(row[colIx], stdout);
+        hPrintf("</TD>");
 	}
     hPrintf("</TR>\n");
     }

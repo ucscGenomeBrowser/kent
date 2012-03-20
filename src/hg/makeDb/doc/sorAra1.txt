@@ -2,6 +2,8 @@
 # Sorex unguiculatus -- Common Shrew
 # Broad sorAra1 2X release
 
+#	http://www.ncbi.nlm.nih.gov/genome/91
+
 #########################################################################
 # Download sequence (2006-03-05 kate)
 

@@ -1,6 +1,11 @@
 # Tupaia belangeri -- 2X Tree Shrew 2X assembly from the Broad
 # Assembly named:  tupBel1
 # Sequence downloaded and masked by Robert Baertsch, 12/06
+
+#	http://www.ncbi.nlm.nih.gov/bioproject/13971
+#	http://www.ncbi.nlm.nih.gov/genome/473
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAPY00
+
 ################################################
 
 # DOWNLOADS (2007-06-05 kate)
@@ -156,3 +161,24 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/tupBel1/bed/ensGene.51
 
 ############################################################################
+# SWAP lastz mm10 (DONE - 2012-03-19 - Hiram)
+    # original alignment to mm10
+    cat /hive/data/genomes/mm10/bed/lastzTupBel1.2012-03-16/fb.mm10.chainTupBel1Link.txt 
+    #	524337666 bases of 2652783500 (19.766%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/tupBel1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/tupBel1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzTupBel1.2012-03-16/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    136m7.163s
+    cat fb.tupBel1.chainMm10Link.txt 
+    #	537379661 bases of 2137225476 (25.144%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/tupBel1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################
