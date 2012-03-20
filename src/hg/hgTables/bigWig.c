@@ -56,14 +56,7 @@ char *bigWigFileName(char *table, struct sqlConnection *conn)
 /* Return file name associated with bigWig.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
 {
-struct trackDb *tdb = NULL;
-if (isCustomTrack(table))  // Why isn't custom track in fullTrackAndSubtrackHash?
-    {
-    struct customTrack *ct = ctLookupName(table);
-    tdb = ct->tdb;
-    }
-else
-    tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
 return tdbBigFileName(conn, tdb);
 }
 
