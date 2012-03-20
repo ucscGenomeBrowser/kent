@@ -2245,8 +2245,8 @@ organism human
 description amniotic epithelial cells
 tissue epithelium
 vendorName ScienCell
-vendorId 7100
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7100
+vendorId 7110
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7110
 tier 3
 sex U
 protocol Stam:HAEpiC_Stam_protocol.pdf
