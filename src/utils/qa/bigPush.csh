@@ -3,11 +3,7 @@ source `which qaConfig.csh`
 
 
 ################################
-#  04-02-04
-#  updated:
-#  04-08-04
 #
-#  Runs through set of all tables ever used in this assembly.
 #  Pushes multiple tables from dev to beta
 #  can't use "&" after output command because of "password prompt"
 #  (if you do, each command gets put into background and 
@@ -17,7 +13,6 @@ source `which qaConfig.csh`
 #  also records total size of the push
 #
 ################################
-onintr cleanup
 
 set db=""
 set tablelist=""
@@ -27,12 +22,10 @@ set warningMessage="\n usage:  `basename $0` database tableList\n\
 Pushes tables in list to mysqlbeta and records size. \n\
 Requires sudo access to mypush to run.\n\
 \n\
-Do not redirect output or run in the background,\n\
-as it will require you to type your password in.\n\
-Program will ask you for your password again after\n\
-large tables. If you take too long to re-type in\n\
-the table the script stalled on might not get\n\
-pushed. Double-check that all tables have been\n\
+Do not redirect output or run in the background, as\n\
+you may be required to re-type your password if any\n\
+single table takes more than the sudo timeout length\n\
+to push. Double-check that all tables have been\n\
 pushed!\n\
 \n\
 Will report total size of push and write two files:\n\
@@ -52,16 +45,16 @@ set trackName=`echo $2 | sed -e "s/Tables//"`
 # echo trackName = $trackName
 
 echo
-echo "Will have to re-type password after large tables"
+echo "Will have to re-type password after very large tables"
 echo "If you take too long to re-type your password, the table"
 echo "the script stalled on might not get pushed."
 echo
 rm -f $db.$trackName.push
 foreach table (`cat $tablelist`)
   echo pushing "$table"
-  sudo mypush $db "$table" hgwbeta >> $db.$trackName.push
+  sudo -v # validate sudo timestamp and extend timeout
+  sudo mypush $db "$table" $sqlbeta >> $db.$trackName.push
   echo "$table" >> $db.$trackName.push
-  # tail -f $db.$trackName.push
 end
 echo
 
@@ -92,9 +85,4 @@ echo
 echo
 
 echo end.
-
-cleanup:
-rm -f $db.$trackName.push
-rm -f $db.$trackName.pushSize
-
 exit 0
