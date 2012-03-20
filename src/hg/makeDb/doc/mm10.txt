@@ -1948,10 +1948,9 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Mon Mar 19 09:41:51 PDT 2012
-    #	real    116m54.411s
+    #	real    87m2.261s
     cat fb.equCab2.chainMm10Link.txt 
-    #	696025630 bases of 1852394361 (37.574%) in intersection
+    #	901995882 bases of 2428790173 (37.138%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/equCab2/bed
     ln -s blastz.mm10.swap lastz.mm10
@@ -2005,10 +2004,9 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Mon Mar 19 09:44:00 PDT 2012
-    #	real    116m54.411s
+    #	real    80m23.870s
     cat fb.cavPor3.chainMm10Link.txt 
-    #	696025630 bases of 1852394361 (37.574%) in intersection
+    #	775452752 bases of 2663369733 (29.115%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/cavPor3/bed
     ln -s blastz.mm10.swap lastz.mm10
@@ -2062,10 +2060,9 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Mon Mar 19 09:38:11 PDT 2012
-    #	real    116m54.411s
+    #	real    159m21.952s
     cat fb.vicPac1.chainMm10Link.txt 
-    #	696025630 bases of 1852394361 (37.574%) in intersection
+    #	610885692 bases of 1922910435 (31.769%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/vicPac1/bed
     ln -s blastz.mm10.swap lastz.mm10
@@ -2119,10 +2116,9 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Mon Mar 19 09:39:28 PDT 2012
-    #	real    116m54.411s
+    #	real    79m38.703s
     cat fb.turTru1.chainMm10Link.txt 
-    #	696025630 bases of 1852394361 (37.574%) in intersection
+    #	744359707 bases of 2298444090 (32.385%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/turTru1/bed
     ln -s blastz.mm10.swap lastz.mm10
@@ -2176,10 +2172,9 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Mon Mar 19 09:40:37 PDT 2012
-    #	real    116m54.411s
+    #	real    136m7.163s
     cat fb.tupBel1.chainMm10Link.txt 
-    #	696025630 bases of 1852394361 (37.574%) in intersection
+    #	537379661 bases of 2137225476 (25.144%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/tupBel1/bed
     ln -s blastz.mm10.swap lastz.mm10
@@ -2233,10 +2228,9 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Mon Mar 19 09:36:42 PDT 2012
-    #	real    116m54.411s
+    #	real    62m47.465s
     cat fb.susScr2.chainMm10Link.txt 
-    #	696025630 bases of 1852394361 (37.574%) in intersection
+    #	656498040 bases of 2231298548 (29.422%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/susScr2/bed
     ln -s blastz.mm10.swap lastz.mm10
@@ -2290,10 +2284,9 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Mon Mar 19 09:42:58 PDT 2012
-    #	real    116m54.411s
+    #	real    64m40.959s
     cat fb.oryCun2.chainMm10Link.txt 
-    #	696025630 bases of 1852394361 (37.574%) in intersection
+    #	668643668 bases of 2604023284 (25.677%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/oryCun2/bed
     ln -s blastz.mm10.swap lastz.mm10
