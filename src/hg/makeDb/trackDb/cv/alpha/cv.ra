@@ -5155,7 +5155,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype cancer
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036
-sex U
+sex M
 tier 3
 protocol Myers:U-87_Myers_protocol.pdf
 # There is considerable confusion about the gender of this cell line.  It was at first described by the vendor as female and that
