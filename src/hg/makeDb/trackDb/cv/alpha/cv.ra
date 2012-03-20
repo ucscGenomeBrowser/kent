@@ -2245,8 +2245,8 @@ organism human
 description amniotic epithelial cells
 tissue epithelium
 vendorName ScienCell
-vendorId 7100
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7100
+vendorId 7110
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7110
 tier 3
 sex U
 protocol Stam:HAEpiC_Stam_protocol.pdf
@@ -5155,7 +5155,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype cancer
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036
-sex U
+sex M
 tier 3
 protocol Myers:U-87_Myers_protocol.pdf
 # There is considerable confusion about the gender of this cell line.  It was at first described by the vendor as female and that
@@ -11922,6 +11922,16 @@ tag EST10NM4H
 description 4 h with 10 nM Estradiol (Myers)
 type treatment
 
+term Estradiol_100nM_1hr
+tag EST100NM1H
+description 1 h with 100 nM Estradiol, Hormone treatment (Stam) PROVIVISIONAL
+type treatment
+
+term Estradiol_ctrl_0hr
+tag ESTCTRL0H
+description No hormone control, zero timepoint, used to distinguish untreated sample in series (Stam) PROVISIONAL
+type treatment
+
 term estrogen
 tag ESTRO
 description 45 min with 100 nM Estradiol (Crawford)
@@ -12014,6 +12024,11 @@ tag MNASED
 description Fragmented using micrococcal nuclease digestion
 type treatment
 label Micrococcal nuclease
+
+term DIFF_4d
+tag DIFF4D
+description Myocytes differentiated from myoblasts for 4 days. See specific cell protocol for treatment details. (Stam) PROVISIONAL
+type treatment
 
 term DIFF_7d
 tag DIFF7D

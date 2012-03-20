@@ -342,7 +342,7 @@ itemUrl http://www.wormbase.org/db/gene/gene?name=%s
 
 name yeastOrthologs
 shortLabel Yeast
-longLabel <em>Saccharomyces cerevisiae</em> Ortholog (Best Blastp Hit to RefSeq)
+longLabel <em>Saccharomyces cerevisiae</em> Ortholog (Best Blastp Hit to SGD)
 priority 8.5
 visibility off
 type lookup scBlastTab query target

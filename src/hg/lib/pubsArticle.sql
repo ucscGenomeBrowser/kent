@@ -1,9 +1,9 @@
-#Text to Genome project article data table
-CREATE TABLE t2gArticle (
+#publication track article data table
+CREATE TABLE pubsArticle (
     articleId bigint not null,	# internal article ID, created during download
-    displayId varchar(255) not null,	# display ID shown on browser, format: <author><year><letters>
     extId varchar(255) not null,	# publisher ID e.g. PMCxxxx or doi or sciencedirect ID
     pmid bigint not null,               # PubmedID if available
+    source varchar(255) not null,       # data source, e.g. elsevier or pmcftp
     citation varchar(2000) default null,	# source journal citation
     year int not null,	# year of publication or 0 if not defined
     title varchar(6000) default null,	# article title

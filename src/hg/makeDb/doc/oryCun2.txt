@@ -776,3 +776,24 @@ liftUp /hive/data/genomes/oryCun2/jkStuff/ens.62.lft
     hgsql -Ne 'select name from nscanGene' oryCun2 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
 
 ############################################################################
+# SWAP lastz mm10 (DONE - 2012-03-19 - Hiram)
+    # original alignment to mm10
+    cat /hive/data/genomes/mm10/bed/lastzOryCun2.2012-03-16/fb.mm10.chainOryCun2Link.txt 
+    #	669778489 bases of 2652783500 (25.248%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/oryCun2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/oryCun2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzOryCun2.2012-03-16/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    64m40.959s
+    cat fb.oryCun2.chainMm10Link.txt 
+    #	668643668 bases of 2604023284 (25.677%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/oryCun2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################
