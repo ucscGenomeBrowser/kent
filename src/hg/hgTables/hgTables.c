@@ -57,7 +57,10 @@ struct grp *fullGroupList;	/* List of all groups. */
 struct grp *curGroup;	/* Currently selected group. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct hash *fullTrackHash;     /* Hash of all tracks in fullTrackList keyed by ->track field. */
-struct hash *fullTrackAndSubtrackHash;  /* All tracks and subtracks keyed by track field. */
+#ifdef UNUSED
+struct hash *fullTrackAndSubtrackHash;  /* All tracks and subtracks keyed by tdb->track field. */
+#endif /* UNUSED */
+struct hash *fullTableToTdbHash;        /* All tracks and subtracks keyed by tdb->table field. */
 struct trackDb *forbiddenTrackList; /* List of tracks with 'tableBrowser off' setting. */
 struct trackDb *curTrack;	/* Currently selected track. */
 char *curTable;		/* Currently selected table. */
@@ -303,7 +306,7 @@ for (hubStatus = hubList; hubStatus != NULL; hubStatus = hubStatus->next)
     }
 slReverse(pHubGroups);
 
-/* Create dummy group for custom tracks if any */
+/* Create dummy group for custom tracks if any. Add custom tracks to list */
 ctList = getCustomTracks();
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
@@ -624,7 +627,7 @@ struct hTableInfo *hti = NULL;
 
 if (isHubTrack(table))
     {
-    struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+    struct trackDb *tdb = hashMustFindVal(fullTableToTdbHash, table);
     hti = hubTrackTableInfo(tdb);
     }
 else if (isBigBed(database, table, curTrack, ctLookupName))
@@ -849,9 +852,6 @@ struct trackDb *track = NULL;
 
 if (name != NULL)
     {
-    /* getFullTrackList tweaks tdb->table mrna to all_mrna, so in
-     * case mrna is passed in (e.g. from hgc link to schema page)
-     * tweak it here too: */
     track = findTrackInGroup(name, trackList, group);
     }
 if (track == NULL)
@@ -1876,15 +1876,15 @@ cartRemovePrefix(cart, hgtaDo);
 
 char *excludeVars[] = {"Submit", "submit", NULL};
 
-static void rAddTracksToHash(struct trackDb *tdbList, struct hash *hash)
-/* Add tracks in list to hash */
+static void rAddTablesToHash(struct trackDb *tdbList, struct hash *hash)
+/* Add tracks in list to hash, keyed by tdb->table*/
 {
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    hashAdd(hash, tdb->track, tdb);
+    hashAdd(hash, tdb->table, tdb);
     if (tdb->subtracks)
-        rAddTracksToHash(tdb->subtracks, hash);
+        rAddTablesToHash(tdb->subtracks, hash);
     }
 }
 
@@ -1901,14 +1901,16 @@ return hash;
 }
 
 void initGroupsTracksTables()
-/* Get list of groups that actually have something in them. */
+/* Get list of groups that actually have something in them, prepare hashes
+ * containing all tracks and all tables. Set global variables that correspond
+ * to the group, track, and table specified in the cart. */
 {
 struct hubConnectStatus *hubList = hubConnectStatusListFromCart(cart);
 struct grp *hubGrpList = NULL;
 fullTrackList = getFullTrackList(hubList, &hubGrpList);
 fullTrackHash = hashTrackList(fullTrackList);
-fullTrackAndSubtrackHash = hashNew(0);
-rAddTracksToHash(fullTrackList, fullTrackAndSubtrackHash);
+fullTableToTdbHash = hashNew(0);
+rAddTablesToHash(fullTrackList, fullTableToTdbHash);
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
 fullGroupList = makeGroupList(fullTrackList, &hubGrpList, allowAllTables());
 curGroup = findSelectedGroup(fullGroupList, hgtaGroup);

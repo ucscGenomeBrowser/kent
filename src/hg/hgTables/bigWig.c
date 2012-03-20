@@ -24,7 +24,7 @@
 boolean isBigWigTable(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
 {
-struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 if (tdb)
     return tdbIsBigWig(tdb);
 else
@@ -44,7 +44,7 @@ if (isCustomTrack(table))
     }
 else if (isHubTrack(table))
     {
-    struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+    struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
     assert(tdb != NULL);
     fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
     assert(fileName != NULL);
@@ -56,7 +56,7 @@ char *bigWigFileName(char *table, struct sqlConnection *conn)
 /* Return file name associated with bigWig.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
 {
-struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
+struct trackDb *tdb = hashMustFindVal(fullTableToTdbHash, table);
 return tdbBigFileName(conn, tdb);
 }
 

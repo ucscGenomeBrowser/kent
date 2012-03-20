@@ -602,7 +602,7 @@ else
 static void showSchemaHub(char *db, char *table)
 /* Show schema on a hub track. */
 {
-struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+struct trackDb *tdb = hashMustFindVal(fullTableToTdbHash, table);
 char *type = cloneFirstWord(tdb->type);
 hPrintf("Binary file of type %s stored at %s<BR>\n",
 	type, trackDbSetting(tdb, "bigDataUrl"));
@@ -686,8 +686,8 @@ void doSchema(struct sqlConnection *conn)
 if (curTrackDescribesCurTable())
     {
     char *table = connectingTableForTrack(curTable);
-    if (!isCustomTrack(table) && !hashFindVal(fullTrackAndSubtrackHash, table))
-        hashAdd(fullTrackAndSubtrackHash, table, curTrack);
+    if (!isCustomTrack(table) && !hashFindVal(fullTableToTdbHash, table))
+        hashAdd(fullTableToTdbHash, table, curTrack);
     htmlOpen("Schema for %s - %s", curTrack->shortLabel, curTrack->longLabel);
     showSchema(database, curTrack, table);
     htmlClose();
@@ -700,14 +700,7 @@ struct asObject *asForTable(struct sqlConnection *conn, char *table)
 /* Get autoSQL description if any associated with table. */
 /* Wrap some error catching around asForTable. */
 {
-struct trackDb *tdb = NULL;
-if (isCustomTrack(table))  // Why isn't custom track in fullTrackAndSubtrackHash?
-    {
-    struct customTrack *ct = ctLookupName(table);
-    tdb = ct->tdb;
-    }
-else
-    tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 if (tdb != NULL)
     return asForTdb(conn,tdb);
 
