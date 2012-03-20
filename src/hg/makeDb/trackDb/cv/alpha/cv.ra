@@ -14117,6 +14117,7 @@ searchable no
 cvDefined no
 priority 590
 validate list: manual,automatic
+deprecated No longer neede by GENCODE
 
 term Antibody
 tag ANTIBODY
@@ -14478,6 +14479,7 @@ searchable no
 cvDefined no
 validate list: 1,2,3,1-2
 priority 590
+deprecated no longer needed by GENCODE
 
 term localization
 tag LOCALIZATION
