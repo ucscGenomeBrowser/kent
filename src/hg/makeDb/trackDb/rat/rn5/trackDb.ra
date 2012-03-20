@@ -1,24 +1,8 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
 
-track chainMm9Blastz
-shortLabel Mm9 Blastz Chain
-longLabel Mm9 Blastz ($o_date) Chained Alignments
-group compGeno
-priority 279.9
-visibility hide
-color 100,50,0
-altColor 255,240,200
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
-spectrum on
-type chain mm9
-otherDb mm9
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
 
-track netMm9Blastz
-shortLabel Mm9 Blastz Net
-longLabel Mm9 Blastz Net ($o_date) Alignment Net
-group compGeno
-priority 279.91
-visibility hide
-spectrum on
-type netAlign mm9 chainMm9Blastz
-otherDb mm9

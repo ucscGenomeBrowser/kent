@@ -1292,6 +1292,8 @@ $HgAutomate::git archive --remote=git://genome-source.cse.ucsc.edu/kent.git \\
 src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
 src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
 src/hg/makeDb/trackDb/trackDb.nt.ra \\
+src/hg/makeDb/trackDb/trackDb.genbank.ra \\
+src/hg/makeDb/trackDb/trackDb.genbank.new.ra \\
 src/hg/makeDb/trackDb/tagTypes.tab \\
 src/hg/lib/trackDb.sql \\
 src/hg/lib/hgFindSpec.sql \\
