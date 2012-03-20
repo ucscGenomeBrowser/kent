@@ -2,6 +2,7 @@ metaObject wgEncodeSydhTfbs
 objType composite
 composite wgEncodeSydhTfbs
 expVars lab,dataType,cell,antibody,treatment,control
+geoSeriesAccession GSE36030
 
 metaObject wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep1
 objType file
@@ -9045,4 +9046,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggrabSig
 treatment None
 view Signal
 
-# MAGIC: 784151912
+# MAGIC: 1200857975

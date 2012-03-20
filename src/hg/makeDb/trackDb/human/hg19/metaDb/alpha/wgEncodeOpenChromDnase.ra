@@ -9254,6 +9254,123 @@ tableName wgEncodeOpenChromDnaseMedulloSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseMedullod341AlnRep1
+objType file
+cell Medullo_D341
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseMedullod341AlnRep1.bam,wgEncodeOpenChromDnaseMedullod341AlnRep1.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 5991
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseMedullod341AlnRep2
+objType file
+cell Medullo_D341
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseMedullod341AlnRep2.bam,wgEncodeOpenChromDnaseMedullod341AlnRep2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 5991
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseMedullod341BaseOverlapSignal
+objType table
+cell Medullo_D341
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseMedullod341BaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 5991
+tableName wgEncodeOpenChromDnaseMedullod341BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseMedullod341Pk
+objType table
+cell Medullo_D341
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseMedullod341Pk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 5991
+tableName wgEncodeOpenChromDnaseMedullod341Pk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseMedullod341RawDataRep1
+objType file
+cell Medullo_D341
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseMedullod341RawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 5991
+view RawData
+
+metaObject wgEncodeOpenChromDnaseMedullod341RawDataRep2
+objType file
+cell Medullo_D341
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseMedullod341RawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 5991
+view RawData
+
+metaObject wgEncodeOpenChromDnaseMedullod341Sig
+objType table
+cell Medullo_D341
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseMedullod341Sig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 5991
+tableName wgEncodeOpenChromDnaseMedullod341Sig
+view Signal
+
 metaObject wgEncodeOpenChromDnaseMel2183AlnRep1
 objType file
 cell Mel_2183
@@ -11217,6 +11334,261 @@ subId 3078
 tableName wgEncodeOpenChromDnaseT47dSig
 view Signal
 
+metaObject wgEncodeOpenChromDnaseUrothelAlnRep1V2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelAlnRep1V2.bam,wgEncodeOpenChromDnaseUrothelAlnRep1V2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 5990
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseUrothelAlnRep2V2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelAlnRep2V2.bam,wgEncodeOpenChromDnaseUrothelAlnRep2V2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 5990
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseUrothelBaseOverlapSignalV2
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelBaseOverlapSignalV2.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 5990
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+tableName wgEncodeOpenChromDnaseUrothelBaseOverlapSignalV2
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseUrothelPkV2
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelPkV2.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 5990
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+tableName wgEncodeOpenChromDnaseUrothelPkV2
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseUrothelRawDataRep1V2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelRawDataRep1V2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 5990
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+view RawData
+
+metaObject wgEncodeOpenChromDnaseUrothelRawDataRep2V2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelRawDataRep2V2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 5990
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+view RawData
+
+metaObject wgEncodeOpenChromDnaseUrothelSigV2
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelSigV2.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 5990
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+tableName wgEncodeOpenChromDnaseUrothelSigV2
+view Signal
+
+metaObject wgEncodeOpenChromDnaseUrothelUt189AlnRep1V2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelUt189AlnRep1V2.bam,wgEncodeOpenChromDnaseUrothelUt189AlnRep1V2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 5992
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+treatment UT189
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseUrothelUt189AlnRep2V2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelUt189AlnRep2V2.bam,wgEncodeOpenChromDnaseUrothelUt189AlnRep2V2.bam.bai
+grant Crawford
+lab Duke
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 5992
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+treatment UT189
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseUrothelUt189BaseOverlapSignalV2
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelUt189BaseOverlapSignalV2.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 5992
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+tableName wgEncodeOpenChromDnaseUrothelUt189BaseOverlapSignalV2
+treatment UT189
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseUrothelUt189PkV2
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelUt189PkV2.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 5992
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+tableName wgEncodeOpenChromDnaseUrothelUt189PkV2
+treatment UT189
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseUrothelUt189RawDataRep1V2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelUt189RawDataRep1V2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 5992
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+treatment UT189
+view RawData
+
+metaObject wgEncodeOpenChromDnaseUrothelUt189RawDataRep2V2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelUt189RawDataRep2V2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 5992
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+treatment UT189
+view RawData
+
+metaObject wgEncodeOpenChromDnaseUrothelUt189SigV2
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-13
+dateUnrestricted 2012-12-13
+fileName wgEncodeOpenChromDnaseUrothelUt189SigV2.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 5992
+submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
+tableName wgEncodeOpenChromDnaseUrothelUt189SigV2
+treatment UT189
+view Signal
+
 metaObject wgEncodeOpenChromDnaseUrotsaAlnRep1
 objType file
 cell Urothelia
@@ -11234,6 +11606,7 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 md5sum b20ebbe94859e3b60f6fad5b97577859,ca9551a51b15f8e868a50d1b4e222848
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11257,6 +11630,7 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 md5sum e7e503c8f12b09581ce929a6164c313b,e2629a0c63006e7536322cdfe3319e47
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11280,6 +11654,7 @@ grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
 md5sum 9dadf551177ed36dae89bbfd84e1d1b9
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 subId 3217
@@ -11303,6 +11678,7 @@ grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
 md5sum 511717a180c94b25747c392909090681
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 subId 3217
@@ -11325,6 +11701,7 @@ geoSampleAccession GSM816640
 grant Crawford
 lab Duke
 md5sum 28fdca872f04a062066eeed4c70c8e73
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11347,6 +11724,7 @@ geoSampleAccession GSM816640
 grant Crawford
 lab Duke
 md5sum 20153637685fdffc5d2ade517cd7fe56
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11370,6 +11748,7 @@ grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
 md5sum e300cf21983630b94ef72edf68ee0bfa
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 subId 3217
@@ -11393,6 +11772,7 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 md5sum b1e719048c085dd7023617c86a2a250d,f145a3dc3bf450bedf53fcd8e52ea89d
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11417,6 +11797,7 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 md5sum 09f9ddbd363e4b93183f531f321e780e,cc62c19f4a66b66bea9298d09aebe5a1
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11441,6 +11822,7 @@ grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
 md5sum c498befb03ca507b97275bf9ec3572a3
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 subId 3218
@@ -11465,6 +11847,7 @@ grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
 md5sum cc91bbd95d224605fff399c0d262f453
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 subId 3218
@@ -11488,6 +11871,7 @@ geoSampleAccession GSM816645
 grant Crawford
 lab Duke
 md5sum 219ad2dfbd9a4738ca500ee93c15e222
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11511,6 +11895,7 @@ geoSampleAccession GSM816645
 grant Crawford
 lab Duke
 md5sum 1ca11ec108ddaa453d580383aa642765
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11535,6 +11920,7 @@ grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
 md5sum 26b4c913737b1c11997b06b0d16bc123
+objStatus revoked - Deemed to be too poor of quality by lab
 origAssembly hg19
 project wgEncode
 subId 3218
@@ -11542,4 +11928,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1583359315
+# MAGIC: 176897954

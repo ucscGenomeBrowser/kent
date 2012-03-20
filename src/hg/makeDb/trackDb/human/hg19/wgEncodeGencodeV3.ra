@@ -6,7 +6,7 @@ group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 fileSortOrder tableName=Contents dccAccession=UCSC_Accession
 dragAndDrop subTracks
-priority 34.3
+priority 34.307
 visibility hide
 color 12,12,120
 type genePred

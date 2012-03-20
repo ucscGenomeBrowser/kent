@@ -228,7 +228,7 @@ karyotype normal
 sex M
 tissue skin
 vendorName PromoCell
-vendorId NHEM
+vendorId C-14043 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
@@ -246,7 +246,7 @@ karyotype normal
 sex F
 tissue skin
 vendorName PromoCell
-vendorId NHEM
+vendorId C-14043
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
@@ -282,7 +282,7 @@ karyotype normal
 sex M
 tissue skin
 vendorName PromoCell
-vendorId NHEM
+vendorId C-14042 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
@@ -300,7 +300,7 @@ karyotype normal
 sex M
 tissue skin
 vendorName PromoCell
-vendorId NHEM
+vendorId C-14042
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
@@ -2312,7 +2312,7 @@ karyotype normal
 sex M
 tissue aorta
 vendorName PromoCell
-vendorId HAoAF
+vendorId C-14037 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
 termId BTO:0000135
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
@@ -2330,7 +2330,7 @@ karyotype normal
 sex F
 tissue aorta
 vendorName PromoCell
-vendorId HAoAF
+vendorId C-14037 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-aortic-adventitial-fibroblasts-haoaf/?sword_list%5B%5D=HAoAF
 termId BTO:0000135
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
@@ -2366,7 +2366,7 @@ karyotype normal
 sex M
 tissue aorta
 vendorName PromoCell
-vendorId HAoEC
+vendorId C-14023 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
 termId BTO:0000394
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
@@ -2384,7 +2384,7 @@ karyotype normal
 sex F
 tissue aorta
 vendorName PromoCell
-vendorId HAoEC
+vendorId C-14023
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-aortic-endothelial-cells-haoec/?sword_list%5B%5D=HAoEC
 termId BTO:0000394
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
@@ -2509,7 +2509,7 @@ karyotype normal
 sex M
 tissue cartilage
 vendorName PromoCell
-vendorId HCH
+vendorId C-14070 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
@@ -2527,7 +2527,7 @@ karyotype normal
 sex F
 tissue cartilage
 vendorName PromoCell
-vendorId HCH
+vendorId C-14070
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?sword_list%5B%5D=HCH
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
@@ -2724,7 +2724,7 @@ karyotype normal
 sex F
 tissue skin
 vendorName PromoCell
-vendorId HFDPC
+vendorId C-14005 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
 termId BTO:0001849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
@@ -2742,7 +2742,7 @@ karyotype normal
 sex F
 tissue skin
 vendorName PromoCell
-vendorId HFDPC
+vendorId C-14005
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-dermal-papilla-cells/?sword_list%5B%5D=HFDPC
 termId BTO:0001849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
@@ -2920,7 +2920,7 @@ karyotype normal
 sex F
 tissue mammary gland
 vendorName PromoCell
-vendorId HMEpC
+vendorId C-14066
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
@@ -2970,7 +2970,7 @@ karyotype normal
 sex M
 tissue blood
 vendorName PromoCell
-vendorId hMNC-PB
+vendorId C-14098
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
@@ -2988,7 +2988,7 @@ karyotype normal
 sex F
 tissue blood
 vendorName PromoCell
-vendorId hMNC-PB
+vendorId C-14098 
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-peripheral-blood-hmnc-pb/?sword_list%5B%5D=hMNC-PB
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
@@ -3024,7 +3024,7 @@ karyotype normal
 sex F
 tissue blood 
 vendorName PromoCell
-vendorId hMNC-CB
+vendorId C-14096 
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
 termId BTO:0004054
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
@@ -3042,7 +3042,7 @@ karyotype normal
 sex M
 tissue blood 
 vendorName PromoCell
-vendorId hMNC-CB
+vendorId C-14096
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuclear-cells/human-mononuclear-cells-from-cord-blood-hmnc-cb/?sword_list%5B%5D=hMNC-CB
 termId BTO:0004054
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
@@ -3078,7 +3078,7 @@ karyotype normal
 sex M
 tissue bone marrow
 vendorName PromoCell
-vendorId hMSC-BM
+vendorId C-14090 
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3096,7 +3096,7 @@ karyotype normal
 sex F
 tissue bone marrow
 vendorName PromoCell
-vendorId hMSC-BM
+vendorId C-14090
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-bone-marrow-hmsc-bm
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3132,7 +3132,7 @@ karyotype normal
 sex F
 tissue subcutaneous adipose tissue
 vendorName PromoCell
-vendorId hMSC-AT
+vendorId C-14092
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3150,7 +3150,7 @@ karyotype normal
 sex F
 tissue adipose
 vendorName PromoCell
-vendorId hMSC-AT
+vendorId C-14092
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-adipose-tissue-hmsc-at/?sword_list%5B%5D=hMSC-AT
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3187,7 +3187,7 @@ karyotype normal
 sex F
 tissue umbilical cord
 vendorName PromoCell
-vendorId hMSC-UC
+vendorId C-14091
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3205,7 +3205,7 @@ karyotype normal
 sex M
 tissue umbilical cord
 vendorName PromoCell
-vendorId hMSC-UC
+vendorId C-14091
 orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesenchymal-stem-cells/human-mesenchymal-stem-cells-from-umbilical-cord-matrix-hmsc-uc/?sword_list%5B%5D=hMSC-UC
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
@@ -3374,7 +3374,7 @@ karyotype normal
 sex M
 tissue cancellous bone
 vendorName PromoCell
-vendorId HOB
+vendorId C-14071
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
 termId BTO:0004324
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
@@ -3392,7 +3392,7 @@ karyotype normal
 sex F
 tissue cancellous bone
 vendorName PromoCell
-vendorId HOB
+vendorId C-14071 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?sword_list%5B%5D=HOB
 termId BTO:0004324
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
@@ -3441,6 +3441,24 @@ sex U
 tier 3
 protocol Stam:HPAF_Stam_protocol.pdf
 
+term HPC-PL
+tag HPCPL
+type Cell Line
+tier 3
+organism human
+description Undifferentiated Pericytes from HPC-PL_0032601.13 and HPC-PL_0101504.13
+lineage missing
+karyotype normal
+sex B
+tissue placenta
+vendorName PromoCell
+vendorId pericytes
+orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
+termId BTO:0001975
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
+lab Gingeras
+protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf,Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
+
 term HPC-PL_0032601.13
 tag HPCPL003260113
 type Cell Line
@@ -3452,7 +3470,7 @@ karyotype normal
 sex M
 tissue placenta
 vendorName PromoCell
-vendorId pericytes
+vendorId C-14095 
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3470,7 +3488,7 @@ karyotype normal
 sex F
 tissue placenta
 vendorName PromoCell
-vendorId pericytes
+vendorId C-14095
 orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3549,7 +3567,7 @@ karyotype normal
 sex F
 tissue placenta
 vendorName PromoCell
-vendorId human-placental-epithelial-cells-hplepc
+vendorId C-14069 
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3567,7 +3585,7 @@ karyotype normal
 sex M
 tissue placenta
 vendorName PromoCell
-vendorId human-placental-epithelial-cells-hplepc
+vendorId C-14069 
 orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/human-placental-epithelial-cells-hplepc/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3668,7 +3686,7 @@ karyotype normal
 sex M
 tissue saphenous vein
 vendorName PromoCell
-vendorId HSaVEC
+vendorId C-14025
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
 termId BTO:0003275
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
@@ -3686,7 +3704,7 @@ karyotype normal
 sex M
 tissue saphenous vein
 vendorName PromoCell
-vendorId HSaVEC
+vendorId C-14025
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-cells-large-vessels/human-saphenous-vein-endothelial-cells-hsavec/?sword_list%5B%5D=HSaVEC
 termId BTO:0003275
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
@@ -3914,7 +3932,7 @@ karyotype normal
 sex F
 tissue placenta
 vendorName PromoCell
-vendorId HVMF
+vendorId C-14034 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3932,7 +3950,7 @@ karyotype normal
 sex M
 tissue placenta
 vendorName PromoCell
-vendorId HVMF
+vendorId C-14034
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
@@ -3968,7 +3986,7 @@ karyotype normal
 sex M
 tissue subcutaneous adipose tissue
 vendorName PromoCell
-vendorId HWP
+vendorId C-14072 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
 termId BTO:0004042
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
@@ -3986,7 +4004,7 @@ karyotype normal
 sex F
 tissue subcutaneous adipose tissue
 vendorName PromoCell
-vendorId HWP
+vendorId C-14072 
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/?sword_list%5B%5D=HWP
 termId BTO:0004042
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
@@ -4529,7 +4547,7 @@ karyotype normal
 sex F
 tissue skin
 vendorName PromoCell
-vendorId NHDF
+vendorId C-14031
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
 termId BTO:0003185
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
@@ -4547,7 +4565,7 @@ karyotype normal
 sex F
 tissue skin
 vendorName PromoCell
-vendorId NHDF
+vendorId C-14031
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/normal-human-dermal-fibroblasts-nhdf/?sword_list%5B%5D=NHDF
 termId BTO:0003185
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
@@ -4984,7 +5002,7 @@ karyotype normal
 sex F
 tissue striated muscle
 vendorName PromoCell
-vendorId SkMC
+vendorId C-14060
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
 termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
@@ -5002,7 +5020,7 @@ karyotype normal
 sex M
 tissue striated muscle
 vendorName PromoCell
-vendorId SkMC
+vendorId C-14060
 orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
 termId BTO:0002916
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
@@ -5785,7 +5803,7 @@ strain Unknown
 description Genital Adipose tissue
 vendorName 1)Stam lab; 2)CSHL lab
 vendorId Genital Fat Pad; Gonadal Adipose Tissue
-orderUrl http://www.gs.washington.edu/faculty/stamj.html; http://gingeraslab.cshl.edu/
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm; http://gingeraslab.cshl.edu/
 termId 16230
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=16230
 color 189,0,157
@@ -12749,7 +12767,7 @@ dataGroup Open Chromatin
 term Genotype
 tag GENOTYPE
 type dataType
-label GENCODE Genes
+label Genotype
 description Genotype CNV and SNP
 dataGroup Other
 

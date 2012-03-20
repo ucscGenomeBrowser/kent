@@ -12140,12 +12140,12 @@ track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
 }
 
-char* t2gArticleTable(struct track *tg)
-/* return the name of the t2g articleTable, either
+char* pubsArticleTable(struct track *tg)
+/* return the name of the pubs articleTable, either
  * the value from the trackDb statement 'articleTable'
  * or the default value: <trackName>Article */
 {
-char *articleTable = trackDbSetting(tg->tdb, "t2gArticleTable");
+char *articleTable = trackDbSetting(tg->tdb, "pubsArticleTable");
 if (articleTable == NULL)
     {
     char buf[256];
@@ -12175,13 +12175,13 @@ matchStr[i++] = 0;
 return matchStr;
 }
 
-static void t2gLoadItems(struct track *tg)
-/* apply filter to t2g items */
+static void pubsLoadItems(struct track *tg)
+/* apply filter to pubs items */
 {
 struct sqlConnection *conn = hAllocConn(database);
-char *keywords = cartOptionalString(cart, "t2gKeywords");
-char *yearFilter = cartOptionalString(cart, "t2gYear");
-char *articleTable = t2gArticleTable(tg);
+char *keywords = cartOptionalString(cart, "pubsKeywords");
+char *yearFilter = cartOptionalString(cart, "pubsYear");
+char *articleTable = pubsArticleTable(tg);
 if(yearFilter != NULL && sameWord(yearFilter, "anytime"))
     yearFilter = NULL;
 if(isNotEmpty(keywords))
@@ -12225,16 +12225,16 @@ else
 hFreeConn(&conn);
 }
 
-static void t2gMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+static void pubsMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
-/* create mouse overs with titles for t2g bed features */
+/* create mouse overs with titles for pubs bed features */
 {
 if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     {
     char query[1024], title[4096];
     char *label = NULL;
-    char *articleTable = t2gArticleTable(tg);
+    char *articleTable = pubsArticleTable(tg);
     if(!isEmpty(articleTable))
         {
         struct sqlConnection *conn = hAllocConn(database);
@@ -12248,9 +12248,9 @@ if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     }
 }
 
-char* t2gLastMarkerName;
+char* pubsLastMarkerName;
 
-char *t2gMarkerItemName(struct track *tg, void *item)
+char *pubsMarkerItemName(struct track *tg, void *item)
 /* retrieve article count from extra field, and return
  * side effect: save original name in global var for mapItem
  * Is this too hacky? No idea where I could save the original name otherwise... */
@@ -12266,31 +12266,31 @@ articleCount = sqlQuickString(conn, query);
 char* newName = catTwoStrings(articleCount, " articles");
 freeMem(articleCount);
 hFreeConn(&conn);
-t2gLastMarkerName = bed->name;
+pubsLastMarkerName = bed->name;
 return newName;
 }
 
-static void t2gMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
 /* use previously saved itemName for the mouseOver */
 {
 genericMapItem(tg, hvg, item,
-		    t2gLastMarkerName, mapItemName, start, end,
+		    pubsLastMarkerName, mapItemName, start, end,
 		    x, y, width, height);
 }
 
-static void t2gMethods(struct track *tg)
+static void pubsMethods(struct track *tg)
 {
-if (startsWith("t2gMarker", tg->table))
+if (startsWith("pubsMarker", tg->table))
 {
-    tg->mapItem = t2gMarkerMapItem;
-    tg->itemName = t2gMarkerItemName;
+    tg->mapItem = pubsMarkerMapItem;
+    tg->itemName = pubsMarkerItemName;
 }
 else
 {
-    tg->loadItems = t2gLoadItems;
-    tg->mapItem = t2gMapItem;
+    tg->loadItems = pubsLoadItems;
+    tg->mapItem = pubsMapItem;
 }
 }
 
@@ -12316,8 +12316,8 @@ if (sameWord(type, "bed"))
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
 
-    if (startsWith("t2g", track->table) )
-        t2gMethods(track);
+    if (startsWith("pubs", track->table) )
+        pubsMethods(track);
     }
 /*
 else if (sameWord(type, "bedLogR"))
