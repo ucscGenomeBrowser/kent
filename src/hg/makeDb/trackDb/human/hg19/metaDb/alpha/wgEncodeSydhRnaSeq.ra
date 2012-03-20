@@ -2,6 +2,7 @@ metaObject wgEncodeSydhRnaSeq
 objType composite
 composite wgEncodeSydhRnaSeq
 expVars lab,dataType,cell,treatment,rnaExtract
+geoSeriesAccession GSE35587
 
 metaObject wgEncodeSydhRnaSeqK562Ifna30PolyaAln
 objType table
@@ -267,4 +268,4 @@ subId 543
 treatment IFNg6h
 view RawData
 
-# MAGIC: -1752050272
+# MAGIC: -1584328760

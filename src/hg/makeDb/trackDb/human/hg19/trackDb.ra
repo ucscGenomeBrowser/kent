@@ -135,6 +135,7 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
+html ucscRetroAli1
 
 searchName ucscRetroInfoRefSeq2
 searchTable ucscRetroAli2
@@ -168,19 +169,6 @@ dontCheckXrefQueryFormat 1
 xrefTable kgXref, ucscRetroInfo2
 xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
-
-
-track tRNAs
-release alpha
-shortLabel tRNA Genes
-longLabel Transfer RNA genes identified with tRNAscan-SE 
-group genes
-priority 53.5
-visibility hide
-color 0,20,150
-type bed 6 +
-nextItemButton on
-noScoreFilter .
 
 track illuminaProbes override
 origAssembly hg18
