@@ -5606,9 +5606,6 @@ html wgEncodeCshlLongRnaSeq.release2
     subTrack wgEncodeCshlLongRnaSeq
     scoreFilter 200
     scoreFilterLimits 0:100
-    extraFields level=[f]FPKM \
-    signif=[f]IDR \
-    score2=[f]Raw_Score 
 
         track wgEncodeCshlLongRnaSeqA549CellPamJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions on
