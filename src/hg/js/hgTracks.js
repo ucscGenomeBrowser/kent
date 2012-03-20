@@ -305,7 +305,6 @@ var makeItemsByDrag = {
     
     load: function ()
     {
-        console.log(this);
         for (var id in hgTracks.trackDb) {
             var rec = hgTracks.trackDb[id];
             if(rec.type != null && rec.type.indexOf("makeItems") == 0) {
