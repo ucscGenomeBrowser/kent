@@ -34,7 +34,7 @@ boolean isBamTable(char *table)
 {
 if (isHubTrack(table))
     {
-    struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+    struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
     return startsWithWord("bam", tdb->type);
     }
 else
