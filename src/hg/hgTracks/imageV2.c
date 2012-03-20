@@ -200,6 +200,7 @@ static void jsonTdbSettingsInit(struct jsonHashElement *settings)
 {
 struct jsonHashElement *ele = newJsonHash(newHash(8));
 jsonHashAddString(ele, "shortLabel", "ruler");
+jsonHashAddString(ele, "type", "ruler");
 jsonHashAddString(ele, "longLabel", "Base Position Controls");
 jsonHashAddNumber(ele, "canPack", 0);
 jsonHashAddNumber(ele, "visibility", rulerMode);
