@@ -536,6 +536,24 @@ liftUp /hive/data/genomes/hg19/jkStuff/ens.62.lft
     featureBits hg19 ensGene
     # 113703268 bases of 2897316137 (3.924%) in intersection
 
+    # lift chrM_rCRS data to UCSC chrM: (DONE - 2012-03-21 - Hiram)
+    cd /hive/data/genomes/hg19/bed/ensGene.65
+    # where chrM.over.chain is from hg19Patch5 processing, namely:
+    cat << '_EOF_' > chrM.over.chain
+chain 1550477 chrM_rCRS 16569 + 0 16569 chrM 16571 + 0 16571 230
+310     0       2
+2796    1       0
+13075   0       1
+387
+'_EOF_'
+    # << happy emacs
+    zcat process/hg19.allGenes.gp.gz | grep -w chrM \
+        | sed -e "s/chrM/chrM_rCRS/g" > chrM_rCRS.gp
+    liftOver -genePred chrM_rCRS.gp chrM.over.chain chrM.gp noMap.chrM
+    sed -e "s/^/585\t/" chrM.gp > chrM.tab
+    hgsql -e 'delete from ensGene where chrom="chrM";' hg19
+    hgsql -e 'LOAD DATA LOCAL INFILE "chrM.tab" INTO TABLE ensGene;' hg19
+
 ############################################################################
 #  loxAfr3 - Elephant - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
     ssh hgwdev
