@@ -4,6 +4,7 @@ import argparse
 import subprocess
 import datetime
 import time
+import pipes
 
 """
     A collection of functions useful to the ENCODE and GB QA Teams.
@@ -28,6 +29,17 @@ def sorted_nicely(l):
     alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
     return sorted(l, key = alphanum_key)
 
+def callHgsql(database, command, options="-Ne"):
+    """Run hgsql command using subprocess, return stdout data if no error."""
+    cmd = ["hgsql", database, options, command]
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmdout, cmderr = p.communicate()
+    if p.returncode != 0:
+        # keep command arguments nicely quoted
+        cmdstr = " ".join([pipes.quote(arg) for arg in cmd])
+        raise Exception("Error from: " + cmdstr + ": " + cmderr)
+    return cmdout
+
 def countPerChrom(database, tables):
     """ Count the amount of rows per chromosome."""
     notgbdbtablelist = tables - getGbdbTables(database, tables)
@@ -36,15 +48,10 @@ def countPerChrom(database, tables):
     globalseen = set()
     localseen = dict()
 
-    cmd = "hgsql %s -e \"select chrom from chromInfo\"" % database
-    p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-    cmdoutput = p.stdout.read()
+    hgsqlOut = callHgsql(database, "select chrom from chromInfo")
+    chrlist = set(hgsqlOut.split())
 
-    chrlist = set(cmdoutput.split("\n")[1:-1])
     notPositionalTable = set()
-    if not chrlist:
-        output.append("Can't get chromInfo from %s for countPerChrom" % database)
-        return (output, tablecounts)
     if not notgbdbtablelist:
         output.append("No tables to count chroms")
         output.append("")
