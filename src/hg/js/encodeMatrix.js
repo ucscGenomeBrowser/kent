@@ -12,15 +12,29 @@ var encodeMatrix = (function () {
 
     // UI panel for search: select tracks or files
 
-    function addSearchPanel($div) {
-        // Create panel of radio buttons for user to select search type
+    function addSearchPanel($div, isFileSearch) {
+        // Create panel of radio buttons for user to change search type
+        // isFileSearch determines initial setting
         // Add to passed in div ID; e.g. #searchTypePanel
-        $div.append('<span id="searchPanelInstructions">search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">tracks<input type="radio" name="searchType" id="searchFiles" value="files">files');
+        $div.append('<span id="searchPanelInstructions">search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" onclick="encodeMatrix.setFileSearch(false);" checked="checked">tracks<input type="radio" name="searchType" id="searchFiles" value="files" onclick="encodeMatrix.setFileSearch(true);" >files');
+        if (isFileSearch) {
+            $('#searchFiles').attr('checked', true);
+        }
     }
 
     return {
 
         // UI panel for search: select tracks or files
+
+        setFileSearch: function (choice) {
+            // Set search type cookie to retain user choice
+            document.cookie = "encodeMatrix.search=" + (choice ? "file" : "track");
+        },
+
+        isFileSearch: function () {
+            // Check search type cookie to retain user choice
+            return document.cookie.match(/encodeMatrix.search=file/);
+        },
 
         getSearchUrl: function (assembly) {
             // Return URL for search of type requested in search panel
@@ -31,9 +45,11 @@ var encodeMatrix = (function () {
                 cartVar = 'hgt_tSearch';
             } else {
                 prog = "hgFileSearch";
-                cartVar = "hgfs_Search";
+                cartVar = "fsFileType=Any&hgfs_Search";
             }
              url = '/cgi-bin/' + prog + '?db=' + assembly + '&' + cartVar + '=search' +
+                    // Intent to clear out search dropdowns we don't need
+                    //'&hgt_tsDelRow=true&hgt_tsDelRow=true&hgt_tsDelRow=true&hgt_tsDelRow=true' +
                     '&tsCurTab=advancedTab&hgt_tsPage=';
             return (url);
         },
@@ -72,7 +88,7 @@ var encodeMatrix = (function () {
             spinner = showLoadingImage('spinner', true);
 
             // add radio buttons for search type to specified div on page
-            addSearchPanel($('#searchTypePanel'));
+            addSearchPanel($('#searchTypePanel'), encodeMatrix.isFileSearch());
         },
 
     show: function ($el) {
@@ -189,8 +205,11 @@ var encodeMatrix = (function () {
                 // in code before the span that shows to it's left
                 $row = $('<tr>' +
                     '<th class="elementType">' +
-                    '<span style="float:right; text-align: right;" title="karyotype: ' + karyotype + '" class="karyotype ' + karyotype + '">&bull;</span>' +
-                    '<span title="' + cellType.description + '"><a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' + cellType.term + '">' + cellType.term + '</a>' +
+                    '<span style="float:right; text-align: right;" title="karyotype: ' + 
+                    karyotype + '" class="karyotype ' + karyotype + '">&bull;</span>' +
+                    '<span title="' + cellType.description + 
+                    '"><a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&term=' + 
+                    encodeURIComponent(cellType.term) + '">' + cellType.term + '</a>' +
                     '</th>'
                     );
                 maxLen = Math.max(maxLen, cellType.term.length);
