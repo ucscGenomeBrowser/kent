@@ -51,7 +51,7 @@ else #non-UCSC Gene assembly
  # each of the non-KG assemblies are treated a little differently
 
  if ( $db =~ "rn*" ) then
-  hgsql -Ne "hgsql -Ne "SELECT value, name FROM rgdGene2ToUniProt" $db > $db.rawDataForUniProt
+  hgsql -Ne "SELECT value, name FROM rgdGene2ToUniProt" $db > $db.rawDataForUniProt
  endif
 
  if ( $db =~ "dm*" ) then
