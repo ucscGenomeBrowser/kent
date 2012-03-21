@@ -22,7 +22,7 @@
 boolean isVcfTable(char *table)
 /* Return TRUE if table corresponds to a VCF file. */
 {
-struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 if (tdb)
     return tdbIsVcf(tdb);
 else

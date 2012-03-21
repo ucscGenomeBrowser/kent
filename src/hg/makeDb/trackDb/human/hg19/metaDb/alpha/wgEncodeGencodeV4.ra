@@ -1,6 +1,5 @@
 metaObject wgEncodeGencode2wayConsPseudoV4
 objType table
-annotation Automatic
 composite wgEncodeGencodeV4
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
@@ -11,7 +10,7 @@ fileName wgEncodeGencode2wayConsPseudoV4.gtf.gz
 grant Hubbard
 lab Sanger
 labExpId V4
-level 3
+labVersion Automatic annotation level 3
 md5sum d9ab71aba73feeec2fcdc3481e55b566
 objStatus replaced by V11
 project wgEncode
@@ -20,7 +19,6 @@ tableName wgEncodeGencode2wayConsPseudoV4
 
 metaObject wgEncodeGencodeAutoV4
 objType table
-annotation Automatic
 composite wgEncodeGencodeV4
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
@@ -31,7 +29,7 @@ fileName wgEncodeGencodeAutoV4.gtf.gz
 grant Hubbard
 lab Sanger
 labExpId V4
-level 3
+labVersion Automatic annotation level 3
 md5sum 73f99245e3c965ddeea833cb4cea4b46
 objStatus replaced by V11
 project wgEncode
@@ -58,7 +56,6 @@ tableName wgEncodeGencodeClassesV4
 
 metaObject wgEncodeGencodeManualV4
 objType table
-annotation Manual
 composite wgEncodeGencodeV4
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
@@ -69,7 +66,7 @@ fileName wgEncodeGencodeManualV4.gtf.gz
 grant Hubbard
 lab Sanger
 labExpId V4
-level 1-2
+labVersion Manual annotation level 1-2
 md5sum 641475f0b3e587056505ebc4ea520e70
 objStatus replaced by V11
 project wgEncode
@@ -78,7 +75,6 @@ tableName wgEncodeGencodeManualV4
 
 metaObject wgEncodeGencodePolyAV4
 objType table
-annotation Manual
 composite wgEncodeGencodeV4
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
@@ -89,7 +85,7 @@ fileName wgEncodeGencodePolyAV4.gtf.gz
 grant Hubbard
 lab Sanger
 labExpId V4
-level 2
+labVersion Manual annotation level 2
 md5sum 053e158a4c29c0dc81401a44b01749b9
 objStatus replaced by V11
 project wgEncode

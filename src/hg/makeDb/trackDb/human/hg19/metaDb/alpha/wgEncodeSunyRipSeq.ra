@@ -2,6 +2,7 @@ metaObject wgEncodeSunyRipSeq
 objType composite
 composite wgEncodeSunyRipSeq
 expVars lab,dataType,cell,antibody
+geoSeriesAccession GSE35585
 
 metaObject wgEncodeSunyRipSeqGm12878Elavl1AlnRep1
 objType table
@@ -1155,4 +1156,4 @@ subId 3407
 tableName wgEncodeSunyRipSeqK562T7tagSigRep2
 view Signal
 
-# MAGIC: -1302786561
+# MAGIC: -1563068651

@@ -68,7 +68,7 @@ char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
 sqlUpdate(conn, "SET SESSION group_concat_max_len = 100000");
 
-safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation," 
+safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, pmid, "  
     "group_concat(snippet, section SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
     "WHERE markerId='%s' AND section in (%s) "
@@ -164,13 +164,17 @@ while ((row = sqlNextRow(sr)) != NULL)
     char* title     = row[2];
     char* authors   = row[3];
     char* citation  = row[4];
-    char* snippets  = row[5];
+    char* pmid      = row[5];
+    char* snippets  = row[6];
     char* addParam  = "";
     if (strstrNoCase(url, "sciencedirect.com"))
         addParam = "?svAppaddApp=298535"; // add the "UCSC matches" sciverse application to article view
     printf("<A HREF=\"%s%s\">%s</A> ", url, addParam, title);
     printf("<SMALL>%s</SMALL>; ", authors);
-    printf("<SMALL>%s</SMALL><BR>", citation);
+    printf("<SMALL>%s ", citation);
+    if (!isEmpty(pmid) && strcmp(pmid, "0")!=0 )
+        printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
+    printf("</SMALL><BR>\n");
     if (pubsDebug)
         printf("articleId=%s", articleId);
     printf("<I>%s</I><P>", snippets);
@@ -186,30 +190,38 @@ static char* printArticleInfo(struct sqlConnection *conn, char* item)
 {
     char query[512];
 
-    safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid FROM %s WHERE displayId='%s'", pubsArticleTable, item);
+    safef(query, sizeof(query), "SELECT articleId, url, title, authors, citation, abstract, pmid FROM %s WHERE articleId='%s'", pubsArticleTable, item);
 
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     char *articleId=NULL;
-    if ((row = sqlNextRow(sr)) != NULL)
+    if ((row = sqlNextRow(sr)) == NULL)
     {
-        char* cit = row[4];
-        char* abstract = row[5];
-        char* pmid = row[6];
+        printf("Could not resolve articleId %s, this is an internal error.\n", item);
+        printf("Please send an email to max@soe.ucsc.edu\n");
+        sqlFreeResult(&sr);
+        return NULL;
+    }
 
-        if (strlen(abstract)==0) 
-            {
-                abstract = "(No abstract found for this article. Please use the link to the fulltext above.)";
-            }
-        articleId = cloneString(row[0]);
-        printf("<P>%s</P>\n", row[3]);
-        printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B></A>\n", row[1], row[2]);
-        printf("<P style=\"width:800px; font-size:80%%\">%s", cit);
-        if (nullIfAllSpace(pmid)!=NULL)
-            printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
-        printf("</P>\n");
-        printf("<P style=\"width:800px; font-size:100%%\">%s</P>\n", abstract);
-	}
+    articleId = cloneString(row[0]);
+    char* url      = row[1];
+    char* title    = row[2];
+    char* authors  = row[3];
+    char* cit      = row[4];
+    char* abstract = row[5];
+    char* pmid     = row[6];
+    if (strlen(abstract)==0) 
+            abstract = "(No abstract available for this article. "
+                "Please follow the link to the fulltext above.)";
+
+    printf("<P>%s</P>\n", authors);
+    printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B></A>\n", url, title);
+    printf("<P style=\"width:800px; font-size:80%%\">%s", cit);
+    if (strlen(pmid)!=0 && strcmp(pmid, "0"))
+        printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
+    printf("</P>\n");
+    printf("<P style=\"width:800px; font-size:100%%\">%s</P>\n", abstract);
+
     sqlFreeResult(&sr);
     return articleId;
 }
@@ -228,9 +240,9 @@ static struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, \
 
     /* get sequence-Ids for feature that was clicked (item&startPos are unique) and return as hash*/
     safef(query, sizeof(query), "SELECT seqIds,'' FROM %s WHERE name='%s' "
-        "and chrom='%s' and chromStart=%d", trackTable, item, seqName, start);
+        "and chrom='%s' and chromStart=%d;", trackTable, item, seqName, start);
     if (pubsDebug)
-        puts(query);
+        printf("%s<br>", query);
     
     // split comma-sep list into parts
     char* seqIdCoordString = sqlQuickString(conn, query);
@@ -245,12 +257,12 @@ static struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, \
     {
         char* annotIdHitCoord[1024];
         chopString(seqIdCoords[i], ":", annotIdHitCoord, ArraySize(annotIdHitCoord));
-        if (pubsDebug)
-            printf("%s, %s<br>", annotIdHitCoord[0], annotIdHitCoord[1]);
-
         // put articleId and annotId together to create annotation(=sequence) Id
         char fullAnnotId[4096];
         safef(fullAnnotId, sizeof(fullAnnotId), "%s%s", articleId, annotIdHitCoord[0]);
+        if (pubsDebug)
+            printf("%s, %s, %s<br>", annotIdHitCoord[0], annotIdHitCoord[1], fullAnnotId);
+
         hashAdd(seqIdHash, fullAnnotId, annotIdHitCoord[1]);
     }
     freeMem(seqIdCoordString);
@@ -282,16 +294,16 @@ i = 0;
 char* c;
 c = text;
 bool doNotBreak = FALSE;
-while (*c != 0){
+while (*c != 0) {
     {
-    if (*c=='&')
+    if ((*c=='&') || (*c=='<'))
        doNotBreak = TRUE;
-    if (*c==';')
+    if (*c==';' || (*c =='>'))
        doNotBreak = FALSE;
 
+    printf("%c", *c);
     if (i % distance == 0 && ! doNotBreak) 
         printf("<wbr>");
-    printf("%c", *c);
     c++;
     i++;
     }
@@ -343,6 +355,8 @@ static bool printSeqSection(char* articleId, char* title, bool showDesc, struct 
         // article, 3 digits for file, 5 for annotation
         char annotId[100];
         safef(annotId, 100, "%010d%03d%05d", atoi(artId), atoi(fileId), atoi(seqId));
+        if (pubsDebug)
+            printf("%s", annotId);
 
         // only display this sequence if we're in the right section
         if (clickedSeqs!=NULL && ((hashLookup(clickedSeqs, annotId)!=NULL) != isClickedSection)) {
@@ -417,7 +431,7 @@ static void printSeqInfo(struct sqlConnection* conn, char* trackTable,
     if (skippedRows)
         printSeqSection(articleId, "Other Sequences in this article", \
             fileDesc, conn, clickedSeqs, 0, fasta);
-    printf("<P><SMALL>Copyright 2011 Elsevier B.V. All rights reserved.</SMALL><P>");
+    printf("<P><SMALL>Copyright 2012 Elsevier B.V. All rights reserved.</SMALL><P>");
     freeHash(&clickedSeqs);
 
 }
@@ -493,7 +507,7 @@ pubsDebug = cgiOptionalInt("debug", 0);
 struct sqlConnection *conn = hAllocConn(database);
 printTrackVersion(tdb, conn, item);
 
-if (startsWith("pubsMarker", trackTable)) 
+if (hashFindVal(tdb->settingsHash, "pubsMarkerTable"))
 {
     char* markerTable = hashMustFindVal(tdb->settingsHash, "pubsMarkerTable");
     char* articleTable = hashMustFindVal(tdb->settingsHash, "pubsArticleTable");

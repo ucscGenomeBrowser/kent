@@ -1,6 +1,5 @@
 metaObject wgEncodeGencodeAutoV3
 objType table
-annotation Automatic
 composite wgEncodeGencodeV3
 dataType Gencode
 dataVersion ENCODE September 2009 Freeze
@@ -11,7 +10,7 @@ fileName wgEncodeGencodeAutoV3.gtf.gz
 grant Hubbard
 lab Sanger
 labExpId V3c
-level 3
+labVersion Automatic annotation  level 3
 md5sum 8a1368b54413267d061c047c04e3dd9c
 project wgEncode
 subId 453
@@ -19,7 +18,6 @@ tableName wgEncodeGencodeAutoV3
 
 metaObject wgEncodeGencodeManualV3
 objType table
-annotation Manual
 composite wgEncodeGencodeV3
 dataType Gencode
 dataVersion ENCODE September 2009 Freeze
@@ -30,7 +28,7 @@ fileName wgEncodeGencodeManualV3.gtf.gz
 grant Hubbard
 lab Sanger
 labExpId V3c
-level 1-2
+labVersion Manual annotation level 1-2
 md5sum 9fe6de65bc0212ea10190ebffb90fcb5
 project wgEncode
 subId 453
@@ -38,7 +36,6 @@ tableName wgEncodeGencodeManualV3
 
 metaObject wgEncodeGencodePolyaV3
 objType table
-annotation Automatic
 composite wgEncodeGencodeV3
 dataType Gencode
 dataVersion ENCODE September 2009 Freeze
@@ -49,7 +46,7 @@ fileName wgEncodeGencodePolyaV3.gtf.gz
 grant Hubbard
 lab Sanger
 labExpId V3c
-level 3
+labVersion Automatic annotation level 3
 md5sum b6af95d1612be3bfd41faefabfd61bf1
 project wgEncode
 subId 453

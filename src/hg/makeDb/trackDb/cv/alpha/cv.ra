@@ -258,7 +258,7 @@ tag NHEMFM2
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin
+description Epidermal Melanocytes from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin
 lineage missing
 karyotype normal
 sex M
@@ -2245,8 +2245,8 @@ organism human
 description amniotic epithelial cells
 tissue epithelium
 vendorName ScienCell
-vendorId 7100
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7100
+vendorId 7110
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7110
 tier 3
 sex U
 protocol Stam:HAEpiC_Stam_protocol.pdf
@@ -5155,7 +5155,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype cancer
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036
-sex U
+sex M
 tier 3
 protocol Myers:U-87_Myers_protocol.pdf
 # There is considerable confusion about the gender of this cell line.  It was at first described by the vendor as female and that
@@ -6601,7 +6601,7 @@ vendorName Cell Signaling
 vendorId 9221
 orderUrl http://www.cellsignal.com/products/9221.html
 lab Struhl
-targetId GeneCard:ATF2_pT71
+targetId GeneCard:ATF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
 validation Human_-_ATF2_(9221)(Western_blot,Immunoprecipitation):human_ATF2_9221_validation_Struhl.pdf
 label ATF2 (9221)
@@ -11922,6 +11922,16 @@ tag EST10NM4H
 description 4 h with 10 nM Estradiol (Myers)
 type treatment
 
+term Estradiol_100nM_1hr
+tag EST100NM1H
+description 1 h with 100 nM Estradiol, Hormone treatment (Stam) PROVIVISIONAL
+type treatment
+
+term Estradiol_ctrl_0hr
+tag ESTCTRL0H
+description No hormone control, zero timepoint, used to distinguish untreated sample in series (Stam) PROVISIONAL
+type treatment
+
 term estrogen
 tag ESTRO
 description 45 min with 100 nM Estradiol (Crawford)
@@ -12014,6 +12024,11 @@ tag MNASED
 description Fragmented using micrococcal nuclease digestion
 type treatment
 label Micrococcal nuclease
+
+term DIFF_4d
+tag DIFF4D
+description Myocytes differentiated from myoblasts for 4 days. See specific cell protocol for treatment details. (Stam) PROVISIONAL
+type treatment
 
 term DIFF_7d
 tag DIFF7D
@@ -12810,21 +12825,21 @@ term MethylSeq
 tag METHYLSEQ
 type dataType
 label Methyl-seq
-description DNA Methyl Reduced Rep Bisulfite Seq
+description DNA Methyl Seq
 dataGroup DNA Methylation
 
 term MethylRrbs
 tag METHYLRRBS
 type dataType
 label Methyl RRBS
-description DNA Methyl WG Bisulfite Seq Provisional
+description DNA Methyl Reduced Rep Bisulfite Seq
 dataGroup DNA Methylation
 
 term MethylWgbs
 tag METHYLWGBS
 type dataType
 label Methyl WGBS
-description DNA Methylation Whole Genome Bisulfite Sequencing
+description DNA Methyl Whole Genome Bisulfite Seq
 dataGroup DNA Methylation
 
 term NRE
@@ -12839,7 +12854,7 @@ term Nucleosome
 tag NUCLEOSOME
 type dataType
 label Nucleosome
-description Nucleosome Positio
+description Nucleosome Position
 dataGroup Other
 
 term Proteogenomics
@@ -12868,7 +12883,7 @@ term RnaChip
 tag RNACHIP
 type dataType
 label RNA-chip
-description RNA Expression Microarray
+description RNA Protein Interactions 
 dataGroup RNA Profiling
 
 term RnaSeq
@@ -14153,6 +14168,7 @@ searchable no
 cvDefined no
 priority 590
 validate list: manual,automatic
+deprecated No longer neede by GENCODE
 
 term Antibody
 tag ANTIBODY
@@ -14514,6 +14530,7 @@ searchable no
 cvDefined no
 validate list: 1,2,3,1-2
 priority 590
+deprecated no longer needed by GENCODE
 
 term localization
 tag LOCALIZATION
@@ -14858,7 +14875,7 @@ tag TYPE
 type typeOfTerm
 label File type
 description The type of the primary file associated with the object
-searchable multiSelect
+searchable no
 cvDefined no
 validate none
 priority 985
