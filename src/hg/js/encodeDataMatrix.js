@@ -180,7 +180,10 @@ $(function () {
                     url +=
                        ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + $(this).data().dataType +
                        '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
-                       '&hgt_mdbVar3=view&hgt_mdbVal3=Any');
+                       '&hgt_mdbVar3=view&hgt_mdbVal3=Any' +
+                       // TODO: figure out how to remove mdbVar4
+                       '&hgt_mdbVar4=view&hgt_mdbVal4=Any'
+                       );
                     // specifying window name limits open window glut
                     window.open(url, "searchWindow");
                 });
