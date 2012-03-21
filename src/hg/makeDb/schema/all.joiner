@@ -3307,35 +3307,26 @@ identifier consIndelsId
     hg17,hg18,hg19.consIndelsHgMmCanFam.name
     hg17,hg18,hg19.consIndelsHgMmCanFamConf.id
 
-identifier publicationsBlat
-"genome location to article relationship as mapped by BLAT"
-    $gbd.pubsBlat.name dupeOk
-    hgFixed.pubsArticle.displayId
+# publication track info 
 
-identifier text2GenomeSequence
-"article to sequence relationship"
+identifier pubsArticleId external=pubTools
+"internal ID of article, this is different from pubmed, doi or piis, generated during download "
+    $gbd.pubsBlat.name dupeOk
     hgFixed.pubsArticle.articleId
     hgFixed.pubsSequenceAnnot.articleId
-
-identifier text2GenomeBandMatch
-"band match to article relationship"
-    $gbd.pubsMarkerBand.name dupeOk
-    hgFixed.pubsMarkerAnnot.markerId
-
-identifier text2GenomeSnpMatch
-"snp match to article relationship"
-    $gbd.pubsMarkerSnp.name dupeOk
-    hgFixed.pubsMarkerAnnot.markerId
-
-identifier text2GenomeGeneMatch
-"gene match to article relationship"
-    $gbd.pubsMarkerGene.name dupeOk
-    hgFixed.pubsMarkerAnnot.markerId
-
-identifier text2GenomeMarker
-"marker match annotation to article data"
-    hgFixed.pubsMarkerAnnot.articleId dupeOk
     hgFixed.pubsArticle.articleId
+
+identifier pubsSequenceId
+"ID of sequence found in article "
+    hgFixed.pubsTestSequence.sequenceId
+    hg19.pubsTestBlat.seqIds comma
+
+identifier pubsMarkerId
+"keyword ('marker') found in an article, like a SNP/band/gene/etc"
+    hgFixed.pubsMarkerAnnot.markerId dupeOk
+    $gbd.pubsMarkerBand.name 
+    $gbd.pubsMarkerSnp.name 
+    $gbd.pubsMarkerGene.name 
 
 identifier ceuBcellRNASeqId
 "ID of ceuBcellRNASeq"
