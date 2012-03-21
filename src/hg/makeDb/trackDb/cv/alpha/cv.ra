@@ -258,7 +258,7 @@ tag NHEMFM2
 type Cell Line
 tier 3
 organism human
-description Epidermal Melanocytes (foreskin) from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin
+description Epidermal Melanocytes from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin
 lineage missing
 karyotype normal
 sex M
@@ -6601,7 +6601,7 @@ vendorName Cell Signaling
 vendorId 9221
 orderUrl http://www.cellsignal.com/products/9221.html
 lab Struhl
-targetId GeneCard:ATF2_pT71
+targetId GeneCard:ATF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
 validation Human_-_ATF2_(9221)(Western_blot,Immunoprecipitation):human_ATF2_9221_validation_Struhl.pdf
 label ATF2 (9221)
@@ -12825,21 +12825,21 @@ term MethylSeq
 tag METHYLSEQ
 type dataType
 label Methyl-seq
-description DNA Methyl Reduced Rep Bisulfite Seq
+description DNA Methyl Seq
 dataGroup DNA Methylation
 
 term MethylRrbs
 tag METHYLRRBS
 type dataType
 label Methyl RRBS
-description DNA Methyl WG Bisulfite Seq Provisional
+description DNA Methyl Reduced Rep Bisulfite Seq
 dataGroup DNA Methylation
 
 term MethylWgbs
 tag METHYLWGBS
 type dataType
 label Methyl WGBS
-description DNA Methylation Whole Genome Bisulfite Sequencing
+description DNA Methyl Whole Genome Bisulfite Seq
 dataGroup DNA Methylation
 
 term NRE
@@ -12854,7 +12854,7 @@ term Nucleosome
 tag NUCLEOSOME
 type dataType
 label Nucleosome
-description Nucleosome Positio
+description Nucleosome Position
 dataGroup Other
 
 term Proteogenomics
@@ -12883,7 +12883,7 @@ term RnaChip
 tag RNACHIP
 type dataType
 label RNA-chip
-description RNA Expression Microarray
+description RNA Protein Interactions 
 dataGroup RNA Profiling
 
 term RnaSeq
