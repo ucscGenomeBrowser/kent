@@ -468,7 +468,7 @@ noInherit on
 	windowingFunction mean+whiskers
 	maxHeightPixels 100:24:16
 
-        track wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel 416B cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in 416B cell)
@@ -477,7 +477,7 @@ noInherit on
         color 86,180,233
         # subId=4346 dateSubmitted=2011-06-24
 
-        track wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel 416B cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in 416B cell)
@@ -486,7 +486,7 @@ noInherit on
         color 86,180,233
         # subId=4348 dateSubmitted=2011-06-24
 
-        track wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1PlusRawSigRep1
+        track wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel HeadlessEmbryo cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in HeadlessEmbryo cell)
@@ -495,7 +495,7 @@ noInherit on
         color 65,105,225
         # subId=4423 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Kidney cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in Kidney cell)
@@ -504,7 +504,7 @@ noInherit on
         color 204,121,167
         # subId=4424 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep4
+        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep4
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Liver cell polyA 4
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 4 (polyA in Liver cell)
@@ -513,7 +513,7 @@ noInherit on
         color 230,159,0
         # subId=4425 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Liver cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in Liver cell)
@@ -522,7 +522,7 @@ noInherit on
         color 230,159,0
         # subId=4426 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Liver cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in Liver cell)
@@ -531,7 +531,7 @@ noInherit on
         color 230,159,0
         # subId=4427 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawSigRep1
+        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel A20 cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in A20 cell)
@@ -540,7 +540,7 @@ noInherit on
         color 86,180,233
         # subId=4428 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Cerebellum cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in Cerebellum cell)
@@ -549,7 +549,7 @@ noInherit on
         color 105,105,105
         # subId=4429 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Cerebrum cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in Cerebrum cell)
@@ -558,7 +558,7 @@ noInherit on
         color 105,105,105
         # subId=4430 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Cerebrum cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in Cerebrum cell)
@@ -567,7 +567,7 @@ noInherit on
         color 105,105,105
         # subId=4431 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel FatPad cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in FatPad cell)
@@ -576,7 +576,7 @@ noInherit on
         color 189,0,157
         # subId=4432 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel MEL cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in MEL cell)
@@ -585,7 +585,7 @@ noInherit on
         color 86,180,233
         # subId=4433 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel MEL cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in MEL cell)
@@ -594,7 +594,7 @@ noInherit on
         color 86,180,233
         # subId=4434 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsPlusRawSigRep1
+        track wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsPlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel NIH-3T3 cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in NIH-3T3 cell)
@@ -602,9 +602,9 @@ noInherit on
         type bigWig 1.000000 56693.000000
         color 86,180,233
         # subId=4435 dateSubmitted=2011-06-28
-        # was wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsPlusRawSigRep1 vsmalladi Fri Feb 24 10:40:48 2012
+        # was wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsPlusRawRep1 vsmalladi Fri Feb 24 10:40:48 2012
 
-        track wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsPlusRawSigRep2
+        track wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsPlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel NIH-3T3 cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in NIH-3T3 cell)
@@ -612,9 +612,9 @@ noInherit on
         type bigWig 1.000000 53523.000000
         color 86,180,233
         # subId=4436 dateSubmitted=2011-06-28
-        # was wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsPlusRawSigRep2 vsmalladi Fri Feb 24 10:40:48 2012
+        # was wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsPlusRawRep2 vsmalladi Fri Feb 24 10:40:48 2012
 
-        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Liver cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in Liver cell)
@@ -623,7 +623,7 @@ noInherit on
         color 230,159,0
         # subId=4438 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawSigRep3
+        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6PlusRawRep3
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Liver cell polyA 3
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 3 (polyA in Liver cell)
@@ -632,7 +632,7 @@ noInherit on
         color 230,159,0
         # subId=4439 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
@@ -640,9 +640,9 @@ noInherit on
         type bigWig 1.000000 29009.000000
         color 105,105,105
         # subId=4440 dateSubmitted=2011-06-28
-        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep1 vsmalladi Tue Jan 10 15:20:51 2012
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawRep1 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
@@ -650,9 +650,9 @@ noInherit on
         type bigWig 1.000000 46115.000000
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
-        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep2 vsmalladi Tue Jan 10 15:20:51 2012
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Patski cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in Patski cell)
@@ -660,10 +660,10 @@ noInherit on
         type bigWig 1.000000 471388.000000
         color 204,121,1677
         # subId=4437 dateSubmitted=2011-06-30
-        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6PlusRawSigRep1 vsmalladi Tue Jan  3 09:20:31 2012
-        # was wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6PlusRawSigRep1 vsmalladi Fri Feb 24 10:40:48 2012
+        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6PlusRawRep1 vsmalladi Tue Jan  3 09:20:31 2012
+        # was wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6PlusRawRep1 vsmalladi Fri Feb 24 10:40:48 2012
 
-        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
@@ -671,9 +671,9 @@ noInherit on
         type bigWig 1.000000 36131.000000
         color 105,105,105
         # subId=4441 dateSubmitted=2011-06-30
-        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2 vsmalladi Tue Jan 10 15:20:51 2012
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
@@ -681,9 +681,9 @@ noInherit on
         type bigWig 1.000000 177312.000000
         color 105,105,105
         # subId=4443 dateSubmitted=2011-06-30
-        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep1 vsmalladi Tue Jan 10 15:20:51 2012
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawRep1 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel B-cell_(CD19+) cell polyA PlusRaw 1
         longLabel B-cell (CD19+) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #too long length = 86 #autogenerated
@@ -692,7 +692,7 @@ noInherit on
         color 86,180,233
         # subId=5329 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawSigRep2
+        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel A20 cell polyA PlusRaw 2
         longLabel A20 adult-8wks BALB/cAnN cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #autogenerated
@@ -701,7 +701,7 @@ noInherit on
         color 86,180,233
         # subId=5323 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel GenitalFatPad cell polyA PlusRaw 1
         longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #too long length = 85 #autogenerated
@@ -710,7 +710,7 @@ noInherit on
         color 189,0,157
         # subId=5324 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel GenitalFatPad cell polyA PlusRaw 2
         longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #too long length = 85 #autogenerated
@@ -719,7 +719,7 @@ noInherit on
         color 189,0,157
         # subId=5325 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Heart cell polyA PlusRaw 1
         longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
@@ -728,7 +728,7 @@ noInherit on
         color 153,38,0
         # subId=5326 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Heart cell polyA PlusRaw 2
         longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #autogenerated
@@ -737,7 +737,7 @@ noInherit on
         color 153,38,0
         # subId=5327 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel B-cell_(CD43-) cell polyA PlusRaw 2
         longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #too long length = 86 #autogenerated
@@ -746,7 +746,7 @@ noInherit on
         color 86,180,233
         # subId=5330 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel B-cell_(CD43-) cell polyA PlusRaw 1
         longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #too long length = 86 #autogenerated
@@ -755,7 +755,7 @@ noInherit on
         color 86,180,233
         # subId=5331 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel T-Naive cell polyA PlusRaw 1
         longLabel T-Naive adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
@@ -764,7 +764,7 @@ noInherit on
         color 86,180,233
         # subId=5332 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Lung cell polyA PlusRaw 1
         longLabel Lung adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
@@ -772,7 +772,7 @@ noInherit on
         type bigWig 1.000000 66940.000000
         # subId=5333 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel LgIntestine cell polyA PlusRaw 1
         longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #too long length = 83 #autogenerated
@@ -780,9 +780,9 @@ noInherit on
         type bigWig 1.000000 180585.000000
         color 230,159,0
         # subId=5335 dateSubmitted=2011-12-22
-        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawSigRep1 vsmalladi Tue Jan  3 10:46:33 2012
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawRep1 vsmalladi Tue Jan  3 10:46:33 2012
 
-        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel LgIntestine cell polyA PlusRaw 2
         longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #too long length = 83 #autogenerated
@@ -790,9 +790,9 @@ noInherit on
         type bigWig 1.000000 416478.000000
         color 230,159,0
         # subId=5336 dateSubmitted=2011-12-22
-        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawSigRep2 vsmalladi Tue Jan  3 10:46:33 2012
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawRep2 vsmalladi Tue Jan  3 10:46:33 2012
 
-        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel SkMuscle cell polyA PlusRaw 1
         longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
@@ -801,7 +801,7 @@ noInherit on
         color 139,69,19
         # subId=5337 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel SkMuscle cell polyA PlusRaw 2
         longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #autogenerated
@@ -810,7 +810,7 @@ noInherit on
         color 139,69,19
         # subId=5338 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Spleen cell polyA PlusRaw 1
         longLabel Spleen adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
@@ -819,7 +819,7 @@ noInherit on
         color 86,180,233
         # subId=5339 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Thymus cell polyA PlusRaw 1
         longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
@@ -828,7 +828,7 @@ noInherit on
         color 86,180,233
         # subId=5340 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Thymus cell polyA PlusRaw 2
         longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #autogenerated
@@ -837,7 +837,7 @@ noInherit on
         color 86,180,233
         # subId=5341 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Patski cell polyA PlusRaw 2
         longLabel Patski adult-8wks Spretus.BL6-Xist cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #too long length = 87 #autogenerated
@@ -845,9 +845,9 @@ noInherit on
         type bigWig 1.000000 74697.000000
         color 204,121,1677
         # subId=5311 dateSubmitted=2011-12-23
-        # was wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6PlusRawSigRep2 vsmalladi Fri Feb 24 10:40:48 2012
+        # was wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6PlusRawRep2 vsmalladi Fri Feb 24 10:40:48 2012
 
-        track wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6PlusRawRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Cerebellum cell polyA PlusRaw 2
         longLabel Cerebellum adult-8wks C57BL/6 cell polyA RNA-seq Raw signal + Rep 2 from ENCODE/UW #too long length = 82 #autogenerated
@@ -856,7 +856,7 @@ noInherit on
         color 105,105,105
         # subId=5588 dateSubmitted=2012-02-13
 
-        track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129PlusRawSigRep1
+        track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Liver cell polyA PlusRaw 1
         longLabel Liver E14.5 129 cell polyA RNA-seq Raw signal + Rep 1 from ENCODE/UW #autogenerated
@@ -877,7 +877,7 @@ noInherit on
 	windowingFunction mean+whiskers
 	maxHeightPixels 100:24:16
 
-        track wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel 416B cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in 416B cell)
@@ -886,7 +886,7 @@ noInherit on
         color 86,180,233
         # subId=4346 dateSubmitted=2011-06-24
 
-        track wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel 416B cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in 416B cell)
@@ -895,7 +895,7 @@ noInherit on
         color 86,180,233
         # subId=4348 dateSubmitted=2011-06-24
 
-        track wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1MinusRawSigRep1
+        track wgEncodeUwRnaSeqHlembryoCellPolyaME11halfCd1MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel HeadlessEmbryo cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in HeadlessEmbryo cell)
@@ -904,7 +904,7 @@ noInherit on
         color 65,105,225
         # subId=4423 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Kidney cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in Kidney cell)
@@ -913,7 +913,7 @@ noInherit on
         color 204,121,167
         # subId=4424 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep4
+        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep4
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Liver cell polyA 4
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 4 (polyA in Liver cell)
@@ -922,7 +922,7 @@ noInherit on
         color 230,159,0
         # subId=4425 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Liver cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in Liver cell)
@@ -931,7 +931,7 @@ noInherit on
         color 230,159,0
         # subId=4426 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqLiverCellPolyaME14halfC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Liver cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in Liver cell)
@@ -940,7 +940,7 @@ noInherit on
         color 230,159,0
         # subId=4427 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawSigRep1
+        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel A20 cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in A20 cell)
@@ -949,7 +949,7 @@ noInherit on
         color 86,180,233
         # subId=4428 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Cerebellum cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in Cerebellum cell)
@@ -958,7 +958,7 @@ noInherit on
         color 105,105,105
         # subId=4429 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Cerebrum cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in Cerebrum cell)
@@ -967,7 +967,7 @@ noInherit on
         color 105,105,105
         # subId=4430 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqCerebrumCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Cerebrum cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in Cerebrum cell)
@@ -976,7 +976,7 @@ noInherit on
         color 105,105,105
         # subId=4431 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqFatCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel FatPad cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in FatPad cell)
@@ -985,7 +985,7 @@ noInherit on
         color 189,0,157
         # subId=4432 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel MEL cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in MEL cell)
@@ -994,7 +994,7 @@ noInherit on
         color 86,180,233
         # subId=4433 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel MEL cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in MEL cell)
@@ -1003,7 +1003,7 @@ noInherit on
         color 86,180,233
         # subId=4434 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsMinusRawSigRep1
+        track wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsMinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel NIH-3T3 cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in NIH-3T3 cell)
@@ -1011,9 +1011,9 @@ noInherit on
         type bigWig 1.000000 104138.000000
         color 86,180,233
         # subId=4435 dateSubmitted=2011-06-28
-        # was wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsMinusRawSigRep1 vsmalladi Fri Feb 24 10:40:47 2012
+        # was wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsMinusRawRep1 vsmalladi Fri Feb 24 10:40:47 2012
 
-        track wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsMinusRawSigRep2
+        track wgEncodeUwRnaSeqNih3t3CellPolyaMImmortalNihsMinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel NIH-3T3 cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in NIH-3T3 cell)
@@ -1021,9 +1021,9 @@ noInherit on
         type bigWig 1.000000 99501.000000
         color 86,180,233
         # subId=4436 dateSubmitted=2011-06-28
-        # was wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsMinusRawSigRep2 vsmalladi Fri Feb 24 10:40:48 2012
+        # was wgEncodeUwRnaSeqNih3t3CellPolyaMAdult8wksNihsMinusRawRep2 vsmalladi Fri Feb 24 10:40:48 2012
 
-        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Liver cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in Liver cell)
@@ -1032,7 +1032,7 @@ noInherit on
         color 230,159,0
         # subId=4438 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawSigRep3
+        track wgEncodeUwRnaSeqLiverCellPolyaMAdult8wksC57bl6MinusRawRep3
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Liver cell polyA 3
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 3 (polyA in Liver cell)
@@ -1041,7 +1041,7 @@ noInherit on
         color 230,159,0
         # subId=4439 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
@@ -1049,9 +1049,9 @@ noInherit on
         type bigWig 1.000000 24820.000000
         color 105,105,105
         # subId=4440 dateSubmitted=2011-06-28
-        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep1 vsmalladi Tue Jan 10 15:20:50 2012
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawRep1 vsmalladi Tue Jan 10 15:20:50 2012
 
-        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
@@ -1059,9 +1059,9 @@ noInherit on
         type bigWig 1.000000 19618.000000
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
-        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep2 vsmalladi Tue Jan 10 15:20:50 2012
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawRep2 vsmalladi Tue Jan 10 15:20:50 2012
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Patski cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in Patski cell)
@@ -1069,10 +1069,10 @@ noInherit on
         type bigWig 1.000000 223741.000000
         color 204,121,1677
         # subId=4437 dateSubmitted=2011-06-30
-        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6MinusRawSigRep1 vsmalladi Tue Jan  3 09:19:48 2012
-        # was wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6MinusRawSigRep1 vsmalladi Fri Feb 24 10:40:48 2012
+        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6MinusRawRep1 vsmalladi Tue Jan  3 09:19:48 2012
+        # was wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6MinusRawRep1 vsmalladi Fri Feb 24 10:40:48 2012
 
-        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
@@ -1080,9 +1080,9 @@ noInherit on
         type bigWig 1.000000 30690.000000
         color 105,105,105
         # subId=4441 dateSubmitted=2011-06-30
-        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2 vsmalladi Tue Jan 10 15:20:51 2012
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
@@ -1090,9 +1090,9 @@ noInherit on
         type bigWig 1.000000 89685.000000
         color 105,105,105
         # subId=4443 dateSubmitted=2011-06-30
-        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep1 vsmalladi Tue Jan 10 15:20:51 2012
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawRep1 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel B-cell_(CD19+) cell polyA MinusRaw 1
         longLabel B-cell (CD19+) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #too long length = 86 #autogenerated
@@ -1101,7 +1101,7 @@ noInherit on
         color 86,180,233
         # subId=5329 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawSigRep2
+        track wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel A20 cell polyA MinusRaw 2
         longLabel A20 adult-8wks BALB/cAnN cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #autogenerated
@@ -1110,7 +1110,7 @@ noInherit on
         color 86,180,233
         # subId=5323 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel GenitalFatPad cell polyA MinusRaw 1
         longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #too long length = 85 #autogenerated
@@ -1119,7 +1119,7 @@ noInherit on
         color 189,0,157
         # subId=5324 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqGfatCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel GenitalFatPad cell polyA MinusRaw 2
         longLabel GenitalFatPad adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #too long length = 85 #autogenerated
@@ -1128,7 +1128,7 @@ noInherit on
         color 189,0,157
         # subId=5325 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Heart cell polyA MinusRaw 1
         longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
@@ -1137,7 +1137,7 @@ noInherit on
         color 153,38,0
         # subId=5326 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqHeartCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Heart cell polyA MinusRaw 2
         longLabel Heart adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #autogenerated
@@ -1146,7 +1146,7 @@ noInherit on
         color 153,38,0
         # subId=5327 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel B-cell_(CD43-) cell polyA MinusRaw 2
         longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #too long length = 86 #autogenerated
@@ -1155,7 +1155,7 @@ noInherit on
         color 86,180,233
         # subId=5330 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqBcellcd43nCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel B-cell_(CD43-) cell polyA MinusRaw 1
         longLabel B-cell (CD43-) adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #too long length = 86 #autogenerated
@@ -1164,7 +1164,7 @@ noInherit on
         color 86,180,233
         # subId=5331 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel T-Naive cell polyA MinusRaw 1
         longLabel T-Naive adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
@@ -1173,7 +1173,7 @@ noInherit on
         color 86,180,233
         # subId=5332 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Lung cell polyA MinusRaw 1
         longLabel Lung adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
@@ -1181,7 +1181,7 @@ noInherit on
         type bigWig 1.000000 672685.000000
         # subId=5333 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel LgIntestine cell polyA MinusRaw 1
         longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #too long length = 83 #autogenerated
@@ -1189,9 +1189,9 @@ noInherit on
         type bigWig 1.000000 180503.000000
         color 230,159,0
         # subId=5335 dateSubmitted=2011-12-22
-        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawSigRep1 vsmalladi Tue Jan  3 10:46:33 2012
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawRep1 vsmalladi Tue Jan  3 10:46:33 2012
 
-        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel LgIntestine cell polyA MinusRaw 2
         longLabel LgIntestine adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #too long length = 83 #autogenerated
@@ -1199,9 +1199,9 @@ noInherit on
         type bigWig 1.000000 295554.000000
         color 230,159,0
         # subId=5336 dateSubmitted=2011-12-22
-        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawSigRep2 vsmalladi Tue Jan  3 10:46:33 2012
+        # was wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawRep2 vsmalladi Tue Jan  3 10:46:33 2012
 
-        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel SkMuscle cell polyA MinusRaw 1
         longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
@@ -1210,7 +1210,7 @@ noInherit on
         color 139,69,19
         # subId=5337 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqSkmuscleCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel SkMuscle cell polyA MinusRaw 2
         longLabel SkMuscle adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #autogenerated
@@ -1219,7 +1219,7 @@ noInherit on
         color 139,69,19
         # subId=5338 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqSpleenCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Spleen cell polyA MinusRaw 1
         longLabel Spleen adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
@@ -1228,7 +1228,7 @@ noInherit on
         color 86,180,233
         # subId=5339 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Thymus cell polyA MinusRaw 1
         longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
@@ -1237,7 +1237,7 @@ noInherit on
         color 86,180,233
         # subId=5340 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqThymusCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Thymus cell polyA MinusRaw 2
         longLabel Thymus adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #autogenerated
@@ -1246,7 +1246,7 @@ noInherit on
         color 86,180,233
         # subId=5341 dateSubmitted=2011-12-22
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqPatskiCellPolyaFImmortalSpbl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Patski cell polyA MinusRaw 2
         longLabel Patski adult-8wks Spretus.BL6-Xist cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #too long length = 87 #autogenerated
@@ -1254,9 +1254,9 @@ noInherit on
         type bigWig 1.000000 48875.000000
         color 204,121,1677
         # subId=5311 dateSubmitted=2011-12-23
-        # was wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6MinusRawSigRep2 vsmalladi Fri Feb 24 10:40:48 2012
+        # was wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6MinusRawRep2 vsmalladi Fri Feb 24 10:40:48 2012
 
-        track wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqCbellumCellPolyaMAdult8wksC57bl6MinusRawRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Cerebellum cell polyA MinusRaw 2
         longLabel Cerebellum adult-8wks C57BL/6 cell polyA RNA-seq Raw signal - Rep 2 from ENCODE/UW #too long length = 82 #autogenerated
@@ -1265,7 +1265,7 @@ noInherit on
         color 105,105,105
         # subId=5588 dateSubmitted=2012-02-13
 
-        track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129MinusRawSigRep1
+        track wgEncodeUwRnaSeqLiverCellPolyaME14halfS129MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Liver cell polyA MinusRaw 1
         longLabel Liver E14.5 129 cell polyA RNA-seq Raw signal - Rep 1 from ENCODE/UW #autogenerated
