@@ -12,7 +12,7 @@
 # - previous_version
 #
 
-set us = "rhead ann braney"
+set us = "pauline ann braney"
 set localRepos = /hive/data/outside/uniGene
 set path = (/usr/bin /bin)
 
@@ -74,7 +74,7 @@ the "MAKE UNIGENE ALIGNMENTS" section.
 
 Cheers,
 
-QA Team (actually Brooke, taking over for Angie)
+QA Team 
 
 
 EOF

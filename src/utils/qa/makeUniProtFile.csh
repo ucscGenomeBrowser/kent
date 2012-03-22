@@ -22,7 +22,9 @@ if ($#argv != 1 ) then
  echo
  echo "  Use this script to create a mapping of UniProt IDs to Gene IDs. \
   UniProt will pick it up from our download server and use it to \
-  create links from their web site to our gene details pages."
+  create links from their web site to our gene details pages. For the \
+  gene sets from outside sources, check this script first to be sure it is \
+  using the most up-to-date tables."
  echo
  echo "    usage: db"
  echo
@@ -37,13 +39,8 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-
-# check to see if this assembly has UCSC Genes
-set hasKGs=`hgsql -Ne "SELECT genomeDb FROM gdbPdb" \
- hgcentraltest | grep "$db"`
-
-# based on whether or not this assembly has UCSC Genes, make the mapping file
-if ( '' != $hasKGs ) then
+# human and mouse use an official UCSC Genes build
+if ( $db =~ "hg*" || $db =~ "mm*" ) then
  # get the data from the two KG-related tables
  hgsql -Ne "SELECT displayId, kgId FROM kgProtAlias" \
   $db > $db.rawDataForUniProt
@@ -52,6 +49,11 @@ if ( '' != $hasKGs ) then
 
 else #non-UCSC Gene assembly
  # each of the non-KG assemblies are treated a little differently
+
+ if ( $db =~ "rn*" ) then
+  hgsql -Ne "SELECT value, name FROM rgdGene2ToUniProt" $db > $db.rawDataForUniProt
+ endif
+
  if ( $db =~ "dm*" ) then
   hgsql -Ne "SELECT alias, a.name FROM flyBase2004Xref AS a, \
    flyBaseToUniProt AS b WHERE a.name=b.name AND alias != 'n/a'" \

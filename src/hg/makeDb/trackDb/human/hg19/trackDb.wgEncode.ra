@@ -24,6 +24,9 @@ include wgEncodeReg.release2.ra alpha
 # UW Repli-Seq track (wrangler: venkat)
 include wgEncodeUwRepliSeq.ra
 
+# FSU Repli-Seq track (wrangler: venkat)
+include wgEncodeFsuRepliSeq.ra alpha
+
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
@@ -51,11 +54,10 @@ include wgEncodeAffyRnaChip.ra
 include wgEncodeGisChiaPet.ra alpha
 
 # UMass-Dekker 5C (wrangler: kate)
-include wgEncodeUmassDekker5C.ra alpha,beta
+include wgEncodeUmassDekker5C.ra 
 
 # UW 5C (wrangler: kate)
-include wgEncodeUw5C.ra beta,public
-include wgEncodeUw5C.patch.ra alpha
+include wgEncodeUw5C.patch.ra beta,public
 #include wgEncodeUw5C.release2.ra alpha
 
 
@@ -77,8 +79,8 @@ include wgEncodeOpenChromFaire.ra beta,public
 include wgEncodeOpenChromSynth.release2.ra
 
 #Duke DNaseI HS (wrangler: Matt)
-include wgEncodeOpenChromDnase.release2.ra alpha
-include wgEncodeOpenChromDnase.ra beta,public
+include wgEncodeOpenChromDnase.release2.ra alpha,beta
+include wgEncodeOpenChromDnase.ra public
 
 #Uw Dnase-Seq (wrangler: Venkat)
 include wgEncodeUwDnase.release4.ra

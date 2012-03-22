@@ -28,7 +28,8 @@ our $mdbFile = "mdb.txt";
 our $pushQFile = "pushQ.sql";
 #our $dafVersion = "0.2.2";
 #our $dafVersion = "1.1";
-our $dafVersion = "2.0";
+our $dafVersionOld = "2.0";
+our $dafVersion = "3.0";
 
 # Prefix for table and filenames (was 'wgEncode' in v1 pipeline)
 our $compositePrefix = "wgEncode";
@@ -104,10 +105,15 @@ sub validateFieldList {
 # validate the entries in a RA record or DDF header using fields.ra
 # $file s/d be 'ddf' or 'dafHeader' or 'dafList'
 # Returns list of any errors that are found.
+#
+# Removed ddf header validation function (3-14-12)
+# due to the fact that the ddf header should validate against the cv.
     my ($fields, $schema, $file) = @_;
     my %hash = map {$_ => 1} @{$fields};
     my @errors;
-    if($file ne 'ddf' && $file ne 'dafHeader' && $file ne 'dafList') {
+    if ($file eq 'ddf') {
+        push (@errors, "fields.ra is no longer used to validate ddf headers")
+    } elsif ($file ne 'dafHeader' && $file ne 'dafList') {
         push(@errors, "file argument '$file' is invalid");
     } else {
         # look for missing required fields
@@ -376,9 +382,9 @@ sub parseDaf
     # Validate DAF version, and return immediately if not current (production)
     # OR:  During beta test, provide notice about this instead of error
 
-    if($daf{dafVersion} ne $dafVersion) {
+    unless ($daf{dafVersion} eq $dafVersion || $daf{dafVersion} eq $dafVersionOld) {
         die "NOTICE:\n\n" .
-                "ENCODE pipeline 2.0 beta testing is in progress." .
+                "ENCODE pipeline 2.0 testing is in progress." .
                 "Your wrangler will complete this submission and provide you" .
                 " with a version 2.0 DAF file to use for future submissions.\n";
         #die "ERROR(s) in DAF '$dafFile':\n\n" .

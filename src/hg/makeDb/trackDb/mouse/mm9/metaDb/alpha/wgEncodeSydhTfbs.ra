@@ -2,6 +2,7 @@ metaObject wgEncodeSydhTfbs
 objType composite
 composite wgEncodeSydhTfbs
 expVars lab,dataType,cell,antibody,treatment,control
+geoSeriesAccession GSE36030
 
 metaObject wgEncodeSydhTfbsCh12Bhlhe40nb100IggrabAlnRep1
 objType file
@@ -660,6 +661,152 @@ sex F
 strain B10.H-2aH-4bp/Wts
 subId 1159
 tableName wgEncodeSydhTfbsCh12CmycIggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsCh12Corestsc30189IggrabAlnRep1
+objType file
+age immortalized
+antibody COREST_(sc-30189)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-27
+dateUnrestricted 2012-11-27
+fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Corestsc30189IggrabAlnRep1.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5458
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Corestsc30189IggrabAlnRep2
+objType file
+age immortalized
+antibody COREST_(sc-30189)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-27
+dateUnrestricted 2012-11-27
+fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Corestsc30189IggrabAlnRep2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5458
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Corestsc30189IggrabPk
+objType table
+age immortalized
+antibody COREST_(sc-30189)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-27
+dateUnrestricted 2012-11-27
+fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5458
+tableName wgEncodeSydhTfbsCh12Corestsc30189IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsCh12Corestsc30189IggrabRawDataRep1
+objType file
+age immortalized
+antibody COREST_(sc-30189)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-27
+dateUnrestricted 2012-11-27
+fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5458
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Corestsc30189IggrabRawDataRep2
+objType file
+age immortalized
+antibody COREST_(sc-30189)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-27
+dateUnrestricted 2012-11-27
+fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5458
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Corestsc30189IggrabSig
+objType table
+age immortalized
+antibody COREST_(sc-30189)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-27
+dateUnrestricted 2012-11-27
+fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5458
+tableName wgEncodeSydhTfbsCh12Corestsc30189IggrabSig
 treatment None
 view Signal
 
@@ -2792,6 +2939,152 @@ sex F
 strain B10.H-2aH-4bp/Wts
 subId 1860
 tableName wgEncodeSydhTfbsCh12Rad21IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsCh12Sin3anb6001263IggrabAlnRep1
+objType file
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Sin3anb6001263IggrabAlnRep1.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5459
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Sin3anb6001263IggrabAlnRep2
+objType file
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Sin3anb6001263IggrabAlnRep2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5459
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsCh12Sin3anb6001263IggrabPk
+objType table
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5459
+tableName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsCh12Sin3anb6001263IggrabRawDataRep1
+objType file
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5459
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Sin3anb6001263IggrabRawDataRep2
+objType file
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5459
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsCh12Sin3anb6001263IggrabSig
+objType table
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell CH12
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId CH12/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5459
+tableName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabSig
 treatment None
 view Signal
 
@@ -7904,6 +8197,152 @@ tableName wgEncodeSydhTfbsMelRad21IggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsMelSin3anb6001263IggrabAlnRep1
+objType file
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabAlnRep1.bam,wgEncodeSydhTfbsMelSin3anb6001263IggrabAlnRep1.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 5471
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelSin3anb6001263IggrabAlnRep2
+objType file
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabAlnRep2.bam,wgEncodeSydhTfbsMelSin3anb6001263IggrabAlnRep2.bam.bai
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 5471
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelSin3anb6001263IggrabPk
+objType table
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 5471
+tableName wgEncodeSydhTfbsMelSin3anb6001263IggrabPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelSin3anb6001263IggrabRawDataRep1
+objType file
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType exp
+sex M
+strain Unknown
+subId 5471
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelSin3anb6001263IggrabRawDataRep2
+objType file
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 2
+setType exp
+sex M
+strain Unknown
+subId 5471
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelSin3anb6001263IggrabSig
+objType table
+age immortalized
+antibody SIN3A_(NB600-1263)
+cell MEL
+composite wgEncodeSydhTfbs
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-28
+dateUnrestricted 2012-11-28
+fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+sex M
+strain Unknown
+subId 5471
+tableName wgEncodeSydhTfbsMelSin3anb6001263IggrabSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsMelSmc3ab9263IggrabAlnRep1
 objType file
 age immortalized
@@ -8607,4 +9046,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggrabSig
 treatment None
 view Signal
 
-# MAGIC: -46144325
+# MAGIC: 1200857975

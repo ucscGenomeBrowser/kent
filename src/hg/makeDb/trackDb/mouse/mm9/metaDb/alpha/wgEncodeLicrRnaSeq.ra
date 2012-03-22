@@ -2,6 +2,7 @@ metaObject wgEncodeLicrRnaSeq
 objType composite
 composite wgEncodeLicrRnaSeq
 expVars lab,dataType,cell,age
+geoSeriesAccession GSE36026
 
 metaObject wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1
 objType table
@@ -12,11 +13,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-08
 dateUnrestricted 2012-12-08
+dccAccession wgEncodeEM002635
+expId 2635
 fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 7/28/2011 Lane 3A
 localization cell
+md5sum bd1fca8cbdc3ecb4f64c9f93e2d7daa4,4f0712dbb8dbdeed543d2f33f52778c5
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -38,11 +42,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-08
 dateUnrestricted 2012-12-08
+dccAccession wgEncodeEM002635
+expId 2635
 fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6AlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 7/28/2011 Lane 3B
 localization cell
+md5sum 963a76ab96b12fd546d03321093aa0f5,81afcbe3e9f0290fd2d56e7237e4683b
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -64,11 +71,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-08
 dateUnrestricted 2012-12-08
+dccAccession wgEncodeEM002635
+expId 2635
 fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 7/28/2011 Lane 3A
 localization cell
+md5sum 71effe3a387003e8c0431819493526d0
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -89,11 +99,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-08
 dateUnrestricted 2012-12-08
+dccAccession wgEncodeEM002635
+expId 2635
 fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 7/28/2011 Lane 3B
 localization cell
+md5sum f04a858e704ec03f384c9f1bc2d2b851
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -114,11 +127,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-08
 dateUnrestricted 2012-12-08
+dccAccession wgEncodeEM002635
+expId 2635
 fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
 labVersion 7/28/2011 Lane 3A
 localization cell
+md5sum b015398120b24950272979e0cf854068
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -140,11 +156,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-08
 dateUnrestricted 2012-12-08
+dccAccession wgEncodeEM002635
+expId 2635
 fileName wgEncodeLicrRnaSeqBatCellPapMAdult24wksC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
 labVersion 7/28/2011 Lane 3B
 localization cell
+md5sum 8c9e3f9611cea07c1d599c806e6e9366
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -326,6 +345,178 @@ softwareVersion TopHat
 strain C57BL/6
 subId 4094
 tableName wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep1
+objType table
+age adult-8wks
+cell BMDM
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002636
+expId 2636
+fileName wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 2C
+localization cell
+md5sum 575960679611e95a112ad25cce8d37d3,dab3e8e4c9448fe51dcd6eda8852b301
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex F
+softwareVersion TopHat
+strain C57BL/6
+subId 5966
+tableName wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep2
+objType table
+age adult-8wks
+cell BMDM
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002636
+expId 2636
+fileName wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 2D
+localization cell
+md5sum 967ea81cc1d620c0605cdba4d0d093e1,0861e50f7a560881fd189a0e3ecb6d9f
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex F
+softwareVersion TopHat
+strain C57BL/6
+subId 5966
+tableName wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6RawDataRep1
+objType file
+age adult-8wks
+cell BMDM
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002636
+expId 2636
+fileName wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 2C
+localization cell
+md5sum 9238043c62a06dc70e610ff7518d93c8
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5966
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6RawDataRep2
+objType file
+age adult-8wks
+cell BMDM
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002636
+expId 2636
+fileName wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 2D
+localization cell
+md5sum 5f99c887606c5c36ee6097f2a45802ce
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5966
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6SigRep1
+objType table
+age adult-8wks
+cell BMDM
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002636
+expId 2636
+fileName wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 2C
+localization cell
+md5sum 983ff17ae22e2d5f336cb91267880f9f
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex F
+softwareVersion TopHat
+strain C57BL/6
+subId 5966
+tableName wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6SigRep2
+objType table
+age adult-8wks
+cell BMDM
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002636
+expId 2636
+fileName wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 7/28/2011 Lane 2D
+localization cell
+md5sum 4ce99765b5d372651b286a4ab7cc501b
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex F
+softwareVersion TopHat
+strain C57BL/6
+subId 5966
+tableName wgEncodeLicrRnaSeqBmdmCellPapFAdult8wksC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
@@ -2230,11 +2421,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002634
+expId 2634
 fileName wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6AlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 6/20/2011 Lane 2B
 localization cell
+md5sum 2e8a3f2b9724a3d862083f3115eff3c2,77c9f9de5e9ef2ea11aa43200eaff61d
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2256,11 +2450,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002634
+expId 2634
 fileName wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6AlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 6/20/2011 Lane 2C
 localization cell
+md5sum 791e677aa49a16f6c208dc130c53acbf,39b53a0e88533daf9ea6da3f6f1b8218
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2282,11 +2479,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002634
+expId 2634
 fileName wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/20/2011 Lane 2B
 localization cell
+md5sum 8990d1e53b79741ee44298422fbb0258
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2307,11 +2507,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002634
+expId 2634
 fileName wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/20/2011 Lane 2C
 localization cell
+md5sum ec6843ff71b67c099a8e56ff6aaf16fe
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2332,11 +2535,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002634
+expId 2634
 fileName wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
 labVersion 6/20/2011 Lane 2B
 localization cell
+md5sum e1bd689965cdd53a6be2c655da37298f
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2358,11 +2564,14 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002634
+expId 2634
 fileName wgEncodeLicrRnaSeqMelCellPapMImmortalC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
 labVersion 6/20/2011 Lane 2C
 localization cell
+md5sum d5ebb1771d180174b46cba8fac2097e0
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3579,4 +3788,4 @@ tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: 519267806
+# MAGIC: 1285021660

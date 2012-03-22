@@ -90,6 +90,12 @@ file ddf
 type string
 required no
 
+#The donorId
+field donorId
+file ddf
+type string
+required no
+
 # This is replicate number as you would expect
 # It would be nice to verify that you have a rep 1 if you have a rep 2. etc
 field replicate

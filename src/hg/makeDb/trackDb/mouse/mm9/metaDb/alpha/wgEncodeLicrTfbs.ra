@@ -2,6 +2,7 @@ metaObject wgEncodeLicrTfbs
 objType composite
 composite wgEncodeLicrTfbs
 expVars lab,dataType,cell,antibody,age
+geoSeriesAccession GSE36027
 
 metaObject wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep1
 objType file
@@ -10,15 +11,18 @@ antibody Input
 cell BAT
 composite wgEncodeLicrTfbs
 control std
-controlId BAT/Input/std
+controlId wgEncodeEM002656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002656
+expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 7/13/2010 Lane 5
+md5sum 881c1a611be107587ad1d4ab305a06e6,57bb16706b9c1f504cbb5450f7ffa36f
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -36,15 +40,18 @@ antibody Input
 cell BAT
 composite wgEncodeLicrTfbs
 control std
-controlId BAT/Input/std
+controlId wgEncodeEM002656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002656
+expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 6/3/2011 Lane 4-1
+md5sum efceb831e848d3bac7dec3de668151ef,6af62add51915d7ca5c2bad7c06e8360
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -62,15 +69,18 @@ antibody Input
 cell BAT
 composite wgEncodeLicrTfbs
 control std
-controlId BAT/Input/std
+controlId wgEncodeEM002656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002656
+expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 7/13/2010 Lane 5
+md5sum 70dea6fe2d6d163d43fb03b662cc99e4
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -88,15 +98,18 @@ antibody Input
 cell BAT
 composite wgEncodeLicrTfbs
 control std
-controlId BAT/Input/std
+controlId wgEncodeEM002656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002656
+expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/3/2011 Lane 4-1
+md5sum 15bfa17891ff3442d57cbb8db3f635e0
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -114,15 +127,18 @@ antibody Input
 cell BAT
 composite wgEncodeLicrTfbs
 control std
-controlId BAT/Input/std
+controlId wgEncodeEM002656
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-01
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002656
+expId 2656
 fileName wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 6d8cf8a6485bf7e4a36bb823148947ea
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -140,7 +156,7 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
@@ -170,7 +186,7 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
@@ -201,7 +217,7 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-13
@@ -231,7 +247,7 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
@@ -261,7 +277,7 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
@@ -291,7 +307,7 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
@@ -321,7 +337,7 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
@@ -351,7 +367,7 @@ antibody Input
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-22
@@ -381,7 +397,7 @@ antibody Input
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-22
@@ -411,7 +427,7 @@ antibody Input
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-22
@@ -441,7 +457,7 @@ antibody Input
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-22
@@ -471,7 +487,7 @@ antibody Input
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-22
@@ -501,7 +517,7 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -532,7 +548,7 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-13
@@ -562,7 +578,7 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -593,7 +609,7 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -623,7 +639,7 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -653,7 +669,7 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -683,7 +699,7 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-controlId BoneMarrow/Input/std
+controlId wgEncodeEM001447
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -706,6 +722,499 @@ tableName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
 tissueSourceType Pooled
 view Signal
 
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 5-7
+md5sum d51ce14d9677cc677dc6f3404fb1bb86,901e500d81b107b2f989927d90bb86ef
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5961
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 5-8
+md5sum d8d8d2c9a00c50eebf557a49290d4067,01f6b99334fd98bcecc0909bd42bcc9f
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5961
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum a6701521e61b87e519e1d8cb2879d890
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion MACS
+strain C57BL/6
+subId 5961
+tableName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 5-7
+md5sum bcd517a44116067870cd1a8db2fb3970
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5961
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 5-8
+md5sum 12469c44c8aef2fbd876da70ba51a920
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5961
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody CTCF
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002663
+expId 2663
+fileName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+md5sum aa10b7d2c1b4723d28edcd5b9dc02230
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5961
+tableName wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody Input
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002660
+expId 2660
+fileName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 4/6/2011 Lane 4-4
+md5sum 0ea34de484e14aa50e1cb6096d760ab2,61a381bf5432391d16f54e85e0f58cc2
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5967
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody Input
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002660
+expId 2660
+fileName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/8/2011 Lane 4-12
+md5sum 03548767fe2481277d3d5b7d342cf834,f3871e0d8eee94718646873b9f1d0bb6
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5967
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody Input
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002660
+expId 2660
+fileName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 4/6/2011 Lane 4-4
+md5sum 390c001c2428bc873a71afeb886f9244
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5967
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody Input
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002660
+expId 2660
+fileName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/8/2011 Lane 4-12
+md5sum e5312afd0a50713324bb1ee88c361b17
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5967
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Input
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002660
+expId 2660
+fileName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+md5sum 7fd233de5cd70511023b93d183712f0d
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5967
+tableName wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 6-11
+md5sum dbd0a80ab54d71eb20205ac9ff36f808,a231a9a277b124c7b2f88178139dac39
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5962
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 7-12
+md5sum 03e08a53e4905078e899e212849bf3df,2bc8ba7204393460e36baef24521d00b
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5962
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum 79ec13c5468c7b41a276538b9cf8ed11
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion MACS
+strain C57BL/6
+subId 5962
+tableName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdPk
+view Peaks
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 6-11
+md5sum 2da0411c22b9393055d1d41ffb68de45
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5962
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 8/18/2011 Lane 7-12
+md5sum f439aa5b05e0aca8762219fe1fe1b77b
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion HCS
+strain C57BL/6
+subId 5962
+view RawData
+
+metaObject wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Pol2
+cell BMDM
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM002660
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-10
+dateUnrestricted 2012-12-09
+dccAccession wgEncodeEM002664
+expId 2664
+fileName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+md5sum 682d03928b2645be9b248a56c3a0c1d7
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5962
+tableName wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdSig
+view Signal
+
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -713,7 +1222,7 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -743,7 +1252,7 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -774,7 +1283,7 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-13
@@ -804,7 +1313,7 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -834,7 +1343,7 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -864,7 +1373,7 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -894,7 +1403,7 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -924,7 +1433,7 @@ antibody Input
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-22
@@ -955,7 +1464,7 @@ antibody Input
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-22
@@ -986,7 +1495,7 @@ antibody Input
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-22
@@ -1017,7 +1526,7 @@ antibody Input
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-22
@@ -1048,7 +1557,7 @@ antibody Input
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-22
@@ -1079,7 +1588,7 @@ antibody Pol2
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
@@ -1109,7 +1618,7 @@ antibody Pol2
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
@@ -1139,7 +1648,7 @@ antibody Pol2
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
@@ -1169,7 +1678,7 @@ antibody Pol2
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
@@ -1199,7 +1708,7 @@ antibody Pol2
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
@@ -1229,7 +1738,7 @@ antibody Pol2
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-controlId Cerebellum/Input/std
+controlId wgEncodeEM001448
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
@@ -1317,7 +1826,7 @@ antibody CTCF
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -1347,7 +1856,7 @@ antibody CTCF
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -1377,7 +1886,7 @@ antibody CTCF
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -1407,7 +1916,7 @@ antibody CTCF
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -1437,7 +1946,7 @@ antibody CTCF
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -1467,7 +1976,7 @@ antibody CTCF
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
@@ -1497,7 +2006,7 @@ antibody Input
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1527,7 +2036,7 @@ antibody Input
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1557,7 +2066,7 @@ antibody Input
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1587,7 +2096,7 @@ antibody Input
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1617,7 +2126,7 @@ antibody Input
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1647,7 +2156,7 @@ antibody Pol2
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1677,7 +2186,7 @@ antibody Pol2
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1707,7 +2216,7 @@ antibody Pol2
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1737,7 +2246,7 @@ antibody Pol2
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1767,7 +2276,7 @@ antibody Pol2
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1797,7 +2306,7 @@ antibody Pol2
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-controlId Cortex/Input/std
+controlId wgEncodeEM001449
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
@@ -1827,7 +2336,7 @@ antibody CTCF
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -1857,7 +2366,7 @@ antibody CTCF
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -1887,7 +2396,7 @@ antibody CTCF
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -1917,7 +2426,7 @@ antibody CTCF
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -1947,7 +2456,7 @@ antibody CTCF
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -1977,7 +2486,7 @@ antibody CTCF
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2007,7 +2516,7 @@ antibody Input
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2037,7 +2546,7 @@ antibody Input
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2067,7 +2576,7 @@ antibody Input
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2097,7 +2606,7 @@ antibody Input
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2127,7 +2636,7 @@ antibody Input
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2157,7 +2666,7 @@ antibody p300
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2187,7 +2696,7 @@ antibody p300
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2217,7 +2726,7 @@ antibody p300
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2247,7 +2756,7 @@ antibody p300
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2277,7 +2786,7 @@ antibody p300
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2307,7 +2816,7 @@ antibody p300
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2337,7 +2846,7 @@ antibody Pol2
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2367,7 +2876,7 @@ antibody Pol2
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2397,7 +2906,7 @@ antibody Pol2
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2427,7 +2936,7 @@ antibody Pol2
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2457,7 +2966,7 @@ antibody Pol2
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2487,7 +2996,7 @@ antibody Pol2
 cell ES-Bruce4
 composite wgEncodeLicrTfbs
 control std
-controlId ES-Bruce4/Input/std
+controlId wgEncodeEM001683
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
@@ -2517,7 +3026,7 @@ antibody CTCF
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -2548,7 +3057,7 @@ antibody CTCF
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -2579,7 +3088,7 @@ antibody CTCF
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -2610,7 +3119,7 @@ antibody CTCF
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -2641,7 +3150,7 @@ antibody CTCF
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -2672,7 +3181,7 @@ antibody CTCF
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -2703,7 +3212,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -2733,7 +3242,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-13
@@ -2763,7 +3272,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -2793,7 +3302,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -2823,7 +3332,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -2853,7 +3362,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -2883,7 +3392,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM002506
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -2912,7 +3421,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM002506
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -2941,7 +3450,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM002506
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -2970,7 +3479,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM002506
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -2999,7 +3508,7 @@ antibody Input
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM002506
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -3028,7 +3537,7 @@ antibody p300
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
@@ -3058,7 +3567,7 @@ antibody p300
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
@@ -3088,7 +3597,7 @@ antibody p300
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
@@ -3118,7 +3627,7 @@ antibody p300
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
@@ -3148,7 +3657,7 @@ antibody p300
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
@@ -3178,7 +3687,7 @@ antibody p300
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
@@ -3208,7 +3717,7 @@ antibody Pol2
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
@@ -3238,7 +3747,7 @@ antibody Pol2
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
@@ -3268,7 +3777,7 @@ antibody Pol2
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
@@ -3298,7 +3807,7 @@ antibody Pol2
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
@@ -3328,7 +3837,7 @@ antibody Pol2
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
@@ -3358,7 +3867,7 @@ antibody Pol2
 cell Heart
 composite wgEncodeLicrTfbs
 control std
-controlId Heart/Input/std
+controlId wgEncodeEM001450
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
@@ -3388,7 +3897,7 @@ antibody CTCF
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
@@ -3419,7 +3928,7 @@ antibody CTCF
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
@@ -3450,7 +3959,7 @@ antibody CTCF
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
@@ -3481,7 +3990,7 @@ antibody CTCF
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
@@ -3512,7 +4021,7 @@ antibody CTCF
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
@@ -3543,7 +4052,7 @@ antibody CTCF
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
@@ -3574,7 +4083,7 @@ antibody Input
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-24
@@ -3605,7 +4114,7 @@ antibody Input
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-13
@@ -3635,7 +4144,7 @@ antibody Input
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-24
@@ -3665,7 +4174,7 @@ antibody Input
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-24
@@ -3695,7 +4204,7 @@ antibody Input
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-24
@@ -3725,7 +4234,7 @@ antibody Input
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-24
@@ -3755,7 +4264,7 @@ antibody Pol2
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-11-18
@@ -3785,7 +4294,7 @@ antibody Pol2
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -3816,7 +4325,7 @@ antibody Pol2
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -3847,7 +4356,7 @@ antibody Pol2
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -3878,7 +4387,7 @@ antibody Pol2
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-11-18
@@ -3907,7 +4416,7 @@ antibody Pol2
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -3938,7 +4447,7 @@ antibody Pol2
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -3969,7 +4478,7 @@ antibody Pol2
 cell Kidney
 composite wgEncodeLicrTfbs
 control std
-controlId Kidney/Input/std
+controlId wgEncodeEM001451
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
@@ -4000,7 +4509,7 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -4029,7 +4538,7 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -4058,7 +4567,7 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
@@ -4087,7 +4596,7 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -4116,7 +4625,7 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -4145,7 +4654,7 @@ antibody CTCF
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -4174,7 +4683,7 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -4203,7 +4712,7 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -4232,7 +4741,7 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -4261,7 +4770,7 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -4290,7 +4799,7 @@ antibody Input
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -4319,7 +4828,7 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -4348,7 +4857,7 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -4377,7 +4886,7 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
@@ -4406,7 +4915,7 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -4435,7 +4944,7 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -4464,7 +4973,7 @@ antibody Pol2
 cell Limb
 composite wgEncodeLicrTfbs
 control std
-controlId Limb/Input/std
+controlId wgEncodeEM002482
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -4493,7 +5002,7 @@ antibody CTCF
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4523,7 +5032,7 @@ antibody CTCF
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4553,7 +5062,7 @@ antibody CTCF
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4583,7 +5092,7 @@ antibody CTCF
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4613,7 +5122,7 @@ antibody CTCF
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4643,7 +5152,7 @@ antibody CTCF
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4673,7 +5182,7 @@ antibody Input
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4703,7 +5212,7 @@ antibody Input
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4733,7 +5242,7 @@ antibody Input
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4763,7 +5272,7 @@ antibody Input
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4793,7 +5302,7 @@ antibody Input
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -4823,7 +5332,7 @@ antibody Input
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM002570
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-13
@@ -4852,7 +5361,7 @@ antibody Input
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM002570
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-13
@@ -4881,7 +5390,7 @@ antibody Input
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM002570
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-13
@@ -4910,7 +5419,7 @@ antibody Input
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM002570
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-13
@@ -4939,7 +5448,7 @@ antibody Input
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM002570
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-13
@@ -4968,7 +5477,7 @@ antibody Pol2
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
@@ -4998,7 +5507,7 @@ antibody Pol2
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
@@ -5028,7 +5537,7 @@ antibody Pol2
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
@@ -5058,7 +5567,7 @@ antibody Pol2
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
@@ -5088,7 +5597,7 @@ antibody Pol2
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
@@ -5118,7 +5627,7 @@ antibody Pol2
 cell Liver
 composite wgEncodeLicrTfbs
 control std
-controlId Liver/Input/std
+controlId wgEncodeEM001452
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
@@ -5148,7 +5657,7 @@ antibody CTCF
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5178,7 +5687,7 @@ antibody CTCF
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5208,7 +5717,7 @@ antibody CTCF
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5238,7 +5747,7 @@ antibody CTCF
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5268,7 +5777,7 @@ antibody CTCF
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5298,7 +5807,7 @@ antibody CTCF
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5328,7 +5837,7 @@ antibody Input
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5358,7 +5867,7 @@ antibody Input
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5388,7 +5897,7 @@ antibody Input
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5418,7 +5927,7 @@ antibody Input
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5448,7 +5957,7 @@ antibody Input
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
@@ -5478,7 +5987,7 @@ antibody Pol2
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
@@ -5508,7 +6017,7 @@ antibody Pol2
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
@@ -5538,7 +6047,7 @@ antibody Pol2
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
@@ -5568,7 +6077,7 @@ antibody Pol2
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
@@ -5598,7 +6107,7 @@ antibody Pol2
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
@@ -5628,7 +6137,7 @@ antibody Pol2
 cell Lung
 composite wgEncodeLicrTfbs
 control std
-controlId Lung/Input/std
+controlId wgEncodeEM001453
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
@@ -5658,7 +6167,7 @@ antibody CTCF
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
@@ -5688,7 +6197,7 @@ antibody CTCF
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
@@ -5718,7 +6227,7 @@ antibody CTCF
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
@@ -5748,7 +6257,7 @@ antibody CTCF
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
@@ -5778,7 +6287,7 @@ antibody CTCF
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
@@ -5808,7 +6317,7 @@ antibody CTCF
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
@@ -5838,7 +6347,7 @@ antibody Input
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -5868,7 +6377,7 @@ antibody Input
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -5898,7 +6407,7 @@ antibody Input
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -5928,7 +6437,7 @@ antibody Input
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -5958,7 +6467,7 @@ antibody Input
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -5988,7 +6497,7 @@ antibody Pol2
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -6018,7 +6527,7 @@ antibody Pol2
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -6048,7 +6557,7 @@ antibody Pol2
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -6078,7 +6587,7 @@ antibody Pol2
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -6108,7 +6617,7 @@ antibody Pol2
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -6138,7 +6647,7 @@ antibody Pol2
 cell MEF
 composite wgEncodeLicrTfbs
 control std
-controlId MEF/Input/std
+controlId wgEncodeEM001456
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -6168,15 +6677,18 @@ antibody CTCF
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 10/10/2011 Lane 1-11 and 2/2/2012 Lane 3-11
+md5sum 0f85e2d8bd20ca86df9414e97da5a9de,f3f18eceac3f20690b0a346d1bb48027
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6194,15 +6706,18 @@ antibody CTCF
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 10/10/2011 Lane 1-12 and 2/16/2012 Lane 3-12
+md5sum 667290327ab20013e507ae5d826f2c75,a8a25df8a9299765ad8c9686734339ad
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6220,15 +6735,18 @@ antibody CTCF
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum a51aff79e8f840f4ee6854e0f51d412c
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6246,15 +6764,18 @@ antibody CTCF
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 10/10/2011 Lane 1-11 and 2/2/2012 Lane 3-11
+md5sum 9f7a9bc43db2b961e81c7af0afc1e11c
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6272,15 +6793,18 @@ antibody CTCF
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 10/10/2011 Lane 1-12 and 2/16/2012 Lane 3-12
+md5sum 253f106c88a5b76658f4546a242089f7
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6298,15 +6822,18 @@ antibody CTCF
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002661
+expId 2661
 fileName wgEncodeLicrTfbsMelCtcfMImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum bf15bc7f3cb04f867e1c284831dd4f0d
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6324,15 +6851,18 @@ antibody Input
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002652
+expId 2652
 fileName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsMelInputMImmortalC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 6/8/2011 Lane 5-1
+md5sum 9abbbb4e032be425f553b48ed78f052a,a5a2a4b014d3a7e65b03699bcab1ca41
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6350,15 +6880,18 @@ antibody Input
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002652
+expId 2652
 fileName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsMelInputMImmortalC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 6/8/2011 Lane 5-2
+md5sum d1389eb3ff084ba31eeaf84393ccd05a,9a117e5fd68a2e6c5cdfa81e56462dad
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6376,15 +6909,18 @@ antibody Input
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002652
+expId 2652
 fileName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/8/2011 Lane 5-1
+md5sum 11ae0be3cf85edcc4a723d8f038774ff
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6402,15 +6938,18 @@ antibody Input
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002652
+expId 2652
 fileName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/8/2011 Lane 5-2
+md5sum 6dd0db681d320e1d34e6b3e1ab1aa2bc
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6428,15 +6967,18 @@ antibody Input
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002652
+expId 2652
 fileName wgEncodeLicrTfbsMelInputMImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 926c64beda2f566d2cfc7fad456083f9
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -6454,15 +6996,18 @@ antibody Pol2
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 12/8/2011 Lane 1-4 and 2/16/2012 Lane 4-4
+md5sum 8d89b215c58910af8fbfef861cca760e,9fb4328e890762d6e8bf48128c88a743
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6480,15 +7025,18 @@ antibody Pol2
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 12/8/2011 Lane 1-5, 2/2/2012 Lane 3-5, 2/16/2012 Lane 4-5
+md5sum 452cbbe8d1f5a7218591bb0694c9dbe4,cd803897ca3b6904c6d096c089ae99f1
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6506,15 +7054,18 @@ antibody Pol2
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdPk.broadPeak.gz
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum dfbeaeb7fcef4137087c7820c1e466a7
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6532,15 +7083,18 @@ antibody Pol2
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 12/8/2011 Lane 1-4 and 2/16/2012 Lane 4-4
+md5sum 7f389b33cd3086d7ed3872cc70101686
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6558,15 +7112,18 @@ antibody Pol2
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 12/8/2011 Lane 1-5, 2/2/2012 Lane 3-5, 2/16/2012 Lane 4-5
+md5sum e90e9e4a761b33e80d57885159d92fe0
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6584,15 +7141,18 @@ antibody Pol2
 cell MEL
 composite wgEncodeLicrTfbs
 control std
-controlId MEL/Input/std
+controlId wgEncodeEM002652
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
+dccAccession wgEncodeEM002662
+expId 2662
 fileName wgEncodeLicrTfbsMelPol2MImmortalC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & normalized
+md5sum 54158dcb7a1d521905000ba266fdba7d
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6610,7 +7170,7 @@ antibody CTCF
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
@@ -6639,7 +7199,7 @@ antibody CTCF
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
@@ -6668,7 +7228,7 @@ antibody CTCF
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
@@ -6697,7 +7257,7 @@ antibody CTCF
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
@@ -6726,7 +7286,7 @@ antibody CTCF
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
@@ -6755,7 +7315,7 @@ antibody CTCF
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
@@ -6784,7 +7344,7 @@ antibody Input
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -6813,7 +7373,7 @@ antibody Input
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -6842,7 +7402,7 @@ antibody Input
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -6871,7 +7431,7 @@ antibody Input
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -6900,7 +7460,7 @@ antibody Input
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -6929,7 +7489,7 @@ antibody Pol2
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -6958,7 +7518,7 @@ antibody Pol2
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -6987,7 +7547,7 @@ antibody Pol2
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7016,7 +7576,7 @@ antibody Pol2
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -7045,7 +7605,7 @@ antibody Pol2
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -7074,7 +7634,7 @@ antibody Pol2
 cell OlfactBulb
 composite wgEncodeLicrTfbs
 control std
-controlId OlfactBulb/Input/std
+controlId wgEncodeEM002473
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -7103,7 +7663,7 @@ antibody Input
 cell Placenta
 composite wgEncodeLicrTfbs
 control std
-controlId Placenta/Input/std
+controlId wgEncodeEM002510
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7132,7 +7692,7 @@ antibody Input
 cell Placenta
 composite wgEncodeLicrTfbs
 control std
-controlId Placenta/Input/std
+controlId wgEncodeEM002510
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7161,7 +7721,7 @@ antibody Input
 cell Placenta
 composite wgEncodeLicrTfbs
 control std
-controlId Placenta/Input/std
+controlId wgEncodeEM002510
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7190,7 +7750,7 @@ antibody Input
 cell Placenta
 composite wgEncodeLicrTfbs
 control std
-controlId Placenta/Input/std
+controlId wgEncodeEM002510
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7219,7 +7779,7 @@ antibody Input
 cell Placenta
 composite wgEncodeLicrTfbs
 control std
-controlId Placenta/Input/std
+controlId wgEncodeEM002510
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7248,7 +7808,7 @@ antibody CTCF
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -7277,7 +7837,7 @@ antibody CTCF
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -7306,7 +7866,7 @@ antibody CTCF
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
@@ -7335,7 +7895,7 @@ antibody CTCF
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -7364,7 +7924,7 @@ antibody CTCF
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -7393,7 +7953,7 @@ antibody CTCF
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -7422,7 +7982,7 @@ antibody Input
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7451,7 +8011,7 @@ antibody Input
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7480,7 +8040,7 @@ antibody Input
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7509,7 +8069,7 @@ antibody Input
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7538,7 +8098,7 @@ antibody Input
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -7567,7 +8127,7 @@ antibody Pol2
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -7596,7 +8156,7 @@ antibody Pol2
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -7625,7 +8185,7 @@ antibody Pol2
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
@@ -7654,7 +8214,7 @@ antibody Pol2
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -7683,7 +8243,7 @@ antibody Pol2
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -7712,7 +8272,7 @@ antibody Pol2
 cell SmIntestine
 composite wgEncodeLicrTfbs
 control std
-controlId SmIntestine/Input/std
+controlId wgEncodeEM002486
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -7741,7 +8301,7 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -7771,7 +8331,7 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -7801,7 +8361,7 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -7831,7 +8391,7 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -7861,7 +8421,7 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -7891,7 +8451,7 @@ antibody CTCF
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
@@ -7921,7 +8481,7 @@ antibody Input
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -7951,7 +8511,7 @@ antibody Input
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -7981,7 +8541,7 @@ antibody Input
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -8011,7 +8571,7 @@ antibody Input
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -8041,7 +8601,7 @@ antibody Input
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -8071,7 +8631,7 @@ antibody Pol2
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -8101,7 +8661,7 @@ antibody Pol2
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -8131,7 +8691,7 @@ antibody Pol2
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -8161,7 +8721,7 @@ antibody Pol2
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -8191,7 +8751,7 @@ antibody Pol2
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -8221,7 +8781,7 @@ antibody Pol2
 cell Spleen
 composite wgEncodeLicrTfbs
 control std
-controlId Spleen/Input/std
+controlId wgEncodeEM001459
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
@@ -8251,7 +8811,7 @@ antibody CTCF
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -8280,7 +8840,7 @@ antibody CTCF
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -8309,7 +8869,7 @@ antibody CTCF
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
@@ -8338,7 +8898,7 @@ antibody CTCF
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -8367,7 +8927,7 @@ antibody CTCF
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -8396,7 +8956,7 @@ antibody CTCF
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -8425,7 +8985,7 @@ antibody Input
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -8454,7 +9014,7 @@ antibody Input
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -8483,7 +9043,7 @@ antibody Input
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -8512,7 +9072,7 @@ antibody Input
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -8541,7 +9101,7 @@ antibody Input
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -8570,7 +9130,7 @@ antibody Pol2
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -8599,7 +9159,7 @@ antibody Pol2
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -8628,7 +9188,7 @@ antibody Pol2
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-15
@@ -8657,7 +9217,7 @@ antibody Pol2
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -8686,7 +9246,7 @@ antibody Pol2
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -8715,7 +9275,7 @@ antibody Pol2
 cell Testis
 composite wgEncodeLicrTfbs
 control std
-controlId Testis/Input/std
+controlId wgEncodeEM002490
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -8744,7 +9304,7 @@ antibody CTCF
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -8773,7 +9333,7 @@ antibody CTCF
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -8802,7 +9362,7 @@ antibody CTCF
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -8831,7 +9391,7 @@ antibody CTCF
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -8860,7 +9420,7 @@ antibody CTCF
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -8889,7 +9449,7 @@ antibody CTCF
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -8918,7 +9478,7 @@ antibody Input
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -8947,7 +9507,7 @@ antibody Input
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -8976,7 +9536,7 @@ antibody Input
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -9005,7 +9565,7 @@ antibody Input
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -9034,7 +9594,7 @@ antibody Input
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -9063,7 +9623,7 @@ antibody Pol2
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -9092,7 +9652,7 @@ antibody Pol2
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -9121,7 +9681,7 @@ antibody Pol2
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -9150,7 +9710,7 @@ antibody Pol2
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -9179,7 +9739,7 @@ antibody Pol2
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -9208,7 +9768,7 @@ antibody Pol2
 cell Thymus
 composite wgEncodeLicrTfbs
 control std
-controlId Thymus/Input/std
+controlId wgEncodeEM002477
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
@@ -9237,7 +9797,7 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -9266,7 +9826,7 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -9295,7 +9855,7 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
@@ -9324,7 +9884,7 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -9353,7 +9913,7 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -9382,7 +9942,7 @@ antibody CTCF
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -9411,7 +9971,7 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -9440,7 +10000,7 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -9469,7 +10029,7 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -9498,7 +10058,7 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -9527,7 +10087,7 @@ antibody Input
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-16
@@ -9556,7 +10116,7 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -9585,7 +10145,7 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -9614,7 +10174,7 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
@@ -9643,7 +10203,7 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -9672,7 +10232,7 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -9701,7 +10261,7 @@ antibody Pol2
 cell WholeBrain
 composite wgEncodeLicrTfbs
 control std
-controlId WholeBrain/Input/std
+controlId wgEncodeEM002494
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
@@ -9723,4 +10283,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 91085655
+# MAGIC: -1018796495

@@ -3931,9 +3931,10 @@ urlLabel ISCA details:
     longLabel ISCA CNVs: Pathogenic Gain Cumulative
     type bedGraph 4
     maxHeightPixels 128:57:16
-    viewLimits 0:60
+    viewLimits 0:100
     alwaysZero on
     color 0,0,200
+    visibility full
     priority 1
 
     track iscaPathLossCum
@@ -3942,9 +3943,10 @@ urlLabel ISCA details:
     longLabel ISCA CNVs: Pathogenic Loss Cumulative
     type bedGraph 4
     maxHeightPixels 128:57:16
-    viewLimits 0:60
+    viewLimits 0:100
     alwaysZero on
     color 200,0,0
+    visibility full
     priority 2
 
     track iscaCuratedPathogenic
@@ -3954,6 +3956,7 @@ urlLabel ISCA details:
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
+    visibility hide
     priority 3
 
     track iscaPathogenic
@@ -3963,6 +3966,7 @@ urlLabel ISCA details:
     type gvf
     noScoreFilter .
     url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
+    visibility pack
     priority 4
 
     track iscaLikelyPathogenic
@@ -3975,7 +3979,7 @@ urlLabel ISCA details:
     priority 5
 
     track iscaUncertain
-    parent iscaComposite
+    parent iscaComposite off
     shortLabel ISCA Uncertain
     longLabel ISCA CNVs: Uncertain
     type gvf
@@ -3984,7 +3988,7 @@ urlLabel ISCA details:
     priority 6
 
     track iscaLikelyBenign
-    parent iscaComposite
+    parent iscaComposite off
     shortLabel ISCA Uncert Ben
     longLabel ISCA CNVs: Uncertain: Likely Benign
     type gvf
@@ -3993,7 +3997,7 @@ urlLabel ISCA details:
     priority 7
 
     track iscaBenign
-    parent iscaComposite
+    parent iscaComposite off
     shortLabel ISCA Benign
     longLabel ISCA CNVs: Benign
     type gvf
@@ -4002,7 +4006,7 @@ urlLabel ISCA details:
     priority 8
 
     track iscaCuratedBenign
-    parent iscaComposite
+    parent iscaComposite off
     shortLabel ISCA Curated Ben
     longLabel ISCA CNVs: Curated Benign
     type gvf

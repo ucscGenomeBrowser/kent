@@ -26,6 +26,7 @@ errAbort(
   "           - path in source repository starting with 'kent/'");
 }
 
+/* Command line validation table. */
 static struct optionSpec options[] = {
    {"jkhgap", OPTION_BOOLEAN},
    {"cgi", OPTION_BOOLEAN},
@@ -92,6 +93,7 @@ fprintf(f, "}\n");
 fprintf(f, "\n");
 
 /* Initialize options array to empty */
+fprintf(f, "/* Command line validation table. */\n");
 fprintf(f, "static struct optionSpec options[] = {\n");
 fprintf(f, "   {NULL, 0},\n");
 fprintf(f, "};\n");
