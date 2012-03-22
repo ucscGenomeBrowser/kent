@@ -11973,6 +11973,31 @@ tag AMA50UG9H
 type treatment
 description 9h with 50 ug/ml alpha-amanitin
 
+term beta-estradiol_10nM_3hr
+tag BEST3H
+description 3 hours with 10 nM beta-estradiol (Hardison) PROVISIONAL 
+type treatment
+
+term beta-estradiol_10nM_7hr
+tag BEST7H
+description 7 hours with 10 nM beta-estradiol (Hardison) PROVISIONAL
+type treatment
+
+term beta-estradiol_10nM_14hr
+tag BEST14H
+description 14 hours with 10 nM beta-estradiol (Hardison) PROVISIONAL
+type treatment
+
+term beta-estradiol_10nM_24hr
+tag BEST24H
+description 24 hours with 10 nM beta-estradiol (Hardison) PROVISIONAL
+type treatment
+
+term beta-estradiol_10nM_30hr
+tag BEST30H
+description 30 hours with 10 nM beta-estradiol (Hardison) PROVISIONAL
+type treatment
+
 term Betamethasone_100nM
 tag BMETH
 description 1 h with 100 nM Betamethasone (Myers)
@@ -12345,6 +12370,62 @@ term vehicle
 tag VEH
 description Charcoal stripped hormone-free FBS for 72 hours (Crawford)
 type treatment
+
+term ZNF_knockout_2C10_C5
+tag ZNF2C10C5
+description beta-globin LCR deletion (18Kb), homozygous (Stam) PROVISIONAL
+type treatment
+
+term ZNF_knockout_4C50_C4
+tag ZNF2C10C5
+description beta-globin LCR deletion (18Kb), homozygous (Stam) PROVISIONAL
+type treatment
+
+term ZNF_knockout_4G7_D3
+tag ZNF2C10C5
+description beta-globin LCR deletion (18Kb), homozygous (Stam) PROVISIONAL
+type treatment
+
+term ZNF_knockout_A4.1-C6
+tag ZNFA41C6
+description off-target control (Stam) PROVISIONAL
+type treatment
+
+term ZNF_knockout_A4.1-E2
+tag ZNFA41E2
+description off-target control (Stam) PROVISIONAL
+type treatment
+
+term ZNF_knockout_B3.4-A8
+tag ZNFB34A8
+description beta-globin LCR inversion, heterozygous (Stam) PROVISIONAL
+type treatment
+
+term ZNF_knockout_E10.3-C6
+tag ZNFE103C6
+description beta-globin LCR inversion, heterozygous (Stam) PROVISIONAL
+type treatment
+
+term ZNF_knockout_E6.1-A1
+tag ZNFE61A1
+description beta-globin LCR deletion (18Kb), heterozygous (Stam) PROVISIONAL
+type treatment
+
+term ZNF_knockout_F4.1-B2
+tag ZNFF41B2
+description beta-globin LCR deletion (18Kb), heterozygous (Stam) PROVISIONAL
+type treatment
+
+term ZNF_knockout_G5.4-A11
+tag ZNFG54A11
+description beta-globin LCR deletion (18Kb), heterozygous (Stam) PROVISIONAL
+type treatment
+
+term ZNF_knockout_P5
+tag ZNFP5
+description Parental K562 clone (Stam) PROVISIONAL
+type treatment
+
 
 ### Protocols
 
