@@ -27,7 +27,6 @@ html wgEncodeOpenChromDnase.release2
 dataVersion through the ENCODE Mar 2012 Freeze
 
     track wgEncodeOpenChromDnaseViewPeaks
-    shortLabel Peaks
     view Peaks
     visibility dense
     subTrack wgEncodeOpenChromDnase
@@ -636,7 +635,6 @@ dataVersion through the ENCODE Mar 2012 Freeze
         # subId=5992 dateSubmitted=2012-03-13
 
     track wgEncodeOpenChromDnaseViewSignal
-    shortLabel DNase F-Seq Density Signal
     view SIG
     visibility full
     subTrack wgEncodeOpenChromDnase
@@ -1247,7 +1245,6 @@ dataVersion through the ENCODE Mar 2012 Freeze
 
 
     track wgEncodeOpenChromDnaseViewSigBo
-    shortLabel DNase Base Overlap Signal
     view SIGBO
     visibility full
     subTrack wgEncodeOpenChromDnase
