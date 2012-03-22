@@ -67,10 +67,13 @@ $(function () {
             if (exp.dataType === undefined) {
                 return true;
             }
-            // add experiment into the appropriate list
+            // add experiment into the appropriate list(s)
             if (exp.cellType === 'None') {
                 addDataType(exp.dataType, refGenomeExps, false);
-            } else if (exp.dataType === 'ChipSeq') {
+            } else {
+                addDataType(exp.dataType, cellAssayExps, false);
+            }
+            if (exp.dataType === 'ChipSeq') {
                 antibody = encodeProject.antibodyFromExp(exp);
                 if (!antibody) {
                     return true;
@@ -81,8 +84,6 @@ $(function () {
                     return true;
                 }
                 addDataType(dataType, tfbsExps, true);
-            } else {
-                addDataType(exp.dataType, cellAssayExps, false);
             }
         });
         // work-around for some supplementary files being accessioned as experiments (5C)
@@ -150,8 +151,8 @@ $(function () {
         });
 
         $(".even, .odd").click(function () {
-            // TODO: base on preview ?
             var dataType, target, url, antibodyTarget;
+            // NOTE: generating full search URL should be generalized & encapsulated
             url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
             if ($(this).parents('table').attr('id') === 'tfbsTable') {
                 target = $(this).children('.dataItem').attr('id');
@@ -165,7 +166,11 @@ $(function () {
                 url += '&hgt_mdbVar1=dataType&hgt_mdbVal1=' + dataType;
             }
             url += '&hgt_mdbVar2=view&hgt_mdbVal2=Any';
-            // TODO: open search window 
+            // remove extra rows
+            url += '&hgt_mdbVar3=[]';
+            url += '&hgt_mdbVar4=[]';
+            url += '&hgt_mdbVar5=[]';
+            url += '&hgt_mdbVar6=[]';
             window.open(url, "searchWindow");
         });
 
@@ -176,7 +181,6 @@ $(function () {
     }
 
     // initialize
-
     encodeMatrix.start($summaryTables);
 
     // load data from server

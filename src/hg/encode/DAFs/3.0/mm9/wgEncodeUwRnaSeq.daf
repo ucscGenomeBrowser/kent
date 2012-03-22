@@ -1,6 +1,6 @@
 # Data Agreement File for UW RNA-seq experiments for mm9  
 
-#$Revision: 1.4 $
+#$Revision: 1.5 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -45,25 +45,25 @@ validationSettings validateFiles.bam:mismatches=5,bamPercent=99.9;validateFiles.
 view             Signal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
 view             PlusRawSignal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
 view             MinusRawSignal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
 
 view             Alignments
 type             bam
 hasReplicates    yes
-required         yes
+required         no
 
 view             RawData
 type             fastq
 hasReplicates    yes
-required         yes
+required         no

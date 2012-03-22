@@ -10,17 +10,33 @@ var encodeMatrix = (function () {
     // spinning image displayed during AJAX activity
     var spinner;
 
-    // UI panel for search: select tracks or files
-
-    function addSearchPanel($div) {
-        // Create panel of radio buttons for user to select search type
+    function addSearchPanel($div, isFile) {
+        // Create panel of radio buttons for user to change search type
+        // isFileSearch determines initial setting
         // Add to passed in div ID; e.g. #searchTypePanel
-        $div.append('<span id="searchPanelInstructions">search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">tracks<input type="radio" name="searchType" id="searchFiles" value="files">files');
+        $div.append('<span id="searchPanelInstructions">search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" onclick="encodeMatrix.setFileSearch(false);">tracks<input type="radio" name="searchType" id="searchFiles" value="files" onclick="encodeMatrix.setFileSearch(true);" >files');
+        if (isFile) {
+            $('#searchFiles').attr('checked', true);
+        } else {
+            $('#searchTracks').attr('checked', true);
+        }
+        encodeMatrix.setFileSearch(isFile);
     }
 
     return {
 
         // UI panel for search: select tracks or files
+
+        setFileSearch: function (isFile) {
+            // Set search type cookie to retain user choice
+            document.cookie = "encodeMatrix.search=" + (isFile ? "file" : "track");
+        },
+
+        isFileSearch: function () {
+            // Check search type cookie to retain user choice
+            // Defaults to track search if no cookie set
+            return document.cookie.match(/encodeMatrix.search=file/);
+        },
 
         getSearchUrl: function (assembly) {
             // Return URL for search of type requested in search panel
@@ -31,7 +47,7 @@ var encodeMatrix = (function () {
                 cartVar = 'hgt_tSearch';
             } else {
                 prog = "hgFileSearch";
-                cartVar = "hgfs_Search";
+                cartVar = "fsFileType=Any&hgfs_Search";
             }
              url = '/cgi-bin/' + prog + '?db=' + assembly + '&' + cartVar + '=search' +
                     '&tsCurTab=advancedTab&hgt_tsPage=';
@@ -72,7 +88,7 @@ var encodeMatrix = (function () {
             spinner = showLoadingImage('spinner', true);
 
             // add radio buttons for search type to specified div on page
-            addSearchPanel($('#searchTypePanel'));
+            addSearchPanel($('#searchTypePanel'), encodeMatrix.isFileSearch());
         },
 
     show: function ($el) {
@@ -103,6 +119,14 @@ var encodeMatrix = (function () {
                 // implementation (stop+fadeIn)
                 header.stop(true, true);
                 header.fadeIn(100);
+            },
+            cbFadeIn: function (header) {
+                // restore checked radio button that is the fadeIn cleared (on Chrome)
+                if (encodeMatrix.isFileSearch()) {
+                    $('#searchFiles').attr('checked', true);
+                } else {
+                    $('#searchTracks').attr('checked', true);
+                }
             }
         });
     },
@@ -189,8 +213,11 @@ var encodeMatrix = (function () {
                 // in code before the span that shows to it's left
                 $row = $('<tr>' +
                     '<th class="elementType">' +
-                    '<span style="float:right; text-align: right;" title="karyotype: ' + karyotype + '" class="karyotype ' + karyotype + '">&bull;</span>' +
-                    '<span title="' + cellType.description + '"><a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' + cellType.term + '">' + cellType.term + '</a>' +
+                    '<span style="float:right; text-align: right;" title="karyotype: ' + 
+                    karyotype + '" class="karyotype ' + karyotype + '">&bull;</span>' +
+                    '<span title="' + cellType.description + 
+                    '"><a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&term=' + 
+                    encodeURIComponent(cellType.term) + '">' + cellType.term + '</a>' +
                     '</th>'
                     );
                 maxLen = Math.max(maxLen, cellType.term.length);
@@ -210,7 +237,6 @@ var encodeMatrix = (function () {
 
         tableHeaderOut($table, groups, expCounts);
         encodeMatrix.tableMatrixOut($table, matrix, cellTiers, groups, expCounts, rowAddCells);
-
         encodeMatrix.addTableFloatingHeader($table);
         encodeMatrix.rotateTableCells($table);
         encodeMatrix.hoverTableCrossHair($table);
