@@ -152,6 +152,7 @@ $(function () {
 
         $(".even, .odd").click(function () {
             var dataType, target, url, antibodyTarget;
+            // NOTE: generating full search URL should be generalized & encapsulated
             url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
             if ($(this).parents('table').attr('id') === 'tfbsTable') {
                 target = $(this).children('.dataItem').attr('id');
@@ -164,10 +165,12 @@ $(function () {
                 dataType = $(this).children('.dataItem').attr('id');
                 url += '&hgt_mdbVar1=dataType&hgt_mdbVal1=' + dataType;
             }
-            url += '&hgt_mdbVar2=view&hgt_mdbVal2=Any' +
-            // TODO: figure out how to remove mdbVar3 and mdbVar4
-                        '&hgt_mdbVar3=view&hgt_mdbVal3=Any' +
-                        '&hgt_mdbVar4=view&hgt_mdbVal4=Any' ;
+            url += '&hgt_mdbVar2=view&hgt_mdbVal2=Any';
+            // remove extra rows
+            url += '&hgt_mdbVar3=[]';
+            url += '&hgt_mdbVar4=[]';
+            url += '&hgt_mdbVar5=[]';
+            url += '&hgt_mdbVar6=[]';
             window.open(url, "searchWindow");
         });
 
