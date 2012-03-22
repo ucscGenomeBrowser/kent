@@ -68,9 +68,8 @@ BEGIN {
     } else {
         die("can't determine system/arch: sys=${sys} mach=${mach}");
     }
-    # include minimal path prevent unnecessary autofs logging of non-existent
-    # /cluster/bin/ on public servers
-    my $newPath .= "$rootDir/bin:$rootDir/bin/$gbCommon::arch:$rootDir/bin/i386";
+
+    my $newPath .= "$rootDir/bin:$rootDir/bin/$gbCommon::arch:/cluster/bin/$gbCommon::arch";
     $main::ENV{PATH} = $newPath . ":" . $main::ENV{PATH};
 
     # eieio has LANG set to en_US.UTF-8, which broken sort.

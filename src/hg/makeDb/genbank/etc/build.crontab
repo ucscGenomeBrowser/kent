@@ -6,10 +6,6 @@
 SHELL=/bin/sh
 MAILTO=genbank@cse.ucsc.edu
 
-# try MGC status info daily at 3am.  Updated Wednesday 2 am EST, we check
-# every day in case of failures.
-0 3 * * *	/cluster/data/genbank/etc/build-mgc
-
 # rsync back the table stats from hgnfs1 for analysis at 6am
 0 6 * * *	rsync --quiet -e 'ssh -x' --ignore-existing --archive hgnfs1:/genbank/var/tblstats /cluster/data/genbank/var
 

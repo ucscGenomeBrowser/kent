@@ -2,6 +2,7 @@ metaObject wgEncodePsuTfbs
 objType composite
 composite wgEncodePsuTfbs
 expVars lab,dataType,cell,antibody
+geoSeriesAccession GSE36029
 
 metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1
 objType file
@@ -747,114 +748,6 @@ sex F
 strain B10.H-2aH-4bp/Wts
 subId 4844
 tableName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputSig
-view Signal
-
-metaObject wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1
-objType file
-age immortalized
-antibody Pol2-4H8
-cell CH12
-composite wgEncodePsuTfbs
-control Input
-controlId wgEncodeEM001923
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2010-11-13
-dateUnrestricted 2011-08-12
-dccAccession wgEncodeEM001924
-expId 1924
-fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam.bai
-grant Hardison
-lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/dan/h/18mar2010ln2-polii-ch12-groomed-reads
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 2972
-view Alignments
-
-metaObject wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk
-objType table
-age immortalized
-antibody Pol2-4H8
-cell CH12
-composite wgEncodePsuTfbs
-control Input
-controlId wgEncodeEM001923
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2010-11-13
-dateUnrestricted 2011-08-12
-dccAccession wgEncodeEM001924
-expId 1924
-fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk.broadPeak.gz
-grant Hardison
-lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/dan/h/18mar2010ln2-polii-ch12-groomed-reads
-project wgEncode
-seqPlatform Illumina_GA2
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 2972
-tableName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk
-view Peaks
-
-metaObject wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputRawDataRep1
-objType file
-age immortalized
-antibody Pol2-4H8
-cell CH12
-composite wgEncodePsuTfbs
-control Input
-controlId wgEncodeEM001923
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2010-11-13
-dateUnrestricted 2011-08-12
-dccAccession wgEncodeEM001924
-expId 1924
-fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputRawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/dan/h/18mar2010ln2-polii-ch12-groomed-reads
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 2972
-view RawData
-
-metaObject wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig
-objType table
-age immortalized
-antibody Pol2-4H8
-cell CH12
-composite wgEncodePsuTfbs
-control Input
-controlId wgEncodeEM001923
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2010-11-13
-dateUnrestricted 2011-08-12
-dccAccession wgEncodeEM001924
-expId 1924
-fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig.bigWig
-grant Hardison
-lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/dan/h/18mar2010ln2-polii-ch12-groomed-reads
-project wgEncode
-seqPlatform Illumina_GA2
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 2972
-tableName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig
 view Signal
 
 metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1
@@ -6539,4 +6432,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1522604408
+# MAGIC: 306066579

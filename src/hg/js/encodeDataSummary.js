@@ -17,6 +17,29 @@ $(function () {
 
     var $summaryTables = $('.summaryTable');
 
+    function addDataType(dataTypeName, expList, isChip) {
+        // Helper function to fill datatype lists that are used to make tables
+
+        var dataType, dataTypeLabel;
+
+        if (!isChip) {
+            // get data type label
+            dataType = encodeProject.getDataType(dataTypeName);
+            if (dataType !== undefined) {
+                dataTypeLabel = dataType.label;
+            }
+        }
+        if (dataTypeLabel === undefined) {
+            // if there is a mismatch between experiment table and CV we might not
+            // find dataType for the experiment
+            dataTypeLabel = dataTypeName;
+        }
+        if (!expList[dataTypeLabel]) {
+            expList[dataTypeLabel] = 0;
+        }
+        expList[dataTypeLabel]++;
+    }
+
     function handleServerData(responses) {
         // Main actions, called when loading data from server is complete
         var experiments = responses[0], 
@@ -26,7 +49,7 @@ $(function () {
 
         var cellAssayExps = {}, tfbsExps = {},  refGenomeExps = {};
         var refGenomeTypes = [], elementTypes = [], tfbsTypes = [];
-        var dataType, antibody, target;
+        var antibody, dataType;
 
         encodeMatrix.show($summaryTables);
 
@@ -37,47 +60,40 @@ $(function () {
         expIdHash = encodeProject.getExpIdHash(expIds);
 
         $.each(experiments, function (i, exp) {
-            // experiment not in this assembly
+            // exlude experiment not in this assembly
             if (expIdHash[exp.ix] === undefined) {
                 return true;
             }
-            antibody = encodeProject.antibodyFromExp(exp);
-            if (antibody) {
-                target = encodeProject.targetFromAntibody(antibody);
+            if (exp.dataType === undefined) {
+                return true;
             }
-            // add experiments into the appropriate table object
+            // add experiment into the appropriate list(s)
             if (exp.cellType === 'None') {
-                dataType = encodeProject.getDataType(exp.dataType);
-                if (dataType !== undefined) {
-                    dataType = dataType.label;
-                } else {
-                    dataType = exp.dataType;
-                }
-                if (!refGenomeExps[dataType]) {
-                    refGenomeExps[dataType] = 0;
-                }
-                refGenomeExps[dataType]++;
-            } else if (exp.dataType === 'ChipSeq') {
-                if (!target) {
+                addDataType(exp.dataType, refGenomeExps, false);
+            } else {
+                addDataType(exp.dataType, cellAssayExps, false);
+            }
+            if (exp.dataType === 'ChipSeq') {
+                antibody = encodeProject.antibodyFromExp(exp);
+                if (!antibody) {
                     return true;
                 }
-                if (!tfbsExps[target]) {
-                    tfbsExps[target] = 0;
+                dataType = encodeProject.targetFromAntibody(antibody);
+                if (!dataType) {
+                    // this excludes controls
+                    return true;
                 }
-                tfbsExps[target]++;
-            } else {
-                dataType = encodeProject.getDataType(exp.dataType);
-                if (dataType !== undefined) {
-                    dataType = dataType.label;
-                } else {
-                    dataType = exp.dataType;
-                }
-                if (!cellAssayExps[dataType]) {
-                    cellAssayExps[dataType] = 0;
-                }
-                cellAssayExps[dataType]++;
+                addDataType(dataType, tfbsExps, true);
             }
         });
+        // work-around for some supplementary files being accessioned as experiments (5C)
+        // they show up in both reference genome and cell assay lists incorrectly
+        // remove them from refGenome list of they are in cellAssayExps
+        for (dataType in refGenomeExps) {
+            if (cellAssayExps[dataType] !== undefined) {
+                delete refGenomeExps[dataType];
+            }
+        }
         // fill in tables and activate buttons
         tableOut('#refGenomeTable', refGenomeTypes, refGenomeExps, false);
         tableOut('#elementTable', elementTypes, cellAssayExps, false);
@@ -104,6 +120,7 @@ $(function () {
         // Helper function to output tables to document
         var total = 0, row = 0;
         var dataType, antibodyTarget;
+        var description, term;
 
         $.each(exps, function (key, value) {
             types.push(key);
@@ -114,41 +131,47 @@ $(function () {
         // lay out table
         $.each(types, function (i, value) {
             description = '';
+            term = '';
             if (isChipSeq) {
                 antibodyTarget = encodeProject.getAntibodyTarget(value);
                 if (antibodyTarget !== undefined) {
                     description = antibodyTarget.description;
+                    term = value;
                 }
             } else {
                 dataType = encodeProject.getDataTypeByLabel(value);
                 if (dataType !== undefined) {
                     description = dataType.description;
+                    term = dataType.term;
                 }
             }
             // quote the end tags so HTML validator doesn't whine
-            $(table).append("<tr class='" + (row % 2 === 0 ? "even" : "odd") + "'><td title='" + description + "'>" + value + "<\/td><td id='" + value + "' class='dataItem' title='Click to search for " + value + " data'>" + exps[value] + "<\/td><\/tr>");
+            $(table).append("<tr class='" + (row % 2 === 0 ? "even" : "odd") + "'><td title='" + description + "'>" + value + "<\/td><td id='" + term + "' class='dataItem' title='Click to search for " + value + " data'>" + exps[value] + "<\/td><\/tr>");
             row++;
         });
 
-        /* $(".dataItem").addClass("selectable"); */
         $(".even, .odd").click(function () {
-            // TODO: base on preview ?
-            var url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
-            if (isChipSeq) {
-                target = $(this).children('.dataItem').attr("id");
+            var dataType, target, url, antibodyTarget;
+            // NOTE: generating full search URL should be generalized & encapsulated
+            url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
+            if ($(this).parents('table').attr('id') === 'tfbsTable') {
+                target = $(this).children('.dataItem').attr('id');
                 url += '&hgt_mdbVar1=antibody';
                 antibodyTarget = encodeProject.getAntibodyTarget(target);
                 $.each(antibodyTarget.antibodies, function (i, antibody) {
                     url += '&hgt_mdbVal1=' + antibody;
                 });
             } else {
-                dataType = $(this).children('.dataItem').attr("id");
+                dataType = $(this).children('.dataItem').attr('id');
                 url += '&hgt_mdbVar1=dataType&hgt_mdbVal1=' + dataType;
             }
             url += '&hgt_mdbVar2=view&hgt_mdbVal2=Any';
-            // TODO: open search window 
+            // remove extra rows
+            url += '&hgt_mdbVar3=[]';
+            url += '&hgt_mdbVar4=[]';
+            url += '&hgt_mdbVar5=[]';
+            url += '&hgt_mdbVar6=[]';
             window.open(url, "searchWindow");
-            //window.location = url;
         });
 
         $(table).append("<tr><td class='totals'>Total: " + types.length + "<\/td><td class='totals'>" + total + "<\/td><\/tr>");
@@ -158,7 +181,6 @@ $(function () {
     }
 
     // initialize
-
     encodeMatrix.start($summaryTables);
 
     // load data from server

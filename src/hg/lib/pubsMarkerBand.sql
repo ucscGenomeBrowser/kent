@@ -1,5 +1,5 @@
 #Text to Genome project marker bed: bed4 plus one additional field for count
-CREATE TABLE `t2g` (
+CREATE TABLE `pubsMarkerBand` (
   `chrom` varchar(255) NOT NULL, # chromosome
   `chromStart` int(10) unsigned NOT NULL, # start position on chromosome
   `chromEnd` int(10) unsigned NOT NULL, # end position on chromosome

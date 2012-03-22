@@ -448,9 +448,7 @@ for (gmd = gbMiscDiffVals; gmd != NULL; gmd = gmd->next, iDiff++)
 static void parseWarnings()
 /* check for various clone warning cases and flag. */
 {
-if (isInvitrogenEvilEntry)
-    kvtAdd(kvt, "wrn", "invitroNorm");
-else if (isAthersysRageEntry)
+if (isAthersysRageEntry)
     kvtAdd(kvt, "wrn", "athRage");
 else if (isOrestesEntry)
     kvtAdd(kvt, "wrn", "orestes");

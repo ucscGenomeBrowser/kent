@@ -323,7 +323,9 @@ void parseWarn(char *tag, char *val)
 {
 if (raWarn != NULL)
     errAbort("multiple wrn");
-raWarn = cloneString(val);
+// ignore outdated invitroNorm
+if (!sameString(val, "invitroNorm"))
+    raWarn = cloneString(val);
 }
 
 static void resetEntry()

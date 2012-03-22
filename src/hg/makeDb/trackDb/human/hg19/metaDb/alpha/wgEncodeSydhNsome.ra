@@ -2,6 +2,7 @@ metaObject wgEncodeSydhNsome
 objType composite
 composite wgEncodeSydhNsome
 expVars lab,dataType,cell
+geoSeriesAccession GSE35586
 
 metaObject wgEncodeSydhNsomeGm12878AlnRep1
 objType file
@@ -1307,4 +1308,4 @@ subId 4351
 tableName wgEncodeSydhNsomeK562Sig
 view Signal
 
-# MAGIC: -865839908
+# MAGIC: -449133788
