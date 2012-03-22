@@ -14,6 +14,11 @@ visibility hide
 track gap override
 visibility hide
 
+track encodeRegions override
+shortLabel ENCODE Pilot
+longLabel Regions used for ENCODE Pilot Project (1%)
+group map
+
 track switchDbTss override
 origAssembly hg17
 pennantIcon 17.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg17"
