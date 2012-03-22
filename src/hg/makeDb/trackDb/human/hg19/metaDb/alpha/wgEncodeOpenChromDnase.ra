@@ -614,10 +614,9 @@ fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1.bam,wgEncodeOpenChromDnaseA
 geoSampleAccession GSM816638
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum c6cc79e299fb65573794d5908d815d06,250f7bbacc33fdbe5051ca0825d90fff
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 subId 1678
@@ -640,10 +639,9 @@ fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep2.bam,wgEncodeOpenChromDnaseA
 geoSampleAccession GSM816638
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 19de87429c02fb032ce6a6b986e25887,91d10f12c3462d1c10427e5f51a26fae
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 subId 1678
@@ -666,10 +664,9 @@ fileName wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal.bigWig
 geoSampleAccession GSM816638
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum b08c026f2dea30657009dfb3dc0cf221
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1678
 tableName wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal
@@ -692,10 +689,9 @@ fileName wgEncodeOpenChromDnaseAosmcSerumfreePk.narrowPeak.gz
 geoSampleAccession GSM816638
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum 224c4d242ba4da5132d3bca1604c435e
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1678
 tableName wgEncodeOpenChromDnaseAosmcSerumfreePk
@@ -718,10 +714,9 @@ fileName wgEncodeOpenChromDnaseAosmcSerumfreeSig.bigWig
 geoSampleAccession GSM816638
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_male
+labVersion private-noSequence fseq v 1.84, iff_generic_male
 md5sum a3e33c4474c4bb23f4c668c9d10b8f04
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1678
 tableName wgEncodeOpenChromDnaseAosmcSerumfreeSig
@@ -912,10 +907,9 @@ fileName wgEncodeOpenChromDnaseCllAlnRep1.bam,wgEncodeOpenChromDnaseCllAlnRep1.b
 geoSampleAccession GSM816664
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 8cdb5025b4123f9020ff42dd96d715ce,74761913f7e3f1dca10f9324c91c3ee8
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 1
 subId 2787
@@ -936,10 +930,9 @@ fileName wgEncodeOpenChromDnaseCllAlnRep2.bam,wgEncodeOpenChromDnaseCllAlnRep2.b
 geoSampleAccession GSM816664
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum ffbd20cc8e2f7e6f37215e1a853fae9f,b0b51bb1ffe19c17ace4cdba7436e26b
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 2
 subId 2787
@@ -960,10 +953,9 @@ fileName wgEncodeOpenChromDnaseCllAlnRep3.bam,wgEncodeOpenChromDnaseCllAlnRep3.b
 geoSampleAccession GSM816664
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum e0beb6808cd21dbb2f7ffa8f1bc31514,edc4aed66c121031407998412046831c
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 3
 subId 2787
@@ -984,10 +976,9 @@ fileName wgEncodeOpenChromDnaseCllBaseOverlapSignal.bigWig
 geoSampleAccession GSM816664
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum 5e1830f83fb4b810ed8ace6167a82b97
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 2787
 tableName wgEncodeOpenChromDnaseCllBaseOverlapSignal
@@ -1008,10 +999,9 @@ fileName wgEncodeOpenChromDnaseCllPk.narrowPeak.gz
 geoSampleAccession GSM816664
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum ac049fea9a6a67122d7d9e3a90473039
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 2787
 tableName wgEncodeOpenChromDnaseCllPk
@@ -1032,10 +1022,9 @@ fileName wgEncodeOpenChromDnaseCllSig.bigWig
 geoSampleAccession GSM816664
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_female
+labVersion private-noSequence fseq v 1.84, iff_generic_female
 md5sum 7bd88601403c273a082419389e06a7f8
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 2787
 tableName wgEncodeOpenChromDnaseCllSig
@@ -1485,10 +1474,9 @@ fileName wgEncodeOpenChromDnaseFibroblAlnRep1.bam,wgEncodeOpenChromDnaseFibroblA
 geoSampleAccession GSM816652
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 08889ea4dfdc188230fc9b515ef2b649,c3b473720c155f08fed495f2061f7dff
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 subId 1653
@@ -1511,10 +1499,9 @@ fileName wgEncodeOpenChromDnaseFibroblAlnRep2.bam,wgEncodeOpenChromDnaseFibroblA
 geoSampleAccession GSM816652
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum f5942623d15ef5ca4a83d5cdca7af582,778ac073a5ce728140d99efb4e053938
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 subId 1653
@@ -1537,10 +1524,9 @@ fileName wgEncodeOpenChromDnaseFibroblBaseOverlapSignal.bigWig
 geoSampleAccession GSM816652
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum e8a0760d6528d945ebc84e47f6977c5b
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1653
 tableName wgEncodeOpenChromDnaseFibroblBaseOverlapSignal
@@ -1563,10 +1549,9 @@ fileName wgEncodeOpenChromDnaseFibroblPk.narrowPeak.gz
 geoSampleAccession GSM816652
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum 0242072de22534e358997bcd4539793f
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1653
 tableName wgEncodeOpenChromDnaseFibroblPk
@@ -1589,10 +1574,9 @@ fileName wgEncodeOpenChromDnaseFibroblSig.bigWig
 geoSampleAccession GSM816652
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_FB8470
+labVersion private-noSequence fseq v 1.84, iff_FB8470
 md5sum 5e9389aa2b90dbfc054d4e12a8ca1868
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1653
 tableName wgEncodeOpenChromDnaseFibroblSig
@@ -1638,10 +1622,9 @@ fileName wgEncodeOpenChromDnaseFibropAlnRep1.bam,wgEncodeOpenChromDnaseFibropAln
 geoSampleAccession GSM816626
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum eeb62c590e9e2cac333e53e084fe4f32,3046225845619fa90376fcffee80b215
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 subId 1651
@@ -1665,10 +1648,9 @@ fileName wgEncodeOpenChromDnaseFibropAlnRep2.bam,wgEncodeOpenChromDnaseFibropAln
 geoSampleAccession GSM816626
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 183e435a56585bd4b8cd2e887e32135d,444318cb94a989d83d4d74387ece5dcd
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 subId 1651
@@ -1692,10 +1674,9 @@ fileName wgEncodeOpenChromDnaseFibropAlnRep3.bam,wgEncodeOpenChromDnaseFibropAln
 geoSampleAccession GSM816626
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum b807dad5d1e26a5f8a205e3b98e33364,568908cf2c94b9e37a60987bde5b50ba
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 3
 subId 1651
@@ -1719,10 +1700,9 @@ fileName wgEncodeOpenChromDnaseFibropBaseOverlapSignal.bigWig
 geoSampleAccession GSM816626
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum 9028d9886f3e8acc093b8f3435c3058f
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1651
 tableName wgEncodeOpenChromDnaseFibropBaseOverlapSignal
@@ -1746,10 +1726,9 @@ fileName wgEncodeOpenChromDnaseFibropPk.narrowPeak.gz
 geoSampleAccession GSM816626
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum b5a7044ddfcacefdc32b813bb672f025
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1651
 tableName wgEncodeOpenChromDnaseFibropPk
@@ -1773,10 +1752,9 @@ fileName wgEncodeOpenChromDnaseFibropSig.bigWig
 geoSampleAccession GSM816626
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_female
+labVersion private-noSequence fseq v 1.84, iff_generic_female
 md5sum 14fd1dc17131d9b995241ed5eb0ade04
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1651
 tableName wgEncodeOpenChromDnaseFibropSig
@@ -5375,10 +5353,9 @@ fileName wgEncodeOpenChromDnaseHmecAlnRep1.bam,wgEncodeOpenChromDnaseHmecAlnRep1
 geoSampleAccession GSM816669
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum fc137e55098f8973ab77b54e7611f784,b5e7fb8a4dbf22889694f1b172473f7e
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 1
 subId 2764
@@ -5399,10 +5376,9 @@ fileName wgEncodeOpenChromDnaseHmecAlnRep2.bam,wgEncodeOpenChromDnaseHmecAlnRep2
 geoSampleAccession GSM816669
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 4a2361f0e95e891157b492e21a669135,0a884382971c448176cf3512d179cc73
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 2
 subId 2764
@@ -5423,10 +5399,9 @@ fileName wgEncodeOpenChromDnaseHmecBaseOverlapSignal.bigWig
 geoSampleAccession GSM816669
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum 8c68e8a2638550cfcd99b2884cc36a33
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 2764
 tableName wgEncodeOpenChromDnaseHmecBaseOverlapSignal
@@ -5447,10 +5422,9 @@ fileName wgEncodeOpenChromDnaseHmecPk.narrowPeak.gz
 geoSampleAccession GSM816669
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum 51f8d1db953631ea37e8addf208630db
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 2764
 tableName wgEncodeOpenChromDnaseHmecPk
@@ -5471,10 +5445,9 @@ fileName wgEncodeOpenChromDnaseHmecSig.bigWig
 geoSampleAccession GSM816669
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_female
+labVersion private-noSequence fseq v 1.84, iff_generic_female
 md5sum 0d43b55bf35accda977d20b089e46001
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 2764
 tableName wgEncodeOpenChromDnaseHmecSig
@@ -5677,10 +5650,9 @@ fileName wgEncodeOpenChromDnaseHsmmAlnRep1.bam,wgEncodeOpenChromDnaseHsmmAlnRep1
 geoSampleAccession GSM816650
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 6de6d42b7d0fee43951f52a46d881776,07b796a1116958485bcc73cb9ecf7e22
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 subId 1654
@@ -5703,10 +5675,9 @@ fileName wgEncodeOpenChromDnaseHsmmAlnRep2.bam,wgEncodeOpenChromDnaseHsmmAlnRep2
 geoSampleAccession GSM816650
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 187b2cabc9ad86b9101f10e31ff15470,8e8166d83f1f8c6baabb1aa9225fc45d
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 subId 1654
@@ -5729,10 +5700,9 @@ fileName wgEncodeOpenChromDnaseHsmmAlnRep3.bam,wgEncodeOpenChromDnaseHsmmAlnRep3
 geoSampleAccession GSM816650
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum cb2bf821de56cc354b52f25a975a1bfa,458cad72cd8ee83534dbf0b79412cd8f
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 3
 subId 1654
@@ -5755,10 +5725,9 @@ fileName wgEncodeOpenChromDnaseHsmmBaseOverlapSignal.bigWig
 geoSampleAccession GSM816650
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum f2e26009bea796ab6e4db3481fa9749c
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1654
 tableName wgEncodeOpenChromDnaseHsmmBaseOverlapSignal
@@ -5781,10 +5750,9 @@ fileName wgEncodeOpenChromDnaseHsmmPk.narrowPeak.gz
 geoSampleAccession GSM816650
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum e8a26f3a234be6d42a4d24de1d3b0f79
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1654
 tableName wgEncodeOpenChromDnaseHsmmPk
@@ -5807,10 +5775,9 @@ fileName wgEncodeOpenChromDnaseHsmmSig.bigWig
 geoSampleAccession GSM816650
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_male
+labVersion private-noSequence fseq v 1.84, iff_generic_male
 md5sum 56b0c213a51320c481ff9b080d683d32
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1654
 tableName wgEncodeOpenChromDnaseHsmmSig
@@ -6053,10 +6020,9 @@ fileName wgEncodeOpenChromDnaseHsmmtAlnRep1.bam,wgEncodeOpenChromDnaseHsmmtAlnRe
 geoSampleAccession GSM816651
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum e392d4ab1f7494f46c319602e3afb8c5,3d5f4d8fc6693f0ef4c42f335a719f8e
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 subId 1679
@@ -6079,10 +6045,9 @@ fileName wgEncodeOpenChromDnaseHsmmtAlnRep2.bam,wgEncodeOpenChromDnaseHsmmtAlnRe
 geoSampleAccession GSM816651
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 5d67fb7dd269c2622c93b9883e9c03f5,ec3b0ebe6bccaab31ef5bee13edbaf8f
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 subId 1679
@@ -6105,10 +6070,9 @@ fileName wgEncodeOpenChromDnaseHsmmtAlnRep3.bam,wgEncodeOpenChromDnaseHsmmtAlnRe
 geoSampleAccession GSM816651
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 22a7f42087f982b1bc44dedcd98c1a6f,d9a85a8c9f6c7bb80bbd5faca8dea5e4
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 3
 subId 1679
@@ -6131,10 +6095,9 @@ fileName wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal.bigWig
 geoSampleAccession GSM816651
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum 3c4985ca4c0fa2982c7bbe32e9a09fef
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1679
 tableName wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal
@@ -6157,10 +6120,9 @@ fileName wgEncodeOpenChromDnaseHsmmtPk.narrowPeak.gz
 geoSampleAccession GSM816651
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum 9e0347a3b9ddd3be7397a2fee791643c
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1679
 tableName wgEncodeOpenChromDnaseHsmmtPk
@@ -6183,10 +6145,9 @@ fileName wgEncodeOpenChromDnaseHsmmtSig.bigWig
 geoSampleAccession GSM816651
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_male
+labVersion private-noSequence fseq v 1.84, iff_generic_male
 md5sum e2901c4b1d245f8573b903f7a0445597
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1679
 tableName wgEncodeOpenChromDnaseHsmmtSig
@@ -6877,10 +6838,9 @@ fileName wgEncodeOpenChromDnaseIpsAlnRep1.bam,wgEncodeOpenChromDnaseIpsAlnRep1.b
 geoSampleAccession GSM816642
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 6c59023e702086da5f5aeabc7b86be6e,351a0c0e8fb8baf0d72a73d0214961ff
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 1
 subId 3065
@@ -6902,10 +6862,9 @@ fileName wgEncodeOpenChromDnaseIpsAlnRep2.bam,wgEncodeOpenChromDnaseIpsAlnRep2.b
 geoSampleAccession GSM816642
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum cd5c405dba7596f4317e7c149567513f,ec8d5b7c59ef3ad18cecb57ffd9b4317
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 2
 subId 3065
@@ -6927,10 +6886,9 @@ fileName wgEncodeOpenChromDnaseIpsAlnRep3.bam,wgEncodeOpenChromDnaseIpsAlnRep3.b
 geoSampleAccession GSM816642
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 65ab4433efcaa3b4d427b4035bbaa6c1,49039c7ad275a54875d2afc54bcc7013
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 3
 subId 3065
@@ -6952,10 +6910,9 @@ fileName wgEncodeOpenChromDnaseIpsBaseOverlapSignal.bigWig
 geoSampleAccession GSM816642
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum 550460d64cc2a7c25b6ca02b9ab9bddc
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 3065
 tableName wgEncodeOpenChromDnaseIpsBaseOverlapSignal
@@ -6977,10 +6934,9 @@ fileName wgEncodeOpenChromDnaseIpsPk.narrowPeak.gz
 geoSampleAccession GSM816642
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum d8e2212fa52b4821ee9275e0ff6df789
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 3065
 tableName wgEncodeOpenChromDnaseIpsPk
@@ -7002,10 +6958,9 @@ fileName wgEncodeOpenChromDnaseIpsSig.bigWig
 geoSampleAccession GSM816642
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_male
+labVersion private-noSequence fseq v 1.84, iff_generic_male
 md5sum a8b1b46280a3033e8e9afad3326a2689
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 3065
 tableName wgEncodeOpenChromDnaseIpsSig
@@ -9265,7 +9220,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseMedullod341AlnRep1.bam,wgEncodeOpenChromDnaseMedullod341AlnRep1.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 5991
@@ -9282,7 +9237,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseMedullod341AlnRep2.bam,wgEncodeOpenChromDnaseMedullod341AlnRep2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 5991
@@ -9651,10 +9606,9 @@ fileName wgEncodeOpenChromDnaseMyometrAlnRep1.bam,wgEncodeOpenChromDnaseMyometrA
 geoSampleAccession GSM816630
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum bcead1b4f080999da8cac963ad557d9d,6ac0d6560242dabf8f7de7322a845dba
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 subId 1655
@@ -9677,10 +9631,9 @@ fileName wgEncodeOpenChromDnaseMyometrAlnRep2.bam,wgEncodeOpenChromDnaseMyometrA
 geoSampleAccession GSM816630
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 73a5de69af4847424e80d5f0e0a253be,71395cdbd8c854665f3c0c1451afdbcc
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 subId 1655
@@ -9703,11 +9656,10 @@ fileName wgEncodeOpenChromDnaseMyometrBaseOverlapSignal.bigWig
 geoSampleAccession GSM816630
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum 9ef860623cbde0e7e5343d378005a0e8
 objStatus revoked - old version of bigWig (version 3)
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1655
 tableName wgEncodeOpenChromDnaseMyometrBaseOverlapSignal
@@ -9730,10 +9682,9 @@ fileName wgEncodeOpenChromDnaseMyometrPk.narrowPeak.gz
 geoSampleAccession GSM816630
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum b43f904151fbcc49872adeb9211e4b2c
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1655
 tableName wgEncodeOpenChromDnaseMyometrPk
@@ -9756,10 +9707,9 @@ fileName wgEncodeOpenChromDnaseMyometrSig.bigWig
 geoSampleAccession GSM816630
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_female
+labVersion private-noSequence fseq v 1.84, iff_generic_female
 md5sum 623d84dd1ba4e1a0bb6dae4adb5408f4
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1655
 tableName wgEncodeOpenChromDnaseMyometrSig
@@ -10176,10 +10126,9 @@ fileName wgEncodeOpenChromDnasePanisdAlnRep1.bam,wgEncodeOpenChromDnasePanisdAln
 geoSampleAccession GSM816666
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 247461f69e331352361b2ee6747455b6,b35af82009e4b262f6f3bc4011ef8861
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 subId 2785
@@ -10200,10 +10149,9 @@ fileName wgEncodeOpenChromDnasePanisdAlnRep2.bam,wgEncodeOpenChromDnasePanisdAln
 geoSampleAccession GSM816666
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 556d696d1ddb623c62180303f53b22c1,1b1cd35f310c06ca92d21575d3643bff
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 subId 2785
@@ -10224,10 +10172,9 @@ fileName wgEncodeOpenChromDnasePanisdAlnRep3.bam,wgEncodeOpenChromDnasePanisdAln
 geoSampleAccession GSM816666
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 5afd1cf7722f7635c9bb8742bde3cf30,c5016d3460d08388985041a6219a6c3b
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 3
 subId 2785
@@ -10248,10 +10195,9 @@ fileName wgEncodeOpenChromDnasePanisdBaseOverlapSignal.bigWig
 geoSampleAccession GSM816666
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum e8d16636a0ad6fddcafaca5220d625b4
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 2785
 tableName wgEncodeOpenChromDnasePanisdBaseOverlapSignal
@@ -10272,10 +10218,9 @@ fileName wgEncodeOpenChromDnasePanisdPk.narrowPeak.gz
 geoSampleAccession GSM816666
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum 9e48df899a8fc096ffc365be804dc8d7
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 2785
 tableName wgEncodeOpenChromDnasePanisdPk
@@ -10296,10 +10241,9 @@ fileName wgEncodeOpenChromDnasePanisdSig.bigWig
 geoSampleAccession GSM816666
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_male
+labVersion private-noSequence fseq v 1.84, iff_generic_male
 md5sum 2c21cfd9d61c2ddd9d5e12b2642f6e4f
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 2785
 tableName wgEncodeOpenChromDnasePanisdSig
@@ -10321,10 +10265,9 @@ fileName wgEncodeOpenChromDnasePanisletsAlnRep1.bam,wgEncodeOpenChromDnasePanisl
 geoSampleAccession GSM816660
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum d70fad6fee4875a6e051e7a90380eaaa,a72db7ec8649e69e5f6a1f13b5afc832
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 subId 1656
@@ -10347,10 +10290,9 @@ fileName wgEncodeOpenChromDnasePanisletsAlnRep2.bam,wgEncodeOpenChromDnasePanisl
 geoSampleAccession GSM816660
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum ceb3b311bbaa5526f6e8f3a61d6de266,2f466e36761cd2f7ea75aa5d844899c6
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 subId 1656
@@ -10373,10 +10315,9 @@ fileName wgEncodeOpenChromDnasePanisletsAlnRep3.bam,wgEncodeOpenChromDnasePanisl
 geoSampleAccession GSM816660
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 35708e462a234eb1884b62de4a4112f7,3636bb5687c898841d9f19d190a57d15
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 3
 subId 1656
@@ -10399,10 +10340,9 @@ fileName wgEncodeOpenChromDnasePanisletsBaseOverlapSignal.bigWig
 geoSampleAccession GSM816660
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum aed997c422e5b203463df123e4f530c2
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1656
 tableName wgEncodeOpenChromDnasePanisletsBaseOverlapSignal
@@ -10425,10 +10365,9 @@ fileName wgEncodeOpenChromDnasePanisletsPk.narrowPeak.gz
 geoSampleAccession GSM816660
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum 3053455db750ad8a85f60b038a5703f0
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1656
 tableName wgEncodeOpenChromDnasePanisletsPk
@@ -10451,10 +10390,9 @@ fileName wgEncodeOpenChromDnasePanisletsSig.bigWig
 geoSampleAccession GSM816660
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_male
+labVersion private-noSequence fseq v 1.84, iff_generic_male
 md5sum 59f619be90d34ba437653fa65090d8fa
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1656
 tableName wgEncodeOpenChromDnasePanisletsSig
@@ -10476,10 +10414,9 @@ fileName wgEncodeOpenChromDnasePhteAlnRep1.bam,wgEncodeOpenChromDnasePhteAlnRep1
 geoSampleAccession GSM816647
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 60604e8bf4d5d680e2b40ee3fd7cd29c,8594b814593ad8f0b21b95077f24baf8
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 1
 subId 2513
@@ -10500,10 +10437,9 @@ fileName wgEncodeOpenChromDnasePhteAlnRep2.bam,wgEncodeOpenChromDnasePhteAlnRep2
 geoSampleAccession GSM816647
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 0440fcfd6f70394326e42d636aa8ef86,619eb1f7d69567318cd16d48572e46a1
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 2
 subId 2513
@@ -10524,10 +10460,9 @@ fileName wgEncodeOpenChromDnasePhteBaseOverlapSignal.bigWig
 geoSampleAccession GSM816647
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum 7819c069913b3ac119436d5267062675
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 2513
 tableName wgEncodeOpenChromDnasePhteBaseOverlapSignal
@@ -10548,10 +10483,9 @@ fileName wgEncodeOpenChromDnasePhtePk.narrowPeak.gz
 geoSampleAccession GSM816647
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum c18dd83a358c2940160933f3efdbe412
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 2513
 tableName wgEncodeOpenChromDnasePhtePk
@@ -10572,10 +10506,9 @@ fileName wgEncodeOpenChromDnasePhteSig.bigWig
 geoSampleAccession GSM816647
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_male
+labVersion private-noSequence fseq v 1.84, iff_generic_male
 md5sum d3b0b99f8c602d32569d9b8252967be6
 origAssembly hg19
-privacy noSequence
 project wgEncode
 subId 2513
 tableName wgEncodeOpenChromDnasePhteSig
@@ -10597,10 +10530,9 @@ fileName wgEncodeOpenChromDnaseProgfibAlnRep1.bam,wgEncodeOpenChromDnaseProgfibA
 geoSampleAccession GSM816661
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 7b58ffebd36b0435a1e44d58c0dbee3b,87193b1be90c1336977e136db8603000
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 subId 1650
@@ -10623,10 +10555,9 @@ fileName wgEncodeOpenChromDnaseProgfibAlnRep2.bam,wgEncodeOpenChromDnaseProgfibA
 geoSampleAccession GSM816661
 grant Crawford
 lab Duke
-labVersion align_on_cluster_bwa.pl v 1
+labVersion private-noSequence align_on_cluster_bwa.pl v 1
 md5sum 454ac2d6880fec6937acbec996c91c27,fd4313e3684a81a94542066e64e24672
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 subId 1650
@@ -10649,10 +10580,9 @@ fileName wgEncodeOpenChromDnaseProgfibBaseOverlapSignal.bigWig
 geoSampleAccession GSM816661
 grant Crawford
 lab Duke
-labVersion baseAlignCounts.pl v 1
+labVersion private-noSequence baseAlignCounts.pl v 1
 md5sum cef577048c96a1c4d6b3389c8426564e
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1650
 tableName wgEncodeOpenChromDnaseProgfibBaseOverlapSignal
@@ -10675,10 +10605,9 @@ fileName wgEncodeOpenChromDnaseProgfibPk.narrowPeak.gz
 geoSampleAccession GSM816661
 grant Crawford
 lab Duke
-labVersion p-value cutoff: 0.05
+labVersion private-noSequence p-value cutoff: 0.05
 md5sum 2429816b92842e16d1a2babcbf6b82db
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1650
 tableName wgEncodeOpenChromDnaseProgfibPk
@@ -10701,10 +10630,9 @@ fileName wgEncodeOpenChromDnaseProgfibSig.bigWig
 geoSampleAccession GSM816661
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_FB0167P
+labVersion private-noSequence fseq v 1.84, iff_FB0167P
 md5sum 30846821abc6cc7f50c1aafe679f7596
 origAssembly hg18
-privacy noSequence
 project wgEncode
 subId 1650
 tableName wgEncodeOpenChromDnaseProgfibSig
@@ -11345,7 +11273,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseUrothelAlnRep1V2.bam,wgEncodeOpenChromDnaseUrothelAlnRep1V2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 5990
@@ -11363,7 +11291,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseUrothelAlnRep2V2.bam,wgEncodeOpenChromDnaseUrothelAlnRep2V2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 5990
@@ -11469,7 +11397,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseUrothelUt189AlnRep1V2.bam,wgEncodeOpenChromDnaseUrothelUt189AlnRep1V2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 5992
@@ -11488,7 +11416,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseUrothelUt189AlnRep2V2.bam,wgEncodeOpenChromDnaseUrothelUt189AlnRep2V2.bam.bai
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 5992
@@ -11928,4 +11856,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 176897954
+# MAGIC: 1689050370

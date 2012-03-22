@@ -3,6 +3,25 @@ objType composite
 composite wgEncodeUncBsuProt
 expVars lab,dataType,cell,localization
 
+metaObject wgEncodeUncBsuProtGm12878CytosolIngelSig
+objType table
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-19
+dateUnrestricted 2012-12-19
+fileName wgEncodeUncBsuProtGm12878CytosolIngelSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cytosol
+project wgEncode
+protocol In-gel
+subId 6086
+tableName wgEncodeUncBsuProtGm12878CytosolIngelSig
+view Signal
+
 metaObject wgEncodeUncBsuProtGm12878MembranefractionRaw
 objType file
 cell GM12878
@@ -383,4 +402,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: -1118370930
+# MAGIC: -594084856

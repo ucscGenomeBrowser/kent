@@ -14748,17 +14748,6 @@ cvDefined yes
 validate cv
 priority 430
 
-term privacy
-tag PRIVACY
-type typeOfTerm
-label Privacy
-description Privacy may be applied to specific datasets where sequence and other identifying information is not provided
-searchable no
-cvDefined no
-validate list: noSequence,none
-priority 450
-# Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided (01/14/2011)
-
 term project
 tag PROJECT
 type typeOfTerm
@@ -14992,7 +14981,7 @@ tag TYPE
 type typeOfTerm
 label File type
 description The type of the primary file associated with the object
-searchable multiSelect
+searchable no
 cvDefined no
 validate none
 priority 985

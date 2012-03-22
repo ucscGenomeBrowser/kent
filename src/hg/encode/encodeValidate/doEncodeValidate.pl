@@ -360,16 +360,10 @@ our %formatCheckers = (
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
     rpkm  => \&validateRpkm,
-    junction  => \&validateFreepass,
-    fpkm1  => \&validateFreepass,
-    fpkm2  => \&validateFreepass,
-    fpkm => \&validateFreepass,
-    insDist  => \&validateFreepass,
     peptideMapping  => \&validateFreepass,
     fasta  => \&validateFasta,
     bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
-    cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     bigWig => \&validateBigWig,
     bigBed => \&validateBigBed,
     bam => \&validateBam,
@@ -599,6 +593,17 @@ sub validateBed {
         }
         if ($fieldCount >= 5 && $type ne 'bed5FloatScore' && $fields[5] !~ m/^(\+|\-|\.)$/) {
             push @localerrors, "$prefix field 6 ($fields[5]) value must be either + or - or .\n";
+        }
+        if ($type eq 'bedRnaElements') {
+            unless ($fields[6] =~ m/$floatRegEx/) {
+                push @localerrors, "$prefix field 7 ($fields[6]) in $type must be a float.\n";
+            }
+            unless ($fields[7] =~ m/$floatRegEx/) {
+                push @localerrors, "$prefix field 8 ($fields[7]) in $type must be a float.\n";
+            }
+            unless ($fields[8] =~ m/^\d+$/) {
+                push @localerrors, "$prefix field 9 ($fields[8]) in $type must be an int.\n";
+            }
         }
         if ($type eq 'bed5FloatScore' && $fieldCount < 6) {
             push @localerrors, "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
@@ -946,7 +951,7 @@ sub validateBigBed
         return("failed validateBigBed for '$file'");
     }
     my ($tmpfile, $basedir, $bar) = fileparse($tempfilename);
-    my $bedError = &validateBed($basedir, $tmpfile, "bed");
+    my $bedError = &validateBed($basedir, $tmpfile, $type);
     if ($bedError) {
         $bedError =~ s/$tmpfile/$file/g;
         print STDERR "ERROR: failed validateBigBed : " . $bedError . "\n";

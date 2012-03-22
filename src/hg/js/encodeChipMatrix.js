@@ -179,20 +179,22 @@ $(function () {
                 $td.click(function() {
                     var url, antibodyTarget;
 
-                    // TODO: encapsulate var names
-                    // TODO: search on antibody
+                    // NOTE: generating full search URL should be generalized & encapsulated
                     url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
                     url +=
                        ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + 'ChipSeq' +
                        '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
                        '&hgt_mdbVar3=antibody');
-                    // TODO: html encode ?
                     antibodyTarget = encodeProject.getAntibodyTarget($(this).data().target);
+                    // TODO: html encode ?
                     $.each(antibodyTarget.antibodies, function (i, antibody) {
                         url += ('&hgt_mdbVal3=' + antibody);
                     });
                     url += '&hgt_mdbVar4=view&hgt_mdbVal4=Any';
-                        // TODO: open search window 
+
+                    // remove extra rows
+                    url += '&hgt_mdbVar5=[]';
+                    url += '&hgt_mdbVar6=[]';
                     window.open(url, "searchWindow");
                 });
             });
