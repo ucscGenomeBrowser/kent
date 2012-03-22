@@ -11973,30 +11973,6 @@ tag AMA50UG9H
 type treatment
 description 9h with 50 ug/ml alpha-amanitin
 
-term beta-estradiol_10nM_3hr
-tag BEST3H
-description 3 hours with 10 nM beta-estradiol (Hardison) PROVISIONAL 
-type treatment
-
-term beta-estradiol_10nM_7hr
-tag BEST7H
-description 7 hours with 10 nM beta-estradiol (Hardison) PROVISIONAL
-type treatment
-
-term beta-estradiol_10nM_14hr
-tag BEST14H
-description 14 hours with 10 nM beta-estradiol (Hardison) PROVISIONAL
-type treatment
-
-term beta-estradiol_10nM_24hr
-tag BEST24H
-description 24 hours with 10 nM beta-estradiol (Hardison) PROVISIONAL
-type treatment
-
-term beta-estradiol_10nM_30hr
-tag BEST30H
-description 30 hours with 10 nM beta-estradiol (Hardison) PROVISIONAL
-type treatment
 
 term Betamethasone_100nM
 tag BMETH
@@ -12107,6 +12083,31 @@ tag DIFFC120H
 type treatment
 description 120 hour differentiation time point of mG/ER cells towards red blood cells after treatment with estradiol. Estradiol 10^-7 M final concentration (Stam)
 label 120 hour diff protocol C
+
+term diffProtD_3hr
+tag DIFFD3h
+description 3 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL 
+type treatment
+
+term diffProtD_7hr
+tag DIFFD7H
+description 7 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
+type treatment
+
+term diffProtD_14hr
+tag DIFFD14H
+description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
+type treatment
+
+term diffProtD24hr
+tag DIFF24H
+description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
+type treatment
+
+term diffProtD_30hr
+tag DIFF30H
+description 30 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
+type treatment
 
 term DMSO_0.02pct
 tag DM002P1H
@@ -12377,12 +12378,12 @@ description beta-globin LCR deletion (18Kb), homozygous (Stam) PROVISIONAL
 type treatment
 
 term ZNF_knockout_4C50_C4
-tag ZNF2C10C5
+tag ZNF4C50C4
 description beta-globin LCR deletion (18Kb), homozygous (Stam) PROVISIONAL
 type treatment
 
 term ZNF_knockout_4G7_D3
-tag ZNF2C10C5
+tag ZNF4G7D3
 description beta-globin LCR deletion (18Kb), homozygous (Stam) PROVISIONAL
 type treatment
 
