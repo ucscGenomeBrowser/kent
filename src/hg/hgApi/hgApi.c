@@ -150,19 +150,10 @@ pushWarnHandler(warnAbortHandler);
 pushAbortHandler(warnAbortHandler);
 
 char *database = cgiString("db");
-char *cmd = cgiOptionalString("cmd");
+char *cmd = cgiString("cmd");
 char *jsonp = cgiOptionalString("jsonp");
-if (database)
-    {
-    database = sqlEscapeString(database);
-    if (!hDbExists(database))
-        errAbort("Invalid database");
-    }
-else
-    errAbort("Missing 'db' parameter");
-
-if (!cmd)
-    errAbort("Missing 'cmd' parameter");
+if (!hDbExists(database))
+    errAbort("Invalid database '%s'", database);
 
 if (!strcmp(cmd, "defaultPos"))
     {
