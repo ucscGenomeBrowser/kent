@@ -10,29 +10,31 @@ var encodeMatrix = (function () {
     // spinning image displayed during AJAX activity
     var spinner;
 
-    // UI panel for search: select tracks or files
-
-    function addSearchPanel($div, isFileSearch) {
+    function addSearchPanel($div, isFile) {
         // Create panel of radio buttons for user to change search type
         // isFileSearch determines initial setting
         // Add to passed in div ID; e.g. #searchTypePanel
-        $div.append('<span id="searchPanelInstructions">search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" onclick="encodeMatrix.setFileSearch(false);" checked="checked">tracks<input type="radio" name="searchType" id="searchFiles" value="files" onclick="encodeMatrix.setFileSearch(true);" >files');
-        if (isFileSearch) {
+        $div.append('<span id="searchPanelInstructions">search for:&nbsp;</span><input type="radio" name="searchType" id="searchTracks" value="tracks" onclick="encodeMatrix.setFileSearch(false);">tracks<input type="radio" name="searchType" id="searchFiles" value="files" onclick="encodeMatrix.setFileSearch(true);" >files');
+        if (isFile) {
             $('#searchFiles').attr('checked', true);
+        } else {
+            $('#searchTracks').attr('checked', true);
         }
+        encodeMatrix.setFileSearch(isFile);
     }
 
     return {
 
         // UI panel for search: select tracks or files
 
-        setFileSearch: function (choice) {
+        setFileSearch: function (isFile) {
             // Set search type cookie to retain user choice
-            document.cookie = "encodeMatrix.search=" + (choice ? "file" : "track");
+            document.cookie = "encodeMatrix.search=" + (isFile ? "file" : "track");
         },
 
         isFileSearch: function () {
             // Check search type cookie to retain user choice
+            // Defaults to track search if no cookie set
             return document.cookie.match(/encodeMatrix.search=file/);
         },
 
@@ -48,8 +50,6 @@ var encodeMatrix = (function () {
                 cartVar = "fsFileType=Any&hgfs_Search";
             }
              url = '/cgi-bin/' + prog + '?db=' + assembly + '&' + cartVar + '=search' +
-                    // Intent to clear out search dropdowns we don't need
-                    //'&hgt_tsDelRow=true&hgt_tsDelRow=true&hgt_tsDelRow=true&hgt_tsDelRow=true' +
                     '&tsCurTab=advancedTab&hgt_tsPage=';
             return (url);
         },
@@ -119,6 +119,14 @@ var encodeMatrix = (function () {
                 // implementation (stop+fadeIn)
                 header.stop(true, true);
                 header.fadeIn(100);
+            },
+            cbFadeIn: function (header) {
+                // restore checked radio button that is the fadeIn cleared (on Chrome)
+                if (encodeMatrix.isFileSearch()) {
+                    $('#searchFiles').attr('checked', true);
+                } else {
+                    $('#searchTracks').attr('checked', true);
+                }
             }
         });
     },
@@ -229,7 +237,6 @@ var encodeMatrix = (function () {
 
         tableHeaderOut($table, groups, expCounts);
         encodeMatrix.tableMatrixOut($table, matrix, cellTiers, groups, expCounts, rowAddCells);
-
         encodeMatrix.addTableFloatingHeader($table);
         encodeMatrix.rotateTableCells($table);
         encodeMatrix.hoverTableCrossHair($table);
