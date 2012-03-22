@@ -1290,6 +1290,26 @@ orderUrl http://labs.fhcrc.org/heimfeld/index.html
 termId BTO:0000725
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000725
 protocol Stam:CD34+Mobilized_Stam_protocol.pdf
+#
+#term CD34+_Mobilized_RO01525
+#tag CD34MobRO01525
+#type Cell Line
+#tier 3
+#organism human
+#description Mobilized CD34+ cells from 23 year old donor RO01525
+#lineage blood stem
+#karyotype normal
+#sex M
+#tissue blood
+#childOf CD34+_Mobilized
+#vendorName missing
+#vendorId missing
+#orderUrl missing
+#termId missing
+#termUrl missing
+#lab Stam
+#protocol Stam:CD34+MobilizedRO01525_Stam_protocol.pdf
+#This cell line is not approved yet. Mar 22, 2012 ~Jeff
 
 term CLL
 tag CLL
@@ -1643,6 +1663,46 @@ termId BTO:0002062
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
 lab Farnham
 protocol Farnham:GM08714_Farnham_protocol.pdf
+#
+#term GM10248
+#tag GM10248
+#type Cell Line
+#tier 3
+#organism human
+#description lymphoblastoid cell line, Clinically normal; 4 paternal cousins have Cornelia de Lange syndrome; 46,XY, t(3;22)(q25.3;p12) 
+#lineage mesoderm
+#karyotype unknown
+#sex F
+#tissue blood
+#childOf Lymphoblastoid
+#vendorName Coriell
+#vendorId GM10248
+#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10248&PgId=166
+#termId BTO:0002062
+#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+#lab Crawford
+#protocol Crawford:GM10248_Crawford_protocol.pdf
+#This cell line is not approved yet. Mar 22, 2012 ~Jeff
+#
+#term GM10266
+#tag GM10266
+#type Cell Line
+#tier 3
+#organism human
+#description lymphoblastoid cell line, De Lange phenotype; developmental delay; profound retardation; seizures; 3 cousins are also affected; 46,XY,-22,+der (22)t(3;22)(q25.3;p12) 
+#lineage mesoderm
+#karyotype unknown
+#sex F
+#tissue blood
+#childOf Lymphoblastoid
+#vendorName Coriell
+#vendorId GM10266
+#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10266&PgId=166
+#termId BTO:0002062
+#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+#lab Crawford
+#protocol Crawford:GM10266_Crawford_protocol.pdf
+#This cell line is not approved yet. Mar 22, 2012 ~Jeff
 
 term GM10847
 tag GM10847
@@ -2012,6 +2072,46 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Snyder:GM-generalized_Snyder_protocol.pdf
+#
+#term GM13976
+#tag GM13976
+#type Cell Line
+#tier 3
+#organism human
+#description lymphoblastoid cell line, Clinically normal; monozygotic twin sister with Cornelia De Lange syndrome is GM13977 
+#lineage mesoderm
+#karyotype unknown
+#sex F
+#tissue blood
+#childOf Lymphoblastoid
+#vendorName Coriell
+#vendorId GM13976
+#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM13976&PgId=166
+#termId BTO:0002062
+#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+#lab Crawford
+#protocol Crawford:GM13976_Crawford_protocol.pdf
+#This cell line is not approved yet. Mar 22, 2012 ~Jeff
+#
+#term GM13977
+#tag GM13977
+#type Cell Line
+#tier 3
+#organism human
+#description lymphoblastoid cell line, Clinically affected; microcephaly; low frontal hairline; synophris; "penciled" arched eyebrows; short nose; crescent shaped mouth; hirsutism; micromelia; short thumbs; mental retardation; clinically normal monozygotic twin sister is GM13976 
+#lineage mesoderm
+#karyotype unknown 
+#sex F
+#tissue blood
+#childOf Lymphoblastoid
+#vendorName Coriell
+#vendorId GM13977
+#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM13977&PgId=166
+#termId BTO:0002062
+#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+#lab Crawford
+#protocol Crawford:GM13977_Crawford_protocol.pdf
+#This cell line is not approved yet. Mar 22, 2012 ~Jeff
 
 term GM18505
 tag GM18505
@@ -2165,6 +2265,25 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Crawford:GM19240_Crawford_protocol.pdf
+#term GM20000
+#tag GM20000
+#type Cell Line
+#tier 3
+#organism human
+#description lymphoblastoid cell line; De Lange phenotype; developmental delay; profound retardation 
+#lineage mesoderm
+#karyotype unknown
+#sex F
+#tissue blood
+#vendorName Coriell
+#childOf Lymphoblastoid
+#vendorId GM20000
+#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM20000&PgId=166
+#termId BTO:0002062
+#termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002062
+#lab Crawford
+#protocol Crawford:GM20000_Crawford_protocol.pdf
+#This cell line is not approved yet. Mar 22, 2012 ~Jeff
 
 term H7-hESC
 tag H7ES
