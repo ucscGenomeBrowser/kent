@@ -1233,19 +1233,6 @@ if (matched != NULL)
 return numChanged;
 }
 
-static boolean isMySql4(struct sqlConnection *conn)
-/* determine if this is at least mysql 4.0 or newer */
-{
-char majorVerBuf[64];
-char *dotPtr = strchr(conn->conn->server_version, '.');
-int len = (dotPtr - conn->conn->server_version);
-assert(dotPtr != NULL);
-strncpy(majorVerBuf, conn->conn->server_version, len);
-majorVerBuf[len] = '\0';
-
-return (sqlUnsigned(majorVerBuf) >= 4);
-}
-
 void sqlWarnings(struct sqlConnection *conn, int numberOfWarnings)
 /* Show the number of warnings requested. New feature in mysql5. */
 {
@@ -1265,6 +1252,13 @@ warn("%s", dy->string);
 dyStringFree(&dy);
 }
 
+int sqlWarnCount(struct sqlConnection *conn)
+/* Return the number of warnings. New feature in mysql5. */
+{
+return sqlQuickNum(conn, "SHOW COUNT(*) WARNINGS");
+}
+
+
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options)
 /* Load a tab-seperated file into a database table, checking for errors.
@@ -1278,7 +1272,6 @@ int numScan, numRecs, numSkipped, numWarnings;
 char *localOpt, *concurrentOpt, *dupOpt;
 const char *info;
 struct sqlResult *sr;
-boolean mysql4 = isMySql4(conn);
 
 /* Doing an "alter table disable keys" command implicitly commits the current
    transaction. Don't want to use that optimization if we need to be transaction
@@ -1319,7 +1312,7 @@ if (options & SQL_TAB_FILE_CONCURRENT)
 else
     {
     concurrentOpt = "";
-    if (mysql4 && doDisableKeys)
+    if (doDisableKeys)
         {
         /* disable update of indexes during load. Inompatible with concurrent,
          * since enable keys locks other's out. */
@@ -1339,6 +1332,7 @@ sr = sqlGetResult(conn, query);
 monitorEnter();
 info = mysql_info(conn->conn);
 monitorLeave();
+
 if (info == NULL)
     errAbort("no info available for result of sql query: %s", query);
 numScan = sscanf(info, "Records: %d Deleted: %*d  Skipped: %d  Warnings: %d",
@@ -1346,6 +1340,9 @@ numScan = sscanf(info, "Records: %d Deleted: %*d  Skipped: %d  Warnings: %d",
 if (numScan != 3)
     errAbort("can't parse sql load info: %s", info);
 sqlFreeResult(&sr);
+
+/* mysql 5.0 bug: mysql_info returns unreliable warnings count, so use this instead: */
+numWarnings = sqlWarnCount(conn);
 
 if ((numSkipped > 0) || (numWarnings > 0))
     {
@@ -1368,7 +1365,9 @@ if ((numSkipped > 0) || (numWarnings > 0))
              "%d row(s) skipped, %d warning(s) loading %s",
              table, numRecs, numSkipped, numWarnings, path);
     }
-if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && mysql4 && doDisableKeys)
+
+
+if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && doDisableKeys)
     {
     /* reenable update of indexes */
     safef(query, sizeof(query), "ALTER TABLE %s ENABLE KEYS", table);
