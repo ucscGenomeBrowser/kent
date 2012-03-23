@@ -59,21 +59,7 @@
 #define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
 #endif///ndef BUTTONS_BY_CSS
 
-struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
-/* Look up through self and parents, looking for someone responsible for handling
- * where the downloads are. */
-{
-if (!tdbIsDownloadsOnly(tdb) && !sameString(tdb->table, tdb->track) && trackHash)
-    {
-    tdb = hashFindVal(trackHash, tdb->table);
-    if (tdb == NULL)
-        errAbort("Can't find track for table %s in wgEncodeDownloadDirKeeper", tdb->table);
-    }
-return trackDbTopLevelSelfOrParent(tdb);
-}
-
-static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,char *name,boolean nameIsFile,
-        struct hash *trackHash)
+static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,char *name,boolean nameIsFile)
 // Returns an HTML string for a downloads link
 {
 // If has fileSortOrder, then link to new hgFileUi
@@ -86,22 +72,22 @@ if (!nameIsFile && trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
     }
 else if(trackDbSetting(tdb, "wgEncode") != NULL)  // Downloads directory if this is ENCODE
     {
-    struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
-    char *compositeDir = (sameWord(dirKeeper->type,"downloadsOnly")?dirKeeper->track:dirKeeper->table);
-    struct dyString *dyLink = dyStringCreate("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download %s' class='file' TARGET=ucscDownloads>%s</A>",
-            hDownloadsServer(),
-            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),  // This may not be wise!!!
-            ENCODE_DCC_DOWNLOADS, compositeDir, (nameIsFile?name:""), nameIsFile?"file":"files",name);
-    return dyStringCannibalize(&dyLink);
+    const char *compositeDir = metadataFindValue(tdb, MDB_OBJ_TYPE_COMPOSITE);
+    if (compositeDir != NULL)
+        {
+        struct dyString *dyLink = dyStringCreate("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download %s' class='file' TARGET=ucscDownloads>%s</A>",
+                hDownloadsServer(), database,
+                ENCODE_DCC_DOWNLOADS, compositeDir, (nameIsFile?name:""), nameIsFile?"file":"files",name);
+        return dyStringCannibalize(&dyLink);
+        }
     }
 return NULL;
 }
 
-static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *name,
-	struct hash *trackHash)
+static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *name)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
-char *htmlString = htmlStringForDownloadsLink(database,trackDbTopLevelSelfOrParent(tdb),name,FALSE,trackHash);
+char *htmlString = htmlStringForDownloadsLink(database,trackDbTopLevelSelfOrParent(tdb),name,FALSE);
 if (htmlString == NULL)
     return FALSE;
 
@@ -110,10 +96,10 @@ freeMem(htmlString);
 return TRUE;
 }
 
-boolean makeDownloadsLink(char *database, struct trackDb *tdb, struct hash *trackHash)
+boolean makeDownloadsLink(char *database, struct trackDb *tdb)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
-return makeNamedDownloadsLink(database, tdb,"Downloads", trackHash);
+return makeNamedDownloadsLink(database, tdb,"Downloads");
 }
 
 void makeTopLink(struct trackDb *tdb)
@@ -173,7 +159,7 @@ freeMem(encValue);
 return dyStringCannibalize(&dyLink);
 }
 
-char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel, struct hash *trackHash)
+char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 /* If metadata from metaDb exists, return string of html with table definition */
 {
 const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
@@ -206,7 +192,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         while (fileSet != NULL)
             {
             struct slName *file = slPopHead(&fileSet);
-            dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, file->name, TRUE, trackHash));
+            dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, file->name, TRUE));
             if (fileSet != NULL)
                 dyStringAppend(dyTable,"<BR>");
             slNameFree(&file);
@@ -247,7 +233,7 @@ return dyStringCannibalize(&dyTable);
 }
 
 boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
-        boolean embeddedInText,boolean showLongLabel, struct hash *trackHash)
+        boolean embeddedInText,boolean showLongLabel)
 /* If metadata from metaTbl exists, create a link that will allow toggling it's display */
 {
 const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
@@ -256,17 +242,11 @@ return FALSE;
 
 printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s<img src='../images/downBlue.png'/></A>",
         (embeddedInText?"&nbsp;":"<P>"),tdb->track,tdb->track, showLongLabel?"true":"false", (title?title:""));
-if (!sameString(tdb->table, tdb->track) && trackHash != NULL) // If trackHash is needed, then can't fill this in with ajax
-    {
-    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track,
-        metadataAsHtmlTable(db,tdb,showLongLabel,TRUE,trackHash) );
-    }
-else
-    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->track);
+printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->track);
 return TRUE;
 }
 
-void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash)
+void extraUiLinks(char *db,struct trackDb *tdb)
 /* Show downlaods, schema and metadata links where appropriate */
 {
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb)
@@ -307,13 +287,13 @@ if(downloadLink)
     if (targetDb == NULL)
         targetDb = cloneString(db);
 
-    makeNamedDownloadsLink(targetDb, tdb, (links > 1 ? "downloads":"Downloads"), trackHash);
+    makeNamedDownloadsLink(targetDb, tdb, (links > 1 ? "downloads":"Downloads"));
     freez(&targetDb);
     if(metadataLink)
         printf(",");
     }
 if (metadataLink)
-    compositeMetadataToggle(db,tdb,"metadata", TRUE, TRUE, trackHash);
+    compositeMetadataToggle(db,tdb,"metadata", TRUE, TRUE);
 
 if(links > 1)
     printf("</td></tr></table>");
@@ -3838,7 +3818,7 @@ if (!cartVarExists(cart, "ajax") && tdbIsComposite(tdb))
 }
 #endif///ndef SUBTRACK_CFG
 
-static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,struct hash *trackHash)
+static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb)
 /* Display list of subtracks and descriptions with checkboxes to control visibility and possibly other
  * nice things including links to schema and metadata and a release date. */
 {
@@ -4139,8 +4119,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             if (membersForAll->members[di] && -1 != (ix = stringArrayIx(membersForAll->members[di]->groupTag, membership->subgroups, membership->count)))
                 dyStringPrintf(dyHtml," %s",membership->membership[ix]);
             }
-        if (membersForAll->members[dimV] && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
-            dyStringPrintf(dyHtml, " %s",membership->membership[ix]);  // Saved view for last
         }
      else if (membersForAll->abcCount) // "dimensions" don't exist but there may be subgroups anyway
         {
@@ -4150,6 +4128,8 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 dyStringPrintf(dyHtml," %s",membership->membership[ix]);
             }
         }
+    if (membersForAll->members[dimV] && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
+        dyStringPrintf(dyHtml, " %s",membership->membership[ix]);  // Saved view for last
 
     // And finally the checkBox is made!
     safef(buffer, sizeof(buffer), "%s_sel", subtrack->track);
@@ -4243,7 +4223,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     printf ("<TD title='select to copy'>&nbsp;%s", subtrack->longLabel);
     if (trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
         printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
-    compositeMetadataToggle(db,subtrack,NULL,TRUE,FALSE, trackHash);
+    compositeMetadataToggle(db,subtrack,NULL,TRUE,FALSE);
     printf("&nbsp;");
 
     // Embedded cfg dialogs are within the TD that contains the longLabel.  This allows a wide item to be embedded in the table
@@ -7199,7 +7179,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
 }
 
 void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
-		  char *primarySubtrack, char *fakeSubmit, char *formName, struct hash *trackHash)
+		  char *primarySubtrack, char *fakeSubmit, char *formName)
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is
  * non-NULL, don't allow it to be cleared and only offer subtracks
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
@@ -7226,7 +7206,7 @@ if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     if(primarySubtrack)
         compositeUiSubtracksMatchingPrimary(db, cart, tdb,primarySubtrack);
     else
-        compositeUiSubtracks(db, cart, tdb, trackHash);
+        compositeUiSubtracks(db, cart, tdb);
     return;
     }
 if (fakeSubmit)
@@ -7264,7 +7244,7 @@ cgiContinueHiddenVar("g");
 if(primarySubtrack)
     compositeUiSubtracksMatchingPrimary(db, cart, tdb,primarySubtrack);
 else
-    compositeUiSubtracks(db, cart, tdb, trackHash);
+    compositeUiSubtracks(db, cart, tdb);
 
 if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not hgTrackUi
     {
