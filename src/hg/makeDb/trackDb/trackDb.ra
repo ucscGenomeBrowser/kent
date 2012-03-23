@@ -456,6 +456,7 @@ compositeTrack on
 release alpha
 nextExonText Next Match
 prevExonText Prev Match
+pubsArticleTable hgFixed.pubsArticle
 
     track pubsBlat
     shortLabel Sequences
@@ -464,9 +465,16 @@ prevExonText Prev Match
     type bed 12 .
     visibility pack
     priority 1
-    color 0,0,100
-    pubsArticleTable hgFixed.pubsArticle
     pubsSequenceTable hgFixed.pubsSequenceAnnot
+    release alpha
+
+    track pubsBlatPsl
+    shortLabel indiv. Seq Matches
+    longLabel Individual sequence matches
+    parent pubs
+    type psl
+    visibility hide
+    priority 2
     release alpha
 
     track pubsMarkerSnp
@@ -476,7 +484,6 @@ prevExonText Prev Match
     visibility pack
     priority 3
     type bed 4 +
-    pubsArticleTable hgFixed.pubsArticle
     pubsMarkerTable hgFixed.pubsMarkerAnnot
     release alpha
 
@@ -487,7 +494,6 @@ prevExonText Prev Match
     visibility pack
     priority 3
     type bed 4 +
-    pubsArticleTable hgFixed.pubsArticle
     pubsMarkerTable hgFixed.pubsMarkerAnnot
     release alpha
 
@@ -498,7 +504,6 @@ prevExonText Prev Match
     priority 3
     visibility pack
     type bed 4 +
-    pubsArticleTable hgFixed.pubsArticle
     pubsMarkerTable hgFixed.pubsMarkerAnnot
     release alpha
 

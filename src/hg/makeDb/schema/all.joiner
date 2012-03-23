@@ -3316,9 +3316,9 @@ identifier pubsArticleId external=pubTools
     hgFixed.pubsSequenceAnnot.articleId
     hgFixed.pubsArticle.articleId
 
-identifier pubsSequenceId
+identifier pubsSequenceId external=pubTools
 "ID of sequence found in article "
-    hgFixed.pubsTestSequence.sequenceId
+    hgFixed.pubsTestSequence.annotId
     hg19.pubsTestBlat.seqIds comma
 
 identifier pubsMarkerId

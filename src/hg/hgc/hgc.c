@@ -6879,7 +6879,6 @@ puts("</HTML>\n");
 exit(0);	/* Avoid cartHtmlEnd. */
 }
 
-
 void htcCdnaAli(char *acc)
 /* Show alignment for accession. */
 {
