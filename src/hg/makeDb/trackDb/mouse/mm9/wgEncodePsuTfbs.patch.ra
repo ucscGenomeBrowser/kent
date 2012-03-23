@@ -1,0 +1,499 @@
+#  PSU TFBS wrangler:vsmalladi)
+
+# Notes:
+#	   - Track Long Label: Transcription Factor Binding Sites by ChIP-seq from ENCODE/PSU
+#	   - Track Short Label: PSU TFBS
+#	   - View Long Labels: [cell] [factor] TFBS ChIP-seq [view] from ENCODE/PSU
+#	   - cellType Order: Ordering is alphabetical
+#	   - Default View selections
+#	       - Peaks = dense
+#	       - Signal = full
+#	   - Short Labels: 
+#	       Template: [cell] {factor] [view]
+#		- Cells: Abbreviation for cells
+#	       - Factors: Will have the target distinction in them only to allow for 17 character limit
+#	               - GATA1_(SC-265) = GATA1
+#	               - TAL1_(SC-12984) = TAL1
+#				   - GATA2_(SC-9008) = GATA2
+#				   - PAX5_(N-15) = PAX5	
+#	       - Views: For consistency sake view will be
+#	               - Peaks = Pk
+#	               - Signal =Sg 
+#	   - Tracks On: All Cell Lines on with the following facots on by default
+#	   - Matrix Dimensions:
+#	       X - Cell Line
+#	       Y - Factor
+#	-View specific changes
+#		-Signal
+#			- windowing function = mean+whiskers
+
+
+
+track wgEncodePsuTfbs
+compositeTrack on
+shortLabel PSU TFBS
+longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/PSU
+group regulation
+subGroup1 view Views Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line CH12=CH12 ERYTHROBL=Erythroblast G1E=G1E G1EER4=G1E-ER4 MEGAKARYO=Megakaryocyte MEL=MEL
+subGroup3 factor Factor CTCF=CTCF GATA1a=GATA1_(SC-265) GATA2SC9008=GATA2_(SC-9008) PAX5c=PAX5_(N-15) POL24H8=Pol2-4H8  TAL1=TAL1_(SC-12984) zINPUT=Input 
+subGroup4 sex Sex B=B F=F M=M U=U
+subGroup5 age Age IMMORTAL=immortalized E0=E0 E14HALF=E14.5
+subGroup6 strain Strain 2A4B=B10.H-2aH-4bp/Wts S129=129 C57BL6=C57BL/6 CD1=CD-1 UKN=Unknown
+subGroup7 control Control INPUT=Input
+dimensions dimensionX=cellType dimensionY=factor
+sortOrder cellType=+ factor=+ sex=+ age=+ strain=+ control=+ view=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target sex=Sex age=Age strain=Strain control=Control replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex age=age strain=strain control=control
+dragAndDrop subTracks
+visibilityViewDefaults  Peaks=pack Signal=full
+noInherit on
+priority 0
+type bed 3
+wgEncode 1
+
+	#####Peak Tracks###########
+	track wgEncodePsuTfbsViewPeaks
+	shortLabel Peaks
+	view Peaks
+	visibility pack
+	#viewUi on
+	subTrack wgEncodePsuTfbs
+	signalFilter 0
+	signalFilterLimits 0:18241
+	pValueFilter 0
+	pValueFilterLimits 0:300
+	qValueFilter 0
+	qValueFilterLimits 0:300
+
+		track wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk
+		parent wgEncodePsuTfbsViewPeaks off 
+		shortLabel CH12 Pol2-4H8
+		longLabel CH12 Pol2-4H8 TFBS ChIP-seq Peaks from ENCODE/PSU
+		subGroups view=Peaks age=IMMORTAL factor=POL24H8 cellType=CH12 control=INPUT sex=F strain=2A4B
+		type broadPeak
+		color 153,38,0
+		# subId=2972 dateSubmitted=2010-11-13
+
+        track wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk
+        parent wgEncodePsuTfbsViewPeaks
+        shortLabel G1E-ER4 CTCF
+        longLabel G1E-ER4 CTCF Estradiol 24 hr TFBS ChIP-seq Peaks from ENCODE/PSU
+        subGroups view=Peaks age=E0 factor=CTCF cellType=G1EER4 control=INPUT sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=4793 dateSubmitted=2011-08-19
+
+        track wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputPk
+        parent wgEncodePsuTfbsViewPeaks
+        shortLabel G1E-ER4 GATA1
+        longLabel G1E-ER4 GATA1 Estradiol 24 hr TFBS ChIP-seq Peaks from ENCODE/PSU
+        subGroups view=Peaks age=E0 factor=GATA1a cellType=G1EER4 control=INPUT sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=4723 dateSubmitted=2011-08-09
+
+        track wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputPk
+        parent wgEncodePsuTfbsViewPeaks
+        shortLabel G1E-ER4 TAL1
+        longLabel G1E-ER4 TAL1 Estradiol 24 hr TFBS ChIP-seq Peaks from ENCODE/PSU
+        subGroups view=Peaks age=E0 factor=TAL1 cellType=G1EER4 control=INPUT sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=4783 dateSubmitted=2011-08-15
+
+        track wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputPk
+        parent wgEncodePsuTfbsViewPeaks
+        shortLabel Erythrobl GATA1
+        longLabel Erythroblast GATA1 TFBS ChIP-seq Peaks from ENCODE/PSU
+        subGroups view=Peaks age=E14HALF factor=GATA1a cellType=ERYTHROBL control=INPUT sex=B strain=CD1
+        type broadPeak
+        color 153,38,0
+        # subId=4782 dateSubmitted=2011-08-17
+        # was wgEncodePsuTfbsErythroblGata1aBE14halfCd1Pk vsmalladi Thu Nov  3 15:06:54 2011
+
+        track wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPk
+        parent wgEncodePsuTfbsViewPeaks
+        shortLabel Megakaryo GATA1
+        longLabel Megakaryocyte GATA1 TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=E14HALF factor=GATA1a cellType=MEGAKARYO control=INPUT sex=B strain=CD1
+        type broadPeak
+        color 86,180,233
+        # subId=4791 dateSubmitted=2011-08-18
+
+        track wgEncodePsuTfbsG1eTal1ME0S129InputPk
+        parent wgEncodePsuTfbsViewPeaks
+        shortLabel G1E TAL1
+        longLabel G1E TAL1 TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=E0 factor=TAL1 cellType=G1E control=INPUT sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=4800 dateSubmitted=2011-08-26
+
+        track wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputPk
+        parent wgEncodePsuTfbsViewPeaks
+        shortLabel CH12 CTCF
+        longLabel CH12 CTCF TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=IMMORTAL factor=CTCF cellType=CH12 control=INPUT sex=F strain=2A4B
+        type broadPeak
+        color 86,180,233
+        # subId=4809 dateSubmitted=2011-08-30
+
+        track wgEncodePsuTfbsG1eCtcfME0S129InputPk
+        parent wgEncodePsuTfbsViewPeaks
+        shortLabel G1E CTCF
+        longLabel G1E CTCF TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=E0 factor=CTCF cellType=G1E control=INPUT sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=4792 dateSubmitted=2011-08-31
+
+        track wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk
+        parent wgEncodePsuTfbsViewPeaks off
+        shortLabel MEL CTCF
+        longLabel MEL CTCF TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=IMMORTAL factor=CTCF cellType=MEL control=INPUT sex=M strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=4817 dateSubmitted=2011-09-08
+
+        track wgEncodePsuTfbsG1ePol24h8ME0S129InputPk
+        parent wgEncodePsuTfbsViewPeaks off
+        shortLabel G1E Pol2-4H8
+        longLabel G1E Pol2-4H8 TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=E0 factor=POL24H8 cellType=G1E control=INPUT sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=3049 dateSubmitted=2011-09-26
+
+        track wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputPk
+        parent wgEncodePsuTfbsViewPeaks off
+        shortLabel G1E-ER4 Pol2-4H8
+        longLabel G1E-ER4 Pol2-4H8 Estradiol 24 hr TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=E0 factor=POL24H8 cellType=G1EER4 control=INPUT sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=3050 dateSubmitted=2011-09-26
+
+        track wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputPk
+        parent wgEncodePsuTfbsViewPeaks off
+        shortLabel CH12 PAX5
+        longLabel CH12 PAX5 TFBS ChIP-seq Peaks from ENCODE/PSU
+        subGroups view=Peaks age=IMMORTAL factor=PAX5c cellType=CH12 control=INPUT sex=F strain=2A4B
+        type broadPeak
+        color 86,180,233
+        # subId=4844 dateSubmitted=2011-09-23
+
+        track wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputPk
+        parent wgEncodePsuTfbsViewPeaks off
+        shortLabel G1E-ER4 GATA2
+        longLabel G1E-ER4 GATA2 Estradiol 24 hr TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=E0 factor=GATA2SC9008 cellType=G1EER4 control=INPUT sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=3045 dateSubmitted=2011-10-21
+
+        track wgEncodePsuTfbsG1eGata2sc9008ME0S129InputPk
+        parent wgEncodePsuTfbsViewPeaks
+        shortLabel G1E GATA2
+        longLabel G1E GATA2 TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=E0 factor=GATA2SC9008 cellType=G1E control=INPUT sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=3046 dateSubmitted=2011-10-21
+
+        track wgEncodePsuTfbsG1eGata1aME0S129InputPk
+        parent wgEncodePsuTfbsViewPeaks off
+        shortLabel G1E GATA1
+        longLabel G1E GATA1 TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=E0 factor=GATA1a cellType=G1E control=INPUT sex=M strain=S129
+        type broadPeak
+        color 153,38,0
+        # subId=5028 dateSubmitted=2011-10-27
+
+        track wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputPk
+        parent wgEncodePsuTfbsViewPeaks off
+        shortLabel MEL Pol2-4H8
+        longLabel MEL Pol2-4H8 TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=IMMORTAL factor=POL24H8 cellType=MEL control=INPUT sex=U strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=3048 dateSubmitted=2011-11-10
+
+        track wgEncodePsuTfbsErythroblTal1BE14halfCd1InputPk
+        parent wgEncodePsuTfbsViewPeaks
+        shortLabel Erythrobl TAL1
+        longLabel Erythroblast TAL1 TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=E14HALF factor=TAL1 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
+        type broadPeak
+        color 153,38,0
+        # subId=5034 dateSubmitted=2011-11-01
+
+        track wgEncodePsuTfbsMelTal1UImmortalC57bl6InputPk
+        parent wgEncodePsuTfbsViewPeaks off
+        shortLabel MEL TAL1
+        longLabel MEL TAL1 TFBS ChIP-seq Peaks from ENCODE/PSU 
+        subGroups view=Peaks age=IMMORTAL factor=TAL1 cellType=MEL control=INPUT sex=U strain=C57BL6
+        type broadPeak
+        color 86,180,233
+        # subId=5096 dateSubmitted=2011-11-05
+
+
+	#####Signal Tracks###########
+	track wgEncodePsuTfbsViewSignal
+	shortLabel Signal
+	view Signal
+	visibility full
+	#viewUi on
+	subTrack wgEncodePsuTfbs
+	viewLimits 5:100
+	autoScale off
+	configurable on
+	maxHeightPixels 100:16:16
+	windowingFunction mean+whiskers
+
+		track wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig
+		parent wgEncodePsuTfbsViewSignal off 
+		shortLabel CH12 Pol2-4H8 
+		longLabel CH12 Pol2-4H8 TFBS ChIP-seq Signal from ENCODE/PSU
+		subGroups view=Signal age=IMMORTAL factor=POL24H8 cellType=CH12 control=INPUT sex=F strain=2A4B
+		type bigWig 1.000000 156.000000
+		color 153,38,0
+		# subId=2972 dateSubmitted=2010-11-13
+
+        track wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal
+        shortLabel G1E-ER4 CTCF 
+        longLabel G1E-ER4 CTCF Estradiol 24 hr TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=CTCF cellType=G1EER4 control=INPUT sex=M strain=S129
+        type bigWig 1.000000 244.000000
+        color 153,38,0
+		viewLimits 1:100 
+        # subId=4793 dateSubmitted=2011-08-19
+
+        track wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal
+        shortLabel G1E-ER4 GATA1 
+        longLabel G1E-ER4 GATA1 Estradiol 24 hr TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=GATA1a cellType=G1EER4 control=INPUT sex=M strain=S129
+        type bigWig 1.000000 212.000000
+        color 153,38,0i
+		viewLimits 2:150
+        # subId=4723 dateSubmitted=2011-08-09
+        # was wgEncodePsuTfbsG1eer4e2Gata1aME0S129Sig vsmalladi Thu Nov  3 15:06:55 2011
+
+        track wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal
+        shortLabel G1E-ER4 TAL1 
+        longLabel G1E-ER4 TAL1 Estradiol 24 hr TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=TAL1 cellType=G1EER4 control=INPUT sex=M strain=S129
+        type bigWig 1.000000 266.000000
+        color 153,38,0
+        viewLimits 1:100
+		# subId=4783 dateSubmitted=2011-08-15
+
+        track wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputSig
+        parent wgEncodePsuTfbsViewSignal
+        shortLabel Erythrobl GATA1 
+        longLabel Erythroblast GATA1 TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E14HALF factor=GATA1a cellType=ERYTHROBL control=INPUT sex=B strain=CD1
+        type bigWig 1.000000 248.000000
+        color 153,38,0
+		viewLimits 2:150
+        # subId=4782 dateSubmitted=2011-08-17
+        # was wgEncodePsuTfbsErythroblGata1aBE14halfCd1Sig vsmalladi Thu Nov  3 15:06:54 2011
+
+        track wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSig
+        parent wgEncodePsuTfbsViewSignal
+        shortLabel Megakaryo GATA1 
+        longLabel Megakaryocyte GATA1 TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E14HALF factor=GATA1a cellType=MEGAKARYO control=INPUT sex=B strain=CD1
+        type bigWig 1.000000 142.000000
+        color 86,180,233
+		viewLimits 5:50
+        # subId=4791 dateSubmitted=2011-08-18
+
+        track wgEncodePsuTfbsG1eTal1ME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal
+        shortLabel G1E TAL1 
+        longLabel G1E TAL1 TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=TAL1 cellType=G1E control=INPUT sex=M strain=S129
+        type bigWig 1.000000 326.000000
+        color 153,38,0
+		viewLimits 2:250
+        # subId=4800 dateSubmitted=2011-08-26
+
+        track wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputSig
+        parent wgEncodePsuTfbsViewSignal
+        shortLabel CH12 CTCF 
+        longLabel CH12 CTCF TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=IMMORTAL factor=CTCF cellType=CH12 control=INPUT sex=F strain=2A4B
+        type bigWig 1.000000 226.000000
+        color 86,180,233
+		viewLimits 1:100
+        # subId=4809 dateSubmitted=2011-08-30
+
+        track wgEncodePsuTfbsG1eCtcfME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal
+        shortLabel G1E CTCF 
+        longLabel G1E CTCF TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=CTCF cellType=G1E control=INPUT sex=M strain=S129
+        type bigWig 1.000000 188.000000
+        color 153,38,0
+		viewLimits 1:50
+        # subId=4792 dateSubmitted=2011-08-31
+
+        track wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel MEL CTCF 
+        longLabel MEL CTCF TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=IMMORTAL factor=CTCF cellType=MEL control=INPUT sex=M strain=C57BL6
+        type bigWig 1.000000 254.000000
+        color 86,180,233
+		viewLimits 1:100
+        # subId=4817 dateSubmitted=2011-09-08
+
+        track wgEncodePsuTfbsG1ePol24h8ME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel G1E Pol2-4H8 
+        longLabel G1E Pol2-4H8 TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=POL24H8 cellType=G1E control=INPUT sex=M strain=S129
+        type bigWig 1.000000 346.000000
+        color 153,38,0
+		viewLimits 5:50
+        # subId=3049 dateSubmitted=2011-09-26
+
+        track wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel G1E-ER4 Pol2-4H8
+        longLabel G1E-ER4 Pol2-4H8 2hr Estradiol TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=POL24H8 cellType=G1EER4 control=INPUT sex=M strain=S129
+        type bigWig 1.000000 358.000000
+        color 153,38,0
+		viewLimits 5:50
+        # subId=3050 dateSubmitted=2011-09-26
+
+        track wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel CH12 PAX5 
+        longLabel CH12 PAX5 TFBS ChIP-seq Signal from ENCODE/PSU
+        subGroups view=Signal age=IMMORTAL factor=PAX5c cellType=CH12 control=INPUT sex=F strain=2A4B
+        type bigWig 1.000000 106.000000
+        color 86,180,233
+		viewLimits 2:100
+        # subId=4844 dateSubmitted=2011-09-23
+
+        track wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel G1E-ER4 GATA2 
+        longLabel G1E-ER4 GATA2 Estradiol 24 hr TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=GATA2SC9008 cellType=G1EER4 control=INPUT sex=M strain=S129
+        type bigWig 1.000000 98.000000
+        color 153,38,0
+		viewLimits 2:20
+        # subId=3045 dateSubmitted=2011-10-21
+
+        track wgEncodePsuTfbsG1eGata2sc9008ME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal
+        shortLabel G1E GATA2 
+        longLabel G1E GATA2 TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=GATA2SC9008 cellType=G1E control=INPUT sex=M strain=S129
+        type bigWig 1.000000 128.000000
+        color 153,38,0
+		viewLimits 2:20
+        # subId=3046 dateSubmitted=2011-10-21
+
+        track wgEncodePsuTfbsG1eGata1aME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel G1E GATA1 
+        longLabel G1E GATA1 TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=GATA1a cellType=G1E control=INPUT sex=M strain=S129
+        type bigWig 1.000000 104.000000
+        color 153,38,0
+		viewLimits 2:150
+        # subId=5028 dateSubmitted=2011-10-27
+
+        track wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel MEL Pol2-4H8 
+        longLabel MEL Pol2-4H8 TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=IMMORTAL factor=POL24H8 cellType=MEL control=INPUT sex=U strain=C57BL6
+        type bigWig 1.000000 186.000000
+        color 86,180,233
+		viewLimits 5:50
+        # subId=3048 dateSubmitted=2011-11-10
+
+        track wgEncodePsuTfbsErythroblTal1BE14halfCd1InputSig
+        parent wgEncodePsuTfbsViewSignal
+        shortLabel Erythrobl TAL1 
+        longLabel Erythroblast TAL1 TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E14HALF factor=TAL1 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
+        type bigWig 1.000000 268.000000
+        color 153,38,0
+		viewLimits 2:250
+        # subId=5034 dateSubmitted=2011-11-01
+
+        track wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel MEL TAL1 
+        longLabel MEL TAL1 TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=IMMORTAL factor=TAL1 cellType=MEL control=INPUT sex=U strain=C57BL6
+        type bigWig 1.000000 346.000000
+        color 86,180,233
+		viewLimits 2:300
+        # subId=5096 dateSubmitted=2011-11-05
+
+        track wgEncodePsuTfbsErythroblInputBE14halfCd1InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel Erythrobl Input 
+        longLabel Erythroblast Input TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E14HALF factor=zINPUT cellType=ERYTHROBL control=INPUT sex=B strain=CD1
+        type bigWig 1.000000 118.000000
+        color 153,38,0
+        # subId=5122 dateSubmitted=2011-12-15
+
+        track wgEncodePsuTfbsG1eInputME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel G1E Input 
+        longLabel G1E Input TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=zINPUT cellType=G1E control=INPUT sex=M strain=S129
+        type bigWig 1.000000 228.000000
+        color 153,38,0
+        # subId=5123 dateSubmitted=2011-12-16
+
+        track wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel Megakaryo Input 
+        longLabel Megakaryocyte Input TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E14HALF factor=zINPUT cellType=MEGAKARYO control=INPUT sex=B strain=CD1
+        type bigWig 1.000000 128.000000
+        color 86,180,233
+        # subId=5124 dateSubmitted=2011-12-18
+
+        track wgEncodePsuTfbsCh12InputFImmortal2a4bInputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel CH12 Input 
+        longLabel CH12 Input TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=IMMORTAL factor=zINPUT cellType=CH12 control=INPUT sex=F strain=2A4B
+        type bigWig 1.000000 200.000000
+        color 86,180,233
+        # subId=5125 dateSubmitted=2011-12-15
+
+        track wgEncodePsuTfbsG1eer4e2InputME0S129InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel G1E-ER4 Input 
+        longLabel G1E-ER4 Input Estradiol 24 hr TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=E0 factor=zINPUT cellType=G1EER4 control=INPUT sex=M strain=S129
+        type bigWig 1.000000 158.000000
+        color 153,38,0
+        # subId=5145 dateSubmitted=2011-12-18
+
+        track wgEncodePsuTfbsMelInputUImmortalC57bl6InputSig
+        parent wgEncodePsuTfbsViewSignal off
+        shortLabel MEL Input 
+        longLabel MEL Input TFBS ChIP-seq Signal from ENCODE/PSU 
+        subGroups view=Signal age=IMMORTAL factor=zINPUT cellType=MEL control=INPUT sex=U strain=C57BL6
+        type bigWig 1.000000 132.000000
+        color 86,180,233
+        # subId=5144 dateSubmitted=2011-12-18
+
