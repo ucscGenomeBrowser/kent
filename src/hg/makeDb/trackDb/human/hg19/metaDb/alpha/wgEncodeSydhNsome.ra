@@ -943,11 +943,35 @@ fileName wgEncodeSydhNsomeK562RawData2Rep4.csqual.gz
 grant Snyder
 lab Stanford
 md5sum a0f14ae3eb004ae00a4aefa7a0735cf9
+objStatus replaced - This file was originally truncated and is replaced with a file with all of the data
 origAssembly hg19
 project wgEncode
 replicate 4
 seqPlatform AB_SOLiD_3.5
 subId 4153
+view RawData2
+
+metaObject wgEncodeSydhNsomeK562RawData2Rep4V2
+objType file
+cell K562
+composite wgEncodeSydhNsome
+dataType Nucleosome
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-23
+dateSubmitted 2011-05-18
+dateUnrestricted 2012-02-18
+dccAccession wgEncodeEH000921
+expId 921
+fileName wgEncodeSydhNsomeK562RawData2Rep4V2.csqual.gz
+grant Snyder
+lab Stanford
+md5sum 34c275367dfeecc57cd0372fa955b8bd
+origAssembly hg19
+project wgEncode
+replicate 4
+seqPlatform AB_SOLiD_3.5
+subId 4153
+submittedDataVersion V2 - fixed truncated original file
 view RawData2
 
 metaObject wgEncodeSydhNsomeK562RawData2Rep5
@@ -1308,4 +1332,4 @@ subId 4351
 tableName wgEncodeSydhNsomeK562Sig
 view Signal
 
-# MAGIC: -449133788
+# MAGIC: 1122554850

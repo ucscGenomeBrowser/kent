@@ -101,7 +101,7 @@ for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displ
     }
 webPrintLinkCell(tdb->longLabel);
 webPrintLinkCellStart();
-compositeMetadataToggle(database, tdb, "metadata", TRUE, FALSE, trackHash);
+compositeMetadataToggle(database, tdb, "metadata", TRUE, FALSE);
 webPrintLinkCellEnd();
 }
 #endif /* TO_BE_REMOVED */
@@ -229,7 +229,7 @@ struct trackDb *tdb = hashFindVal(trackHash, table);
 if (tdb == NULL)
     printf("%s info n/a", table);
 else
-    compositeMetadataToggle(database, tdb, "metadata", TRUE, FALSE, trackHash);
+    compositeMetadataToggle(database, tdb, "metadata", TRUE, FALSE);
 webPrintLinkCellEnd();
 }
 

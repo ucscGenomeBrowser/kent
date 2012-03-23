@@ -3363,7 +3363,7 @@ organism human
 description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-UC_0081101.7 and hMSC-UC_0052501.7 from matrix (Wharton's Jelly)
 lineage missing
 karyotype normal
-sex F
+sex B
 tissue umbilical cord
 vendorName PromoCell
 vendorId hMSC-UC
@@ -6011,8 +6011,8 @@ color 153,38,0
 sex U
 protocol Hardison:G1E_Hardison_protocol.pdf
 
-term G1E-ER4+E2
-tag G1E_ER4_E2
+term G1E-ER4
+tag G1EER4
 type Cell Line
 organism mouse
 tissue blood
@@ -11468,6 +11468,11 @@ tag R1X101
 type readType
 description Single 101 nt reads
 
+term 2x36
+tag R2X36
+type readType
+description Paired 36 nt reads
+
 term 2x75
 tag R2X75
 type readType
@@ -12099,7 +12104,7 @@ tag DIFFD14H
 description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
 type treatment
 
-term diffProtD24hr
+term diffProtD_24hr
 tag DIFF24H
 description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
 type treatment

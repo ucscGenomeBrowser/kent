@@ -10,8 +10,8 @@ shortLabel Duke DNaseI HS
 longLabel Open Chromatin by DNaseI HS from ENCODE/OpenChrom(Duke University)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLa-S3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 ADULTCD4TH0=Adult_CD4_Th0 ADULTCD4TH1=Adult_CD4_Th1 AOSMC=AoSMC CHORN=Chorion CLL=CLL COLO829=Colo829 ECC1=ECC-1 FIBRO=Fibrobl FIBROP=FibroP FIBROPAG08395=FibroP_AG08395 FIBROPAG08396=FibroP_AG08396 FIBROPAG20443=FibroP_AG20443 Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7ES=H7-hESC H9=H9-hESC HEK293=HEK293 HEK293T=HEK293T Hepatocytes=Hepatocytes HMEC=HMEC HSMMFSHD=HSMM_FSHD HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMEMB=HSMM_emb HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 IPS=iPS IPSCWRU1=iPS_CWRU1 IPSNIHI7=iPS_NIHi7 IPSNIHI11=iPS_NIHi11 ISHIKAWA=Ishikawa LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MEDULLOD341=Medullo&#95;D341 MELANO=Melano MEL2183=Mel-2183 MYOMETR=Myometr NHBE=NHBE NHEK=NHEK Osteobl=Osteobl 8988T=PA-TU-8988T PANI=PanIslets PanIsD=PanIsletD pHTE=pHTE PROG=ProgFib RWPE1=RWPE1 Stellate=Stellate T47D=T-47D TH1=Th1 UROTHEL=Urothelia
-subGroup3 treatment Treatment AANONE=None DM002P1H=DMSO_0.02pct EST10NM1H=Estradiol_10nM_1h EST10NM30M=Estradiol_10nM_30m ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs METHYLT=Methyltrienolone&nbsp;(androgen) NABUT=NaBut SERUMFREE=Serum_Free_Media TAM10030=4-hydroxytamoxifen_100nM_30min UT189=UT189_E.coli
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 ADULTCD4TH0=Adult_CD4_Th0 ADULTCD4TH1=Adult_CD4_Th1 AOSMC=AoSMC CHORN=Chorion CLL=CLL COLO829=Colo829 ECC1=ECC-1 FIBRO=Fibrobl FIBROP=FibroP FIBROPAG08395=FibroP_AG08395 FIBROPAG08396=FibroP_AG08396 FIBROPAG20443=FibroP_AG20443 GLIOBLA=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7ES=H7-hESC H9=H9-hESC HEK293=HEK293 HEK293T=HEK293T HEPATOCYTES=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMEMB=HSMM_emb HSMMFSHD=HSMM_FSHD HSMMT=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 IPS=iPS IPSCWRU1=iPS_CWRU1 IPSNIHI07=iPS_NIHi7 IPSNIHI11=iPS_NIHi11 ISHIKAWA=Ishikawa LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MEDULLOD341=Medullo&#95;D341 MEL2183=Mel-2183 MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK Osteobl=Osteobl PA-TU8988T=PA-TU-8988T PANISD=PanIsletD PANI=PanIslets PHTE=pHTE PROG=ProgFib RWPE1=RWPE1 Stellate=Stellate T47D=T-47D TH1=Th1 UROTHEL=Urothelia
+subGroup3 treatment Treatment AANONE=None DM002P1H=DMSO_0.02% EST10NM1H=Estradiol_10_nM_1_h EST10NM30M=Estradiol_10_nM_30_m ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid IFNa4h=IFN-&alpha_4_hrs IFNg4h=IFN-&gamma_4_hrs METHYLT=Methyltrienolone&nbsp;(androgen) NABUT=NaBut SERUMFREE=Serum_Free_Media TAM10030=4-hydroxytamoxifen_100_nM_30_m UT189=UT189_E.coli
 sortOrder cellType=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dimensions dimensionY=cellType dimensionX=treatment
@@ -28,7 +28,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
 
     track wgEncodeOpenChromDnaseViewPeaks
     view Peaks
-    visibility dense
+    visibility pack 
     subTrack wgEncodeOpenChromDnase
     pValueFilter 0.0
     pValueFilterLimits 0:16
@@ -98,7 +98,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HeLa-S3 Pk
         longLabel HeLa-S3 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=2HeLa-S3 treatment=AANONE
+        subGroups view=Peaks cellType=2HELAS3 treatment=AANONE
         type narrowPeak
         color 0,119,158
         # subId=1498 dateSubmitted=2010-06-16
@@ -139,7 +139,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HepG2 Pk
         longLabel HepG2 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=2HepG2 treatment=AANONE
+        subGroups view=Peaks cellType=2HEPG2 treatment=AANONE
         type narrowPeak
         color 189,0,157
         # subId=1528 dateSubmitted=2010-06-16
@@ -175,8 +175,8 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseHelas3Ifna4hPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HeLa-S3 Pk
-        longLabel HeLa-S3 IFNa 4hrs DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=2HeLa-S3 treatment=IFNa4h
+        longLabel HeLa-S3 IFN-a 4hrs DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        subGroups view=Peaks cellType=2HELAS3 treatment=IFNa4h
         type narrowPeak
         color 0,119,158
         # subId=1544 dateSubmitted=2010-06-17
@@ -250,7 +250,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HSMMtube Pk
         longLabel HSMMtube DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=HSMMt treatment=AANONE
+        subGroups view=Peaks cellType=HSMMT treatment=AANONE
         type narrowPeak
         # subId=1679 dateSubmitted=2010-06-20
 
@@ -266,7 +266,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel pHTE Pk
         longLabel pHTE DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=pHTE treatment=AANONE
+        subGroups view=Peaks cellType=PHTE treatment=AANONE
         type narrowPeak
         # subId=2513 dateSubmitted=2010-10-18
 
@@ -316,7 +316,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel PA-TU-8988T Pk
         longLabel PA-TU-8988T DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=8988T treatment=AANONE
+        subGroups view=Peaks cellType=PA-TU8988T treatment=AANONE
         type narrowPeak
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -324,7 +324,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel PanIsletD Pk
         longLabel PanIsletD DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=PanIsD treatment=AANONE
+        subGroups view=Peaks cellType=PANISD treatment=AANONE
         type narrowPeak
         # subId=2785 dateSubmitted=2010-10-29
 
@@ -340,7 +340,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Gliobla Pk
         longLabel Gliobla DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=Gliobla treatment=AANONE
+        subGroups view=Peaks cellType=GLIOBLA treatment=AANONE
         type narrowPeak
         # subId=2514 dateSubmitted=2010-10-20
 
@@ -356,7 +356,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Hepatocytes Pk
         longLabel Hepatocytes DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=Hepatocytes treatment=AANONE
+        subGroups view=Peaks cellType=HEPATOCYTES treatment=AANONE
         type narrowPeak
         # subId=3063 dateSubmitted=2010-12-06
 
@@ -443,7 +443,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIshikawaEst10nm30mPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Ishikawa Pk
-        longLabel Ishikawa Estradiol 10nM_30m DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        longLabel Ishikawa Estradiol 10 nM 30 m DNaseI HS Peaks from ENCODE/OpenChrom-Duke
         subGroups view=Peaks cellType=ISHIKAWA treatment=EST10NM30M
         type narrowPeak
         # subId=4909 dateSubmitted=2011-09-28
@@ -451,7 +451,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIshikawaTam10030Pk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Ishikawa Pk
-        longLabel Ishikawa 4-OHTAM DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        longLabel Ishikawa 4-OHTAM 100 nM 30 m DNaseI HS Peaks from ENCODE/OpenChrom-Duke
         subGroups view=Peaks cellType=ISHIKAWA treatment=TAM10030
         type narrowPeak
         # subId=4911 dateSubmitted=2011-09-28
@@ -491,7 +491,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseT47dEst10nm30mPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel T-47D Pk
-        longLabel T-47D Estradiol 10nM_30m DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        longLabel T-47D Estradiol 10 nM 30 m DNaseI HS Peaks from ENCODE/OpenChrom-Duke
         subGroups view=Peaks cellType=T47D treatment=EST10NM30M
         type narrowPeak
         # subId=5383 dateSubmitted=2012-02-03
@@ -499,7 +499,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseEcc1Est10nm30mPk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel ECC-1 Pk
-        longLabel ECC-1 Estradiol 10nM_30m DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        longLabel ECC-1 Estradiol 10 nM 30 m DNaseI HS Peaks from ENCODE/OpenChrom-Duke
         subGroups view=Peaks cellType=ECC1 treatment=EST10NM30M
         type narrowPeak
         # subId=5384 dateSubmitted=2012-02-03
@@ -557,7 +557,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel NIHi7 Pk
         longLabel iPS NIHi7 DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=IPSNIHI7 treatment=AANONE
+        subGroups view=Peaks cellType=IPSNIHI07 treatment=AANONE
         type narrowPeak
         # subId=5481 dateSubmitted=2012-02-01
 
@@ -638,9 +638,9 @@ dataVersion through the ENCODE Mar 2012 Freeze
     view SIG
     visibility full
     subTrack wgEncodeOpenChromDnase
-    viewLimits 0:0.1
+    viewLimits 0:2
     minLimit 0
-    maxLimit 0.1
+    maxLimit 2
     autoScale off
     windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
@@ -707,7 +707,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HeLa-S3 DS
         longLabel HeLa-S3 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=2HeLa-S3 treatment=AANONE
+        subGroups view=SIG cellType=2HELAS3 treatment=AANONE
         type bigWig 0.000000 2.024200
         color 0,119,158
         # subId=1498 dateSubmitted=2010-06-16
@@ -748,7 +748,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HepG2 DS
         longLabel HepG2 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=2HepG2 treatment=AANONE
+        subGroups view=SIG cellType=2HEPG2 treatment=AANONE
         type bigWig 0.000000 2.203900
         color 189,0,157
         # subId=1528 dateSubmitted=2010-06-16
@@ -784,8 +784,8 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseHelas3Ifna4hSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HeLa-S3 DS
-        longLabel HeLa-S3 IFNa 4hrs DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=2HeLa-S3 treatment=IFNa4h
+        longLabel HeLa-S3 IFN-a 4hrs DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIG cellType=2HELAS3 treatment=IFNa4h
         type bigWig 0.000000 0.761900
         color 0,119,158
         # subId=1544 dateSubmitted=2010-06-17
@@ -859,7 +859,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HSMMtube DS
         longLabel HSMMtube DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=HSMMt treatment=AANONE
+        subGroups view=SIG cellType=HSMMT treatment=AANONE
         type bigWig 0.000000 1.594200
         # subId=1679 dateSubmitted=2010-06-20
 
@@ -875,7 +875,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel pHTE DS
         longLabel pHTE DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=pHTE treatment=AANONE
+        subGroups view=SIG cellType=PHTE treatment=AANONE
         type bigWig 0.000000 2.165800
         # subId=2513 dateSubmitted=2010-10-18
 
@@ -925,7 +925,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel PA-TU-8988T DS
         longLabel PA-TU-8988T DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=8988T treatment=AANONE
+        subGroups view=SIG cellType=PA-TU8988T treatment=AANONE
         type bigWig 0.000000 1.842900
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -933,7 +933,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel PanIsletD DS
         longLabel PanIsletD DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=PanIsD treatment=AANONE
+        subGroups view=SIG cellType=PANISD treatment=AANONE
         type bigWig 0.000000 1.462100
         # subId=2785 dateSubmitted=2010-10-29
 
@@ -949,7 +949,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Gliobla DS
         longLabel Gliobla DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=Gliobla treatment=AANONE
+        subGroups view=SIG cellType=GLIOBLA treatment=AANONE
         type bigWig 0.000000 1.195300
         # subId=2514 dateSubmitted=2010-10-20
 
@@ -965,7 +965,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Hepatocytes DS
         longLabel Hepatocytes DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=Hepatocytes treatment=AANONE
+        subGroups view=SIG cellType=HEPATOCYTES treatment=AANONE
         type bigWig 0.000000 1.185800
         # subId=3063 dateSubmitted=2010-12-06
 
@@ -1052,7 +1052,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIshikawaEst10nm30mSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Ishikawa DS
-        longLabel Ishikawa Estradiol 10nM_30m DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        longLabel Ishikawa Estradiol 10 nM 30 m DNaseI HS Density Sig from ENCODE/OpenChrom-Duke
         subGroups view=SIG cellType=ISHIKAWA treatment=EST10NM30M
         type bigWig 0.000000 0.971500
         # subId=4909 dateSubmitted=2011-09-28
@@ -1060,7 +1060,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIshikawaTam10030Sig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Ishikawa DS
-        longLabel Ishikawa 4-OHTAM DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        longLabel Ishikawa 4-OHTAM 100nM 30 m DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIG cellType=ISHIKAWA treatment=TAM10030
         type bigWig 0.000000 1.095400
         # subId=4911 dateSubmitted=2011-09-28
@@ -1100,7 +1100,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseT47dEst10nm30mSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel T-47D DS
-        longLabel T-47D Estradiol 10nM_30m DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        longLabel T-47D Estradiol 10 nM 30 m DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIG cellType=T47D treatment=EST10NM30M
         type bigWig 0.000000 0.817300
         # subId=5383 dateSubmitted=2012-02-03
@@ -1108,7 +1108,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseEcc1Est10nm30mSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel ECC-1 DS
-        longLabel ECC-1 Estradiol 10nM_30m DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        longLabel ECC-1 Estradiol 10 nM 30 m DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIG cellType=ECC1 treatment=EST10NM30M
         type bigWig 0.000000 0.888500
         # subId=5384 dateSubmitted=2012-02-03
@@ -1166,7 +1166,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel NIHi7 DS
         longLabel iPS NIHi7 DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=IPSNIHI7 treatment=AANONE
+        subGroups view=SIG cellType=IPSNIHI07 treatment=AANONE
         type bigWig 0.000000 0.476200
         # subId=5481 dateSubmitted=2012-02-01
 
@@ -1248,9 +1248,9 @@ dataVersion through the ENCODE Mar 2012 Freeze
     view SIGBO
     visibility full
     subTrack wgEncodeOpenChromDnase
-    viewLimits 0:50
+    viewLimits 0:1000
     minLimit 0
-    maxLimit 50
+    maxLimit 1000
     autoScale off
     windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
@@ -1317,18 +1317,18 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HeLa-S3 OS
         longLabel HeLa-S3 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=2HeLa-S3 treatment=AANONE
+        subGroups view=SIGBO cellType=2HELAS3 treatment=AANONE
         type bigWig 0.000000 265.000000
         color 0,119,158
         # subId=1498 dateSubmitted=2010-06-16
 
-        track wgEncodeOpenChromDnaseGm19239BaseOverlapSignal
+        track wgEncodeOpenChromDnaseGm19239BaseOverlapSignalV2
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM19239 OS
         longLabel GM19239 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIGBO cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 209.000000
-        # subId=1506 dateSubmitted=2010-06-16
+        # subId=6244 dateSubmitted=2012-03-23
 
         track wgEncodeOpenChromDnaseGm18507BaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
@@ -1358,7 +1358,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HepG2 OS
         longLabel HepG2 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=2HepG2 treatment=AANONE
+        subGroups view=SIGBO cellType=2HEPG2 treatment=AANONE
         type bigWig 0.000000 274.000000
         color 189,0,157
         # subId=1528 dateSubmitted=2010-06-16
@@ -1394,8 +1394,8 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HeLa-S3 OS
-        longLabel HeLa-S3 IFNa 4hrs DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=2HeLa-S3 treatment=IFNa4h
+        longLabel HeLa-S3 IFN-a 4hrs DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        subGroups view=SIGBO cellType=2HELAS3 treatment=IFNa4h
         type bigWig 0.000000 224.000000
         color 0,119,158
         # subId=1544 dateSubmitted=2010-06-17
@@ -1470,7 +1470,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HSMMtube OS
         longLabel HSMMtube DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=HSMMt treatment=AANONE
+        subGroups view=SIGBO cellType=HSMMT treatment=AANONE
         type bigWig 0.000000 328.000000
         # subId=1679 dateSubmitted=2010-06-20
 
@@ -1486,7 +1486,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel pHTE OS
         longLabel pHTE DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=pHTE treatment=AANONE
+        subGroups view=SIGBO cellType=PHTE treatment=AANONE
         type bigWig 0.000000 317.000000
         # subId=2513 dateSubmitted=2010-10-18
 
@@ -1536,7 +1536,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel PA-TU-8988T OS
         longLabel PA-TU-8988T DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=8988T treatment=AANONE
+        subGroups view=SIGBO cellType=PA-TU8988T treatment=AANONE
         type bigWig 0.000000 286.000000
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -1544,7 +1544,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel PanIsletD OS
         longLabel PanIsletD DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=PanIsD treatment=AANONE
+        subGroups view=SIGBO cellType=PANISD treatment=AANONE
         type bigWig 0.000000 415.000000
         # subId=2785 dateSubmitted=2010-10-29
 
@@ -1560,7 +1560,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Gliobla OS
         longLabel Gliobla DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=Gliobla treatment=AANONE
+        subGroups view=SIGBO cellType=GLIOBLA treatment=AANONE
         type bigWig 0.000000 228.000000
         # subId=2514 dateSubmitted=2010-10-20
 
@@ -1576,7 +1576,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Hepatocytes OS
         longLabel Hepatocytes DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=Hepatocytes treatment=AANONE
+        subGroups view=SIGBO cellType=HEPATOCYTES treatment=AANONE
         type bigWig 0.000000 242.000000
         # subId=3063 dateSubmitted=2010-12-06
 
@@ -1663,7 +1663,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIshikawaEst10nm30mBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Ishikawa OS
-        longLabel Ishikawa Estradiol 10nM_30m DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        longLabel Ishikawa Estradiol 10 nM 30 m DNaseI HS Overlap Sig from ENCODE/OpenChrom-Duke
         subGroups view=SIGBO cellType=ISHIKAWA treatment=EST10NM30M
         type bigWig 0.000000 198.000000
         # subId=4909 dateSubmitted=2011-09-28
@@ -1671,7 +1671,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIshikawaTam10030BaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Ishikawa OS
-        longLabel Ishikawa 4-OHTAM DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        longLabel Ishikawa 4-OHTAM 100 nM 30 m DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIGBO cellType=ISHIKAWA treatment=TAM10030
         type bigWig 0.000000 209.000000
         # subId=4911 dateSubmitted=2011-09-28
@@ -1711,7 +1711,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseT47dEst10nm30mBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel T-47D OS
-        longLabel T-47D Estradiol 10nM_30m DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        longLabel T-47D Estradiol 10 nM 30 m DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIGBO cellType=T47D treatment=EST10NM30M
         type bigWig 0.000000 220.000000
         # subId=5383 dateSubmitted=2012-02-03
@@ -1719,7 +1719,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseEcc1Est10nm30mBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel ECC-1 OS
-        longLabel ECC-1 Estradiol 10nM_30m DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        longLabel ECC-1 Estradiol 10 nM 30 m DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIGBO cellType=ECC1 treatment=EST10NM30M
         type bigWig 0.000000 220.000000
         # subId=5384 dateSubmitted=2012-02-03
@@ -1777,7 +1777,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel NIHi7 OS
         longLabel iPS NIHi7 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=IPSNIHI7 treatment=AANONE
+        subGroups view=SIGBO cellType=IPSNIHI07 treatment=AANONE
         type bigWig 0.000000 319.000000
         # subId=5481 dateSubmitted=2012-02-01
 

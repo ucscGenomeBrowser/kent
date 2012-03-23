@@ -2652,11 +2652,11 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
     {
     // Composites *might* have had their top level controls just printed, but almost certainly have additional controls
     if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
-        hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM, trackHash);
+        hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
     previewLinks(database, tdb);
-    extraUiLinks(database,tdb, trackHash);
+    extraUiLinks(database,tdb);
     }
 }
 
@@ -2883,7 +2883,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
                     "genome-preview.ucsc.edu", database, tdb->track);
                 }
             printf("&nbsp;&nbsp;");
-            makeDownloadsLink(database, tdb, trackHash);
+            makeDownloadsLink(database, tdb);
             }
         char *downArrow = "&dArr;";
         enum browserType browser = cgiBrowser();
