@@ -1904,6 +1904,7 @@ char *yearFilter = cartUsualString(cart, yearTag, "anytime");
 int i;
 puts("<P><B>Filter articles by keywords in abstract, title or authors:</B>");
 cgiMakeTextVar(keywordTag, keywords, 45);
+
 text[0] = "anytime";
 values[0] = "anytime";
 time_t nowTime = time(NULL);
@@ -1920,6 +1921,7 @@ for(i = 0; i < NUM_YEARS; i++)
     }
 
 puts("</P><P>\n");
+printf("<B>Show articles published </B>");
 cgiDropDownWithTextValsAndExtra(yearTag, text, values, NUM_YEARS + 1, yearFilter, NULL);
 puts("</P>\n");
 }
@@ -2547,7 +2549,7 @@ else if (sameString(track, "vegaGeneComposite"))
 else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
 else if (startsWith("pubs", track))
-        pubsUi(tdb);
+    pubsUi(tdb);
 else if (startsWith("blastDm", track))
     blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))

@@ -693,6 +693,9 @@ struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, int scoreMa
 struct linkedFeatures *lfFromBed(struct bed *bed);
 /* Return a linked feature from a (full) bed. */
 
+void loadSimpleBedAsLinkedFeaturesPerBase(struct track *tg);
+/* bed list not freed as pointer to it is stored in 'original' field */
+
 void loadSimpleBed(struct track *tg);
 /* Load the items in one track - just move beds in
  * window... */

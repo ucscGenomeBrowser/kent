@@ -14,6 +14,11 @@ visibility hide
 track gap override
 visibility hide
 
+track encodeRegions override
+shortLabel ENCODE Pilot
+longLabel Regions used for ENCODE Pilot Project (1%)
+group map
+
 track switchDbTss override
 origAssembly hg17
 pennantIcon 17.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg17"
@@ -2469,7 +2474,7 @@ noInherit on
 
 #include jkExperiments.ra
 
-track agilentCgh
+track genotypeArrays
 shortLabel Arrays
 longLabel Microarray probesets
 compositeTrack on
@@ -2479,8 +2484,16 @@ noScoreFilter .
 noInherit on
 type bed 3 .
 
+    track affyCytoScan
+    parent genotypeArrays
+    shortLabel Affy CytoScan
+    longLabel Affymetrix Cytoscan CNV and SNP array probeset
+    priority 0
+    itemRgb on
+    type bed 9 .
+
     track agilentCgh1x1m
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 1x1m
     longLabel Agilent SurePrint G3 Human CGH Microarray 1x1M AMADID 021529
     color 0,128,0
@@ -2488,7 +2501,7 @@ type bed 3 .
     priority 1
 
     track agilentHrd1x1m
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag HRD 1x1m
     longLabel Agilent SurePrint G3 Human High-Resolution Microarray 1x1M AMADID 023642
     color 255,128,0
@@ -2496,7 +2509,7 @@ type bed 3 .
     priority 2
 
     track agilentCghSnp2x400k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag SNP 2x400k
     longLabel Agilent SurePrint G3 Human CGH+SNP Microarray 2x400K AMADID 028081
     color 0,0,128
@@ -2505,7 +2518,7 @@ type bed 3 .
     priority 3
 
     track agilentCgh2x400k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 2x400k
     longLabel Agilent SurePrint G3 Human CGH Microarray 2x400K AMADID 021850
     color 0,128,0
@@ -2513,7 +2526,7 @@ type bed 3 .
     priority 4
 
     track agilentCghSnpCancer4x180k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag Can 4x180k
     longLabel Agilent SurePrint G3 Human CGH+SNP Cancer Microarray 4x180K AMADID 030587
     color 0,0,128
@@ -2522,7 +2535,7 @@ type bed 3 .
     priority 5
 
     track agilentCghSnp4x180k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag SNP 4x180k
     longLabel Agilent SurePrint G3 Human CGH+SNP Microarray 4x180K AMADID 029830
     color 0,0,128
@@ -2531,7 +2544,7 @@ type bed 3 .
     priority 6
 
     track agilentCgh4x180k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 4x180k
     longLabel Agilent SurePrint G3 Human CGH Microarray 4x180K AMADID 022060
     color 255,128,0
@@ -2539,7 +2552,7 @@ type bed 3 .
     priority 7
 
     track agilentCgh8x60k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 8x60k
     longLabel Agilent SurePrint G3 Human CGH Microarray 8x60K AMADID 021924
     type bed 4 .
@@ -2547,7 +2560,7 @@ type bed 3 .
     priority 8
 
     track agilentCgh1x244k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 1x244k
     longLabel Agilent SurePrint HD Human CGH Microarray 1x244K AMADID 014693
     color 255,128,0
@@ -2555,7 +2568,7 @@ type bed 3 .
     priority 9
 
     track agilentCgh2x105k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 2x105k
     longLabel Agilent SurePrint HD Human CGH Microarray 2x105K AMADID 014698
     color 0,128,0
@@ -2563,7 +2576,7 @@ type bed 3 .
     priority 10
 
     track agilentCgh4x44k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 4x44k
     longLabel Agilent SurePrint HD Human CGH Microarray 4x44K AMADID 014950
     color 255,128,0
@@ -2753,7 +2766,7 @@ speciesCodonDefault hg19
 #sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr3 proCap1 echTel1 dasNov2 choHof1 
 #sGroup_Vertebrate macEug1 monDom5 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig2 fr2 gasAcu1 oryLat2 danRer6 petMar1 
 #speciesDefaultOff panTro2 gorGor1 ponAbe2 papHam1 calJac1 tarSyr1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 macEug1 ornAna1 taeGut1 anoCar1 proCap1 tetNig2 fr2 gasAcu1 oryLat2 petMar1
-speciesOrder ornAna1 galGal3 taeGut1 anoCar1 pytMol0 chrPic0 allMis0
+speciesOrder ornAna1 galGal3 taeGut1 anoCar2 pytMol0 chrPic0 pelSin0 cheMyd0 allMis0
 #itemFirstCharCase noChange
 #treeImage phylo/hg19_Dino.gif
 priority 100

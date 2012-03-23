@@ -594,17 +594,6 @@ sub validateBed {
         if ($fieldCount >= 5 && $type ne 'bed5FloatScore' && $fields[5] !~ m/^(\+|\-|\.)$/) {
             push @localerrors, "$prefix field 6 ($fields[5]) value must be either + or - or .\n";
         }
-        if ($type eq 'bedRnaElements') {
-            unless ($fields[6] =~ m/$floatRegEx/) {
-                push @localerrors, "$prefix field 7 ($fields[6]) in $type must be a float.\n";
-            }
-            unless ($fields[7] =~ m/$floatRegEx/) {
-                push @localerrors, "$prefix field 8 ($fields[7]) in $type must be a float.\n";
-            }
-            unless ($fields[8] =~ m/^\d+$/) {
-                push @localerrors, "$prefix field 9 ($fields[8]) in $type must be an int.\n";
-            }
-        }
         if ($type eq 'bed5FloatScore' && $fieldCount < 6) {
             push @localerrors, "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
             next
@@ -951,7 +940,7 @@ sub validateBigBed
         return("failed validateBigBed for '$file'");
     }
     my ($tmpfile, $basedir, $bar) = fileparse($tempfilename);
-    my $bedError = &validateBed($basedir, $tmpfile, $type);
+    my $bedError = &validateBed($basedir, $tmpfile, "bed");
     if ($bedError) {
         $bedError =~ s/$tmpfile/$file/g;
         print STDERR "ERROR: failed validateBigBed : " . $bedError . "\n";

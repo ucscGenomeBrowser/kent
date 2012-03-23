@@ -227,7 +227,7 @@ noScoreFilter .
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
 urlLabel MGI Phenotypic Allele: 
 
-track agilentCgh
+track genotypeArrays
 compositeTrack on
 shortLabel Agilent CGH
 longLabel Agilent CGH Microarray probesets
@@ -238,7 +238,7 @@ priority 100
 type bed 3
 
     track agilentCgh1x1m
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 1x1M
     longLabel Agilent SurePrint G3 Mouse CGH Microarray 1x1M AMADID 027414
     color 0,128,0
@@ -248,7 +248,7 @@ type bed 3
     priority 1
 
     track agilentCgh4x180k
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 4x180K
     longLabel Agilent SurePrint G3 Mouse CGH Microarray 4x180K AMADID 027411
     color 255,128,0
@@ -258,7 +258,7 @@ type bed 3
     priority 2
 
     track agilentCgh244a
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 1x244K
     longLabel Agilent SurePrint HD Mouse CGH Microarray 1x244K AMADID 014695
     color 0,128,0
@@ -269,7 +269,7 @@ type bed 3
     priority 3
 
     track agilentCgh105a
-    parent agilentCgh
+    parent genotypeArrays
     shortLabel Ag CGH 2x105K
     longLabel Agilent SurePrint HD Mouse CGH Microarray 2x105K AMADID 014699
     color 255,128,0
