@@ -3613,11 +3613,16 @@ metaObject wgEncodeOpenChromDnaseGm19239BaseOverlapSignalV2
 objType table
 cell GM19239
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-23
-dateUnrestricted 2012-12-23
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2012-03-23
+dateSubmitted 2009-10-06
+dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000567
+expId 567
 fileName wgEncodeOpenChromDnaseGm19239BaseOverlapSignalV2.bigWig
+geoSampleAccession GSM816659
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -11907,4 +11912,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1730049212
+# MAGIC: 927111879
