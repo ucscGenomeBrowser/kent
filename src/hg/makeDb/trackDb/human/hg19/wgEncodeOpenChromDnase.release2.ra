@@ -28,7 +28,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
 
     track wgEncodeOpenChromDnaseViewPeaks
     view Peaks
-    visibility dense
+    visibility pack 
     subTrack wgEncodeOpenChromDnase
     pValueFilter 0.0
     pValueFilterLimits 0:16
@@ -638,9 +638,9 @@ dataVersion through the ENCODE Mar 2012 Freeze
     view SIG
     visibility full
     subTrack wgEncodeOpenChromDnase
-    viewLimits 0:0.1
+    viewLimits 0:2
     minLimit 0
-    maxLimit 0.1
+    maxLimit 2
     autoScale off
     windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
@@ -1248,9 +1248,9 @@ dataVersion through the ENCODE Mar 2012 Freeze
     view SIGBO
     visibility full
     subTrack wgEncodeOpenChromDnase
-    viewLimits 0:50
+    viewLimits 0:1000
     minLimit 0
-    maxLimit 50
+    maxLimit 1000
     autoScale off
     windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
