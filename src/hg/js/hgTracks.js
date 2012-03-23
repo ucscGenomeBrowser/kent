@@ -2097,7 +2097,10 @@ var rightClick = {
                     if(done) {
                         var o = new Object();
                         var any = false;
-                            var title = rightClick.selectedMenuItem.title || "feature";
+                        var title = rightClick.selectedMenuItem.title || "feature";
+                        if(title.length > 60) {
+                            title = title.substring(0, 50) + "...";
+                        }
                         if(isGene || isHgc || id == "wikiTrack") {
                             // Add "Open details..." item
                             var displayItemFunctions = false;
