@@ -12392,7 +12392,6 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 char *pubsMarkerItemName(struct track *tg, void *item)
 /* retrieve article count from score field and return.*/
 {
-//struct bed *bed = item;
 struct linkedFeatures *lf = item;
 char newName[64];
 safef(newName, sizeof(newName), "%d articles", (int) lf->score);
@@ -12402,7 +12401,6 @@ return cloneString(newName);
 static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
-/* use previously saved itemName for the mouseOver */
 {
 struct linkedFeatures *lf = item;
 genericMapItem(tg, hvg, item,
@@ -12498,26 +12496,27 @@ hFreeConn(&conn);
 static void pubsBlatPslMethods(struct track *tg)
 /* a track that shows only the indiv matches for one single article */
 {
-    activatePslTrackIfCgi(tg);
-    tg->loadItems = pubsPslLoadItems;
-    tg->itemName  = pubsItemName;
-    tg->mapItem   = pubsMapItem;
+activatePslTrackIfCgi(tg);
+tg->loadItems = pubsPslLoadItems;
+tg->itemName  = pubsItemName;
+tg->mapItem   = pubsMapItem;
 }
 
 static void pubsBlatMethods(struct track *tg)
 /* publication blat tracks are bed12+2 tracks of sequences in text, mapped with BLAT */
 {
-    tg->loadItems = pubsLoadItems;
-    tg->itemName  = pubsItemName;
-    tg->mapItem   = pubsMapItem;
+tg->loadItems = pubsLoadItems;
+tg->itemName  = pubsItemName;
+tg->mapItem   = pubsMapItem;
 }
 
 static void pubsMarkerMethods(struct track *tg)
-/* publication marker tracks are bed4 tracks of genome marker occurences like rsXXXX found in text*/
+/* publication marker tracks are bed5 tracks of genome marker occurences like rsXXXX found in text*/
 {
-    tg->loadItems= pubsLoadMarkerItem;
-    tg->mapItem  = pubsMarkerMapItem;
-    tg->itemName = pubsMarkerItemName;
+tg->bedSize   = 5;
+tg->loadItems = pubsLoadMarkerItem;
+tg->mapItem   = pubsMarkerMapItem;
+tg->itemName  = pubsMarkerItemName;
 }
 
 void fillInFromType(struct track *track, struct trackDb *tdb)

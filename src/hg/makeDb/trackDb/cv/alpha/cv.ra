@@ -3363,7 +3363,7 @@ organism human
 description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-UC_0081101.7 and hMSC-UC_0052501.7 from matrix (Wharton's Jelly)
 lineage missing
 karyotype normal
-sex F
+sex B
 tissue umbilical cord
 vendorName PromoCell
 vendorId hMSC-UC
@@ -11467,6 +11467,11 @@ term 1x101
 tag R1X101
 type readType
 description Single 101 nt reads
+
+term 2x36
+tag R2X36
+type readType
+description Paired 36 nt reads
 
 term 2x75
 tag R2X75

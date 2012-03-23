@@ -318,23 +318,22 @@ taxId 10116
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-continue=cat -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek rn5 > cat.log 2>&1 &
-XXX - running - Wed Mar 21 16:23:52 PDT 2012
-    #	real    250m27.510s
+    #	real    55m22.186s
     cat faSize.rmsk.txt
-    #	2860591921 bases (676999153 N's 2183592768 real 1981827417 upper
-    #	201765351 lower) in 22819 sequences in 1 files
-    #	Total size: mean 125360.1 sd 395781.0 min 1000 (AFYH01291818)
-    #	max 10736886 (JH126562) median 5475
-    #	%7.05 masked total, %9.24 masked real
+    #	2909698938 bases (336845215 N's 2572853723 real 1473277432 upper
+    #	1099576291 lower) in 2739 sequences in 1 files
+    #	Total size: mean 1062321.6 sd 13354598.7 min 280 (chrUn_AABR06111537)
+    #	max 290094216 (chr1) median 1018
+    #	%37.79 masked total, %42.74 masked real
 
     grep -i versi do.log
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
 
     featureBits -countGaps rn5 rmsk
-    #	201917583 bases of 2860591921 (7.059%) in intersection
+    #	1100336249 bases of 2909698938 (37.816%) in intersection
     # why is it different than the faSize above ?
-    # because rmsk masks out some N's as well as bases, the count above
+    # because rmsk masks out some N's as well as bases, the faSize count above
     #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
@@ -349,8 +348,7 @@ XXX - running - Wed Mar 21 16:23:52 PDT 2012
     cat fb.simpleRepeat 
     #	97893561 bases of 2780239565 (3.521%) in intersection
 
-XXX -
-    # not going to add to rmsk here, using the window masker instead since
+    # add the TRF mask to the rmsk sequence:
     #	it masks more sequence
     cd /hive/data/genomes/rn5
     twoBitMask rn5.rmsk.2bit \
@@ -359,11 +357,13 @@ XXX -
 
     twoBitToFa rn5.2bit stdout | faSize stdin > faSize.rn5.2bit.txt
     cat faSize.rn5.2bit.txt
-    #	2608572064 bases (131440969 N's 2477131095 real 1320629270 upper
-    #	1156501825 lower) in 2685 sequences in 1 files
-    #	Total size: mean 971535.2 sd 4827933.6 min 1003 (AGCE01151413)
-    #	max 72162052 (JH378105) median 1553
+    #	2909698938 bases (336845215 N's 2572853723 real 1471484052 upper
+    #	1101369671 lower) in 2739 sequences in 1 files
+    #	Total size: mean 1062321.6 sd 13354598.7 min 280 (chrUn_AABR06111537)
+    #	max 290094216 (chr1) median 1018
+    #	%37.85 masked total, %42.81 masked real
 
+    #	replace the previous symLink which goes to the unmasked 2bit
     rm /gbdb/rn5/rn5.2bit
     ln -s `pwd`/rn5.2bit /gbdb/rn5/rn5.2bit
 
@@ -496,27 +496,117 @@ close (FH);
     #	%29.65 masked total, %33.53 masked real
 
     # how much does this window masker and repeat masker overlap:
-XXX - waiting for rmsk to load
     featureBits -countGaps rn5 rmsk windowmaskerSdust
-    #	177085590 bases of 2860591921 (6.191%) in intersection
+    #	648600018 bases of 2909698938 (22.291%) in intersection
 
 #########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2012-01-12 - Hiram)
-    cd /hive/data/genomes/rn5
-    twoBitMask -add bed/windowMasker/rn5.cleanWMSdust.2bit \
-	bed/simpleRepeat/trfMask.bed rn5.2bit
+# MASK SEQUENCE WITH WM+TRF
+    # not running this since RM + TRF is plenty of masking
+#    cd /hive/data/genomes/rn5
+#    twoBitMask -add bed/windowMasker/rn5.cleanWMSdust.2bit \
+#	bed/simpleRepeat/trfMask.bed rn5.2bit
     #	safe to ignore the warnings about BED file with >=13 fields
-    twoBitToFa rn5.2bit stdout | faSize stdin > faSize.rn5.txt
-    cat faSize.rn5.txt
-    #	2860591921 bases (676999153 N's 2183592768 real 1186074582 upper
-    #	997518186 lower) in 22819 sequences in 1 files
-    #	Total size: mean 125360.1 sd 395781.0 min 1000 (AFYH01291818)
-    #	max 10736886 (JH126562) median 5475
-    #	%34.87 masked total, %45.68 masked real
+#    twoBitToFa rn5.2bit stdout | faSize stdin > faSize.rn5.txt
+#    cat faSize.rn5.txt
 
     #	create symlink to gbdb
-    ssh hgwdev
-    rm /gbdb/rn5/rn5.2bit
-    ln -s `pwd`/rn5.2bit /gbdb/rn5/rn5.2bit
+#    ssh hgwdev
+#    rm /gbdb/rn5/rn5.2bit
+#    ln -s `pwd`/rn5.2bit /gbdb/rn5/rn5.2bit
+
+#########################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2012-03-23 - Hiram)
+    ssh encodek
+    mkdir /hive/data/genomes/rn5/bed/linSpecRep
+    cd /hive/data/genomes/rn5/bed/linSpecRep
+
+    # split the RM output by chromosome name into separate files
+    mkdir rmsk dateRepeats
+    head -3 ../repeatMasker/rn5.sorted.fa.out > rmsk.header.txt
+    headRest 3 ../repeatMasker/rn5.sorted.fa.out \
+	| splitFileByColumn -ending=.out -col=5 -head=rmsk.header.txt stdin rmsk
+
+    ls -1S rmsk/* > rmOut.list
+    wc -l rmOut.list
+    #	2382 rmOut.list
+
+    cat << '_EOF_' > mkLSR
+#!/bin/csh -fe
+rm -f dateRepeats/$1_homo-sapiens_mus-musculus
+/scratch/data/RepeatMasker110426/DateRepeats \
+    $1 -query rat -comp human -comp mouse
+mv $1_homo-sapiens_mus-musculus dateRepeats
+'_EOF_'
+    #	<< happy emacs
+    chmod +x mkLSR
+
+    cat << '_EOF_' > template
+#LOOP
+./mkLSR $(path1) {check out line+ dateRepeats/$(file1)_homo-sapiens_mus-musculus}
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    gensub2 rmOut.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 2382 of 2382 jobs
+# CPU time in finished jobs:      37294s     621.57m    10.36h    0.43d  0.001 y
+# IO & Wait Time:                  6367s     106.11m     1.77h    0.07d  0.000 y
+# Average job time:                  18s       0.31m     0.01h    0.00d
+# Longest finished job:              78s       1.30m     0.02h    0.00d
+# Submission to last job:          2245s      37.42m     0.62h    0.03d
+
+    mkdir notInHuman notInMouse
+    for F in dateRepeats/chr*.out_homo-sapiens*
+    do
+	B=`basename ${F}`
+	B=${B/.out*/}
+	echo $B 
+        /cluster/bin/scripts/extractRepeats 1 ${F} > \
+		notInHuman/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 2 ${F} > \
+		notInMouse/${B}.out.spec
+    done
+
+    #	Verify that these two things are actually different
+    #	To check identical
+    find ./notInHuman ./notInMouse -name "*.out.spec" | \
+	while read FN; do echo `cat ${FN} | sum -r` ${FN}; done \
+	| sort -k1,1n | sort -t"/" -k3,3 > check.same
+    # some of them are the same, but not all:
+    sed -e 's#./notInHuman/##; s#./notInMouse/##' check.same \
+	| sort | uniq -c | sort -rn | less
+    # you will see a count of two at the beginning, but it becomes one soon
+
+    #	Copy to data/staging for cluster replication
+    mkdir /hive/data/staging/data/rn5
+    rsync -a -P ./notInMouse/ /hive/data/staging/data/rn5/notInMouse/
+    rsync -a -P ./notInHuman/ /hive/data/staging/data/rn5/notInHuman/
+
+    # We also need the nibs for the lastz runs with lineage specific repeats
+    mkdir /hive/data/staging/data/rn5/nib
+    mkdir /hive/data/genomes/rn5/nib
+    cd /hive/data/genomes/rn5
+    cut -f1 chrom.sizes | while read C
+do
+    twoBitToFa -seq=${C} rn5.2bit stdout | faToNib -softMask stdin nib/${C}.nib
+    ls -og nib/$C.nib
+done
+    # verify one is properly masked:
+    nibFrag -masked nib/chrM.nib 0 `grep -w chrM chrom.sizes | cut -f2` + \
+	stdout | faSize stdin
+    #	16313 bases (0 N's 16313 real 15922 upper 391 lower)
+    #	in 1 sequences in 1 files
+    #	%2.40 masked total, %2.40 masked real
+    # compare to:
+    twoBitToFa -seq=chrM rn5.2bit stdout | faSize stdin
+    #	16313 bases (0 N's 16313 real 15922 upper 391 lower)
+    #	in 1 sequences in 1 files
+    #	%2.40 masked total, %2.40 masked real
+
+    #	Copy to data/genomes staging for cluster replication
+    rsync -a -P ./nib/ /hive/data/staging/data/rn5/nib/
 
 #########################################################################
