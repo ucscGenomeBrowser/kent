@@ -10,7 +10,7 @@ shortLabel Duke DNaseI HS
 longLabel Open Chromatin by DNaseI HS from ENCODE/OpenChrom(Duke University)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 ADULTCD4TH0=Adult_CD4_Th0 ADULTCD4TH1=Adult_CD4_Th1 AOSMC=AoSMC CHORN=Chorion CLL=CLL COLO829=Colo829 ECC1=ECC-1 FIBRO=Fibrobl FIBROP=FibroP FIBROPAG08395=FibroP_AG08395 FIBROPAG08396=FibroP_AG08396 FIBROPAG20443=FibroP_AG20443 GLIOBLA=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7ES=H7-hESC H9=H9-hESC HEK293=HEK293 HEK293T=HEK293T HEPATOCYTES=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMEMB=HSMM_emb HSMMFSHD=HSMM_FSHD HSMMT=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 IPS=iPS IPSCWRU1=iPS_CWRU1 IPSNIHI07=iPS_NIHi7 IPSNIHI11=iPS_NIHi11 ISHIKAWA=Ishikawa LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MEDULLOD341=Medullo&#95;D341 MEL2183=Mel-2183 MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK Osteobl=Osteobl PANI=PanIslets PANISD=PanIsletD PATU8988T=PA-TU-8988T PHTE=pHTE PROG=ProgFib RWPE1=RWPE1 Stellate=Stellate T47D=T-47D TH1=Th1 UROTHEL=Urothelia
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 ADULTCD4TH0=Adult_CD4_Th0 ADULTCD4TH1=Adult_CD4_Th1 AOSMC=AoSMC CHORN=Chorion CLL=CLL COLO829=Colo829 ECC1=ECC-1 FIBRO=Fibrobl FIBROP=FibroP FIBROPAG08395=FibroP_AG08395 FIBROPAG08396=FibroP_AG08396 FIBROPAG20443=FibroP_AG20443 GLIOBLA=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7ES=H7-hESC H9=H9-hESC HEK293=HEK293 HEK293T=HEK293T HEPATOCYTES=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMEMB=HSMM_emb HSMMFSHD=HSMM_FSHD HSMMT=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 IPS=iPS IPSCWRU1=iPS_CWRU1 IPSNIHI07=iPS_NIHi7 IPSNIHI11=iPS_NIHi11 ISHIKAWA=Ishikawa LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MEDULLOD341=Medullo&#95;D341 MEL2183=Mel-2183 MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK Osteobl=Osteobl PA-TU8988T=PA-TU-8988T PANISD=PanIsletD PANI=PanIslets PHTE=pHTE PROG=ProgFib RWPE1=RWPE1 Stellate=Stellate T47D=T-47D TH1=Th1 UROTHEL=Urothelia
 subGroup3 treatment Treatment AANONE=None DM002P1H=DMSO_0.02% EST10NM1H=Estradiol_10_nM_1_h EST10NM30M=Estradiol_10_nM_30_m ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid IFNa4h=IFN-&alpha_4_hrs IFNg4h=IFN-&gamma_4_hrs METHYLT=Methyltrienolone&nbsp;(androgen) NABUT=NaBut SERUMFREE=Serum_Free_Media TAM10030=4-hydroxytamoxifen_100_nM_30_m UT189=UT189_E.coli
 sortOrder cellType=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -316,7 +316,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel PA-TU-8988T Pk
         longLabel PA-TU-8988T DNaseI HS Peaks from ENCODE/OpenChrom-Duke
-        subGroups view=Peaks cellType=PATU8988T treatment=AANONE
+        subGroups view=Peaks cellType=PA-TU8988T treatment=AANONE
         type narrowPeak
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -925,7 +925,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel PA-TU-8988T DS
         longLabel PA-TU-8988T DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIG cellType=PATU8988T treatment=AANONE
+        subGroups view=SIG cellType=PA-TU8988T treatment=AANONE
         type bigWig 0.000000 1.842900
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -1536,7 +1536,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel PA-TU-8988T OS
         longLabel PA-TU-8988T DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
-        subGroups view=SIGBO cellType=PATU8988T treatment=AANONE
+        subGroups view=SIGBO cellType=PA-TU8988T treatment=AANONE
         type bigWig 0.000000 286.000000
         # subId=2786 dateSubmitted=2010-11-01
 
