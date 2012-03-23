@@ -451,7 +451,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIshikawaTam10030Pk
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Ishikawa Pk
-        longLabel Ishikawa 4-OHTAM 100nM 30 m DNaseI HS Peaks from ENCODE/OpenChrom-Duke
+        longLabel Ishikawa 4-OHTAM 100 nM 30 m DNaseI HS Peaks from ENCODE/OpenChrom-Duke
         subGroups view=Peaks cellType=ISHIKAWA treatment=TAM10030
         type narrowPeak
         # subId=4911 dateSubmitted=2011-09-28
@@ -1052,7 +1052,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIshikawaEst10nm30mSig
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Ishikawa DS
-        longLabel Ishikawa Estradiol 10 nM 30 m DNaseI HS Density Signal from ENCODE/OpenChrom-Duke
+        longLabel Ishikawa Estradiol 10 nM 30 m DNaseI HS Density Sig from ENCODE/OpenChrom-Duke
         subGroups view=SIG cellType=ISHIKAWA treatment=EST10NM30M
         type bigWig 0.000000 0.971500
         # subId=4909 dateSubmitted=2011-09-28
@@ -1663,7 +1663,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIshikawaEst10nm30mBaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Ishikawa OS
-        longLabel Ishikawa Estradiol 10 nM 30 m DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        longLabel Ishikawa Estradiol 10 nM 30 m DNaseI HS Overlap Sig from ENCODE/OpenChrom-Duke
         subGroups view=SIGBO cellType=ISHIKAWA treatment=EST10NM30M
         type bigWig 0.000000 198.000000
         # subId=4909 dateSubmitted=2011-09-28
@@ -1671,7 +1671,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         track wgEncodeOpenChromDnaseIshikawaTam10030BaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Ishikawa OS
-        longLabel Ishikawa 4-OHTAM 100nM 30 m DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
+        longLabel Ishikawa 4-OHTAM 100 nM 30 m DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIGBO cellType=ISHIKAWA treatment=TAM10030
         type bigWig 0.000000 209.000000
         # subId=4911 dateSubmitted=2011-09-28
