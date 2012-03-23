@@ -746,9 +746,7 @@ void cgiBadVar(char *varName)
 /* Complain about a variable that's not there. */
 {
 if (varName == NULL) varName = "";
-errAbort("Sorry, didn't find input variable %s\n"
-        "Probably the web page didn't mean to call this program.",
-        varName);
+errAbort("Sorry, didn't find CGI input variable '%s'", varName);
 }
 
 static char *mustFindVarData(char *varName)
