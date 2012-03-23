@@ -11232,6 +11232,11 @@ tag R1X101
 type readType
 description Single 101 nt reads
 
+term 2x36
+tag R2X36
+type readType
+description Paired 36 nt reads
+
 term 2x75
 tag R2X75
 type readType
