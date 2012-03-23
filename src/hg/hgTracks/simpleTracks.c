@@ -133,7 +133,6 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-
 #define CHROM_COLORS 26
 
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
@@ -12204,12 +12203,13 @@ static struct pubsExtra *pubsMakeExtra(char* articleTable, struct sqlConnection*
     struct linkedFeatures* lf)
 {
 char query[LARGEBUF];
-safef(query, sizeof(query), "SELECT authors, year, title FROM %s WHERE articleId = '%s'", 
-    articleTable, lf->name);
 struct sqlResult *sr = NULL;
 char **row = NULL;
-sr = sqlGetResult(conn, query);
 struct pubsExtra *extra = NULL;
+
+safef(query, sizeof(query), "SELECT authors, year, title FROM %s WHERE articleId = '%s'", 
+    articleTable, lf->name);
+sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
 {
     char* authors = row[0];
@@ -12254,8 +12254,8 @@ static void pubsLoadKeywordYearItems(struct track *tg)
 /* load items that fulfill keyword and year filter */
 {
 struct sqlConnection *conn = hAllocConn(database);
-char *keywords = cartOptionalString(cart, "pubsKeywords");
-char *yearFilter = cartOptionalString(cart, "pubsYear");
+char *keywords = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsKeywords");
+char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsYear");
 char *articleTable = pubsArticleTable(tg);
 
 if(yearFilter == NULL || sameWord(yearFilter, "anytime"))
@@ -12417,7 +12417,7 @@ static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* 
     char *sequenceTable = trackDbRequiredSetting(tg->tdb, "pubsSequenceTable");
     char *selectValSql = NULL;
     if (getSnippet)
-        selectValSql = "replace(replace(snippet, \"<B>\", \"-->\"), \"</B>\", \"<--\")";
+        selectValSql = "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")";
     else
         selectValSql = "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))";
 
@@ -12441,7 +12441,10 @@ if (sr!=NULL)
 {
     char **row = NULL;
     row = sqlNextRow(sr);
-    dispLabel = pubsFeatureLabel(row[0], row[1]);
+    if (row != NULL)
+        dispLabel = pubsFeatureLabel(row[0], row[1]);
+    else
+        dispLabel = articleId;
 }
 else
     dispLabel = articleId;
