@@ -119,9 +119,7 @@ var encodeMatrix = (function () {
                 // implementation (stop+fadeIn)
                 header.stop(true, true);
                 header.fadeIn(100);
-            },
-            cbFadeOut: function (header) {
-                // restore checked radio button that is the fadeIn cleared (on Chrome)
+
                 if (encodeMatrix.isFileSearch()) {
                     $('#searchFiles').attr('checked', true);
                 } else {
