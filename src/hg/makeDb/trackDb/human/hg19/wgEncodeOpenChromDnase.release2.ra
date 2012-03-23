@@ -1328,7 +1328,7 @@ dataVersion through the ENCODE Mar 2012 Freeze
         longLabel GM19239 DNaseI HS Overlap Signal from ENCODE/OpenChrom-Duke
         subGroups view=SIGBO cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 209.000000
-        # subId=1506 dateSubmitted=2010-06-16
+        # subId=6244 dateSubmitted=2012-03-23
 
         track wgEncodeOpenChromDnaseGm18507BaseOverlapSignal
         parent wgEncodeOpenChromDnaseViewSigBo off
