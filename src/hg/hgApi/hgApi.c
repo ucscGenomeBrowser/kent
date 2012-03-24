@@ -262,7 +262,7 @@ else if (!strcmp(cmd, "tableMetadata"))
         struct trackDb *tdb = hTrackDbForTrackAndAncestors(database, trackName); // Doesn't get whole track list
         if (tdb != NULL)
             {
-            char * html = metadataAsHtmlTable(database,tdb,showLonglabel,showShortLabel,NULL);
+            char * html = metadataAsHtmlTable(database,tdb,showLonglabel,showShortLabel);
             if (html)
                 {
                 dyStringAppend(output,html);

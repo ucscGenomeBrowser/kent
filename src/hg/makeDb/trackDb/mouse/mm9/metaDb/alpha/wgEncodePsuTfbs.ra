@@ -3166,7 +3166,7 @@ metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep1
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3189,13 +3189,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep2
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3217,13 +3218,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk
 objType table
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3246,13 +3248,14 @@ sex M
 strain 129
 subId 4793
 tableName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep1
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3275,13 +3278,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep2
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3303,13 +3307,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3331,13 +3336,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3359,13 +3365,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepSignalRep1
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3387,13 +3394,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepSignalRep2
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3415,13 +3423,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig
 objType table
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3444,13 +3453,14 @@ sex M
 strain 129
 subId 4793
 tableName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3472,13 +3482,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3500,13 +3511,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputPk
 objType table
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3528,13 +3540,14 @@ sex M
 strain 129
 subId 4723
 tableName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3556,13 +3569,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep2
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3584,13 +3598,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3612,13 +3627,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3640,13 +3656,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3668,13 +3685,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep2
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3696,13 +3714,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputSig
 objType table
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3724,13 +3743,14 @@ sex M
 strain 129
 subId 4723
 tableName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3751,13 +3771,14 @@ setType exp
 sex M
 strain 129
 subId 3033
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputPk
 objType table
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3778,13 +3799,14 @@ sex M
 strain 129
 subId 3033
 tableName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputRawDataRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3805,13 +3827,14 @@ setType exp
 sex M
 strain 129
 subId 3033
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig
 objType table
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3832,13 +3855,14 @@ sex M
 strain 129
 subId 3033
 tableName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3859,13 +3883,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3886,13 +3911,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputPk
 objType table
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3913,13 +3939,14 @@ sex M
 strain 129
 subId 3045
 tableName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep1
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3940,13 +3967,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep2
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3967,13 +3995,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3994,13 +4023,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4021,13 +4051,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4048,13 +4079,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4075,13 +4107,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputSig
 objType table
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4102,13 +4135,14 @@ sex M
 strain 129
 subId 3045
 tableName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4131,13 +4165,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4159,13 +4194,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4188,13 +4224,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4216,13 +4253,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4244,13 +4282,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4272,13 +4311,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputSig
 objType table
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4300,13 +4340,14 @@ sex M
 strain 129
 subId 5145
 tableName wgEncodePsuTfbsG1eer4e2InputME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep1
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4327,13 +4368,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep2
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4354,13 +4396,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep3
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4381,13 +4424,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputPk
 objType table
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4408,13 +4452,14 @@ sex M
 strain 129
 subId 3050
 tableName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep1
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4435,13 +4480,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep2
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4462,13 +4508,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep3
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4489,13 +4536,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4516,13 +4564,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4543,13 +4592,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep3
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4570,13 +4620,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4597,13 +4648,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4624,13 +4676,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep3
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4651,13 +4704,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputSig
 objType table
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4678,13 +4732,14 @@ sex M
 strain 129
 subId 3050
 tableName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4705,13 +4760,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4732,13 +4788,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputPk
 objType table
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4759,13 +4816,14 @@ sex M
 strain 129
 subId 4783
 tableName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep1
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4786,13 +4844,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep2
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4813,13 +4872,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4840,13 +4900,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4867,13 +4928,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4894,13 +4956,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4921,13 +4984,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig
 objType table
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4948,6 +5012,7 @@ sex M
 strain 129
 subId 4783
 tableName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1
@@ -6432,4 +6497,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 306066579
+# MAGIC: -1462850998

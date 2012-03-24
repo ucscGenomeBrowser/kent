@@ -47,7 +47,7 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control 
 visibilityViewDefaults Peaks=pack  Signal=full
 noInherit on
 wgEncode 1
-html wgEncodeSydhHistone.new
+html wgEncodeSydhHistone.release3
 
     #Peak Track SYDH Histone#
     track wgEncodeSydhHistoneViewPeaks

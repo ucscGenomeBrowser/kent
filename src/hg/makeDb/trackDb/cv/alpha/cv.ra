@@ -6011,8 +6011,8 @@ color 153,38,0
 sex U
 protocol Hardison:G1E_Hardison_protocol.pdf
 
-term G1E-ER4+E2
-tag G1E_ER4_E2
+term G1E-ER4
+tag G1EER4
 type Cell Line
 organism mouse
 tissue blood
@@ -12104,7 +12104,7 @@ tag DIFFD14H
 description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
 type treatment
 
-term diffProtD24hr
+term diffProtD_24hr
 tag DIFF24H
 description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
 type treatment

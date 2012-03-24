@@ -23,9 +23,26 @@ def parsePubmed(doc, id):
 
 def parsePmc(doc, id):
     infoDict = dict()
-    id = re.sub("PMC", "", id)
     infoDict['url'] = "http://www.ncbi.nlm.nih.gov/pmc/articles/%s" % id
     attribList = ['Title', 'PubDate', 'Journal', 'Volume', 'Issue', 'Pagination', 'CollectiveName']
+    for node in doc.iter("ArticleId"):
+        good = 0
+        for child in node:
+            if child.tag == "IdType" and child.text == "pmid":
+                good = 1
+            if good == 1 and child.tag == "Value":
+                return parseInit(child.text) 
+            
+            
+    for i in ids:
+        good = 0
+        for j in i:
+            if j.tag == "IdType" and j.text == "pmid":
+                good = 1
+            if j.tag == "Value" and good:
+                print j.text
+
+
     for element in doc:
         if element.tag != "DocSum":
             continue
@@ -46,16 +63,20 @@ def parsePmc(doc, id):
 def parseInit(id):
     urlbase = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?"
     db = "Pubmed"
-    if re.match("^PMC", id):
-        db = "pmc"
     url = urlbase + "db=%s" % db + "&id=%s" % id
+    if re.match("^PMC", id):
+        db = "PMC"
+        id = re.sub("PMC", "", id)
+        url = urlbase + "db=%s" % db + "&id=%s&version=2.0" % id
 
     fetch = urllib2.urlopen(url)
     doc = ET.XML(fetch.read())
     if db == "Pubmed":
         infoDict = parsePubmed(doc, id)
-    elif db == "pmc":
+    elif db == "PMC":
         infoDict = parsePmc(doc, id)
+
+
 
     return infoDict
 

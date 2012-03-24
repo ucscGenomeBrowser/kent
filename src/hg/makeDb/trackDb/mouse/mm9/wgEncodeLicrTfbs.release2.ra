@@ -29,10 +29,10 @@ shortLabel LICR TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line BAT=BAT BMARROW=Bone_Marrow BMDM=BMDM CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=OlfactBulb PLAC=Placenta SMINT=SmIntestine SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=WholeBrain
+subGroup2 cellType Cell_Line BAT=Brown_Adipose_Tissu BMARROW=Bone_Marrow BMDM=Bone_Marrow_Derived_Macrophage CBELLUM=Cerebellum CORTEX=Cortex ESB4=ES-Bruce4 HEART=Heart KIDNEY=Kidney LIMB=Limb LIVER=Liver LUNG=Lung MEF=MEF MEL=MEL OLFACT=Olfactory_Bulb PLAC=Placenta SMINT=Small_Intestine SPLEEN=Spleen TESTIS=Testis THYMUS=Thymus WBRAIN=Whole_Brain
 subGroup3 factor Factor CTCF=CTCF P300=p300 POL2=Pol2 INPUT=Input
 subGroup4 sex Sex M=M F=F U=U
-subGroup5 age Age ADULT8WKS=adult-8wks ADULT24WKS=adult-24wks E0=E0 E14HALF=E14.5 IMMORTAL=immortalized
+subGroup5 age Age ADULT8WKS=Adult_8_weeks ADULT24WKS=adult_24_weeks E0=Embryonic_day_0 E14HALF=Embryonic_day_14.5 IMMORTAL=Immortal_cells
 subGroup6 strain Strain C57BL6=C57BL/6
 subGroup7 control Control STD=std
 dimensions dimensionX=cellType dimensionY=factor dimensionA=age

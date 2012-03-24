@@ -543,4 +543,9 @@ void sqlPrintStats(FILE *fh);
 /* print statistic about the number of connections and other options done by
  * this process. */
 
+struct sqlResult *sqlStoreResult(struct sqlConnection *sc, char *query);
+/* Returns NULL if result was empty.  Otherwise returns a structure
+ * that you can do sqlRow() on.  Same interface as sqlGetResult,
+ * but internally this keeps the entire result in memory. */
+
 #endif /* JKSQL_H */
