@@ -7,6 +7,7 @@ BIN_DIR = bin/${MACHTYPE}
 
 all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/pslReaderTester \
+	${BIN_DIR}/annoGratorTester \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester 
 
@@ -38,6 +39,9 @@ genePredTest: ${BIN_DIR}/genePredTester mkdirs
 pslReaderTest: ${BIN_DIR}/pslReaderTester mkdirs
 	${MAKE} -f pslReaderTests.mk test
 
+annoGratorTest: ${BIN_DIR}/annoGratorTester mkdirs
+	${MAKE} -f annoGratorTests.mk test
+
 customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 	${MAKE} -f customTrackTests.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
 	rm -f loader
@@ -50,6 +54,10 @@ ${BIN_DIR}/genePredTester: genePredTester.o ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
 ${BIN_DIR}/pslReaderTester: pslReaderTester.o ${MYLIBS}
+	@${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
+
+${BIN_DIR}/annoGratorTester: annoGratorTester.o ${MYLIBS}
 	@${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 

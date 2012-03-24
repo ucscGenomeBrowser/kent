@@ -14,6 +14,9 @@
 #define OPTION_MULTI      0x40
 #define OPTION_DOUBLE	  0x80
 
+/* Mask for option types (excluding OPTION_MULTI) */
+#define OPTION_TYPE_MASK (OPTION_BOOLEAN|OPTION_STRING|OPTION_INT|OPTION_FLOAT|OPTION_LONG_LONG|OPTION_DOUBLE)
+
 struct optionSpec
 /* Specification of a single option.  An array of these are passed
  * to optionInit() to validate options. */
