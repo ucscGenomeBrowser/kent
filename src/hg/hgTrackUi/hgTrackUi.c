@@ -1895,8 +1895,8 @@ puts("&nbsp;<B>position</B>");
 void pubsUi(struct trackDb *tdb)
 /* UI for pubs match track */
 {
-char* keywordTag = "pubsKeywords";
-char* yearTag = "pubsYear";
+char* keywordTag = "pubsBlat.pubsKeywords";
+char* yearTag = "pubsBlat.pubsYear";
 char *keywords = cartUsualString(cart, keywordTag, "");
 char *text[NUM_YEARS + 1];
 char *values[NUM_YEARS + 1];

@@ -629,16 +629,16 @@ if (stringIn("Psl", trackTable))
 else
 {
     printTrackVersion(tdb, conn, item);
-    if (trackDbSettingClosestToHome(tdb, "pubsMarkerTable") != NULL)
+    if (stringIn("Marker", trackTable))
     {
-        char* markerTable = hashMustFindVal(tdb->settingsHash, "pubsMarkerTable");
+        char* markerTable = trackDbRequiredSetting(tdb, "pubsMarkerTable");
         printPositionAndSize(start, end, 0);
         printMarkerSnippets(conn, articleTable, markerTable, item);
     }
     else
     {
         printPositionAndSize(start, end, 1);
-        pubsSequenceTable = hashMustFindVal(tdb->settingsHash, "pubsSequenceTable");
+        pubsSequenceTable = trackDbRequiredSetting(tdb, "pubsSequenceTable");
         char* articleId = printArticleInfo(conn, item, articleTable);
         if (articleId!=NULL) 
         {

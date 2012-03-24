@@ -339,8 +339,9 @@ summary wigMaf
 superTrack *
 symbolTable bed genePred
 pubsArticleTable bed psl
-pubsSequenceTable bed
-pubsMarkerTable bed
+pubsSequenceTable bed psl
+pubsMarkerTable bed psl
+pubsPslTrack bed psl
 thickDrawItem bed
 table *
 tableBrowser *
