@@ -12543,11 +12543,12 @@ if (sameWord(type, "bed"))
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
 
-    // XX this might not be the right place / right way to set methods here
-    // XX should I introduce a track type ? (MaxH)
-    if (trackDbSettingClosestToHome(track->tdb, "pubsMarkerTable") !=NULL)
+    // XX MaxH: this works as a temp hack, but it is not the right way to do it
+    // XX should I introduce several new track types ? 
+    // XX or rather additional trackDb statements, one per pubs-"track type" ?
+    if (startsWith("pubs", track->track) && stringIn("Marker", track->track))
         pubsMarkerMethods(track);
-    if (trackDbSettingClosestToHome(track->tdb, "pubsSequenceTable") !=NULL)
+    if (startsWith("pubs", track->track) && stringIn("Blat", track->track))
         pubsBlatMethods(track);
     }
 /*
