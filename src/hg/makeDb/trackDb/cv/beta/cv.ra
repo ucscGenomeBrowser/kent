@@ -3457,7 +3457,7 @@ orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
 lab Gingeras
-protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf,Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
+protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
 
 term HPC-PL_0032601.13
 tag HPCPL003260113
@@ -6584,7 +6584,7 @@ target ATF1
 targetDescription ATF1 is a bZip transcription factor from the CREB family.  ATF1 binds to both cAMP response elements (TGACGTCA).
 vendorName Millipore
 vendorId 06-325
-orderUrl http://www.millipore.com/catalogue/item/06-325
+orderUrl http://www.millipore.com/coa/tech1/74jm6a
 lab Struhl
 targetId GeneCard:ATF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF1
@@ -10100,7 +10100,7 @@ orderUrl http://www.scbt.com/datasheet-273-tfiid-tbp-si-1-antibody.html
 lab Struhl
 targetId GeneCard:TBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
-validation Human_-_TBP_(sc-273)(Western_blot,Immunoprecipitation):human_TBP_sci273_validation_Struhl.pdf
+validation Human_-_TBP_(sc-273)(Western_blot,Immunoprecipitation):human_TBP_sc-273_validation_Struhl.pdf
 label TBP (sc-273)
 
 
@@ -11314,7 +11314,7 @@ type localization
 description Whole cell
 termId GO:0005623
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
-label cell GO:0005623
+label cell
 
 term nucleus
 tag NUCLEUS
@@ -11322,7 +11322,7 @@ type localization
 description Large membrane bound part of cell containing chromosomes and the bulk of the cell's DNA
 termId GO:0005634
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005634
-label nucleus GO:0005634
+label nucleus
 
 term cytosol
 tag CYTOSOL
@@ -11330,7 +11330,7 @@ type localization
 description The fluid between the cells outer membrane and the nucleus
 termId GO:0005829
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005829
-label cytosol GO:0005829
+label cytosol
 
 term polysome
 tag POLYSOME
@@ -11338,7 +11338,7 @@ type localization
 description Strand of mRNA with ribosomes attached
 termId GO:0005844
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
-label polysome GO:0005844
+label polysome
 
 term chromatin
 tag CHROMATIN
@@ -11346,7 +11346,7 @@ type localization
 description Nuclear DNA and associated proteins
 termId GO:0000790
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0000790
-label chromatin GO:0000790
+label chromatin
 
 term nucleolus
 tag NUCLEOLUS
@@ -11354,7 +11354,7 @@ type localization
 description The part of the nucleus where ribosomal RNA is actively transcribed
 termId GO:0005730
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
-label nucleolus GO:0005730
+label nucleolus
 
 term nucleoplasm
 tag NUCLEOPLASM
@@ -11362,7 +11362,7 @@ type localization
 description That part of the nuclear content other than the chromosomes or the nucleolus
 termId GO:0005654
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005654
-label nucleoplasm GO:0005654
+label nucleoplasm
 
 term nuclearMatrix
 tag NUCLEARMATRIX
@@ -11377,7 +11377,7 @@ type localization
 description That fraction of cells, prepared by disruptive biochemical methods, that includes the plasma and other membranes.
 termId GO:0005624
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
-label membraneFraction GO:0005624
+label membraneFraction
 
 term mitochondria
 tag MITO
@@ -11385,7 +11385,7 @@ type localization
 description Mitochondria
 termId GO:0005739
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
-label mitochondria GO:0005739
+label mitochondria 
 
 ### RNA extracts
 
