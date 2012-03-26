@@ -12682,6 +12682,12 @@ type view
 label Exons Gencode V7
 description Expression level estimates for GENCODE V7 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
+term ExonsGencV10
+tag EXONGENCV10
+type view
+label Exons Gencode V10
+description Expression level estimates for GENCODE V10 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
+
 term ExonsEnsV65IAcuff
 tag EXONENSV65
 type view
@@ -12747,6 +12753,12 @@ tag GENEGENCV7
 type view
 label Genes Gencode V7
 description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format
+
+term GeneGencV10
+tag GENEGENCV10
+type view
+label Genes Genoce V10
+description Expression level estimates at the gene level for the GENCODE V10 annotation in gtf format
 
 term GeneGencV3c
 tag GENEGENCV3C
@@ -12970,6 +12982,12 @@ tag TRANSDENOVO
 type view
 label Transcripts De novo
 description 'De novo' transcripts with FPKM produced by Cufflinks
+
+term TranscriptGencV10
+tag TRANSGENCV7
+type view
+label Transcript Gencode V10
+description Expression level estimates at the transcript level for the GENCODE V10 annotation in gtf format
 
 term TranscriptGencV7
 tag TRANSGENCV7
