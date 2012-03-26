@@ -17,12 +17,25 @@ ver="$2"
 reportTransCounts() {
     local transcriptClass="$1"
     local baseSel="select count(distinct attrs.transcriptId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencodeTranscriptSource${ver} src where attrs.transcriptClass = \"${transcriptClass}\" and src.transcriptId = attrs.transcriptId"
+    if [ ${transcriptClass} == "pseudo" ]; then
+        type="PseudoGene"
+    else
+        type="Comp"
+    fi
+    local baseSelPar="select count(distinct attrs.transcriptId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencode${type}${ver} genes, wgEncodeGencodeTranscriptSource${ver} src where attrs.transcriptClass = \"${transcriptClass}\" and genes.name = attrs.transcriptId and src.transcriptId = attrs.transcriptId and genes.chrom = \"chrX\" and genes.name in (select name from wgEncodeGencode${type}${ver} where chrom = \"chrY\")"
     local cnt
+    local par
     cnt=$(hgsql -Ne "${baseSel} and src.source like \"ensembl_havana%\"" ${db})
+    par=$(hgsql -Ne "${baseSelPar} and src.source like \"ensembl_havana%\"" ${db})
+    cnt=$(( $cnt+$par ))
     echo "${transcriptClass}	both manual and automatic	$cnt"
     cnt=$(hgsql -Ne "${baseSel} and src.source like \"havana%\"" ${db})
+    par=$(hgsql -Ne "${baseSelPar} and src.source like \"havana%\"" ${db})
+    cnt=$(( $cnt+$par ))
     echo "${transcriptClass}	manual only	$cnt"
-    cnt=$(hgsql -Ne "${baseSel} and src.source not like \"havana%\"" ${db})
+    cnt=$(hgsql -Ne "${baseSel} and src.source not like \"%havana%\"" ${db})
+    par=$(hgsql -Ne "${baseSelPar} and src.source not like \"%havana%\"" ${db})
+    cnt=$(( $cnt+$par ))
     echo "${transcriptClass}	automatic only	$cnt"
 }
 echo "Transcript report"
@@ -31,22 +44,59 @@ for transcriptClass in $(hgsql -Ne "select distinct(transcriptClass) from wgEnco
    reportTransCounts ${transcriptClass}
 done
 cnt=$(hgsql -Ne "select count(distinct attrs.transcriptId) from wgEncodeGencodeAttrs${ver} attrs" ${db})
+parGenes=$(hgsql -Ne "select count(distinct name) from wgEncodeGencodeComp${ver} where chrom = \"chrX\" and name in (select name from wgEncodeGencodeComp${ver} where chrom = \"chrY\")" ${db})
+parPseudoGenes=$(hgsql -Ne "select count(distinct name) from wgEncodeGencodePseudoGene${ver} where chrom = \"chrX\" and name in (select name from wgEncodeGencodePseudoGene${ver} where chrom = \"chrY\")" ${db})
+echo "Par genes is $parGenes"
+echo "Par pseudogenes is $parPseudoGenes"
+echo "cnt is $cnt"
+cnt=$(( $cnt+$parGenes+$parPseudoGenes ))
 echo "All	All	$cnt"
 
 # generate gene stats
 reportGeneCounts() {
     local baseSel="select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencodeGeneSource${ver} src where src.geneId = attrs.geneId"
+    local type="Comp"
+    local baseSelPar="select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencode${type}${ver} genes, wgEncodeGencodeGeneSource${ver} src where genes.name = attrs.transcriptId and src.geneId = attrs.geneId and genes.chrom = \"chrX\" and genes.name in (select name from wgEncodeGencode${type}${ver} where chrom = \"chrY\")"
+    #local baseSelParPseudo="select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencodePseudoGene${ver} pseudo, wgEncodeGencodeGeneSource${ver} src where pseudo.name = attrs.transcriptId and src.geneId = attrs.geneId and pseudo.chrom = \"chrX\" and pseudo.name in (select name from wgEncodeGencodePseudoGene${ver} where chrom = \"chrY\")"
     local cnt
+    local par
     cnt=$(hgsql -Ne "${baseSel} and src.source like \"ensembl_havana%\"" ${db})
+    par=$(hgsql -Ne "${baseSelPar} and src.source like \"ensembl_havana%\"" ${db})
+    cnt=$(( $cnt+$par ))
     echo "both manual and automatic	$cnt"
     cnt=$(hgsql -Ne "${baseSel} and src.source like \"havana%\"" ${db})
+    par=$(hgsql -Ne "${baseSelPar} and src.source like \"havana%\"" ${db})
+    cnt=$(( $cnt+$par ))
     echo "manual only	$cnt"
-    cnt=$(hgsql -Ne "${baseSel} and src.source not like \"havana%\"" ${db})
+    cnt=$(hgsql -Ne "${baseSel} and src.source not like \"%havana%\"" ${db})
+    par=$(hgsql -Ne "${baseSelPar} and src.source not like \"%havana%\"" ${db})
+    cnt=$(( $cnt+$par ))
     echo "automatic only	$cnt"
+    type="PseudoGene"
+    cnt=$(hgsql -Ne "${baseSel} and attrs.geneType like \"%pseudogene\" and src.source like \"ensembl_havana%\"" ${db}) 
+    par=$(hgsql -Ne "${baseSelPar} and attrs.geneType like \"%pseudogene\"and src.source like \"ensembl_havana%\"" ${db})
+    cnt=$(( $cnt+$par ))
+    echo "pseudo	both manual and automatic	$cnt"
+    cnt=$(hgsql -Ne "${baseSel} and geneType like \"%pseudogene\" and src.source like \"havana%\"" ${db}) 
+    par=$(hgsql -Ne "${baseSelPar} and attrs.geneType like \"%pseudogene\" and src.source like \"havana%\"" ${db})
+    cnt=$(( $cnt+$par ))
+    echo "pseudo	manual only	$cnt"
+    cnt=$(hgsql -Ne "${baseSel} and geneType like \"%pseudogene\" and src.source not like \"%havana%\"" ${db}) 
+    par=$(hgsql -Ne "${baseSelPar} and attrs.geneType like \"%pseudogene\" and src.source not like \"%havana%\"" ${db})
+    cnt=$(( $cnt+$par ))
+    echo "pseudo	automatic only	$cnt"
 }
 echo ""
 echo "Gene report"
 echo "source	count"
 reportGeneCounts
 cnt=$(hgsql -Ne "select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs" ${db})
+parGenes=$(hgsql -Ne "select count(distinct attrs.geneId) from wgEncodeGencodeComp${ver} comp, wgEncodeGencodeAttrs${ver} attrs where comp.name = attrs.transcriptId and comp.chrom = \"chrX\" and comp.name in (select name from wgEncodeGencodeComp${ver} where chrom = \"chrY\")" ${db})
+parPseudoGenes=$(hgsql -Ne "select count(distinct attrs.geneId) from wgEncodeGencodePseudoGene${ver} pseudo, wgEncodeGencodeAttrs${ver} attrs where pseudo.name = attrs.transcriptId and pseudo.chrom = \"chrX\" and pseudo.name in (select name from wgEncodeGencodePseudoGene${ver} where chrom = \"chrY\")" ${db})
+echo "parGenes is $parGenes"
+echo "parPseudoGenes is $parPseudoGenes"
+echo "cnt is $cnt"
+cnt=$(( $cnt+$parGenes+$parPseudoGenes ))
 echo "All	$cnt"
+cnt=$(hgsql -Ne "select count(distinct name) from wgEncodeGencode2wayConsPseudo${ver};" ${db})
+echo "2-way pseudogenes	$cnt"

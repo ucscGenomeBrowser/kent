@@ -327,7 +327,7 @@ color 0,107,27
 sex M
 tier 1
 protocol ENCODE:H1_ES_protocol.pdf
-#vendorId
+dvendorId
 
 ###### type 3 cells once they have been submitted.
 
@@ -1430,7 +1430,7 @@ tier 3
 lab Crawford
 protocol Crawford:CordCD4Th0_Crawford_protocol.pdf
 
-term Cord_CD4_naive
+term Cord_CD4_Th1
 tag CORDCD4TH1
 type Cell Line
 organism human
@@ -3363,7 +3363,7 @@ organism human
 description Undifferentiated Mesenchymal Stem Cells from two individuals, hMSC-UC_0081101.7 and hMSC-UC_0052501.7 from matrix (Wharton's Jelly)
 lineage missing
 karyotype normal
-sex F
+sex B
 tissue umbilical cord
 vendorName PromoCell
 vendorId hMSC-UC
@@ -3659,7 +3659,7 @@ orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/pericytes/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
 lab Gingeras
-protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf,Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
+protocol Gingeras:HPCPL0032601.13_Gingeras_protocol.pdf Gingeras:HPCPL0101504.13_Gingeras_protocol.pdf
 
 term HPC-PL_0032601.13
 tag HPCPL003260113
@@ -6011,8 +6011,8 @@ color 153,38,0
 sex U
 protocol Hardison:G1E_Hardison_protocol.pdf
 
-term G1E-ER4+E2
-tag G1E_ER4_E2
+term G1E-ER4
+tag G1EER4
 type Cell Line
 organism mouse
 tissue blood
@@ -6820,7 +6820,7 @@ target ATF1
 targetDescription ATF1 is a bZip transcription factor from the CREB family.  ATF1 binds to both cAMP response elements (TGACGTCA).
 vendorName Millipore
 vendorId 06-325
-orderUrl http://www.millipore.com/catalogue/item/06-325
+orderUrl http://www.millipore.com/coa/tech1/74jm6a
 lab Struhl
 targetId GeneCard:ATF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF1
@@ -10336,7 +10336,7 @@ orderUrl http://www.scbt.com/datasheet-273-tfiid-tbp-si-1-antibody.html
 lab Struhl
 targetId GeneCard:TBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
-validation Human_-_TBP_(sc-273)(Western_blot,Immunoprecipitation):human_TBP_sci273_validation_Struhl.pdf
+validation Human_-_TBP_(sc-273)(Western_blot,Immunoprecipitation):human_TBP_sc-273_validation_Struhl.pdf
 label TBP (sc-273)
 
 
@@ -11448,10 +11448,25 @@ tag R1X36
 type readType
 description Single 36 nt reads
 
+term 1x41
+tag R1X41
+type readType
+description Single 41 nt reads PROVISIONAL
+
+term 1x45
+tag R1X45
+type readType
+description Single 45 nt reads PROVISIONAL
+
 term 1x50
 tag R1X50
 type readType
 description Single 50 nt reads
+
+term 1x55
+tag R1X55
+type readType
+description Single 55 nt reads PROVISIONAL
 
 term 1x75
 tag R1X75
@@ -11468,6 +11483,11 @@ tag R1X101
 type readType
 description Single 101 nt reads
 
+term 2x36
+tag R2X36
+type readType
+description Paired 36 nt reads
+
 term 2x75
 tag R2X75
 type readType
@@ -11477,6 +11497,11 @@ term 2x76D
 tag R2X76D
 type readType
 description Paired 76 nt directed reads
+
+term 2x99D
+tag R2X99D
+type readType
+description Paired 99 nt directed reads PROVISIONAL
 
 term 2x100
 tag R2X100
@@ -11550,7 +11575,7 @@ type localization
 description Whole cell
 termId GO:0005623
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
-label cell GO:0005623
+label cell
 
 term nucleus
 tag NUCLEUS
@@ -11558,7 +11583,7 @@ type localization
 description Large membrane bound part of cell containing chromosomes and the bulk of the cell's DNA
 termId GO:0005634
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005634
-label nucleus GO:0005634
+label nucleus
 
 term cytosol
 tag CYTOSOL
@@ -11566,7 +11591,7 @@ type localization
 description The fluid between the cells outer membrane and the nucleus
 termId GO:0005829
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005829
-label cytosol GO:0005829
+label cytosol
 
 term polysome
 tag POLYSOME
@@ -11574,7 +11599,7 @@ type localization
 description Strand of mRNA with ribosomes attached
 termId GO:0005844
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
-label polysome GO:0005844
+label polysome
 
 term chromatin
 tag CHROMATIN
@@ -11582,7 +11607,7 @@ type localization
 description Nuclear DNA and associated proteins
 termId GO:0000790
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0000790
-label chromatin GO:0000790
+label chromatin
 
 term nucleolus
 tag NUCLEOLUS
@@ -11590,7 +11615,7 @@ type localization
 description The part of the nucleus where ribosomal RNA is actively transcribed
 termId GO:0005730
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
-label nucleolus GO:0005730
+label nucleolus
 
 term nucleoplasm
 tag NUCLEOPLASM
@@ -11598,7 +11623,7 @@ type localization
 description That part of the nuclear content other than the chromosomes or the nucleolus
 termId GO:0005654
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005654
-label nucleoplasm GO:0005654
+label nucleoplasm
 
 term nuclearMatrix
 tag NUCLEARMATRIX
@@ -11613,7 +11638,7 @@ type localization
 description That fraction of cells, prepared by disruptive biochemical methods, that includes the plasma and other membranes.
 termId GO:0005624
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
-label membraneFraction GO:0005624
+label membraneFraction
 
 term mitochondria
 tag MITO
@@ -11621,7 +11646,7 @@ type localization
 description Mitochondria
 termId GO:0005739
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005739
-label mitochondria GO:0005739
+label mitochondria
 
 ### RNA extracts
 
@@ -11973,7 +11998,6 @@ tag AMA50UG9H
 type treatment
 description 9h with 50 ug/ml alpha-amanitin
 
-
 term Betamethasone_100nM
 tag BMETH
 description 1 h with 100 nM Betamethasone (Myers)
@@ -12099,7 +12123,7 @@ tag DIFFD14H
 description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
 type treatment
 
-term diffProtD24hr
+term diffProtD_24hr
 tag DIFF24H
 description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
 type treatment
@@ -12658,6 +12682,11 @@ type view
 label Exons Gencode V7
 description Expression level estimates for GENCODE V7 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
+term ExonsEnsV65IAcuff
+tag EXONENSV65
+type view
+description Expression level estimates for ENSEMBL V65 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon PROVISIONAL
+
 term Fasta3p
 tag FASTA3P
 type view
@@ -12724,6 +12753,11 @@ tag GENEGENCV3C
 type view
 label Genes Gencode V3c
 description Expression level estimates at the gene level for the GENCODE CRCh37.v3c annotation in gtf format
+
+term GeneEnsV65IAcuff
+tag GENENSV65
+type view
+description Expression level estimates at the gene level for the ENSEMBL V65 annotation in gtf format PROVISIONAL
 
 term HMM
 tag HMM
@@ -12948,6 +12982,11 @@ tag TRANSGENCV3C
 type view
 label Transcript Gencode V3c
 description Expression level estimates at the transcript level for the GENCODE CRCh37.v3c annotation in gtf format
+
+term TranscriptEnsV65IAcuff
+tag TRANSENSV65
+type view
+description Expression level estimates at the transcript level for the ENSEMBL V65 annotation in gtf format PROVISIONAL
 
 term Transfrags
 tag TRANSFRAGS

@@ -83,7 +83,7 @@ char query[4000];
 sqlUpdate(conn, "SET SESSION group_concat_max_len = 100000");
 
 safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, pmid, "  
-    "group_concat(snippet, section SEPARATOR ' (...) ') FROM %s "
+    "group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
     "WHERE markerId='%s' AND section in (%s) "
     "GROUP by articleId "
@@ -629,16 +629,16 @@ if (stringIn("Psl", trackTable))
 else
 {
     printTrackVersion(tdb, conn, item);
-    if (trackDbSettingClosestToHome(tdb, "pubsMarkerTable") != NULL)
+    if (stringIn("Marker", trackTable))
     {
-        char* markerTable = hashMustFindVal(tdb->settingsHash, "pubsMarkerTable");
+        char* markerTable = trackDbRequiredSetting(tdb, "pubsMarkerTable");
         printPositionAndSize(start, end, 0);
         printMarkerSnippets(conn, articleTable, markerTable, item);
     }
     else
     {
         printPositionAndSize(start, end, 1);
-        pubsSequenceTable = hashMustFindVal(tdb->settingsHash, "pubsSequenceTable");
+        pubsSequenceTable = trackDbRequiredSetting(tdb, "pubsSequenceTable");
         char* articleId = printArticleInfo(conn, item, articleTable);
         if (articleId!=NULL) 
         {
