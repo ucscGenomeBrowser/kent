@@ -3601,10 +3601,36 @@ grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
 md5sum 717e489b21c000680b9a9cc85e14420a
+objStatus revoked - This is a bigWig version 3 file, it is obsolete.
 origAssembly hg18
 project wgEncode
 subId 1506
 tableName wgEncodeOpenChromDnaseGm19239BaseOverlapSignal
+treatment None
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseGm19239BaseOverlapSignalV2
+objType table
+cell GM19239
+composite wgEncodeOpenChromDnase
+controlId generic_male
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2012-03-23
+dateSubmitted 2009-10-06
+dateUnrestricted 2010-07-06
+dccAccession wgEncodeEH000567
+expId 567
+fileName wgEncodeOpenChromDnaseGm19239BaseOverlapSignalV2.bigWig
+geoSampleAccession GSM816659
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+origAssembly hg18
+project wgEncode
+subId 6244
+submittedDataVersion V2 - The other file was bigWig version 3, which is now obsolete. It is replaced with a version 4 bigWig
+tableName wgEncodeOpenChromDnaseGm19239BaseOverlapSignalV2
 treatment None
 view Base_Overlap_Signal
 
@@ -7788,6 +7814,7 @@ fileName wgEncodeOpenChromDnaseK562AlnRep1V2.bam,wgEncodeOpenChromDnaseK562AlnRe
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 2e09ac79fd61ec4d512fa367c4d4fc5e,8f157982ee99c4e6db49382a77ad8383
 project wgEncode
 replicate 1
 subId 5901
@@ -7835,6 +7862,7 @@ fileName wgEncodeOpenChromDnaseK562AlnRep2V2.bam,wgEncodeOpenChromDnaseK562AlnRe
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 00133b6e2bcc5db858ce858b3445534b,0126a8db65f0ecabef7aaf284486597d
 project wgEncode
 replicate 2
 subId 5901
@@ -7856,6 +7884,7 @@ fileName wgEncodeOpenChromDnaseK562AlnRep3V2.bam,wgEncodeOpenChromDnaseK562AlnRe
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum e7de9426c4a051638ebd139c77c9156e,f4b67c30a9264b8c119349b52d19718b
 project wgEncode
 replicate 3
 subId 5901
@@ -7903,6 +7932,7 @@ fileName wgEncodeOpenChromDnaseK562BaseOverlapSignalV2.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum d911aa7ce6c5318ef4363bd6b12c7920
 project wgEncode
 subId 5901
 submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
@@ -8095,6 +8125,7 @@ fileName wgEncodeOpenChromDnaseK562PkV2.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 967fa97156ca5b756800fa14bd9db61f
 project wgEncode
 subId 5901
 submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
@@ -8140,6 +8171,7 @@ expId 530
 fileName wgEncodeOpenChromDnaseK562RawDataRep1V2.fastq.gz
 grant Crawford
 lab Duke
+md5sum f2cf4aca12268a5215eb6bac18bbafe5
 project wgEncode
 replicate 1
 subId 5901
@@ -8185,6 +8217,7 @@ expId 530
 fileName wgEncodeOpenChromDnaseK562RawDataRep2V2.fastq.gz
 grant Crawford
 lab Duke
+md5sum c46596dc57167146ce6a0c0f02721c0b
 project wgEncode
 replicate 2
 subId 5901
@@ -8205,6 +8238,7 @@ expId 530
 fileName wgEncodeOpenChromDnaseK562RawDataRep3V2.fastq.gz
 grant Crawford
 lab Duke
+md5sum b8d22b786c97af485ef7ad751add1e6e
 project wgEncode
 replicate 3
 subId 5901
@@ -8252,6 +8286,7 @@ fileName wgEncodeOpenChromDnaseK562SigV2.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
+md5sum e9ee35dfd82f08f28e1fe7a19e0c5940
 project wgEncode
 subId 5901
 submittedDataVersion V2 - This data was generated based on completely new growths and DNase experiments, and does not include any previously submitted data for this cell type.
@@ -9221,6 +9256,7 @@ fileName wgEncodeOpenChromDnaseMedullod341AlnRep1.bam,wgEncodeOpenChromDnaseMedu
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum 8833c200de809922d1a5d0abd5f5a7b1,3dd196b9dd0d7fb9abad1f8858546cd6
 project wgEncode
 replicate 1
 subId 5991
@@ -9238,6 +9274,7 @@ fileName wgEncodeOpenChromDnaseMedullod341AlnRep2.bam,wgEncodeOpenChromDnaseMedu
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum fe69068c01fd8c6e71646e03141746fa,e452511c2620bfb43980e5613cdaefa7
 project wgEncode
 replicate 2
 subId 5991
@@ -9255,6 +9292,7 @@ fileName wgEncodeOpenChromDnaseMedullod341BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum c80c124365904076847529ad1e22cc73
 project wgEncode
 subId 5991
 tableName wgEncodeOpenChromDnaseMedullod341BaseOverlapSignal
@@ -9272,6 +9310,7 @@ fileName wgEncodeOpenChromDnaseMedullod341Pk.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum a51ab37b275ddff5d955acc9e3580f77
 project wgEncode
 subId 5991
 tableName wgEncodeOpenChromDnaseMedullod341Pk
@@ -9288,6 +9327,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseMedullod341RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
+md5sum 927146e7d0686cfef7be39430a7e2177
 project wgEncode
 replicate 1
 subId 5991
@@ -9304,6 +9344,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseMedullod341RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
+md5sum f8ea8197da07a42b82e71cdc52bc5811
 project wgEncode
 replicate 2
 subId 5991
@@ -9321,6 +9362,7 @@ fileName wgEncodeOpenChromDnaseMedullod341Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
+md5sum f5edf318c2e469c1b92434c10bdf259d
 project wgEncode
 subId 5991
 tableName wgEncodeOpenChromDnaseMedullod341Sig
@@ -11274,6 +11316,7 @@ fileName wgEncodeOpenChromDnaseUrothelAlnRep1V2.bam,wgEncodeOpenChromDnaseUrothe
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum b20ebbe94859e3b60f6fad5b97577859,ca9551a51b15f8e868a50d1b4e222848
 project wgEncode
 replicate 1
 subId 5990
@@ -11292,6 +11335,7 @@ fileName wgEncodeOpenChromDnaseUrothelAlnRep2V2.bam,wgEncodeOpenChromDnaseUrothe
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum a893de00a3fa4a95b540f945f0dc2e89,4e2d70ec41c2252fd98575c7b4398bee
 project wgEncode
 replicate 2
 subId 5990
@@ -11310,6 +11354,7 @@ fileName wgEncodeOpenChromDnaseUrothelBaseOverlapSignalV2.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 94dd464d273dc13ed5606728fbfc7926
 project wgEncode
 subId 5990
 submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
@@ -11328,6 +11373,7 @@ fileName wgEncodeOpenChromDnaseUrothelPkV2.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum ea0f37de5b112e7be8a778f8e35456e6
 project wgEncode
 subId 5990
 submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
@@ -11345,6 +11391,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseUrothelRawDataRep1V2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 31aebf39dd23dcbb2b09bcc66176f9a9
 project wgEncode
 replicate 1
 subId 5990
@@ -11362,6 +11409,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseUrothelRawDataRep2V2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 498b3de6794dd451ece28dd81fbf8991
 project wgEncode
 replicate 2
 subId 5990
@@ -11380,6 +11428,7 @@ fileName wgEncodeOpenChromDnaseUrothelSigV2.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+md5sum 06f863c0c82db5f1f87b9baeb064be38
 project wgEncode
 subId 5990
 submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
@@ -11398,6 +11447,7 @@ fileName wgEncodeOpenChromDnaseUrothelUt189AlnRep1V2.bam,wgEncodeOpenChromDnaseU
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum b1e719048c085dd7023617c86a2a250d,f145a3dc3bf450bedf53fcd8e52ea89d
 project wgEncode
 replicate 1
 subId 5992
@@ -11417,6 +11467,7 @@ fileName wgEncodeOpenChromDnaseUrothelUt189AlnRep2V2.bam,wgEncodeOpenChromDnaseU
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
+md5sum e447bb81b761617dccfa1a0234535c87,f7f7ece17feb6e395fd4c37687152d03
 project wgEncode
 replicate 2
 subId 5992
@@ -11436,6 +11487,7 @@ fileName wgEncodeOpenChromDnaseUrothelUt189BaseOverlapSignalV2.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum dc259f67dd9569ec5b328e9c7dc0a33f
 project wgEncode
 subId 5992
 submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
@@ -11455,6 +11507,7 @@ fileName wgEncodeOpenChromDnaseUrothelUt189PkV2.narrowPeak.gz
 grant Crawford
 lab Duke
 labVersion p-value cutoff: 0.05
+md5sum 9c3f30e0e709782ac7a842fbf4a9f6d6
 project wgEncode
 subId 5992
 submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
@@ -11473,6 +11526,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseUrothelUt189RawDataRep1V2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 234e44898336c911255d9b895784bb2c
 project wgEncode
 replicate 1
 subId 5992
@@ -11491,6 +11545,7 @@ dateUnrestricted 2012-12-13
 fileName wgEncodeOpenChromDnaseUrothelUt189RawDataRep2V2.fastq.gz
 grant Crawford
 lab Duke
+md5sum 4615c36124d0c2694c6544da49c76596
 project wgEncode
 replicate 2
 subId 5992
@@ -11510,6 +11565,7 @@ fileName wgEncodeOpenChromDnaseUrothelUt189SigV2.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
+md5sum 9778a64fc9cc2b03540eb050f0c14424
 project wgEncode
 subId 5992
 submittedDataVersion V2 - Previous replicate 2 was deemed to be too poor of quality. The experiment was re-run. This submission now includes a new second replicate along with the previous first replicate.
@@ -11856,4 +11912,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1689050370
+# MAGIC: 927111879
