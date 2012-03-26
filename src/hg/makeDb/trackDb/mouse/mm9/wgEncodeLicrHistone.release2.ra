@@ -669,7 +669,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k04me3MImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks 
         shortLabel MEL H3K4m3 
-        longLabel MEL immortalized H3K4me3 ChIP-seq Peaks from ENCODE/LICR 
+        longLabel MEL immortal cells H3K4me3 ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=IMMORTAL factor=H3K04ME3 cellType=MEL control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -678,7 +678,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k27acMImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks
         shortLabel MEL H3K27a 
-        longLabel MEL immortalized H3K27ac ChIP-seq Peaks from ENCODE/LICR 
+        longLabel MEL immortal cells H3K27ac ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=IMMORTAL factor=H3K27AC cellType=MEL control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -687,7 +687,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k04me1MImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks
         shortLabel MEL H3K4m1 
-        longLabel MEL immortalized H3K4me1 ChIP-seq Peaks from ENCODE/LICR 
+        longLabel MEL immortal cells H3K4me1 ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=IMMORTAL factor=H3K04ME1 cellType=MEL control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -696,7 +696,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k09acMImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks
         shortLabel MEL H3K9a 
-        longLabel MEL immortalized H3K9ac ChIP-seq Peaks from ENCODE/LICR
+        longLabel MEL immortal cells H3K9ac ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=IMMORTAL factor=H3K09AC cellType=MEL control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -705,7 +705,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k79me2MImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks 
         shortLabel MEL H3K79m2 
-        longLabel MEL immortalized H3K79me2 ChIP-seq Peaks from ENCODE/LICR
+        longLabel MEL immortal cells H3K79me2 ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=IMMORTAL factor=H3K79ME2 cellType=MEL control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -714,7 +714,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k36me3MImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks
         shortLabel MEL H3K36m3 
-        longLabel MEL immortalized H3K36me3 std ChIP-seq Peaks from ENCODE/LICR
+        longLabel MEL immortal cells H3K36me3 std ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=IMMORTAL factor=H3K36ME3 cellType=MEL control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -723,7 +723,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k27me3MImmortalC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks
         shortLabel MEL H3K27m3
-        longLabel MEL immortalized H3K27me3 ChIP-seq Peaks from ENCODE/LICR
+        longLabel MEL immortal cells H3K27me3 ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=IMMORTAL factor=H3K27ME3 cellType=MEL control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -1621,7 +1621,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelInputMImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel MEL Input
-        longLabel MEL immortalized Input ChIP-seq Signal from ENCODE/LICR
+        longLabel MEL immortal cells Input ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=INPUT cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.150000 92.559998
         color 86,180,233
@@ -1630,7 +1630,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k04me3MImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel MEL H3K4m3 
-        longLabel MEL immortalized H3K4me3 ChIP-seq Signal from ENCODE/LICR 
+        longLabel MEL immortal cells H3K4me3 ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=IMMORTAL factor=H3K04ME3 cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.110000 82.040001
         color 86,180,233
@@ -1640,7 +1640,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k27acMImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel MEL H3K27a
-        longLabel MEL immortalized H3K27ac ChIP-seq Signal from ENCODE/LICR 
+        longLabel MEL immortal cells H3K27ac ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=IMMORTAL factor=H3K27AC cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.150000 73.129997
         color 86,180,233
@@ -1650,7 +1650,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k04me1MImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel MEL H3K4m1
-        longLabel MEL immortalized H3K4me1 ChIP-seq Signal from ENCODE/LICR
+        longLabel MEL immortal cells H3K4me1 ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=H3K04ME1 cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.150000 33.680000
         color 86,180,233
@@ -1660,7 +1660,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k09acMImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel MEL H3K9a
-        longLabel MEL immortalized H3K9ac ChIP-seq Signal from ENCODE/LICR
+        longLabel MEL immortal cells H3K9ac ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=H3K09AC cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.130000 69.959999
         color 86,180,233
@@ -1670,7 +1670,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k79me2MImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel MEL H3K79m2
-        longLabel MEL immortalized H3K79me2 ChIP-seq Signal from ENCODE/LICR
+        longLabel MEL immortal cells H3K79me2 ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=H3K79ME2 cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.110000 44.459999
         color 86,180,233
@@ -1680,7 +1680,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k36me3MImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel MEL H3K36m3
-        longLabel MEL immortalized H3K36me3 ChIP-seq Signal from ENCODE/LICR
+        longLabel MEL immortal cells H3K36me3 ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=H3K36ME3 cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.110000 21.510000
         color 86,180,233
@@ -1690,7 +1690,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k27me3MImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel MEL H3K27m3
-        longLabel MEL immortalized H3K27me3 ChIP-seq Signal from ENCODE/LICR
+        longLabel MEL immortal cells H3K27me3 ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=H3K27ME3 cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.110000 35.549999
         color 86,180,233
