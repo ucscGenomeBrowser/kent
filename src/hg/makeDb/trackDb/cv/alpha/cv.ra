@@ -12683,6 +12683,11 @@ type view
 label Exons Gencode V7
 description Expression level estimates for GENCODE V7 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
+term ExonsEnsV65IAcuff
+tag EXONENSV65
+type view
+description Expression level estimates for ENSEMBL V65 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon PROVISIONAL
+
 term Fasta3p
 tag FASTA3P
 type view
@@ -12749,6 +12754,11 @@ tag GENEGENCV3C
 type view
 label Genes Gencode V3c
 description Expression level estimates at the gene level for the GENCODE CRCh37.v3c annotation in gtf format
+
+term GeneEnsV65IAcuff
+tag GENENSV65
+type view
+description Expression level estimates at the gene level for the ENSEMBL V65 annotation in gtf format PROVISIONAL
 
 term HMM
 tag HMM
@@ -12973,6 +12983,11 @@ tag TRANSGENCV3C
 type view
 label Transcript Gencode V3c
 description Expression level estimates at the transcript level for the GENCODE CRCh37.v3c annotation in gtf format
+
+term TranscriptEnsV65IAcuff
+tag TRANSENSV65
+type view
+description Expression level estimates at the transcript level for the ENSEMBL V65 annotation in gtf format PROVISIONAL
 
 term Transfrags
 tag TRANSFRAGS
