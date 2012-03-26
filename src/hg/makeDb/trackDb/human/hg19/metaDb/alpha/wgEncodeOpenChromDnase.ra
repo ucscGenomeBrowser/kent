@@ -3,6 +3,7 @@ objType composite
 composite wgEncodeOpenChromDnase
 expVars lab,dataType,cell,treatment
 geoSeriesAccession GSE32970
+treatment None
 
 metaObject wgEncodeOpenChromDnase8988tAlnRep1
 objType file
@@ -11588,6 +11589,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001113
+expId 1113
 fileName wgEncodeOpenChromDnaseUrothelAlnRep1V2.bam,wgEncodeOpenChromDnaseUrothelAlnRep1V2.bam.bai
 grant Crawford
 lab Duke
@@ -11608,6 +11611,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001113
+expId 1113
 fileName wgEncodeOpenChromDnaseUrothelAlnRep2V2.bam,wgEncodeOpenChromDnaseUrothelAlnRep2V2.bam.bai
 grant Crawford
 lab Duke
@@ -11628,6 +11633,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001113
+expId 1113
 fileName wgEncodeOpenChromDnaseUrothelBaseOverlapSignalV2.bigWig
 grant Crawford
 lab Duke
@@ -11648,6 +11655,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001113
+expId 1113
 fileName wgEncodeOpenChromDnaseUrothelPkV2.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -11668,6 +11677,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001113
+expId 1113
 fileName wgEncodeOpenChromDnaseUrothelRawDataRep1V2.fastq.gz
 grant Crawford
 lab Duke
@@ -11687,6 +11698,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001113
+expId 1113
 fileName wgEncodeOpenChromDnaseUrothelRawDataRep2V2.fastq.gz
 grant Crawford
 lab Duke
@@ -11706,6 +11719,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001113
+expId 1113
 fileName wgEncodeOpenChromDnaseUrothelSigV2.bigWig
 grant Crawford
 lab Duke
@@ -11726,6 +11741,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001114
+expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189AlnRep1V2.bam,wgEncodeOpenChromDnaseUrothelUt189AlnRep1V2.bam.bai
 grant Crawford
 lab Duke
@@ -11746,6 +11763,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001114
+expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189AlnRep2V2.bam,wgEncodeOpenChromDnaseUrothelUt189AlnRep2V2.bam.bai
 grant Crawford
 lab Duke
@@ -11766,6 +11785,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001114
+expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189BaseOverlapSignalV2.bigWig
 grant Crawford
 lab Duke
@@ -11786,6 +11807,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001114
+expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189PkV2.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -11806,6 +11829,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001114
+expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189RawDataRep1V2.fastq.gz
 grant Crawford
 lab Duke
@@ -11825,6 +11850,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001114
+expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189RawDataRep2V2.fastq.gz
 grant Crawford
 lab Duke
@@ -11844,6 +11871,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH001114
+expId 1114
 fileName wgEncodeOpenChromDnaseUrothelUt189SigV2.bigWig
 grant Crawford
 lab Duke
@@ -12202,4 +12231,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -448977298
+# MAGIC: 1227910072
