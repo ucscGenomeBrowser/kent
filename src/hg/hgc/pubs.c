@@ -34,6 +34,19 @@ static int pubsSecChecked[] ={
 
 static char* pubsSequenceTable;
 
+static char* mangleUrl(char* url) 
+/* add publisher specific parameters to url and return new url*/
+{
+if (!stringIn("sciencedirect.com", url))
+    return url;
+    
+// cgi param to add the "UCSC matches" sciverse application to elsevier's sciencedirect
+char* sdAddParam = "?svAppaddApp=298535"; 
+char* longUrl = catTwoStrings(url, sdAddParam);
+char* newUrl = replaceChars(longUrl, "article", "svapps");
+return newUrl;
+}
+
 static void printFilterLink(char* pslTrack, char* articleId)
 /* print a link to hgTracks with an additional cgi param to activate the single article filter */
 {
@@ -180,10 +193,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     char* citation  = row[4];
     char* pmid      = row[5];
     char* snippets  = row[6];
-    char* addParam  = "";
-    if (strstrNoCase(url, "sciencedirect.com"))
-        addParam = "?svAppaddApp=298535"; // add the "UCSC matches" sciverse application to article view
-    printf("<A HREF=\"%s%s\">%s</A> ", url, addParam, title);
+    url = mangleUrl(url);
+    printf("<A HREF=\"%s\">%s</A> ", url, title);
     printf("<SMALL>%s</SMALL>; ", authors);
     printf("<SMALL>%s ", citation);
     if (!isEmpty(pmid) && strcmp(pmid, "0")!=0 )
@@ -224,6 +235,8 @@ static char* printArticleInfo(struct sqlConnection *conn, char* item, char* pubs
     char* cit      = row[4];
     char* abstract = row[5];
     char* pmid     = row[6];
+
+    url = mangleUrl(url);
     if (strlen(abstract)==0) 
             abstract = "(No abstract available for this article. "
                 "Please follow the link to the fulltext above.)";
@@ -571,6 +584,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     seq->size = strlen(seq->dna);
     }
 sqlFreeResult(&sr);
+
 return seq;
 }
 
@@ -587,6 +601,14 @@ if (psl == NULL)
     errAbort("Couldn't find alignment at %s:%s", pslTable, item);
 
 oSeq = getSeq(conn, seqTable, item);
+if (oSeq->size != psl->qSize) 
+{
+    //errAbort("prot alignments not supported yet");
+    //oSeq -> size = 3*oSeq -> size;
+    errAbort("prot alignments not supported yet %s", oSeq->dna);
+    oSeq = translateSeq(oSeq, 0, FALSE);
+    errAbort("prot alignments not supported yet %s", oSeq->dna);
+}
 if (oSeq == NULL)  
     errAbort("%s is in pslTable but not in sequence table. Internal error.", item);
 showSomeAlignment(psl, oSeq, gftDna, 0, oSeq->size, NULL, 0, 0);
