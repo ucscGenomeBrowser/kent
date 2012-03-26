@@ -133,7 +133,6 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-
 #define CHROM_COLORS 26
 
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
@@ -12204,12 +12203,13 @@ static struct pubsExtra *pubsMakeExtra(char* articleTable, struct sqlConnection*
     struct linkedFeatures* lf)
 {
 char query[LARGEBUF];
-safef(query, sizeof(query), "SELECT authors, year, title FROM %s WHERE articleId = '%s'", 
-    articleTable, lf->name);
 struct sqlResult *sr = NULL;
 char **row = NULL;
-sr = sqlGetResult(conn, query);
 struct pubsExtra *extra = NULL;
+
+safef(query, sizeof(query), "SELECT authors, year, title FROM %s WHERE articleId = '%s'", 
+    articleTable, lf->name);
+sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
 {
     char* authors = row[0];
@@ -12254,8 +12254,8 @@ static void pubsLoadKeywordYearItems(struct track *tg)
 /* load items that fulfill keyword and year filter */
 {
 struct sqlConnection *conn = hAllocConn(database);
-char *keywords = cartOptionalString(cart, "pubsKeywords");
-char *yearFilter = cartOptionalString(cart, "pubsYear");
+char *keywords = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsKeywords");
+char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsYear");
 char *articleTable = pubsArticleTable(tg);
 
 if(yearFilter == NULL || sameWord(yearFilter, "anytime"))
@@ -12392,7 +12392,6 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 char *pubsMarkerItemName(struct track *tg, void *item)
 /* retrieve article count from score field and return.*/
 {
-//struct bed *bed = item;
 struct linkedFeatures *lf = item;
 char newName[64];
 safef(newName, sizeof(newName), "%d articles", (int) lf->score);
@@ -12402,7 +12401,6 @@ return cloneString(newName);
 static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
-/* use previously saved itemName for the mouseOver */
 {
 struct linkedFeatures *lf = item;
 genericMapItem(tg, hvg, item,
@@ -12417,7 +12415,7 @@ static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* 
     char *sequenceTable = trackDbRequiredSetting(tg->tdb, "pubsSequenceTable");
     char *selectValSql = NULL;
     if (getSnippet)
-        selectValSql = "replace(replace(snippet, \"<B>\", \"-->\"), \"</B>\", \"<--\")";
+        selectValSql = "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")";
     else
         selectValSql = "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))";
 
@@ -12441,7 +12439,10 @@ if (sr!=NULL)
 {
     char **row = NULL;
     row = sqlNextRow(sr);
-    dispLabel = pubsFeatureLabel(row[0], row[1]);
+    if (row != NULL)
+        dispLabel = pubsFeatureLabel(row[0], row[1]);
+    else
+        dispLabel = articleId;
 }
 else
     dispLabel = articleId;
@@ -12498,26 +12499,27 @@ hFreeConn(&conn);
 static void pubsBlatPslMethods(struct track *tg)
 /* a track that shows only the indiv matches for one single article */
 {
-    activatePslTrackIfCgi(tg);
-    tg->loadItems = pubsPslLoadItems;
-    tg->itemName  = pubsItemName;
-    tg->mapItem   = pubsMapItem;
+activatePslTrackIfCgi(tg);
+tg->loadItems = pubsPslLoadItems;
+tg->itemName  = pubsItemName;
+tg->mapItem   = pubsMapItem;
 }
 
 static void pubsBlatMethods(struct track *tg)
 /* publication blat tracks are bed12+2 tracks of sequences in text, mapped with BLAT */
 {
-    tg->loadItems = pubsLoadItems;
-    tg->itemName  = pubsItemName;
-    tg->mapItem   = pubsMapItem;
+tg->loadItems = pubsLoadItems;
+tg->itemName  = pubsItemName;
+tg->mapItem   = pubsMapItem;
 }
 
 static void pubsMarkerMethods(struct track *tg)
-/* publication marker tracks are bed4 tracks of genome marker occurences like rsXXXX found in text*/
+/* publication marker tracks are bed5 tracks of genome marker occurences like rsXXXX found in text*/
 {
-    tg->loadItems= pubsLoadMarkerItem;
-    tg->mapItem  = pubsMarkerMapItem;
-    tg->itemName = pubsMarkerItemName;
+tg->bedSize   = 5;
+tg->loadItems = pubsLoadMarkerItem;
+tg->mapItem   = pubsMarkerMapItem;
+tg->itemName  = pubsMarkerItemName;
 }
 
 void fillInFromType(struct track *track, struct trackDb *tdb)
@@ -12541,11 +12543,12 @@ if (sameWord(type, "bed"))
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
 
-    // XX this might not be the right place / right way to set methods here
-    // XX should I introduce a track type ? (MaxH)
-    if (trackDbSettingClosestToHome(track->tdb, "pubsMarkerTable") !=NULL)
+    // XX MaxH: this works as a temp hack, but it is not the right way to do it
+    // XX should I introduce several new track types ? 
+    // XX or rather additional trackDb statements, one per pubs-"track type" ?
+    if (startsWith("pubs", track->track) && stringIn("Marker", track->track))
         pubsMarkerMethods(track);
-    if (trackDbSettingClosestToHome(track->tdb, "pubsSequenceTable") !=NULL)
+    if (startsWith("pubs", track->track) && stringIn("Blat", track->track))
         pubsBlatMethods(track);
     }
 /*

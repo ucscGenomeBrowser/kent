@@ -1341,8 +1341,17 @@ if (numScan != 3)
     errAbort("can't parse sql load info: %s", info);
 sqlFreeResult(&sr);
 
-/* mysql 5.0 bug: mysql_info returns unreliable warnings count, so use this instead: */
-numWarnings = sqlWarnCount(conn);
+char *host = getenv("HOST");
+if (  // TODO 2012/03/26 this is temporary and we should eventually get to always checking the warnings.
+    ( sameOk(host,"hgwdev") 
+   || sameOk(host,"hgwbeta") 
+   || sameOk(host,"hgwalpha") 
+    )
+   && !sameOk(cfgOption("detectMysqlLoadWarnings"), "off")) // go gently in case of backwards-compatibility issues
+    {
+    /* mysql 5.0 bug: mysql_info returns unreliable warnings count, so use this instead: */
+    numWarnings = sqlWarnCount(conn);
+    }
 
 if ((numSkipped > 0) || (numWarnings > 0))
     {
