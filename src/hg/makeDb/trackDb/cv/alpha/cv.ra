@@ -327,7 +327,7 @@ color 0,107,27
 sex M
 tier 1
 protocol ENCODE:H1_ES_protocol.pdf
-#vendorId
+dvendorId
 
 ###### type 3 cells once they have been submitted.
 
@@ -1430,7 +1430,7 @@ tier 3
 lab Crawford
 protocol Crawford:CordCD4Th0_Crawford_protocol.pdf
 
-term Cord_CD4_naive
+term Cord_CD4_Th1
 tag CORDCD4TH1
 type Cell Line
 organism human
@@ -11997,7 +11997,6 @@ term Alpha-amanitin_50ug_9hr
 tag AMA50UG9H
 type treatment
 description 9h with 50 ug/ml alpha-amanitin
-
 
 term Betamethasone_100nM
 tag BMETH
