@@ -389,7 +389,7 @@ html wgEncodeLicrTfbs.release2
         track wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks off
         shortLabel BMDM 8w CTCF 
-        longLabel Bone Marrow Derived Macrophage Adult 8 weeks CTCF ChIP-seq Peaks from ENCODE/LICR
+        longLabel BMDM Adult 8 weeks CTCF ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=BMDM control=STD sex=F strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -398,7 +398,7 @@ html wgEncodeLicrTfbs.release2
         track wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks off
         shortLabel BMDM 8w Pol2
-        longLabel Bone Marrow Derived Macrophage Adult 8 weeks Pol2 ChIP-seq Peaks from ENCODE/LICR 
+        longLabel BMDM Adult 8 weeks Pol2 ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=BMDM control=STD sex=F strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -974,7 +974,7 @@ html wgEncodeLicrTfbs.release2
         track wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel BMDM 8w CTCF
-        longLabel Bone Marrow Derived Macrophage Adult 8 weeks CTCF ChIP-seq Signal from ENCODE/LICR 
+        longLabel BMDM Adult 8 weeks CTCF ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=BMDM control=STD sex=F strain=C57BL6
         type bigWig 0.160000 35.139999
         color 86,180,233
@@ -984,7 +984,7 @@ html wgEncodeLicrTfbs.release2
         track wgEncodeLicrTfbsBmdmPol2FAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel BMDM 8w Pol2 
-        longLabel Bone Marrow Derived Macrophage Adult 8 weeks Pol2 ChIP-seq Signal from ENCODE/LICR 
+        longLabel BMDM Adult 8 weeks Pol2 ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=BMDM control=STD sex=F strain=C57BL6
         type bigWig 0.110000 37.799999
         color 86,180,233
@@ -994,7 +994,7 @@ html wgEncodeLicrTfbs.release2
         track wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
         shortLabel BMDM 8w Input
-        longLabel Bone Marrow Derived Macrophage Adult 8 weeks Input ChIP-seq Signal from ENCODE/LICR
+        longLabel BMDM Adult 8 weeks Input ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=BMDM control=STD sex=F strain=C57BL6
         type bigWig 0.140000 48.919998
         color 86,180,233
