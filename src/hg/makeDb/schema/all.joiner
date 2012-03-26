@@ -3682,6 +3682,26 @@ tablesIgnored $gbd
     miRNA
     nestedRepeats
     nestedRepeatsRM327
+    polyASeqSitesBrainFwd
+    polyASeqSitesBrainRev
+	polyASeqSitesKidneyFwd
+	polyASeqSitesKidneyRev
+	polyASeqSitesLiverFwd
+	polyASeqSitesLiverRev
+	polyASeqSitesMaqcBrain1Fwd
+	polyASeqSitesMaqcBrain1Rev
+	polyASeqSitesMaqcBrain2Fwd
+	polyASeqSitesMaqcBrain2Rev
+	polyASeqSitesMaqcUhr1Fwd
+	polyASeqSitesMaqcUhr1Rev
+	polyASeqSitesMaqcUhr2Fwd
+	polyASeqSitesMaqcUhr2Rev
+	polyASeqSitesMuscleFwd
+	polyASeqSitesMuscleRev
+	polyASeqSitesTestisFwd
+	polyASeqSitesTestisRev
+	polyASeqSitesIleumFwd
+	polyASeqSitesIleumRev
     quality
     qualityBw
     rnaCluster
