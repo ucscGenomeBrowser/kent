@@ -24,7 +24,7 @@ highest confidence areas of open chromatin.  ChIP assays provide
 functional validation and preliminary annotation of a subset of
 open chromatin sites. Each method employed Illumina (formerly Solexa)
 sequencing by synthesis as the detection platform.
-The Tier 1 and Tier 2 cell types were additionally verified using a
+The Tier 1 and Tier 2 cell types were additionally verified using
 high-resolution 1% ENCODE tiled microarrays supplied by NimbleGen.
 </P>
 <P>Other <B><em>Open Chromatin</em></B> track sets:
@@ -113,7 +113,7 @@ the input DNA as reference (DNase-chip). A more detailed protocol is available
 <P>The read length for sequences from DNase-seq was 20 bases long due to a MmeI
 cutting step of the approximately 50 kb DNA fragments extracted after DNaseI
 digestion. Sequences from each experiment were aligned to the genome using
-BWA (Li <em>et al.</em>, 2008) for the NCBI37 (hg19) assembly.
+BWA (Li <em>et al.</em>, 2008) for the GRCh37 (hg19) assembly.
 <DIV style='position:relative; left:25px;'><DL><DT>The command used for these alignments was:</DT>
 <DD><CODE>&gt; bwa aln -t 8 genome.fa s_1.sequence.txt.bfq &gt; s_1.sequence.txt.sai</CODE></DD></DL>
 where genome.fa is the whole genome sequence and s_1.sequence.txt.bfq is one lane
@@ -138,7 +138,7 @@ These models are meant to correct for sequencing biases, alignment artifacts,
 and copy number changes in these cell lines. Input data was not generated
 directly for other cell lines. Instead, a general background model was derived
 from the available Input data sets. This should provide corrections for
-sequencing biases and alignment artifacts, but does not correct for cell-type specific copy number changes.
+sequencing biases and alignment artifacts, but does not correct for cell type-specific copy number changes.
 <DIV style='position:relative; left:25px;'><DL><DT>The exact command used for this step is:</DT>
 <DD><CODE>&gt; fseq -l 600 -v -f 0 -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</CODE></DD></DL>
 where the bff files are the background files based on alignability, the
@@ -165,8 +165,8 @@ directory, labeled 'Validation' in the View column.
 
 <h2>Release Notes</h2>
 <P>
-This is Release 2 (March 2012) of the track. A number of new experiments have been added. 
-Some experiments have been removed from display, and others have been updated based on the results of new experiments. 
+This is Release 2 (March 2012) of the track. A number of new experiments have been added, 
+some experiments have been removed, and others have been updated based on the results of new experiments. 
 The previous FibroP and iPS cell line experiments consisted of samples from donated cell lines from three separate individuals. 
 Replicate data for each individual have been created, thus both of these experiments were split into three distinct cell lines 
 (FibroP_AG08395, FibroP_AG08396, FibroP_AG20443, and iPS_CWRU1, iPS_NIHi7, iPS_NIHi11). 
@@ -180,7 +180,7 @@ the purity of the cell growths. We have decided not to pursue this cell line fur
 <P>
 <UL>
 <li>A synthesis of open chromatin evidence from the three assay types was
-compiled for Tier 1 and 2 cell lines. NHEK will also be added in this
+compiled for Tier 1 and 2 cell lines. NHEK has been added in this
 release and can be viewed in:
 <a href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chromatin Synthesis</a>.
 </li>
@@ -198,20 +198,17 @@ experiments can be found
 <P>
 These data and annotations were created by a collaboration of multiple
 institutions (contact:
-<A HREF="mailto:&#116;&#115;f&#117;&#114;e&#121;&#64;&#101;&#109;a&#105;&#108;.
-&#117;&#110;&#99;.
-&#101;&#100;&#117;">
-&#116;&#115;f&#117;&#114;e&#121;&#64;&#101;&#109;a&#105;&#108;.
-&#117;&#110;&#99;.
-&#101;&#100;&#117;
-Terry Furey</A>):
+<A HREF="mailto:&#116;s&#102;&#117;&#114;e&#121;&#64;&#101;m&#97;&#105;&#108;.
+&#117;&#110;c.
+&#101;&#100;u">
+Terry Furey</A>
 <!-- above address is tsfurey at email.unc.edu -->
 
 </P><P>
 <UL>
 <LI>Duke University's <A HREF="http://www.genome.duke.edu/index.php"
 TARGET=_blank>Institute for Genome Sciences & Policy (IGSP)</A>: Alan Boyle,
-Lingyun Song, <A HREF="http://www.genome.duke.edu/people/faculty/furey/"
+Lingyun Song, <A HREF="http://genetics.unc.edu/faculty/terry-furey"
 TARGET=_blank>Terry Furey</A>, and
 <A HREF="http://www.genome.duke.edu/directory/faculty/crawford/"
 TARGET=_blank>Greg Crawford</a>
