@@ -2,6 +2,7 @@ metaObject wgEncodePsuHistone
 objType composite
 composite wgEncodePsuHistone
 expVars lab,dataType,cell,antibody
+geoSeriesAccession GSE36028
 
 metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep1
 objType file
@@ -67,6 +68,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
@@ -74,13 +76,13 @@ expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum ad0c8ab580d0b371730422d4b1ff3efd
+md5sum 305e99d028e05d7c35507346a0871fdc
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5039
+subId 5997
 tableName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputPk
 view Peaks
 
@@ -148,6 +150,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
@@ -155,14 +158,14 @@ expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum f7a15dbffac8e82297497de2853dc707
+md5sum 8e457261ce63f66c1d9eaaeeb1b0862f
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5039
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepPeaksRep2
@@ -175,6 +178,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
@@ -182,14 +186,14 @@ expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 55d2830a8dc29e23687844e06fd5575f
+md5sum dd76eb87d595ceadb1c700b622764daa
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5039
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepSignalRep1
@@ -337,6 +341,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
@@ -344,13 +349,13 @@ expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 1b2789adc093a92518643d47e28d949a
+md5sum 85024d06eb1a15162e19f029084d6c42
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5036
+subId 5997
 tableName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputPk
 view Peaks
 
@@ -418,6 +423,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
@@ -425,14 +431,14 @@ expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 38180aafec41a86acd93462149973f5f
+md5sum 91d1ad450b7147b6986fd56e0f734564
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5036
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepPeaksRep2
@@ -445,6 +451,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
@@ -452,14 +459,14 @@ expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 0a2434a5f46f6e4c499cfb384987013a
+md5sum d8b38e129ffb03cb955bd40c8700deaa
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5036
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepSignalRep1
@@ -607,6 +614,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
@@ -614,13 +622,13 @@ expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum d92c529b24a123a626144e4bcc286bb8
+md5sum 4c83011ff05bec82f9de1b3ad39a2406
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5108
+subId 5997
 tableName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputPk
 view Peaks
 
@@ -634,6 +642,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
@@ -641,14 +650,14 @@ expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum c0291ef55316b1450b8accf9be750baf
+md5sum 19d13da7deca84b58489167eda45aea2
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5108
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepPeaksRep2
@@ -661,6 +670,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
@@ -668,14 +678,14 @@ expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum f38d8b51a4c9ced1990d88f8f9b742d8
+md5sum 85ddd37fce75a05bdbe677b7c292a05c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5108
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepSignalRep1
@@ -877,6 +887,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
@@ -884,13 +895,13 @@ expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum b3bbfa2728da0dbb2caece98b65c9a07
+md5sum b984423dbb0957736ed6eead6e33f144
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 4876
+subId 5997
 tableName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputPk
 view Peaks
 
@@ -958,6 +969,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
@@ -965,14 +977,14 @@ expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 2c1fd26a1be33e7082e5de537a054ae6
+md5sum b034af4b7ec3906534b6bb7b9dedf45a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 4876
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepPeaksRep2
@@ -985,6 +997,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
@@ -992,14 +1005,14 @@ expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 63713448f7d8dad9820aecf50049b971
+md5sum da6fb05fd349cd98d7963ae198ef3df1
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 4876
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepSignalRep1
@@ -1147,6 +1160,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
@@ -1154,13 +1168,13 @@ expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum c40a250f319f5551b251c5277b2bb3e3
+md5sum 929cb2db325618a40f0c1fc27681e7ff
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5013
+subId 5997
 tableName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputPk
 view Peaks
 
@@ -1228,6 +1242,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
@@ -1235,14 +1250,14 @@ expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 16a1c2f7d90512e7d497ef606c44e0ac
+md5sum 6bfe3b03ebf557510d9f191a3dacbd96
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5013
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepPeaksRep2
@@ -1255,6 +1270,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
@@ -1262,14 +1278,14 @@ expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum e5d8d17e2b8dae2de59cdd1181c486a9
+md5sum 8913af1e229049312d5e9d4da62e630e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex F
 strain B10.H-2aH-4bp/Wts
-subId 5013
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepSignalRep1
@@ -1606,6 +1622,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
@@ -1613,13 +1630,13 @@ expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 79f6f29972e91b90713678c30a210ae8
+md5sum 60a5dd7548c89717135b6b1f79e6a7ac
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5105
+subId 5997
 tableName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputPk
 view Peaks
 
@@ -1633,6 +1650,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
@@ -1640,14 +1658,14 @@ expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 601fee49a979f6ded80a2be27980d4ab
+md5sum 1e7ad282cc73ab1976e001e2bc53d275
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5105
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepPeaksRep2
@@ -1660,6 +1678,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
@@ -1667,14 +1686,14 @@ expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum cf847c88385c37962f3e0ce8a0780262
+md5sum c0636981504588a4a7eddce1bcee3e60
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5105
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepSignalRep1
@@ -1876,6 +1895,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
@@ -1883,13 +1903,13 @@ expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum c2e09058ef9dd7677778ff338e61be33
+md5sum 15130e48af164314b008c108999e0b9b
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5101
+subId 5997
 tableName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputPk
 view Peaks
 
@@ -1903,6 +1923,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
@@ -1910,14 +1931,14 @@ expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 623d35167d51ab30eb246601bb0f3c88
+md5sum d99d1b8820ff7b736e3c3437d5a4a17b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5101
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep2
@@ -1930,6 +1951,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
@@ -1937,14 +1959,14 @@ expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 2b9b71e3ac1d5b885ae350a4431c6905
+md5sum ca2cef3aadafc982e6bbfb54622613ad
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5101
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepSignalRep1
@@ -2146,6 +2168,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
@@ -2153,13 +2176,13 @@ expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 1af20647cbbaca8ab654170f76a5deed
+md5sum 3c5285874405646387ba2f7b0463749f
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5110
+subId 5997
 tableName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputPk
 view Peaks
 
@@ -2173,6 +2196,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
@@ -2180,14 +2204,14 @@ expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 4c45b5ab31b88af88246948e352301ca
+md5sum 0352c03eb6afdbf6d2e06823d99cad79
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5110
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepPeaksRep2
@@ -2200,6 +2224,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
@@ -2207,14 +2232,14 @@ expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 094dda1fec6a8e032e02bb606e1a7fc5
+md5sum 8ddcee787b45d57471144934ceba51de
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5110
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepSignalRep1
@@ -2416,6 +2441,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
@@ -2423,13 +2449,13 @@ expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum a89622a3554328193a890b4a6f6bff1b
+md5sum a54eb2ceee32d407eb376b5409142218
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 4846
+subId 5997
 tableName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputPk
 view Peaks
 
@@ -2443,6 +2469,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
@@ -2450,14 +2477,14 @@ expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum a5ec3262d46e4d458428187413414e14
+md5sum ae8e690c0fb4d719ebbb94dde1de0fb4
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 4846
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepPeaksRep2
@@ -2470,6 +2497,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
@@ -2477,14 +2505,14 @@ expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 5751f53ca5f339b1aaf2bdf7c181ab81
+md5sum ec22283e3e2e28c60aa397924fae0a98
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 4846
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepSignalRep1
@@ -2686,6 +2714,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
@@ -2693,13 +2722,13 @@ expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 988aef38ad5b683b25d210e1edb7a441
+md5sum d76196e33b1136bde8628e2928d80295
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5097
+subId 5997
 tableName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputPk
 view Peaks
 
@@ -2713,6 +2742,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
@@ -2720,14 +2750,14 @@ expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 786a398ed04c4f850654617c602e4d9b
+md5sum 9d3e8126cbf494bd9efb4eb8971be4cd
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5097
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepPeaksRep2
@@ -2740,6 +2770,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
@@ -2747,14 +2778,14 @@ expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 00d5e9ef401b959ab2935b9f72d55d6e
+md5sum cd0762531f6a06e07b866d752b534167
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5097
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepSignalRep1
@@ -3147,7 +3178,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-10-31
+dateResubmitted 2012-03-14
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
@@ -3155,13 +3186,13 @@ expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 1b286035a7d6c42bc401dbad631604bc
+md5sum 3e3533acb5216d78b67719d6d0dd7748
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 3043
+subId 5997
 tableName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk
 view Peaks
 
@@ -3231,7 +3262,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-10-31
+dateResubmitted 2012-03-14
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
@@ -3239,14 +3270,14 @@ expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 37326f03fe95c31d1be14a3a5ac24c85
+md5sum c17a4f12b06b86358881c8a4a5080333
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 3043
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep2
@@ -3259,7 +3290,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-10-31
+dateResubmitted 2012-03-14
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
@@ -3267,14 +3298,14 @@ expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum a4dccd2d4098c798ddc8ae2bdea68174
+md5sum 6ea344540f71dd35ef0a6de5b80467f3
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 3043
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepSignalRep1
@@ -3427,7 +3458,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-10-27
+dateResubmitted 2012-03-14
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
@@ -3435,13 +3466,13 @@ expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 961cd4af26d9698fc3525629bcc6d646
+md5sum a441ffc86f8e9015fc8d467ccbb5d688
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 3042
+subId 5997
 tableName wgEncodePsuHistoneG1eH3k04me3ME0S129InputPk
 view Peaks
 
@@ -3511,7 +3542,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-10-27
+dateResubmitted 2012-03-14
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
@@ -3519,14 +3550,14 @@ expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 7da4f364e96f201de7323afef6a78475
+md5sum 0fb77715d4a51bcdc5ceda0c10bf1bee
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 3042
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep2
@@ -3539,7 +3570,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-10-27
+dateResubmitted 2012-03-14
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
@@ -3547,14 +3578,14 @@ expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum bf270181952f1ab13fb718fec8e67890
+md5sum f21fd93ecf09e464f3e880b6ccc6ea6b
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 3042
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepSignalRep1
@@ -3705,6 +3736,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
@@ -3712,13 +3744,13 @@ expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 9dfe2d3b1f40be36384f445067c06646
+md5sum 80a539caf6106228aa654c431db63aa1
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 5109
+subId 5997
 tableName wgEncodePsuHistoneG1eH3k09me3ME0S129InputPk
 view Peaks
 
@@ -3732,6 +3764,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
@@ -3739,14 +3772,14 @@ expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum e16d94aae9e19178dbade290cdc25546
+md5sum 984e4a15645d8e17508d00d30910d87d
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 5109
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep2
@@ -3759,6 +3792,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
@@ -3766,14 +3800,14 @@ expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 40a06cc6a4b3a61c2b9255369e4d0e25
+md5sum 2d2fbf850ef0a979824d38fe446b79e7
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 5109
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepSignalRep1
@@ -3975,6 +4009,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
@@ -3982,13 +4017,13 @@ expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum a859509a40875f15f59ce881e0b536fa
+md5sum 87a76a979e80088d5e4ab8475631e5bc
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 3047
+subId 5997
 tableName wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk
 view Peaks
 
@@ -4056,6 +4091,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
@@ -4063,14 +4099,14 @@ expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum b1aed87b61eea5f66bfc85450ed0485a
+md5sum 8d6ff57f377949bc3ab300a9a96106a7
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 3047
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep2
@@ -4083,6 +4119,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
@@ -4090,14 +4127,14 @@ expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 58ea257104af1da3612038a0412c96ea
+md5sum c8523165214dc683e7f0cb2579387197
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 3047
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepSignalRep1
@@ -4245,6 +4282,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
@@ -4252,13 +4290,13 @@ expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 7ceec110f6e96de93b62fd87c6df6d52
+md5sum 11809537c2d2d5a15b1bea54e641ce6b
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 5012
+subId 5997
 tableName wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk
 view Peaks
 
@@ -4326,6 +4364,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
@@ -4333,14 +4372,14 @@ expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum e5d61cad098de7a2422c1b346f4297a7
+md5sum 2e09d86fe785d947559d6393879cb88b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 5012
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepPeaksRep2
@@ -4353,6 +4392,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
@@ -4360,14 +4400,14 @@ expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 45ef4f363cf38f2fe448e778588ce20e
+md5sum 2b4df2ca328bf6de0f4b17647d678985
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 5012
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepSignalRep1
@@ -4644,7 +4684,7 @@ metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep1
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -4665,13 +4705,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep2
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -4692,18 +4733,20 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk
 objType table
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
@@ -4711,26 +4754,28 @@ expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 4def55cf1f26e676257a18a1839c4fa0
+md5sum 123627b364dda53f114a899a6de8c17b
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 3040
+subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
@@ -4738,26 +4783,28 @@ expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 2b83d68cfc63796da7ec9463866f5fda
+md5sum 24f5f2352eaaafb3573c5621722c9fbf
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 3040
+subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
@@ -4765,21 +4812,22 @@ expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum a890fe06eb3e8be1913698fe88b9eaa0
+md5sum 3fd278f0162dd243f7d0f72b30727b1b
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 3040
+subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4800,13 +4848,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4827,13 +4876,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputSig
 objType table
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4854,13 +4904,14 @@ sex M
 strain 129
 subId 3040
 tableName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129RawDataRep1
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -4881,13 +4932,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129RawDataRep2
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -4908,13 +4960,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep1
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4936,13 +4989,14 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep2
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4964,19 +5018,20 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk
 objType table
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-10-26
+dateResubmitted 2012-03-14
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
@@ -4984,21 +5039,22 @@ expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 5376b88cd8e2121f6432c6926842f838
+md5sum 4bbbd7a7b4c90204e4500a744f496062
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 3041
+subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep1
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5020,13 +5076,14 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep2
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5048,19 +5105,20 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-10-26
+dateResubmitted 2012-03-14
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
@@ -5068,27 +5126,28 @@ expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 1ebfc417755395becee3d41aa6e215a1
+md5sum 83e8251f8fe8dec08b6737d2322de99b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 3041
+subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-10-26
+dateResubmitted 2012-03-14
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
@@ -5096,21 +5155,22 @@ expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum b11024b275b538d67a6e463bdcf14d93
+md5sum 330e8568f49d033d1095affe4f01a1b3
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 3041
+subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5132,13 +5192,14 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5160,13 +5221,14 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputSig
 objType table
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5188,13 +5250,14 @@ sex M
 strain 129
 subId 3041
 tableName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep1
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -5215,13 +5278,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep2
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -5242,18 +5306,20 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk
 objType table
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
@@ -5261,26 +5327,28 @@ expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 119be97aaf121f8be45add230bb78400
+md5sum 1dbf71f3e54772eb6b905bd61348074a
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 5112
+subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
@@ -5288,26 +5356,28 @@ expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 6bd8785be826e7b6fdcccb60ac8df2af
+md5sum e8004e80a43f0e6013ca3dc5b8c19e28
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 5112
+subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
@@ -5315,21 +5385,22 @@ expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 9a627b83e3da89d3f90bb46f7b2eccd5
+md5sum e11b0739afbcc8a2aa8605ce84027e7b
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 5112
+subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5350,13 +5421,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5377,13 +5449,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputSig
 objType table
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5404,13 +5477,14 @@ sex M
 strain 129
 subId 5112
 tableName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129RawDataRep1
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -5431,13 +5505,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129RawDataRep2
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -5458,13 +5533,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5485,13 +5561,14 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5512,18 +5589,20 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
 objType table
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
@@ -5531,21 +5610,22 @@ expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum a2f0c86679a98af605da03bb9b6e3a79
+md5sum 7d9a25b5f973fffd9e3363a2244f80d6
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 4875
+subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep1
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5566,13 +5646,14 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep2
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5593,18 +5674,20 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
@@ -5612,26 +5695,28 @@ expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 82dd3d38528ee9e4004994b7fad39eb3
+md5sum 5b95ea4fffa5e8fbf40abc7df8442187
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 4875
+subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
@@ -5639,21 +5724,22 @@ expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 5b242f05d635b70724040a4b98cc485e
+md5sum b2263c4ef8ee1acb3ff3b23a8ba94c9c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
-subId 4875
+subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5674,13 +5760,14 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5701,13 +5788,14 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
 objType table
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5728,13 +5816,14 @@ sex M
 strain 129
 subId 4875
 tableName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep1
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5755,13 +5844,14 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep2
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5782,18 +5872,20 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
 objType table
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
@@ -5801,21 +5893,22 @@ expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum ae92b8fd14414e72e2236c30da5dbfcb
+md5sum d46858064ea6a4e96afe2654b193fe77
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain 129
-subId 5037
+subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep1
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5836,13 +5929,14 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep2
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5863,18 +5957,20 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep1
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
@@ -5882,26 +5978,28 @@ expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum f0c35afac9110e7ad9aaf7ce61da5441
+md5sum a1a8b9eab7af293600afe119e3d04818
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain 129
-subId 5037
+subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep2
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
@@ -5909,21 +6007,22 @@ expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum fa1c08aa84e3dae197edacb320389552
+md5sum 1c715e28d76e9ff5496b7f18a5ee2a32
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain 129
-subId 5037
+subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepSignalRep1
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5944,13 +6043,14 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepSignalRep2
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5971,13 +6071,14 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
 objType table
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5998,13 +6099,14 @@ sex B
 strain 129
 subId 5037
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6025,13 +6127,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6052,13 +6155,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6079,13 +6183,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6106,13 +6211,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6133,13 +6239,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6160,13 +6267,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputSig
 objType table
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6187,6 +6295,7 @@ sex M
 strain 129
 subId 5188
 tableName wgEncodePsuHistoneG1eer4e2InputME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep1
@@ -6253,6 +6362,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
@@ -6260,13 +6370,13 @@ expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum b2629a0bae5fe59739c76cdc423622a7
+md5sum 695188c109ebf5d35100a92333a0f452
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5038
+subId 5997
 tableName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputPk
 view Peaks
 
@@ -6334,6 +6444,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
@@ -6341,14 +6452,14 @@ expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum f70b4d4edb5ce4a93119f9ef48a3fb58
+md5sum 0e71e228dbeb90bf3e652ba804aa6ff1
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5038
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepPeaksRep2
@@ -6361,6 +6472,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
@@ -6368,14 +6480,14 @@ expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 639e05dac8e86c1594362e0e68168e56
+md5sum 41d02dc5c71d6b3103bef7a2d0bf4ce8
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5038
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepSignalRep1
@@ -6523,6 +6635,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
@@ -6530,13 +6643,13 @@ expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 98598102d3ee96e2f0915b4934c17ca6
+md5sum 6398aa96b491c2a55bec0d2c8df44638
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5035
+subId 5997
 tableName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputPk
 view Peaks
 
@@ -6604,6 +6717,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
@@ -6611,14 +6725,14 @@ expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum d3526f18c662fb8112b4d83a19e4e1dc
+md5sum 255357367b47fb1bbfff3bb29fc083fd
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5035
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepPeaksRep2
@@ -6631,6 +6745,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
@@ -6638,14 +6753,14 @@ expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 801a39f09b9fb506f82a601f009b67ad
+md5sum 8e1b8e83fd0404db61b7db79df157b16
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5035
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepSignalRep1
@@ -6793,6 +6908,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
@@ -6800,13 +6916,13 @@ expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 424ec8e2664a4080b6c290ea4999fd58
+md5sum 39d032124578c10096f685dd60b4c9de
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5111
+subId 5997
 tableName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputPk
 view Peaks
 
@@ -6820,6 +6936,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
@@ -6827,14 +6944,14 @@ expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 45b3fc9a174e82eedb2f5161bd75b87e
+md5sum a5a6482add56c64125bfa221f0bded06
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5111
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepPeaksRep2
@@ -6847,6 +6964,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
@@ -6854,14 +6972,14 @@ expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 7cea4802586abc6192c1d6e3e18e40c6
+md5sum 848dceabe96dad181a74909c5d205531
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5111
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepSignalRep1
@@ -7063,6 +7181,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
@@ -7070,13 +7189,13 @@ expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 49cade8a416fdb056c8734bf46a309f3
+md5sum 361691b712888ac59795d71b59e241da
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5115
+subId 5997
 tableName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputPk
 view Peaks
 
@@ -7090,6 +7209,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
@@ -7097,14 +7217,14 @@ expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum ebcf420d72cdfa6de34fefcd0cf6d2ed
+md5sum 4b5c613dc639069c531545bba4f4b351
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5115
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep2
@@ -7117,6 +7237,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
@@ -7124,14 +7245,14 @@ expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 2f1ee97f88e5a24ebf3ad98170d0e16e
+md5sum c1f0cf080d3854a7307f2fa4c9bae885
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5115
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepSignalRep1
@@ -7333,6 +7454,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
@@ -7340,13 +7462,13 @@ expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 8b7cb35af63b96215c429105f0f60600
+md5sum 2f45743b959386be358fd1f55674c8c2
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5031
+subId 5997
 tableName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputPk
 view Peaks
 
@@ -7360,6 +7482,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
@@ -7367,14 +7490,14 @@ expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 84546dced4ddf5d48fdcbfe4c12988df
+md5sum 2548d3bae80af412dce1d89e6438775f
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5031
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepPeaksRep2
@@ -7387,6 +7510,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-03-14
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
@@ -7394,14 +7518,14 @@ expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 908cc8045a1791041812728decac59c8
+md5sum c5a08f1824624363a66bf53ac9930172
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex B
 strain CD-1
-subId 5031
+subId 5997
 view RepPeaks
 
 metaObject wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepSignalRep1
@@ -7917,4 +8041,4 @@ subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1410406996
+# MAGIC: -920431513
