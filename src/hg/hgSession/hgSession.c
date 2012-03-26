@@ -15,6 +15,7 @@
 #include "hdb.h"
 #include "ra.h"
 #include "wikiLink.h"
+#include "hgLoginLink.h"
 #include "customTrack.h"
 #include "customFactory.h"
 #include "hgSession.h"
@@ -81,6 +82,61 @@ printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
        wikiLinkUserLoginUrl(cartSessionId(cart)));
 printf("The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n");
+}
+
+void welcomeGBUser(char *hgLoginUserName)
+/* Tell the user they are not logged in to the hgLogin and tell them how
+ * to
+ * do so. */
+{
+char *hgLoginHost = hgLoginLinkHost();
+
+cartWebStart(cart, NULL, "Welcome %s", hgLoginUserName);
+jsInit();
+printf("If you are not %s (on the hgLogin at "
+       "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
+       "and would like to sign out or change identity, \n",
+       hgLoginUserName, hgLoginHost, hgLoginHost);
+printf("<A HREF=\"%s\"><B>click here to sign out XXXX from hgLogin.</B></A>\n",
+       hgLoginLinkUserLogoutUrl(cartSessionId(cart)));
+}
+
+
+void offerGBLogin()
+/* Tell the user they are not logged in to the hgLogin and tell them how
+ * to
+ * do so. */
+{
+char *hgLoginHost = hgLoginLinkHost();
+
+cartWebStart(cart, NULL, "Sign in to UCSC Genome Bioinformatics");
+jsInit();
+printf("Signing in enables you to save current settings into a "
+       "named session, and then restore settings from the session later.\n"
+       "If you wish, you can share named sessions with other users.\n");
+printf("<P>The sign-in page is handled by our XXXX hgLogin "
+       "<A HREF=\"http://%s/\" TARGET=_BLANK>hgLogin system</A>:\n", hgLoginHost);
+printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
+       hgLoginLinkUserLoginUrl(cartSessionId(cart)));
+printf("The hgLogin also serves as a forum for users "
+       "to share knowledge and ideas.\n");
+}
+
+
+char *getLinkUserName()
+/* Return the user name specified in cookies from the browser, or NULL
+ * if 
+ * the user doesn't appear to be logged in. */
+{
+if (hgLoginLinkEnabled())
+    return cloneString(hgLoginLinkUserName());
+else     
+    if (wikiLinkEnabled())
+       {
+       return cloneString(wikiLinkUserName());
+       }
+
+return NULL;
 }
 
 void showCartLinks()
@@ -496,6 +552,37 @@ void doMainPage(char *message)
 /* Login status/links and session controls. */
 {
 puts("Content-Type:text/html\n");
+if (hgLoginLinkEnabled())
+  {
+  /* XXXX hgLogin  */
+printf("HELLO HGLOGIN\n");
+    char *hgLoginUserName = hgLoginLinkUserName();
+/* DEBUG: */ printf("<BR>DEBUG X: hgLoginUserName is %s<BR>",hgLoginUserName);
+
+    if (hgLoginUserName)
+        welcomeGBUser(hgLoginUserName);
+    else
+        offerGBLogin();
+
+/* DEBUG: */ printf("<BR>DEBUG Y: hgLoginUserName is %s<BR>",hgLoginUserName);
+/* DEBUG: */ printf("<BR>DEBUG Z: message is %s<BR>",message);
+
+    if (isNotEmpty(message))
+        {
+/* DEBUG: */ printf("<BR>DEBUG A: message is %s<BR>", message);
+        if (cartVarExists(cart, hgsDoSessionDetail))
+            webNewSection("Session Details");
+        else
+            webNewSection("Updated Session");
+        puts(message);
+/* DEBUG: */ printf("<BR>DEBUG B: message is %s<BR>", message);
+
+        }
+    showSessionControls(hgLoginUserName, TRUE, TRUE);
+    showLinkingTemplates(hgLoginUserName);
+
+
+  } else { /* use wiki login */
 if (wikiLinkEnabled())
     {
     char *wikiUserName = wikiLinkUserName();
@@ -511,10 +598,11 @@ if (wikiLinkEnabled())
 	    webNewSection("Updated Session");
 	puts(message);
 	}
+/* DEBUG: */ printf("<BR>DEBUG WIKI message is %s<BR>", message);
     showSessionControls(wikiUserName, TRUE, TRUE);
     showLinkingTemplates(wikiUserName);
     }
-else
+else 
     {
     if (isNotEmpty(message))
 	{
@@ -530,6 +618,7 @@ else
 	showSessionControls(NULL, FALSE, FALSE);
     showLinkingTemplates(NULL);
     }
+  }
 cartWebEnd();
 }
 
@@ -560,7 +649,8 @@ struct dyString *dyMessage = dyStringNew(2048);
 char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
 char *encSessionName = cgiEncodeFull(sessionName);
 boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
-char *userName = wikiLinkUserName();
+/* char *userName = wikiLinkUserName(); */
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 
@@ -743,7 +833,8 @@ char *doUpdateSessions()
 struct dyString *dyMessage = dyStringNew(1024);
 struct hashEl *cartHelList = NULL, *hel = NULL;
 struct sqlConnection *conn = hConnectCentral();
-char *userName = wikiLinkUserName();
+/* char *userName = wikiLinkUserName(); */
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 boolean didSomething = FALSE;
 char query[512];
@@ -950,7 +1041,8 @@ char *doSessionDetail(char *sessionName)
 {
 struct dyString *dyMessage = dyStringNew(4096);
 char *encSessionName = cgiEncodeFull(sessionName);
-char *userName = wikiLinkUserName();
+/* char *userName = wikiLinkUserName(); */
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
@@ -1055,7 +1147,8 @@ webPushErrHandlersCart(cart);
 char *sessionName = oldSessionName;
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encOldSessionName = encSessionName;
-char *userName = wikiLinkUserName();
+/* char *userName = wikiLinkUserName(); */
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
