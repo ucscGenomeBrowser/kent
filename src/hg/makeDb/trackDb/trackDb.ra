@@ -457,6 +457,9 @@ release alpha
 nextExonText Next Match
 prevExonText Prev Match
 pubsArticleTable hgFixed.pubsArticle
+pubsSequenceTable hgFixed.pubsSequenceAnnot
+pubsPslTrack pubsBlatPsl
+pubsMarkerTable hgFixed.pubsMarkerAnnot
 
     track pubsBlat
     shortLabel Sequences
@@ -465,47 +468,48 @@ pubsArticleTable hgFixed.pubsArticle
     type bed 12 .
     visibility pack
     priority 1
-    pubsSequenceTable hgFixed.pubsSequenceAnnot
     release alpha
+    #configurable off
 
     track pubsBlatPsl
-    shortLabel indiv. Seq Matches
-    longLabel Individual sequence matches
+    shortLabel Individual Seq. Matches
+    longLabel Individual sequence matches of one selected article from sequences track
     parent pubs
     type psl
     visibility hide
     priority 2
     release alpha
-
-    track pubsMarkerSnp
-    shortLabel SNPs
-    longLabel SNPs in Publications
-    parent pubs
-    visibility pack
-    priority 3
-    type bed 4 +
-    pubsMarkerTable hgFixed.pubsMarkerAnnot
-    release alpha
+    #configurable off
 
     track pubsMarkerBand
     shortLabel Bands
     longLabel Cytogenetic bands in Publications
-    parent pubs
-    visibility pack
+    parent pubs on
+    visibility hide
     priority 3
-    type bed 4 +
-    pubsMarkerTable hgFixed.pubsMarkerAnnot
+    type bed 4
     release alpha
+    #configurable off
+
+    track pubsMarkerSnp
+    shortLabel SNPs
+    longLabel SNPs in Publications
+    parent pubs on
+    visibility hide
+    priority 3
+    type bed 4
+    release alpha
+    #configurable off
 
     track pubsMarkerGene
     shortLabel Genes
     longLabel Gene symbols in Publications
-    parent pubs
+    parent pubs on
     priority 3
-    visibility pack
-    type bed 4 +
-    pubsMarkerTable hgFixed.pubsMarkerAnnot
+    visibility hide
+    type bed 4
     release alpha
+    #configurable off
 
 track transMap
 superTrack on
