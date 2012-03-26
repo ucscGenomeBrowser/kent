@@ -11448,10 +11448,25 @@ tag R1X36
 type readType
 description Single 36 nt reads
 
+term 1x41
+tag R1X41
+type readType
+description Single 41 nt reads PROVISIONAL
+
+term 1x45
+tag R1X45
+type readType
+description Single 45 nt reads PROVISIONAL
+
 term 1x50
 tag R1X50
 type readType
 description Single 50 nt reads
+
+term 1x55
+tag R1X55
+type readType
+description Single 55 nt reads PROVISIONAL
 
 term 1x75
 tag R1X75
@@ -11482,6 +11497,11 @@ term 2x76D
 tag R2X76D
 type readType
 description Paired 76 nt directed reads
+
+term 2x99D
+tag R2X99D
+type readType
+description Paired 99 nt directed reads PROVISIONAL
 
 term 2x100
 tag R2X100
