@@ -2798,13 +2798,13 @@ term HEK293
 tag HEK293
 type Cell Line
 organism human
-description embryonic kidney, (PMID: 11967234)
+description embryonic kidney, cells contain Adenovirus 5 DNA (PMID: 11967234)
 tissue kidney
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
 lineage mesoderm
-karyotype cancer
+karyotype normal
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
 sex U
