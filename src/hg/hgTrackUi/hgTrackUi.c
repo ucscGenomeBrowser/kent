@@ -1895,8 +1895,8 @@ puts("&nbsp;<B>position</B>");
 void pubsUi(struct trackDb *tdb)
 /* UI for pubs match track */
 {
-char* keywordTag = "pubsKeywords";
-char* yearTag = "pubsYear";
+char* keywordTag = "pubsBlat.pubsKeywords";
+char* yearTag = "pubsBlat.pubsYear";
 char *keywords = cartUsualString(cart, keywordTag, "");
 char *text[NUM_YEARS + 1];
 char *values[NUM_YEARS + 1];
@@ -1904,6 +1904,7 @@ char *yearFilter = cartUsualString(cart, yearTag, "anytime");
 int i;
 puts("<P><B>Filter articles by keywords in abstract, title or authors:</B>");
 cgiMakeTextVar(keywordTag, keywords, 45);
+
 text[0] = "anytime";
 values[0] = "anytime";
 time_t nowTime = time(NULL);
@@ -1920,6 +1921,7 @@ for(i = 0; i < NUM_YEARS; i++)
     }
 
 puts("</P><P>\n");
+printf("<B>Show articles published </B>");
 cgiDropDownWithTextValsAndExtra(yearTag, text, values, NUM_YEARS + 1, yearFilter, NULL);
 puts("</P>\n");
 }
@@ -2547,7 +2549,7 @@ else if (sameString(track, "vegaGeneComposite"))
 else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
 else if (startsWith("pubs", track))
-        pubsUi(tdb);
+    pubsUi(tdb);
 else if (startsWith("blastDm", track))
     blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))
@@ -2650,11 +2652,11 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
     {
     // Composites *might* have had their top level controls just printed, but almost certainly have additional controls
     if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
-        hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM, trackHash);
+        hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
     previewLinks(database, tdb);
-    extraUiLinks(database,tdb, trackHash);
+    extraUiLinks(database,tdb);
     }
 }
 
@@ -2881,7 +2883,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
                     "genome-preview.ucsc.edu", database, tdb->track);
                 }
             printf("&nbsp;&nbsp;");
-            makeDownloadsLink(database, tdb, trackHash);
+            makeDownloadsLink(database, tdb);
             }
         char *downArrow = "&dArr;";
         enum browserType browser = cgiBrowser();

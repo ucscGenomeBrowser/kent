@@ -262,7 +262,7 @@ else if (!strcmp(cmd, "tableMetadata"))
         struct trackDb *tdb = hTrackDbForTrackAndAncestors(database, trackName); // Doesn't get whole track list
         if (tdb != NULL)
             {
-            char * html = metadataAsHtmlTable(database,tdb,showLonglabel,showShortLabel,NULL);
+            char * html = metadataAsHtmlTable(database,tdb,showLonglabel,showShortLabel);
             if (html)
                 {
                 dyStringAppend(output,html);
@@ -313,8 +313,14 @@ else if (!strcmp(cmd, "encodeExperiments"))
     // Return list of ENCODE experiments.  Note: database is ignored.
     // TODO: add selector for org=human|mouse, retire db=
     // e.g. http://genome.ucsc.edu/cgi-bin/hgApi?db=hg18&cmd=encodeExperiments
+    // NOTE:  This table lives only on development and preview servers -- use preview
+    //  if not found on localhost
     struct sqlConnection *connExp = sqlConnect(ENCODE_EXP_DATABASE);
-    /* TODO: any need to use connection pool ? */
+    if (!sqlTableExists(connExp, ENCODE_EXP_TABLE))
+        {
+        sqlDisconnect(&connExp);
+        connExp = sqlConnectProfile("preview", ENCODE_EXP_DATABASE);
+        }
     struct encodeExp *exp = NULL, *exps = encodeExpLoadAllFromTable(connExp, ENCODE_EXP_TABLE);
     dyStringPrintf(output, "[\n");
     while ((exp = slPopHead(&exps)) != NULL)

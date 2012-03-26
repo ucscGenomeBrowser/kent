@@ -14,7 +14,8 @@ include wgEncodeUwDnase.ra beta,public
 include wgEncodeUwDnase.release2.ra alpha 
 
 # PSU TFBS (wrangler: Venkat)
-include wgEncodePsuTfbs.ra
+include wgEncodePsuTfbs.ra beta,public
+include wgEncodePsuTfbs.patch.ra alpha
 
 # PSU Histone (wrangler: Venkat)
 include wgEncodePsuHistone.ra alpha,beta
