@@ -1,8 +1,9 @@
 <H2>Description</H2>
-<P>This track is based on text-mining on fulltext of biomedical articles and includes two types of subtracks:</P>
+<P>This track is based on text-mining on fulltext of biomedical articles and includes three types of subtracks:</P>
 
 <ul>
-<li>Sequences found in publications that have been found in the text and searched in genomes with BLAT</li>
+<li>Sequences - grouped by article - found in publications and searched in genomes with BLAT</li>
+<li>Individual BLAT matches of all sequences of one single article</li>
 <li>Identifiers in publications that directly relate to chromosome locations (e.g. gene symbols, SNP identifiers, etc)</li>
 </ul>
 <P>Both sources of information are linked to the respective articles.
@@ -12,15 +13,23 @@ href="http://text.soe.ucsc.edu">project website</A>.</P>
 <H2>Display Convention and Configuration</H2>
 <P>The sequence track indicates the location of sequences in publications
 mapped back to the genome, annotated with the first author and the year of the
-publication.  Article titles are shown when you move the mouse cursor over the
-features.  Thicker parts of the features (exons) represent matching sequences,
+publication.  All matches of one article are grouped ("chained") together.
+Article titles are shown when you move the mouse cursor over the features.
+Thicker parts of the features (exons) represent matching sequences,
 connected by thin lines to matches from the same article within 30 kbp.</P>
 
-<P>All other tracks just show the number of matching articles as the feature
-description. Clicking on them shows the sentences where the identifiers were found.</P>
+<P>The track "individual sequence matches" activates automatically when
+the user clicks a sequence match and follows the link "Show sequence matches individually" 
+from the details page.  Mouse overs show flanking text around the sequence and clicking
+features links to BLAT alignments.
+</P>
 
-<P>The track configuration includes a keyword filter. Keywords are space-separated
-and are searched in the article's title and abstract.</P>
+<P>All other tracks show the number of matching articles as the feature
+description.  Clicking on them shows the sentences and sections in articles 
+where the identifiers were found.</P>
+
+<P>The track configuration includes a keyword and year filter. Keywords are space-separated
+and are searched in the article's title, author list and abstract.</P>
 
 <H2>Data</H2>
 <P>The track is based on text from biomedical research articles, obtained as
