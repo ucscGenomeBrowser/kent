@@ -4684,7 +4684,7 @@ metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep1
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -4705,13 +4705,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep2
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -4732,13 +4733,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk
 objType table
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4760,13 +4762,14 @@ sex M
 strain 129
 subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4788,13 +4791,14 @@ setType exp
 sex M
 strain 129
 subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4816,13 +4820,14 @@ setType exp
 sex M
 strain 129
 subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4843,13 +4848,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4870,13 +4876,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputSig
 objType table
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4897,13 +4904,14 @@ sex M
 strain 129
 subId 3040
 tableName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129RawDataRep1
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -4924,13 +4932,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129RawDataRep2
 objType file
 age E0
 antibody H3K4me1
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -4951,13 +4960,14 @@ setType exp
 sex M
 strain 129
 subId 3040
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep1
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -4979,13 +4989,14 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep2
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5007,13 +5018,14 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk
 objType table
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5035,13 +5047,14 @@ sex M
 strain 129
 subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep1
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5063,13 +5076,14 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep2
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5091,13 +5105,14 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5119,13 +5134,14 @@ setType exp
 sex M
 strain 129
 subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5147,13 +5163,14 @@ setType exp
 sex M
 strain 129
 subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5175,13 +5192,14 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5203,13 +5221,14 @@ setType exp
 sex M
 strain 129
 subId 3041
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputSig
 objType table
 age E0
 antibody H3K4me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5231,13 +5250,14 @@ sex M
 strain 129
 subId 3041
 tableName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep1
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -5258,13 +5278,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep2
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -5285,13 +5306,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk
 objType table
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5313,13 +5335,14 @@ sex M
 strain 129
 subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5341,13 +5364,14 @@ setType exp
 sex M
 strain 129
 subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5369,13 +5393,14 @@ setType exp
 sex M
 strain 129
 subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5396,13 +5421,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5423,13 +5449,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputSig
 objType table
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5450,13 +5477,14 @@ sex M
 strain 129
 subId 5112
 tableName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129RawDataRep1
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -5477,13 +5505,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129RawDataRep2
 objType file
 age E0
 antibody H3K9me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control None
 controlId wgEncodeEM001921
@@ -5504,13 +5533,14 @@ setType exp
 sex M
 strain 129
 subId 5112
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5531,13 +5561,14 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5558,13 +5589,14 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
 objType table
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5586,13 +5618,14 @@ sex M
 strain 129
 subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep1
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5613,13 +5646,14 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep2
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5640,13 +5674,14 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5668,13 +5703,14 @@ setType exp
 sex M
 strain 129
 subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5696,13 +5732,14 @@ setType exp
 sex M
 strain 129
 subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5723,13 +5760,14 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5750,13 +5788,14 @@ setType exp
 sex M
 strain 129
 subId 4875
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
 objType table
 age E0
 antibody H3K27me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5777,13 +5816,14 @@ sex M
 strain 129
 subId 4875
 tableName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep1
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5804,13 +5844,14 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep2
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5831,13 +5872,14 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
 objType table
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5859,13 +5901,14 @@ sex B
 strain 129
 subId 5997
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep1
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5886,13 +5929,14 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep2
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5913,13 +5957,14 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep1
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5941,13 +5986,14 @@ setType exp
 sex B
 strain 129
 subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep2
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5969,13 +6015,14 @@ setType exp
 sex B
 strain 129
 subId 5997
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepSignalRep1
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -5996,13 +6043,14 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepSignalRep2
 objType file
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6023,13 +6071,14 @@ setType exp
 sex B
 strain 129
 subId 5037
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
 objType table
 age E0
 antibody H3K36me3
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6050,13 +6099,14 @@ sex B
 strain 129
 subId 5037
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6077,13 +6127,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6104,13 +6155,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6131,13 +6183,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6158,13 +6211,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6185,13 +6239,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6212,13 +6267,14 @@ setType input
 sex M
 strain 129
 subId 5188
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputSig
 objType table
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuHistone
 control Input
 controlId wgEncodeEM001921
@@ -6239,6 +6295,7 @@ sex M
 strain 129
 subId 5188
 tableName wgEncodePsuHistoneG1eer4e2InputME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep1
@@ -7984,4 +8041,4 @@ subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 36085352
+# MAGIC: -920431513

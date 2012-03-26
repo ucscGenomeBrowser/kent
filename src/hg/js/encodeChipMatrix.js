@@ -97,12 +97,12 @@ $(function () {
     function tableHeaderOut($table, antibodyGroups, antibodyTargetExps) {
         // Generate table header and add to document
 
-        var $tableHeader, $thead;
+        var $tableHeaders, $thead, $th;
         var maxLen;  // for resizing header cells to accomodate label lengths
         var antibodyTarget;
 
         // fill in column headers from antibody targets returned by server
-        $tableHeader = $('#columnHeaders');
+        $tableHeaders = $('#columnHeaders');
         $thead = $('thead');
 
         // 1st column is row headers
@@ -110,7 +110,7 @@ $(function () {
         $thead.before('<colgroup></colgroup>');
 
         $.each(antibodyGroups, function (i, group) {
-            $tableHeader.append('<th class="groupType"><div class="verticalText">' + 
+            $tableHeaders.append('<th class="groupType"><div class="verticalText">' + 
                                 group.label + '</div></th>');
             maxLen = Math.max(maxLen, group.label.length);
             $thead.before('<colgroup></colgroup>');
@@ -121,9 +121,13 @@ $(function () {
                     return true;
                 }
                 antibodyTarget = encodeProject.getAntibodyTarget(target);
-                $tableHeader.append('<th class="elementType" title="' +
-                                antibodyTarget.description +
-                                '"><div class="verticalText">' + target + '</div></th>');
+                $th = $('<th class="elementType"><div class="verticalText">' + 
+                                target + '</div></th>');
+                if (!encodeProject.isIE8()) {
+                    // Suppress mouseover under IE8 as QA noted flashing effect
+                    $th.attr('title', antibodyTarget.description);
+                }
+                $tableHeaders.append($th);
                 // add colgroup element to support cross-hair hover effect
                 $thead.before('<colgroup class="experimentCol"></colgroup>');
                 maxLen = Math.max(maxLen, target.length);

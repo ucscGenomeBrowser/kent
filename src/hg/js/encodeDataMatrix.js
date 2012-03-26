@@ -96,11 +96,11 @@ $(function () {
         // Generate table header and add to document
         // NOTE: relies on hard-coded classes and ids
 
-        var $tableHeader, $thead;
+        var $tableHeaders, $thead, $th;
         var maxLen, dataType;
 
         // fill in column headers from dataTypes returned by server
-        $tableHeader = $('#columnHeaders');
+        $tableHeaders = $('#columnHeaders');
         $thead = $('thead');
 
         // 1st column is row headers
@@ -108,7 +108,7 @@ $(function () {
         $thead.before('<colgroup></colgroup>');
 
         $.each(dataGroups, function (i, group) {
-            $tableHeader.append('<th class="groupType"><div class="verticalText">' + 
+            $tableHeaders.append('<th class="groupType"><div class="verticalText">' + 
                                 group.label + '</div></th>');
             maxLen = Math.max(maxLen, group.label.length);
             $thead.before('<colgroup></colgroup>');
@@ -117,10 +117,14 @@ $(function () {
 
                 // prune out datatypes with no experiments
                 if (dataTypeExps[dataType.term] !== undefined) {
-                    $tableHeader.append('<th class="elementType" title="' + 
-                                        dataType.description + 
-                                        '"><div class="verticalText">' + dataType.label + 
-                                        '</div></th>');
+                    $th = $('<th class="elementType"><div class="verticalText">' + 
+                                dataType.label + '</div></th>');
+                    if (!encodeProject.isIE8()) {
+                        // Suppress mouseover under IE8 as QA noted flashing effect
+                        $th.attr('title', dataType.description);
+                    }
+                    $tableHeaders.append($th);
+
                     // add colgroup element to support cross-hair hover effect
                     $thead.before('<colgroup class="experimentCol"></colgroup>');
                     maxLen = Math.max(maxLen, dataType.label.length);
@@ -169,10 +173,11 @@ $(function () {
                     'dataType' : dataType,
                     'cellType' : cellType
                 });
+
                 $td.mouseover(function() {
                     $(this).attr('title', 'Click to select: ' + 
                         encodeProject.getDataType($(this).data().dataType).label +
-                            ' ' + ' in ' + $(this).data().cellType +' cells');
+                        ' ' + ' in ' + $(this).data().cellType +' cells');
                 });
                 $td.click(function() {
                     // NOTE: generating full search URL should be generalized & encapsulated

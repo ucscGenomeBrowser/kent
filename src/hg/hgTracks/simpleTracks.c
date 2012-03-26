@@ -14,6 +14,7 @@
 #include "psl.h"
 #include "web.h"
 #include "hdb.h"
+#include "hgFind.h"
 #include "hCommon.h"
 #include "hgColors.h"
 #include "trackDb.h"
@@ -131,7 +132,6 @@
 #ifdef LOWELAB_WIKI
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
-
 
 #define CHROM_COLORS 26
 
@@ -12145,7 +12145,7 @@ char* pubsArticleTable(struct track *tg)
  * the value from the trackDb statement 'articleTable'
  * or the default value: <trackName>Article */
 {
-char *articleTable = trackDbSetting(tg->tdb, "pubsArticleTable");
+char *articleTable = trackDbSettingClosestToHome(tg->tdb, "pubsArticleTable");
 if (isEmpty(articleTable))
     {
     char buf[256];
@@ -12177,46 +12177,51 @@ return matchStr;
 struct pubsExtra 
 /* additional info needed for publication blat linked features: author+year and title */
 {
-    char* authorYear;
-    char* title;
+    char* label;
+    char* mouseOver;
 };
 
-static char* pubsGetFirstAuthor(char* authors) 
-/* return first author from author field */
+static char* pubsFeatureLabel(char* authors, char* year) 
+/* create label <author><year> given authors and year strings */
 {
+char* authorYear = NULL;
+
 char* author = firstWordInLine(authors);
 stripChar(author, ',');
 stripChar(author, ';');
 
 if (isEmpty(author))
     author = "NoAuthor";
-return author;
+if (isEmpty(year))
+    year = "NoYear";
+authorYear  = catTwoStrings(author, year);
+
+return authorYear;
 }
 
 static struct pubsExtra *pubsMakeExtra(char* articleTable, struct sqlConnection* conn, 
     struct linkedFeatures* lf)
 {
 char query[LARGEBUF];
-safef(query, sizeof(query), "SELECT authors, year, title FROM %s WHERE articleId = '%s'", 
-    articleTable, lf->name);
 struct sqlResult *sr = NULL;
 char **row = NULL;
-sr = sqlGetResult(conn, query);
 struct pubsExtra *extra = NULL;
+
+safef(query, sizeof(query), "SELECT authors, year, title FROM %s WHERE articleId = '%s'", 
+    articleTable, lf->name);
+sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
 {
-    char* author =  pubsGetFirstAuthor(row[0]);
+    char* authors = row[0];
     char* year    = row[1];
     char* title   = row[2];
-    if (isEmpty(year))
-        year = "NoYear";
 
     extra = needMem(sizeof(struct pubsExtra));
-    extra->authorYear  = catTwoStrings(author, year);
+    extra->label = pubsFeatureLabel(authors, year);
     if (isEmpty(title))
-        extra->title = extra->authorYear;
+        extra->mouseOver = extra->label;
     else
-        extra->title = cloneString(title);
+        extra->mouseOver = cloneString(title);
 }
 
 sqlFreeResult(&sr);
@@ -12249,22 +12254,28 @@ static void pubsLoadKeywordYearItems(struct track *tg)
 /* load items that fulfill keyword and year filter */
 {
 struct sqlConnection *conn = hAllocConn(database);
-char *keywords = cartOptionalString(cart, "pubsKeywords");
-char *yearFilter = cartOptionalString(cart, "pubsYear");
+char *keywords = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsKeywords");
+char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsYear");
 char *articleTable = pubsArticleTable(tg);
 
-if(yearFilter != NULL && sameWord(yearFilter, "anytime"))
+if(yearFilter == NULL || sameWord(yearFilter, "anytime"))
     yearFilter = NULL;
+
 if(isNotEmpty(keywords))
     keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
 
 if(isEmpty(yearFilter) && isEmpty(keywords))
+{
     loadGappedBed(tg);
+}
 else
     {
+    char* oldLabel = tg->longLabel;
+    tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+    freeMem(oldLabel);
+
     char extra[2048], yearWhere[256], keywordsWhere[1024], prefix[256];
     char **row;
-    int rowOffset;
     struct linkedFeatures *lfList = NULL;
     struct trackDb *tdb = tg->tdb;
     int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
@@ -12273,7 +12284,8 @@ else
 
     safef(prefix, sizeof(prefix),  "name IN (SELECT articleId FROM %s WHERE", articleTable);
     if(isNotEmpty(keywords))
-        safef(keywordsWhere, sizeof(keywordsWhere), "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", keywords);
+        safef(keywordsWhere, sizeof(keywordsWhere), \
+        "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", keywords);
     if(isNotEmpty(yearFilter))
         safef(yearWhere, sizeof(yearWhere), "year >= '%s'", sqlEscapeString(yearFilter));
 
@@ -12283,6 +12295,8 @@ else
         safef(extra, sizeof(extra), "%s %s)", prefix, keywordsWhere);
     else
         safef(extra, sizeof(extra), "%s %s AND %s)", prefix, yearWhere, keywordsWhere);
+
+    int rowOffset = 0;
     struct sqlResult *sr = hExtendedRangeQuery(conn, tg->table, chromName, winStart, winEnd, extra,
                                                FALSE, NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -12298,6 +12312,28 @@ else
 hFreeConn(&conn);
 }
 
+#define PUBSFILTERNAME "pubsFilterArticleId"
+
+static void activatePslTrackIfCgi(struct track *tg)
+/* the publications hgc creates links back to the browser with 
+ * the cgi param pubsFilterArticleId to show only a single type
+ * of feature for the pubsBlatPsl track. 
+ * If the parameter was supplied, we save this parameter here
+ * into the cart and activate the track.
+ */
+{
+char *articleId = cgiOptionalString(PUBSFILTERNAME);
+//if (articleId==NULL) 
+    //articleId = cartOptionalString(cart, PUBSFILTERNAME);
+
+if (articleId!=NULL) 
+{
+    cartSetString(cart, PUBSFILTERNAME, articleId);
+    tdbSetCartVisibility(tg->tdb, cart, hCarefulTrackOpenVis(database, tg->track));
+    tg->visibility=tvPack;
+}
+}
+
 static void pubsLoadItems(struct track *tg)
 /* filter items and stuff item data from other tables (author name, title) into extra field */
 {
@@ -12311,7 +12347,7 @@ char *pubsItemName(struct track *tg, void *item)
 struct linkedFeatures *lf = item;
 struct pubsExtra* extra = lf->extra;
 if (extra!=NULL)
-    return extra->authorYear;
+    return extra->label;
 else
     return lf->name;
 }
@@ -12328,7 +12364,7 @@ if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     if (lf->extra != NULL) 
     {
         struct pubsExtra *extra = lf->extra;
-        mouseOver = extra->title;
+        mouseOver = extra->mouseOver;
     }
     else
         mouseOver = itemName;
@@ -12337,38 +12373,153 @@ if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
 }
 }
 
+static void pubsLoadMarkerItem (struct track *tg)
+/* copy item names into extra field */
+{
+//loadSimpleBed(tg);
+loadSimpleBedAsLinkedFeaturesPerBase(tg);
+//tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE, FALSE);
+//if (! (hashFindVal(tdb->settingsHash, "pubsMarkerTable")))
+enum trackVisibility vis = tg->visibility;
+if (vis == tvDense || vis == tvSquish) 
+    return;
+
+struct linkedFeatures *lf = NULL;
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    lf->extra = lf->name;
+}
+
 char *pubsMarkerItemName(struct track *tg, void *item)
 /* retrieve article count from score field and return.*/
 {
-struct bed *bed = item;
+struct linkedFeatures *lf = item;
 char newName[64];
-safef(newName, sizeof(newName), "%d articles", (int) bed->score);
+safef(newName, sizeof(newName), "%d articles", (int) lf->score);
 return cloneString(newName);
 }
 
 static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
-/* use previously saved itemName for the mouseOver */
 {
+struct linkedFeatures *lf = item;
 genericMapItem(tg, hvg, item,
-		    itemName, mapItemName, start, end,
+		    lf->extra, lf->extra, start, end,
 		    x, y, width, height);
+}
+
+static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* conn, char* articleId, bool getSnippet)
+/* create a hash with a mapping annotId -> snippet or annotId -> shortSeq for an articleId*/
+{
+    char query[LARGEBUF];
+    char *sequenceTable = trackDbRequiredSetting(tg->tdb, "pubsSequenceTable");
+    char *selectValSql = NULL;
+    if (getSnippet)
+        selectValSql = "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")";
+    else
+        selectValSql = "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))";
+
+    safef(query, sizeof(query), "SELECT annotId, %s  FROM %s WHERE articleId='%s' ", 
+        selectValSql, sequenceTable, articleId);
+    struct hash *seqIdHash = sqlQuickHash(conn, query);
+    //freeMem(sequenceTable); // XX Why does this crash??
+    return seqIdHash;
+}
+
+static char *pubsArticleDispId(struct track *tg, struct sqlConnection *conn, char* articleId)
+/* given an articleId, lookup author and year and create <author><year> label for it */
+{
+char* dispLabel = NULL;
+char *articleTable = pubsArticleTable(tg);
+char query[LARGEBUF];
+safef(query, sizeof(query), "SELECT authors, year FROM %s WHERE articleId = '%s'", 
+    articleTable, articleId);
+struct sqlResult *sr = sqlGetResult(conn, query);
+if (sr!=NULL)
+{
+    char **row = NULL;
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        dispLabel = pubsFeatureLabel(row[0], row[1]);
+    else
+        dispLabel = articleId;
+}
+else
+    dispLabel = articleId;
+sqlFreeResult(&sr);
+return dispLabel;
+}
+
+static void pubsPslLoadItems(struct track *tg)
+/* load only psl items from a single article */
+{
+// get articleId to filter on
+char *articleId = cartOptionalString(cart, PUBSFILTERNAME);
+if (articleId==NULL)
+    return;
+
+struct sqlConnection *conn = hAllocConn(database);
+char* dispLabel = pubsArticleDispId(tg, conn, articleId);
+struct hash *idToSnip = pubsLookupSequences(tg, conn, articleId, TRUE);
+struct hash *idToSeq = pubsLookupSequences(tg, conn, articleId, FALSE);
+
+// change track label 
+char* oldLabel = tg->longLabel;
+tg->longLabel = catTwoStrings("Individual matches for article ", dispLabel);
+freeMem(oldLabel);
+
+// filter and load items for this articleId
+char where[256];
+safef(where, sizeof(where), " articleId=%s ", articleId);
+
+int rowOffset = 0;
+struct sqlResult *sr = NULL;
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, where, &rowOffset);
+
+struct linkedFeatures *lfList = NULL;
+char **row = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+{
+    struct psl *psl = pslLoad(row+rowOffset);
+    slAddHead(&lfList, lfFromPsl(psl, TRUE));
+    char* shortSeq  = hashFindVal(idToSeq,  lfList->name);
+    char* snip = hashFindVal(idToSnip, lfList->name);
+    struct pubsExtra *extra = needMem(sizeof(struct pubsExtra));
+    extra->mouseOver=snip;
+    extra->label=shortSeq;
+    lfList->extra = extra;
+}
+sqlFreeResult(&sr);
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+hFreeConn(&conn);
+}
+
+static void pubsBlatPslMethods(struct track *tg)
+/* a track that shows only the indiv matches for one single article */
+{
+activatePslTrackIfCgi(tg);
+tg->loadItems = pubsPslLoadItems;
+tg->itemName  = pubsItemName;
+tg->mapItem   = pubsMapItem;
 }
 
 static void pubsBlatMethods(struct track *tg)
 /* publication blat tracks are bed12+2 tracks of sequences in text, mapped with BLAT */
 {
-    tg->loadItems = pubsLoadItems;
-    tg->itemName  = pubsItemName;
-    tg->mapItem   = pubsMapItem;
+tg->loadItems = pubsLoadItems;
+tg->itemName  = pubsItemName;
+tg->mapItem   = pubsMapItem;
 }
 
 static void pubsMarkerMethods(struct track *tg)
 /* publication marker tracks are bed5 tracks of genome marker occurences like rsXXXX found in text*/
 {
-    tg->mapItem  = pubsMarkerMapItem;
-    tg->itemName = pubsMarkerItemName;
+tg->bedSize   = 5;
+tg->loadItems = pubsLoadMarkerItem;
+tg->mapItem   = pubsMarkerMapItem;
+tg->itemName  = pubsMarkerItemName;
 }
 
 void fillInFromType(struct track *track, struct trackDb *tdb)
@@ -12392,9 +12543,12 @@ if (sameWord(type, "bed"))
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
 
-    if (hashFindVal(tdb->settingsHash, "pubsMarkerTable"))
+    // XX MaxH: this works as a temp hack, but it is not the right way to do it
+    // XX should I introduce several new track types ? 
+    // XX or rather additional trackDb statements, one per pubs-"track type" ?
+    if (startsWith("pubs", track->track) && stringIn("Marker", track->track))
         pubsMarkerMethods(track);
-    if (hashFindVal(tdb->settingsHash, "pubsSequenceTable"))
+    if (startsWith("pubs", track->track) && stringIn("Blat", track->track))
         pubsBlatMethods(track);
     }
 /*
@@ -12455,6 +12609,10 @@ else if (sameWord(type, "logo"))
 else if (sameWord(type, "psl"))
     {
     pslMethods(track, tdb, wordCount, words);
+
+    // XX what is the right way to do this? new track type? 
+    if (trackDbSettingClosestToHome(track->tdb, "pubsArticleTable") !=NULL)
+        pubsBlatPslMethods(track);
     }
 else if (sameWord(type, "snake"))
     {
