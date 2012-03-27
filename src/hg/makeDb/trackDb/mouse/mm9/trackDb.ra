@@ -2,7 +2,6 @@
 
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
-include trackDb.merckPolyA.all.ra
 
 track jaxQTLLift
 shortLabel MGI QTL LiftO
