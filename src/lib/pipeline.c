@@ -410,7 +410,6 @@ static int groupLeaderWait(struct pipeline *pl)
  * the exit code of the first group process exit non-zero, or zero if none
  * failed. */
 {
-// FIXME: get error back, can't send back status in a exit code
 int status;
 pid_t pid = waitpid(-pl->groupLeader, &status, 0);
 if (pid < 0)
