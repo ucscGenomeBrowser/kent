@@ -1561,7 +1561,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneLiverH3k27me3MAdult8wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel Lv 8w H3K27m3
-        longLabel Liver 8w H3K27me3 ChIP-seq Signal from ENCODE/LICR
+        longLabel Liver 8w H3K27me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=H3K27ME3 cellType=LIVER control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 64.220001
         color 230,159,0
