@@ -1,5 +1,4 @@
 include trackDb.chainNet.ra
-include trackDb.merckPolyA.all.ra
 
 track knownGene override
 shortLabel Known Genes
