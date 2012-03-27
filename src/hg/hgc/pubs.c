@@ -336,14 +336,14 @@ if (linkText==NULL)
     char startBuf[64], endBuf[64];
     sprintLongWithCommas(startBuf, start + 1);
     sprintLongWithCommas(endBuf, end);
-    safef(buf, sizeof(buf), "%s:%s-%s (%s)", seqName, startBuf, endBuf, db);
+    safef(buf, sizeof(buf), "%s:%s-%s (%s)", chrom, startBuf, endBuf, db);
     linkText = buf;
 }
 
 if (optUrlStr==NULL)
     optUrlStr = "";
     
-printf("<A HREF=\"%s&amp;db=%s&amp;position=%d-%d&amp;%s\">%s</A>\n", hgTracksPathAndSettings(), db, start, end, optUrlStr, linkText);
+printf("<A HREF=\"%s&amp;db=%s&amp;position=%s:%d-%d&amp;%s\">%s</A>\n", hgTracksPathAndSettings(), db, chrom, start, end, optUrlStr, linkText);
 }
 
 void printGbLinks(struct slName* locs) 
@@ -356,16 +356,16 @@ for (el = locs; el != NULL; el = el->next)
     char* db       = cloneNextWordByDelimiter(&locString, '/');
     char* chrom    = cloneNextWordByDelimiter(&locString, ':');
     char* startStr = cloneNextWordByDelimiter(&locString, '-');
-    char* endStr   = locString;
+    char* endStr   = cloneString(locString);
 
     int start = atoi(startStr);
     int end = atoi(endStr);
     printHgTracksLink(db, chrom, start, end, NULL, NULL);
     printf("<BR>");
-    //freeMem(endStr); //XX why can't I free these?
-    //freeMem(chrom);
-    //freeMem(startStr);
-    //freeMem(db);
+    freeMem(endStr); //XX why can't I free these?
+    freeMem(chrom);
+    freeMem(startStr);
+    freeMem(db);
 }
 }
 
@@ -601,18 +601,29 @@ if (psl == NULL)
     errAbort("Couldn't find alignment at %s:%s", pslTable, item);
 
 oSeq = getSeq(conn, seqTable, item);
-if (oSeq->size != psl->qSize) 
-{
-    //errAbort("prot alignments not supported yet");
-    //oSeq -> size = 3*oSeq -> size;
-    errAbort("prot alignments not supported yet %s", oSeq->dna);
-    oSeq = translateSeq(oSeq, 0, FALSE);
-    errAbort("prot alignments not supported yet %s", oSeq->dna);
-}
+
 if (oSeq == NULL)  
     errAbort("%s is in pslTable but not in sequence table. Internal error.", item);
-showSomeAlignment(psl, oSeq, gftDna, 0, oSeq->size, NULL, 0, 0);
-printf("hihi");
+
+enum gfType qt;
+if (psl->qSize!=oSeq->size) 
+{
+    qt = gftProt;
+    // trying to correct pslMap's changes to qSize/qStarts and blockSizes
+    psl->qSize = psl->qSize/3;
+    psl->match = psl->match/3;
+    int i;
+    for (i=0; i<psl->blockCount; i++)
+    {
+        psl->qStarts[i] = psl->qStarts[i]/3; 
+        psl->blockSizes[i] = psl->blockSizes[i]/3; 
+    }
+
+}
+else
+    qt = gftDna;
+
+showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL, 0, 0);
 }
 
 void doPubsDetails(struct trackDb *tdb, char *item)
