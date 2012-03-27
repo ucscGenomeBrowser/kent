@@ -610,13 +610,28 @@ if (psl->qSize!=oSeq->size)
 {
     qt = gftProt;
     // trying to correct pslMap's changes to qSize/qStarts and blockSizes
+    psl->strand[1]=psl->strand[0];
+    psl->strand[0]='+';
+    psl->strand[2]=0;
     psl->qSize = psl->qSize/3;
     psl->match = psl->match/3;
+    // Take care of codons that go over block boundaries:
+    // Convert a block with blockSizes=58,32 and qStarts=0,58,
+    // to blockSizes=19,11 and qStarts=0,19
     int i;
+    int remaind = 0;
     for (i=0; i<psl->blockCount; i++)
     {
-        psl->qStarts[i] = psl->qStarts[i]/3; 
-        psl->blockSizes[i] = psl->blockSizes[i]/3; 
+        psl->qStarts[i] = psl->qStarts[i]/3;
+
+        int bs = psl->blockSizes[i];
+        remaind += (bs % 3);
+        if (remaind>=3)
+        {
+            bs += 1;
+            remaind -= 3;
+        }
+        psl->blockSizes[i] = bs/3; 
     }
 
 }
