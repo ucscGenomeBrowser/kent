@@ -570,7 +570,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneBatH3k04me1MAdult24wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel BAT 24w H3K4m1
-        longLabel BAT adult-24wks H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
+        longLabel BAT 24w H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=ADULT24WKS factor=H3K04ME1 cellType=BAT control=STD sex=M strain=C57BL6 
         type broadPeak
         color 189,0,157
@@ -579,7 +579,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneBatH3k04me3MAdult24wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel BAT 24w H3K4m3 
-        longLabel BAT adult-24wks H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
+        longLabel BAT 24w H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT24WKS factor=H3K04ME3 cellType=BAT control=STD sex=M strain=C57BL6 
         type broadPeak
         color 189,0,157
@@ -588,7 +588,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneBatH3k27acMAdult24wksC57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel BAT 24w H3K27a
-        longLabel BAT adult-24wks H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
+        longLabel BAT 24w H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT24WKS factor=H3K27AC cellType=BAT control=STD sex=M strain=C57BL6 
         type broadPeak
         color 189,0,157
