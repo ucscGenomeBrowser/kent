@@ -317,8 +317,9 @@ type Cell Line
 organism human
 description embryonic stem cells
 tissue embryonic stem cell
-vendorName Cellular Dynamics
-orderUrl http://www.cellulardynamics.com/
+vendorName WiCell Research Institute
+vendorId WA01
+orderUrl http://www.wicell.org/index.php?option=com_content&task=view&id=169&Itemid=0
 lineage inner cell mass
 karyotype normal
 termId CL:0000007
@@ -327,7 +328,6 @@ color 0,107,27
 sex M
 tier 1
 protocol ENCODE:H1_ES_protocol.pdf
-dvendorId
 
 ###### type 3 cells once they have been submitted.
 
