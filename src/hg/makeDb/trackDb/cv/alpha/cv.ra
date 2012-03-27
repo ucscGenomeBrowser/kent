@@ -317,8 +317,9 @@ type Cell Line
 organism human
 description embryonic stem cells
 tissue embryonic stem cell
-vendorName Cellular Dynamics
-orderUrl http://www.cellulardynamics.com/
+vendorName WiCell Research Institute
+vendorId WA01
+orderUrl http://www.wicell.org/index.php?option=com_content&task=view&id=169&Itemid=0
 lineage inner cell mass
 karyotype normal
 termId CL:0000007
@@ -327,7 +328,6 @@ color 0,107,27
 sex M
 tier 1
 protocol ENCODE:H1_ES_protocol.pdf
-dvendorId
 
 ###### type 3 cells once they have been submitted.
 
@@ -2788,8 +2788,8 @@ description esophageal epithelial cells
 tissue epithelium
 lineage endoderm
 vendorName ScienCell
-vendorId 2700
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2700
+vendorId 2720
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2720
 sex U
 tier 3
 protocol Stam:HEEpiC_Stam_protocol.pdf
@@ -2798,13 +2798,13 @@ term HEK293
 tag HEK293
 type Cell Line
 organism human
-description embryonic kidney, (PMID: 11967234)
+description embryonic kidney, cells contain Adenovirus 5 DNA (PMID: 11967234)
 tissue kidney
 vendorName ATCC
 vendorId CRL-1573
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
 lineage mesoderm
-karyotype cancer
+karyotype normal
 termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
 sex U
@@ -12681,6 +12681,17 @@ type view
 label Exons Gencode V7
 description Expression level estimates for GENCODE V7 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
+term ExonsGencV10
+tag EXONGENCV10
+type view
+label Exons Gencode V10
+description Expression level estimates for GENCODE V10 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
+
+term ExonsEnsV65IAcuff
+tag EXONENSV65
+type view
+description Expression level estimates for ENSEMBL V65 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon PROVISIONAL
+
 term Fasta3p
 tag FASTA3P
 type view
@@ -12742,11 +12753,22 @@ type view
 label Genes Gencode V7
 description Expression level estimates at the gene level for the GENCODE V7 annotation in gtf format
 
+term GeneGencV10
+tag GENEGENCV10
+type view
+label Genes Genoce V10
+description Expression level estimates at the gene level for the GENCODE V10 annotation in gtf format
+
 term GeneGencV3c
 tag GENEGENCV3C
 type view
 label Genes Gencode V3c
 description Expression level estimates at the gene level for the GENCODE CRCh37.v3c annotation in gtf format
+
+term GeneEnsV65IAcuff
+tag GENENSV65
+type view
+description Expression level estimates at the gene level for the ENSEMBL V65 annotation in gtf format PROVISIONAL
 
 term HMM
 tag HMM
@@ -12960,6 +12982,12 @@ type view
 label Transcripts De novo
 description 'De novo' transcripts with FPKM produced by Cufflinks
 
+term TranscriptGencV10
+tag TRANSGENCV7
+type view
+label Transcript Gencode V10
+description Expression level estimates at the transcript level for the GENCODE V10 annotation in gtf format
+
 term TranscriptGencV7
 tag TRANSGENCV7
 type view
@@ -12971,6 +12999,11 @@ tag TRANSGENCV3C
 type view
 label Transcript Gencode V3c
 description Expression level estimates at the transcript level for the GENCODE CRCh37.v3c annotation in gtf format
+
+term TranscriptEnsV65IAcuff
+tag TRANSENSV65
+type view
+description Expression level estimates at the transcript level for the ENSEMBL V65 annotation in gtf format PROVISIONAL
 
 term Transfrags
 tag TRANSFRAGS

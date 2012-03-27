@@ -42,7 +42,7 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 
 pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 		pipelineRead pipelineReadMult pipelineReadFd pipelineReadMem \
-		pipelineExitCode pipelineWriteErr pipelineExecError
+		pipelineExitCode pipelineWriteErr
 
 pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
@@ -79,9 +79,8 @@ pipelineReadMem: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -memApi -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
 	diff -b input/simple1.txt output/$@.out
 
-# make sure piple exit code makes it back
 pipelineExitCode: ${BIN_DIR}/pipelineTester
-	${BIN_DIR}/pipelineTester -exitCode=13 "sh -c 'exit 13'"
+	${BIN_DIR}/pipelineTester -exitCode=1 false
 
 # test redirecting stderr, see that two process can write stderr, but only
 # the second's stdout should make it to the end of the pipe.  Since order
@@ -92,12 +91,6 @@ pipelineWriteErr: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
 	diff -b expected/$@.out output/$@.out
 	test -s output/$@.err
-
-# exec a non-existant program
-pipelineExecError: ${BIN_DIR}/pipelineTester mkdirs
-	if ${BIN_DIR}/pipelineTester -write -stderr=output/$@.err "thatDoesNotCompute" 2> output/$@.parent.err ; then false else true ; fi
-	diff -b expected/$@.err output/$@.err
-	diff -b expected/$@.parent.err output/$@.parent.err
 
 ${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} ${L}

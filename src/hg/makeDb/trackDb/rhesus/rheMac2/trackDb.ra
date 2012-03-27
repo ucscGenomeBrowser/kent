@@ -1,4 +1,3 @@
-include trackDb.merckPolyA.all.ra
 
 track ctgPos override
 shortLabel Contigs

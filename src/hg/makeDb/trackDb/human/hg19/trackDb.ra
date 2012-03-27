@@ -3,7 +3,6 @@
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
-include trackDb.merckPolyA.all.ra
 
 #large composites
 include uMassBrainHistone.ra
@@ -18,6 +17,7 @@ track encodeRegions override
 shortLabel ENCODE Pilot
 longLabel Regions used for ENCODE Pilot Project (1%)
 group map
+pennantIcon encodeThumbnail.jpg ../ENCODE "encode project"
 
 track switchDbTss override
 origAssembly hg17
