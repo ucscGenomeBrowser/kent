@@ -37,7 +37,7 @@ subGroup5 age Age 1ADULT8WKS=Adult_8_weeks 2ADULT24WKS=Adult_24_weeks E0=Embryon
 subGroup6 strain Strain C57BL6=C57BL/6
 subGroup7 control Control STD=std
 dimensions dimensionX=cellType dimensionY=factor dimensionA=age 
-dimensionAchecked 1ADULT8WKS
+dimensionAchecked 1ADULT8WKS,E14HALF,IMMORTAL
 filterComposite dimensionA=multi
 sortOrder cellType=+ factor=+ view=+ age=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target sex=Sex age=Age replicate=Replicate view=View dccAccession=UCSC_Accession geoSeriesAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -487,7 +487,7 @@ html wgEncodeLicrHistone.release2
         # subId=5662 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks
+        parent wgEncodeLicrHistoneViewPeaks off
         shortLabel Bn 14.5 H3K4m3 
         longLabel WBrain E14.5 H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=WBRAIN control=STD sex=U strain=C57BL6 
@@ -496,7 +496,7 @@ html wgEncodeLicrHistone.release2
         # subId=5660 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks
+        parent wgEncodeLicrHistoneViewPeaks off
         shortLabel Bn 14.5 H3K4m1
         longLabel WBrain E14.5 H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=WBRAIN control=STD sex=U strain=C57BL6 
@@ -505,7 +505,7 @@ html wgEncodeLicrHistone.release2
         # subId=5659 dateSubmitted=2012-02-14
 
         track wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdPk
-        parent wgEncodeLicrHistoneViewPeaks
+        parent wgEncodeLicrHistoneViewPeaks off
         shortLabel Bn 14.5 H3K27a
         longLabel WBrain E14.5 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=H3K27AC cellType=WBRAIN control=STD sex=U strain=C57BL6 
@@ -917,7 +917,7 @@ html wgEncodeLicrHistone.release2
         # subId=3928 dateSubmitted=2011-04-27
 
         track wgEncodeLicrHistoneCbellumInputMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal
+        parent wgEncodeLicrHistoneViewSignal off
         shortLabel Cb 8w Input
         longLabel Cerebellum 8w Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=1ADULT8WKS factor=INPUT cellType=CBELLUM control=STD sex=M strain=C57BL6 
@@ -935,7 +935,7 @@ html wgEncodeLicrHistone.release2
         # subId=3930 dateSubmitted=2011-04-27
 
         track wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal
+        parent wgEncodeLicrHistoneViewSignal off
         shortLabel Ht 8w Input
         longLabel Heart 8w Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=1ADULT8WKS factor=INPUT cellType=HEART control=STD sex=M strain=C57BL6 
@@ -953,7 +953,7 @@ html wgEncodeLicrHistone.release2
         # subId=3932 dateSubmitted=2011-04-27
 
         track wgEncodeLicrHistoneLiverInputMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal
+        parent wgEncodeLicrHistoneViewSignal off
         shortLabel Lv 8w Input 
         longLabel Liver 8w Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=1ADULT8WKS factor=INPUT cellType=LIVER control=STD sex=M strain=C57BL6 
@@ -1203,7 +1203,7 @@ html wgEncodeLicrHistone.release2
         # subId=5361 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal
+        parent wgEncodeLicrHistoneViewSignal off
         shortLabel Bn 14.5 H3K27a 
         longLabel WBrain E14.5 H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=WBRAIN control=STD sex=U strain=C57BL6 
@@ -1214,7 +1214,7 @@ html wgEncodeLicrHistone.release2
         # was wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdSig vsmalladi Tue Jan 10 15:20:48 2012
 
         track wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal
+        parent wgEncodeLicrHistoneViewSignal off
         shortLabel Bn 14.5 Input 
         longLabel WBrain E14.5 Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=INPUT cellType=WBRAIN control=STD sex=U strain=C57BL6 
@@ -1619,7 +1619,7 @@ html wgEncodeLicrHistone.release2
         # subId=5899 dateSubmitted=2012-02-28
 
         track wgEncodeLicrHistoneMelInputMImmortalC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal
+        parent wgEncodeLicrHistoneViewSignal off
         shortLabel MEL Input
         longLabel MEL Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=INPUT cellType=MEL control=STD sex=M strain=C57BL6
