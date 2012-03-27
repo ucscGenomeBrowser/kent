@@ -1502,7 +1502,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneBatInputMAdult24wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel BAT 24w Input
-        longLabel BAT adult-24wks Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
+        longLabel BAT 24w Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT24WKS factor=INPUT cellType=BAT control=STD sex=M strain=C57BL6 
         type bigWig 0.100000 50.900002
         color 189,0,157
@@ -1511,7 +1511,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneBatH3k04me1MAdult24wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel BAT 24w H3K4m1 
-        longLabel BAT adult-24wks H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
+        longLabel BAT 24w H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT24WKS factor=H3K04ME1 cellType=BAT control=STD sex=M strain=C57BL6 
         type bigWig 0.130000 14.560000
         color 189,0,157
@@ -1521,7 +1521,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneBatH3k04me3MAdult24wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel BAT 24w H3K4m3 
-        longLabel BAT adult-24wks H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
+        longLabel BAT 24w H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT24WKS factor=H3K04ME3 cellType=BAT control=STD sex=M strain=C57BL6 
         type bigWig 0.160000 60.709999
         color 189,0,157
@@ -1531,7 +1531,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneBatH3k27acMAdult24wksC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal off
         shortLabel BAT 24w H3K27a
-        longLabel BAT adult-24wks H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
+        longLabel BAT 24w H3K27ac Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=ADULT24WKS factor=H3K27AC cellType=BAT control=STD sex=M strain=C57BL6 
         type bigWig 0.110000 46.150002
         color 189,0,157
