@@ -64,4 +64,133 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Tric
 1551895762 one half size
 1560245362      67      JH594674.1      14442683
 
+    # the automatic pickup of the chrMt sequence fails because the name
+    #	in the fasta is only: "Trichechus manatus" and the script is
+    #	expecting "Trichechus manatus latirostris"
+    # So, pick up the sequence and include it with the wild card
+    #	specification of files here:
+
+    wget -O NC_010302.NCBI.fa \
+	"http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=NC_010302"
+
+    sed -e 's/^>.*/>chrM/' NC_010302.NCBI.fa > chrM.fa
+
+    faCount NC_010302.fa
+#seq    len     A       C       G       T       N       cpg
+NC_010302       16882   5129    4760    2474    4519    0       472
+    echo "chrM 1 16882 1 O NC_010302.1 1 16882 +" | tr '[ ]' '[\t]' > chrM.agp
+
 #########################################################################
+# process into UCSC naming scheme (DONE - 2012-03-27 - Hiram)
+    mkdir /hive/data/genomes/triMan1/ucsc
+    cd /hive/data/genomes/triMan1/ucsc
+
+    # verify we don't have any .acc numbers different from .1
+    zcat \
+    ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| cut -f1 | egrep "^JH|AHIN" \
+	| sed -e 's/^JH[0-9][0-9]*//; s/^AHIN[0-9][0-9]*//' | sort | uniq -c
+    #	326656 .1
+
+    # this is like the unplaced.pl script in other assemblies except it
+    #	does not add chrUn_ to the names since they are all just scaffolds
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, "|gzip -c > unplaced.agp.gz") or die "can not write to unplaced.agp.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;    
+        printf UC "%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, "|gzip -c > unplaced.fa.gz") or die "can not write to unplaced.fa.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\.1\|.*//;
+        printf UC ">$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+
+    time ./unplaced.pl
+    # real    13m48.991s
+# -rw-rw-r-- 1   4475827 Mar 27 12:07 unplaced.agp.gz
+# -rw-rw-r-- 1 855931027 Mar 27 12:21 unplaced.fa.gz
+
+    # verify nothing lost in the translation, should be the same as above
+    #	except for the name translations
+    faSize *.fa.gz
+# 3103791524 bases (334708729 N's 2769082795 real 2769082795 upper 0 lower)
+#	in 6322 sequences in 1 files
+# Total size: mean 490950.9 sd 2814444.1 min 1000 (AHIN01166489)
+#	max 45942467 (JH594607) median 3585
+
+    # the automatic pickup of the chrMt sequence fails because the name
+    #	in the fasta is only: "Trichechus manatus" and the script is
+    #	expecting "Trichechus manatus latirostris"
+    # So, pick up the sequence and include it with the wild card
+    #	specification of files here:
+
+    cat ../genbank/chrM.fa | gzip -c > chrM.fa.gz
+    cat ../genbank/chrM.agp | gzip -c > chrM.agp.gz
+
+#############################################################################
+#  Initial database build (DONE - 2012-03-27 - Hiram)
+    cd /hive/data/genomes/triMan1
+    cat << '_EOF_' > triMan1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db triMan1
+clade mammal
+genomeCladePriority 57
+scientificName Trichechus manatus latirostris
+commonName Manatee
+assemblyDate Oct. 2011
+assemblyLabel Broad Institute of MIT and Harvard TriManLat1.0 (GCA_000243295.1)
+assemblyShortLabel BROAD v1.0
+ncbiAssemblyName TriManLat1.0
+ncbiAssemblyId 328638
+orderKey 3380
+# chrM already included
+mitoAcc none
+fastaFiles /hive/data/genomes/triMan1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/triMan1/ucsc/*.agp.gz
+dbDbSpeciesDir manatee
+taxId   127582
+'_EOF_'
+    # << happy emacs
+
+    # first verify the sequence and AGP files are OK
+    time makeGenomeDb.pl -stop=agp -workhorse=hgwdev triMan1.config.ra \
+	> agp.log 2>&1
+    #	real    2m26.020s
+    # verify that was OK, look at the agp.log file
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev triMan1.config.ra \
+	> db.log 2>&1
+    #	real    10m45.982s
+    # verify that was OK, look at the do.log file
+    # copy the trackDb business to the source tree, check it in and add
+    #	to the trackDb/makefile
+
+#############################################################################
