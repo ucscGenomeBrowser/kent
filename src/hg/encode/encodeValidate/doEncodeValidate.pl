@@ -181,6 +181,7 @@ our %validators = (
     fragLength => \&validateNoValidation,
     setType => \&validateSetType,
     cell => \&validateControlledVocabOrNone,
+    insertLength => \&validateControlledVocabOrNone,
     antibody => \&validateControlledVocabOrControl,
     control => \&validateControlledVocabOrControl,
     ripAntibody => \&validateControlledVocabOrNone,
