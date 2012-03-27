@@ -2788,8 +2788,8 @@ description esophageal epithelial cells
 tissue epithelium
 lineage endoderm
 vendorName ScienCell
-vendorId 2700
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2700
+vendorId 2720
+orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2720
 sex U
 tier 3
 protocol Stam:HEEpiC_Stam_protocol.pdf
@@ -4563,8 +4563,7 @@ term Monocytes-CD14+
 tag MONOCD14
 type Cell Line
 organism human
-description SEE Monocytes-CD14+_RO01746, newly promoted to tier 2: not in 2011 analysis
-deprecated same as Monocytes-CD14+_RO01746
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 sex F
