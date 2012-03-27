@@ -238,7 +238,9 @@ lineFileClose(&lf);
 *retHash = typeHash;
 }
 
-void stanzaTypeToStats(struct stanzaType *typeList, char *fileName)
+/******* Routines for output in various formats. *********/
+
+void stanzaTypesToStats(struct stanzaType *typeList, char *fileName)
 /* Write out typeList to file in a format that expresses stats. */
 {
 FILE *f = mustOpen(fileName, "w");     
@@ -256,50 +258,6 @@ for (type = typeList; type != NULL; type = type->next)
     }
 carefulClose(&f);
 }
-
-struct stanzaField *removeMatchingSymbol(struct stanzaField **pFieldList, char *symbol)
-/* Remove field from *list where field->symbol is same as symbol parameter. Return removed
- * field, or NULL if no such field. */
-{
-struct stanzaField *newList = NULL, *field, *nextField;
-struct stanzaField *result = NULL;
-for (field = *pFieldList; field != NULL; field = nextField)
-    {
-    nextField = field->next;
-    if (sameString(field->symbol, symbol))
-        result = field;
-    else
-        slAddHead(&newList, field);
-    }
-slReverse(&newList);
-*pFieldList = newList;
-return result;
-}
-
-void stanzaTypeReorderFields(struct stanzaType *type, char *firstFields[], int firstFieldsCount)
-/* Reorder fields in stanza so that the firstFields are in front and in order if they exist.
- * Remaining fields are after the first fields, and in their original order. */
-{
-struct stanzaField *startList = NULL, *endList = type->fieldList;
-int i;
-for (i=0; i<firstFieldsCount; ++i)
-    {
-    struct stanzaField *field = removeMatchingSymbol(&endList, firstFields[i]);
-    if (field != NULL)
-        slAddTail(&startList, field);
-    }
-type->fieldList = slCat(startList, endList);
-}
-
-char *fieldPriority[] = {
-/* List of order we'd like initial fields in */
-   "symbol",
-   "deprecated",
-   "shortLabel",
-   "longLabel",
-   "target",
-   "targetDescription",
-};
 
 void stanzaTypeToTree(struct stanzaType *typeList, char *fileName)
 /* Write out typeList to file in aTree format that autoDtd also uses. 
@@ -340,6 +298,76 @@ for (type = typeList; type != NULL; type = type->next)
 carefulClose(&f);
 }
 
+/******* Routines for rearranging stanza types. *********/
+
+struct stanzaField *removeMatchingSymbol(struct stanzaField **pFieldList, char *symbol)
+/* Remove field from *list where field->symbol is same as symbol parameter. Return removed
+ * field, or NULL if no such field. */
+{
+struct stanzaField *newList = NULL, *field, *nextField;
+struct stanzaField *result = NULL;
+for (field = *pFieldList; field != NULL; field = nextField)
+    {
+    nextField = field->next;
+    if (sameString(field->symbol, symbol))
+        result = field;
+    else
+        slAddHead(&newList, field);
+    }
+slReverse(&newList);
+*pFieldList = newList;
+return result;
+}
+
+void reorderFields(struct stanzaType *type, char *firstFields[], int firstFieldsCount)
+/* Reorder fields in stanza so that the firstFields are in front and in order if they exist.
+ * Remaining fields are after the first fields, and in their original order. */
+{
+struct stanzaField *startList = NULL, *endList = type->fieldList;
+int i;
+for (i=0; i<firstFieldsCount; ++i)
+    {
+    struct stanzaField *field = removeMatchingSymbol(&endList, firstFields[i]);
+    if (field != NULL)
+        slAddTail(&startList, field);
+    }
+type->fieldList = slCat(startList, endList);
+}
+
+char *fieldPriority[] = {
+/* List of order we'd like initial fields in */
+   "symbol",
+   "deprecated",
+   "shortLabel",
+   "longLabel",
+   "target",
+   "targetDescription",
+};
+
+struct stanzaField *stanzaFieldFake(char *name, struct stanzaType *parent, boolean isOptional)
+/* Make up a fake field of given characteristics.  Will be interpreted as a string field. */
+{
+struct stanzaField *field;
+AllocVar(field);
+field->name = name;
+field->symbol = fieldLabelToSymbol(name);
+if (isOptional)
+    field->count = parent->count/2;
+else
+    field->count = parent->count;
+return field;
+}
+
+void addDeprecatedField(struct stanzaType *type)
+/* Add deprecated field if it doesn't exist already */
+{
+if (!stanzaFieldFind(type->fieldList, "deprecated"))
+    {
+    struct stanzaField *field = stanzaFieldFake("deprecated", type, TRUE);
+    slAddHead(&type->fieldList, field);
+    }
+}
+
 void testCvToSql(char *inCvRa, char *outStats, char *outTree)
 /* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
 {
@@ -349,12 +377,15 @@ struct stanzaType *typeList;
 stanzaTypesFromCvRa(inCvRa, &typeList, &typeHash);
 
 /* Output stats format before we start munging the tree. */
-stanzaTypeToStats(typeList, outStats);
+stanzaTypesToStats(typeList, outStats);
 
 /* Rearrange tree to be more as we'd like database. */
 struct stanzaType *type;
 for (type = typeList; type != NULL; type = type->next)
-    stanzaTypeReorderFields(type, fieldPriority, ArraySize(fieldPriority));
+    {
+    addDeprecatedField(type);
+    reorderFields(type, fieldPriority, ArraySize(fieldPriority));
+    }
 
 stanzaTypeToTree(typeList, outTree);
 }
