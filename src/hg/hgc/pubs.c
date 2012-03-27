@@ -52,12 +52,10 @@ static void printFilterLink(char* pslTrack, char* articleId)
 {
     int start = cgiInt("o");
     int end = cgiInt("t");
-    printf("&nbsp; <A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d&amp;pubsFilterArticleId=%s&amp;%s=pack\">",
+    printf("<P><A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d&amp;pubsFilterArticleId=%s&amp;%s=pack\">",
                       hgTracksPathAndSettings(), database, seqName, start+1, end, articleId, pslTrack);
-    char startBuf[64], endBuf[64];
-    sprintLongWithCommas(startBuf, start + 1);
-    sprintLongWithCommas(endBuf, end);
-    printf("Show these sequence matches individually on genome browser</A>");
+    printf("Show these sequence matches individually on genome browser</A> (activates track \""
+        "Individual matches for article\")</P>");
 }
 
 static char* makeSqlMarkerList(void)
@@ -287,6 +285,7 @@ static struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, \
 }
 
 static void printSeqHeaders(bool showDesc, bool isClickedSection) 
+/* print table and headers */
 {
     printf("<TABLE style=\"background-color: #%s\" WIDTH=\"100%%\" CELLPADDING=\"2\">\n", HG_COL_BORDER);
     printf("<TR style=\"background-color: #%s; color: #FFFFFF\">\n", HG_COL_TABLE_LABEL);
@@ -399,7 +398,15 @@ static bool printSeqSection(char* articleId, char* title, bool showDesc, struct 
     title, cartSidUrlString(cart), cgiString("o"), cgiString("t"), cgiString("g"), cgiString("i"), 
     !fasta, otherFormat);
 
-    webNewSection(fullTitle);
+    webNewSection("%s", fullTitle);
+
+    if (isClickedSection)
+    {
+        printFilterLink(pslTable, articleId);
+        printf("</TD></TR>");
+    }
+    else
+        printf("</TD><TR><TD>");
 
     if (!fasta) 
         printSeqHeaders(showDesc, isClickedSection);
@@ -471,16 +478,11 @@ static bool printSeqSection(char* articleId, char* title, bool showDesc, struct 
                 }
 
             }
-        printf("</TR>\n");
+            printf("</TR>\n");
         }
 	}
-    printf("</TR>\n");
+    printf("</TR></TABLE>\n"); // finish section
 
-    if (isClickedSection)
-    {
-        printf("</TABLE></TABLE><TR><TD><P>&nbsp;");
-        printFilterLink(pslTable, articleId);
-    }
     webEndSectionTables();
     sqlFreeResult(&sr);
     return foundSkippedRows;
