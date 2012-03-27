@@ -6332,6 +6332,23 @@ sex U
 protocol Gingeras:MammaryGland_Gingeras_protocol.pdf
 label Mammary Gland
 
+term MEP
+tag MEP
+type Cell Line
+tissue blood
+category primaryCells
+description mouse megakaryocyte erythroid progenitor cells Lineage  CD16/32 and CD34- PROVISIONAL
+age ageUnknown
+strain Unknown
+vendorName Bodine lab
+vendorId MEP
+orderUrl http://www.genome.gov/10000336
+termId 7040
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
+color 86,180,233
+sex U
+protocol Ren:MEP_Hardison_protocol.pdf
+
 term MEF
 tag MEF
 type Cell Line
