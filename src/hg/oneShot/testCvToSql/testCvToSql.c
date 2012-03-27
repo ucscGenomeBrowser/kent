@@ -3,9 +3,8 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "portable.h"
 #include "ra.h"
-
-boolean uglyOne;                /* Debugging helper - true for extra output. */
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +22,10 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+
+typedef char *(*StringMerger)(char *a, char *b);
+/* Given two strings, produce a third. */
+
 struct stanzaField 
 /* Information about a field (type of line) with a given stanza */
     {
@@ -34,7 +37,51 @@ struct stanzaField
     int countFloat;        /* Number of times contents of field are a float-compatible format. */
     int countUnsigned;     /* Number of times contents of field could be unsigned int */
     int countInt;          /* Number of times contents of field could be unsigned int */
+    StringMerger mergeChildren; /* Function to merge two children if any */
+    struct stanzaField *children;  /* Allows fields to be in a tree. */
     };
+
+void enforceCamelCase(char *label)
+/* Make sure that label is a good symbol for us - no spaces, starts with lower case. */
+{
+if (!islower(label[0]))
+    errAbort("Label \"%s\" must start with lower case letter.", label);
+char c, *s = label;
+while ((c = *(++s)) != 0)
+    if (!isalnum(c) && c != '_')
+        errAbort("Char '%c' is not allowed in label \"%s.\"", c, label);
+}
+
+char *fieldLabelToSymbol(char *label)
+/* Convert a field label to one we want to use.  This one mostly puts system into 
+ * something more compatible with what we're used to in other databases. */
+{
+if (sameString(label, "term"))
+    return "shortLabel";
+else if (sameString(label, "tag"))
+    return "symbol";
+else if (sameString(label, "description"))
+    return "longLabel";
+else if (sameString(label, "antibodyDescription"))
+    return "longLabel";
+else
+    {
+    enforceCamelCase(label);
+    return label;
+    }
+}
+
+
+struct stanzaField *stanzaFieldNew(char *name)
+/* Construct a new field tag around given name. */
+{
+struct stanzaField *field;
+AllocVar(field);
+field->uniq = hashNew(8);
+field->name = cloneString(name);
+field->symbol = fieldLabelToSymbol(name);
+return field;
+}
 
 struct stanzaField *stanzaFieldFind(struct stanzaField *list, char *name)
 /* Return list element of given name, or NULL if not found. */
@@ -42,6 +89,16 @@ struct stanzaField *stanzaFieldFind(struct stanzaField *list, char *name)
 struct stanzaField *el;
 for (el = list; el != NULL; el = el->next)
     if (sameString(name, el->name))
+        break;
+return el;
+}
+
+struct stanzaField *stanzaFieldFindSymbol(struct stanzaField *list, char *symbol)
+/* Return list element of given symbol, or NULL if not found. */
+{
+struct stanzaField *el;
+for (el = list; el != NULL; el = el->next)
+    if (sameString(symbol, el->symbol))
         break;
 return el;
 }
@@ -54,7 +111,9 @@ struct stanzaType
     char *symbol;       /* Similar to name, but no white space and always camelCased. */
     int count;          /* Number of times stanza type observed. */
     struct stanzaField *fieldList;      /* Fields, in order of observance. */
+    FILE *f;            /* File to output data in if any */
     };
+
 
 struct slPair *requiredTag(struct lineFile *lf, struct slPair *stanza, char *tag)
 /* Make sure there is a line that begins with tag in the stanza, and return it. */
@@ -94,17 +153,6 @@ int size = end-s;
 return size == strlen(s);
 }
 
-void enforceCamelCase(char *label)
-/* Make sure that label is a good symbol for us - no spaces, starts with lower case. */
-{
-if (!islower(label[0]))
-    errAbort("Label \"%s\" must start with lower case letter.", label);
-char c, *s = label;
-while ((c = *(++s)) != 0)
-    if (!isalnum(c) && c != '_')
-        errAbort("Char '%c' is not allowed in label \"%s.\"", c, label);
-}
-
 char *typeLabelToSymbol(char *label)
 /* Convert a label that may have spaces or bad casing to something else. Rather than being
  * generic this just handles the two known special cases, and does some sanity checks. */
@@ -115,25 +163,6 @@ if (sameString(label, "Cell Line"))
     }
 else if (sameString(label, "Antibody"))
     return "antibody";
-else
-    {
-    enforceCamelCase(label);
-    return label;
-    }
-}
-
-char *fieldLabelToSymbol(char *label)
-/* Convert a field label to one we want to use.  This one mostly puts system into 
- * something more compatible with what we're used to in other databases. */
-{
-if (sameString(label, "term"))
-    return "shortLabel";
-else if (sameString(label, "tag"))
-    return "symbol";
-else if (sameString(label, "description"))
-    return "longLabel";
-else if (sameString(label, "antibodyDescription"))
-    return "longLabel";
 else
     {
     enforceCamelCase(label);
@@ -202,16 +231,12 @@ while ((stanza = nextStanza(lf)) != NULL)
         /* Get tag and it's value. */
         char *tag = line->name;
         char *val = line->val;
-        if (uglyOne) uglyf(" %s %s\n", tag, val);
 
         /* Get field that corresponds with tag, making a new one if need be. */
         struct stanzaField *field = stanzaFieldFind(type->fieldList, tag);
         if (field == NULL)
             {
-            AllocVar(field);
-            field->uniq = hashNew(8);
-            field->name = cloneString(tag);
-            field->symbol = fieldLabelToSymbol(tag);
+            field = stanzaFieldNew(tag);
             slAddTail(&type->fieldList, field);
             }
 
@@ -298,6 +323,77 @@ for (type = typeList; type != NULL; type = type->next)
 carefulClose(&f);
 }
 
+void outputAccordingToType(struct hash *ra, struct stanzaType *type, FILE *f)
+/* Output data in ra according to specs in type. */
+{
+struct stanzaField *field;
+for (field = type->fieldList; field != NULL; field = field->next)
+    {
+    if (field != type->fieldList)
+        fputc('\t', f);
+
+    /* Figure out what to put here - just a simple ra field lookup unless we have to merge. */
+    char *val = NULL;
+    if (field->mergeChildren)
+         {
+         /* If we merge, then elsewhere we set up field to have exactly two children.
+          * Get data from tags defined by these two children.  If only one of these is
+          * found use it, otherwise call the mergeChildren function to figure out what
+          * text to use. */
+         struct stanzaField *a = field->children;
+         assert(a != NULL);
+         struct stanzaField *b = a->next;
+         assert(b != NULL);
+         char *aVal = hashFindVal(ra, a->name);
+         char *bVal = hashFindVal(ra, b->name);
+         if (aVal == NULL)
+             val = bVal;
+         else if (bVal == NULL)
+             val = aVal;
+         else
+             val = field->mergeChildren(aVal, bVal);
+         }
+    else
+        val = hashFindVal(ra, field->name);
+    val = emptyForNull(val);
+    fputs(val, f);
+    }
+fputc('\n', f);
+}
+
+void outputTabs(struct stanzaType *typeList, struct hash *typeHash,
+        char *inFile, char *outDir)
+/* Stream through inFile, reformatting it a bit into outDir. */
+{
+struct lineFile *lf = lineFileOpen(inFile, TRUE);
+
+/* Create output dir if need be. */
+makeDirsOnPath(outDir);
+
+/* First open all outputs. */
+struct stanzaType *type;
+for (type = typeList; type != NULL; type = type->next)
+    {
+    char path[PATH_LEN];
+    safef(path, sizeof(path), "%s/%s.tab",  outDir, type->symbol);
+    type->f = mustOpen(path, "w");
+    }
+
+/* Stream through stanzas and dispatch according to type */
+struct hash *ra;
+while ((ra = raNextStanza(lf)) != NULL)
+    {
+    char *typeName = hashMustFindVal(ra, "type");
+    struct stanzaType *type = hashMustFindVal(typeHash, typeName);
+    outputAccordingToType(ra, type, type->f);
+    hashFree(&ra);
+    }
+
+/* Close all outputs. */
+for (type = typeList; type != NULL; type = type->next)
+    carefulClose(&type->f);
+}
+
 /******* Routines for rearranging stanza types. *********/
 
 struct stanzaField *removeMatchingSymbol(struct stanzaField **pFieldList, char *symbol)
@@ -347,10 +443,7 @@ char *fieldPriority[] = {
 struct stanzaField *stanzaFieldFake(char *name, struct stanzaType *parent, boolean isOptional)
 /* Make up a fake field of given characteristics.  Will be interpreted as a string field. */
 {
-struct stanzaField *field;
-AllocVar(field);
-field->name = name;
-field->symbol = fieldLabelToSymbol(name);
+struct stanzaField *field = stanzaFieldNew(name);
 if (isOptional)
     field->count = parent->count/2;
 else
@@ -368,7 +461,81 @@ if (!stanzaFieldFind(type->fieldList, "deprecated"))
     }
 }
 
-void testCvToSql(char *inCvRa, char *outStats, char *outTree)
+void removeField(struct stanzaType *type, char *fieldName)
+/* Remove field of given type. */
+{
+struct stanzaField *field = stanzaFieldFindSymbol(type->fieldList, fieldName);
+if (field != NULL)
+    slRemoveEl(&type->fieldList, field);
+}
+
+struct stanzaField *buryTwoUnderMerge(struct stanzaType *type, char *name,
+        struct stanzaField *a, struct stanzaField *b, StringMerger mergeChildren)
+/* Set things up so we'll output a merged field rather than the given two fields 
+ * for the given type */
+{
+struct stanzaField *field = stanzaFieldNew(name);
+field->count = max(a->count, b->count);
+field->countFloat = max(a->countFloat, b->countFloat);
+field->countUnsigned = max(a->countUnsigned, b->countUnsigned);
+field->countInt = max(a->countInt, b->countInt);
+slRemoveEl(&type->fieldList, a);
+slRemoveEl(&type->fieldList, b);
+field->children = a;
+a->next = b;
+b->next = NULL; /* Possibly not necessary, but cheap insurance. */
+field->mergeChildren = mergeChildren;
+slAddTail(&type->fieldList, field);
+return field;
+}
+
+char *bestShortLabel(char *a, char *b)
+/* Pick the value that looks like a better label based on length, etc.  All being equal
+ * return a. */
+{
+int idealSize = 17;
+int aLen = strlen(a), bLen = strlen(b);
+if (aLen == bLen)
+    return a;
+else if (aLen < bLen)
+    {
+    if (bLen <= idealSize)
+         return b;
+    else
+         return a;
+    }
+else
+    {
+    if (aLen <= idealSize)
+        return a;
+    else
+        return b;
+    }
+}
+
+void testBestShortLabel()
+/* Just verify bestShortLabel function a bit. */
+{
+assert(sameString("longerThanX", bestShortLabel("x", "longerThanX")));
+assert(sameString("longerThanX", bestShortLabel("longerThanX", "x")));
+assert(sameString("x", bestShortLabel("x", "aWholeLotLongerThanX")));
+assert(sameString("x", bestShortLabel("aWholeLotLongerThanX", "x")));
+}
+
+void mergeLabelAndShortLabel(struct stanzaType *type)
+/* If type has both short and long labels, do a merger. */
+{
+struct stanzaField *label = stanzaFieldFindSymbol(type->fieldList, "label");
+struct stanzaField *shortLabel = stanzaFieldFindSymbol(type->fieldList, "shortLabel");
+uglyf("mergeLabelAndShortLabel(%s) label=%p shortLabel=%p\n", type->name, label, shortLabel);
+if (label != NULL && shortLabel != NULL)
+    {
+    uglyf("Merging %s and %s in %s\n", label->name, shortLabel->name, type->name);
+    buryTwoUnderMerge(type, "shortLabel", label, shortLabel, bestShortLabel);
+    }
+}
+
+void testCvToSql(char *inCvRa, char *outStats, char *outTree, char *outDir)
 /* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
 {
 /* Read input into type list and hash */
@@ -384,18 +551,23 @@ struct stanzaType *type;
 for (type = typeList; type != NULL; type = type->next)
     {
     addDeprecatedField(type);
+    mergeLabelAndShortLabel(type);
+    removeField(type, "type");
     reorderFields(type, fieldPriority, ArraySize(fieldPriority));
     }
 
+/* Output type tree and actual data */
 stanzaTypeToTree(typeList, outTree);
+outputTabs(typeList, typeHash, inCvRa, outDir);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 5)
     usage();
-testCvToSql(argv[1], argv[2], argv[3]);
+testBestShortLabel();
+testCvToSql(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
