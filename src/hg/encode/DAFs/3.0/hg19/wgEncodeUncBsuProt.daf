@@ -30,22 +30,39 @@ variables         cell, localization, protocol
 assembly          hg19
 
 
-validationSettings allowReloads
+validationSettings none
 
 # Track/view definition
-view             Signal
-type             peptideMapping
+view             pepMapFt
+type             bigBed
 hasReplicates    no
 required         no 
 
-view             RawSignal
-type             peptideMapping
+view             pepMapUnFt
+type             bigBed
 hasReplicates    no
 required         no 
 downloadOnly     yes
 
-view             ModifiedPeptideMapping
+view             pepMapGcFt
 type             bigBed
 hasReplicates    no
 required         no 
+
+view             pepMapGcUnFt
+type             bigBed
+hasReplicates    no
+required         no 
+downloadOnly     yes
+
+view             mPepMapGcFt
+type             bigBed
+hasReplicates    no
+required         no 
+
+view             mPepMapGcUnFt
+type             bigBed
+hasReplicates    no
+required         no 
+downloadOnly     yes
 
