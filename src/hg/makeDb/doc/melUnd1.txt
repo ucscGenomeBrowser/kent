@@ -1,0 +1,68 @@
+# for emacs: -*- mode: sh; -*-
+#
+#	the above keeps emacs happy while working with this text document
+
+# This file describes how we made the browser database on the
+#	Melopsittacus undulatus - budgerigar
+#	WashU St. Louis - http://genome.wustl.edu/
+
+#	http://www.ncbi.nlm.nih.gov/bioproject/72527
+#	http://www.ncbi.nlm.nih.gov/genome/10765
+#	http://www.ncbi.nlm.nih.gov/genome/assembly/325078/
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AGAI01
+#	Genome Coverage : 16x 454; 7x Illumina
+
+#	http://www.ncbi.nlm.nih.gov/bioproject/19105 - chrMt
+#	chrMt NC_009134.1 - EF450826.1
+
+#	DATE:	13-Sep-2011
+#	ORGANISM:	Melopsittacus undulatus
+#	TAXID:	13146
+#	ASSEMBLY LONG NAME:	Melopsittacus undulatus Budgerigar Version 6.3
+#	ASSEMBLY SHORT NAME:	Melopsittacus_undulatus_6.3
+#	ASSEMBLY SUBMITTER:	Washington University School of Medicine
+#	ASSEMBLY TYPE:	Haploid
+#	NUMBER OF ASSEMBLY-UNITS:	1
+#	ASSEMBLY ACCESSION:	GCA_000238935.1
+#	FTP-RELEASE DATE: 02-Jan-2012
+
+#	Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Coelomata;
+#	Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata;
+#	Teleostomi; Euteleostomi; Sarcopterygii; Tetrapoda; Amniota;
+#	Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda;
+#	Coelurosauria; Aves; Neognathae; Psittaciformes; Psittacidae;
+#	Melopsittacus
+
+
+#########################################################################
+## Download sequence (DONE - 2012-03-26 - Hiram)
+    mkdir /hive/data/genomes/melUnd1
+    mkdir /hive/data/genomes/melUnd1/genbank
+    cd /hive/data/genomes/melUnd1/genbank
+
+    time rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Melopsittacus_undulatus/Melopsittacus_undulatus_6.3/ ./
+    #	real    4m16.584s
+
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+# 1117355426 bases (30758804 N's 1086596622 real 1086596622 upper 0 lower)
+#	in 25211 sequences in 1 files
+# Total size: mean 44320.2 sd 774121.2 min 228 (gi|366922013|gb|JH533144.1|)
+#	max 39887635 (gi|366898540|gb|JH556617.1|) median 1201
+
+    faCount Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+	> faCount.txt
+     egrep -v "^#seq|^total" faCount.txt \
+	| awk '{printf "%s\t%d\n", $1, $2}' \
+	| sed -e 's/^gi.*gb|//; s/|//' | sort -k2,2nr > chrom.sizes
+
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 25211, total size: 1117355426, one half size: 558677713
+# cumulative    N50 count       contig  contig size
+549534897       27      JH556592.1      11405270
+558677713 one half size
+560149280       28      JH556573.1      10614383
+
+#########################################################################
+
