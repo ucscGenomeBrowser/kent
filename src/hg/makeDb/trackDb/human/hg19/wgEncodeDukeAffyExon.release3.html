@@ -11,17 +11,16 @@ ENCODE Project. The RNA was extracted from cells that were also analyzed by DNas
 <P>
 In contrast to the hg18 annotation, this track now displays exon array data
 that has been aggregated to the gene level for those probes that have been
-linked to genes. Probes not linked to genes are displayed at the probe level.
+linked to genes. Probes not linked to genes are not included.
 The display for this track shows gene probe location and signal value as
 grayscale-colored items where higher signal values correspond to darker-colored
 blocks.
 </P>
 
 <P>
-Items with scores between 900-1000 are in the highest 10% quantile for signal
-value of that particular cell type. Similarly, items scoring 800-900 are the
-next 10% quantile and at the bottom of scale, items scoring 100-200 are in the
-lowest 20% quantile for signal value.
+Items with scores between 900-1000 have signal values greater than 9 that have been linearly scaled for that particular cell type. 
+Items scoring 400-900 have signal values between 4 and 9, and the signal is simply multiplied by 100 to get the score. 
+Items with scores between 200-400 have signal values below 4 that have been linearly scaled to fit that score range. 
 </P>
 <P>
 The subtracks within this composite annotation track correspond to data from different
@@ -43,25 +42,33 @@ as to how probe level data was processed to produce gene level annotations.
 Cells were grown according to the approved
  <A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 Total RNA was isolated from these cells using trizol extraction followed by
-cleanup on RNEasy column (Qiagen) that included a DNaseI step. The RNA was
-checked for quality using a nanodrop and an Agilent Bioanalyzer. RNA
-(1 &micro;g) deemed to be of good quality was then processed according to the
-standard Affymetrix Whole transcript Sense Target labeling protocol that
-included a riboreduction step. The fragmented biotin-labeled cDNA was
-hybridized over 16 h to Affymetrix Exon 1.0 ST arrays and scanned on an
-Affymetrix Scanner 3000 7G using AGCC software.
+cleanup on RNEasy column (Qiagen) that included a DNaseI step. 
+The RNA was checked for quality using a nanodrop and an Agilent Bioanalyzer.
+RNA (1 &micro;g) deemed to be of good quality was then processed
+either by 1) he standard Affymetrix Whole transcript Sense Target labeling protocol that included a riboreduction step,
+or 2) using the NuGEN labeling system.
+The fragmented biotin-labeled cDNA was hybridized over 16 h to Affymetrix Exon 1.0 ST arrays and scanned on an Affymetrix Scanner 3000 7G using AGCC software. 
 </P>
 <P>
-Exon expression analyses were carried out using Affymetrix Expression Console
-1.1 software tools. All samples were processed together using the sketch-quantile
-normalization method. Gene level analysis was done at the "extended" annotation
-confidence level. Probes were summarized with median polish as used in RMA, and
-the background was corrected with PM and RMA background correction options. And
-all library files used were default library files. Gene names were assigned based on
-the output annotation file from this software. The accession number for the annotated
-transcript was used if a gene name was not assigned. If neither was present, the probe
-number was used.
+Data from all replicates were normalized together as follows.
+Probesets flagged as cross-hybridizing were removed from the analysis (Salomonis et al. 2010).
+Though these arrays provide exon-level resolution, we estimated gene-level expression by
+grouping probesets by gene for normalization (Bemmo et al. 2008). We assigned probesets
+to genes based on the GENCODE v10 annotation (July 2011). We classified an exon as
+constitutive or non-constitutive, based on whether it was present in all protein-coding transcripts.
+For genes with at least 4 constitutive probes, only constitutive probesets were used to
+estimate gene expression. For all other genes, including all non-protein-coding genes, we used
+all (non-cross-hybridizing) probesets that mapped to an expressed exon in any transcript of the gene. We
+normalized gene-level expression estimates using Affymetrix Power Tools (APT) 
+with the chipstream command "rma-bg, med-norm, pm-gcbg, med-polish". This chipstream calls 
+for an RMA normalization with gc-background correction using antigenomic background probes. 
 </P>
+<p>
+While the data was generated using the same microarray platform, two different experimental
+backgrounds were present due to a change in labeling reagents (Affymetrix vs. NuGEN; see Methods above). 
+We found batch effects related to this change were causing array data to group by experimental protocol
+rather than cell type relatedness. We used an R script (ComBat) to correct for this batch affect (Johnson et al. 2007).
+<p>
 
 <H2>Verification</H2>
 <P>

@@ -1,0 +1,2 @@
+process exited with 255: "./thatDoesNotCompute" in pipeline "./thatDoesNotCompute"
+pipeline exited with 255

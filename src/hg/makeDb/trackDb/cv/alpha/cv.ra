@@ -12971,6 +12971,42 @@ type view
 label PeakSeq Optimal Peaks
 description Regions of optimal enriched signal in experiment performed by PeakSeq
 
+term pepMapFt
+tag PEPMAPFT
+type view
+label Peptide Mapping Filtered
+description filtered peptide mapping results based on the mapping scores or false discovery rate on genome database for mass-spectrometry-based proteomics experiments PROVISIONAL
+
+term pepMapUnFt
+tag PEPMAPUNFT
+type view
+label Peptide Mapping unFiltered
+description unfiltered peptide mapping results based on the mapping scores or false discovery rate on genome database for mass-spectrometry-based proteomics experiments PROVISIONAL
+
+term pepMapGcFt
+tag PEPMAPGCFT
+type view
+label Peptide Mapping Gencode Filtered
+description filtered peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments PROVISIONAL
+
+term pepMapGcUnFt
+tag PEPMAPGCUNFT
+type view
+label Peptide Mapping Gencode unFiltered
+description unfiltered peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments PROVISIONAL
+
+term mPepMapGcFt
+tag MPEPMAPGCFT
+type view
+label Modified Peptide Mapping Gencode Filtered
+description filtered modified peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments PROVISIONAL
+
+term mPepMapGcUnFt
+tag MPEPMAPGCUNFT
+type view
+label Modified Peptide Mapping Gencode unFiltered
+description unfiltered modified peptide mapping results based on the mapping scores or false discovery rate on gencode annotation for mass-spectrometry-based proteomics experiments PROVISIONAL
+
 term PrimerPeaks
 tag PRIMEPKS
 type view
