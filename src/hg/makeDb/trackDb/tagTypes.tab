@@ -338,9 +338,10 @@ subgroups bed
 summary wigMaf
 superTrack *
 symbolTable bed genePred
-pubsArticleTable bed
-pubsSequenceTable bed
-pubsMarkerTable bed
+pubsArticleTable bed psl
+pubsSequenceTable bed psl
+pubsMarkerTable bed psl
+pubsPslTrack bed psl
 thickDrawItem bed
 table *
 tableBrowser *

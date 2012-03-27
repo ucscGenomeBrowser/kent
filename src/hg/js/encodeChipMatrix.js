@@ -97,12 +97,12 @@ $(function () {
     function tableHeaderOut($table, antibodyGroups, antibodyTargetExps) {
         // Generate table header and add to document
 
-        var $tableHeader, $thead;
+        var $tableHeaders, $thead, $th;
         var maxLen;  // for resizing header cells to accomodate label lengths
         var antibodyTarget;
 
         // fill in column headers from antibody targets returned by server
-        $tableHeader = $('#columnHeaders');
+        $tableHeaders = $('#columnHeaders');
         $thead = $('thead');
 
         // 1st column is row headers
@@ -110,7 +110,7 @@ $(function () {
         $thead.before('<colgroup></colgroup>');
 
         $.each(antibodyGroups, function (i, group) {
-            $tableHeader.append('<th class="groupType"><div class="verticalText">' + 
+            $tableHeaders.append('<th class="groupType"><div class="verticalText">' + 
                                 group.label + '</div></th>');
             maxLen = Math.max(maxLen, group.label.length);
             $thead.before('<colgroup></colgroup>');
@@ -121,9 +121,13 @@ $(function () {
                     return true;
                 }
                 antibodyTarget = encodeProject.getAntibodyTarget(target);
-                $tableHeader.append('<th class="elementType" title="' +
-                                antibodyTarget.description +
-                                '"><div class="verticalText">' + target + '</div></th>');
+                $th = $('<th class="elementType"><div class="verticalText">' + 
+                                target + '</div></th>');
+                if (!encodeProject.isIE8()) {
+                    // Suppress mouseover under IE8 as QA noted flashing effect
+                    $th.attr('title', antibodyTarget.description);
+                }
+                $tableHeaders.append($th);
                 // add colgroup element to support cross-hair hover effect
                 $thead.before('<colgroup class="experimentCol"></colgroup>');
                 maxLen = Math.max(maxLen, target.length);
@@ -179,20 +183,22 @@ $(function () {
                 $td.click(function() {
                     var url, antibodyTarget;
 
-                    // TODO: encapsulate var names
-                    // TODO: search on antibody
+                    // NOTE: generating full search URL should be generalized & encapsulated
                     url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
                     url +=
                        ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + 'ChipSeq' +
                        '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
                        '&hgt_mdbVar3=antibody');
-                    // TODO: html encode ?
                     antibodyTarget = encodeProject.getAntibodyTarget($(this).data().target);
+                    // TODO: html encode ?
                     $.each(antibodyTarget.antibodies, function (i, antibody) {
                         url += ('&hgt_mdbVal3=' + antibody);
                     });
                     url += '&hgt_mdbVar4=view&hgt_mdbVal4=Any';
-                        // TODO: open search window 
+
+                    // remove extra rows
+                    url += '&hgt_mdbVar5=[]';
+                    url += '&hgt_mdbVar6=[]';
                     window.open(url, "searchWindow");
                 });
             });

@@ -27,7 +27,7 @@ boolean isBigBed(char *database, char *table, struct trackDb *parent,
 	struct customTrack *(*ctLookupName)(char *table))
 /* Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed. */
 {
-struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 if (tdb)
     return tdbIsBigBed(tdb);
 else

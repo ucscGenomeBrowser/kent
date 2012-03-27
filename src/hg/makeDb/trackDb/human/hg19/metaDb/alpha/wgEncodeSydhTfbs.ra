@@ -23732,7 +23732,6 @@ view Signal
 
 metaObject wgEncodeSydhTfbsHelas3InputRawData
 objType file
-accession GSE12781
 antibody Input
 cell HeLa-S3
 composite wgEncodeSydhTfbs
@@ -23743,6 +23742,7 @@ dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 dccAccession wgEncodeEH000612
+dccInternalNotes Lab provide GEO number GSE12781
 expId 612
 fileName wgEncodeSydhTfbsHelas3InputRawData.fastq.gz
 grant Snyder
@@ -25718,7 +25718,6 @@ view Signal
 
 metaObject wgEncodeSydhTfbsHelas3Pol2RawDataRep1
 objType file
-accession GSE12781
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeSydhTfbs
@@ -25729,6 +25728,7 @@ dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 dccAccession wgEncodeEH000613
+dccInternalNotes Lab provide GEO number GSE12781
 expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2RawDataRep1.fastq.gz
 grant Snyder
@@ -25744,7 +25744,6 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Pol2RawDataRep2
 objType file
-accession GSE12781
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeSydhTfbs
@@ -25755,6 +25754,7 @@ dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 dccAccession wgEncodeEH000613
+dccInternalNotes Lab provide GEO number GSE12781
 expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2RawDataRep2.fastq.gz
 grant Snyder
@@ -25770,7 +25770,6 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Pol2RawDataRep3
 objType file
-accession GSE12781
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeSydhTfbs
@@ -25781,6 +25780,7 @@ dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 dccAccession wgEncodeEH000613
+dccInternalNotes Lab provide GEO number GSE12781
 expId 613
 fileName wgEncodeSydhTfbsHelas3Pol2RawDataRep3.fastq.gz
 grant Snyder
@@ -28771,7 +28771,6 @@ view Signal
 
 metaObject wgEncodeSydhTfbsHelas3ifngInputRawData
 objType file
-accession GSE12782
 antibody Input
 cell HeLa-S3
 composite wgEncodeSydhTfbs
@@ -28782,6 +28781,7 @@ dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 dccAccession wgEncodeEH000611
+dccInternalNotes Lab provide GEO number GSE12782
 expId 611
 fileName wgEncodeSydhTfbsHelas3ifngInputRawData.fastq.gz
 grant Snyder
@@ -28796,7 +28796,6 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3ifngStat1RawDataRep1
 objType file
-accession GSE12782
 antibody STAT1
 cell HeLa-S3
 composite wgEncodeSydhTfbs
@@ -28807,6 +28806,7 @@ dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 dccAccession wgEncodeEH000614
+dccInternalNotes Lab provide GEO number GSE12782
 expId 614
 fileName wgEncodeSydhTfbsHelas3ifngStat1RawDataRep1.fastq.gz
 grant Snyder
@@ -28822,7 +28822,6 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3ifngStat1RawDataRep2
 objType file
-accession GSE12782
 antibody STAT1
 cell HeLa-S3
 composite wgEncodeSydhTfbs
@@ -28833,6 +28832,7 @@ dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
 dccAccession wgEncodeEH000614
+dccInternalNotes Lab provide GEO number GSE12782
 expId 614
 fileName wgEncodeSydhTfbsHelas3ifngStat1RawDataRep2.fastq.gz
 grant Snyder
@@ -57865,4 +57865,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 263752793
+# MAGIC: -40504144

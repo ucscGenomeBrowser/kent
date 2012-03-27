@@ -4366,3 +4366,24 @@ see doc/builds.txt for specific details.
     md5sum cavPor3ToHg19.over.chain.gz >> md5sum.txt
 
 ############################################################################
+# SWAP lastz mm10 (DONE - 2012-03-19 - Hiram)
+    # original alignment to mm10
+    cat /hive/data/genomes/mm10/bed/lastzCavPor3.2012-03-16/fb.mm10.chainCavPor3Link.txt 
+    #	754642254 bases of 2652783500 (28.447%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/cavPor3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cavPor3/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCavPor3.2012-03-16/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    80m23.870s
+    cat fb.cavPor3.chainMm10Link.txt 
+    #	775452752 bases of 2663369733 (29.115%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/cavPor3/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################

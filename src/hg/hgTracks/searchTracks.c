@@ -389,7 +389,6 @@ if(tracksFound < 1)
     }
 else
     {
-    struct hash *tdbHash = makeTrackHash(database, chromName);
     hPrintf("<form action='%s' name='%s' id='%s' method='post'>\n\n", hgTracksName(),SEARCH_RESULTS_FORM,SEARCH_RESULTS_FORM);
     cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 
@@ -523,7 +522,7 @@ else
         // shortLabel has description popup and longLabel has "..." metadata
         hPrintf("<td><a target='_top' onclick=\"popUp.hgTrackUi('%s',true); return false;\" href='%s' title='Display track details'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);
         hPrintf("<td>%s", track->longLabel);
-        compositeMetadataToggle(database, track->tdb, NULL, TRUE, FALSE, tdbHash);
+        compositeMetadataToggle(database, track->tdb, NULL, TRUE, FALSE);
         hPrintf("</td></tr>\n");
         }
     //hPrintf("</table>\n");

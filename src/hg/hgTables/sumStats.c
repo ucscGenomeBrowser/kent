@@ -371,7 +371,6 @@ htmlClose();
 void doSummaryStats(struct sqlConnection *conn)
 /* Put up page showing summary stats for track. */
 {
-hgBotDelay();
 if (isWiggle(database, curTable))
     doSummaryStatsWiggle(conn);
 else if (isBigWigTable(curTable))

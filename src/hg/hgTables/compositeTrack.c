@@ -165,8 +165,7 @@ cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaNextSubtrackMergePrimary, dbTable);
 
 hPrintf("<H3>Select a subset of subtracks to merge:</H3>\n");
-hCompositeUi(database, cart, curTrack, curTable, hgtaDoSubtrackMergePage, "mainForm", 
-	fullTrackHash);
+hCompositeUi(database, cart, curTrack, curTable, hgtaDoSubtrackMergePage, "mainForm");
 
 hPrintf("<H3>Select a merge operation:</H3>\n");
 struct trackDb *primary = subTdbFind(curTrack,curTable);

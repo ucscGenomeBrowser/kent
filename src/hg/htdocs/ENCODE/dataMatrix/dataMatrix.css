@@ -42,7 +42,7 @@ td {
 /* for IE, referenced by rotateCells jquery */
 table div.rotated {
     writing-mode: tb-rl;
-    /* filter: flipv fliph;  180% flip, better res? */
+    filter: flipv fliph;  /* 180 degrees */
 }
 
 .groupType {

@@ -3307,35 +3307,28 @@ identifier consIndelsId
     hg17,hg18,hg19.consIndelsHgMmCanFam.name
     hg17,hg18,hg19.consIndelsHgMmCanFamConf.id
 
-identifier publicationsBlat
-"genome location to article relationship as mapped by BLAT"
-    $gbd.pubsBlat.name dupeOk
-    hgFixed.pubsArticle.displayId
+# publication track info 
 
-identifier text2GenomeSequence
-"article to sequence relationship"
+identifier pubsArticleId external=pubTools
+"internal ID of article, this is different from pubmed, doi or piis, generated during download "
+    $gbd.pubsBlat.name dupeOk
+    $gbd.pubsBlatPsl.articleId
     hgFixed.pubsArticle.articleId
     hgFixed.pubsSequenceAnnot.articleId
-
-identifier text2GenomeBandMatch
-"band match to article relationship"
-    $gbd.pubsMarkerBand.name dupeOk
-    hgFixed.pubsMarkerAnnot.markerId
-
-identifier text2GenomeSnpMatch
-"snp match to article relationship"
-    $gbd.pubsMarkerSnp.name dupeOk
-    hgFixed.pubsMarkerAnnot.markerId
-
-identifier text2GenomeGeneMatch
-"gene match to article relationship"
-    $gbd.pubsMarkerGene.name dupeOk
-    hgFixed.pubsMarkerAnnot.markerId
-
-identifier text2GenomeMarker
-"marker match annotation to article data"
-    hgFixed.pubsMarkerAnnot.articleId dupeOk
     hgFixed.pubsArticle.articleId
+
+identifier pubsSequenceId external=pubTools
+"ID of sequence found in article "
+    hgFixed.pubsSequence.annotId dupeOk
+    $gbd.pubsBlat.seqIds comma
+    $gbd.pubsBlatPsl.qName
+
+identifier pubsMarkerId
+"keyword ('marker') found in an article, like a SNP/band/gene/etc"
+    hgFixed.pubsMarkerAnnot.markerId dupeOk
+    $gbd.pubsMarkerBand.name 
+    $gbd.pubsMarkerSnp.name 
+    $gbd.pubsMarkerGene.name 
 
 identifier ceuBcellRNASeqId
 "ID of ceuBcellRNASeq"
@@ -3885,6 +3878,12 @@ tablesIgnored $danRer
     UMassME3Peak
 
 tablesIgnored $canFam
+    polyASeqSitesBrainFwd
+    polyASeqSitesBrainRev
+    polyASeqSitesKidneyFwd
+    polyASeqSitesKidneyRev
+    polyASeqSitesTestisFwd
+    polyASeqSitesTestisRev
     genomicSuperDups
     mzH%
 
@@ -4016,6 +4015,22 @@ tablesIgnored $hg
     pgSjk
     polyaDb
     polyaPredict
+    polyASeqSitesBrainRev
+    polyASeqSitesKidneyFwd
+    polyASeqSitesKidneyRev
+    polyASeqSitesLiverFwd
+    polyASeqSitesLiverRev
+    polyASeqSitesMaqcBrain1Fwd
+    polyASeqSitesMaqcBrain1Rev
+    polyASeqSitesMaqcBrain2Fwd
+    polyASeqSitesMaqcBrain2Rev
+    polyASeqSitesMaqcUhr1Fwd
+    polyASeqSitesMaqcUhr1Rev
+    polyASeqSitesMaqcUhr2Fwd
+    polyASeqSitesMaqcUhr2Rev
+    polyASeqSitesMuscleFwd
+    polyASeqSitesMuscleRev
+    polyASeqSitesTestisFwd
     promoterStanford
     pseudoYale
     recombRate
@@ -4062,15 +4077,41 @@ tablesIgnored $mm
     laminB1_EF
     laminB1_ES
     laminB1_NP
+    polyASeqSitesBrainFwd
+    polyASeqSitesBrainRev
+    polyASeqSitesKidneyFwd
+    polyASeqSitesKidneyRev
+    polyASeqSitesLiverFwd
+    polyASeqSitesLiverRev
+    polyASeqSitesMuscleFwd
+    polyASeqSitesMuscleRev
+    polyASeqSitesTestisFwd
+    polyASeqSitesTestisRev
 
 
 tablesIgnored $panTro
     humanDels
 
+tablesIgnored $rheMac
+    polyASeqSitesBrainFwd
+    polyASeqSitesBrainRev
+    polyASeqSitesIleumFwd
+    polyASeqSitesIleumRev
+    polyASeqSitesKidneyFwd
+    polyASeqSitesKidneyRev
+    polyASeqSitesLiverFwd
+    polyASeqSitesLiverRev
+    polyASeqSitesTestisFwd
+    polyASeqSitesTestisRev
+
 tablesIgnored $rn
     all_sts_primer
     bactigPos
     ecores%
+    polyASeqSitesBrainFwd
+    polyASeqSitesBrainRev
+    polyASeqSitesTestisFwd
+    polyASeqSitesTestisRev
     recombRateRat
     syntenyMouse
     syntenyHuman

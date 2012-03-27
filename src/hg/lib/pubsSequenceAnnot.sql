@@ -1,5 +1,5 @@
-#Text to Genome project sequence data table
-CREATE TABLE t2gSequence (
+#publication track sequence annotation table
+CREATE TABLE pubsSequenceAnnot (
     articleId bigint not null,	# identifier of the article where the sequence was found
     fileId int not null,        # identifier of the file where the sequence was found
     seqId bigint not null,	# unique identifier of this sequence within a file

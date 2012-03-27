@@ -18399,3 +18399,9 @@ TMPDIR=/scratch/tmp
     ln -s blastz.hg19.swap lastz.hg19
 
 #########################################################################
+# LIFT ENCODE REGIONS FROM HG19 (DONE, Andy)
+
+echo "select * from encodeRegions" | hgsql hg18 | tail -n +2 \
+  | liftOver /dev/stdin /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz /dev/stdout encodeRegions.unmapped \
+  | hgLoadBed -noBin hg19 encodeRegions /dev/stdin
+# (all mapped cleanly)
