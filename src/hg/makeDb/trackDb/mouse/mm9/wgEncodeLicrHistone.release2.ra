@@ -363,7 +363,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneEsb4H3k27acME0C57bl6StdPk
         parent wgEncodeLicrHistoneViewPeaks off
         shortLabel ESB4 E0 H3K27a 
-        longLabel ES-Bruce4 E0 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
+        longLabel ES-Bruce4 E0 H3K27ac Histone Modifications by ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E0 factor=H3K27AC cellType=ESB4 control=STD sex=M strain=C57BL6 
         type broadPeak
         color 65,105,225
@@ -1680,7 +1680,7 @@ html wgEncodeLicrHistone.release2
         track wgEncodeLicrHistoneMelH3k36me3MImmortalC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
         shortLabel MEL H3K36m3
-        longLabel MEL Histone Modifications by H3K36me3 ChIP-seq Signal from ENCODE/LICR
+        longLabel MEL H3K36me3 Histone Modifications by H3K36me3 ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=IMMORTAL factor=H3K36ME3 cellType=MEL control=STD sex=M strain=C57BL6
         type bigWig 0.110000 21.510000
         color 86,180,233
