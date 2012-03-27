@@ -4,7 +4,6 @@ include trackDb.chainNet.ra
 include trackDb.encode.ra
 include trackDb.wgEncode.ra
 include trackDb.pipeline.ra
-include trackDb.merckPolyA.all.ra
 
 track clonePos override
 longLabel Clone Coverage
