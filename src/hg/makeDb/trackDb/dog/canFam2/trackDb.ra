@@ -1,5 +1,4 @@
 include trackDb.chainNet.ra
-include trackDb.merckPolyA.all.ra
 
 track bacEndPairs
 #replaces record bacEndPairs in parent dir missing/extra color,altColor

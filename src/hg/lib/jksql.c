@@ -1178,21 +1178,21 @@ return sr;
 
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query)
-/* (Returns NULL if result was empty. :
- *     old info, only applies with mysql_store_result not mysql_use_result)
- * Otherwise returns a structure that you can do sqlRow() on. */
+/* 
+ * Return a structure that you can do sqlNextRow() on. 
+ * (You need to check the return value of sqlRow to find out if there are
+ * any results.) */
 {
 return sqlUseOrStore(sc,query,mysql_use_result, TRUE);
 }
 
 struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query)
-/* Query database.
- * old comment: If result empty squawk and die.
- *    This only applied back when sqlGetResult was using mysql_store_result.
- * These days, with mysql_use_result, we cannot know ahead of time
+/* 
+ * Return a structure that you can do sqlNextRow() on. 
+ * DOES NOT errAbort() IF THERE ARE NO RESULTS 
+ * (These days, with mysql_use_result, we cannot know ahead of time
  * if there are results, we can only know by actually trying to fetch a row.
- * At then how would we put it back?  So in fact right now sqlMustGetResult
- * is no different than sqlGetResult.  */
+ * So in fact right now sqlMustGetResult is no different than sqlGetResult.) */
 {
 struct sqlResult *res = sqlGetResult(sc,query);
 if (res == NULL)

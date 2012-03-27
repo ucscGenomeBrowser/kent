@@ -1890,27 +1890,34 @@ puts("&nbsp;<B>position</B>");
 
 }
 
-#define NUM_YEARS 30  // similar to google scholar, which goes back to 20 years
-
 void pubsUi(struct trackDb *tdb)
 /* UI for pubs match track */
 {
-char* keywordTag = "pubsBlat.pubsKeywords";
-char* yearTag = "pubsBlat.pubsYear";
-char *keywords = cartUsualString(cart, keywordTag, "");
+#define NUM_YEARS 30  // similar to google scholar, which goes back to 20 years
+
+#define PUBS_KEYWORDS_TAG "pubsKeywords"
+#define PUBS_YEAR_TAG     "pubsYear"
+
+// get current set filters from cart
+char *keywords   = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_KEYWORDS_TAG, "");
+char *yearFilter = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_YEAR_TAG, "anytime");
+
+// print keyword input box
+puts("<P><B>Filter articles by keywords in abstract, title or authors:</B>");
+char cgiVar[128];
+safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_KEYWORDS_TAG);
+cgiMakeTextVar(cgiVar, keywords, 45);
+
+// generate strings like "since <year>" for last 30 years
 char *text[NUM_YEARS + 1];
 char *values[NUM_YEARS + 1];
-char *yearFilter = cartUsualString(cart, yearTag, "anytime");
-int i;
-puts("<P><B>Filter articles by keywords in abstract, title or authors:</B>");
-cgiMakeTextVar(keywordTag, keywords, 45);
-
 text[0] = "anytime";
 values[0] = "anytime";
 time_t nowTime = time(NULL);
 struct tm *tm = localtime(&nowTime);
 int nowYear = 1900 + tm->tm_year;
 
+int i;
 for(i = 0; i < NUM_YEARS; i++)
     {
     char buf[20];
@@ -1920,9 +1927,11 @@ for(i = 0; i < NUM_YEARS; i++)
     values[i + 1] = cloneString(buf);
     }
 
+// print dropdown box with "since <year>" lines
 puts("</P><P>\n");
 printf("<B>Show articles published </B>");
-cgiDropDownWithTextValsAndExtra(yearTag, text, values, NUM_YEARS + 1, yearFilter, NULL);
+safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_YEAR_TAG);
+cgiDropDownWithTextValsAndExtra(cgiVar, text, values, NUM_YEARS + 1, yearFilter, NULL);
 puts("</P>\n");
 }
 
