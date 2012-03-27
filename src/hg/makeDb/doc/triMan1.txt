@@ -1,0 +1,67 @@
+# for emacs: -*- mode: sh; -*-
+#
+#	the above keeps emacs happy while working with this text document
+
+# This file describes how we made the browser database on the
+#	Trichechus manatus latirostris (Florida manatee)
+#	Broad Institute 
+
+#	http://www.ncbi.nlm.nih.gov/bioproject/68243
+#	http://www.ncbi.nlm.nih.gov/genome/10467
+#	http://www.ncbi.nlm.nih.gov/genome/assembly/328638/
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AHIN01
+#	Genome Coverage : 150x
+
+#	chrMt: NC_010302.1 - AM904728.1
+#	http://www.ncbi.nlm.nih.gov/bioproject/28669
+#	http://www.ncbi.nlm.nih.gov/nuccore/NC_010302.1
+
+
+#	DATE:	07-Oct-2011
+#	ORGANISM:	Trichechus manatus latirostris
+#	TAXID:	127582
+#	ASSEMBLY LONG NAME:	TriManLat1.0
+#	ASSEMBLY SHORT NAME:	TriManLat1.0
+#	ASSEMBLY SUBMITTER:	Broad Institute of MIT and Harvard
+#	ASSEMBLY TYPE:	Haploid
+#	NUMBER OF ASSEMBLY-UNITS:	1
+#	ASSEMBLY ACCESSION:	GCA_000243295.1
+#	FTP-RELEASE DATE: 24-Jan-2012
+
+#	Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Coelomata;
+#	Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata;
+#	Teleostomi; Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia;
+#	Theria; Eutheria; Afrotheria; Sirenia; Trichechidae; Trichechus;
+#	Trichechus manatus
+
+#########################################################################
+## Download sequence (DONE - 2012-03-26 - Hiram)
+    mkdir /hive/data/genomes/triMan1
+    mkdir /hive/data/genomes/triMan1/genbank
+    cd /hive/data/genomes/triMan1/genbank
+
+    rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Trichechus_manatus/TriManLat1.0/ ./
+
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+# 3103791524 bases (334708729 N's 2769082795 real 2769082795 upper 0 lower)
+#	in 6322 sequences in 1 files
+# Total size: mean 490950.9 sd 2814444.1
+#	min 1000 (gi|373254797|gb|AHIN01166489.1|)
+#	max 45942467 (gi|373522909|gb|JH594607.1|) median 3585
+
+    faCount Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+	> faCount.txt
+    egrep -v "^#seq|^total" faCount.txt \
+	| awk '{printf "%s\t%d\n", $1, $2}' \
+	| sed -e 's/^gi.*gb|//; s/|//' | sort -k2,2nr > chrom.sizes
+
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 6322, total size: 3103791524, one half size: 1551895762
+# cumulative    N50 count       contig  contig size
+1545802679      66      JH594672.1      14775788
+1551895762 one half size
+1560245362      67      JH594674.1      14442683
+
+#########################################################################
