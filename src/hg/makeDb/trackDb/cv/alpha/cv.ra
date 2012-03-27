@@ -5869,6 +5869,57 @@ color 230,159,0
 sex U
 protocol Gingeras:Duodenum_Gingeras_protocol.pdf
 
+term EpiSC-5
+tag EpiSC5
+type Cell Line
+organism mouse
+category primaryCells
+description epidermal stem cell PROVISIONAL
+age EO
+strain 129
+vendorName Gilbert lab
+vendorId EpiSC5
+orderUrl http://gilbertlab.bio.fsu.edu/
+termId 233
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=233
+color 65,105,225
+sex M
+protocol missing
+
+term EpiSC-7
+tag EpiSC7
+type Cell Line
+organism mouse
+category primaryCells
+description epidermal stem cell PROVISIONAL
+age EO
+strain 129
+vendorName Gilbert lab
+vendorId EpiSC7
+orderUrl http://gilbertlab.bio.fsu.edu/
+termId 50
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=50
+color 65,105,225
+sex M
+protocol missing
+
+term ES-46C
+tag ES46C
+type Cell Line
+organism mouse
+category primaryCells
+description ES-cells isolated from 129. PROVISIONAL
+age EO
+strain 129
+vendorName Smith lab
+vendorId ES-46C
+orderUrl http://www.cscr.cam.ac.uk/research/principal-investigators/pressor-austin-smith
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+color 65,105,225
+sex M
+protocol mising
+
 term ES-Bruce4
 tag ESB4
 type Cell Line
@@ -5918,7 +5969,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 color 65,105,225
 termId 29
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
-sex U
+sex M
 protocol missing
 
 term ES-E14
@@ -5935,6 +5986,23 @@ orderUrl http://santoslab.ucsf.edu/lab_site/Home.html
 color 65,105,225
 sex M
 protocol Stam:ES-E14_Stam_protocol.pdf
+
+term ES-TT2
+tag ESTT2
+type Cell Line
+organism mouse
+category primaryCells
+description ES-cells isolated from C57BL/6xCBA PROVISIONAL
+age EO
+strain B6CBAF1/J
+vendorName Shinkai lab
+vendorId ES-TT2
+orderUrl http://www.riken.go.jp/engn/r-world/research/lab/asi/cml/index.html
+color 65,105,225
+termId 29
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=29
+sex M
+protocol missing
 
 term Erythrobl
 tag ERYTHROBL
@@ -12177,13 +12245,38 @@ description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol 
 type treatment
 
 term diffProtD_24hr
-tag DIFF24H
+tag DIFFD24H
 description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
 type treatment
 
 term diffProtD_30hr
-tag DIFF30H
+tag DIFFD30H
 description 30 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
+type treatment
+
+term diffProtE_3d
+tag DIFFE3D
+description 3 day differentiation of ES-D3 cells with conditioned medium MEDII to form neural precursor cells (Gilbert) PROVISIONAL
+type treatment
+
+term diffProtE_6d
+tag DIFFE6D
+description 6 day differentiation of ES-D3 cells with conditioned medium MEDII to form neural precursor cells (Gilbert) PROVISIONAL
+type treatment
+
+term diffProtE_9d
+tag DIFFE9D
+description 9 day differentiation of ES-D3 cells with conditioned medium MEDII to form neural precursor cells (Gilbert) PROVISIONAL
+type treatment
+
+term diffProtF_6d
+tag DIFFF6D
+descrption 6 day differentiation of ES-46C cells in adherent monolayer culture (Gilbert) PROVISIONAL
+type treatment
+
+term diffProtF_9d
+tag DIFFF9D
+descrption 9 day differentiation of ES-TT2 cells in adherent monolayer culture (Gilbert) PROVISIONAL
 type treatment
 
 term DMSO_0.02pct
@@ -13376,8 +13469,13 @@ label B10.H-2aH-4bp/Wts
 term B6D2F1/J
 tag B6D2F1J
 type strain
-description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
+description Derived from cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
 label B6D2F1/J
+
+term B6CBAF1/J
+tag B6CBAF1J
+type strain
+description Derived from cross between C57BL/6J Female x CBA/J Male (C57BL/6 x CBA)F1/J. PROVSIONAL
 
 term BALB/cAnN
 tag BALBCANN
