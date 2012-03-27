@@ -4015,6 +4015,7 @@ tablesIgnored $hg
     pgSjk
     polyaDb
     polyaPredict
+    polyASeqSitesBrainFwd
     polyASeqSitesBrainRev
     polyASeqSitesKidneyFwd
     polyASeqSitesKidneyRev
@@ -4031,6 +4032,7 @@ tablesIgnored $hg
     polyASeqSitesMuscleFwd
     polyASeqSitesMuscleRev
     polyASeqSitesTestisFwd
+    polyASeqSitesTestisRev
     promoterStanford
     pseudoYale
     recombRate
