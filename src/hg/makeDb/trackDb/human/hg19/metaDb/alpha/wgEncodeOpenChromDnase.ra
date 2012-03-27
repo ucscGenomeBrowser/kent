@@ -9472,6 +9472,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH002688
+expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341AlnRep1.bam,wgEncodeOpenChromDnaseMedullod341AlnRep1.bam.bai
 grant Crawford
 lab Duke
@@ -9491,6 +9493,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH002688
+expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341AlnRep2.bam,wgEncodeOpenChromDnaseMedullod341AlnRep2.bam.bai
 grant Crawford
 lab Duke
@@ -9510,6 +9514,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH002688
+expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
@@ -9529,6 +9535,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH002688
+expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341Pk.narrowPeak.gz
 grant Crawford
 lab Duke
@@ -9548,6 +9556,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH002688
+expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
@@ -9566,6 +9576,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH002688
+expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
@@ -9584,6 +9596,8 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-13
 dateUnrestricted 2012-12-13
+dccAccession wgEncodeEH002688
+expId 2688
 fileName wgEncodeOpenChromDnaseMedullod341Sig.bigWig
 grant Crawford
 lab Duke
@@ -12231,4 +12245,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1227910072
+# MAGIC: -81127175
