@@ -43,6 +43,7 @@ var subCfg = { // subtrack config module.
       // Note this is often called directly as the onchange event function
         if (obj == undefined || $.type(obj) === "string")
             obj = this;
+
         $(obj).addClass('changed');
 
         // checkboxes have hidden boolshads which should be marked when unchecked
@@ -682,8 +683,16 @@ var subCfg = { // subtrack config module.
             } else {
                 subCfg.markChange(e,this);
                 // If made visible, be sure to make composite visible
-                if (this.selectedIndex > 0)
-                    exposeAll();
+                // But do NOT turn composite from hide to full, since it will turn on other subs
+                // Just trigger a supertrack reshaping
+                if (this.selectedIndex > 0) {
+                    //exposeAll();
+                    var visDD = normed($("select.visDD"));
+                    if (visDD != undefined) {
+                        if ($(visDD).hasClass('superChild'))
+                            visTriggersHiddenSelect(visDD);
+                    }
+                }
             }
         });
     },
@@ -836,7 +845,10 @@ var subCfg = { // subtrack config module.
         // Tricky for composite level controls.  Could wrap cfg controls in new div.
         // DO THIS AFTER Views
         // NOTE: excluding sortOrder and showCfg which are special cases we don't care about in subCfg
-        var compObjs = $('select,input').filter("[name^='"+subCfg.compositeName+"\\.'],[name^='"+subCfg.compositeName+"_']").not(".viewDD");
+        // Excluding views and subCBs because a {composite}_{subtrack} naming scheme may be used
+        var compObjs = $('select,input').filter("[name^='"+subCfg.compositeName+"\\.'],[name^='"+subCfg.compositeName+"_']");
+        // viewDD, subCB already done. non-abc matCBs not needed, as they shouldn't go to the cart.!
+        compObjs = $(compObjs).not(".viewDD,.subCB,.matCB:not(.abc)");
         if (compObjs.length > 0) {
             $(compObjs).each(function (i) {
                 if (this.type != 'hidden') {
@@ -845,8 +857,8 @@ var subCfg = { // subtrack config module.
                     && this.id.length > 0
                     && $(this).hasClass('filterBy') == false
                     && $(this).hasClass('filterComp') == false)
-                        warn('DEBUG: Not expected control with name ['+this.name + '], and id #'+this.id);
-                    // DEBUG -------------
+                        warn('DEBUG: Unexpected control with name ['+this.name + '], and id #'+this.id);
+                    // DEBUG ------------- Helps find unexpected problems.
 
                     $(this).change(function (e) {
                         subCfg.markChange(e,this);

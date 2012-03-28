@@ -2,7 +2,6 @@
 
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
-include trackDb.merckPolyA.all.ra
 
 track jaxQTLLift
 shortLabel MGI QTL LiftO
@@ -871,7 +870,6 @@ noScoreFilter on
 #scoreFilterByRange on
 compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
 wgEncode 1
-metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=mm9 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.mm9.bed8.gz
 
 track nscanGene override
 informant Mouse N-SCAN uses human (hg18) as the informant and iterative pseudogene masking.

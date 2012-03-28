@@ -1890,13 +1890,49 @@ puts("&nbsp;<B>position</B>");
 
 }
 
-void t2gUi(struct trackDb *tdb)
-/* UI for t2g match track */
+void pubsUi(struct trackDb *tdb)
+/* UI for pubs match track */
 {
-char* keywordTag = "t2gKeywords";
-char *keywords = cartUsualString(cart, keywordTag, "");
+#define NUM_YEARS 30  // similar to google scholar, which goes back to 20 years
+
+#define PUBS_KEYWORDS_TAG "pubsKeywords"
+#define PUBS_YEAR_TAG     "pubsYear"
+
+// get current set filters from cart
+char *keywords   = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_KEYWORDS_TAG, "");
+char *yearFilter = cartUsualStringClosestToHome(cart, tdb, FALSE, PUBS_YEAR_TAG, "anytime");
+
+// print keyword input box
 puts("<P><B>Filter articles by keywords in abstract, title or authors:</B>");
-cgiMakeTextVar(keywordTag, keywords, 45);
+char cgiVar[128];
+safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_KEYWORDS_TAG);
+cgiMakeTextVar(cgiVar, keywords, 45);
+
+// generate strings like "since <year>" for last 30 years
+char *text[NUM_YEARS + 1];
+char *values[NUM_YEARS + 1];
+text[0] = "anytime";
+values[0] = "anytime";
+time_t nowTime = time(NULL);
+struct tm *tm = localtime(&nowTime);
+int nowYear = 1900 + tm->tm_year;
+
+int i;
+for(i = 0; i < NUM_YEARS; i++)
+    {
+    char buf[20];
+    safef(buf, sizeof(buf), "since %d", nowYear - i);
+    text[i + 1] = cloneString(buf);
+    safef(buf, sizeof(buf), "%d", nowYear - i);
+    values[i + 1] = cloneString(buf);
+    }
+
+// print dropdown box with "since <year>" lines
+puts("</P><P>\n");
+printf("<B>Show articles published </B>");
+safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_YEAR_TAG);
+cgiDropDownWithTextValsAndExtra(cgiVar, text, values, NUM_YEARS + 1, yearFilter, NULL);
+puts("</P>\n");
 }
 
 
@@ -2521,8 +2557,8 @@ else if (sameString(track, "vegaGeneComposite"))
     vegaGeneUI(tdb);
 else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
-else if (startsWith("t2g", track))
-        t2gUi(tdb);
+else if (startsWith("pubs", track))
+    pubsUi(tdb);
 else if (startsWith("blastDm", track))
     blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))
@@ -2625,11 +2661,11 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
     {
     // Composites *might* have had their top level controls just printed, but almost certainly have additional controls
     if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
-        hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM, trackHash);
+        hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
     previewLinks(database, tdb);
-    extraUiLinks(database,tdb, trackHash);
+    extraUiLinks(database,tdb);
     }
 }
 
@@ -2793,18 +2829,17 @@ if (!tdbIsDownloadsOnly(tdb))
                     canPack = rTdbTreeCanPack(tdbGetComposite(tdb));
                 }
             else
-                {
                 vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
-                if (tdbIsSuperTrackChild(tdb))
-                    {
-                    hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
-                        "normalText superChild visDD", trackDbSetting(tdb, "onlyVisibility"),
-                        "onchange='visTriggersHiddenSelect(this);'");
-                    }
-                else
-                    hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
-                        "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),NULL);
+
+            if (tdbIsSuperTrackChild(tdb))
+                {
+                hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
+                    "normalText superChild visDD", trackDbSetting(tdb, "onlyVisibility"),
+                    "onchange='visTriggersHiddenSelect(this);'");
                 }
+            else
+                hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,
+                    "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),NULL);
             }
     if (!ajax)
         {
@@ -2857,7 +2892,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
                     "genome-preview.ucsc.edu", database, tdb->track);
                 }
             printf("&nbsp;&nbsp;");
-            makeDownloadsLink(database, tdb, trackHash);
+            makeDownloadsLink(database, tdb);
             }
         char *downArrow = "&dArr;";
         enum browserType browser = cgiBrowser();

@@ -252,13 +252,20 @@ function setCartVarAndRefresh(name,val)
 function errorHandler(request, textStatus)
 {
     var str;
+    var tryAgain = true;
     if(textStatus && textStatus.length && textStatus != "error") {
         str = "Encountered network error : '" + textStatus + "'.";
     } else {
-        str = "Encountered a network error."
+        if(request.responseText) {
+            tryAgain = false;
+            str = "Encountered error: '" + request.responseText + "'";
+        } else {
+            str = "Encountered a network error."
+        }
     }
-    str += " Please try again. If the problem persists, please check your network connection.";
-    showWarning(str);
+    if(tryAgain)
+        str += " Please try again. If the problem persists, please check your network connection.";
+    warn(str);
     jQuery('body').css('cursor', '');
     if(this.disabledEle) {
         this.disabledEle.removeAttr('disabled');
@@ -275,14 +282,6 @@ function catchErrorOrDispatch(obj, textStatus)
         this.trueSuccess(obj, textStatus);
     else
         errorHandler.call(this, obj, textStatus);
-}
-
-function showWarning(str)
-{
-    $("#warningText").text(str);
-    $("#warning").show();
-    // reset window to the top so the user sees this message.
-    $(window).scrollTop(0);
 }
 
 // Specific calls...

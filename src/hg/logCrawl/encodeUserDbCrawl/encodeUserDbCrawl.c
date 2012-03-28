@@ -127,13 +127,13 @@ else
 }
 
 
-boolean parseContents(char *contents, struct hash *varHash, 
-	struct trackVar **pList)
-/* Parse list of CGI vars.  and add to varHash/list.  Return TRUE if a wgEncode
- * track is on. */
+void parseContents(char *contents, struct hash *varHash, 
+	struct trackVar **pList, boolean *retAnyTrack, boolean *retIsEncode)
+/* Parse list of CGI vars.  and add to varHash/list.  */
 {
 char *s = contents, *e;
-boolean isWgEncode = FALSE;
+boolean isEncode = FALSE;
+boolean anyTrack = FALSE;
 
 while (s != NULL && s[0] != 0)
     {
@@ -150,13 +150,16 @@ while (s != NULL && s[0] != 0)
 	    {
 	    enum trackVis vis;
 	    int isTrack = addVisibilityVar(name, val, varHash, pList, &vis);
+	    if (isTrack)
+	        anyTrack = TRUE;
 	    if (isTrack && startsWith("wgEncode", name) && vis != tvHide)
-	        isWgEncode = TRUE;
+	        isEncode = TRUE;
 	    }
 	}
     s = e;
     }
-return isWgEncode;
+*retAnyTrack = anyTrack;
+*retIsEncode = isEncode;
 }
 
 void encodeUserDbCrawl(char *input, char *output)
@@ -178,8 +181,12 @@ while (lineFileRowTab(lf, row))
     useCount = atoi(row[5]);
     if (useCount > 1 && startsWith("2011-1", lastUse) && (stringIn("db=hg18", contents) || stringIn("db=hg19", contents)))
 	{
-	++totalCount;
-	wgEncodeCount += parseContents(contents, varHash, &tvList);
+	boolean anyTrack, isEncode;
+	parseContents(contents, varHash, &tvList, &anyTrack, &isEncode);
+	if (isEncode)
+	    wgEncodeCount++;
+	if (anyTrack)
+	    ++totalCount;
 	}
     }
 slSort(&tvList, trackVarCmp);

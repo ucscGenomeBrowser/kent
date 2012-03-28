@@ -212,7 +212,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
 		   sameString("bam", s) || sameString("bedDetail", s) ||
 		   sameString("bed8Attrs", s) || sameString("gvf", s) ||
-		   sameString("vcfTabix", s));
+		   sameString("vcfTabix", s) || sameString("pgSnp", s));
 freeMem(t);
 return canPack;
 }
@@ -792,6 +792,12 @@ for (generation = tdb; generation != NULL; generation = generation->parent)
         break;
     }
 return trackSetting;
+}
+
+void trackDbAddSetting(struct trackDb *bt, char *name, char *val)
+{
+/* Add a setting to a trackDb rec */
+hashAdd(trackDbHashSettings(bt), name, cloneString(val));
 }
 
 char *trackDbSettingByView(struct trackDb *tdb, char *name)

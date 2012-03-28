@@ -16,53 +16,57 @@ genes, and about twice as many splice variants.</P>
 This track in general follows the display conventions for
 <A HREF="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction tracks</A>. The exons
 for putative non-coding genes and untranslated regions are represented by relatively thin blocks,
-while those for coding open reading frames are thicker. The following color key is used:
-<UL>
-<LI><b>Black</b> -- feature has a corresponding entry in the Protein Data Bank (PDB)
-<LI><FONT color="#0C0C78"><b>Dark blue</b></FONT> -- transcript has been reviewed or validated by the RefSeq, UniProtKB/Swiss-Prot, or CCDS staff
-<LI><FONT color="#5050A0"><b>Medium blue</b></FONT> -- other RefSeq transcripts
-<LI><FONT color="#8282D2"><b>Light blue</b></FONT> -- non-RefSeq transcripts
-</UL></P>
+while those for coding open reading frames are thicker. The following color key is used:</P>
+
+<ul>
+<li><span style="font-weight: bold;">Black</span> -- feature has a corresponding entry in the Protei
+n Data Bank (PDB)</li>
+<li><span style="color: #0C0C78; font-weight: bold;">Dark blue</span> -- transcript has been reviewed
+ or validated by either the RefSeq, SwissProt or CCDS staff</li>
+<li><span style="color: #5050A0; font-weight: bold;">Medium blue</span> -- other RefSeq transcripts</li>
+<li><span style="color: #8282D2; font-weight: bold;">Light blue</span> -- non-RefSeq transcripts</li>
+</ul>
+
 <P>
 This track contains an optional <A HREF="../goldenPath/help/hgCodonColoring.html">codon coloring
-feature</A> that allows users to quickly validate and compare gene predictions.
+feature</A> that allows users to quickly validate and compare gene predictions.</P>
 
 <H2>Methods</H2>
 <P>
-The UCSC Genes are built using a multi-step pipeline:  
+The UCSC Genes are built using a multi-step pipeline:</P>  
 <OL>
 <LI>RefSeq and GenBank RNAs are aligned to the genome with BLAT, keeping only the best alignments
 for each RNA.  Alignments are discarded if they do not meet certain sequence identity and coverage
 filters.  All sequences must align with high (98%) identity. The sequence coverage must be at least
 90% for shorter sequences (those with 2500 or fewer bases), with the coverage threshold
-progressively relaxed for longer sequences.
-<LI>Alignments are broken up at non-intronic gaps, with small isolated fragments thrown out.
+progressively relaxed for longer sequences.</LI>
+<LI>Alignments are broken up at non-intronic gaps, with small isolated fragments thrown out.</LI>
 <LI>A splicing graph is created for each set of overlapping alignments. This graph has an edge
 for each exon or intron, and a vertex for each splice site, start, and end. Each RNA that
 contributes to an edge is kept as evidence for that edge. Gene models from the Consensus CDS project
-(CCDS) are also added to the graph.
+(CCDS) are also added to the graph.</LI>
 <LI>A similar splicing graph is created in the mouse, based on mouse RNA and ESTs. If the mouse
 graph has an edge that is orthologous to an edge in the human graph, that is added to the evidence
-for the human edge.
+for the human edge.</LI>
 <LI>If an edge in the splicing graph is supported by two or more human ESTs, it is added as
-evidence for the edge.
-<LI>If there is an Exoniphy prediction for an exon, that is added as evidence.
+evidence for the edge.</LI>
+<LI>If there is an Exoniphy prediction for an exon, that is added as evidence.</LI>
 <LI>The graph is traversed to generate all unique transcripts. The traversal is guided by the
 initial RNAs to avoid a combinatorial explosion in alternative splicing. All RefSeq transcripts are
 output. For other multi-exon transcripts to be output, an edge supported by at least one additional
 line of evidence beyond the RNA is required.  Single-exon genes require either two RNAs or two 
-additional lines of evidence beyond the single RNA. 
+additional lines of evidence beyond the single RNA.</LI>
 <LI>Alignments are merged in from the hg19
 <A HREF="hgTrackUi?db=hg19&g=tRNAs">tRNA Genes</A> track and from Rfam
-in regions that are syntenic with the mm9 mouse genome.  
+in regions that are syntenic with the mm9 mouse genome.</LI> 
 <LI>Protein predictions are generated. For non-RefSeq transcripts we use the txCdsPredict program to
 determine if the transcript is protein-coding, and if so, the locations of the start and stop codons. 
 The program weighs as positive evidence the length of the protein, the presence of a Kozak consensus
 sequence at the start codon, and the length of the orthologous predicted protein in other species.
 As negative evidence it considers nonsense-mediated decay and start codons in any frame upstream of
 the predicted start codon. For RefSeq transcripts the RefSeq protein prediction is used directly
-instead of this procedure.  For CCDS proteins the CCDS protein is used directly.
-<LI>The corresponding UniProt protein is found, if any.
+instead of this procedure.  For CCDS proteins the CCDS protein is used directly.</LI>
+<LI>The corresponding UniProt protein is found, if any.</LI>
 <LI>The transcript is assigned a permanent &quot;uc&quot; accession. If the transcript was not in
 the previous release of UCSC Genes, the accession ends with the suffix &quot;.1&quot; indicating
 that this is
@@ -70,7 +74,7 @@ the first version of this transcript.  If the transcript is identical to some tr
 previous release of UCSC Genes, the accession is re-used with the same version number. If the
 transcript is not identical to any transcript in the previous release but it overlaps a similar
 transcript with a compatible structure, the previous accession is re-used with the version number
-incremented.
+incremented.</LI>
 </OL>
 
 <H2>Related Data</H2>
@@ -86,31 +90,30 @@ protein-coding transcripts). One can see a full list of the associated tables in
 this list is then available at the <B>table</B> menu. Note that some of these tables refer to UCSC
 Genes by its former name of <I>Known Genes</I>, sometimes abbreviated as <I>known</I> or <I>kg</I>.
 While the complete set of annotation tables is too long to describe, some of the more important
-tables are described below.
+tables are described below.</P>
 <UL> 
 <LI> <B>kgXref</B> identifies the RefSeq, SwissProt, Rfam, or tRNA sequences (if any) on which each
-transcript was based.
+transcript was based.</LI>
 <LI> <B>knownToRefSeq</B> identifies the RefSeq transcript that each UCSC Genes transcript is most
 closely associated with. That RefSeq transcript is either the RefSeq on which the UCSC Genes
 transcript was based, if there is one, or it's the RefSeq transcript that the UCSC Genes transcript
-overlaps at the most bases.  
+overlaps at the most bases.</LI>  
 <LI> <B>knownGeneMrna</B> contains the mRNA sequence that represents each UCSC Genes transcript. If
 the transcript is based on a RefSeq transcript, then this table contains the RefSeq transcript,
-including any portions that do not align to the genome.
+including any portions that do not align to the genome.</LI>
 <LI> <B>knownGeneTxMrna</B> contains mRNA sequences for each UCSC Genes transcript.  In contrast to
 the sequencess in knownGeneMrna, these sequences are derived by obtaining the sequences for each exon
-from the reference genome and concatenating these exonic sequences.
+from the reference genome and concatenating these exonic sequences.</LI>
 <LI> <B>knownGenePep</B> contains the protein sequences derived from the knownGeneMrna transcript
 sequences. Any protein-level annotations, such as the contents of the knownToPfam table, are based
-on these sequences.
+on these sequences.</LI>
 <LI> <B>knownGeneTxPep</B> contains the protein translation (if any) of each mRNA sequence in
-knownGeneTxMrna.  
+knownGeneTxMrna.</LI>
 <LI> <B>knownIsoforms</B> maps each transcript to a <EM>cluster ID</EM>, a cluster of isoforms of
-the same gene.
+the same gene.</LI>
 <LI> <B>knownCanonical</B> identifies the canonical isoform of each cluster ID, or gene. Generally,
-this is the longest isoform.
+this is the longest isoform.</LI>
 </UL>
-<P>
 
 <H2>Credits</H2>
 <P>

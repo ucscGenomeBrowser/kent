@@ -900,7 +900,7 @@ void acemblyDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
 void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
-		  char *primarySubtrack, char *fakeSubmit, char *formName, struct hash *trackHash);
+		  char *primarySubtrack, char *fakeSubmit, char *formName);
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is
  * non-NULL, don't allow it to be cleared and only offer subtracks
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
@@ -921,11 +921,11 @@ char *controlledVocabLink(char *file,char *term,char *value,char *title, char *l
 // returns allocated string of HTML link to controlled vocabulary term
 
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean
-        showLongLabel,boolean showShortLabel, struct hash *trackHash);
+        showLongLabel,boolean showShortLabel);
 /* If metadata from metaDb exists, return string of html with table definition */
 
 boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
-        boolean embeddedInText,boolean showLongLabel, struct hash *trackHash);
+        boolean embeddedInText,boolean showLongLabel);
 /* If metadata from metaTbl exists, create a link that will allow toggling it's display */
 
 boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
@@ -1191,7 +1191,7 @@ struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
    if 'column' is provided, and there are multiple filterBy columns, only the named column's clause is returned.
    The 'and' param and dyString in/out allows stringing multiple where clauses together
 */
-boolean makeDownloadsLink(char *database, struct trackDb *tdb, struct hash *trackHash);
+boolean makeDownloadsLink(char *database, struct trackDb *tdb);
 // Make a downloads link (if appropriate and then returns TRUE)
 
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
@@ -1200,7 +1200,7 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
 void makeTopLink(struct trackDb *tdb);
 /* Link to top of UI page */
 
-void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash);
+void extraUiLinks(char *db,struct trackDb *tdb);
 /* Show downloads, schema and metadata links where appropriate */
 
 boolean chainDbNormScoreAvailable(struct trackDb *tdb);

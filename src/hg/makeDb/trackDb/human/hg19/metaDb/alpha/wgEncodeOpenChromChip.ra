@@ -441,10 +441,9 @@ fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam,wgEncodeOpenChromChipFibrob
 geoSampleAccession GSM822281
 grant Crawford
 lab UT-A
-labVersion align_on_cluster_bwa.pl v 1
+labVersion privacy-noSequence align_on_cluster_bwa.pl v 1
 md5sum 73ceacd96d6340593f7063d02d490eb5,b3f5ee7e5dfc381e376866ba813df104
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 1
 setType exp
@@ -468,10 +467,9 @@ fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam,wgEncodeOpenChromChipFibrob
 geoSampleAccession GSM822281
 grant Crawford
 lab UT-A
-labVersion align_on_cluster_bwa.pl v 1
+labVersion privacy-noSequence align_on_cluster_bwa.pl v 1
 md5sum 4dd6716a0af3d9dd760e665f6c21a90f,40ba37d1a81006d74d7e0d3efa99a739
 origAssembly hg19
-privacy noSequence
 project wgEncode
 replicate 2
 setType exp
@@ -495,10 +493,9 @@ fileName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
 geoSampleAccession GSM822281
 grant Crawford
 lab UT-A
-labVersion baseAlignCounts.pl v 1
+labVersion privacy-noSequence baseAlignCounts.pl v 1
 md5sum dab29e01f678fd54430857815061de7a
 origAssembly hg19
-privacy noSequence
 project wgEncode
 setType exp
 subId 2480
@@ -522,10 +519,9 @@ fileName wgEncodeOpenChromChipFibroblCtcfPkRep1.narrowPeak.gz
 geoSampleAccession GSM822281
 grant Crawford
 lab UT-A
-labVersion p-value cutoff: 0.05
+labVersion privacy-noSequence p-value cutoff: 0.05
 md5sum 6ff4896fbdab19d5c75c6aee1bc00f47
 origAssembly hg19
-privacy noSequence
 project wgEncode
 setType exp
 subId 2480
@@ -549,10 +545,9 @@ fileName wgEncodeOpenChromChipFibroblCtcfSig.bigWig
 geoSampleAccession GSM822281
 grant Crawford
 lab UT-A
-labVersion fseq v 1.84, iff_FB8470
+labVersion privacy-noSequence fseq v 1.84, iff_FB8470
 md5sum fe21c95a32bb0a41d7476f008b46ce6b
 origAssembly hg19
-privacy noSequence
 project wgEncode
 setType exp
 subId 2480
@@ -576,10 +571,9 @@ fileName wgEncodeOpenChromChipFibroblInputAln.bam,wgEncodeOpenChromChipFibroblIn
 geoSampleAccession GSM822267
 grant Crawford
 lab UT-A
-labVersion align_on_cluster_bwa.pl v 1
+labVersion privacy-noSequence align_on_cluster_bwa.pl v 1
 md5sum 0508b60fa6b9d866c13d0ed55812d4e6,6478ca3133d4f9dbebca385e1bcfa0c9
 origAssembly hg19
-privacy noSequence
 project wgEncode
 setType input
 subId 2487
@@ -602,10 +596,9 @@ fileName wgEncodeOpenChromChipFibroblInputSig.bigWig
 geoSampleAccession GSM822267
 grant Crawford
 lab UT-A
-labVersion fseq v 1.84
+labVersion privacy-noSequence fseq v 1.84
 md5sum eb732363b7174de8db9770eebcdff881
 origAssembly hg19
-privacy noSequence
 project wgEncode
 setType input
 subId 2487
@@ -6084,7 +6077,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
@@ -6110,7 +6103,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
@@ -6136,7 +6129,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
@@ -6162,7 +6155,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
@@ -6189,7 +6182,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
@@ -6214,7 +6207,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
@@ -6239,7 +6232,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
@@ -7645,10 +7638,9 @@ fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam,wgEncodeOpenChromChipProgfi
 geoSampleAccession GSM822272
 grant Crawford
 lab UT-A
-labVersion align_on_cluster_bwa.pl v 1
+labVersion privacy-noSequence align_on_cluster_bwa.pl v 1
 md5sum 77acfa12f34d420e7ec34f6fad5f889c,c6c8bc9285a19b11eb90893955605d09
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 setType exp
@@ -7673,10 +7665,9 @@ fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam,wgEncodeOpenChromChipProgfi
 geoSampleAccession GSM822272
 grant Crawford
 lab UT-A
-labVersion align_on_cluster_bwa.pl v 1
+labVersion privacy-noSequence align_on_cluster_bwa.pl v 1
 md5sum 92e8605b20e95980ed0bad990f2ee952,5e40a5f387e81ac2055a935a085f6ec9
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 setType exp
@@ -7701,10 +7692,9 @@ fileName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal.bigWig
 geoSampleAccession GSM822272
 grant Crawford
 lab UT-A
-labVersion baseAlignCounts.pl v 1
+labVersion privacy-noSequence baseAlignCounts.pl v 1
 md5sum 49121e163375eb91b2bacde791f2f0d0
 origAssembly hg18
-privacy noSequence
 project wgEncode
 setType exp
 subId 1657
@@ -7729,10 +7719,9 @@ fileName wgEncodeOpenChromChipProgfibCtcfPkRep1.narrowPeak.gz
 geoSampleAccession GSM822272
 grant Crawford
 lab UT-A
-labVersion p-value cutoff: 0.05
+labVersion privacy-noSequence p-value cutoff: 0.05
 md5sum a5758f424e0c4dc9bea8d9cd87d87e11
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 setType exp
@@ -7758,10 +7747,9 @@ fileName wgEncodeOpenChromChipProgfibCtcfSig.bigWig
 geoSampleAccession GSM822272
 grant Crawford
 lab UT-A
-labVersion fseq v 1.84, iff_FB0167P
+labVersion privacy-noSequence fseq v 1.84, iff_FB0167P
 md5sum 88f498c99eb611a53eb6d734f7be2627
 origAssembly hg18
-privacy noSequence
 project wgEncode
 setType exp
 subId 1657
@@ -7786,10 +7774,9 @@ fileName wgEncodeOpenChromChipProgfibInputAln.bam,wgEncodeOpenChromChipProgfibIn
 geoSampleAccession GSM822269
 grant Crawford
 lab UT-A
-labVersion align_on_cluster_bwa.pl v 1
+labVersion privacy-noSequence align_on_cluster_bwa.pl v 1
 md5sum 1a759e20bda9d3191d38fded13bf9c59,65f00f8e614a4aeab2bb871c90337292
 origAssembly hg18
-privacy noSequence
 project wgEncode
 setType input
 subId 1832
@@ -7813,10 +7800,9 @@ fileName wgEncodeOpenChromChipProgfibInputSig.bigWig
 geoSampleAccession GSM822269
 grant Crawford
 lab UT-A
-labVersion fseq v 1.84
+labVersion privacy-noSequence fseq v 1.84
 md5sum 8bd8a3811ae589a90b1aca3faa28085b
 origAssembly hg18
-privacy noSequence
 project wgEncode
 setType input
 subId 1832
@@ -7841,10 +7827,9 @@ fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam,wgEncodeOpenChromChipProgfi
 geoSampleAccession GSM822282
 grant Crawford
 lab UT-A
-labVersion align_on_cluster_bwa.pl v 1
+labVersion privacy-noSequence align_on_cluster_bwa.pl v 1
 md5sum 05b7208b6d9aef9ad895295d9b620123,6256f52e58c0ab3b07493ac7d397c30f
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 setType exp
@@ -7869,10 +7854,9 @@ fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam,wgEncodeOpenChromChipProgfi
 geoSampleAccession GSM822282
 grant Crawford
 lab UT-A
-labVersion align_on_cluster_bwa.pl v 1
+labVersion privacy-noSequence align_on_cluster_bwa.pl v 1
 md5sum 14d6eba1644fc4bcb61fdadc4a6543a3,20e151758e6ed2840010cc4c8258be4a
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 2
 setType exp
@@ -7897,10 +7881,9 @@ fileName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal.bigWig
 geoSampleAccession GSM822282
 grant Crawford
 lab UT-A
-labVersion baseAlignCounts.pl v 1
+labVersion privacy-noSequence baseAlignCounts.pl v 1
 md5sum ab54164fe8ac926a2acda80a9d0bf5a9
 origAssembly hg18
-privacy noSequence
 project wgEncode
 setType exp
 subId 1652
@@ -7925,10 +7908,9 @@ fileName wgEncodeOpenChromChipProgfibPol2PkRep1.narrowPeak.gz
 geoSampleAccession GSM822282
 grant Crawford
 lab UT-A
-labVersion p-value cutoff: 0.05
+labVersion privacy-noSequence p-value cutoff: 0.05
 md5sum b90a52875788d85efa9d8e9ba599a8bd
 origAssembly hg18
-privacy noSequence
 project wgEncode
 replicate 1
 setType exp
@@ -7954,10 +7936,9 @@ fileName wgEncodeOpenChromChipProgfibPol2Sig.bigWig
 geoSampleAccession GSM822282
 grant Crawford
 lab UT-A
-labVersion fseq v 1.84, iff_FB0167P
+labVersion privacy-noSequence fseq v 1.84, iff_FB0167P
 md5sum 6f9a94bc5fd2e7ae7e161162a639d057
 origAssembly hg18
-privacy noSequence
 project wgEncode
 setType exp
 subId 1652
@@ -7965,4 +7946,4 @@ tableName wgEncodeOpenChromChipProgfibPol2Sig
 treatment None
 view Signal
 
-# MAGIC: -1815630508
+# MAGIC: 486802215

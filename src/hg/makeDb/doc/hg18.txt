@@ -29796,7 +29796,8 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 2/6/12 angie)
+# NHGRI GWAS CATALOG (DONE 2/21/12 angie)
+# Updated 2/21/12 (remove extra whitespace, translate non-ASCII to html), 2/6/12
 # Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11, 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10, 4/1/10, 3/1/10
 # Originally done 1/19/10
@@ -29857,7 +29858,7 @@ see doc/builds.txt for specific details.
 
     # Use SNPs (comma-sep list) to map to genome coords, and strongest SNP-Risk Allele 
     # as bed 4+ name.
-    perl -we 'while (<>) { \
+    perl -MEncode -we 'while (<>) { \
                 next if (/^\s*$/); \
                 s/\r$//; \
                 @w = split("\t"); \
@@ -29872,8 +29873,26 @@ see doc/builds.txt for specific details.
                 foreach $i (28, 25, 24, 23, 22, 21, 19, 18, 17, 16, 15, 14, 12, 11, 5, 0) { \
                   splice(@w, $i, 1); \
                 } \
+                # trim leading/trailing spaces if any; \
+                # convert the Unicode in titles to HTML because non-ASCII gives Galaxy trouble. \
+                foreach $i (0 .. $#w) { \
+                  $w[$i] =~ s/^\s*//;  $w[$i] =~ s/\s*$//; \
+                  # ugh, clean out non-utf8 stuff before decoding utf8 into unicode: \
+                  $w[$i] =~ s/\226/-/g; $w[$i] =~ s/\327/x/g; $w[$i] =~ s/\317\?/&tau;/g; \
+                  $w[$i] =~ s/\342\?\?/<sub>1<\/sub>/g; $w[$i] =~ s/\347/c/g; \
+                  $w[$i] =~ s/\351/e/g; $w[$i] =~ s/\353/e/g; \
+                  $w[$i] = decode_utf8($w[$i], Encode::FB_CROAK); \
+                  @chars = split(//, $w[$i]); \
+                  $w[$i] = ""; \
+                  foreach $c (@chars) { \
+                    if (ord($c) > 127) { \
+                      $c = sprintf "&#%d;", ord($c); \
+                    } \
+                  $w[$i] .= $c; \
+                  } \
+                } \
                 foreach $s (@snps) { \
-                  print join("\t", $s, @w); \
+                  print join("\t", $s, @w) . "\n"; \
                 } \
               }' \
       gwascatalog.txt \
@@ -29884,7 +29903,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 7702 elements of size 22
+#Loaded 7744 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29898,7 +29917,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#490 ambigStrand.txt
+#496 ambigStrand.txt
 
 
 #############################################################################
@@ -31213,15 +31232,16 @@ TMPDIR=/scratch/tmp
     md5sum *.gz > md5sum.txt
 
 #########################################################################
-# ISCA (FORMERLY ISCA RETROSPECTIVE) FROM DBVAR (DONE 10/18/11 angie)
+# ISCA (FORMERLY ISCA RETROSPECTIVE) FROM DBVAR (DONE 3/2/12 angie)
 # Combined submitted+remapped, w/new subcategories likely benign, likely pathogenic,
 # and removed Retrospective from names 10/18/11.
 # Split into benign/pathogenic/uncertain subtracks 9/14/11.
 # Reloaded 4/19/11 to drop the boring aggregate variants (sv; keep ssv).
 # Originally done 1/31/11
     # Redmine: Track #34 (dbVar for human)
-    mkdir -p /hive/data/genomes/hg18/bed/isca/2011_10_18
-    cd /hive/data/genomes/hg18/bed/isca/2011_10_18
+    set today = `date +%Y_%m_%d`
+    mkdir /hive/data/genomes/hg18/bed/isca/$today
+    cd /hive/data/genomes/hg18/bed/isca/$today
     # Get variants submitted on this assembly, and variants remapped from other assemblies.
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.NCBI36.submitted.all.germline.ucsc.gvf.gz
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.NCBI36.remap.all.germline.ucsc.gvf.gz
@@ -31260,40 +31280,41 @@ TMPDIR=/scratch/tmp
         print join("\t", @bed8Attrs) . "\n";' \
       > isca.bed
     wc -l isca.bed
-#11550 isca.bed
+#11969 isca.bed
+
     # Split into subtracks by clinical_int value.
     zcat nstd37_ISCA*.gvf.gz \
     | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
-#   4256 Benign
-#   4066 Pathogenic
-#   2837 Uncertain Significance
-#    330 Uncertain Significance: likely benign
-#     61 Uncertain Significance: likely pathogenic
+#   4301 Benign
+#   4250 Pathogenic
+#   2910 Uncertain significance
+#    394 Uncertain significance: likely benign
+#    114 Uncertain significance: likely pathogenic
     foreach subtrack (Benign Pathogenic)
       grep -w  $subtrack isca.bed > isca$subtrack.bed
       hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
         -allowStartEqualEnd hg18 isca$subtrack isca$subtrack.bed
     end
-#Loaded 4256 elements of size 11
-#Loaded 4066 elements of size 11
+#Read 4301 elements of size 11 from iscaBenign.bed
+#Read 4250 elements of size 11 from iscaPathogenic.bed
 
     # The subcategories of Uncertain need a bit more sophisticated treatment:
     set subtrack = Uncertain
     grep -w $subtrack isca.bed \
-    | grep -v 'Uncertain Significance: likely' \
+    | grep -vi 'Uncertain Significance: likely' \
       > isca$subtrack.bed
     hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
       -allowStartEqualEnd hg18 isca$subtrack isca$subtrack.bed
-#Loaded 2837 elements of size 11
+#Read 2910 elements of size 11 from iscaUncertain.bed
     foreach unc (benign pathogenic)
       set subtrack = Likely`perl -we 'print ucfirst("'$unc'");'`
-      grep -w "Uncertain Significance: likely $unc" isca.bed \
+      grep -wi "Uncertain Significance: likely $unc" isca.bed \
         > isca$subtrack.bed
       hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
         -allowStartEqualEnd hg18 isca$subtrack isca$subtrack.bed
     end
-#Loaded 330 elements of size 11
-#Loaded 61 elements of size 11
+#Read 394 elements of size 11 from iscaLikelyBenign.bed
+#Read 114 elements of size 11 from iscaLikelyPathogenic.bed
 
 
 #############################################################################

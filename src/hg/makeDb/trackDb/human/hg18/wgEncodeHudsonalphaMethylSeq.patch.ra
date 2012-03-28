@@ -1,0 +1,324 @@
+# HudsonAlpha Methyl-seq (wrangler: braney)
+
+track wgEncodeHudsonalphaMethylSeq
+compositeTrack on
+shortLabel HAIB Methyl-seq
+longLabel ENCODE HudsonAlpha Methyl-seq
+group regulation
+subGroup1 cellType Cell_Line  BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12878=GM12878 GM12891=GM12891 GM12892=GM12892 H1hESC=H1-hESC H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HepG2=HepG2 HeLaS3=HeLa-S3 HFL11W=HFL11W HFL24W=HFL24W K562=K562
+subGroup2 replicate Replicate rep1=1 rep2=2
+dimensions dimensionX=replicate dimensionY=cellType
+sortOrder cellType=+ replicate=+
+dragAndDrop subTracks
+visibilityViewDefaults Regions=dense
+controlledVocabulary encode/cv.ra cellType=cell
+priority 0
+type bed 9
+itemRgb on
+wgEncode 1
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12891
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel GM12891 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12891 cells)
+    subGroups cellType=GM12891 replicate=rep1
+    type bed 9
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12891
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel GM12891 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12891 cells)
+    subGroups cellType=GM12891 replicate=rep2
+    type bed 9
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12892
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel GM12892 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12892 cells)
+    subGroups cellType=GM12892 replicate=rep1
+    type bed 9
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12892
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel GM12892 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12892 cells)
+    subGroups cellType=GM12892 replicate=rep2
+    type bed 9
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel H1-hESC 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in H1-hESC cells)
+    subGroups cellType=H1hESC replicate=rep2
+    type bed 9
+    color 0,107,27
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel H1-hESC 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H1-hESC cells)
+    subGroups cellType=H1hESC replicate=rep1
+    type bed 9
+    color 0,107,27
+
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel HeLa-S3 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in HeLa-S3 cells)
+    subGroups cellType=HeLaS3 replicate=rep2
+    type bed 9
+    color 0,119,158
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel HeLa-S3 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HeLa-S3 cells)
+    subGroups cellType=HeLaS3 replicate=rep1
+    type bed 9
+    color 0,119,158
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel HepG2 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in HepG2 cells)
+    subGroups cellType=HepG2 replicate=rep2
+    type bed 9
+    color 189,0,157
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel HepG2 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HepG2 cells)
+    subGroups cellType=HepG2 replicate=rep1
+    type bed 9
+    color 189,0,157
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel HCT-116 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in HCT-116 cells)
+    subGroups cellType=HCT-116 replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+#    noInherit on
+    itemRgb on
+    cell HCT-116
+    color 0,55,219
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel HCT-116 2
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 2 (in HCT-116 cells)
+    subGroups cellType=HCT-116 replicate=rep2
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    #noInherit on
+    itemRgb on
+    cell HCT-116
+    color 0,55,219
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES cells)
+    subGroups cellType=H9ES replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    #noInherit on
+    itemRgb on
+    cell H9ES
+    color 0,128,0
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel H9ES-E 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-E cells)
+    subGroups cellType=H9ES-E replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    #noInherit on
+    itemRgb on
+    cell H9ES-E
+    color 0,128,0
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel H9ES-AFP+ 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-AFP+ cells)
+    subGroups cellType=H9ES-AFPP replicate=rep1
+    type bed 9
+    color 0,128,0
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel H9ES-AFP- 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-AFP- cells)
+    subGroups cellType=H9ES-AFP- replicate=rep1
+    type bed 9
+    color 0,128,0
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel H9ES-EB 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-EB cells)
+    subGroups cellType=H9ES-EB replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    itemRgb on
+    cell H9ES-EB
+    color 0,128,0
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel H9ES-CM 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-CM cells)
+    subGroups cellType=H9ES-CM replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    itemRgb on
+    cell H9ES-CM
+    color 0,128,0
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel H9ES-EBD 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in H9ES-EBD cells)
+    subGroups cellType=H9ES-EBD replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    itemRgb on
+    cell H9ES-EBD
+    color 0,128,0
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel BG02ES 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in BG02ES cells)
+    subGroups cellType=BG02ES replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    itemRgb on
+    cell BG02ES
+    color 0,128,0
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel BG02ES-EBD 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in BG02ES-EBD cells)
+    subGroups cellType=BG02ES-EBD replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    itemRgb on
+    cell BG02ES-EBD
+    color 0,128,0
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel BG02ES-EBD 2
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 2 (in BG02ES-EBD cells)
+    subGroups cellType=BG02ES-EBD replicate=rep2
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    itemRgb on
+    cell BG02ES-EBD
+    color 0,128,0
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel HFL11W 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in HFL11W cells)
+    subGroups cellType=HFL11W replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    itemRgb on
+    cell HFL11W
+    color 189,0,157
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
+    subTrack wgEncodeHudsonalphaMethylSeq off
+    shortLabel HFL24W 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in HFL24W cells)
+    subGroups cellType=HFL24W replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    itemRgb on
+    cell HFL24W
+    color 189,0,157
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HAL 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in HAL cells)
+    subGroups cellType=HAL replicate=rep1
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    itemRgb on
+    cell HAL
+    color 189,0,157
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel GM12878 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in GM12878 cells)
+    subGroups cellType=GM12878 replicate=rep1
+    type bed 9
+    itemRgb on
+    color 153,38,0
+    cell GM12878
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel GM12878 2
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 2 (in GM12878 cells)
+    subGroups cellType=GM12878 replicate=rep2
+    type bed 9
+    itemRgb on
+    color 153,38,0
+    cell GM12878
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1K562
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel K562 1
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 1 (in K562 cells)
+    subGroups cellType=K562 replicate=rep1
+    type bed 9
+    cell K562
+    itemRgb on
+    color 46,0,184
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2K562
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel K562 2
+    longLabel ENCODE HudsonAlpha Methyl-seq Regions Replicate 2 (in K562 cells)
+    subGroups cellType=K562 replicate=rep2
+    type bed 9
+    cell K562
+    itemRgb on
+    color 46,0,184

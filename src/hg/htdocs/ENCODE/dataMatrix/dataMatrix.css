@@ -10,45 +10,39 @@ table {
 th {
     vertical-align: bottom;
     text-align: left;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 5px;
 }
 
 td {
     border: none;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 3px;
-    padding-right: 3px;
+    padding: 3px;
 }
 
 /* vertical column headers (th child of columnHeaders row) */
 #columnHeaders th {
-    /*height: 150px;    restore when data types labels are cleaned up */
+    /* height is dynamically reset based on max label length */
     height: 180px;
 }
 
-.matrix {
-    background-color: #EEEEEE;
-}
-
 .verticalText {
-    text-align: center;
-    vertical-align: middle;
-    width: 20px;
-    margin: 0px;
-    padding: 0px;
-    padding-left: 3px;
-    padding-right: 3px;
-    padding-top: 10px;
+    /* text-align: center; */
+    /* vertical-align: middle; */
+    width: 1em;
+    padding-left: 4px;
+    padding-right: 4px;
     white-space: nowrap;
     /* for firefox, safari, chrome, etc. */
     -webkit-transform: rotate(-90deg);
     -moz-transform: rotate(-90deg);                 
     /* for IE */
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    /* replaced with writing-mode below */
+    /* filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); */
+}
+
+/* for IE, referenced by rotateCells jquery */
+table div.rotated {
+    writing-mode: tb-rl;
+    filter: flipv fliph;  /* 180 degrees */
 }
 
 .groupType {
@@ -71,20 +65,18 @@ td {
     color: #004D99;
 }
 
-.matrixCell {
-    border: 1px solid darkgray;
-    background-color: white;
-}
-
 .experiment {
     background-color: #00994D;
     text-align: center;
-    #padding: 10px;
-    #display: block;
+    border: 1px solid darkgray;
+}
+
+.todoExperiment {
+    border: 1px solid darkgray;
 }
 
 .experiment:hover {
-background-color: #994D00;
+   background-color: #FFFF80;
 }
 
 .experiment a {
@@ -108,29 +100,28 @@ text-decoration: none;
 }
 
 #cellHeaderLabel {
-    margin-top: 2em;
+    margin-top: 4em;
 }
 
 /* colored bullets on cell types based on karyotype CV field */
 
+.karyotype {
+    font-size: large;
+}
+
 .cancer {
     color: brown;
-    font-size: large;
-    text-align: right;
-    float: right;
 }
 
 .normal {
     color: green;
-    font-size: large;
-    text-align: right;
-    float: right;
 }
 
 .unknown {
     color: lightgrey;
-    text-align: right;
-    float: right;
 }
 
+.crossHair {
+    background-color: #EDEDED;
+}
 

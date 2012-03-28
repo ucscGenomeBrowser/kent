@@ -181,6 +181,7 @@ our %validators = (
     fragLength => \&validateNoValidation,
     setType => \&validateSetType,
     cell => \&validateControlledVocabOrNone,
+    insertLength => \&validateControlledVocabOrNone,
     antibody => \&validateControlledVocabOrControl,
     control => \&validateControlledVocabOrControl,
     ripAntibody => \&validateControlledVocabOrNone,
@@ -195,7 +196,7 @@ our %validators = (
     tissueSourceType => \&validateControlledVocabOrNone,
     spikeInPool => \&validateNoValidation,
     readType => \&validateControlledVocabOrNone,
-	region => \&validateControlledVocabOrNone,
+    region => \&validateControlledVocabOrNone,
     default => \&validateControlledVocab,
     );
 
@@ -311,6 +312,17 @@ sub validateControlledVocabOrControl {
 
 sub validateControlledVocab {
     my ($val, $type) = @_;
+
+    if (not defined $terms{'typeOfTerm'}->{$type}) {
+        return ("Controlled Vocabulary \'$type\' is not a defined type");
+    }   
+    if (not defined $terms{'typeOfTerm'}->{$type}->{'cvDefined'}) {
+        return ("Controlled Vocabulary \'$type\' has no cvDefined field");
+    }
+
+    if ($terms{'typeOfTerm'}->{$type}->{'cvDefined'} eq "no") {
+        return &validateNoValidation();
+    }
     return defined($terms{$type}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
@@ -349,16 +361,10 @@ our %formatCheckers = (
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
     rpkm  => \&validateRpkm,
-    junction  => \&validateFreepass,
-    fpkm1  => \&validateFreepass,
-    fpkm2  => \&validateFreepass,
-    fpkm => \&validateFreepass,
-    insDist  => \&validateFreepass,
     peptideMapping  => \&validateFreepass,
     fasta  => \&validateFasta,
     bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
-    cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     bigWig => \&validateBigWig,
     bigBed => \&validateBigBed,
     bam => \&validateBam,
@@ -367,7 +373,7 @@ our %formatCheckers = (
     bedRnaElements => \&validateBed,
     bedRrbs => \&validateBed,
     txt  => \&validateFreepass,
-    doc => \&validateFreepass,
+    document => \&validateFreepass,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -589,6 +595,17 @@ sub validateBed {
         if ($fieldCount >= 5 && $type ne 'bed5FloatScore' && $fields[5] !~ m/^(\+|\-|\.)$/) {
             push @localerrors, "$prefix field 6 ($fields[5]) value must be either + or - or .\n";
         }
+        if ($type eq 'bedRnaElements') {
+            unless ($fields[6] =~ m/$floatRegEx/) {
+                push @localerrors, "$prefix field 7 ($fields[6]) in $type must be a float.\n";
+            }
+            unless ($fields[7] =~ m/$floatRegEx/) {
+                push @localerrors, "$prefix field 8 ($fields[7]) in $type must be a float.\n";
+            }
+            unless ($fields[8] =~ m/^\d+$/) {
+                push @localerrors, "$prefix field 9 ($fields[8]) in $type must be an int.\n";
+            }
+        }
         if ($type eq 'bed5FloatScore' && $fieldCount < 6) {
             push @localerrors, "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
             next
@@ -754,7 +771,7 @@ sub getInfoFiles
     my $category = $terms{'Cell Line'}->{$cell}->{'category'};
 
     # Can be a better design, but need to flesh out design more.
-    if (defined $category && $category eq "Tissue") {
+    if (defined $category && $category eq "Tissue" && defined $sex) {
         $cellLineSex=$sex;
     }
 
@@ -935,7 +952,7 @@ sub validateBigBed
         return("failed validateBigBed for '$file'");
     }
     my ($tmpfile, $basedir, $bar) = fileparse($tempfilename);
-    my $bedError = &validateBed($basedir, $tmpfile, "bed");
+    my $bedError = &validateBed($basedir, $tmpfile, $type);
     if ($bedError) {
         $bedError =~ s/$tmpfile/$file/g;
         print STDERR "ERROR: failed validateBigBed : " . $bedError . "\n";
@@ -1154,6 +1171,29 @@ sub isDeprecated {
     else {
         return ();
     }
+}
+
+sub validateDdfHeader {
+
+    my @ddfHeader = @{$_[0]};
+    #can't use %terms becuase it's global, not falling into that trap.
+    my %cv = %{$_[1]};
+    my @localerrors;
+
+    foreach my $column (@ddfHeader) {
+        if ($column eq "cell") {
+            $column = "cellType";
+        }
+        if ($column eq "antibody") {
+            $column = "Antibody";
+        }
+        unless (defined $cv{'typeOfTerm'}->{$column}) {
+            push @localerrors, "The term '$column' is not in the Controlled Vocabulary";
+        }
+    }
+
+    return (\@localerrors);
+
 }
 
 sub validateDdfField {
@@ -1443,7 +1483,7 @@ sub makeDownloadTargetFileName {
         $fileType = "bed" if ($type =~ /^bed /);
 
         if (@srcFiles > 1) {
-            if (($type eq "fastq") || ($type eq "doc")) {
+            if (($type eq "fastq") || ($type eq "document")) {
                 $target = "$tablename.$fileType.tgz"; # will want to tar these
             } else {
                 $target = "$tablename.$fileType.gz";  # will cat and gz these
@@ -1452,7 +1492,7 @@ sub makeDownloadTargetFileName {
             my $srcFile  = $srcFiles[0];
 
             # Special effort for single docs which will have the suffix they came in with
-            if ($type eq "doc") {
+            if ($type eq "document") {
                 my @fileNameParts = split(/\./,$srcFile);
                 if (@fileNameParts > 1) {
                     shift( @fileNameParts ); # Throw away the root
@@ -1469,7 +1509,7 @@ sub makeDownloadTargetFileName {
             } elsif (Encode::isZipped($srcFile) && Encode::isZipped(".$fileType")) {
                 $target = "$tablename.$fileType"; # $fileType includes .gz
             } else {
-                $target = "$tablename.$fileType.gz"; # default of single file will be gz (even for a doc or fastq)
+                $target = "$tablename.$fileType.gz"; # default of single file will be gz (even for a document or fastq)
             }
         }
     }
@@ -1683,7 +1723,13 @@ while(@{$lines}) {
     last;
 }
 
-my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
+%terms = Encode::getControlledVocab($configPath);
+
+#my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
+
+#the ddf header should not validate against fields.ra, so it now validates against the CV
+my @errors = @{&validateDdfHeader(\@ddfHeader, \%terms)};
+
 
 # Special cases to handle conditionally required fields
 if(!defined($ddfHeader{controlId})) {
@@ -1700,7 +1746,6 @@ if(@errors) {
     die "ERROR in DDF '$ddfFile':\n" . join("\n", @errors) . "\n";
 }
 
-%terms = Encode::getControlledVocab($configPath);
 
 my @variables;
 if (defined($daf->{variables})) {
@@ -1799,6 +1844,13 @@ while (@{$lines}) {
             }
             my $cell = $line{cell};
             my $sex = $line{sex};
+            my $category;
+            if (defined $terms{'Cell Line'}->{$cell}) {
+                $category = $terms{'Cell Line'}->{$cell}->{'category'};
+            }
+            if (defined $category && $category eq "Tissue" && not defined $sex) {
+                push (@errors, "Cell '$cell' is a tissue; the sex must be defined in the DDF.");
+            }
             my $mdbError = validateDdfField($field, $line{$field}, $view, $daf, $cell, $sex, \%terms);
             if ($mdbError) {
                 push(@metadataErrors, $mdbError);
@@ -1969,6 +2021,13 @@ my $compositeTrack = Encode::compositeTrackName($daf);
 my $compositeExists = $db->quickQuery("select count(*) from trackDb where tableName = ?", $compositeTrack);
 
 if(@errors) {
+    #collapse identical errors into one line
+    my %errors;
+    foreach my $line (@errors) {
+        $errors{$line}++;
+    }
+    @errors = keys(%errors);
+
     my $prefix = @errors > 1 ? "Error(s)" : "Error";
     die "$prefix:\n\n" . join("\n\n", @errors) . "\n";
 }
@@ -2248,8 +2307,8 @@ foreach my $ddfLine (@ddfLines) {
         }
         if($prevTableFound) {
             my $oldSettings = $db->quickQuery("select settings from trackDb where tableName = '$prevTableName'");
-            if( $oldSettings ) {
-                $oldSettings =~ m/metadata (.*?)\n/;    # Is this throwing away all but the contents of the metadata line?
+            if( $oldSettings =~ m/metadata (.*?)\n/ ) {
+                #$oldSettings =~ m/metadata (.*?)\n/;    # Is this throwing away all but the contents of the metadata line?
                 my ( $tagRef, $valRef ) = Encode::metadataLineToArrays($1);
                 my @tags = @{$tagRef};
                 my @vals = @{$valRef};
@@ -2277,7 +2336,7 @@ foreach my $ddfLine (@ddfLines) {
         $metadata .= " attic=auxValid";
     } elsif ($ddfLine->{display} && $ddfLine->{display} eq "no") {
         $metadata .= " attic=auxExp";
-    } elsif ($type eq "doc") {
+    } elsif ($type eq "document") {
         if ($daf->{TRACKS}{$view}{supplemental} && $daf->{TRACKS}{$view}{supplemental} eq "yes") {
             # FIXME: at this point, the pipeline is unprepared to deal with "sup" which is placed in "supplemental" subdir.
             $metadata .= " attic=sup";
@@ -2355,7 +2414,7 @@ foreach my $ddfLine (@ddfLines) {
     }
     print LOADER_RA "files @{$ddfLine->{files}}\n";
     print LOADER_RA "downloadOnly $downloadOnly\n";
-    print LOADER_RA "pushQDescription $pushQDescription\n";
+    print LOADER_RA "pushQDescription 1\n";
     print LOADER_RA "targetFile $targetFile\n";
     print LOADER_RA "\n";
 
@@ -2445,7 +2504,6 @@ if($submitPath =~ /(\d+)$/) {
     }
 }
 
-#matt made this
 sub generateLongLabel {
     my $lab = $_[0];
     my %vars = %{$_[1]};

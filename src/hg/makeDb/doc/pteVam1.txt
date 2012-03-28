@@ -2,6 +2,10 @@
 
 # Pteropus vampyrus
 
+#	http://www.ncbi.nlm.nih.gov/bioproject/20325
+#	http://www.ncbi.nlm.nih.gov/genome/757
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABRP00
+
 #########################################################################
 # DOWNLOAD SEQUENCE 
     ssh kkstore05

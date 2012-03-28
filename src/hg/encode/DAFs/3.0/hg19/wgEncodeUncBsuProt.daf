@@ -1,24 +1,24 @@
-# Data Agreement File $Revision: 2.0 $
+# Data Agreement File $Revision: 3.1 $
 #
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the related .ddf should look like this:
-# files view replicate  cell    labExpId    labVersion      softwareVersion origAssembly
+# files view replicate  cell  protocol  labExpId    labVersion  
 #
 #files          a list of files that correspond to the metadata in this line
 #view           the view of the data as described below
 #replicate      the replicate number, note that it will only work if the view has (hasReplicates yes)
 #cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
+#protocol       In-gel or FASP
 #labExpId	for the lab to specify any internal experimental ID
 #labVersion     free text for the lab to specify metadata (possibly 'These files produced for use with GENCODE V3c' or something of the like) (OPTIONAL)
 #softwareVersion free text for the lab to specify Cufflinks V??? You can also clarify your mapAlgorithm here (OPTIONAL)
-#origAssembly   optional Specifies if this is new data (hg19) or remapped data (hg18)  (OPTIONAL) 
 #
 #NOTE:  The optional columns do not have to be in the DDF for validation.  They do not show up in the file names, just the metadata.
 
 
-dafVersion        2.0
+dafVersion        3.0
 
 # Lab and general info
 grant             Giddings
@@ -30,27 +30,39 @@ variables         cell, localization, protocol
 assembly          hg19
 
 
-validationSettings allowReloads
+validationSettings none
 
 # Track/view definition
-view             Signal
-type             peptideMapping
-hasReplicates    no
-required         no 
-
-view             RawSignal
-type             peptideMapping
-hasReplicates    no
-required         no 
-downloadOnly     yes
-
-view             Modified???
+view             pepMapFt
 type             bigBed
 hasReplicates    no
 required         no 
 
-view             ModifiedRaw??
+view             pepMapUnFt
 type             bigBed
 hasReplicates    no
 required         no 
 downloadOnly     yes
+
+view             pepMapGcFt
+type             bigBed
+hasReplicates    no
+required         no 
+
+view             pepMapGcUnFt
+type             bigBed
+hasReplicates    no
+required         no 
+downloadOnly     yes
+
+view             mPepMapGcFt
+type             bigBed
+hasReplicates    no
+required         no 
+
+view             mPepMapGcUnFt
+type             bigBed
+hasReplicates    no
+required         no 
+downloadOnly     yes
+

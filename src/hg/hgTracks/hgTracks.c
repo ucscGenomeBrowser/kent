@@ -938,7 +938,7 @@ tg->longLabel = "Your Sequence from Blat Search";
 tg->shortLabel = "Blat Sequence";
 tg->loadItems = loadUserPsl;
 tg->mapItemName = lfMapNameFromExtra;
-tg->priority = 100;
+tg->priority = 101;
 tg->defaultPriority = tg->priority;
 tg->groupName = "map";
 tg->defaultGroupName = cloneString(tg->groupName);
@@ -2527,9 +2527,9 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
-
-    jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
+// turn off inPlaceUpdate when rows in imgTbl can arbitrarily reappear and disappear (see redmine #7306)
+jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", withLeftLabels || withCenterLabels);
+jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
 if(newWinWidth)
     {
     jsonHashAddNumber(jsonForClient, "newWinWidth", newWinWidth);
@@ -3613,7 +3613,7 @@ if (!psOutput)
 if (!psOutput)
     {
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
-        cartSessionId(cart), "PDF/PS");
+        cartSessionId(cart), "PS/PDF");
     }
 
 if (!psOutput)
@@ -4180,8 +4180,8 @@ registerTrackHandlers();
 loadFromTrackDb(&trackList);
 if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
     slSafeAddHead(&trackList, pcrResultTg());
-if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
-slSafeAddHead(&trackList, oligoMatchTg());
+if (userSeqString != NULL) 
+    slSafeAddHead(&trackList, userPslTg());
 if (restrictionEnzymesOk())
     {
     slSafeAddHead(&trackList, cuttersTg());
@@ -4394,18 +4394,6 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
 void printTrackInitJavascript(struct track *trackList)
 {
 hPrintf("<input type='hidden' id='%s' name='%s' value=''>\n", hgtJsCommand, hgtJsCommand);
-hPrintf("<script type='text/javascript'>\n");
-hPrintf( "function hgTracksInitTracks()\n{\n");
-
-struct track *track;
-for (track = trackList; track != NULL; track = track->next)
-    {
-    if (startsWithWord("makeItems", track->tdb->type) )
-        hPrintf("makeItemsByDrag.init(\"%s\");\n", track->track);
-    }
-
-hPrintf( "}\n");
-hPrintf("</script>\n");
 }
 
 void jsCommandDispatch(char *command, struct track *trackList)
@@ -5506,37 +5494,35 @@ trashDirFile(&psTn, "hgt", "hgt", ".eps");
 if(!trackImgOnly)
     {
     hotLinks();
-    printf("<H1>PostScript/PDF Output</H1>\n");
-    printf("PostScript images can be printed at high resolution "
+    printf("<H1>PDF Output</H1>\n");
+    printf("PDF images can be printed with Acrobat Reader "
            "and edited by many drawing programs such as Adobe "
-           "Illustrator.");
+           "Illustrator or Inkscape.<BR> To save a file to disk, right-click "
+           "on one of the following links and select \"Save As...\".");
     }
 doTrackForm(psTn.forCgi, &ideoPsTn);
-
-// postscript
-printf("<UL>\n");
-printf("<LI><A HREF=\"%s\">Click here</A> "
-       "to download the current browser graphic in PostScript.\n", psTn.forCgi);
-if (strlen(ideoPsTn.forCgi))
-    printf("<LI><A HREF=\"%s\">Click here</A> "
-           "to download the current chromosome ideogram in PostScript.\n", ideoPsTn.forCgi);
-printf("</UL>\n");
 
 pdfFile = convertEpsToPdf(psTn.forCgi);
 if (strlen(ideoPsTn.forCgi))
     ideoPdfFile = convertEpsToPdf(ideoPsTn.forCgi);
 if(pdfFile != NULL)
     {
-    printf("<BR>PDF can be viewed with Adobe Acrobat Reader.\n");
     printf("<UL>\n");
-    printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
-       "to download the current browser graphic in PDF.\n", pdfFile);
+    printf("<LI><A TARGET=_blank HREF=\"%s\">"
+       "Download the current browser graphic</A> in PDF.\n", pdfFile);
     if (ideoPdfFile != NULL)
-        printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
-               "to download the current chromosome ideogram in PDF.\n", ideoPdfFile);
+        printf("<LI><A TARGET=_blank HREF=\"%s\">"
+               "Download the current chromosome ideogram</A> in PDF.\n", ideoPdfFile);
     printf("</UL>\n");
     freez(&pdfFile);
     freez(&ideoPdfFile);
+    // postscript
+    printf("<P><SMALL>\n");
+    printf("We still provide postscript files: <A HREF=\"%s\">browser graphic</A> ", psTn.forCgi);
+    if (strlen(ideoPsTn.forCgi))
+        printf("and <A HREF=\"%s\">ideogram</A>", ideoPsTn.forCgi);
+    printf("</SMALL></P>\n");
+
     }
 else
     printf("<BR><BR>PDF format not available");
@@ -5933,14 +5919,6 @@ hubCheckForNew(database, cart);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 }
 
-void ajaxWarnHandler(char *format, va_list args)
-{
-// When we are generating a response for ajax client and hit an error, put any warnings into hgTracks.err in the response.
-char buf[4096];
-vsnprintf(buf, sizeof(buf), format, args);
-jsonHashAddString(jsonForClient, "err", buf);
-}
-
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -5994,7 +5972,6 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     withNextItemArrows = FALSE;
     withNextExonArrows = FALSE;
     hgFindMatches = NULL;     // XXXX necessary ???
-    pushWarnHandler(ajaxWarnHandler);
     }
 
 jsonForClient = newJsonHash(newHash(8));
@@ -6034,8 +6011,6 @@ if(!trackImgOnly)
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
-    // XXXX stole this and '.hidden' from bioInt.css - needs work
-    hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
 
 /* check for new data hub */

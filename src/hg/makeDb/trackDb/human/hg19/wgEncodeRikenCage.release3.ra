@@ -3,17 +3,17 @@ compositeTrack on
 shortLabel RIKEN CAGE Loc
 longLabel RNA Subcellular CAGE Localization from ENCODE/RIKEN
 group expression
-subGroup1 view Views Clusters=Clusters PlusRawSignal=Plus_Signal MinusRawSignal=Minus_Signal Alignments=Alignments 
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLaS3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ MCF7=MCF7 NHEK=NHEK prostate=Prostate SKNSHRA=SK-N-SH_RA
+subGroup1 view Views TssHmm=TSS_HMM_Clusters MinusRawSignal=Minus_Signal PlusRawSignal=Plus_Signal Alignments=Alignments 
+subGroup2 cellType Cell_Line aGM12878=GM12878&nbsp;(Tier_1) aH1hESC=H1hESC&nbsp;(Tier_1) aK562=K562&nbsp;(Tier_1) bHeLaS3=HeLaS3&nbsp;(Tier_2) bHepG2=HepG2&nbsp;(Tier_2) bHUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ MCF7=MCF7 NHEK=NHEK prostate=Prostate SKNSHRA=SK-N-SH_RA
 subGroup3 localization Localization cell=Whole_Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract pAM=PolyA- pAP=PolyA+ total=Total_RNA
-subGroup5 rep Rep rep0=0 rep1=1 rep2=2 rep3=3 rep4=4 Pooled=Pooled
+subGroup5 rep Rep rep1=1 rep2=2 Pooled=Pooled
 dimensions dimensionX=cellType dimensionC=rnaExtract dimensionY=localization dimensionB=rep
 dimensionCchecked pAP,pAM
-dimensionBchecked rep0,rep1,Pooled
+dimensionBchecked rep1,Pooled
 filterComposite dimC=multi dimB=multi
 sortOrder  cellType=+ localization=+ rnaExtract=+ rep=+ view=-
-fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View dccRep=UCSC<BR>Replicate replicate=Lab<BR>Replicate bioRep=Cross_Lab<BR>BioReplicate labProtocolId=<i>Protocol<BR>ID</i> labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession origAssembly=Original<BR>Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum 
+fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View dccRep=UCSC<BR>Replicate replicate=Lab<BR>Replicate bioRep=Cross_Lab<BR>BioReplicate labProtocolId=<i>Protocol<BR>ID</i> labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession origAssembly=Original<BR>Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
@@ -21,7 +21,7 @@ priority 0
 type bed 3
 wgEncode 1
 superTrack wgEncodeRnaSeqSuper dense
-html wgEncodeRikenCage.new
+html wgEncodeRikenCage.release3
 
     track wgEncodeRikenCageViewPlusSignal
     shortLabel Plus Signal
@@ -51,7 +51,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel GM78 cyto pA- + 0
         longLabel GM12878 cytosol polyA- CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1GM12878 localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=PlusRawSignal cellType=aGM12878 localization=cytosol rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
@@ -62,7 +62,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HUVE cyto pA- + 0
         longLabel HUVEC cytosol polyA- CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HUVEC localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=PlusRawSignal cellType=bHUVEC localization=cytosol rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 224,75,0
         # subId=1800 dateSubmitted=2010-06-21
@@ -72,7 +72,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HepG cyto pA- + 0
         longLabel HepG2 cytosol polyA- CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=PlusRawSignal cellType=bHepG2 localization=cytosol rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1801 dateSubmitted=2010-06-21
@@ -82,7 +82,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HepG nucl pA- + 0
         longLabel HepG2 nucleus polyA- CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=pAM rep=rep1
+        subGroups view=PlusRawSignal cellType=bHepG2 localization=nucleus rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1802 dateSubmitted=2010-06-21
@@ -92,7 +92,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HUVE cell pA+ + 2
         longLabel HUVEC whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HUVEC localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=bHUVEC localization=cell rnaExtract=pAP rep=rep2
         type bigWig 0.040000 10398.650391
         origAssembly hg19
         color 224,75,0
@@ -103,7 +103,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HeLa nucl pA+ + 1
         longLabel HeLa-S3 nucleus polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=bHeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 0.070000 45852.261719
         origAssembly hg19
         color 0,119,158
@@ -114,7 +114,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HeLa nucl pA+ + 2
         longLabel HeLa-S3 nucleus polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HeLaS3 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=bHeLaS3 localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 0.050000 54571.789062
         origAssembly hg19
         color 0,119,158
@@ -136,7 +136,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HepG cell pA+ + 1
         longLabel HepG2 whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HepG2 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=bHepG2 localization=cell rnaExtract=pAP rep=rep1
         type bigWig 0.040000 32286.490234
         origAssembly hg19
         color 189,0,157
@@ -147,7 +147,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel H1ES cell pA+ + 1
         longLabel H1-hESC whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1H1hESC localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=aH1hESC localization=cell rnaExtract=pAP rep=rep1
         type bigWig 0.040000 7334.810059
         origAssembly hg19
         color 0,107,27
@@ -158,7 +158,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel H1ES cyto pA+ + 2
         longLabel H1-hESC cytosol polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1H1hESC localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=aH1hESC localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 0.040000 11435.740234
         origAssembly hg19
         color 0,107,27
@@ -169,7 +169,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HepG cell pA+ + 2
         longLabel HepG2 whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HepG2 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=bHepG2 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 0.040000 50981.449219
         origAssembly hg19
         color 189,0,157
@@ -180,7 +180,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HUVE nucl pA+ + 1
         longLabel HUVEC nucleus polyA+ CAGE Plus start sites Rep 1 (Lab Rep 3) from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HUVEC localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=bHUVEC localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 0.040000 34263.128906
         origAssembly hg19
         color 224,75,0
@@ -191,7 +191,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HUVE cell pA+ + 1
         longLabel HUVEC whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HUVEC localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=bHUVEC localization=cell rnaExtract=pAP rep=rep1
         type bigWig 0.040000 11292.700195
         origAssembly hg19
         color 224,75,0
@@ -202,7 +202,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HepG nucl pA+ + 1
         longLabel HepG2 nucleus polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=bHepG2 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 0.050000 82978.382812
         origAssembly hg19
         color 189,0,157
@@ -213,7 +213,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HeLa cell pA+ + 2
         longLabel HeLa-S3 whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HeLaS3 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=bHeLaS3 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 0.050000 11799.719727
         origAssembly hg19
         color 0,119,158
@@ -246,7 +246,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 cyto pA+ + 1
         longLabel K562 cytosol polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 0.040000 10278.469727
         origAssembly hg19
         color 46,0,184
@@ -257,7 +257,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel H1ES cell pA+ + 2
         longLabel H1-hESC whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1H1hESC localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=aH1hESC localization=cell rnaExtract=pAP rep=rep2
         type bigWig 0.050000 5374.350098
         origAssembly hg19
         color 0,107,27
@@ -268,7 +268,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HepG cyto pA+ + 2
         longLabel HepG2 cytosol polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=bHepG2 localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 0.050000 77987.828125
         origAssembly hg19
         color 189,0,157
@@ -279,7 +279,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HUVE cyto pA+ + 1
         longLabel HUVEC cytosol polyA+ CAGE Plus start sites Rep 1 (Lab Rep 3) from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HUVEC localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=bHUVEC localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 0.040000 10856.809570
         origAssembly hg19
         color 224,75,0
@@ -290,7 +290,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 nucl pA+ + 1
         longLabel K562 nucleus polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=aK562 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 0.050000 34920.730469
         origAssembly hg19
         color 46,0,184
@@ -301,7 +301,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HepG nucl pA+ + 2
         longLabel HepG2 nucleus polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=bHepG2 localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 0.050000 51112.691406
         origAssembly hg19
         color 189,0,157
@@ -312,7 +312,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HeLa cyto pA+ + 1
         longLabel HeLa-S3 cytosol polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=bHeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 0.050000 9534.669922
         origAssembly hg19
         color 0,119,158
@@ -323,7 +323,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HeLa cell pA+ + 1
         longLabel HeLa-S3 whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HeLaS3 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=bHeLaS3 localization=cell rnaExtract=pAP rep=rep1
         type bigWig 0.040000 14674.490234
         origAssembly hg19
         color 0,119,158
@@ -334,7 +334,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel K562 cell pA+ + 2
         longLabel K562 whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=aK562 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 0.040000 12450.700195
         origAssembly hg19
         color 46,0,184
@@ -356,7 +356,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel H1ES nucl pA+ + 2
         longLabel H1-hESC nucleus polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1H1hESC localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=aH1hESC localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 0.040000 7536.419922
         origAssembly hg19
         color 0,107,27
@@ -367,7 +367,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 cell pA+ + 1
         longLabel K562 whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=aK562 localization=cell rnaExtract=pAP rep=rep1
         type bigWig 0.050000 12831.000000
         origAssembly hg19
         color 46,0,184
@@ -378,7 +378,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel K562 nucl pA+ + 2
         longLabel K562 nucleus polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=aK562 localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 0.050000 45255.660156
         origAssembly hg19
         color 46,0,184
@@ -389,7 +389,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HepG cyto pA+ + 1
         longLabel HepG2 cytosol polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=bHepG2 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 0.060000 166794.718750
         origAssembly hg19
         color 189,0,157
@@ -400,7 +400,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HUVE nucl pA+ + 2
         longLabel HUVEC nucleus polyA+ CAGE Plus start sites Rep 2 (Lab Rep 4) from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HUVEC localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=bHUVEC localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 0.040000 26760.609375
         origAssembly hg19
         color 224,75,0
@@ -411,7 +411,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HeLa cyto pA+ + 2
         longLabel HeLa-S3 cytosol polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HeLaS3 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=bHeLaS3 localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 0.050000 10951.839844
         origAssembly hg19
         color 0,119,158
@@ -422,7 +422,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HUVE cyto pA+ + 2
         longLabel HUVEC cytosol polyA+ CAGE Plus start sites Rep 2 (Lab Rep 4) from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HUVEC localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=bHUVEC localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 0.040000 14849.919922
         origAssembly hg19
         color 224,75,0
@@ -433,7 +433,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel GM78 nucl pA- + 1
         longLabel GM12878 nucleus polyA- CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1GM12878 localization=nucleus rnaExtract=pAM rep=rep1
+        subGroups view=PlusRawSignal cellType=aGM12878 localization=nucleus rnaExtract=pAM rep=rep1
         type bigWig 0.710000 17480.259766
         origAssembly hg19
         color 153,38,0
@@ -454,7 +454,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel K562 cyto pA+ + 2
         longLabel K562 cytosol polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 0.060000 10864.750000
         origAssembly hg19
         color 46,0,184
@@ -475,7 +475,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 cyto pA- + 0
         longLabel K562 cytosol polyA- CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=PlusRawSignal cellType=aK562 localization=cytosol rnaExtract=pAM rep=rep1
         type bigWig 0.120000 6131.720215
         origAssembly hg18
         color 46,0,184
@@ -486,7 +486,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel H1ES cell pA- + 0
         longLabel H1-hESC whole cell polyA- CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1H1hESC localization=cell rnaExtract=pAM rep=rep1
+        subGroups view=PlusRawSignal cellType=aH1hESC localization=cell rnaExtract=pAM rep=rep1
         type  bigWig 0.040000 23004.330078
         origAssembly hg18
         color 0,107,27
@@ -497,7 +497,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel K562 chrm tot + 0
         longLabel K562 chromatin total CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=chromatin rnaExtract=total rep=rep1
+        subGroups view=PlusRawSignal cellType=aK562 localization=chromatin rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1804 dateSubmitted=2010-06-21
@@ -508,7 +508,7 @@ html wgEncodeRikenCage.new
         #subTrack wgEncodeRikenCageViewPlusSignal on
         #shortLabel K562 cyto pA+ + 0
         #longLabel K562 cytosol polyA+ CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        #subGroups view=PlusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep1
+        #subGroups view=PlusRawSignal cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep1
         #type bigWig 0.040000 4464.319824
         #color 46,0,184
         # subId=1806 dateSubmitted=2010-06-21
@@ -517,7 +517,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel K562 nplm tot + 0
         longLabel K562 nucleoplasm total CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=nucleoplasm rnaExtract=total rep=rep1
+        subGroups view=PlusRawSignal cellType=aK562 localization=nucleoplasm rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1808 dateSubmitted=2010-06-21
@@ -527,7 +527,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 psom pA- + 0
         longLabel K562 polysome polyA- CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=polysome rnaExtract=pAM rep=rep1
+        subGroups view=PlusRawSignal cellType=aK562 localization=polysome rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1810 dateSubmitted=2010-06-21
@@ -547,7 +547,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel K562 nucl pA- + 0
         longLabel K562 nucleus polyA- CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=nucleus rnaExtract=pAM rep=rep1
+        subGroups view=PlusRawSignal cellType=aK562 localization=nucleus rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=2127 dateSubmitted=2010-08-26
@@ -557,7 +557,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HepG nlus tot + 0
         longLabel HepG2 nucleolus total CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleolus rnaExtract=total rep=rep1
+        subGroups view=PlusRawSignal cellType=bHepG2 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=2124 dateSubmitted=2010-08-23
@@ -567,7 +567,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel GM78 nlus tot + 0
         longLabel GM12878 nucleolus total CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
+        subGroups view=PlusRawSignal cellType=aGM12878 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
         color 153,38,0
         # subId=2125 dateSubmitted=2010-08-23
@@ -577,7 +577,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HeLa cyto pA- + 0
         longLabel HeLa-S3 cytosol polyA- CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups rep=rep1 view=PlusRawSignal cellType=2HeLaS3 localization=cytosol rnaExtract=pAM
+        subGroups rep=rep1 view=PlusRawSignal cellType=bHeLaS3 localization=cytosol rnaExtract=pAM
         type bigWig 0.140000 55619.878906
         origAssembly hg18
         color 0,119,158
@@ -588,7 +588,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel HeLa nlus tot + 0
         longLabel Hela-S3 nucleolus total CAGE Plus start sites Generation 0 from ENCODE/RIKEN
-        subGroups rep=rep1 view=PlusRawSignal cellType=2HeLaS3 localization=nucleolus rnaExtract=total
+        subGroups rep=rep1 view=PlusRawSignal cellType=bHeLaS3 localization=nucleolus rnaExtract=total
         type bigWig 0.120000 29534.529297
         origAssembly hg18
         color 0,119,158
@@ -599,7 +599,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel K562 nlus tot + 1
         longLabel K562 nucleolus total CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1K562 localization=nucleolus rnaExtract=total rep=rep1
+        subGroups view=PlusRawSignal cellType=aK562 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.050000 38081.750000
         origAssembly hg19
         color 46,0,184
@@ -681,7 +681,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel GM78 cell pA+ + 1
         longLabel GM12878 whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1GM12878 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=aGM12878 localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 188531.000000
         color 153,38,0
         # subId=3946 dateSubmitted=2011-04-29
@@ -692,7 +692,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel GM78 cyto pA+ + 1
         longLabel GM12878 cytosol polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=aGM12878 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 1.000000 178047.000000
         color 153,38,0
         # subId=3950 dateSubmitted=2011-04-29
@@ -703,7 +703,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal on
         shortLabel GM78 nucl pA+ + 1
         longLabel GM12878 nucleus polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=PlusRawSignal cellType=aGM12878 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 255779.000000
         color 153,38,0
         # subId=3948 dateSubmitted=2011-04-29
@@ -713,7 +713,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel GM78 nucl pA+ + 2
         longLabel GM12878 nucleus polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1GM12878 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=aGM12878 localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 1.000000 361501.000000
         color 153,38,0
         # subId=3949 dateSubmitted=2011-04-29
@@ -723,7 +723,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel GM78 cell pA+ + 2
         longLabel GM12878 whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1GM12878 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=aGM12878 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 1.000000 218248.000000
         color 153,38,0
         # subId=3951 dateSubmitted=2011-04-29
@@ -733,7 +733,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel GM78 cyto pA+ + 2
         longLabel GM12878 cytosol polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=1GM12878 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=PlusRawSignal cellType=aGM12878 localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 1.000000 277633.000000
         color 153,38,0
         # subId=3947 dateSubmitted=2011-04-28
@@ -777,7 +777,7 @@ html wgEncodeRikenCage.new
     windowingFunction mean+whiskers
     autoScale off
     transformFunc NONE
-    maxWindowToDraw 10000000
+    maxWindowToDraw 1000000
 
         track wgEncodeRikenCageNhekCytosolPamMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal off
@@ -793,7 +793,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel GM78 cyto pA- - 0
         longLabel GM12878 cytosol polyA- CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1GM12878 localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=MinusRawSignal cellType=aGM12878 localization=cytosol rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
@@ -804,7 +804,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HUVE cyto pA- - 0
         longLabel HUVEC cytosol polyA- CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HUVEC localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=MinusRawSignal cellType=bHUVEC localization=cytosol rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 224,75,0
         # subId=1800 dateSubmitted=2010-06-21
@@ -814,7 +814,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HepG cyto pA- - 0
         longLabel HepG2 cytosol polyA- CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=MinusRawSignal cellType=bHepG2 localization=cytosol rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1801 dateSubmitted=2010-06-21
@@ -824,7 +824,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HepG nucl pA- - 0
         longLabel HepG2 nucleus polyA- CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=pAM rep=rep1
+        subGroups view=MinusRawSignal cellType=bHepG2 localization=nucleus rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1802 dateSubmitted=2010-06-21
@@ -835,7 +835,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel K562 chrm tot - 0
         longLabel K562 chromatin total CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=chromatin rnaExtract=total rep=rep1
+        subGroups view=MinusRawSignal cellType=aK562 localization=chromatin rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1804 dateSubmitted=2010-06-21
@@ -846,7 +846,7 @@ html wgEncodeRikenCage.new
         #subTrack wgEncodeRikenCageViewMinusSignal on
         #shortLabel K562 cyto pA+ - 0
         #longLabel K562 cytosol polyA+ CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        #subGroups view=MinusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep1
+        #subGroups view=MinusRawSignal cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep1
         #type bigWig 0.040000 4464.319824
         #color 46,0,184
         # subId=1806 dateSubmitted=2010-06-21
@@ -855,7 +855,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel K562 nplm tot - 0
         longLabel K562 nucleoplasm total CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=nucleoplasm rnaExtract=total rep=rep1
+        subGroups view=MinusRawSignal cellType=aK562 localization=nucleoplasm rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1808 dateSubmitted=2010-06-21
@@ -865,7 +865,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 psom pA- - 0
         longLabel K562 polysome polyA- CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=polysome rnaExtract=pAM rep=rep1
+        subGroups view=MinusRawSignal cellType=aK562 localization=polysome rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1810 dateSubmitted=2010-06-21
@@ -885,7 +885,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 nucl pA- - 0
         longLabel K562 nucleus polyA- CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=nucleus rnaExtract=pAM rep=rep1
+        subGroups view=MinusRawSignal cellType=aK562 localization=nucleus rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=2127 dateSubmitted=2010-08-26
@@ -895,7 +895,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HepG nlus tot - 0
         longLabel HepG2 nucleolus total CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleolus rnaExtract=total rep=rep1
+        subGroups view=MinusRawSignal cellType=bHepG2 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=2124 dateSubmitted=2010-08-23
@@ -905,7 +905,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel GM78 nlus tot - 0
         longLabel GM12878 nucleolus total CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
+        subGroups view=MinusRawSignal cellType=aGM12878 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
         color 153,38,0
         # subId=2125 dateSubmitted=2010-08-23
@@ -915,7 +915,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HUVE cell pA+ - 2
         longLabel HUVEC whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HUVEC localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=bHUVEC localization=cell rnaExtract=pAP rep=rep2
         type bigWig 0.040000 11331.299805
         origAssembly hg19
         color 224,75,0
@@ -926,7 +926,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HeLa nucl pA+ - 1
         longLabel HeLa-S3 nucleus polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=bHeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 0.070000 8482.209961
         origAssembly hg19
         color 0,119,158
@@ -937,7 +937,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HeLa nucl pA+ - 2
         longLabel HeLa-S3 nucleus polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HeLaS3 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=bHeLaS3 localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 0.050000 14537.650391
         origAssembly hg19
         color 0,119,158
@@ -959,7 +959,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HepG cell pA+ - 1
         longLabel HepG2 whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HepG2 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=bHepG2 localization=cell rnaExtract=pAP rep=rep1
         type bigWig 0.040000 7464.879883
         origAssembly hg19
         color 189,0,157
@@ -970,7 +970,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel H1ES cell pA+ - 1
         longLabel H1-hESC whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1H1hESC localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=aH1hESC localization=cell rnaExtract=pAP rep=rep1
         type bigWig 0.040000 13309.480469
         origAssembly hg19
         color 0,107,27
@@ -981,7 +981,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel H1ES cyto pA+ - 2
         longLabel H1-hESC cytosol polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1H1hESC localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=aH1hESC localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 0.040000 9035.400391
         origAssembly hg19
         color 0,107,27
@@ -992,7 +992,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HepG cell pA+ - 2
         longLabel HepG2 whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HepG2 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=bHepG2 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 0.040000 9120.190430
         origAssembly hg19
         color 189,0,157
@@ -1003,7 +1003,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HUVE nucl pA+ - 1
         longLabel HUVEC nucleus polyA+ CAGE Minus start sites Rep 1 (Lab Rep 3) from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HUVEC localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=bHUVEC localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 0.040000 5482.290039
         origAssembly hg19
         color 224,75,0
@@ -1014,7 +1014,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HUVE cell pA+ - 1
         longLabel HUVEC whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HUVEC localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=bHUVEC localization=cell rnaExtract=pAP rep=rep1
         type bigWig 0.040000 12203.730469
         origAssembly hg19
         color 224,75,0
@@ -1025,7 +1025,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HepG nucl pA+ - 1
         longLabel HepG2 nucleus polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=bHepG2 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 0.050000 4378.689941
         origAssembly hg19
         color 189,0,157
@@ -1036,7 +1036,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HeLa cell pA+ - 2
         longLabel HeLa-S3 whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HeLaS3 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=bHeLaS3 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 0.050000 13169.519531
         origAssembly hg19
         color 0,119,158
@@ -1069,7 +1069,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 cyto pA+ - 1
         longLabel K562 cytosol polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 0.040000 13557.019531
         origAssembly hg19
         color 46,0,184
@@ -1080,7 +1080,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel H1ES cell pA+ - 2
         longLabel H1-hESC whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1H1hESC localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=aH1hESC localization=cell rnaExtract=pAP rep=rep2
         type bigWig 0.050000 11162.490234
         origAssembly hg19
         color 0,107,27
@@ -1091,7 +1091,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HepG cyto pA+ - 2
         longLabel HepG2 cytosol polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=bHepG2 localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 0.050000 7257.919922
         origAssembly hg19
         color 189,0,157
@@ -1102,7 +1102,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HUVE cyto pA+ - 1
         longLabel HUVEC cytosol polyA+ CAGE Minus start sites Rep 1 (Lab Rep 3) from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HUVEC localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=bHUVEC localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 0.040000 10944.379883
         origAssembly hg19
         color 224,75,0
@@ -1113,7 +1113,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 nucl pA+ - 1
         longLabel K562 nucleus polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=aK562 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 0.050000 16401.419922
         origAssembly hg19
         color 46,0,184
@@ -1124,7 +1124,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HepG nucl pA+ - 2
         longLabel HepG2 nucleus polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=bHepG2 localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 0.050000 5314.419922
         origAssembly hg19
         color 189,0,157
@@ -1135,7 +1135,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HeLa cyto pA+ - 1
         longLabel HeLa-S3 cytosol polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=bHeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 0.050000 11692.589844
         origAssembly hg19
         color 0,119,158
@@ -1146,7 +1146,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HeLa cell pA+ - 1
         longLabel HeLa-S3 whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HeLaS3 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=bHeLaS3 localization=cell rnaExtract=pAP rep=rep1
         type bigWig 0.040000 10177.059570
         origAssembly hg19
         color 0,119,158
@@ -1157,7 +1157,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel K562 cell pA+ - 2
         longLabel K562 whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=aK562 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 0.040000 18586.400391
         origAssembly hg19
         color 46,0,184
@@ -1179,7 +1179,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel H1ES nucl pA+ - 2
         longLabel H1-hESC nucleus polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1H1hESC localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=aH1hESC localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 0.040000 6403.740234
         origAssembly hg19
         color 0,107,27
@@ -1190,7 +1190,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 cell pA+ - 1
         longLabel K562 whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=aK562 localization=cell rnaExtract=pAP rep=rep1
         type bigWig 0.050000 18315.849609
         origAssembly hg19
         color 46,0,184
@@ -1201,7 +1201,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel K562 nucl pA+ - 2
         longLabel K562 nucleus polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=aK562 localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 0.050000 10692.429688
         origAssembly hg19
         color 46,0,184
@@ -1212,7 +1212,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HepG cyto pA+ - 1
         longLabel HepG2 cytosol polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=bHepG2 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 0.060000 6386.109863
         origAssembly hg19
         color 189,0,157
@@ -1223,7 +1223,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HUVE nucl pA+ - 2
         longLabel HUVEC nucleus polyA+ CAGE Minus start sites Rep 2 (Lab Rep 4) from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HUVEC localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=bHUVEC localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 0.040000 5541.009766
         origAssembly hg19
         color 224,75,0
@@ -1234,7 +1234,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HeLa cyto pA+ - 2
         longLabel HeLa-S3 cytosol polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HeLaS3 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=bHeLaS3 localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 0.050000 13038.450195
         origAssembly hg19
         color 0,119,158
@@ -1245,7 +1245,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HUVE cyto pA+ - 2
         longLabel HUVEC cytosol polyA+ CAGE Minus start sites Rep 2 (Lab Rep 4) from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=2HUVEC localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=bHUVEC localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 0.040000 7272.350098
         origAssembly hg19
         color 224,75,0
@@ -1256,7 +1256,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel GM78 nucl pA- - 1
         longLabel GM12878 nucleus polyA- CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1GM12878 localization=nucleus rnaExtract=pAM rep=rep1
+        subGroups view=MinusRawSignal cellType=aGM12878 localization=nucleus rnaExtract=pAM rep=rep1
         type bigWig 0.710000 8817.570312
         origAssembly hg19
         color 153,38,0
@@ -1277,7 +1277,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel K562 cyto pA+ - 2
         longLabel K562 cytosol polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 0.060000 18765.929688
         origAssembly hg19
         color 46,0,184
@@ -1298,7 +1298,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel K562 cyto pA- - 0
         longLabel K562 cytosol polyA- CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=MinusRawSignal cellType=aK562 localization=cytosol rnaExtract=pAM rep=rep1
         type bigWig 0.120000 9517.360352
         origAssembly hg18
         color 46,0,184
@@ -1309,7 +1309,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel H1ES cell pA- - 0
         longLabel H1-hESC whole cell polyA- CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1H1hESC localization=cell rnaExtract=pAM rep=rep1
+        subGroups view=MinusRawSignal cellType=aH1hESC localization=cell rnaExtract=pAM rep=rep1
         type bigWig 0.040000 10790.110352
         origAssembly hg18
         color 0,107,27
@@ -1320,7 +1320,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HeLa cyto pA- - 0
         longLabel HeLa-S3 cytosol polyA- CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups rep=rep1 view=MinusRawSignal cellType=2HeLaS3 localization=cytosol rnaExtract=pAM
+        subGroups rep=rep1 view=MinusRawSignal cellType=bHeLaS3 localization=cytosol rnaExtract=pAM
         type bigWig 0.140000 15425.269531
         origAssembly hg18
         color 0,119,158
@@ -1331,7 +1331,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel HeLa nlus tot - 0
         longLabel Hela-S3 nucleolus total CAGE Minus start sites Generation 0 from ENCODE/RIKEN
-        subGroups rep=rep1 view=MinusRawSignal cellType=2HeLaS3 localization=nucleolus rnaExtract=total
+        subGroups rep=rep1 view=MinusRawSignal cellType=bHeLaS3 localization=nucleolus rnaExtract=total
         type bigWig 0.120000 21887.250000
         origAssembly hg18
         color 0,119,158
@@ -1342,7 +1342,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel K562 nlus tot - 1
         longLabel K562 nucleolus total CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1K562 localization=nucleolus rnaExtract=total rep=rep1
+        subGroups view=MinusRawSignal cellType=aK562 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.050000 19662.699219
         origAssembly hg19
         color 46,0,184
@@ -1424,7 +1424,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel GM78 cell pA+ - 1
         longLabel GM12878 whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1GM12878 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=aGM12878 localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 285019.000000
         color 153,38,0
         # subId=3946 dateSubmitted=2011-04-29
@@ -1434,7 +1434,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel GM78 cyto pA+ - 1
         longLabel GM12878 cytosol polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=aGM12878 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 1.000000 461584.000000
         color 153,38,0
         # subId=3950 dateSubmitted=2011-04-29
@@ -1444,7 +1444,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal on
         shortLabel GM78 nucl pA+ - 1
         longLabel GM12878 nucleus polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=MinusRawSignal cellType=aGM12878 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 110366.000000
         color 153,38,0
         # subId=3948 dateSubmitted=2011-04-29
@@ -1454,7 +1454,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel GM78 nucl pA+ - 2
         longLabel GM12878 nucleus polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1GM12878 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=aGM12878 localization=nucleus rnaExtract=pAP rep=rep2
         type bigWig 1.000000 106130.000000
         color 153,38,0
         # subId=3949 dateSubmitted=2011-04-29
@@ -1464,7 +1464,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel GM78 cell pA+ - 2
         longLabel GM12878 whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1GM12878 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=aGM12878 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 1.000000 304430.000000
         color 153,38,0
         # subId=3951 dateSubmitted=2011-04-29
@@ -1474,7 +1474,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel GM78 cyto pA+ - 2
         longLabel GM12878 cytosol polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=1GM12878 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=MinusRawSignal cellType=aGM12878 localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 1.000000 460936.000000
         color 153,38,0
         # subId=3947 dateSubmitted=2011-04-28
@@ -1491,7 +1491,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageSknshraCellPapMinusRawRep1
         subTrack wgEncodeRikenCageViewMinusSignal off
-        shortLabel SKSH cell pA+ - 1
+        shortLabel SKSH cell pAP - 1
         longLabel SK-N-SH_RA whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 134321.000000
@@ -1539,7 +1539,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 cyto pA- A 0
         longLabel GM12878 cytosol polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1GM12878 localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=Alignments cellType=aGM12878 localization=cytosol rnaExtract=pAM rep=rep1
         type bam
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
@@ -1550,7 +1550,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cyto pA- A 0
         longLabel HUVEC cytosol polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HUVEC localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=Alignments cellType=bHUVEC localization=cytosol rnaExtract=pAM rep=rep1
         type bam
         color 224,75,0
         # subId=1800 dateSubmitted=2010-06-21 THIS ONE SHOWS
@@ -1561,7 +1561,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HepG cyto pA- A 0
         longLabel HepG2 cytosol polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HepG2 localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=Alignments cellType=bHepG2 localization=cytosol rnaExtract=pAM rep=rep1
         type bam
         color 189,0,157
         # subId=1801 dateSubmitted=2010-06-21
@@ -1572,7 +1572,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HepG nucl pA- A 0
         longLabel HepG2 nucleus polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=pAM rep=rep1
+        subGroups view=Alignments cellType=bHepG2 localization=nucleus rnaExtract=pAM rep=rep1
         type bam
         color 189,0,157
         # subId=1802 dateSubmitted=2010-06-21
@@ -1583,7 +1583,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 chrm tot A 0
         longLabel K562 chromatin total CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=chromatin rnaExtract=total rep=rep1
+        subGroups view=Alignments cellType=aK562 localization=chromatin rnaExtract=total rep=rep1
         type bam
         color 46,0,184
         # subId=1804 dateSubmitted=2010-06-21
@@ -1594,7 +1594,7 @@ html wgEncodeRikenCage.new
         #subTrack wgEncodeRikenCageViewAlignments off
         #shortLabel K562 cyto pA+ A 0
         #longLabel K562 cytosol polyA+ CAGE Alignments Generation 0 from ENCODE/RIKEN
-        #subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep1
+        #subGroups view=Alignments cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep1
         #type bam
         #color 46,0,184
         # subId=1806 dateSubmitted=2010-06-21
@@ -1603,7 +1603,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 nplm tot A 0
         longLabel K562 nucleoplasm total CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=nucleoplasm rnaExtract=total rep=rep1
+        subGroups view=Alignments cellType=aK562 localization=nucleoplasm rnaExtract=total rep=rep1
         type bam
         color 46,0,184
         # subId=1808 dateSubmitted=2010-06-21
@@ -1612,7 +1612,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 psom pA- A 0
         longLabel K562 polysome polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=polysome rnaExtract=pAM rep=rep1
+        subGroups view=Alignments cellType=aK562 localization=polysome rnaExtract=pAM rep=rep1
         type bam
         color 46,0,184
         # subId=1810 dateSubmitted=2010-06-21
@@ -1632,7 +1632,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA- A 0
         longLabel K562 nucleus polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=pAM rep=rep1
+        subGroups view=Alignments cellType=aK562 localization=nucleus rnaExtract=pAM rep=rep1
         type bam
         color 46,0,184
         # subId=2127 dateSubmitted=2010-08-26
@@ -1642,7 +1642,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HepG nlus tot A 0
         longLabel HepG2 nucleolus total CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HepG2 localization=nucleolus rnaExtract=total rep=rep1
+        subGroups view=Alignments cellType=bHepG2 localization=nucleolus rnaExtract=total rep=rep1
         type bam
         color 189,0,157
         # subId=2124 dateSubmitted=2010-08-23
@@ -1651,7 +1651,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 nlus tot A 0
         longLabel GM12878 nucleolus total CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
+        subGroups view=Alignments cellType=aGM12878 localization=nucleolus rnaExtract=total rep=rep1
         type bam
         color 153,38,0
         # subId=2125 dateSubmitted=2010-08-23
@@ -1660,7 +1660,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cell pA+ A 2
         longLabel HUVEC whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HUVEC localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=bHUVEC localization=cell rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 224,75,0
@@ -1670,7 +1670,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HeLa nucl pA+ A 1
         longLabel HeLa-S3 nucleus polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=bHeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 0,119,158
@@ -1680,7 +1680,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HeLa nucl pA+ A 2
         longLabel HeLa-S3 nucleus polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HeLaS3 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=bHeLaS3 localization=nucleus rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 0,119,158
@@ -1700,7 +1700,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HepG cell pA+ A 1
         longLabel HepG2 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HepG2 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=bHepG2 localization=cell rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 189,0,157
@@ -1710,7 +1710,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cell pA+ A 1
         longLabel H1-hESC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1H1hESC localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=aH1hESC localization=cell rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 0,107,27
@@ -1720,7 +1720,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cyto pA+ A 2
         longLabel H1-hESC cytosol polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1H1hESC localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=aH1hESC localization=cytosol rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 0,107,27
@@ -1730,7 +1730,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HepG cell pA+ A 2
         longLabel HepG2 whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HepG2 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=bHepG2 localization=cell rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 189,0,157
@@ -1740,7 +1740,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HUVE nucl pA+ A 1
         longLabel HUVEC nucleus polyA+ CAGE Alignments Rep 1 (Lab Rep 3) from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HUVEC localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=bHUVEC localization=nucleus rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 224,75,0
@@ -1750,7 +1750,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cell pA+ A 1
         longLabel HUVEC whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HUVEC localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=bHUVEC localization=cell rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 224,75,0
@@ -1760,7 +1760,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HepG nucl pA+ A 1
         longLabel HepG2 nucleus polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=bHepG2 localization=nucleus rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 189,0,157
@@ -1770,7 +1770,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cell pA+ A 2
         longLabel HeLa-S3 whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HeLaS3 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=bHeLaS3 localization=cell rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 0,119,158
@@ -1800,7 +1800,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA+ A 1
         longLabel K562 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 46,0,184
@@ -1810,7 +1810,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cell pA+ A 2
         longLabel H1-hESC whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1H1hESC localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=aH1hESC localization=cell rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 0,107,27
@@ -1820,7 +1820,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HepG cyto pA+ A 2
         longLabel HepG2 cytosol polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HepG2 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=bHepG2 localization=cytosol rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 189,0,157
@@ -1830,7 +1830,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cyto pA+ A 1
         longLabel HUVEC cytosol polyA+ CAGE Alignments Rep 1 (Lab Rep 3) from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HUVEC localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=bHUVEC localization=cytosol rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 224,75,0
@@ -1840,7 +1840,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA+ A 1
         longLabel K562 nucleus polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=aK562 localization=nucleus rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 46,0,184
@@ -1850,7 +1850,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HepG nucl pA+ A 2
         longLabel HepG2 nucleus polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=bHepG2 localization=nucleus rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 189,0,157
@@ -1860,7 +1860,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cyto pA+ A 1
         longLabel HeLa-S3 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=bHeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 0,119,158
@@ -1870,7 +1870,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cell pA+ A 1
         longLabel HeLa-S3 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HeLaS3 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=bHeLaS3 localization=cell rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 0,119,158
@@ -1880,7 +1880,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 cell pA+ A 2
         longLabel K562 whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=aK562 localization=cell rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 46,0,184
@@ -1900,7 +1900,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel H1ES nucl pA+ A 2
         longLabel H1-hESC nucleus polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1H1hESC localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=aH1hESC localization=nucleus rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 0,107,27
@@ -1910,7 +1910,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 cell pA+ A 1
         longLabel K562 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=aK562 localization=cell rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 46,0,184
@@ -1920,7 +1920,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA+ A 2
         longLabel K562 nucleus polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=aK562 localization=nucleus rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 46,0,184
@@ -1930,7 +1930,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HepG cyto pA+ A 1
         longLabel HepG2 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HepG2 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=bHepG2 localization=cytosol rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
         color 189,0,157
@@ -1940,7 +1940,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HUVE nucl pA+ A 2
         longLabel HUVEC nucleus polyA+ CAGE Alignments Rep 2 (Lab Rep 4) from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HUVEC localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=bHUVEC localization=nucleus rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 224,75,0
@@ -1950,7 +1950,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cyto pA+ A 2
         longLabel HeLa-S3 cytosol polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HeLaS3 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=bHeLaS3 localization=cytosol rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 0,119,158
@@ -1960,7 +1960,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cyto pA+ A 2
         longLabel HUVEC cytosol polyA+ CAGE Alignments Rep 2 (Lab Rep 4) from ENCODE/RIKEN
-        subGroups view=Alignments cellType=2HUVEC localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=bHUVEC localization=cytosol rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 224,75,0
@@ -1970,7 +1970,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 nucl pA- A 1
         longLabel GM12878 nucleus polyA- CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1GM12878 localization=nucleus rnaExtract=pAM rep=rep1
+        subGroups view=Alignments cellType=aGM12878 localization=nucleus rnaExtract=pAM rep=rep1
         type bam
         origAssembly hg19
         color 153,38,0
@@ -1990,7 +1990,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA+ A 2
         longLabel K562 cytosol polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=aK562 localization=cytosol rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
         color 46,0,184
@@ -2010,7 +2010,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA- A 0
         longLabel K562 cytosol polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=pAM rep=rep1
+        subGroups view=Alignments cellType=aK562 localization=cytosol rnaExtract=pAM rep=rep1
         type bam
         origAssembly hg18
         color 46,0,184
@@ -2021,7 +2021,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cell pA- A 0
         longLabel H1-hESC whole cell polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1H1hESC localization=cell rnaExtract=pAM rep=rep1
+        subGroups view=Alignments cellType=aH1hESC localization=cell rnaExtract=pAM rep=rep1
         type bam
         origAssembly hg18
         color 0,107,27
@@ -2032,7 +2032,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cyto pA- A 0
         longLabel HeLa-S3 cytosol polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups rep=rep1 view=Alignments cellType=2HeLaS3 localization=cytosol rnaExtract=pAM
+        subGroups rep=rep1 view=Alignments cellType=bHeLaS3 localization=cytosol rnaExtract=pAM
         type bam
         origAssembly hg18
         color 0,119,158
@@ -2043,7 +2043,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel HeLa nlus tot A 0
         longLabel HeLa-S3 nucleolus total CAGE Alignments Generation 0 from ENCODE/RIKEN
-        subGroups rep=rep1 view=Alignments cellType=2HeLaS3 localization=nucleolus rnaExtract=total
+        subGroups rep=rep1 view=Alignments cellType=bHeLaS3 localization=nucleolus rnaExtract=total
         type bam
         origAssembly hg18
         color 0,119,158
@@ -2053,7 +2053,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel K562 nlus tot A 1
         longLabel K562 nucleolus total CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=total rep=rep1
+        subGroups view=Alignments cellType=aK562 localization=nucleolus rnaExtract=total rep=rep1
         type bam
         origAssembly hg19
         color 46,0,184
@@ -2155,7 +2155,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 cell pA+ A 1
         longLabel GM12878 whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1GM12878 localization=cell rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=aGM12878 localization=cell rnaExtract=pAP rep=rep1
         type bam
         color 153,38,0
         # subId=3946 dateSubmitted=2011-04-29
@@ -2164,7 +2164,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 cyto pA+ A 1
         longLabel GM12878 cytosol polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=aGM12878 localization=cytosol rnaExtract=pAP rep=rep1
         type bam
         color 153,38,0
         # subId=3950 dateSubmitted=2011-04-29
@@ -2173,7 +2173,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 nucl pA+ A 1
         longLabel GM12878 nucleus polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+        subGroups view=Alignments cellType=aGM12878 localization=nucleus rnaExtract=pAP rep=rep1
         type bam
         color 153,38,0
         # subId=3948 dateSubmitted=2011-04-29
@@ -2182,7 +2182,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 nucl pA+ A 2
         longLabel GM12878 nucleus polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1GM12878 localization=nucleus rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=aGM12878 localization=nucleus rnaExtract=pAP rep=rep2
         type bam
         color 153,38,0
         # subId=3949 dateSubmitted=2011-04-29
@@ -2191,7 +2191,7 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 cell pA+ A 2
         longLabel GM12878 whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1GM12878 localization=cell rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=aGM12878 localization=cell rnaExtract=pAP rep=rep2
         type bam
         color 153,38,0
         # subId=3951 dateSubmitted=2011-04-29
@@ -2200,10 +2200,428 @@ html wgEncodeRikenCage.new
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel GM78 cyto pA+ A 2
         longLabel GM12878 cytosol polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=1GM12878 localization=cytosol rnaExtract=pAP rep=rep2
+        subGroups view=Alignments cellType=aGM12878 localization=cytosol rnaExtract=pAP rep=rep2
         type bam
         color 153,38,0
         # subId=3947 dateSubmitted=2011-04-28
 
+    track wgEncodeRikenCageViewTssHmm
+    shortLabel TssHmm
+    view TssHmm
+    visibility hide
+    subTrack wgEncodeRikenCage
 
+        track wgEncodeRikenCageA549CellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel A549 cell longPolyA
+        longLabel A549 cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=A549 localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        # subId=5610 dateSubmitted=2012-02-10
 
+        track wgEncodeRikenCageAg04450CellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel AG04450 cell longPolyA
+        longLabel AG04450 cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=AG04450 localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageBjCellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel BJ cell longPolyA
+        longLabel BJ cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=BJ localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageGm12878CellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel GM12878 cell longPolyA
+        longLabel GM12878 cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aGM12878 localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 153,38,0
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageGm12878CytosolPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel GM12878 cytosol longPolyA
+        longLabel GM12878 cytosol longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aGM12878 localization=cytosol rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 153,38,0
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageGm12878NucleusPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel GM12878 nucleus longPolyA
+        longLabel GM12878 nucleus longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aGM12878 localization=nucleus rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 153,38,0
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageH1hescCellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel H1-hESC cell longPolyA
+        longLabel H1-hESC cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aH1hESC localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 0,107,27
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHelas3CellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HeLa-S3 cell longPolyA
+        longLabel HeLa-S3 cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHeLaS3 localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 0,119,158
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHelas3CytosolPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HeLa-S3 cytosol longPolyA
+        longLabel HeLa-S3 cytosol longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHeLaS3 localization=cytosol rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 0,119,158
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHelas3NucleusPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HeLa-S3 nucleus longPolyA
+        longLabel HeLa-S3 nucleus longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHeLaS3 localization=nucleus rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 0,119,158
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHepg2CellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HepG2 cell longPolyA
+        longLabel HepG2 cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHepG2 localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 189,0,157
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHepg2CytosolPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HepG2 cytosol longPolyA
+        longLabel HepG2 cytosol longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHepG2 localization=cytosol rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 189,0,157
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHepg2NucleusPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HepG2 nucleus longPolyA
+        longLabel HepG2 nucleus longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHepG2 localization=nucleus rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 189,0,157
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHuvecCellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HUVEC cell longPolyA
+        longLabel HUVEC cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHUVEC localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 224,75,0
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHuvecCytosolPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HUVEC cytosol longPolyA
+        longLabel HUVEC cytosol longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHUVEC localization=cytosol rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 224,75,0
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHuvecNucleusPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HUVEC nucleus longPolyA
+        longLabel HUVEC nucleus longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHUVEC localization=nucleus rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 224,75,0
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageK562CellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel K562 cell longPolyA
+        longLabel K562 cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aK562 localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 46,0,184
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageK562CytosolPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel K562 cytosol longPolyA
+        longLabel K562 cytosol longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aK562 localization=cytosol rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 46,0,184
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageK562NucleusPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel K562 nucleus longPolyA
+        longLabel K562 nucleus longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aK562 localization=nucleus rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 46,0,184
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageMcf7CellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel MCF-7 cell longPolyA
+        longLabel MCF-7 cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=MCF7 localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageNhekCellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel NHEK cell longPolyA
+        longLabel NHEK cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=NHEK localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 179,0,134
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageNhekCytosolPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel NHEK cytosol longPolyA
+        longLabel NHEK cytosol longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=NHEK localization=cytosol rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 179,0,134
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageSknshraCellPapTssHmm
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel SK-N-SH_RA cell longPolyA
+        longLabel SK-N-SH RA cell longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=SKNSHRA localization=cell rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        # subId=5610 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageGm12878CytosolPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel GM12878 cytosol longNonPolyA
+        longLabel GM12878 cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aGM12878 localization=cytosol rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 153,38,0
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageGm12878NucleolusTotalTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel GM12878 nucleolus total
+        longLabel GM12878 nucleolus total CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aGM12878 localization=nucleolus rnaExtract=total rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 153,38,0
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageGm12878NucleusPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel GM12878 nucleus longNonPolyA
+        longLabel GM12878 nucleus polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aGM12878 localization=nucleus rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 153,38,0
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageH1hescCellPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel H1-hESC cell longNonPolyA
+        longLabel H1-hESC cell polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aH1hESC localization=cell rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 0,107,27
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHelas3CytosolPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HeLa-S3 cytosol longNonPolyA
+        longLabel HeLa-S3 cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHeLaS3 localization=cytosol rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 0,119,158
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHelas3NucleolusTotalTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HeLa-S3 nucleolus total
+        longLabel HeLa-S3 nucleolus total CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHeLaS3 localization=nucleolus rnaExtract=total rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 0,119,158
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHepg2CytosolPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HepG2 cytosol longNonPolyA
+        longLabel HepG2 cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHepG2 localization=cytosol rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 189,0,157
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHepg2NucleusPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HepG2 nucleus longNonPolyA
+        longLabel HepG2 nucleus polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHepG2 localization=nucleus rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 189,0,157
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHuvecCytosolPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HUVEC cytosol longNonPolyA
+        longLabel HUVEC cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHUVEC localization=cytosol rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 224,75,0
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageK562CytosolPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel K562 cytosol longNonPolyA
+        longLabel K562 cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aK562 localization=cytosol rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 46,0,184
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageK562NucleusPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel K562 nucleus longNonPolyA
+        longLabel K562 nucleus polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aK562 localization=nucleus rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 46,0,184
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageK562PolysomePamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel K562 polysome longNonPolyA
+        longLabel K562 polysome polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aK562 localization=polysome rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 46,0,184
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageNhekCytosolPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel NHEK cytosol longNonPolyA
+        longLabel NHEK cytosol polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=NHEK localization=cytosol rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 179,0,134
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageNhekNucleusPamTssHmmV2
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel NHEK nucleus longNonPolyA
+        longLabel NHEK nucleus polyA - CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAM rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 179,0,134
+        # subId=5609 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageHepg2NucleolusTotalTssHmmV3
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel HepG2 nucleolus total
+        longLabel HepG2 nucleolus total CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=bHepG2 localization=nucleolus rnaExtract=total rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 189,0,157
+        # subId=5611 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageK562ChromatinTotalTssHmmV3
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel K562 chromatin total
+        longLabel K562 chromatin total CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aK562 localization=chromatin rnaExtract=total rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 46,0,184
+        # subId=5611 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageK562NucleolusTotalTssHmmV3
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel K562 nucleolus total
+        longLabel K562 nucleolus total CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aK562 localization=nucleus rnaExtract=total rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 46,0,184
+        # subId=5611 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageK562NucleoplasmTotalTssHmmV3
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel K562 nucleoplasm total
+        longLabel K562 nucleoplasm total CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=aK562 localization=nucleoplasm rnaExtract=total rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 46,0,184
+        # subId=5611 dateSubmitted=2012-02-10
+
+        track wgEncodeRikenCageNhekNucleusPapTssHmmV3
+        parent wgEncodeRikenCageViewTssHmm off
+        shortLabel NHEK nucleus longPolyA
+        longLabel NHEK nucleus longPolyA CAGE TSS HMM from ENCODE/RIKEN 
+        subGroups view=TssHmm cellType=NHEK localization=nucleus rnaExtract=pAP rep=Pooled
+        type bed 6
+        origAssembly hg19
+        color 179,0,134
+        # subId=5611 dateSubmitted=2012-02-10

@@ -1,0 +1,669 @@
+# Caltech TFBS (wrangler: Venkat)
+# Notes:
+#       - Track Long Label:Transcription Factor Binding Sites by ChIP-seq from ENCODE/Caltech
+#       - Track Short Label: Caltech TFBS
+#       - View Long Labels: [cell] [factor] [treatment] TFBS ChIP-seq [view] from ENCODE/Caltech
+#       - cellType Order: Ordering is alphabetical
+#       - Short Labels: 
+#               Template: [cell] [factor] [treatment] [replicate] 
+#				- Cell: Abbreviations for cells
+#						- C2C12 = C2
+#               - Factor: Abbreviations for factor
+#						- MyoD_(sc-32758) = MyoD
+#						- Myogenin_(sc-12732) = Myogen
+#						- FOSL1_(sc-605) = FOSL1
+#						- TCF3_(SC-349) = TCF3
+#						- Pol2(phosphoS2) = Pol2S2
+#						- Inputs = Use control Con basebp
+#               - Views: For consistency sake view will be two letters (Optional if there is room.)
+#                       - Peaks = Pk
+#                       - Signal = Sg
+#				- Treatment: Treatment will abbreviate to length
+#						- E2P24H = 24h
+#						- E2P60H = 60h
+#						- E2P5d = 5d
+#						- E2P7d = 7d
+#       - Default Tracks on: MyoD in myoblasts and Myogenin is 60h myocytes
+#       - Display matrix:
+#               - Dimension Y - Factor
+#                       - factor Order: Ordering is based on alphabetaclly.
+#               - Dimension X - Treatment
+#                       - treatment Order: Ordering is based on length of treatment. 
+#       - View default settings:
+#           - Peaks: pack
+#           - Signal: full
+
+
+track wgEncodeCaltechTfbs
+compositeTrack on
+shortLabel Caltech TFBS
+longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/Caltech
+group regulation
+subGroup1 view Views Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line C2C12=C2C12
+subGroup3 factor Factor CEBPB=CEBPB CTCF=CTCF E2F4=E2F4 FOSL1SC605=FOSL1_(sc-605) MAX=MAX SC32758=MyoD_(sc-32758) SC12732=Myogenin_(sc-12732) NRSF=NRSF POL2=POL2 POL2S2=Pol2(phosphoS2) SRF=SRF TCF3=TCF3_(SC-349) TCF12=TCF12 USF1=USF-1 INPUT=Input
+subGroup4 sex Sex F=F
+subGroup5 control Control CNTRL32B=Control_32bp CNTRL36B=Control_36bp CNTRL50B=Control_50bp
+subGroup6 treatment Treatment NONE=None E2P24H=EqS_2.0pct_24h E2P60H=EqS_2.0pct_60h E2P5D=EqS_2.0pct_5d E2P7D=EqS_2.0pct_7d
+subGroup7 protocol Protocol PCR1X=PCR1x PCR2X=PCR2x
+subGroup8 rep Rep rep1=1 rep2=2 rep3=3
+dimensions dimensionX=treatment dimensionY=factor dimensionA=control dimensionB=rep
+dimensionAchecked CNTRL32B,CNTRL50B,CNTRL36B
+dimensionBchecked rep1
+filterComposite dimensionA=multi dimensionB=multi
+sortOrder cellType=+ factor=+ control=+ treatment=+ protocol=+ rep=+ view=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control treatment=Treatment protocol=Protocol replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex control=control treatment=treatment protocol=protocol
+dragAndDrop subTracks
+visibilityViewDefaults  Peaks=pack Signal=full
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+html wgEncodeCaltechTfbs.release2
+
+	#####Peak Tracks###########
+	track wgEncodeCaltechTfbsViewPeaks
+	shortLabel Peaks
+	view Peaks
+	visibility pack
+	#viewUi on
+	subTrack wgEncodeCaltechTfbs
+	signalFilter 0
+	signalFilterLimits 0:82
+    scoreFilterLimits 1:1000
+    scoreFilter 0
+    scoreMin 0
+	minGrayLevel 5
+
+        track wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 USF-1 1 
+        longLabel C2C12 USF-1 Myoblast TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=USF1 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4447 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Usf1FCntrl50bMybPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:51 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bE2p60hPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks
+        shortLabel C2 Myogenin 60h 1
+        longLabel C2C12 Myogenin Myocyte 60h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=SC12732 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4697 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc60hPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+        track wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 NRSF 60h 1
+        longLabel C2C12 NRSF Myocyte 60h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=NRSF cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4702 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12NrsfFCntrl32bMyc60hPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+        track wgEncodeCaltechTfbsC2c12SrfFCntrl32bE2p24hPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 SRF 24h 1
+        longLabel C2C12 SRF Myocyte 24h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=SRF cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P24H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4705 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12SrfFCntrl32bMyc24hPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:51 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bE2p24hPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 MyoD 24h 1
+        longLabel C2C12 MyoD Myocyte 24h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=SC32758 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P24H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4706 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bMyc24hPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:50 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks
+        shortLabel C2 MyoD 24h 1
+        longLabel C2C12 MyoD Myoblast TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=SC32758 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=NONE rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4707 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bMybPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:50 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bE2p60hPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 MyoD 60h 1
+        longLabel C2C12 MyoD Myocyte 60h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=SC32758 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4708 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bMyc60hPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:50 2011
+
+        track wgEncodeCaltechTfbsC2c12CtcfFCntrl32bPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 CTCF 1
+        longLabel C2C12 CTCF Myoblast ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=CTCF cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=NONE rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4709 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12CtcfFCntrl32bMybPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:46 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 Myogenin 1
+        longLabel C2C12 Myogenin Myoblast TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=SC12732 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=NONE rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4710 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMybPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+        track wgEncodeCaltechTfbsC2c12Fosl1sc605FCntrl36bPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 FOSL1 1
+        longLabel C2C12 FOSL1 Myoblast TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=FOSL1SC605 cellType=C2C12 control=CNTRL36B protocol=PCR1X sex=F treatment=NONE rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4711 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Fosl1sc605FCntrl36bMybPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:47 2011
+
+        track wgEncodeCaltechTfbsC2c12Usf1FCntrl50bE2p60hPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 USF-1 60h 1
+        longLabel C2C12 USF-1 Myocyte 60h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=USF1 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4716 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Usf1FCntrl50bMyc60hPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:52 2011
+
+        track wgEncodeCaltechTfbsC2c12MaxFCntrl50bE2p60hPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 Max 60h 1
+        longLabel C2C12 Max Myocyte 60h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=MAX cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4718 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12MaxFCntrl50bMyc60hPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:48 2011
+
+        track wgEncodeCaltechTfbsC2c12E2f4FCntrl50bE2p60hPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 E2F4 60h 1
+        longLabel C2C12 E2F4 Myocyte 60h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=E2F4 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4719 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12E2f4FCntrl50bMyc60hPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:46 2011
+
+        track wgEncodeCaltechTfbsC2c12MaxFCntrl50bPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 Max Pk 1
+        longLabel C2C12 Max Myoblast TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=MAX cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4720 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12MaxFCntrl50bMybPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:48 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc32758FCntrl50bE2p7dPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 MyoD 7d 1
+        longLabel C2C12 MyoD Myocyte 7d TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=SC32758 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P7D rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4721 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc32758FCntrl50bMyc7dPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:51 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc12732FCntrl50bE2p7dPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 Myogenin 7d 1
+        longLabel C2C12 Myogenin Myocyte 7d TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=SC12732 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P7D rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4722 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc12732FCntrl50bMyc7dPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:50 2011
+
+        track wgEncodeCaltechTfbsC2c12Tcf3FCntrl32bE2p5dPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 TCF3 5d 1
+        longLabel C2C12 TCF3 Myocyte 5d TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=TCF3 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P5D rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4724 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12Tcf3FCntrl32bMyc5dPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:51 2011
+
+        track wgEncodeCaltechTfbsC2c12Pol2s2FCntrl32bE2p60hPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 Pol2S2 60h 1
+        longLabel C2C12 Pol2S2 Myocyte 60h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=POL2S2 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4725 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12Pol2s2FCntrl32bMyc60hPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+        track wgEncodeCaltechTfbsC2c12Pol2FCntrl32bE2p60hPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 Pol2 60h 1
+        longLabel C2C12 Pol2 Myocyte 60h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=POL2 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4726 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12Pol2FCntrl32bMyc60hPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+        track wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 CEBPB 60h 1
+        longLabel C2C12 CEBPB Myocyte 60h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=CEBPB cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4727 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12CebpbFCntrl50bMyc60hPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:46 2011
+
+        track wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xPkRep2
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 CEBPB 60h 2
+        longLabel C2C12 CEBPB Myocyte 60h TFBS ChIP-seq Peaks Rep 2 from ENCODE/Caltech
+        subGroups view=Peaks factor=CEBPB cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep2
+        type narrowPeak
+        color 139,69,19
+        # subId=4728 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12CebpbFCntrl50bMyc60hPcr1xPkRep2 vsmalladi Tue Oct  4 13:10:46 2011
+
+        track wgEncodeCaltechTfbsC2c12CebpbFCntrl50bPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 CEBPB 1
+        longLabel C2C12 CEBPB Myoblast TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=CEBPB cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4729 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12CebpbFCntrl50bMybPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:45 2011
+
+        track wgEncodeCaltechTfbsC2c12Tcf12FCntrl50bE2p60hPcr1xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 TCF12 60h 1
+        longLabel C2C12 TCF12 Myocyte 60h2 TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=TCF12 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4730 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12Tcf12FCntrl50bMyc60hPcr1xPkRep1 vsmalladi Tue Oct  4 13:10:51 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bE2p24hPcr2xPkRep1
+        parent wgEncodeCaltechTfbsViewPeaks off
+        shortLabel C2 Myogenin 24h 1
+        longLabel C2C12 Myogenin Myocyte 24h TFBS ChIP-seq Peaks Rep 1 from ENCODE/Caltech
+        subGroups view=Peaks factor=SC12732 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P24H rep=rep1
+        type narrowPeak
+        color 139,69,19
+        # subId=4450 dateSubmitted=2011-09-01
+        # was wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc24hPcr2xPkRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+	#######	Signal Tracks###########
+	track wgEncodeCaltechTfbsViewSignal
+	shortLabel Signal
+	view Signal
+	visibility full
+	#viewUi on
+	subTrack wgEncodeCaltechTfbs
+	viewLimits 0:1
+	autoScale off
+	maxHeightPixels 100:32:0
+	windowingFunction mean+whiskers
+
+        track wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 USF-1 1
+        longLabel C2C12 USF-1 Myoblast TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=USF1 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep1
+        type bigWig 0.049600 10984.600586
+        color 139,69,19
+        # subId=4447 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Usf1FCntrl50bMybPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:52 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl32bE2p24hPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 32bp 24h 1
+        longLabel C2C12 Control 32bp Myocyte 24h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P24H rep=rep1
+        type bigWig 0.086100 1009.830200
+        color 139,69,19
+        # subId=4449 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl32bMyc24hPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:47 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bE2p60hPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal
+        shortLabel C2 Myogenin 60h 1
+        longLabel C2C12 Myogenin Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=SC12732 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.049800 296.461395
+        color 139,69,19
+        # subId=4697 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc60hPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:50 2011
+
+        track wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 NRSF 60h 1
+        longLabel C2C12 NRSF Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=NRSF cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.087400 1262.788086
+        color 139,69,19
+        # subId=4702 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12NrsfFCntrl32bMyc60hPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl32bPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 32bp  1
+        longLabel C2C12 Control 32bp Myoblast TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=NONE rep=rep1
+        type bigWig 0.077700 1187.887817
+        color 139,69,19
+        # subId=4703 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl32bMybPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:47 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl32bE2p60hPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 32bp 60h 1
+        longLabel C2C12 Control 32bp Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.042600 2602.975830
+        color 139,69,19
+        # subId=4704 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl32bMyc60hPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:47 2011
+
+        track wgEncodeCaltechTfbsC2c12SrfFCntrl32bE2p24hPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 SRF 24h 1
+        longLabel C2C12 SRF Myocyte 24h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=SRF cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P24H rep=rep1
+        type bigWig 0.048900 819.985291
+        color 139,69,19
+        # subId=4705 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12SrfFCntrl32bMyc24hPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:51 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bE2p24hPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 MyoD 24h 1
+        longLabel C2C12 MyoD Myocyte 24h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=SC32758 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P24H rep=rep1
+        type bigWig 0.052100 827.875977
+        color 139,69,19
+        # subId=4706 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bMyc24hPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:50 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal
+        shortLabel C2 MyoD 1
+        longLabel C2C12 MyoD Myoblast TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=SC32758 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=NONE rep=rep1
+        type bigWig 0.049800 999.933289
+        color 139,69,19
+        # subId=4707 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bMybPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:50 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bE2p60hPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 MyoD 60h 1
+        longLabel C2C12 MyoD Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=SC32758 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.033900 335.904602
+        color 139,69,19
+        # subId=4708 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bMyc60hPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:50 2011
+
+        track wgEncodeCaltechTfbsC2c12CtcfFCntrl32bPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 CTCF 1
+        longLabel C2C12 CTCF Myoblast TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=CTCF cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=NONE rep=rep1
+        type bigWig 0.111000 885.506409
+        color 139,69,19
+        # subId=4709 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12CtcfFCntrl32bMybPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:46 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Myogenin 1
+        longLabel C2C12 Myogenin Myoblast TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=SC12732 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=NONE rep=rep1
+        type bigWig 0.171600 1243.264404
+        color 139,69,19
+        # subId=4710 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMybPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+        track wgEncodeCaltechTfbsC2c12Fosl1sc605FCntrl36bPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 FOSL1 1
+        longLabel C2C12 FOSL1 Myoblast TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=FOSL1SC605 cellType=C2C12 control=CNTRL36B protocol=PCR1X sex=F treatment=NONE rep=rep1
+        type bigWig 0.048800 5862.488770
+        color 139,69,19
+        # subId=4711 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Fosl1sc605FCntrl36bMybPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:47 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl36bE2p60hPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 36bp 60h 1
+        longLabel C2C12 Control 36bp Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL36B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.042500 5125.781738
+        color 139,69,19
+        # subId=4712 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl36bMyc60hPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:47 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 50bp 60h 1
+        longLabel C2C12 Control 50bp Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.052000 10580.088867
+        color 139,69,19
+        # subId=4713 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl50bMyc60hPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:48 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xSigRep2
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 50bp 60h 2
+        longLabel C2C12 Control 50bp Myocyte 60h TFBS ChIP-seq Signal Rep 2 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep2
+        type bigWig 0.032500 9851.844727
+        color 139,69,19
+        # subId=4714 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl50bMyc60hPcr1xSigRep2 vsmalladi Tue Oct  4 13:10:48 2011
+
+        track wgEncodeCaltechTfbsC2c12Usf1FCntrl50bE2p60hPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 USF-1 60h 1
+        longLabel C2C12 USF-1 Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=USF1 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.047700 11492.834961
+        color 139,69,19
+        # subId=4716 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Usf1FCntrl50bMyc60hPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:52 2011
+
+        track wgEncodeCaltechTfbsC2c12MaxFCntrl50bE2p60hPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Max 60h 1
+        longLabel C2C12 Max Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=MAX cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.054500 12323.050781
+        color 139,69,19
+        # subId=4718 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12MaxFCntrl50bMyc60hPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:48 2011
+
+        track wgEncodeCaltechTfbsC2c12E2f4FCntrl50bE2p60hPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 E2F4 60h 1
+        longLabel C2C12 E2F4 Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=E2F4 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.059400 8322.877930
+        color 139,69,19
+        # subId=4719 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12E2f4FCntrl50bMyc60hPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:46 2011
+
+        track wgEncodeCaltechTfbsC2c12MaxFCntrl50bPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Max 1
+        longLabel C2C12 Max Myoblast TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=MAX cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep1
+        type bigWig 0.038000 10295.183594
+        color 139,69,19
+        # subId=4720 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12MaxFCntrl50bMybPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:48 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc32758FCntrl50bE2p7dPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 MyoD 7d 1
+        longLabel C2C12 MyoD Myocyte 7d TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=SC32758 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P7D rep=rep1
+        type bigWig 0.034500 10969.869141
+        color 139,69,19
+        # subId=4721 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc32758FCntrl50bMyc7dPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:51 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc12732FCntrl50bE2p7dPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Myogenin 7d 1
+        longLabel C2C12 Myogenin Myocyte 7d TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=SC12732 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P7D rep=rep1
+        type bigWig 0.055500 10654.280273
+        color 139,69,19
+        # subId=4722 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12Sc12732FCntrl50bMyc7dPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:50 2011
+
+        track wgEncodeCaltechTfbsC2c12Tcf3FCntrl32bE2p5dPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 TCF3 5d 1
+        longLabel C2C12 TCF3 Myocyte 5d TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=TCF3 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P5D rep=rep1
+        type bigWig 0.077000 986.911194
+        color 139,69,19
+        # subId=4724 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12Tcf3FCntrl32bMyc5dPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:51 2011
+
+        track wgEncodeCaltechTfbsC2c12Pol2s2FCntrl32bE2p60hPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Pol2S2 60h 1
+        longLabel C2C12 Pol2S2 Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=POL2S2 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.049700 139.236496
+        color 139,69,19
+        # subId=4725 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12Pol2s2FCntrl32bMyc60hPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+        track wgEncodeCaltechTfbsC2c12Pol2FCntrl32bE2p60hPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Pol2 60h 1
+        longLabel C2C12 Pol2 Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech 
+        subGroups view=Signal factor=POL2 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.060300 133.534302
+        color 139,69,19
+        # subId=4726 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12Pol2FCntrl32bMyc60hPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+        track wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 CEBPB 60h 1
+        longLabel C2C12 CEBPB Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=CEBPB cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.047900 13241.905273
+        color 139,69,19
+        # subId=4727 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12CebpbFCntrl50bMyc60hPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:46 2011
+
+        track wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xSigRep2
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 CEBPB 60h 2
+        longLabel C2C12 CEBPB Myocyte 60h TFBS ChIP-seq Signal Rep 2 from ENCODE/Caltech
+        subGroups view=Signal factor=CEBPB cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep2
+        type bigWig 0.061800 10728.395508
+        color 139,69,19
+        # subId=4728 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12CebpbFCntrl50bMyc60hPcr1xSigRep2 vsmalladi Tue Oct  4 13:10:46 2011
+
+        track wgEncodeCaltechTfbsC2c12CebpbFCntrl50bPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 CEBPB 1
+        longLabel C2C12 CEBPB Myoblast TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=CEBPB cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep1
+        type bigWig 0.047900 18378.423828
+        color 139,69,19
+        # subId=4729 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12CebpbFCntrl50bMybPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:45 2011
+
+        track wgEncodeCaltechTfbsC2c12Tcf12FCntrl50bE2p60hPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 TCF12 60h 1
+        longLabel C2C12 TCF12 Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=TCF12 cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.051800 6948.665527
+        color 139,69,19
+        # subId=4730 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12Tcf12FCntrl50bMyc60hPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:51 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 50bp 1
+        longLabel C2C12 Control 50bp Myoblast TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep1
+        type bigWig 0.073500 10874.264648
+        color 139,69,19
+        # subId=4448 dateSubmitted=2011-08-05
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep1 vsmalladi Tue Oct  4 14:20:04 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep3
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 50bp 3
+        longLabel C2C12 Control 50bp Myoblast TFBS Signal Rep 3 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep3
+        type bigWig 0.080100 10912.944336
+        color 139,69,19
+        # subId=4717 dateSubmitted=2011-09-02
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep3 vsmalladi Tue Oct  4 13:10:48 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep2
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 50bp 2
+        longLabel C2C12 Control 50bp Myoblast TFBS ChIP-seq Signal Rep 2 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep2
+        type bigWig 0.051500 10494.582031
+        color 139,69,19
+        # subId=4715 dateSubmitted=2011-09-01
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep2 vsmalladi Tue Oct  4 13:10:48 2011
+
+        track wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bE2p24hPcr2xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Myogenin 24h 1
+        longLabel C2C12 Myogenin Myocyte 24h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=SC12732 cellType=C2C12 control=CNTRL32B protocol=PCR2X sex=F treatment=E2P24H rep=rep1
+        type bigWig 0.087100 417.784607
+        color 139,69,19
+        # subId=4450 dateSubmitted=2011-09-01
+        # was wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bMyc24hPcr2xSigRep1 vsmalladi Tue Oct  4 13:10:49 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 36bp 1
+        longLabel C2C12 Control 36bp ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL36B protocol=PCR1X sex=F treatment=NONE rep=rep1
+        type bigWig 0.042412 6022.777344
+        color 139,69,19
+        # subId=4941 dateSubmitted=2011-10-18
+

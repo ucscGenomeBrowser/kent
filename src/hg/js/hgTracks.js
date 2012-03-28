@@ -19,7 +19,6 @@ var browser;              // browser ("msie", "safari" etc.) // move to utils.js
  * int imgBox*            // various drag-scroll values
  * boolean measureTiming  // true if measureTiming is on
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
- * string err             // error message (present only when hgTracks has hit a fatal berror).
  */
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
@@ -301,6 +300,16 @@ var makeItemsByDrag = {
         jQuery(img.imgAreaSelect( { selectionColor: 'green', outerColor: '',
             minHeight: imgHeight, maxHeight: imgHeight, onSelectEnd: makeItemsByDrag.end,
             autoHide: true, movable: false}));
+        }
+    },
+    
+    load: function ()
+    {
+        for (var id in hgTracks.trackDb) {
+            var rec = hgTracks.trackDb[id];
+            if(rec.type != null && rec.type.indexOf("makeItems") == 0) {
+                this.init(id);
+            }
         }
     }
 }
@@ -1624,7 +1633,7 @@ var rightClick = {
             }
             return;
         }
-        showWarning("Couldn't parse out img src");
+        warn("Couldn't parse out img src");
     },
 
     myPrompt: function (msg, callback)
@@ -1655,7 +1664,7 @@ var rightClick = {
     {   // dispatcher for context menu hits
         var id = rightClick.selectedMenuItem.id;
         if(menuObject.shown) {
-            // showWarning("Spinning: menu is still shown");
+            // warn("Spinning: menu is still shown");
             setTimeout(function() { rightClick.hitFinish(menuItemClicked, menuObject, cmd); }, 10);
             return;
         }
@@ -1689,7 +1698,7 @@ var rightClick = {
                         chromEnd = parseInt(a[1]);
                 }
                 if(chrom == null || chromStart == null || chromEnd == null) {
-                    showWarning("couldn't parse out genomic coordinates");
+                    warn("couldn't parse out genomic coordinates");
                 } else {
                     if(cmd == 'getDna')
                     {
@@ -2088,7 +2097,11 @@ var rightClick = {
                     if(done) {
                         var o = new Object();
                         var any = false;
-                            var title = rightClick.selectedMenuItem.title || "feature";
+                        var title = rightClick.selectedMenuItem.title || "feature";
+                        var maxLength = 60;
+                        if(title.length > maxLength) {
+                            title = title.substring(0, maxLength) + "...";
+                        }
                         if(isGene || isHgc || id == "wikiTrack") {
                             // Add "Open details..." item
                             var displayItemFunctions = false;
@@ -2543,6 +2556,7 @@ var imageV2 = {
             $("div.scroller").panImages();
         }
         imageV2.loadRemoteTracks();
+        makeItemsByDrag.load();
         imageV2.markAsDirtyPage();
     },
 
@@ -2611,6 +2625,15 @@ var imageV2 = {
                 });
     },
 
+    fullReload: function()
+    {
+        // force reload of whole page via trackform submit
+        // This function does not return
+        jQuery('body').css('cursor', 'wait');
+        document.TrackHeaderForm.submit();
+
+    },
+    
     updateImgAndMap: function (response, status)
     {   // Handle ajax response with an updated trackMap image, map and optional ideogram.
         //
@@ -2622,9 +2645,10 @@ var imageV2 = {
         var oldTrackDb = hgTracks.trackDb;
         var valid = false;
         if(json == undefined) {
-            showWarning("hgTracks object is missing from the response");
-        } else if (json.err) {
-            showWarning("Request failed; error: " + json.err);
+            var stripped = new Object();
+            stripJsEmbedded(response, true, stripped);
+            if(stripped.warnMsg == null)
+                warn("hgTracks object is missing from the response");
         } else {
             if(this.id != null) {
                 if(json.trackDb[this.id]) {
@@ -2641,7 +2665,7 @@ var imageV2 = {
                     vis.update(this.id, visibility);
                     valid = true;
                 } else {
-                    showWarning("Invalid hgTracks.trackDb received from the server");
+                    warn("Invalid hgTracks.trackDb received from the server");
                 }
             } else {
                 valid = true;
@@ -2660,7 +2684,7 @@ var imageV2 = {
                 if(imageV2.updateImgForId(response, id)) {
                     imageV2.afterReload();
                 } else {
-                    showWarning("Couldn't parse out new image for id: " + id);
+                    warn("Couldn't parse out new image for id: " + id);
                     //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                 }
             } else {
@@ -2673,8 +2697,7 @@ var imageV2 = {
                     if(json.cgiVersion != hgTracks.cgiVersion) {
                         // Must reload whole page because of a new version on the server; this should happen very rarely.
                         // Note that we have already updated position based on the user's action.
-                        jQuery('body').css('cursor', 'wait');
-                        document.TrackHeaderForm.submit();
+                        imageV2.fullReload();
                     } else {
                         // We update rows one at a time (b/c updating the whole imgTable at one time doesn't work in IE).
                         for (var id in hgTracks.trackDb) {
@@ -2682,7 +2705,7 @@ var imageV2 = {
                             if(hgTracks.trackDb[id].type != "remote"
                             && hgTracks.trackDb[id].visibility > 0 // && $('#tr_' + id).length > 0
                             && !imageV2.updateImgForId(response, id)) {
-                                showWarning("Couldn't parse out new image for id: " + id);
+                                warn("Couldn't parse out new image for id: " + id);
                             }
                         }
                     /* This (disabled) code handles dynamic addition of tracks:
@@ -2706,7 +2729,7 @@ var imageV2 = {
                 // now pull out and parse the map.
                 //a = /<MAP id='map' Name=map>([\s\S]+)<\/MAP>/.exec(response);
                 //if(!a[1])
-                //    showWarning("Couldn't parse out map");
+                //    warn("Couldn't parse out map");
             }
             // Parse out new ideoGram url (if available)
             // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif" BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
@@ -3150,6 +3173,7 @@ $(document).ready(function()
             });
         }
         imageV2.loadRemoteTracks();
+        makeItemsByDrag.load();
     }
 
     // Drag select in chromIdeogram

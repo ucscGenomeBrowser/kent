@@ -1,0 +1,15 @@
+metaObject wgEncodeNhgriBip
+objType table
+composite wgEncodeNhgriBip
+dataType Bip
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-01-27
+dateUnrestricted 2009-10-27
+fileName wgEncodeNhgriBip.mm9.bed8.gz
+grant Elnitski
+lab NHGRI-Elnitski
+project wgEncode
+subId 200
+tableName wgEncodeNhgriBip
+
+# MAGIC: -1776358953

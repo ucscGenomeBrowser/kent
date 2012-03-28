@@ -188,7 +188,7 @@ cgiTableRowEnd();
 cgiTableEnd();
 
 /* text box and two buttons (submit, reset) */
-cgiParagraph("&nbsp;Paste in data (<a href=\"http://hgwdev.cse.ucsc.edu/FAQ/FAQformat.html#format1\" target=\"_blank\">BED</a> or chrN:start-end formats):\n");
+cgiParagraph("&nbsp;Paste in data (<a href=\"../FAQ/FAQformat.html#format1\" target=\"_blank\">BED</a> or chrN:start-end formats):\n");
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 
@@ -220,7 +220,7 @@ cgiTableRowEnd();
 cgiTableEnd();
 
 /* next  row -- file upload controls */
-cgiParagraph("&nbsp;Or upload data from a file (<a href=\"http://hgwdev.cse.ucsc.edu/FAQ/FAQformat.html#format1\" target=\"_blank\">BED</a> or chrN:start-end in plain text format):");
+cgiParagraph("&nbsp;Or upload data from a file (<a href=\"../FAQ/FAQformat.html#format1\" target=\"_blank\">BED</a> or chrN:start-end in plain text format):");
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
@@ -479,8 +479,8 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
     char *line;
     int lineSize;
     char *fromDb, *toDb;
-    int ct = 0, errCt = 0;
-
+    int ct = -1, errCt = 0;
+    enum liftOverFileType lft;
     /* read in user data and save to file */
     makeTempName(&oldTn, HGLFT, ".user");
     old = mustOpen(oldTn.forCgi, "w");
@@ -505,7 +505,14 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
         errAbort("ERROR: Can't convert from %s to %s: no chain file loaded",
                                 fromDb, toDb);
     readLiftOverMap(chainFile, chainHash);
-    ct = liftOverBedOrPositions(oldTn.forCgi, chainHash, 
+    lft = liftOverSniff(oldTn.forCgi);
+    if (lft == bed)
+	ct = liftOverBed(oldTn.forCgi, chainHash, 
+			minMatch, minBlocks, 0, minSizeQ,
+			minChainT, 0,
+			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
+    else if (lft == positions)
+	ct = liftOverPositions(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
 			minChainT, 0,
 			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
@@ -539,10 +546,12 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
         lineFileClose(&errFile);
         puts("</PRE></BLOCKQUOTE>\n");
         }
-    puts("<BLOCKQUOTE><PRE>\n");
-    puts("Note: &quot;multiple&quot; option is not supported for position format.");
-    puts("</PRE></BLOCKQUOTE>\n");
-
+    if ((multiple) && (lft == positions))
+	{
+	puts("<BLOCKQUOTE><PRE>\n");
+	puts("Note: &quot;multiple&quot; option is not supported for position format.");
+	puts("</PRE></BLOCKQUOTE>\n");
+	}
     webParamsUsed(minMatch, multiple, minSizeQ, minChainT, minBlocks, fudgeThick);
 
     carefulClose(&unmapped);

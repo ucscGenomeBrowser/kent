@@ -1,5 +1,4 @@
 include trackDb.chainNet.ra
-include trackDb.merckPolyA.all.ra
 
 track bacEndPairs
 #replaces record bacEndPairs in parent dir missing/extra color,altColor
@@ -166,6 +165,7 @@ noInherit on
         type bigWig 0.190000 41009.750000
 
 # ENCODE NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
+# metadata project=wgEncode grant=Elnitski lab=NHGRI-Elnitski dataType=Bip dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.canFam2.bed8.gz
 track wgEncodeNhgriBip
 shortLabel NHGRI BiP
 longLabel ENCODE NHGRI Elnitski Bidirectional Promoters
@@ -180,7 +180,6 @@ noScoreFilter on
 #scoreFilterByRange on
 compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) bosTau4=Cow_(October_2007)
 wgEncode 1
-metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=canFam2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.canFam2.bed8.gz
 
 track nscanGene override
 visibility dense

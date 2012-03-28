@@ -14,6 +14,13 @@
 #       Felis_catus/catChr4
 #       Felis catus
 
+#	http://www.ncbi.nlm.nih.gov/genome/78
+#	http://www.ncbi.nlm.nih.gov/bioproject/16726 - UWash - Cinnamon
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AANG00
+
+#	http://www.ncbi.nlm.nih.gov/bioproject/32759 - NHGRI - multiple cats
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ACBE00
+
 ##########################################################################
 # Download sequence (DONE - 2010-05-23 - Chin)
     mkdir /hive/data/genomes/felCat4

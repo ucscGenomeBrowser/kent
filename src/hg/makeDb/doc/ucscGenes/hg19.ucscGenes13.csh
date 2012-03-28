@@ -7,6 +7,10 @@
 
 #	"$Id: hg19.ucscGenes13.csh,v 1.4 2010/06/08 01:57:08 cline Exp $"
 
+#
+# Prerequisites
+# Before executing this script, rebuild the swissprot and proteins databases.
+
 
 # Directories
 set genomes = /hive/data/genomes

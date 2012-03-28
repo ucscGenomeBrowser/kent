@@ -2628,11 +2628,12 @@ if (!foundPep)
 	puts("<LI>\n");
 	/* put out correct message to describe translated mRNA */
         if ((sameString(geneTable, "ensGene")) || (sameString(geneTable, "vegaGene")) || (sameString(geneTable, "vegaPseudoGene"))
+      || (genbankIsRefSeqNonCodingMRnaAcc(geneName))
       || (sameString(geneTable, "lincRNAsTranscripts")) )
 	    {
 	    printf("Non-protein coding gene or gene fragment, no protein prediction available.");
 	    }
-	else if (!genbankIsRefSeqNonCodingMRnaAcc(geneName))
+	else 
 	    {
 	    hgcAnchorSomewhere("htcTranslatedPredMRna", geneName,
 		"translate", seqName);
@@ -2909,7 +2910,7 @@ void printTrackHtml(struct trackDb *tdb)
 {
 if (!isCustomTrack(tdb->track))
     {
-    extraUiLinks(database,tdb,trackHash);
+    extraUiLinks(database,tdb);
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
@@ -6877,7 +6878,6 @@ puts("</FRAMESET>");
 puts("</HTML>\n");
 exit(0);	/* Avoid cartHtmlEnd. */
 }
-
 
 void htcCdnaAli(char *acc)
 /* Show alignment for accession. */
@@ -23988,11 +23988,10 @@ while ((row = sqlNextRow(sr)) != NULL)
           printf("<BR><B> GeneReview(s) available for %s:</B> (%s)<BR>",itemName,clickMsg);
           firstTime = FALSE;
           printf("<PRE><TT>");
-              // #1234567890123456789012345678901234567890
+              // #123456789-123456789-123456789-123456789-123456789-123456789-
           printf("Short name    Disease ID     GeneTests disease name<BR>");
-          printf("-----------------------------------------------------------");
-          printf("-----------------------------------------------------------");
-          printf("----------------------------------<BR>");
+          printf("------------------------------------------------------------");
+          printf("--------------------<BR>");
         }
         printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
         if (strlen(grShort) <= 15) {
@@ -25243,9 +25242,9 @@ else if (sameString("par", table))
     {
     doParDetails(tdb, item);
     }
-else if (startsWith("t2g", table))
+else if (startsWith("pubs", table))
     {
-    doT2gDetails(tdb, item);
+    doPubsDetails(tdb, item);
     }
 else if (tdb != NULL && startsWith("bedDetail", tdb->type))
     {

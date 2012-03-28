@@ -1,3 +1,9 @@
+# for emacs: -*- mode: sh; -*-
+
+#	http://www.ncbi.nlm.nih.gov/genome/82
+#	http://www.ncbi.nlm.nih.gov/bioproject/12555
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAFC01
+
 # file template copied from bosTau6.txt
 # Assembly Info:
 # DATE:	25-Oct-2011

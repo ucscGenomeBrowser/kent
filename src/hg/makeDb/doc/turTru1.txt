@@ -1,6 +1,11 @@
 # for emacs: -*- mode: sh; -*-
 
 # Tursiops truncatus  Bottle-nosed dolphin
+
+#	http://www.ncbi.nlm.nih.gov/bioproject/20367
+#	http://www.ncbi.nlm.nih.gov/genome/769
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABRN00
+
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-10-07)
     ssh kkstore05
@@ -149,3 +154,24 @@ skipInvalid yes
  *** Steps were performed in /hive/data/genomes/turTru1/bed/ensGene.51
 
 ############################################################################
+# SWAP mm10 lastz (DONE - 2012-03-19 - Hiram)
+    # original alignment to mm10
+    cd /hive/data/genomes/mm10/bed/lastzTurTru1.2012-03-16/fb.mm10.chainTurTru1Link.txt 
+    #	762961671 bases of 2652783500 (28.761%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/turTru1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/turTru1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzTurTru1.2012-03-16/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    79m38.703s
+    cat fb.turTru1.chainMm10Link.txt 
+    #	744359707 bases of 2298444090 (32.385%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/turTru1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+##############################################################################

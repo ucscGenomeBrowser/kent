@@ -8,7 +8,7 @@ objType table
 cell GM12878
 composite wgEncodeBroadHmm
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000784
@@ -29,7 +29,7 @@ objType table
 cell H1-hESC
 composite wgEncodeBroadHmm
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000785
@@ -50,7 +50,7 @@ objType table
 cell HepG2
 composite wgEncodeBroadHmm
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000789
@@ -71,7 +71,7 @@ objType table
 cell HMEC
 composite wgEncodeBroadHmm
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000786
@@ -92,7 +92,7 @@ objType table
 cell HSMM
 composite wgEncodeBroadHmm
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000787
@@ -113,7 +113,7 @@ objType table
 cell HUVEC
 composite wgEncodeBroadHmm
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000788
@@ -134,7 +134,7 @@ objType table
 cell K562
 composite wgEncodeBroadHmm
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000790
@@ -155,7 +155,7 @@ objType table
 cell NHEK
 composite wgEncodeBroadHmm
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000791
@@ -176,7 +176,7 @@ objType table
 cell NHLF
 composite wgEncodeBroadHmm
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000792
@@ -192,4 +192,4 @@ subId 3823
 tableName wgEncodeBroadHmmNhlfHMM
 view HMM
 
-# MAGIC: 1591659937
+# MAGIC: 853605587

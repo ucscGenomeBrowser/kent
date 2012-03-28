@@ -3,7 +3,7 @@
 # This file describes browser build for the gadMor1
 #	Atlantic Cod Gadus morhua genome: May 2010
 
-# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CAEA00
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CAEA01
 #	WGS, est. size: 830 Mbp
 # A new page of information at NCBI:
 #	http://www.ncbi.nlm.nih.gov/genome/2661

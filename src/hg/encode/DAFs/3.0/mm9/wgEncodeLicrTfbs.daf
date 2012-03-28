@@ -1,12 +1,12 @@
 # Data Agreement File for LICR ChIP-seq (Transciption Factor Binding Sites) experiments for mm9
 
-#$Revision: 1.14 $
+#$Revision: 1.18 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated DDF should look like this:
-#files   view    cell    antibody        sex     age     strain  control replicate      seqPlatform       softwareVersion labVersion
+#files   view    cell    antibody        sex     age     strain  control replicate	seqPlatform       softwareVersion labVersion
 
 
 #Explanation of DDF terms
@@ -48,10 +48,10 @@ required         no
 view             Alignments
 type             bam
 hasReplicates    yes
-required         yes
+required         no
 
 view             RawData
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
 

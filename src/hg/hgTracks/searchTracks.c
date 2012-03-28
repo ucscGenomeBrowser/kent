@@ -389,7 +389,6 @@ if(tracksFound < 1)
     }
 else
     {
-    struct hash *tdbHash = makeTrackHash(database, chromName);
     hPrintf("<form action='%s' name='%s' id='%s' method='post'>\n\n", hgTracksName(),SEARCH_RESULTS_FORM,SEARCH_RESULTS_FORM);
     cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 
@@ -523,7 +522,7 @@ else
         // shortLabel has description popup and longLabel has "..." metadata
         hPrintf("<td><a target='_top' onclick=\"popUp.hgTrackUi('%s',true); return false;\" href='%s' title='Display track details'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);
         hPrintf("<td>%s", track->longLabel);
-        compositeMetadataToggle(database, track->tdb, NULL, TRUE, FALSE, tdbHash);
+        compositeMetadataToggle(database, track->tdb, NULL, TRUE, FALSE);
         hPrintf("</td></tr>\n");
         }
     //hPrintf("</table>\n");
@@ -569,7 +568,7 @@ char *typeSearch  = cartUsualString(   cart, TRACK_SEARCH_ON_TYPE,ANYLABEL);
 char *simpleEntry = cartOptionalString(cart, TRACK_SEARCH_SIMPLE);
 char *descSearch  = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 char *groupSearch = cartUsualString(  cart, TRACK_SEARCH_ON_GROUP,ANYLABEL);
-boolean doSearch = sameWord(cartString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
+boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 int tracksFound = 0;
@@ -582,6 +581,27 @@ enum searchTab selectedTab = (sameString(currentTab, "advancedTab") ? advancedTa
 
 if(selectedTab == simpleTab && !isEmpty(simpleEntry)) // NOTE: could support quotes in simple tab by detecting quotes and choosing to use doesNameMatch() || doesDescriptionMatch()
     stripChar(simpleEntry, '"');
+trackList = getTrackList(&groupList, -2); // global
+makeGlobalTrackHash(trackList);
+
+// NOTE: This is necessary when container cfg by '*' results in vis changes
+// This will handle composite/view override when subtrack specific vis exists, AND superTrack reshaping.
+parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+
+slSort(&groupList, gCmpGroup);
+for (group = groupList; group != NULL; group = group->next)
+    {
+    groupTrackListAddSuper(cart, group);
+    if (group->trackList != NULL)
+        {
+        groups[numGroups] = cloneString(group->name);
+        labels[numGroups] = cloneString(group->label);
+        numGroups++;
+        if (numGroups >= ArraySize(groups))
+            internalErr();
+        }
+    }
+
 safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly", organism, hFreezeFromDb(database));
 webStartWrapperDetailedNoArgs(cart, database, "", buf, FALSE, FALSE, FALSE, FALSE);
 
@@ -700,27 +720,6 @@ if(doSearch)
     {
     // Now search
     struct slRef *tracks = NULL;
-    trackList = getTrackList(&groupList, -2); // global
-    makeGlobalTrackHash(trackList);
-
-    // NOTE: This is necessary when container cfg by '*' results in vis changes
-    // This will handle composite/view override when subtrack specific vis exists, AND superTrack reshaping.
-    parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
-
-    slSort(&groupList, gCmpGroup);
-    for (group = groupList; group != NULL; group = group->next)
-        {
-        groupTrackListAddSuper(cart, group);
-        if (group->trackList != NULL)
-            {
-            groups[numGroups] = cloneString(group->name);
-            labels[numGroups] = cloneString(group->label);
-            numGroups++;
-            if (numGroups >= ArraySize(groups))
-                internalErr();
-            }
-        }
-
     if(selectedTab==simpleTab && !isEmpty(simpleEntry))
         tracks = simpleSearchForTracksstruct(simpleEntry);
     else if(selectedTab==advancedTab)

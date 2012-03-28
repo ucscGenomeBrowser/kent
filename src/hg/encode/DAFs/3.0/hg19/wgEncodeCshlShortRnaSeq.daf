@@ -29,7 +29,7 @@ lab               CSHL
 dataType          RnaSeq
 compositeSuffix   CshlShortRnaSeq
 group             expression
-variables         cell, localization, rnaExtract, protocol
+variables         cell, localization, protocol
 assembly          hg19
 noAutoCreate      yes
 
@@ -39,7 +39,6 @@ validationSettings validateFiles.bam:mismatches=10,nMatch
 
 #Pooled replicates
 view             Contigs
-longLabelPrefix  CSHL RNA-seq Contigs   
 type             bedRnaElements
 sql		 bedRnaElements
 hasReplicates    no
