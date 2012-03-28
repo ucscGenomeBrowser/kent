@@ -3,16 +3,16 @@ objType composite
 composite wgEncodeUwRnaSeq
 expVars lab,dataType,cell,age,strain
 
-metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6AlnRep1
+metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-24
 dateUnrestricted 2012-03-24
-fileName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6AlnRep1.bam,wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6AlnRep1.bam.bai
+fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep1.bam,wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -22,22 +22,22 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 4346
-tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6AlnRep1
+tableName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep1
 tissueSourceType None
 view Alignments
 
-metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6AlnRep2
+metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep2
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-24
 dateUnrestricted 2012-03-24
-fileName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6AlnRep2.bam,wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6AlnRep2.bam.bai
+fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep2.bam,wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep2.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -47,15 +47,15 @@ project wgEncode
 replicate 2
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 4348
-tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6AlnRep2
+tableName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jAlnRep2
 tissueSourceType None
 view Alignments
 
-metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawRep1
+metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jMinusRawRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -63,7 +63,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-24
 dateUnrestricted 2012-03-24
-fileName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jMinusRawRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -73,15 +73,15 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 6107
-tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawRep1
+tableName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jMinusRawRep1
 tissueSourceType None
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawRep2
+metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jMinusRawRep2
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -89,7 +89,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-24
 dateUnrestricted 2012-03-24
-fileName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jMinusRawRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -99,15 +99,15 @@ project wgEncode
 replicate 2
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 6107
-tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6MinusRawRep2
+tableName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jMinusRawRep2
 tissueSourceType None
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawRep1
+metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jPlusRawRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -115,7 +115,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-24
 dateUnrestricted 2012-03-24
-fileName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jPlusRawRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -125,15 +125,15 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 6107
-tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawRep1
+tableName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jPlusRawRep1
 tissueSourceType None
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawRep2
+metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jPlusRawRep2
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -141,7 +141,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-24
 dateUnrestricted 2012-03-24
-fileName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jPlusRawRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -151,22 +151,22 @@ project wgEncode
 replicate 2
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 6107
-tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6PlusRawRep2
+tableName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jPlusRawRep2
 tissueSourceType None
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6RawDataRep1
+metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jRawDataRep1
 objType file
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-24
 dateUnrestricted 2012-03-24
-fileName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -176,21 +176,21 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 4346
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6RawDataRep2
+metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jRawDataRep2
 objType file
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-24
 dateUnrestricted 2012-03-24
-fileName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
+fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -200,14 +200,14 @@ project wgEncode
 replicate 2
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 4348
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6SigRep1
+metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jSigRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -215,7 +215,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-24
 dateUnrestricted 2012-03-24
-fileName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jSigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -225,15 +225,15 @@ project wgEncode
 replicate 1
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 6107
-tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6SigRep1
+tableName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jSigRep1
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6SigRep2
+metaObject wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jSigRep2
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -241,7 +241,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-24
 dateUnrestricted 2012-03-24
-fileName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+fileName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jSigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -251,22 +251,22 @@ project wgEncode
 replicate 2
 rnaExtract polyA
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 6107
-tableName wgEncodeUwRnaSeq416bCellPolyaMAdult8wksC57bl6SigRep2
+tableName wgEncodeUwRnaSeq416bCellPolyaMImmortalB6d2f1jSigRep2
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannAlnRep1
+metaObject wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannAlnRep1
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannAlnRep1.bam,wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannAlnRep1.bam.bai
+fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannAlnRep1.bam,wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -278,20 +278,20 @@ rnaExtract polyA
 sex M
 strain BALB/cAnN
 subId 4428
-tableName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannAlnRep1
+tableName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannAlnRep1
 tissueSourceType None
 view Alignments
 
-metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannAlnRep2
+metaObject wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannAlnRep2
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannAlnRep2.bam,wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannAlnRep2.bam.bai
+fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannAlnRep2.bam,wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannAlnRep2.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -303,13 +303,13 @@ rnaExtract polyA
 sex M
 strain BALB/cAnN
 subId 5323
-tableName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannAlnRep2
+tableName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannAlnRep2
 tissueSourceType None
 view Alignments
 
-metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawRep1
+metaObject wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannMinusRawRep1
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -317,7 +317,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawRep1.bigWig
+fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannMinusRawRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -329,13 +329,13 @@ rnaExtract polyA
 sex M
 strain BALB/cAnN
 subId 6107
-tableName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawRep1
+tableName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannMinusRawRep1
 tissueSourceType None
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawRep2
+metaObject wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannMinusRawRep2
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -343,7 +343,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawRep2.bigWig
+fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannMinusRawRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -355,13 +355,13 @@ rnaExtract polyA
 sex M
 strain BALB/cAnN
 subId 6105
-tableName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannMinusRawRep2
+tableName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannMinusRawRep2
 tissueSourceType None
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawRep1
+metaObject wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannPlusRawRep1
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -369,7 +369,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawRep1.bigWig
+fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannPlusRawRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -381,13 +381,13 @@ rnaExtract polyA
 sex M
 strain BALB/cAnN
 subId 6107
-tableName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawRep1
+tableName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannPlusRawRep1
 tissueSourceType None
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawRep2
+metaObject wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannPlusRawRep2
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -395,7 +395,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawRep2.bigWig
+fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannPlusRawRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -407,20 +407,20 @@ rnaExtract polyA
 sex M
 strain BALB/cAnN
 subId 6105
-tableName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannPlusRawRep2
+tableName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannPlusRawRep2
 tissueSourceType None
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannRawDataRep1
+metaObject wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannRawDataRep1
 objType file
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannRawDataRep1.fastq.gz
+fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannRawDataRep1.fastq.gz
 grant Stam
 lab UW-m
 labVersion 1
@@ -435,16 +435,16 @@ subId 4428
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannRawDataRep2
+metaObject wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannRawDataRep2
 objType file
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannRawDataRep2.fastq.tgz
+fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -459,9 +459,9 @@ subId 5323
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannSigRep1
+metaObject wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannSigRep1
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -469,7 +469,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannSigRep1.bigWig
+fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannSigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -481,13 +481,13 @@ rnaExtract polyA
 sex M
 strain BALB/cAnN
 subId 6107
-tableName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannSigRep1
+tableName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannSigRep1
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannSigRep2
+metaObject wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannSigRep2
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwRnaSeq
 dataType RnaSeq
@@ -495,7 +495,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannSigRep2.bigWig
+fileName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannSigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -507,7 +507,7 @@ rnaExtract polyA
 sex M
 strain BALB/cAnN
 subId 6105
-tableName wgEncodeUwRnaSeqA20CellPolyaMAdult8wksBalbcannSigRep2
+tableName wgEncodeUwRnaSeqA20CellPolyaMImmortalBalbcannSigRep2
 tissueSourceType None
 view Signal
 
@@ -3432,7 +3432,7 @@ tableName wgEncodeUwRnaSeqLungCellPolyaMAdult8wksC57bl6SigRep1
 tissueSourceType Pooled
 view Signal
 
-metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6AlnRep1
+metaObject wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep1
 objType table
 age adult-8wks
 cell MEL
@@ -3441,7 +3441,7 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6AlnRep1.bam,wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6AlnRep1.bam.bai
+fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep1.bam,wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -3453,11 +3453,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4433
-tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6AlnRep1
+tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep1
 tissueSourceType None
 view Alignments
 
-metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6AlnRep2
+metaObject wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep2
 objType table
 age adult-8wks
 cell MEL
@@ -3466,7 +3466,7 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6AlnRep2.bam,wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6AlnRep2.bam.bai
+fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep2.bam,wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep2.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -3478,11 +3478,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4434
-tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6AlnRep2
+tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknAlnRep2
 tissueSourceType None
 view Alignments
 
-metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawRep1
+metaObject wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep1
 objType table
 age adult-8wks
 cell MEL
@@ -3492,7 +3492,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3504,11 +3504,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 6107
-tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawRep1
+tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep1
 tissueSourceType None
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawRep2
+metaObject wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep2
 objType table
 age adult-8wks
 cell MEL
@@ -3518,7 +3518,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3530,11 +3530,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 6107
-tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6MinusRawRep2
+tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknMinusRawRep2
 tissueSourceType None
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawRep1
+metaObject wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep1
 objType table
 age adult-8wks
 cell MEL
@@ -3544,7 +3544,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3556,11 +3556,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 6107
-tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawRep1
+tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep1
 tissueSourceType None
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawRep2
+metaObject wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep2
 objType table
 age adult-8wks
 cell MEL
@@ -3570,7 +3570,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3582,11 +3582,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 6107
-tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6PlusRawRep2
+tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknPlusRawRep2
 tissueSourceType None
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6RawDataRep1
+metaObject wgEncodeUwRnaSeqMelCellPolyaMImmortalUknRawDataRep1
 objType file
 age adult-8wks
 cell MEL
@@ -3595,7 +3595,7 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -3610,7 +3610,7 @@ subId 4433
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6RawDataRep2
+metaObject wgEncodeUwRnaSeqMelCellPolyaMImmortalUknRawDataRep2
 objType file
 age adult-8wks
 cell MEL
@@ -3619,7 +3619,7 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
+fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -3634,7 +3634,7 @@ subId 4434
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6SigRep1
+metaObject wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep1
 objType table
 age adult-8wks
 cell MEL
@@ -3644,7 +3644,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3656,11 +3656,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 6107
-tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6SigRep1
+tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep1
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6SigRep2
+metaObject wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep2
 objType table
 age adult-8wks
 cell MEL
@@ -3670,7 +3670,7 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-03-21
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+fileName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -3682,7 +3682,7 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 6107
-tableName wgEncodeUwRnaSeqMelCellPolyaMAdult8wksC57bl6SigRep2
+tableName wgEncodeUwRnaSeqMelCellPolyaMImmortalUknSigRep2
 tissueSourceType None
 view Signal
 
@@ -5464,4 +5464,4 @@ tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -1589761388
+# MAGIC: 2039225162
