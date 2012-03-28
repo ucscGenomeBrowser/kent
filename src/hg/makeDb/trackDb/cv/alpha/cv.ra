@@ -13606,6 +13606,11 @@ type strain
 description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
 label 129/Ola
 
+term 129S1/SVImJ
+tag 129S1
+type strain
+description Control inbred strain of the steel-derived ES cells. PROVISIONAL 
+
 term 129S2/SvPas
 tag 129S2
 type strain
