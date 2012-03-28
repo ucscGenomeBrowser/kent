@@ -67,7 +67,7 @@ void annoStreamerInit(struct annoStreamer *self, struct asObject *asObj)
 /* Initialize a newly allocated annoStreamer with default annoStreamer methods and
  * default filters and columns based on asObj.
  * In general, subclasses' constructors will call this first; override nextRow, close,
- * and probably setRegion; and then initialize their private data. */
+ * and probably setRegion and setQuery; and then initialize their private data. */
 {
 self->getAutoSqlObject = annoStreamerGetAutoSqlObject;
 self->setRegion = annoStreamerSetRegion;
