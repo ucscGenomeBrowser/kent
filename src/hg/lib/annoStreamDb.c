@@ -23,8 +23,7 @@ struct annoStreamDb
     int endIx;				// Index of chromEnd-ish col in autoSql or bin-less table
     };
 
-static void asdSetRegionDb(struct annoStreamer *vSelf,
-			    char *chrom, uint regionStart, uint regionEnd)
+static void asdSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
 /* Set region -- and free current sqlResult if there is one. */
 {
 annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
@@ -69,7 +68,7 @@ row += self->omitBin;
 return row;
 }
 
-static struct annoRow *asdNextRowDb(struct annoStreamer *vSelf)
+static struct annoRow *asdNextRow(struct annoStreamer *vSelf)
 /* Perform sql query if we haven't already and return a single
  * annoRow, or NULL if there are no more items. */
 {
@@ -98,7 +97,7 @@ uint chromEnd = sqlUnsigned(row[self->omitBin+self->endIx]);
 return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row, self->numCols);
 }
 
-static void asdCloseDb(struct annoStreamer **pVSelf)
+static void asdClose(struct annoStreamer **pVSelf)
 /* Close db connection and free self. */
 {
 if (pVSelf == NULL)
@@ -107,6 +106,7 @@ struct annoStreamDb *self = *(struct annoStreamDb **)pVSelf;
 // Let the caller close conn; it might be from a cache.
 freeMem(self->table);
 sqlFreeResult(&(self->sr));
+hFreeConn(&(self->conn));
 annoStreamerFree(pVSelf);
 }
 
@@ -158,20 +158,19 @@ if (asHasFields(self, "genoName", "genoStart", "genoEnd"))
 return FALSE;
 }
 
-struct annoStreamer *annoStreamDbNew(struct sqlConnection *conn, char *table,
-				     struct asObject *asObj)
-/* Create an annoStreamer (subclass) object from a database table described by asObj.
- * conn must not be shared. */
+struct annoStreamer *annoStreamDbNew(char *db, char *table, struct asObject *asObj)
+/* Create an annoStreamer (subclass) object from a database table described by asObj. */
 {
+struct sqlConnection *conn = hAllocConn(db);
 if (!sqlTableExists(conn, table))
-    errAbort("annoStreamNewDb: table %s doesn't exist", table);
+    errAbort("annoStreamDbNew: table '%s' doesn't exist in database '%s'", table, db);
 struct annoStreamDb *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, asObj);
-streamer->setRegion = asdSetRegionDb;
-streamer->nextRow = asdNextRowDb;
-streamer->close = asdCloseDb;
+streamer->setRegion = asdSetRegion;
+streamer->nextRow = asdNextRow;
+streamer->close = asdClose;
 self->conn = conn;
 self->table = cloneString(table);
 char *asFirstColumnName = streamer->asObj->columnList->name;

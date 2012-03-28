@@ -34,8 +34,7 @@ static struct optionSpec optionSpecs[] = {
 void dbToTabOut(char *db, char *table, struct asObject *asObj, char *outFile)
 /* Get data from a pgSnp database table and print all fields to tab-sep output. */
 {
-struct sqlConnection *conn = sqlConnect(db);
-struct annoStreamer *pgSnpIn = annoStreamDbNew(conn, table, asObj);
+struct annoStreamer *pgSnpIn = annoStreamDbNew(db, table, asObj);
 struct annoFormatter *tabOut = annoFormatTabNew(outFile);
 struct dyString *dbDotTwoBit = dyStringCreate("/hive/data/genomes/%s/%s.2bit", db, db);
 struct twoBitFile *tbf = twoBitOpen(dbDotTwoBit->string);
@@ -43,7 +42,6 @@ struct annoGratorQuery *query = annoGratorQueryNew(db, NULL, tbf, pgSnpIn, NULL,
 annoGratorQuerySetRegion(query, "chr1", 705881, 752721);
 annoGratorQueryExecute(query);
 annoGratorQueryFree(&query);
-sqlDisconnect(&conn);
 dyStringFree(&dbDotTwoBit);
 }
 
@@ -52,10 +50,8 @@ void twoDbToTabOut(char *db, char *table1, struct asObject *asObj1,
 /* Integrate data from a pgSnp database table and a knownGene db table
  * and print all fields to tab-sep output. */
 {
-struct sqlConnection *conn = sqlConnect(db);
-struct annoStreamer *primary = annoStreamDbNew(conn, table1, asObj1);
-struct sqlConnection *conn2 = sqlConnect(db);
-struct annoStreamer *kgIn = annoStreamDbNew(conn2, table2, asObj2);
+struct annoStreamer *primary = annoStreamDbNew(db, table1, asObj1);
+struct annoStreamer *kgIn = annoStreamDbNew(db, table2, asObj2);
 struct annoGrator *geneGrator = annoGratorNew(kgIn);
 struct annoFormatter *tabOut = annoFormatTabNew(outFile);
 
@@ -70,8 +66,6 @@ else
 annoGratorQueryExecute(query);
 
 annoGratorQueryFree(&query);
-sqlDisconnect(&conn);
-sqlDisconnect(&conn2);
 dyStringFree(&dbDotTwoBit);
 }
 
