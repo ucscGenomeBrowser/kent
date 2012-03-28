@@ -28,6 +28,76 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+struct fieldLabel
+/* Information on labels that describe a field. Just used to make a big static table */
+    {
+    char *typePattern;   /* Types this applies to.  Put more specific types first. */
+    char *fieldName;     /* Name of field */
+    char *description;       /* The actual comment. */
+    };
+
+struct fieldLabel fieldDescriptions[] = {
+   {"cellLine", "lineage", "High level developmental lineage of cell."},
+   {"cellLine", "tier", "ENCODE cell line tier. 1-3 with 1 being most commonly used, 3 least."},
+   {"cellLine", "protocol", "Scientific protocol used for growing cells"},
+   {"cellLine", "category", "Category of cell source - Tissue, primaryCells, etc."},
+   {"cellLine", "childOf", "Name of cell line or tissue this cell is descended from."},
+   {"cellLine", "derivedFrom", "Tissue or other souce of original cells."},
+   {"antibody", "target", "Molecular target of antibody."},
+   {"antibody", "targetDescription", "Sentence or so description of antibody target."},
+   {"antibody", "targetUrl", "Web page associated with antibody target."},
+   {"antibody", "validation", "How antibody was validated to be specific for target."},
+   {"antibody", "displayName", "Descriptive short but not necessarily unique name for antibody."},
+   {"antibody", "targetId", "Identifier for target, either a Gencode gene id (TRUE Wranglers) or prefixed with source of ID"},
+   {"dataType", "dataGroup", "High level grouping of experimental data."},
+   {"age", "stage", "High level place within life cycle of organism."},
+   {"lab", "labInst", "The institution where the lab is located."},
+   {"lab", "labPi", "Last name or other short identifier for lab's primary investigator"},
+   {"lab", "labPiFull", "Full name of lab's primary investigator."},
+   {"lab", "grantPi", "Last name of primary investigator on grant paying for data."},
+   {"grant", "grantInst", "Name of instution awarded grant paying for data."},
+   {"grant", "projectName", "Short name describing grant."},
+   {"typeOfTerm", "searchable", "Describes how to search for term. 'No' for unsearchable."},
+   {"typeOfTerm", "cvDefined", "Is there a controlled vocabulary for this term. Is 'yes' or 'no.'"},
+   {"typeOfTerm", "validate", "Describes how to validate field. Use 'none' for no validation."},
+   {"typeOfTerm", "hidden", "Hide field in user interface? Can be 'yes' or 'no' or a release list"},
+   {"typeOfTerm", "priority", "Order to display or search terms, lower is earlier."},
+   {"*", "symbol", "A short human and machine readable symbol with just alphanumeric characters."},
+   {"*", "deprecated", "If non-empty, the reason why this entry is obsolete."},
+   {"*", "shortLabel", "A one or two word (less than 18 character) label."},
+   {"*", "longLabel", "A sentence or two label."},
+   {"*", "organism", "Common name of organism."},
+   {"*", "tissue", "Tissue source of sample."},
+   {"*", "vendorName", "Name of vendor selling reagent."},
+   {"*", "vendorId", "Catalog number of other way of identifying reagent."},
+   {"*", "orderUrl", "Web page to order regent."},
+   {"*", "karyotype", "Status of chromosomes in cell - usually either normal or cancer."},
+   {"*", "termId", "ID of term in external controlled vocabulary. See also termUrl."},
+   {"*", "termUrl", "URL describing controlled vocabulary."},
+   {"*", "color", "Red,green,blue components of color to visualize, each 0-255."},
+   {"*", "sex", "M for male, F for female, B for both, U for unknown."},
+   {"*", "lab", "Scientific lab producing data."},
+   {"*", "lots", "The specific lots of reagent used."},
+   {"*", "age", "Age of organism cells come from."},
+   {"*", "strain", "Strain of organism."},
+   {"*", "geoPlatformName", "Short description of sequencing platform, used by GEO."},
+   {"*", "xyz", "Xyz"},
+};
+
+char *searchFieldDescription(char *type, char *field)
+/* Search field description table for match to field. */
+{
+int i;
+for (i=0; i<ArraySize(fieldDescriptions); ++i)
+    {
+    struct fieldLabel *d = &fieldDescriptions[i];
+    if (wildMatch(d->typePattern, type) && sameString(d->fieldName, field))
+        return d->description;
+    }
+errAbort("Can't find description for %s.%s.  Please add to fieldDescriptions in source code.", 
+         type, field);
+return NULL;
+}
 
 typedef char *(*StringMerger)(char *a, char *b);
 /* Given two strings, produce a third. */
@@ -520,6 +590,10 @@ for (type = typeList; type != NULL; type = type->next)
             }
         fprintf(f, " %s;\t", field->symbol);
         fputc('"', f);
+        char *description = searchFieldDescription(type->symbol, field->symbol);
+        if (description == NULL)
+             description = "noDescriptionDefined";
+        fputs(description, f);
         fputc('"', f);
         fputc('\n', f);
 
@@ -593,7 +667,6 @@ void addDeprecatedField(struct stanzaType *type)
 if (!stanzaFieldFind(type->fieldList, "deprecated"))
     {
     struct stanzaField *field = stanzaFieldFake("deprecated", type, TRUE);
-    uglyf("Adding deprecated to %s %d\n", type->name, type->count);
     slAddHead(&type->fieldList, field);
     }
 }
