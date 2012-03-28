@@ -1441,7 +1441,7 @@ html wgEncodeLicrHistone.release2
         # subId=5444 dateSubmitted=2012-01-05
 
         track wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdSig
-        parent wgEncodeLicrHistoneViewSignal
+        parent wgEncodeLicrHistoneViewSignal off
         shortLabel Bn 14.5 H3K4m3 
         longLabel WBrain E14.5 H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K04ME3 cellType=WBRAIN control=STD sex=U strain=C57BL6 
@@ -1452,7 +1452,7 @@ html wgEncodeLicrHistone.release2
 
         track wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdSig
         parent wgEncodeLicrHistoneViewSignal
-        shortLabel Bn 14.5 H3K4m1
+        shortLabel Bn 14.5 H3K4m1 off
         longLabel WBrain E14.5 H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=H3K04ME1 cellType=WBRAIN control=STD sex=U strain=C57BL6 
         type bigWig 0.110000 18.080000

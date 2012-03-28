@@ -351,7 +351,7 @@ html wgEncodeLicrTfbs.release2
         # subId=5665 dateSubmitted=2012-02-14
 
         track wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdPk
-        parent wgEncodeLicrTfbsViewPeaks
+        parent wgEncodeLicrTfbsViewPeaks off 
         shortLabel Brain 14.5 Pol2 
         longLabel Whole Brain Embryonic day 14.5 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E14HALF factor=POL2 cellType=WBRAIN control=STD sex=U strain=C57BL6 
@@ -360,7 +360,7 @@ html wgEncodeLicrTfbs.release2
         # subId=5661 dateSubmitted=2012-02-14
 
         track wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdPk
-        parent wgEncodeLicrTfbsViewPeaks
+        parent wgEncodeLicrTfbsViewPeaks off
         shortLabel Brain 14.5 CTCF 
         longLabel Whole Brain Embryonic day 14.5 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR 
         subGroups view=Peaks age=E14HALF factor=CTCF cellType=WBRAIN control=STD sex=U strain=C57BL6 
@@ -790,7 +790,7 @@ html wgEncodeLicrTfbs.release2
         # was wgEncodeLicrTfbsSmintestinePol2MAdult8wksC57bl6StdSig vsmalladi Tue Jan  3 14:08:08 2012
 
         track wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdSig
-        parent wgEncodeLicrTfbsViewSignal
+        parent wgEncodeLicrTfbsViewSignal off
         shortLabel Brain 14.5 CTCF 
         longLabel Whole Brain Embryonic day 14.5 CTCF TFBS ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=CTCF cellType=WBRAIN control=STD sex=U strain=C57BL6 
@@ -821,7 +821,7 @@ html wgEncodeLicrTfbs.release2
         # subId=5360 dateSubmitted=2011-12-23
 
         track wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
-        parent wgEncodeLicrTfbsViewSignal
+        parent wgEncodeLicrTfbsViewSignal off
         shortLabel Brain 14.5 Pol2 
         longLabel Whole Brain Embryonic day 14.5 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=E14HALF factor=POL2 cellType=WBRAIN control=STD sex=U strain=C57BL6 
