@@ -430,7 +430,7 @@ html wgEncodeLicrTfbs.release2
 
 
         track wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrTfbsViewSignal
+        parent wgEncodeLicrTfbsViewSignal off
         shortLabel Cb 8w Input 
         longLabel Cerebellum Adult 8 weeks Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=1ADULT8WKS factor=INPUT cellType=CBELLUM control=STD sex=M strain=C57BL6 
@@ -567,7 +567,7 @@ html wgEncodeLicrTfbs.release2
         # subId=3920 dateSubmitted=2011-04-22
 
         track wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrTfbsViewSignal
+        parent wgEncodeLicrTfbsViewSignal off
         shortLabel Heart 8w Input 
         longLabel Heart Adult 8 weeks Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=1ADULT8WKS factor=INPUT cellType=HEART control=STD sex=M strain=C57BL6 
@@ -612,7 +612,7 @@ html wgEncodeLicrTfbs.release2
         # subId=3925 dateSubmitted=2011-04-25
 
         track wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdSig
-        parent wgEncodeLicrTfbsViewSignal 
+        parent wgEncodeLicrTfbsViewSignal off
         shortLabel Liver 8w Input 
         longLabel Liver Adult 8 weeks Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=1ADULT8WKS factor=INPUT cellType=LIVER control=STD sex=M strain=C57BL6 
@@ -906,7 +906,7 @@ html wgEncodeLicrTfbs.release2
         # subId=5744 dateSubmitted=2012-02-16
 
         track wgEncodeLicrTfbsWbrainInputUE14halfC57bl6StdSig
-        parent wgEncodeLicrTfbsViewSignal
+        parent wgEncodeLicrTfbsViewSignal off
         shortLabel Brain 14.5 Input 
         longLabel Whole Brain Embryonic day 14.5 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E14HALF factor=INPUT cellType=WBRAIN control=STD sex=U strain=C57BL6 
@@ -963,7 +963,7 @@ html wgEncodeLicrTfbs.release2
         # subId=5959 dateSubmitted=2012-02-29
 
         track wgEncodeLicrTfbsMelInputMImmortalC57bl6StdSig
-        parent wgEncodeLicrTfbsViewSignal
+        parent wgEncodeLicrTfbsViewSignal off
         shortLabel MEL Input 
         longLabel MEL immortal cells Input ChIP-seq Signal from ENCODE/LICR 
         subGroups view=Signal age=IMMORTAL factor=INPUT cellType=MEL control=STD sex=M strain=C57BL6
