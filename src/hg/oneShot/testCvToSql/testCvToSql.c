@@ -103,7 +103,7 @@ return NULL;
 typedef char *(*StringMerger)(char *a, char *b);
 /* Given two strings, produce a third. */
 
-enum sfType {sftString = 0, sftUnsigned, sftInt, sftFloat};
+enum sfType {sftString = 0, sftUnsigned, sftInt, sftFloat, sftLongString};
 /* Possible types of a simple field. */
 
 struct stanzaField 
@@ -118,6 +118,7 @@ struct stanzaField
     int countFloat;        /* Number of times contents of field are a float-compatible format. */
     int countUnsigned;     /* Number of times contents of field could be unsigned int */
     int countInt;          /* Number of times contents of field could be unsigned int */
+    int maxSize;           /* Longest observed size. */
     StringMerger mergeChildren; /* Function to merge two children if any */
     struct stanzaField *children;  /* Allows fields to be in a tree. */
     };
@@ -135,7 +136,8 @@ if (count != 0)
         valType = sftInt;
     else if (count == field->countFloat)
         valType = sftFloat;
-
+    else if (field->maxSize > 255)
+        valType = sftLongString;
     }
 field->valType = valType;
 }
@@ -360,6 +362,10 @@ while ((stanza = nextStanza(lf)) != NULL)
                 }
             }
 
+        int valSize = strlen(val);
+        if (valSize > field->maxSize)
+            field->maxSize = valSize;
+
         /* Update fields uniq hash to include this val of field. */
         hashIncInt(field->uniq, val);
         }
@@ -437,6 +443,7 @@ for (type = typeList; type != NULL; type = type->next)
         switch (field->valType)
             {
             case sftString:
+            case sftLongString:
                 fputc('$', f);
                 break;
             case sftUnsigned:
@@ -584,6 +591,9 @@ for (type = typeList; type != NULL; type = type->next)
                 break;
             case sftFloat:
                 fputs("float", f);
+                break;
+            case sftLongString:
+                fputs("lstring", f);
                 break;
             default:
                 internalErr();
