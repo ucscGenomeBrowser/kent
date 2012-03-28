@@ -1,4 +1,8 @@
 /* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
+
+/* Currently this is implemented in two main passes - one of which builds up a stanzaType list.
+ * The list is then reformatted a bit, and the second pass actually writes the data. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -190,6 +194,12 @@ if (stanza != NULL)
         if (val == NULL)
             errAbort("Tag \"%s\" without value in stanza ending line %d of %s",
                 pair->name, lf->lineIx, lf->fileName);
+
+        /* Tabs will also mess us up. */
+        if (strchr(val, '\t'))
+            errAbort("Internal tab in tag \"%s\" in stanza ending line %d of %s",
+                pair->name, lf->lineIx, lf->fileName);
+            
         }
     hashFree(&uniq);
     }
@@ -527,10 +537,9 @@ void mergeLabelAndShortLabel(struct stanzaType *type)
 {
 struct stanzaField *label = stanzaFieldFindSymbol(type->fieldList, "label");
 struct stanzaField *shortLabel = stanzaFieldFindSymbol(type->fieldList, "shortLabel");
-uglyf("mergeLabelAndShortLabel(%s) label=%p shortLabel=%p\n", type->name, label, shortLabel);
 if (label != NULL && shortLabel != NULL)
     {
-    uglyf("Merging %s and %s in %s\n", label->name, shortLabel->name, type->name);
+    verbose(2, "Merging %s and %s in %s\n", label->name, shortLabel->name, type->name);
     buryTwoUnderMerge(type, "shortLabel", label, shortLabel, bestShortLabel);
     }
 }
