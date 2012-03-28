@@ -37,7 +37,7 @@ subGroup5 age Age 1ADULT8WKS=Adult_8_weeks 2ADULT24WKS=Adult_24_weeks E0=Embryon
 subGroup6 strain Strain C57BL6=C57BL/6
 subGroup7 control Control STD=std
 dimensions dimensionX=cellType dimensionY=factor dimensionA=age 
-dimensionAchecked 1ADULT8WKS,E14HALF,IMMORTAL
+dimensionAchecked 1ADULT8WKS,IMMORTAL
 filterComposite dimensionA=multi
 sortOrder cellType=+ factor=+ view=+ age=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target sex=Sex age=Age replicate=Replicate view=View dccAccession=UCSC_Accession geoSeriesAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
