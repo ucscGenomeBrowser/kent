@@ -32,6 +32,9 @@ static struct optionSpec options[] = {
 typedef char *(*StringMerger)(char *a, char *b);
 /* Given two strings, produce a third. */
 
+enum sfType {sftString = 0, sftUnsigned, sftInt, sftFloat};
+/* Possible types of a simple field. */
+
 struct stanzaField 
 /* Information about a field (type of line) with a given stanza */
     {
@@ -39,6 +42,7 @@ struct stanzaField
     char *name;            /* Name of field, first word in line containing field. */
     char *symbol;          /* Similar to name, but no white space and always camelCased. */
     struct hash *uniq;     /* Count-valued hash of all observed values. */
+    enum sfType valType;   /* Type of values we've seen */
     int count;             /* Number of times field used */
     int countFloat;        /* Number of times contents of field are a float-compatible format. */
     int countUnsigned;     /* Number of times contents of field could be unsigned int */
@@ -46,6 +50,24 @@ struct stanzaField
     StringMerger mergeChildren; /* Function to merge two children if any */
     struct stanzaField *children;  /* Allows fields to be in a tree. */
     };
+
+void setValType(struct stanzaField *field)
+/* Set valType field based on count, countFloat, countUnsigned, countInt */
+{
+enum sfType valType = sftString;
+int count = field->count;
+if (count != 0)
+    {
+    if (count == field->countUnsigned)
+        valType = sftUnsigned;
+    else if (count == field->countInt)
+        valType = sftInt;
+    else if (count == field->countFloat)
+        valType = sftFloat;
+
+    }
+field->valType = valType;
+}
 
 void enforceCamelCase(char *label)
 /* Make sure that label is a good symbol for us - no spaces, starts with lower case. */
@@ -279,6 +301,16 @@ while ((stanza = nextStanza(lf)) != NULL)
         }
 
     }
+
+/* Set valType for fields */
+struct stanzaType *type;
+for (type = typeList; type != NULL; type = type->next)
+    {
+    struct stanzaField *field;
+    for (field = type->fieldList; field != NULL; field = field->next)
+        setValType(field);
+    }
+
 /* Clean up and go home. */
 lineFileClose(&lf);
 *retTypeList = typeList;
@@ -331,12 +363,22 @@ for (type = typeList; type != NULL; type = type->next)
         if (sameString(field->symbol, "type"))
             continue;
         spaceOut(f, 4);
-        if (field->count == field->countInt)
-            fputc('#', f);
-        else if (field->count == field->countFloat)
-            fputc('%', f);
-        else 
-            fputc('$', f);
+        switch (field->valType)
+            {
+            case sftString:
+                fputc('$', f);
+                break;
+            case sftUnsigned:
+            case sftInt:
+                fputc('#', f);
+                break;
+            case sftFloat:
+                fputc('%', f);
+                break;
+            default:
+                internalErr();
+                break;
+            }
         fputs(field->symbol, f);
         if (field->count != type->count)
             fputc('?', f);
@@ -458,14 +500,24 @@ for (type = typeList; type != NULL; type = type->next)
     for (field = type->fieldList; field != NULL; field = field->next)
         {
         fputs(indent, f);
-        if (field->count == field->countUnsigned)
-            fputs("uint", f);
-        if (field->count == field->countInt)
-            fputs("int", f);
-        else if (field->count == field->countFloat)
-            fputs("float", f);
-        else 
-            fputs("string", f);
+        switch (field->valType)
+            {
+            case sftString:
+                fputs("string", f);
+                break;
+            case sftUnsigned:
+                fputs("uint", f);
+                break;
+            case sftInt:
+                fputs("int", f);
+                break;
+            case sftFloat:
+                fputs("float", f);
+                break;
+            default:
+                internalErr();
+                break;
+            }
         fprintf(f, " %s;\t", field->symbol);
         fputc('"', f);
         fputc('"', f);
@@ -541,6 +593,7 @@ void addDeprecatedField(struct stanzaType *type)
 if (!stanzaFieldFind(type->fieldList, "deprecated"))
     {
     struct stanzaField *field = stanzaFieldFake("deprecated", type, TRUE);
+    uglyf("Adding deprecated to %s %d\n", type->name, type->count);
     slAddHead(&type->fieldList, field);
     }
 }
