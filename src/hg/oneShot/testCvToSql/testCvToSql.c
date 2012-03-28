@@ -1,7 +1,9 @@
 /* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
 
-/* Currently this is implemented in two main passes - one of which builds up a stanzaType list.
- * The list is then reformatted a bit, and the second pass actually writes the data. */
+/* Currently this is implemented in three main steps:
+ *    1) Read in cv.ra into a list of stanzaTypes.
+ *    2) Rearrange stanzaTypes a bit to reduce redundancy and standardize names. 
+ *    3) Output in a variety of formats.  In some formats will stream through cv.ra again. */
 
 #include "common.h"
 #include "linefile.h"
@@ -206,20 +208,22 @@ if (stanza != NULL)
 return stanza;
 }
 
-void stanzaTypesFromCvRa(char *inCvRa, struct stanzaType **retTypeList, struct hash **retHash)
+void stanzaTypesFromCvRa(char *inCvRa, struct stanzaType **retTypeList, struct hash **retHash,
+        struct hash **retTypeOfTermHash)
 /* Read cv.ra file into a list of stanzaTypes. Return list and also a hash of same items
  * keyed by type name. */
 {
 /* Stream through input and build up hash and list of stanzaTypes */
 struct lineFile *lf = lineFileOpen(inCvRa, TRUE);
 struct hash *typeHash = hashNew(10);
+struct hash *typeOfTermHash = hashNew(10);
 struct stanzaType *typeList = NULL;
 struct slPair *stanza;
 while ((stanza = nextStanza(lf)) != NULL)
     {
     /* Get type field and enforce two other fields exist */
     struct slPair *typePair = requiredTag(lf, stanza, "type");
-    requiredTag(lf, stanza, "term");
+    struct slPair *termPair = requiredTag(lf, stanza, "term");
     requiredTag(lf, stanza, "tag");
 
     /* Get existing stanzaType structure or if need be make a new one and add to hash */
@@ -266,11 +270,20 @@ while ((stanza = nextStanza(lf)) != NULL)
         /* Update fields uniq hash to include this val of field. */
         hashIncInt(field->uniq, val);
         }
+
+    /* Add stanza as pairs to typeOfTerm hash */
+    if (sameString(typeName, "typeOfTerm"))
+        {
+        requiredTag(lf, stanza, "description");
+        hashAdd(typeOfTermHash, termPair->val, stanza);
+        }
+
     }
 /* Clean up and go home. */
 lineFileClose(&lf);
 *retTypeList = typeList;
 *retHash = typeHash;
+*retTypeOfTermHash = typeOfTermHash;
 }
 
 /******* Routines for output in various formats. *********/
@@ -333,8 +346,31 @@ for (type = typeList; type != NULL; type = type->next)
 carefulClose(&f);
 }
 
+void openTypeFiles(struct stanzaType *typeList, char *outDir, char *suffix)
+/* Open a file (to write) for each element of typeList.  The file fill be in
+ * opened in the directory and with the suffix indicated in the parameters. */
+{
+struct stanzaType *type;
+for (type = typeList; type != NULL; type = type->next)
+    {
+    char path[PATH_LEN];
+    safef(path, sizeof(path), "%s/%s%s",  outDir, type->symbol, suffix);
+    type->f = mustOpen(path, "w");
+    }
+}
+
+void closeTypeFiles(struct stanzaType *typeList)
+/* Close all open files in typeList. */
+{
+struct stanzaType *type;
+for (type = typeList; type != NULL; type = type->next)
+    {
+    carefulClose(&type->f);
+    }
+}
+
 void outputAccordingToType(struct hash *ra, struct stanzaType *type, FILE *f)
-/* Output data in ra according to specs in type. */
+/* Output data in ra as tab-separated according to specs in type. */
 {
 struct stanzaField *field;
 for (field = type->fieldList; field != NULL; field = field->next)
@@ -371,23 +407,14 @@ for (field = type->fieldList; field != NULL; field = field->next)
 fputc('\n', f);
 }
 
+
 void outputTabs(struct stanzaType *typeList, struct hash *typeHash,
         char *inFile, char *outDir)
 /* Stream through inFile, reformatting it a bit into outDir. */
 {
+/* Open inputs and output. */
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
-
-/* Create output dir if need be. */
-makeDirsOnPath(outDir);
-
-/* First open all outputs. */
-struct stanzaType *type;
-for (type = typeList; type != NULL; type = type->next)
-    {
-    char path[PATH_LEN];
-    safef(path, sizeof(path), "%s/%s.tab",  outDir, type->symbol);
-    type->f = mustOpen(path, "w");
-    }
+openTypeFiles(typeList, outDir, ".tab");
 
 /* Stream through stanzas and dispatch according to type */
 struct hash *ra;
@@ -399,9 +426,56 @@ while ((ra = raNextStanza(lf)) != NULL)
     hashFree(&ra);
     }
 
-/* Close all outputs. */
+/* Close all outputs and input. */
+closeTypeFiles(typeList);
+lineFileClose(&lf);
+}
+
+void outputAutoSql(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outDir)
+/* Output start of autoSql files to outDir, one per table. */
+{
+openTypeFiles(typeList, outDir, ".as");
+struct stanzaType *type;
 for (type = typeList; type != NULL; type = type->next)
-    carefulClose(&type->f);
+    {
+    char *totKey = type->name;  /* key in typeOfTerm hash */
+    if (sameString(totKey, "Cell Line"))
+        totKey = "cellType";
+    char *typeDescription = "NoTypeDescription";
+    struct slPair *typeOfTerm = hashFindVal(typeOfTermHash, totKey);
+    if (typeOfTerm != NULL)
+        {
+        struct slPair *description = slPairFind(typeOfTerm, "description");
+        assert(description != NULL);  // Checked in initial parsing
+        typeDescription = description->val;
+        }
+    FILE *f = type->f;
+    char *indent = "    ";
+    fprintf(f, "table %s\n", type->symbol);
+    fprintf(f, "\"%s\"\n", typeDescription);
+    fprintf(f, "%s(\n", indent);
+    struct stanzaField *field;
+    for (field = type->fieldList; field != NULL; field = field->next)
+        {
+        fputs(indent, f);
+        if (field->count == field->countUnsigned)
+            fputs("uint", f);
+        if (field->count == field->countInt)
+            fputs("int", f);
+        else if (field->count == field->countFloat)
+            fputs("float", f);
+        else 
+            fputs("string", f);
+        fprintf(f, " %s;\t", field->symbol);
+        fputc('"', f);
+        fputc('"', f);
+        fputc('\n', f);
+
+        }
+    fprintf(f, "%s)\n", indent);
+    fprintf(f, "\n");
+    }
+closeTypeFiles(typeList);
 }
 
 /******* Routines for rearranging stanza types. *********/
@@ -548,9 +622,10 @@ void testCvToSql(char *inCvRa, char *outStats, char *outTree, char *outDir)
 /* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
 {
 /* Read input into type list and hash */
-struct hash *typeHash;
+struct hash *typeHash;   /* stanzaType valued, keyed by type->name */
+struct hash *typeOfTermHash;   /* list of slPair valued, keyed by "term" tag */
 struct stanzaType *typeList;
-stanzaTypesFromCvRa(inCvRa, &typeList, &typeHash);
+stanzaTypesFromCvRa(inCvRa, &typeList, &typeHash, &typeOfTermHash);
 
 /* Output stats format before we start munging the tree. */
 stanzaTypesToStats(typeList, outStats);
@@ -567,6 +642,8 @@ for (type = typeList; type != NULL; type = type->next)
 
 /* Output type tree and actual data */
 stanzaTypeToTree(typeList, outTree);
+makeDirsOnPath(outDir);
+outputAutoSql(typeList, typeOfTermHash, outDir);
 outputTabs(typeList, typeHash, inCvRa, outDir);
 }
 
