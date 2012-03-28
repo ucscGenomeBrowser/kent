@@ -477,7 +477,7 @@ view Signal
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksAlnRep1
 objType file
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -501,7 +501,7 @@ view Alignments
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksAlnRep2
 objType file
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -525,7 +525,7 @@ view Alignments
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksHotspotsRep1
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -550,7 +550,7 @@ view Hotspots
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksHotspotsRep2
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -575,7 +575,7 @@ view Hotspots
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksPkRep1
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -600,7 +600,7 @@ view Peaks
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksPkRep2
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -625,7 +625,7 @@ view Peaks
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksRawDataRep1
 objType file
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -649,7 +649,7 @@ view RawData
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksRawDataRep2
 objType file
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -673,7 +673,7 @@ view RawData
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep1
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -698,7 +698,7 @@ view Signal
 
 metaObject wgEncodeUwDnaseA20BalbcannMAdult8wksSigRep2
 objType table
-age adult-8wks
+age immortalized
 cell A20
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -2221,7 +2221,7 @@ md5sum 11890d995fb712040e7a9c1c0583d3cc,03a11bd50b2700ad03fb36664837b659
 project wgEncode
 replicate 1
 sex M
-strain 129
+strain 129S1/SVImJ
 subId 2004
 view Alignments
 
@@ -2244,7 +2244,7 @@ md5sum 46bc34f4b66881b071b65d7ad982d2b2,d4ab1f620593a8fb87ad998c4dd71995
 project wgEncode
 replicate 2
 sex M
-strain 129
+strain 129S1/SVImJ
 subId 2003
 view Alignments
 
@@ -2267,7 +2267,7 @@ md5sum 514eae2cece1c36ce17c5ff92e7f4e79
 project wgEncode
 replicate 1
 sex M
-strain 129
+strain 129S1/SVImJ
 subId 2004
 tableName wgEncodeUwDnaseEscj7S129ME0HotspotsRep1
 view Hotspots
@@ -2291,7 +2291,7 @@ md5sum 210ccc7f212fd72b50abca8a9172cdb2
 project wgEncode
 replicate 2
 sex M
-strain 129
+strain 129S1/SVImJ
 subId 2003
 tableName wgEncodeUwDnaseEscj7S129ME0HotspotsRep2
 view Hotspots
@@ -2315,7 +2315,7 @@ md5sum b4bcb6dbce740ee5aac01f68e929248c
 project wgEncode
 replicate 1
 sex M
-strain 129
+strain 129S1/SVImJ
 subId 2004
 tableName wgEncodeUwDnaseEscj7S129ME0PkRep1
 view Peaks
@@ -2339,7 +2339,7 @@ md5sum edec6be08b686069baf64f023e6ef0eb
 project wgEncode
 replicate 2
 sex M
-strain 129
+strain 129S1/SVImJ
 subId 2003
 tableName wgEncodeUwDnaseEscj7S129ME0PkRep2
 view Peaks
@@ -2363,7 +2363,7 @@ md5sum 0c38a0334dd8e4163e94a7ed3e3b2b72
 project wgEncode
 replicate 1
 sex M
-strain 129
+strain 129S1/SVImJ
 subId 2004
 view RawData
 
@@ -2386,7 +2386,7 @@ md5sum 45241c5c7130fa3e791b1c8123c0af52
 project wgEncode
 replicate 2
 sex M
-strain 129
+strain 129S1/SVImJ
 subId 2003
 view RawData
 
@@ -2409,7 +2409,7 @@ md5sum 369056e8ce34e09ca670c4a9cc602989
 project wgEncode
 replicate 1
 sex M
-strain 129
+strain 129S1/SVImJ
 subId 2004
 tableName wgEncodeUwDnaseEscj7S129ME0SigRep1
 view Signal
@@ -2433,7 +2433,7 @@ md5sum 23636161abe4ec657d417d862468fb87
 project wgEncode
 replicate 2
 sex M
-strain 129
+strain 129S1/SVImJ
 subId 2003
 tableName wgEncodeUwDnaseEscj7S129ME0SigRep2
 view Signal
@@ -14427,4 +14427,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -908934477
+# MAGIC: 1080165737
