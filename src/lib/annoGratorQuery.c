@@ -143,7 +143,6 @@ struct annoGratorQuery *query = *pQuery;
 freez(&(query->assemblyName));
 if (query->csAllocdHere)
     hashFree(&(query->chromSizes));
-twoBitClose(&(query->tbf));
 query->primarySource->close(&(query->primarySource));
 struct annoStreamer *grator = (struct annoStreamer *)(query->integrators), *nextGrator;
 for (;  grator != NULL;  grator = nextGrator)

@@ -82,6 +82,78 @@ for (col = streamer->columns, i = 0;  col != NULL;  col = col->next, i++)
     }
 }
 
+static double wigRowAvg(struct annoRow *row)
+/* Return the average value of floats in row->data. */
+{
+float *vector = row->data;
+int len = row->end - row->start;
+double sum = 0.0;
+int i;
+for (i = 0;  i < len;  i++)
+    sum += vector[i];
+return sum / (double)len;
+}
+
+static char **wordsFromWigRowAvg(struct annoRow *row)
+/* Return an array of strings with a single string containing the average of values in row. */
+{
+double avg = wigRowAvg(row);
+char **words;
+AllocArray(words, 1);
+char avgStr[32];
+safef(avgStr, sizeof(avgStr), "%lf", avg);
+words[0] = cloneString(avgStr);
+return words;
+}
+
+static char **wordsFromWigRowVals(struct annoRow *row)
+/* Return an array of strings with a single string containing comma-sep per-base wiggle values. */
+{
+float *vector = row->data;
+int len = row->end - row->start;
+struct dyString *dy = dyStringNew(10*len);
+int i;
+for (i = 0;  i < len;  i++)
+    dyStringPrintf(dy, "%f,", vector[i]);
+char **words;
+AllocArray(words, 1);
+words[0] = dyStringCannibalize(&dy);
+return words;
+}
+
+static char **wordsFromRow(struct annoRow *row, boolean *retFreeWhenDone)
+/* If row->type is arWords, return its words.  Otherwise translate row->data into words. */
+{
+if (row == NULL)
+    return NULL;
+boolean freeWhenDone = FALSE;
+char **words = NULL;
+if (row->type == arWords)
+    words = row->data;
+else if (row->type == arWig)
+    {
+    freeWhenDone = TRUE;
+    //#*** config options: avg? more stats? list of values?
+    boolean doAvg = FALSE;
+    if (doAvg)
+	words = wordsFromWigRowAvg(row);
+    else
+	words = wordsFromWigRowVals(row);
+    }
+else
+    errAbort("annoFormatTab: unrecognized row type %d", row->type);
+if (retFreeWhenDone != NULL)
+    *retFreeWhenDone = freeWhenDone;
+return words;
+}
+
+INLINE void freeWords1(char **words)
+/* Free words and words[0] (alloc'd by wordsFromWig* above. */
+{
+freeMem(words[0]);
+freeMem(words);
+}
+
 static void aftFormatOne(struct annoFormatter *vSelf)
 /* Print out tab-separated columns that we have gathered in prior calls to aftCollect,
  * and start over fresh for the next line of output. */
@@ -102,14 +174,20 @@ for (i = 0, grRef = self->gratorRowLists;  i < numGrators;  i++, grRef = grRef->
 // Print out enough rows to make sure that all grator rows are included.
 for (i = 0;  i < maxRows;  i++)
     {
-    printColumns(self->f, vSelf->query->primarySource, self->primaryRow->words, TRUE);
+    boolean freeWhenDone = FALSE;
+    char **primaryData = wordsFromRow(self->primaryRow, &freeWhenDone);
+    printColumns(self->f, vSelf->query->primarySource, primaryData, TRUE);
+    if (freeWhenDone)
+	freeWords1(primaryData);
     struct annoStreamer *grator = (struct annoStreamer *)self->formatter.query->integrators;
     for (grRef = self->gratorRowLists;  grRef != NULL;  grRef = grRef->next,
 	     grator = grator->next)
 	{
 	struct annoRow *gratorRow = slElementFromIx(grRef->val, i);
-	char **row = (gratorRow == NULL) ? NULL : gratorRow->words;
-	printColumns(self->f, grator, row, FALSE);
+	char **gratorWords = wordsFromRow(gratorRow, &freeWhenDone);
+	printColumns(self->f, grator, gratorWords, FALSE);
+	if (freeWhenDone)
+	    freeWords1(gratorWords);
 	}
     fputc('\n', self->f);
     }
