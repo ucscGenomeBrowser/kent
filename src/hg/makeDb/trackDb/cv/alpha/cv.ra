@@ -8622,7 +8622,6 @@ term H3K4me3B
 tag H3K04ME3b
 type Antibody
 target H3K4me3
-displayName H3K4me3
 antibodyDescription Rabbit monoclonal antibody. Antibody Target: H3K4me3
 targetDescription Histone H3 (tri-methyl K4) marks promoters in chromatin regions
 vendorName Cell Signaling
@@ -8654,7 +8653,6 @@ label H3K9ac (ab4441)
 
 term H3K9acB
 tag H3K09ACb
-displayName H3K9ac
 type Antibody
 target H3K9ac
 antibodyDescription Rabbit polyclonal. Antibody Target: H3K9ac
@@ -8768,7 +8766,6 @@ term H3K27me3B
 tag H3K27ME3b
 type Antibody
 target H3K27me3
-displayName H3K27me3
 antibodyDescription rabbit monoclonal. Antibody Target: H3K27me3
 targetDescription Histone H3 (tri-methyl K27) marks repressed chromatin regions
 orderUrl http://www.cellsignal.com/products/9733.html
@@ -8800,7 +8797,6 @@ label H3K36me3 (ab9050)
 
 term H3K36me3B
 tag H3K36ME3b
-displayName H3K36me3
 type Antibody
 target H3K36me3
 antibodyDescription rabbit polyclonal. Antibody Target: H3K36me3
