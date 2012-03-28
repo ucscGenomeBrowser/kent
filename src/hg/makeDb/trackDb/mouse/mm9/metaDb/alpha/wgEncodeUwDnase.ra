@@ -7529,7 +7529,7 @@ tableName wgEncodeUwDnaseMesodermCd1ME11halfSigRep2
 tissueSourceType Pooled
 view Signal
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksAlnRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalAlnRep1
 objType file
 age adult-8wks
 cell mG/ER
@@ -7538,7 +7538,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDnaseMgerC57bl6MAdult8wksAlnRep1.bam.bai
+fileName wgEncodeUwDnaseMgerUknImmortalAlnRep1.bam,wgEncodeUwDnaseMgerUknImmortalAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labExpId DS15400
@@ -7552,7 +7552,7 @@ tissueSourceType None
 treatment None
 view Alignments
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksAlnRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalAlnRep2
 objType file
 age adult-8wks
 cell mG/ER
@@ -7561,7 +7561,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksAlnRep2.bam,wgEncodeUwDnaseMgerC57bl6MAdult8wksAlnRep2.bam.bai
+fileName wgEncodeUwDnaseMgerUknImmortalAlnRep2.bam,wgEncodeUwDnaseMgerUknImmortalAlnRep2.bam.bai
 grant Stam
 lab UW-m
 labExpId DS15395
@@ -7575,7 +7575,7 @@ tissueSourceType None
 treatment None
 view Alignments
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hAlnRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hAlnRep1
 objType file
 age adult-8wks
 cell mG/ER
@@ -7584,7 +7584,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hAlnRep1.bam,wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hAlnRep1.bam.bai
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc24hAlnRep1.bam,wgEncodeUwDnaseMgerUknImmortalDiffc24hAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labExpId DS15410
@@ -7598,7 +7598,7 @@ tissueSourceType None
 treatment diffProtC_24hr
 view Alignments
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hAlnRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hAlnRep2
 objType file
 age adult-8wks
 cell mG/ER
@@ -7607,7 +7607,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hAlnRep2.bam,wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hAlnRep2.bam.bai
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc24hAlnRep2.bam,wgEncodeUwDnaseMgerUknImmortalDiffc24hAlnRep2.bam.bai
 grant Stam
 lab UW-m
 labExpId DS15405
@@ -7621,7 +7621,7 @@ tissueSourceType None
 treatment diffProtC_24hr
 view Alignments
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hHotspotsRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hHotspotsRep1
 objType table
 age adult-8wks
 cell mG/ER
@@ -7630,7 +7630,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hHotspotsRep1.broadPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc24hHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15410
@@ -7640,12 +7640,12 @@ replicate 1
 sex M
 strain C57BL/6
 subId 5592
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hHotspotsRep1
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc24hHotspotsRep1
 tissueSourceType None
 treatment diffProtC_24hr
 view Hotspots
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hHotspotsRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hHotspotsRep2
 objType table
 age adult-8wks
 cell mG/ER
@@ -7654,7 +7654,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hHotspotsRep2.broadPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc24hHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15405
@@ -7664,12 +7664,12 @@ replicate 2
 sex M
 strain C57BL/6
 subId 5593
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hHotspotsRep2
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc24hHotspotsRep2
 tissueSourceType None
 treatment diffProtC_24hr
 view Hotspots
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hPkRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hPkRep1
 objType table
 age adult-8wks
 cell mG/ER
@@ -7678,7 +7678,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hPkRep1.narrowPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc24hPkRep1.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15410
@@ -7688,12 +7688,12 @@ replicate 1
 sex M
 strain C57BL/6
 subId 5592
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hPkRep1
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc24hPkRep1
 tissueSourceType None
 treatment diffProtC_24hr
 view Peaks
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hPkRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hPkRep2
 objType table
 age adult-8wks
 cell mG/ER
@@ -7702,7 +7702,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hPkRep2.narrowPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc24hPkRep2.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15405
@@ -7712,12 +7712,12 @@ replicate 2
 sex M
 strain C57BL/6
 subId 5593
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hPkRep2
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc24hPkRep2
 tissueSourceType None
 treatment diffProtC_24hr
 view Peaks
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hRawDataRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hRawDataRep1
 objType file
 age adult-8wks
 cell mG/ER
@@ -7726,7 +7726,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hRawDataRep1.fastq.tgz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc24hRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labExpId DS15410
@@ -7740,7 +7740,7 @@ tissueSourceType None
 treatment diffProtC_24hr
 view RawData
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hRawDataRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hRawDataRep2
 objType file
 age adult-8wks
 cell mG/ER
@@ -7749,7 +7749,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hRawDataRep2.fastq.tgz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc24hRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labExpId DS15405
@@ -7763,7 +7763,7 @@ tissueSourceType None
 treatment diffProtC_24hr
 view RawData
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hSigRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hSigRep1
 objType table
 age adult-8wks
 cell mG/ER
@@ -7772,7 +7772,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hSigRep1.bigWig
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc24hSigRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS15410
@@ -7782,12 +7782,12 @@ replicate 1
 sex M
 strain C57BL/6
 subId 5592
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hSigRep1
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc24hSigRep1
 tissueSourceType None
 treatment diffProtC_24hr
 view Signal
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hSigRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc24hSigRep2
 objType table
 age adult-8wks
 cell mG/ER
@@ -7796,7 +7796,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hSigRep2.bigWig
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc24hSigRep2.bigWig
 grant Stam
 lab UW-m
 labExpId DS15405
@@ -7806,12 +7806,12 @@ replicate 2
 sex M
 strain C57BL/6
 subId 5593
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc24hSigRep2
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc24hSigRep2
 tissueSourceType None
 treatment diffProtC_24hr
 view Signal
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hAlnRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc48hAlnRep1
 objType file
 age adult-8wks
 cell mG/ER
@@ -7820,7 +7820,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hAlnRep1.bam,wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hAlnRep1.bam.bai
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc48hAlnRep1.bam,wgEncodeUwDnaseMgerUknImmortalDiffc48hAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labExpId DS15420
@@ -7834,7 +7834,7 @@ tissueSourceType None
 treatment diffProtC_48hr
 view Alignments
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hAlnRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc48hAlnRep2
 objType file
 age adult-8wks
 cell mG/ER
@@ -7843,7 +7843,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hAlnRep2.bam,wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hAlnRep2.bam.bai
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc48hAlnRep2.bam,wgEncodeUwDnaseMgerUknImmortalDiffc48hAlnRep2.bam.bai
 grant Stam
 lab UW-m
 labExpId DS15415
@@ -7857,7 +7857,7 @@ tissueSourceType None
 treatment diffProtC_48hr
 view Alignments
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hHotspotsRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc48hHotspotsRep1
 objType table
 age adult-8wks
 cell mG/ER
@@ -7866,7 +7866,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hHotspotsRep1.broadPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc48hHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15420
@@ -7876,12 +7876,12 @@ replicate 1
 sex M
 strain C57BL/6
 subId 5594
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hHotspotsRep1
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc48hHotspotsRep1
 tissueSourceType None
 treatment diffProtC_48hr
 view Hotspots
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hHotspotsRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc48hHotspotsRep2
 objType table
 age adult-8wks
 cell mG/ER
@@ -7890,7 +7890,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hHotspotsRep2.broadPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc48hHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15415
@@ -7900,12 +7900,12 @@ replicate 2
 sex M
 strain C57BL/6
 subId 5595
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hHotspotsRep2
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc48hHotspotsRep2
 tissueSourceType None
 treatment diffProtC_48hr
 view Hotspots
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hPkRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc48hPkRep1
 objType table
 age adult-8wks
 cell mG/ER
@@ -7914,7 +7914,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hPkRep1.narrowPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc48hPkRep1.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15420
@@ -7924,12 +7924,12 @@ replicate 1
 sex M
 strain C57BL/6
 subId 5594
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hPkRep1
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc48hPkRep1
 tissueSourceType None
 treatment diffProtC_48hr
 view Peaks
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hPkRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc48hPkRep2
 objType table
 age adult-8wks
 cell mG/ER
@@ -7938,7 +7938,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hPkRep2.narrowPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc48hPkRep2.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15415
@@ -7948,12 +7948,12 @@ replicate 2
 sex M
 strain C57BL/6
 subId 5595
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hPkRep2
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc48hPkRep2
 tissueSourceType None
 treatment diffProtC_48hr
 view Peaks
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hRawDataRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc48hRawDataRep1
 objType file
 age adult-8wks
 cell mG/ER
@@ -7962,7 +7962,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hRawDataRep1.fastq.tgz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc48hRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labExpId DS15420
@@ -7976,7 +7976,7 @@ tissueSourceType None
 treatment diffProtC_48hr
 view RawData
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hRawDataRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc48hRawDataRep2
 objType file
 age adult-8wks
 cell mG/ER
@@ -7985,7 +7985,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hRawDataRep2.fastq.tgz
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc48hRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labExpId DS15415
@@ -7999,7 +7999,7 @@ tissueSourceType None
 treatment diffProtC_48hr
 view RawData
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hSigRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc48hSigRep1
 objType table
 age adult-8wks
 cell mG/ER
@@ -8008,7 +8008,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hSigRep1.bigWig
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc48hSigRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS15420
@@ -8018,12 +8018,12 @@ replicate 1
 sex M
 strain C57BL/6
 subId 5594
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hSigRep1
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc48hSigRep1
 tissueSourceType None
 treatment diffProtC_48hr
 view Signal
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hSigRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalDiffc48hSigRep2
 objType table
 age adult-8wks
 cell mG/ER
@@ -8032,7 +8032,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-29
 dateUnrestricted 2012-11-29
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hSigRep2.bigWig
+fileName wgEncodeUwDnaseMgerUknImmortalDiffc48hSigRep2.bigWig
 grant Stam
 lab UW-m
 labExpId DS15415
@@ -8042,12 +8042,12 @@ replicate 2
 sex M
 strain C57BL/6
 subId 5595
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksDiffc48hSigRep2
+tableName wgEncodeUwDnaseMgerUknImmortalDiffc48hSigRep2
 tissueSourceType None
 treatment diffProtC_48hr
 view Signal
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksHotspotsRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalHotspotsRep1
 objType table
 age adult-8wks
 cell mG/ER
@@ -8056,7 +8056,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15400
@@ -8066,12 +8066,12 @@ replicate 1
 sex M
 strain C57BL/6
 subId 5590
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksHotspotsRep1
+tableName wgEncodeUwDnaseMgerUknImmortalHotspotsRep1
 tissueSourceType None
 treatment None
 view Hotspots
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksHotspotsRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalHotspotsRep2
 objType table
 age adult-8wks
 cell mG/ER
@@ -8080,7 +8080,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalHotspotsRep2.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15395
@@ -8090,12 +8090,12 @@ replicate 2
 sex M
 strain C57BL/6
 subId 5591
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksHotspotsRep2
+tableName wgEncodeUwDnaseMgerUknImmortalHotspotsRep2
 tissueSourceType None
 treatment None
 view Hotspots
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksPkRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalPkRep1
 objType table
 age adult-8wks
 cell mG/ER
@@ -8104,7 +8104,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksPkRep1.narrowPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalPkRep1.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15400
@@ -8114,12 +8114,12 @@ replicate 1
 sex M
 strain C57BL/6
 subId 5590
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksPkRep1
+tableName wgEncodeUwDnaseMgerUknImmortalPkRep1
 tissueSourceType None
 treatment None
 view Peaks
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksPkRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalPkRep2
 objType table
 age adult-8wks
 cell mG/ER
@@ -8128,7 +8128,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksPkRep2.narrowPeak.gz
+fileName wgEncodeUwDnaseMgerUknImmortalPkRep2.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS15395
@@ -8138,12 +8138,12 @@ replicate 2
 sex M
 strain C57BL/6
 subId 5591
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksPkRep2
+tableName wgEncodeUwDnaseMgerUknImmortalPkRep2
 tissueSourceType None
 treatment None
 view Peaks
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksRawDataRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalRawDataRep1
 objType file
 age adult-8wks
 cell mG/ER
@@ -8152,7 +8152,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksRawDataRep1.fastq.tgz
+fileName wgEncodeUwDnaseMgerUknImmortalRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labExpId DS15400
@@ -8166,7 +8166,7 @@ tissueSourceType None
 treatment None
 view RawData
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksRawDataRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalRawDataRep2
 objType file
 age adult-8wks
 cell mG/ER
@@ -8175,7 +8175,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksRawDataRep2.fastq.tgz
+fileName wgEncodeUwDnaseMgerUknImmortalRawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labExpId DS15395
@@ -8189,7 +8189,7 @@ tissueSourceType None
 treatment None
 view RawData
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksSigRep1
+metaObject wgEncodeUwDnaseMgerUknImmortalSigRep1
 objType table
 age adult-8wks
 cell mG/ER
@@ -8198,7 +8198,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksSigRep1.bigWig
+fileName wgEncodeUwDnaseMgerUknImmortalSigRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS15400
@@ -8208,12 +8208,12 @@ replicate 1
 sex M
 strain C57BL/6
 subId 5590
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksSigRep1
+tableName wgEncodeUwDnaseMgerUknImmortalSigRep1
 tissueSourceType None
 treatment None
 view Signal
 
-metaObject wgEncodeUwDnaseMgerC57bl6MAdult8wksSigRep2
+metaObject wgEncodeUwDnaseMgerUknImmortalSigRep2
 objType table
 age adult-8wks
 cell mG/ER
@@ -8222,7 +8222,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-27
 dateUnrestricted 2012-11-27
-fileName wgEncodeUwDnaseMgerC57bl6MAdult8wksSigRep2.bigWig
+fileName wgEncodeUwDnaseMgerUknImmortalSigRep2.bigWig
 grant Stam
 lab UW-m
 labExpId DS15395
@@ -8232,7 +8232,7 @@ replicate 2
 sex M
 strain C57BL/6
 subId 5591
-tableName wgEncodeUwDnaseMgerC57bl6MAdult8wksSigRep2
+tableName wgEncodeUwDnaseMgerUknImmortalSigRep2
 tissueSourceType None
 treatment None
 view Signal
@@ -14427,4 +14427,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 1851350339
+# MAGIC: -908934477
