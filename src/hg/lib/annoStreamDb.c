@@ -91,9 +91,9 @@ while (annoFilterRowFails(vSelf->filters, row, self->numCols, &rightFail))
     if (row == NULL)
 	return NULL;
     }
-char *chrom = row[self->omitBin+self->chromIx];
-uint chromStart = sqlUnsigned(row[self->omitBin+self->startIx]);
-uint chromEnd = sqlUnsigned(row[self->omitBin+self->endIx]);
+char *chrom = row[self->chromIx];
+uint chromStart = sqlUnsigned(row[self->startIx]);
+uint chromEnd = sqlUnsigned(row[self->endIx]);
 return annoRowFromStringArray(chrom, chromStart, chromEnd, rightFail, row, self->numCols);
 }
 
