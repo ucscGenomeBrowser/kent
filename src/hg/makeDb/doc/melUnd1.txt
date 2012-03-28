@@ -65,4 +65,267 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Melops
 560149280       28      JH556573.1      10614383
 
 #########################################################################
+# process into UCSC naming scheme (DONE - 2012-03-27 - Hiram)
+    mkdir /hive/data/genomes/melUnd1/ucsc
+    cd /hive/data/genomes/melUnd1/ucsc
+
+    # verify we don't have any .acc numbers different from .1
+    zcat \
+    ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| cut -f1 | egrep "^JH|AGAI" \
+	| sed -e 's/^JH[0-9][0-9]*//; s/^AGAI[0-9][0-9]*//' | sort | uniq -c
+    #	116513 .1
+
+    # this is like the unplaced.pl script in other assemblies except it
+    #	does not add chrUn_ to the names since they are all just scaffolds
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, "|gzip -c > unplaced.agp.gz") or die "can not write to unplaced.agp.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;    
+        printf UC "%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, "|gzip -c > unplaced.fa.gz") or die "can not write to unplaced.fa.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\.1\|.*//;
+        printf UC ">$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+
+    time ./unplaced.pl
+    #	real    5m23.124s
+# -rw-rw-r-- 1   1483871 Mar 27 12:29 unplaced.agp.gz
+# -rw-rw-r-- 1 332029817 Mar 27 12:34 unplaced.fa.gz
+
+    # verify nothing lost in the translation, should be the same as above
+    #	except for the name translations
+    faSize *.fa.gz
+# 1117355426 bases (30758804 N's 1086596622 real 1086596622 upper 0 lower)
+#	in 25211 sequences in 1 files
+# Total size: mean 44320.2 sd 774121.2 min 228 (JH533144)
+#	max 39887635 (JH556617) median 1201
+
+#############################################################################
+#  Initial database build (DONE - 2012-03-27 - Hiram)
+    cd /hive/data/genomes/melUnd1
+    cat << '_EOF_' > melUnd1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db melUnd1
+clade vertebrate
+genomeCladePriority 60
+scientificName Melopsittacus undulatus
+commonName Budgerigar
+assemblyDate Sep. 2011
+assemblyLabel WUSTL Melopsittacus undulatus Budgerigar Version 6.3 (GCA_000238935.1)
+assemblyShortLabel WUSTL v6.3
+ncbiAssemblyName Melopsittacus_undulatus_6.3
+ncbiAssemblyId 325078
+orderKey 4375
+mitoAcc NC_009134
+fastaFiles /hive/data/genomes/melUnd1/ucsc/unplaced.fa.gz
+agpFiles /hive/data/genomes/melUnd1/ucsc/unplaced.agp.gz
+dbDbSpeciesDir birds
+taxId   13146
+'_EOF_'
+    # << happy emacs
+
+    # first verify the sequence and AGP files are OK
+    time makeGenomeDb.pl -stop=agp -workhorse=hgwdev melUnd1.config.ra \
+	> agp.log 2>&1
+    #	real    1m24.027s
+    # verify that was OK, look at the agp.log file
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev melUnd1.config.ra \
+	> db.log 2>&1
+    #	real    8m11.569s
+    # verify that was OK, look at the do.log file
+    # copy the trackDb business to the source tree, check it in and add
+    #	to the trackDb/makefile
+
+#############################################################################
+# running repeat masker (DONE - 2012-03-27 - Hiram)
+    mkdir /hive/data/genomes/melUnd1/bed/repeatMasker
+    cd /hive/data/genomes/melUnd1/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek melUnd1 > do.log 2>&1 &
+XXX - running - Tue Mar 27 15:50:53 PDT 2012
+    #	real    250m27.510s
+    cat faSize.rmsk.txt
+    #	2860591921 bases (676999153 N's 2183592768 real 1981827417 upper
+    #	201765351 lower) in 22819 sequences in 1 files
+    #	Total size: mean 125360.1 sd 395781.0 min 1000 (AFYH01291818)
+    #	max 10736886 (JH126562) median 5475
+    #	%7.05 masked total, %9.24 masked real
+
+    grep -i versi do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+
+    featureBits -countGaps melUnd1 rmsk
+    #	201917583 bases of 2860591921 (7.059%) in intersection
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2012-03-27 - Hiram)
+    mkdir /hive/data/genomes/melUnd1/bed/simpleRepeat
+    cd /hive/data/genomes/melUnd1/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	melUnd1 > do.log 2>&1 &
+XXX - running - Tue Mar 27 15:51:17 PDT 2012
+    #	real    43m42.360s
+
+    cat fb.simpleRepeat 
+    #	33730886 bases of 2183592768 (1.545%) in intersection
+
+    # not going to add to rmsk here, using the window masker instead since
+    #	it masks more sequence
+    cd /hive/data/genomes/melUnd1
+    twoBitMask melUnd1.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed melUnd1.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa melUnd1.2bit stdout | faSize stdin > faSize.melUnd1.2bit.txt
+    cat faSize.melUnd1.2bit.txt
+    #	2608572064 bases (131440969 N's 2477131095 real 1320629270 upper
+    #	1156501825 lower) in 2685 sequences in 1 files
+    #	Total size: mean 971535.2 sd 4827933.6 min 1003 (AGCE01151413)
+    #	max 72162052 (JH378105) median 1553
+
+    rm /gbdb/melUnd1/melUnd1.2bit
+    ln -s `pwd`/melUnd1.2bit /gbdb/melUnd1/melUnd1.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-03-27 - Hiram)
+    mkdir /hive/data/genomes/melUnd1/bed/gap
+    cd /hive/data/genomes/melUnd1/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../melUnd1.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m8.820s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+
+    time featureBits -countGaps melUnd1 -not gap -bed=notGap.bed
+    #	1086620216 bases of 1117373619 (97.248%) in intersection
+    #	real    0m7.713s
+
+    time featureBits -countGaps melUnd1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	5401 bases of 1117373619 (0.000%) in intersection
+    #	real    6m52.681s
+
+    # no unannotated gaps, no more to run here
+    # there are no non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" melUnd1 | sort | uniq -c
+    #	45651 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2012-03-27 - Hiram)
+    mkdir /hive/data/genomes/melUnd1/bed/windowMasker
+    cd /hive/data/genomes/melUnd1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev melUnd1 > do.log 2>&1 &
+XXX - running - Tue Mar 27 15:51:37 PDT 2012
+    #	real    275m14.802s
+
+    # Masking statistics
+    twoBitToFa melUnd1.wmsk.2bit stdout | faSize stdin
+    #	2860591921 bases (676999153 N's 2183592768 real 1197030078 upper
+    #	986562690 lower) in 22819 sequences in 1 files
+    #	Total size: mean 125360.1 sd 395781.0 min 1000 (AFYH01291818)
+    #	max 10736886 (JH126562) median 5475
+    #	%34.49 masked total, %45.18 masked real
+
+    twoBitToFa melUnd1.wmsk.sdust.2bit stdout | faSize stdin
+    #	2860591921 bases (676999153 N's 2183592768 real 1186196719 upper
+    #	997396049 lower) in 22819 sequences in 1 files
+    #	Total size: mean 125360.1 sd 395781.0 min 1000 (AFYH01291818)
+    #	max 10736886 (JH126562) median 5475
+    #	%34.87 masked total, %45.68 masked real
+
+    hgLoadBed melUnd1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 14478353 elements of size 3
+
+    featureBits -countGaps melUnd1 windowmaskerSdust
+    #	1674395202 bases of 2860591921 (58.533%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits melUnd1 -not gap -bed=notGap.bed
+    #	2183592768 bases of 2183592768 (100.000%) in intersection
+    time nice -n +19 featureBits melUnd1 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	997396049 bases of 2183592768 (45.677%) in intersection
+    #	real    16m48.600s
+
+    #	reload track to get it clean
+    hgLoadBed melUnd1 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 14630157 elements of size 4
+    time featureBits -countGaps melUnd1 windowmaskerSdust
+    #	997396049 bases of 2860591921 (34.867%) in intersection
+    #	real    2m47.260s
+
+    #	mask with this clean result
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../melUnd1.unmasked.2bit stdin \
+	    -type=.bed melUnd1.cleanWMSdust.2bit
+    twoBitToFa melUnd1.cleanWMSdust.2bit stdout | faSize stdin \
+        > melUnd1.cleanWMSdust.faSize.txt
+    cat melUnd1.cleanWMSdust.faSize.txt
+    #	2860591921 bases (676999153 N's 2183592768 real 1186196719 upper
+    #	997396049 lower) in 22819 sequences in 1 files
+    #	Total size: mean 125360.1 sd 395781.0 min 1000 (AFYH01291818)
+    #	max 10736886 (JH126562) median 5475
+    #	%34.87 masked total, %45.68 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps melUnd1 rmsk windowmaskerSdust
+    #	177085590 bases of 2860591921 (6.191%) in intersection
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2012-01-12 - Hiram)
+    cd /hive/data/genomes/melUnd1
+    twoBitMask -add bed/windowMasker/melUnd1.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed melUnd1.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa melUnd1.2bit stdout | faSize stdin > faSize.melUnd1.txt
+    cat faSize.melUnd1.txt
+    #	2860591921 bases (676999153 N's 2183592768 real 1186074582 upper
+    #	997518186 lower) in 22819 sequences in 1 files
+    #	Total size: mean 125360.1 sd 395781.0 min 1000 (AFYH01291818)
+    #	max 10736886 (JH126562) median 5475
+    #	%34.87 masked total, %45.68 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/melUnd1/melUnd1.2bit
+    ln -s `pwd`/melUnd1.2bit /gbdb/melUnd1/melUnd1.2bit
+
+#########################################################################
 
