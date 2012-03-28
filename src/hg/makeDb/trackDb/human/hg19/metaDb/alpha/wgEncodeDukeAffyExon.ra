@@ -42,7 +42,7 @@ fileName wgEncodeDukeAffyExon8988tSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum d937fe00c25ed73ce70480f021c05e69
+md5sum f65d920aafc51231e98c2a67e834be96
 project wgEncode
 replicate 1
 subId 6079
@@ -89,7 +89,7 @@ fileName wgEncodeDukeAffyExon8988tSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 7246daac40761027e78c8485a7261b7e
+md5sum dc09a139acf1c424a1c7b13956bc949b
 project wgEncode
 replicate 2
 subId 6079
@@ -110,7 +110,7 @@ fileName wgEncodeDukeAffyExonA549SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 25c23dadff02ec3008ff99ca7bd35926
+md5sum 152e04270b0d4be66986c6594a56b5f6
 project wgEncode
 replicate 1
 subId 6080
@@ -130,7 +130,7 @@ fileName wgEncodeDukeAffyExonA549SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 68b9ace65dadde0204ddef7dd0511950
+md5sum 0b16d549875ace6c5d2369c24c567b91
 project wgEncode
 replicate 2
 subId 6080
@@ -177,7 +177,7 @@ fileName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 64893395e36c7c48eb5df64745202bb7
+md5sum 2884f9ccf2d62ce28d33aaa309d5cf2c
 project wgEncode
 replicate 1
 subId 6079
@@ -225,7 +225,7 @@ fileName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 68cf667fa94a2beaebdc75dbdcf57157
+md5sum b9cff42fc87e66e7517ae91aceb40edc
 project wgEncode
 replicate 2
 subId 6079
@@ -273,7 +273,7 @@ fileName wgEncodeDukeAffyExonAosmcSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 3faaa0e0f7e3af3ffd4818317c96edd9
+md5sum d9366ab06d362a8ccb087c467e3b2a1d
 project wgEncode
 replicate 1
 subId 6079
@@ -321,7 +321,7 @@ fileName wgEncodeDukeAffyExonAosmcSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum d217eaa91efb844b9f1e4e89d3abcedc
+md5sum 8982b49a9273d37561e29d000e40843b
 project wgEncode
 replicate 2
 subId 6079
@@ -369,7 +369,7 @@ fileName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 32fd39a7e44d2093b166c339a089f796
+md5sum bee4775fd4dd98a921059a95cffa2862
 project wgEncode
 replicate 1
 subId 6079
@@ -417,7 +417,7 @@ fileName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum cc2dacebe981080711bba64799556d73
+md5sum 62b84f36cbab491df382734219a2ba86
 project wgEncode
 replicate 2
 subId 6079
@@ -518,7 +518,7 @@ fileName wgEncodeDukeAffyExonChorionSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 7fb9bc6587f9837a71ab26168f5a213a
+md5sum fdfdd10fa410f6f9335d119a41a85f0d
 project wgEncode
 replicate 1
 subId 6079
@@ -565,7 +565,7 @@ fileName wgEncodeDukeAffyExonCllSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 100beb86764cceca27a1b95ac27c8e65
+md5sum 2d72c33e347bef9d78771a1e838d1818
 project wgEncode
 replicate 1
 subId 6079
@@ -612,7 +612,7 @@ fileName wgEncodeDukeAffyExonCllSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum f31a5b57ba9e51830dd08d2c7a242d49
+md5sum 6137e25c938d85cc6f7704248ae53735
 project wgEncode
 replicate 2
 subId 6079
@@ -633,7 +633,7 @@ fileName wgEncodeDukeAffyExonColo829SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 5a7caccb198867fe653b62271ecd3323
+md5sum f4c87a6e0c96feffea9a450c8ee9ec41
 project wgEncode
 replicate 1
 subId 6080
@@ -653,7 +653,7 @@ fileName wgEncodeDukeAffyExonColo829SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 6974931391b52341873b6221b4d0e4bd
+md5sum 27802d275b7611e3411c8b3c3bdb3b87
 project wgEncode
 replicate 2
 subId 6080
@@ -701,7 +701,7 @@ fileName wgEncodeDukeAffyExonFibroblSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 5f94b1034a114a1fede3be4f6deb9a72
+md5sum 73a4886c87b8cacf45c5e0bf775a1c24
 project wgEncode
 replicate 1
 subId 6079
@@ -750,7 +750,7 @@ fileName wgEncodeDukeAffyExonFibroblSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum dbccb944168975489f61da88619000e0
+md5sum 92f795cc38c953bb667909528a484112
 project wgEncode
 replicate 2
 subId 6079
@@ -843,7 +843,7 @@ fileName wgEncodeDukeAffyExonFibropag08395SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 2319bbffff2fca2ed19796d3f0b20774
+md5sum e66582d4c90dd4a63937360018c78075
 project wgEncode
 replicate 1
 subId 6080
@@ -863,7 +863,7 @@ fileName wgEncodeDukeAffyExonFibropag08395SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 6a40a464dbaddbd5089f0201ccc6dff8
+md5sum d4535894e53fa9bb8ce0d91398f5b98c
 project wgEncode
 replicate 2
 subId 6080
@@ -883,7 +883,7 @@ fileName wgEncodeDukeAffyExonFibropag08395SimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 67df3a7f6e1f2109c2bf787425d7c05a
+md5sum 3525af9105fb5819829c1a9046892190
 project wgEncode
 replicate 3
 subId 6080
@@ -903,7 +903,7 @@ fileName wgEncodeDukeAffyExonFibropag08396SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 086974287b50453bcdab5aee520582cb
+md5sum be44d8fe0467e0f7b4b3b8a68dc8e2ce
 project wgEncode
 replicate 1
 subId 6080
@@ -923,7 +923,7 @@ fileName wgEncodeDukeAffyExonFibropag08396SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 873aa013e7a5f36aae8e909cbce773d5
+md5sum af89229c85ab9801513523bd37ac1356
 project wgEncode
 replicate 2
 subId 6080
@@ -943,7 +943,7 @@ fileName wgEncodeDukeAffyExonFibropag08396SimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 8891781f9b422523a2dd5e8c888e1eda
+md5sum 9e268161a85aff6f03791216c164e107
 project wgEncode
 replicate 3
 subId 6080
@@ -963,7 +963,7 @@ fileName wgEncodeDukeAffyExonFibropag20443SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 7c1029cdc5f8256c2085f3e203e46e7b
+md5sum c623cb0dc096effaeb7236c708287cd9
 project wgEncode
 replicate 1
 subId 6080
@@ -983,7 +983,7 @@ fileName wgEncodeDukeAffyExonFibropag20443SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum de57e29e79a9a1cfac78f5a6d71fca60
+md5sum de14d08c12ab2b65ba5d838d151dba9b
 project wgEncode
 replicate 2
 subId 6080
@@ -1003,7 +1003,7 @@ fileName wgEncodeDukeAffyExonFibropag20443SimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 7ec5e83631cd2a99113886282876625e
+md5sum d21120c541d92f072ba625dccb171371
 project wgEncode
 replicate 3
 subId 6080
@@ -1051,7 +1051,7 @@ fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 418900eeaca8c0ca0c40b1350b0413e7
+md5sum 0dcc176f9e447c1bfa58502ab0f41fc7
 project wgEncode
 replicate 1
 subId 6079
@@ -1100,7 +1100,7 @@ fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum dbbde7e231cfbb5938e7747032a35455
+md5sum 769c73be8082924b2fe16fdf2abfaa99
 project wgEncode
 replicate 2
 subId 6079
@@ -1148,7 +1148,7 @@ fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 0f583420014fddf5f6d6871c4fde7f3c
+md5sum 92722d479dca0660acb8b9472eabde4c
 project wgEncode
 replicate 3
 subId 6079
@@ -1196,7 +1196,7 @@ fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep4V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 27110bd05ebeea773ca6a5e738cf9edb
+md5sum f89d593a451d6b47dd5829b1f6a75c41
 project wgEncode
 replicate 4
 subId 6079
@@ -1244,7 +1244,7 @@ fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 5bb3500dcd10118b4386fdcc307c81ac
+md5sum b8bdbf98058ec0586882794e9639f2aa
 project wgEncode
 replicate 1
 subId 6079
@@ -1292,7 +1292,7 @@ fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum ae6b33fee99c39185dfee9035826e3a7
+md5sum 6c32dff4696a878c9b386a274f6f4c6c
 project wgEncode
 replicate 2
 subId 6079
@@ -1340,7 +1340,7 @@ fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 230cf524457857822d44221f0c7dbe13
+md5sum 09c351207df625d09641ba9ea64f6cc1
 project wgEncode
 replicate 3
 subId 6079
@@ -1389,7 +1389,7 @@ fileName wgEncodeDukeAffyExonGm12891SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum be9bcc956acd4fb8fe6ec639f7e84cfa
+md5sum 5db9cca8150bf655bb1b7a2259189683
 project wgEncode
 replicate 1
 subId 6079
@@ -1438,7 +1438,7 @@ fileName wgEncodeDukeAffyExonGm12891SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 5303e60d57b4862030940db7aa6d3b83
+md5sum be3c61021e25e93d5791ef2e9a4929a3
 project wgEncode
 replicate 2
 subId 6079
@@ -1487,7 +1487,7 @@ fileName wgEncodeDukeAffyExonGm12892SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum c8b63e2e435f533e782ecbb755eb9ca2
+md5sum e35a3b99cd5649fe86b76f951923121d
 project wgEncode
 replicate 1
 subId 6079
@@ -1536,7 +1536,7 @@ fileName wgEncodeDukeAffyExonGm12892SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 51e81a19085bdfffff8ab556002799b7
+md5sum 27fe0f5e02cab612c322e585225d849d
 project wgEncode
 replicate 2
 subId 6079
@@ -1585,7 +1585,7 @@ fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum cf532d1380b34c4789eec60fba3bf886
+md5sum cd9f0c261439dd7df03dfe16d623bc0d
 project wgEncode
 replicate 1
 subId 6079
@@ -1634,7 +1634,7 @@ fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 9dc949c2605f444bca94d724e777a95a
+md5sum c7cc3e84c4ecc1ec0b5d2c60d43f5eb7
 project wgEncode
 replicate 2
 subId 6079
@@ -1683,7 +1683,7 @@ fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 0e2b22b598d074023dadbea3edb7be43
+md5sum 6032e3ead090e9e682e866e6c51cbccd
 project wgEncode
 replicate 3
 subId 6079
@@ -1732,7 +1732,7 @@ fileName wgEncodeDukeAffyExonGm19238SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum d0c56df88b32f438cf3036cbe29a5270
+md5sum 7b45075b8b0c2336c5e5938bd6c7180f
 project wgEncode
 replicate 1
 subId 6079
@@ -1781,7 +1781,7 @@ fileName wgEncodeDukeAffyExonGm19238SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 00012e78cfe3bee08ecd5502dc4106a7
+md5sum 903bc29db8262afb082b2f269ea4a769
 project wgEncode
 replicate 2
 subId 6079
@@ -1830,7 +1830,7 @@ fileName wgEncodeDukeAffyExonGm19239SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 740a2306db5c3e8cb0cd5c5a1456cf28
+md5sum 6b5241caec8d7002e5e6554957414ca9
 project wgEncode
 replicate 1
 subId 6079
@@ -1879,7 +1879,7 @@ fileName wgEncodeDukeAffyExonGm19239SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum e295d879261754187d95ce845c294e92
+md5sum 0e85fd9bcdf2144b94cb42e78f5bb012
 project wgEncode
 replicate 2
 subId 6079
@@ -1928,7 +1928,7 @@ fileName wgEncodeDukeAffyExonGm19240SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum e34f08f61d2c3efc5c3a7f602574aa07
+md5sum 4ea9630eeafed9637a8d8e9f76936960
 project wgEncode
 replicate 1
 subId 6079
@@ -1977,7 +1977,7 @@ fileName wgEncodeDukeAffyExonGm19240SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum f9ed3044dbe738b339f9e4cd78f1f6d3
+md5sum 5e5c8fdd3906a23e3d1d43d2e061ef46
 project wgEncode
 replicate 2
 subId 6079
@@ -2024,7 +2024,7 @@ fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum dfb7e71ddc20bb8e621b47c0bed6bcd1
+md5sum 8a2f2a9f4ad637d8fab023355d38a497
 project wgEncode
 replicate 1
 subId 6079
@@ -2071,7 +2071,7 @@ fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 43f40774363fa99defc429c39288122b
+md5sum 0a22f5952570197cd784f39a6b6361a0
 project wgEncode
 replicate 2
 subId 6079
@@ -2118,7 +2118,7 @@ fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum cddeaf30c7102773ea0e0549d03dc21f
+md5sum be39ada377fdb23ace5a6ddd98dd399f
 project wgEncode
 replicate 3
 subId 6079
@@ -2165,7 +2165,7 @@ fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep4V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 9bf0c997f77d250f488966398d910151
+md5sum 4a4e38657592af9b9fe46474fa6eca21
 project wgEncode
 replicate 4
 subId 6079
@@ -2186,7 +2186,7 @@ fileName wgEncodeDukeAffyExonH7esSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum fa5448a895999de0bef04a63b8121fef
+md5sum 8ec3448d7875efc9d3e16fe0908a6e87
 project wgEncode
 replicate 1
 subId 6080
@@ -2206,7 +2206,7 @@ fileName wgEncodeDukeAffyExonH7esSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 3415740d2fef8d93b5284349607879e6
+md5sum 23399d8cbf432712b4e06d9cbd423af9
 project wgEncode
 replicate 2
 subId 6080
@@ -2226,7 +2226,7 @@ fileName wgEncodeDukeAffyExonH7esSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 078d2efae191aebb4ae32d1a937c4815
+md5sum b9c49c90e99c918bfc904f808d5ea476
 project wgEncode
 replicate 3
 subId 6080
@@ -2272,7 +2272,7 @@ fileName wgEncodeDukeAffyExonH9esSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum e5047e3e9dd8eec9c85a01f5148eff1c
+md5sum f90bd7501debcfab667e4258652d134d
 project wgEncode
 replicate 1
 subId 6079
@@ -2295,7 +2295,7 @@ fileName wgEncodeDukeAffyExonH9esSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 72d90720d59e93b1c3810dda395b41a6
+md5sum c48c0235a851058f8e992456e3f59f71
 project wgEncode
 replicate 2
 subId 6080
@@ -2317,7 +2317,7 @@ fileName wgEncodeDukeAffyExonH9esSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 3fa0e8794c2dfd9f343c682227b8e041
+md5sum d878b8f5e1de8398ab1d61546f6e7c57
 project wgEncode
 replicate 3
 subId 6080
@@ -2337,7 +2337,7 @@ fileName wgEncodeDukeAffyExonHek293tSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum bdad6c8c91c47d27e679af1417bc2eb6
+md5sum cd20bc741330e9d6224b6b06ce3f7c0c
 project wgEncode
 replicate 1
 subId 6080
@@ -2357,7 +2357,7 @@ fileName wgEncodeDukeAffyExonHek293tSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 65a4f36c3cd57c112734d416b7bbe11c
+md5sum d41f01e2c21d9c43c9399870bff628c9
 project wgEncode
 replicate 2
 subId 6080
@@ -2405,7 +2405,7 @@ fileName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 85e71deeff8ce29bc114f21aa7468bf8
+md5sum 01ce40e578949d85781812ea8714a776
 project wgEncode
 replicate 1
 subId 6079
@@ -2454,7 +2454,7 @@ fileName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 2f2a97539e6ad7ad3856d7827e6135df
+md5sum 7f4e465782d45aed4a675fce6083c7d4
 project wgEncode
 replicate 2
 subId 6079
@@ -2503,7 +2503,7 @@ fileName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 2025f0a10118c6a2079b443a9ada0be9
+md5sum e2adf61dbc0506100a966ee60256c57d
 project wgEncode
 replicate 1
 subId 6079
@@ -2552,7 +2552,7 @@ fileName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 1bf97e8bba309e277aec48cfdcbfac6f
+md5sum 0bd3b56c223bcccc08f64cc55d5f4a8a
 project wgEncode
 replicate 2
 subId 6079
@@ -2601,7 +2601,7 @@ fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum b49d29d2d09188162ac8df1728a8a0f8
+md5sum b7bfa24c4b17cc71230efd9991430993
 project wgEncode
 replicate 1
 subId 6079
@@ -2650,7 +2650,7 @@ fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 5c4a1432b6e529c392b96d0547a0c6f4
+md5sum 605d2c9712eb306dcd09db0793761f29
 project wgEncode
 replicate 2
 subId 6079
@@ -2699,7 +2699,7 @@ fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum de85743aa0fe03e1147755d4a3e6acf0
+md5sum 4a4a3057f26c3c13c8ddcdc8ef0079b5
 project wgEncode
 replicate 3
 subId 6079
@@ -2722,7 +2722,7 @@ fileName wgEncodeDukeAffyExonHepatoSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum cd275db1f29f28cc90127e1a6bd80b09
+md5sum be80d13e2a3b8dabb206f3ec84118de8
 project wgEncode
 replicate 1
 subId 6079
@@ -2745,7 +2745,7 @@ fileName wgEncodeDukeAffyExonHepatoSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 48cbdab1c841b1e3391de016cf42fac6
+md5sum f30a69a528e079ab4b3404fd7e9ee017
 project wgEncode
 replicate 2
 subId 6079
@@ -2843,7 +2843,7 @@ fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 27834491b3f02085039ea015cde897a2
+md5sum 2ffef8194c4dd935c334d2e55cb747ac
 project wgEncode
 replicate 1
 subId 6079
@@ -2892,7 +2892,7 @@ fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 528ac9c16e2ee0e3950300a40f0f22bd
+md5sum 2066943ed1de4c643bb2d75c9620d19b
 project wgEncode
 replicate 2
 subId 6079
@@ -2941,7 +2941,7 @@ fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 1b771eb4e40606145b4b705ec1e6f791
+md5sum 305f68dd1aa158eb3e8663ac8e667a1a
 project wgEncode
 replicate 3
 subId 6079
@@ -2990,7 +2990,7 @@ fileName wgEncodeDukeAffyExonHmecSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 0645ea7090f4c220842e948e180c8f9e
+md5sum 339bafbf6fd5cc7da3fcd27ecd667b78
 project wgEncode
 replicate 1
 subId 6079
@@ -3039,7 +3039,7 @@ fileName wgEncodeDukeAffyExonHmecSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 1abffda0209fffacacd9fc5fe7fc1497
+md5sum a528c30fe75d38a65e95c1a8730d1614
 project wgEncode
 replicate 2
 subId 6079
@@ -3086,7 +3086,7 @@ fileName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 9e4ed7cb70334b368ab969502f5b6762
+md5sum 13a8a604cf5d38b54fa8c6d299a16b02
 project wgEncode
 replicate 1
 subId 6079
@@ -3133,7 +3133,7 @@ fileName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 492a0bb478745945705671a8688606ce
+md5sum 62b8e98e8b3c53db7d1dd5ddef6f615c
 project wgEncode
 replicate 2
 subId 6079
@@ -3181,7 +3181,7 @@ fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum bb9f9dd5f1adfc5e1f13665bb8549dea
+md5sum 2de9c9ab1c82fbbb5425e732a8138f09
 project wgEncode
 replicate 1
 subId 6079
@@ -3229,7 +3229,7 @@ fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 12936a27ab54e4b00d3007663264e694
+md5sum d56dc8d6829d5ebbb67190717a6d7575
 project wgEncode
 replicate 2
 subId 6079
@@ -3277,7 +3277,7 @@ fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum bc5c08b69c353fff911445bb0199f50e
+md5sum 366e23e231e50138a999fe0e19f2a42e
 project wgEncode
 replicate 3
 subId 6079
@@ -3298,7 +3298,7 @@ fileName wgEncodeDukeAffyExonHsmmfshdSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum ee8414c6f95b0526f6df4346a48534e4
+md5sum 5354adae2f9edc7c0530bc97b755338e
 project wgEncode
 replicate 1
 subId 6080
@@ -3318,7 +3318,7 @@ fileName wgEncodeDukeAffyExonHsmmfshdSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 414ccab2ea679e4d25f1a087a9861fe4
+md5sum c269f27796b228f720dfab26340287bb
 project wgEncode
 replicate 2
 subId 6080
@@ -3338,7 +3338,7 @@ fileName wgEncodeDukeAffyExonHsmmfshdSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 5c36462f70dbe14d4d517a8a624d096f
+md5sum fb43dfc8889e7cf43b600dbe24b6d277
 project wgEncode
 replicate 3
 subId 6080
@@ -3385,7 +3385,7 @@ fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 796f4c100239ac91a4aca8176b706e0b
+md5sum 51da1cb54ad89378508f42dd546e1218
 project wgEncode
 replicate 1
 subId 6079
@@ -3433,7 +3433,7 @@ fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum cc38b8115d9f284c0a0181ca09d998e1
+md5sum fe708f4bfc0ff6ff2c551dcc2b33d8c7
 project wgEncode
 replicate 2
 subId 6079
@@ -3481,7 +3481,7 @@ fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 9271846493f43387ea11c771e2a2e2b9
+md5sum b7cc59301916ad68cc400adc2b591183
 project wgEncode
 replicate 3
 subId 6079
@@ -3502,7 +3502,7 @@ fileName wgEncodeDukeAffyExonHsmmtubefshdSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum f68d6645bcb98a00c2a3127722067c05
+md5sum fabba180ee1f807544ff08e5b1ddf656
 project wgEncode
 replicate 1
 subId 6080
@@ -3522,7 +3522,7 @@ fileName wgEncodeDukeAffyExonHsmmtubefshdSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 86d8d1725e865635f9fc5f221dacef46
+md5sum da1b5058aba96b3525f95ddd3a6afb29
 project wgEncode
 replicate 2
 subId 6080
@@ -3542,7 +3542,7 @@ fileName wgEncodeDukeAffyExonHsmmtubefshdSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 99ef7dfc2cfa030890217285c262b661
+md5sum 466defb3bdcd1bd3f07c19536f513c31
 project wgEncode
 replicate 3
 subId 6080
@@ -3588,7 +3588,7 @@ fileName wgEncodeDukeAffyExonHtr8SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 4def108d5b4b3925fbb060142f2b9fa4
+md5sum c3ff0d9758e7dac9e1ca7d640fce93cb
 project wgEncode
 replicate 1
 subId 6079
@@ -3635,7 +3635,7 @@ fileName wgEncodeDukeAffyExonHtr8SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 1a5d8c5bfd2b387a04e9092929b97898
+md5sum 627c264822703d26d117517020ef8bf6
 project wgEncode
 replicate 2
 subId 6079
@@ -3682,7 +3682,7 @@ fileName wgEncodeDukeAffyExonHuh75SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 4f7f8db436936c4c819f4e774adc3afe
+md5sum a8a9a29b03d66d8e05df7926a5f04f4b
 project wgEncode
 replicate 1
 subId 6079
@@ -3705,7 +3705,7 @@ fileName wgEncodeDukeAffyExonHuh75SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 4281459630ad5a4762378f663e184a8f
+md5sum bfce5cbf9deff5ba1eaf1ca428934f3b
 project wgEncode
 replicate 2
 subId 6080
@@ -3751,7 +3751,7 @@ fileName wgEncodeDukeAffyExonHuh7SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum d908536c2161df7be4755559dd4adcba
+md5sum d609dc0ec561fbda0510d02b3a46109f
 project wgEncode
 replicate 1
 subId 6079
@@ -3774,7 +3774,7 @@ fileName wgEncodeDukeAffyExonHuh7SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 8c0dde011cc0b790131fc399e6654d45
+md5sum 619dbdee32653b6d721101c20e669e71
 project wgEncode
 replicate 2
 subId 6080
@@ -3822,7 +3822,7 @@ fileName wgEncodeDukeAffyExonHuvecSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum f6e9a76f94e4e19c4479f9d0467c9510
+md5sum 5b927b2ed142f451a91091ae238b10f1
 project wgEncode
 replicate 1
 subId 6079
@@ -3871,7 +3871,7 @@ fileName wgEncodeDukeAffyExonHuvecSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 9298ded93d3666f8c27ce8ced9244f33
+md5sum f92201a28aa7f05ad5d962da109726b3
 project wgEncode
 replicate 2
 subId 6079
@@ -3964,7 +3964,7 @@ fileName wgEncodeDukeAffyExonIpscwru1SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum b43aa526c85eec3bc20099e2ef651ec6
+md5sum 87a0ce5095c7e36c147a82c6d33bc96e
 project wgEncode
 replicate 1
 subId 6080
@@ -3984,7 +3984,7 @@ fileName wgEncodeDukeAffyExonIpscwru1SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum cd72e252a8b3934e1e7c44d6301966cf
+md5sum fa51e58ef8197b7db54a37b0797ce84e
 project wgEncode
 replicate 2
 subId 6080
@@ -4004,7 +4004,7 @@ fileName wgEncodeDukeAffyExonIpsnihi11SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 136a9b17275a70d11e96e32001a5ac69
+md5sum bbf2fe130b4971eced08b02af0f4ac84
 project wgEncode
 replicate 1
 subId 6080
@@ -4024,7 +4024,7 @@ fileName wgEncodeDukeAffyExonIpsnihi11SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum b06b95f5cb7ec795a7375ae93ef4baa8
+md5sum bd52dd8e625affe88ed8728b46043b60
 project wgEncode
 replicate 2
 subId 6080
@@ -4044,7 +4044,7 @@ fileName wgEncodeDukeAffyExonIpsnihi7SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 4f3690bc00f6c1eb7431da6d22a9007a
+md5sum 49a860524084bd5c13c54e0a34957489
 project wgEncode
 replicate 1
 subId 6080
@@ -4064,7 +4064,7 @@ fileName wgEncodeDukeAffyExonIpsnihi7SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 284791254aa172f7a0e144f42b3e2ceb
+md5sum 7e87e3f5ce098a654e75235e0d08fa51
 project wgEncode
 replicate 2
 subId 6080
@@ -4084,7 +4084,7 @@ fileName wgEncodeDukeAffyExonK562NabutSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 6792aa589ace137d8245276fb4529fed
+md5sum b38b25195389fb9f98017cc699a7944d
 project wgEncode
 replicate 1
 subId 6080
@@ -4104,7 +4104,7 @@ fileName wgEncodeDukeAffyExonK562NabutSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 6b34cee16757d64acd7763c101470660
+md5sum bc91863099f6e912a8df87ad4bbfc5b4
 project wgEncode
 replicate 2
 subId 6080
@@ -4124,7 +4124,7 @@ fileName wgEncodeDukeAffyExonK562NabutSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum efaf18e9f0914636dc1803613ef78aef
+md5sum b27f0c57201905166aa25212649b53d6
 project wgEncode
 replicate 3
 subId 6080
@@ -4144,7 +4144,7 @@ fileName wgEncodeDukeAffyExonK562NabutSimpleSignalRep4.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum d0b91a557df86fdbd64eec9f980a4328
+md5sum 8561536944e623427649e936c5aaf2a0
 project wgEncode
 replicate 4
 subId 6080
@@ -4190,7 +4190,7 @@ fileName wgEncodeDukeAffyExonK562SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum fcf3b997da74a6730f30b9a67ed3f56e
+md5sum 3a733b9cf664bfb99ac9c82c1bea15bf
 project wgEncode
 replicate 1
 subId 6079
@@ -4237,7 +4237,7 @@ fileName wgEncodeDukeAffyExonK562SimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum eda2f65174dfbe6f3711e38687ab4fd3
+md5sum 479b67705318dbe0dc11395bd4806b7b
 project wgEncode
 replicate 2
 subId 6079
@@ -4284,7 +4284,7 @@ fileName wgEncodeDukeAffyExonK562SimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 08352a91a5003fb845817e02ad18f1de
+md5sum d490fcc6d7608e634be12e15e38b589d
 project wgEncode
 replicate 3
 subId 6079
@@ -4307,7 +4307,7 @@ fileName wgEncodeDukeAffyExonK562SimpleSignalRep4.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 689a2434d3d2bd23c97ff13eeabfeb6f
+md5sum d87bf3fbd6a87bd6bd0483b8538b434a
 project wgEncode
 replicate 4
 subId 6080
@@ -4355,7 +4355,7 @@ fileName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 211675d477e78b9143076d4b1993d41f
+md5sum 3c6ffc053ee1d2d0328181773d3e0cce
 project wgEncode
 replicate 1
 subId 6079
@@ -4403,7 +4403,7 @@ fileName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 1fa02ce189e94c0548f11e3c5ff0f3ee
+md5sum 789436dfc789c66f7a2edd37ec7074d1
 project wgEncode
 replicate 2
 subId 6079
@@ -4452,7 +4452,7 @@ fileName wgEncodeDukeAffyExonLncapSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 77586aa8d4acd7845e8c48608d68b693
+md5sum bbbf8e2ca33ab3566b43e47a00ed1b6d
 project wgEncode
 replicate 1
 subId 6079
@@ -4501,7 +4501,7 @@ fileName wgEncodeDukeAffyExonLncapSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 4b94537451a7ae9acc1ae0f93010ee4e
+md5sum 6cd4a4ecd993f2cb23a96b5881984579
 project wgEncode
 replicate 2
 subId 6079
@@ -4522,7 +4522,7 @@ fileName wgEncodeDukeAffyExonMcf7CtcfshrnaSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 42851f4e0f2bf2679ab094119c5071e9
+md5sum a727925362e11e8c48af3451845ac872
 project wgEncode
 replicate 1
 subId 6080
@@ -4542,7 +4542,7 @@ fileName wgEncodeDukeAffyExonMcf7CtcfshrnaSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 6cf8902207c6f3493f6d141454041888
+md5sum c713f0bb00021ae3a16df999e47c988d
 project wgEncode
 replicate 2
 subId 6080
@@ -4562,7 +4562,7 @@ fileName wgEncodeDukeAffyExonMcf7CtcfshrnaSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 01c3e28346b92a279e74621f404e1ee2
+md5sum cd0b897b0778538fba62c288243e3644
 project wgEncode
 replicate 3
 subId 6080
@@ -4610,7 +4610,7 @@ fileName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 585cebfb4dca4ff5d8dddc886abf9fda
+md5sum 42f984b4c654c45db4668849fe7e31af
 project wgEncode
 replicate 1
 subId 6079
@@ -4659,7 +4659,7 @@ fileName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 71ec4d709d06506e5f29c2ae1371f4b5
+md5sum 4981b3ef5c5e0f27379fed312144abb9
 project wgEncode
 replicate 2
 subId 6079
@@ -4680,7 +4680,7 @@ fileName wgEncodeDukeAffyExonMcf7HypoxlacSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 10cf73a994efde978efcf66a8985f80f
+md5sum 280513cb15d472c73f3f446e1d11cb58
 project wgEncode
 replicate 1
 subId 6080
@@ -4700,7 +4700,7 @@ fileName wgEncodeDukeAffyExonMcf7RandshrnaSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 595ad475b8b4c94aed689056550796de
+md5sum 4f9695d6c063f9b1337866dd199ae5c8
 project wgEncode
 replicate 1
 subId 6080
@@ -4720,7 +4720,7 @@ fileName wgEncodeDukeAffyExonMcf7RandshrnaSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 7fa0cfc08e4f7a99b1f842a042e3b59a
+md5sum 1cdc24faf49621d45d9897273096273d
 project wgEncode
 replicate 2
 subId 6080
@@ -4740,7 +4740,7 @@ fileName wgEncodeDukeAffyExonMcf7RandshrnaSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 9263b4116f92c5d234b33e4d92915222
+md5sum bfb0438cc0b958945af0e6ff89907338
 project wgEncode
 replicate 3
 subId 6080
@@ -4787,7 +4787,7 @@ fileName wgEncodeDukeAffyExonMcf7SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum ec50b75a0bf6d4157ee0649620ccf403
+md5sum c0df69f6baa61486df8234dc43e50f19
 project wgEncode
 replicate 1
 subId 6079
@@ -4835,7 +4835,7 @@ fileName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 1ac6db2ef7b2541eb52eda8fc9da4a75
+md5sum f746d0f39f66b6d234d0d1c17df93b6d
 project wgEncode
 replicate 1
 subId 6079
@@ -4883,7 +4883,7 @@ fileName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 952a9e3e806adb232702de8701c2e21c
+md5sum 2bd93fcea4077a106ce8b3b3feef3141
 project wgEncode
 replicate 2
 subId 6079
@@ -4932,7 +4932,7 @@ fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 64b9c5598ced98976532a2ccb1b10c0b
+md5sum 4c41bfc76837bdc5e24f8868bc039cfc
 project wgEncode
 replicate 1
 subId 6079
@@ -4981,7 +4981,7 @@ fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 7e9bd4b46f8267fd8453545bb506f71e
+md5sum cfe3f0cae9fe78ea6bda4cab70a0bbf7
 project wgEncode
 replicate 2
 subId 6079
@@ -5028,7 +5028,7 @@ fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 455dae317e21c15f913d500972505a08
+md5sum ae5440a8967a63350aa599958cde5739
 project wgEncode
 replicate 3
 subId 6079
@@ -5049,7 +5049,7 @@ fileName wgEncodeDukeAffyExonMel2183SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum d57ad1a1f8879fd2bec52e10d82a53e7
+md5sum c2418bc310fbcb16167e69cd89316de0
 project wgEncode
 replicate 1
 subId 6080
@@ -5069,7 +5069,7 @@ fileName wgEncodeDukeAffyExonMel2183SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 64daa581ad5ce3fd6273424528d92cac
+md5sum ddaf018e132cba0be42562c4881443bd
 project wgEncode
 replicate 2
 subId 6080
@@ -5116,7 +5116,7 @@ fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 7c15e8e6c440f91a739f4f70ff09a588
+md5sum 2b36cb7ad0fc7bf0b02b7f0fcffa6a7f
 project wgEncode
 replicate 1
 subId 6079
@@ -5164,7 +5164,7 @@ fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 6df7e3f1cc224c828ccbe2c04e396e58
+md5sum eff8dfe635fcf9dd965bb8c6eb1e69ab
 project wgEncode
 replicate 2
 subId 6079
@@ -5212,7 +5212,7 @@ fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 6295d97430bb74402dd558a05b84fea2
+md5sum 42e720b1ade3e9f18277da57235db23e
 project wgEncode
 replicate 3
 subId 6079
@@ -5260,7 +5260,7 @@ fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep4V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 2f5ee755e43dccf04e23c804b91bc2ca
+md5sum 8f48f9d8fee311297c6d5569f0b052a8
 project wgEncode
 replicate 4
 subId 6079
@@ -5307,7 +5307,7 @@ fileName wgEncodeDukeAffyExonMyometrSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum a6bdc938b53ddacd2025933a30dc8b1e
+md5sum 76f42a6ad8bc00ddbbc9413ff20b93ec
 project wgEncode
 replicate 1
 subId 6079
@@ -5354,7 +5354,7 @@ fileName wgEncodeDukeAffyExonMyometrSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum f2d61079cf84dd9e18a15c37c49c742a
+md5sum 30502ef48ba5149fe4ac067e6519092c
 project wgEncode
 replicate 2
 subId 6079
@@ -5402,7 +5402,7 @@ fileName wgEncodeDukeAffyExonNhaSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum e7d8aa5547064f4f8008cbbe39ece030
+md5sum e338a2c0b10b82a983751878fc1dc99b
 project wgEncode
 replicate 1
 subId 6079
@@ -5450,7 +5450,7 @@ fileName wgEncodeDukeAffyExonNhaSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum ce560873b87ab59c2f9bc27bee1f65c7
+md5sum 75be2ec5fdf7f217270ea4861e40d233
 project wgEncode
 replicate 2
 subId 6079
@@ -5499,7 +5499,7 @@ fileName wgEncodeDukeAffyExonNhekSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 1a7e4bd904440c23b6d9c187faa981d5
+md5sum c17c65321b0ecf7cf14ce01547c1ec75
 project wgEncode
 replicate 1
 sex F
@@ -5549,7 +5549,7 @@ fileName wgEncodeDukeAffyExonNhekSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 376771de249b49bf8bae08c36d2f3511
+md5sum b9f9b287eeee5adb2b106e583bea49dc
 project wgEncode
 replicate 2
 sex F
@@ -5573,7 +5573,7 @@ fileName wgEncodeDukeAffyExonOsteoSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum e267774d279dbfb983591c523358d42c
+md5sum 8334c9006f3b7cd1742425e3c92cd31a
 project wgEncode
 replicate 1
 subId 6079
@@ -5596,7 +5596,7 @@ fileName wgEncodeDukeAffyExonOsteoSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum d3bc58819025e7472622ddb98a708f11
+md5sum c99fe30e4641bbe6699747ed821ca864
 project wgEncode
 replicate 2
 subId 6079
@@ -5619,7 +5619,7 @@ fileName wgEncodeDukeAffyExonOsteoSimpleSignalRep3V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 0afcde51c15c16efbc894a3041f88ee9
+md5sum 2eefd713003944a3d12ba654e713f7f2
 project wgEncode
 replicate 3
 subId 6079
@@ -5744,7 +5744,7 @@ fileName wgEncodeDukeAffyExonProgfibSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum fa2054403bd75fafc385331b3ae70a8c
+md5sum 462c13fafd07fbab2f3c835b36d21bc4
 project wgEncode
 replicate 1
 subId 6079
@@ -5793,7 +5793,7 @@ fileName wgEncodeDukeAffyExonProgfibSimpleSignalRep2V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum b31d05742cc32c6e018537cb3d3557ff
+md5sum 7437a98d8cda199091eadb469db85654
 project wgEncode
 replicate 2
 subId 6079
@@ -5840,7 +5840,7 @@ fileName wgEncodeDukeAffyExonStellateSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 4e6d20a24ae432df5346f9635fdd46f9
+md5sum 69c461b91537b6bba985dd48d3ae87f9
 project wgEncode
 replicate 1
 subId 6079
@@ -5863,7 +5863,7 @@ fileName wgEncodeDukeAffyExonStellateSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 1ed435d030eeb42dfd768b89bfea4d8e
+md5sum 401e8bae911b1a83ae31fcf45019df1c
 project wgEncode
 replicate 2
 subId 6080
@@ -5883,7 +5883,7 @@ fileName wgEncodeDukeAffyExonUch1SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 46a8001092b479c42227ec552bfe5a4d
+md5sum 5ae6d10e6b656fe7bcf7fd4b3c418e7d
 project wgEncode
 replicate 1
 subId 6080
@@ -5903,7 +5903,7 @@ fileName wgEncodeDukeAffyExonUch1SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 93eb76c746db03976f775fdc7f3fe1e6
+md5sum b628495f7732cecfb8d797cb5abbb691
 project wgEncode
 replicate 2
 subId 6080
@@ -5925,7 +5925,7 @@ fileName wgEncodeDukeAffyExonUrothelSimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum b4a187c324093731d337843919dbba1f
+md5sum f707cbd03c22f7b2a55d3146aee84efe
 project wgEncode
 replicate 1
 subId 6079
@@ -5948,7 +5948,7 @@ fileName wgEncodeDukeAffyExonUrothelSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 5f5012b3cb15bf7ace5b1a46c03e616a
+md5sum 5751d8438b6788fb1cf323df6706d59d
 project wgEncode
 replicate 2
 subId 6080
@@ -5970,7 +5970,7 @@ fileName wgEncodeDukeAffyExonUrothelUt189SimpleSignalRep1V2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum 4a0a8f1e8ab4f29d50e81ef13de9c310
+md5sum 2e22cbde0b11ea8a9ec608831949b910
 project wgEncode
 replicate 1
 subId 6079
@@ -5993,7 +5993,7 @@ fileName wgEncodeDukeAffyExonUrothelUt189SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
 labVersion 2.0
-md5sum fad7202b465d2ab5b9a5723047016dae
+md5sum dfa0fc0785d1cab474f76f21aa7ea36c
 project wgEncode
 replicate 2
 subId 6080
@@ -6049,4 +6049,4 @@ tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: -1038992840
+# MAGIC: -1295155011
