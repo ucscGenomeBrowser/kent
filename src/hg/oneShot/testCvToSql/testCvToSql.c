@@ -10,6 +10,7 @@
 #include "hash.h"
 #include "options.h"
 #include "portable.h"
+#include "obscure.h"
 #include "ra.h"
 
 void usage()
@@ -18,7 +19,7 @@ void usage()
 errAbort(
   "testCvToSql - Test out some ideas for making relational database version of cv.ra\n"
   "usage:\n"
-  "   testCvToSql cv.ra out.stats out.atree\n"
+  "   testCvToSql cv.ra out.stats out.atree out.as outTabDir\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -37,6 +38,7 @@ struct fieldLabel
     };
 
 struct fieldLabel fieldDescriptions[] = {
+/* Descriptions of fields, with types being from most to least specific. */
    {"cellLine", "lineage", "High level developmental lineage of cell."},
    {"cellLine", "tier", "ENCODE cell line tier. 1-3 with 1 being most commonly used, 3 least."},
    {"cellLine", "protocol", "Scientific protocol used for growing cells"},
@@ -55,8 +57,8 @@ struct fieldLabel fieldDescriptions[] = {
    {"lab", "labPi", "Last name or other short identifier for lab's primary investigator"},
    {"lab", "labPiFull", "Full name of lab's primary investigator."},
    {"lab", "grantPi", "Last name of primary investigator on grant paying for data."},
-   {"grant", "grantInst", "Name of instution awarded grant paying for data."},
-   {"grant", "projectName", "Short name describing grant."},
+   {"encodeGrant", "grantInst", "Name of instution awarded grant paying for data."},
+   {"encodeGrant", "projectName", "Short name describing grant."},
    {"typeOfTerm", "searchable", "Describes how to search for term. 'No' for unsearchable."},
    {"typeOfTerm", "cvDefined", "Is there a controlled vocabulary for this term. Is 'yes' or 'no.'"},
    {"typeOfTerm", "validate", "Describes how to validate field. Use 'none' for no validation."},
@@ -81,7 +83,6 @@ struct fieldLabel fieldDescriptions[] = {
    {"*", "age", "Age of organism cells come from."},
    {"*", "strain", "Strain of organism."},
    {"*", "geoPlatformName", "Short description of sequencing platform, used by GEO."},
-   {"*", "xyz", "Xyz"},
 };
 
 char *searchFieldDescription(char *type, char *field)
@@ -543,11 +544,11 @@ closeTypeFiles(typeList);
 lineFileClose(&lf);
 }
 
-void outputAutoSql(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outDir)
+void outputAutoSql(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outFile)
 /* Output start of autoSql files to outDir, one per table. */
 {
-openTypeFiles(typeList, outDir, ".as");
 struct stanzaType *type;
+FILE *f = mustOpen(outFile, "w");
 for (type = typeList; type != NULL; type = type->next)
     {
     char *totKey = type->name;  /* key in typeOfTerm hash */
@@ -561,9 +562,9 @@ for (type = typeList; type != NULL; type = type->next)
         assert(description != NULL);  // Checked in initial parsing
         typeDescription = description->val;
         }
-    FILE *f = type->f;
     char *indent = "    ";
     fprintf(f, "table %s\n", type->symbol);
+    typeDescription = makeEscapedString(typeDescription, '"');
     fprintf(f, "\"%s\"\n", typeDescription);
     fprintf(f, "%s(\n", indent);
     struct stanzaField *field;
@@ -601,7 +602,7 @@ for (type = typeList; type != NULL; type = type->next)
     fprintf(f, "%s)\n", indent);
     fprintf(f, "\n");
     }
-closeTypeFiles(typeList);
+carefulClose(&f);
 }
 
 /******* Routines for rearranging stanza types. *********/
@@ -744,7 +745,7 @@ if (label != NULL && shortLabel != NULL)
     }
 }
 
-void testCvToSql(char *inCvRa, char *outStats, char *outTree, char *outDir)
+void testCvToSql(char *inCvRa, char *outStats, char *outTree, char *outAs, char *outDir)
 /* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
 {
 /* Read input into type list and hash */
@@ -752,6 +753,7 @@ struct hash *typeHash;   /* stanzaType valued, keyed by type->name */
 struct hash *typeOfTermHash;   /* list of slPair valued, keyed by "term" tag */
 struct stanzaType *typeList;
 stanzaTypesFromCvRa(inCvRa, &typeList, &typeHash, &typeOfTermHash);
+verbose(1, "%s contains %d types\n", inCvRa, typeHash->elCount);
 
 /* Output stats format before we start munging the tree. */
 stanzaTypesToStats(typeList, outStats);
@@ -760,6 +762,8 @@ stanzaTypesToStats(typeList, outStats);
 struct stanzaType *type;
 for (type = typeList; type != NULL; type = type->next)
     {
+    if (sameString(type->name, "grant"))
+        type->symbol = "encodeGrant";
     addDeprecatedField(type);
     mergeLabelAndShortLabel(type);
     removeField(type, "type");
@@ -769,7 +773,7 @@ for (type = typeList; type != NULL; type = type->next)
 /* Output type tree and actual data */
 stanzaTypeToTree(typeList, outTree);
 makeDirsOnPath(outDir);
-outputAutoSql(typeList, typeOfTermHash, outDir);
+outputAutoSql(typeList, typeOfTermHash, outAs);
 outputTabs(typeList, typeHash, inCvRa, outDir);
 }
 
@@ -777,9 +781,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 6)
     usage();
 testBestShortLabel();
-testCvToSql(argv[1], argv[2], argv[3], argv[4]);
+testCvToSql(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
