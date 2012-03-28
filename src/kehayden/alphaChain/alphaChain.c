@@ -19,16 +19,14 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "alphaChain - create a linear projection of alpha satellite arrays using the probablistic model of HuRef satellite graphs\n"
+  "alphaChain - create a linear projection of alpha satellite arrays using the probablistic model\n"
+  "of HuRef satellite graphs\n"
   "usage:\n"
-  "   alphaChain alphaMonFile.fa\n"
+  "   alphaChain alphaMonFile.fa significant_output.txt\n"
   "options:\n"
   "   -size=N - Set max chain size, default %d\n"
   "   -chain=fileName - Write out word chain to file\n"
-  "   -nonsense=fileName - Write out predicted nonsense to file\n"
   "   -maxNonsenseSize=N - Keep nonsense output to this many words.\n"
-  "   -lower - Lowercase all words\n"
-  "   -unpunc - Strip punctuation\n"
   "   -fullOnly - Only output chains of size\n"
   "   -minUse=N - Set minimum use in output chain, default %d\n"
   , maxChainSize, minUse
@@ -39,10 +37,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"size", OPTION_INT},
    {"minUse", OPTION_INT},
-   {"nonsense", OPTION_STRING},
    {"chain", OPTION_STRING},
-   {"lower", OPTION_BOOLEAN},
-   {"unpunc", OPTION_BOOLEAN},
    {"fullOnly", OPTION_BOOLEAN},
    {"maxNonsenseSize", OPTION_INT},
    {NULL, 0},
@@ -224,23 +219,41 @@ assert(pickedWord != NULL);
 return pickedWord;
 }
 
-char *predictNext(struct wordTree *wt, struct dlList *recent)
-/* Predict next word given list of recent words and wordTree. */
+char *predictNextFromAllPredecessors(struct wordTree *wt, struct dlNode *list)
+/* Predict next word given tree and recently used word list.  If tree doesn't
+ * have statistics for what comes next given the words in list, then it returns
+ * NULL. */
 {
 struct dlNode *node;
-for (node = recent->head; !dlEnd(node); node = node->next)
+for (node = list; !dlEnd(node); node = node->next)
     {
     char *word = node->val;
     struct wordTree key;
     key.word = word;
     wt = rbTreeFind(wt->following, &key);
-    if (wt == NULL)
-        errAbort("%s isn't a follower of %s\n", word, wt->word);
+    if (wt == NULL || wt->following == NULL)
+        break;
     }
 char *result = NULL;
-if (wt->following != NULL)
+if (wt != NULL && wt->following != NULL)
     result = pickRandomWord(wt->following);
 return result;
+}
+
+char *predictNext(struct wordTree *wt, struct dlList *recent)
+/* Predict next word given tree and recently used word list.  Will use all words in
+ * recent list if can,  but if there is not data in tree, will back off, and use
+ * progressively less previous words until ultimately it just picks a random
+ * word. */
+{
+struct dlNode *node;
+for (node = recent->head; !dlEnd(node); node = node->next)
+    {
+    char *result = predictNextFromAllPredecessors(wt, node);
+    if (result != NULL)
+        return result;
+    }
+return pickRandomWord(wt->following); 
 }
 
 static void wordTreeMakeNonsense(struct wordTree *wt, int maxSize, char *firstWord, 
@@ -282,16 +295,7 @@ for (;;)
     if (word == NULL)
          break;
 
-    /* Output last word in list. */
-	{
-	node = ll->tail;
-	word = node->val;
-	fprintf(f, "%s", word);
-	if (word[strlen(word)-1] == '.')
-	    fprintf(f, "\n");
-	else
-	    fprintf(f, " ");
-	}
+    fprintf(f, "%s\n", word);
     }
 dlListFree(&ll);
 }
@@ -375,11 +379,11 @@ lineFileClose(&lf);
 return wt;
 }
 
-void alphaChain(char *inFile, int maxSize)
+void alphaChain(char *inFile, char *outFile)
 /* alphaChain - Create Markov chain of words and optionally output chain in two formats. */
 {
 struct lm *lm = lmInit(0);
-struct wordTree *wt = wordTreeForChainsInFile(inFile, maxSize, lm);
+struct wordTree *wt = wordTreeForChainsInFile(inFile, maxChainSize, lm);
 
 if (optionExists("chain"))
     {
@@ -389,14 +393,15 @@ if (optionExists("chain"))
     carefulClose(&f);
     }
 
-if (optionExists("nonsense"))
-    {
-    char *fileName = optionVal("nonsense", NULL);
-    FILE *f = mustOpen(fileName, "w");
-    int maxSize = min(wt->useCount, maxNonsenseSize);
-    wordTreeMakeNonsense(wt, maxChainSize, pickRandomWord(wt->following), maxSize, f);
-    carefulClose(&f);
-    }
+
+ FILE *f = mustOpen(outFile, "w");
+ int maxSize = min(wt->useCount, maxNonsenseSize);
+
+ /* KEH NOTES: controls how many words we emit */
+
+ wordTreeMakeNonsense(wt, maxChainSize, pickRandomWord(wt->following), maxSize, f);
+ carefulClose(&f);
+    
 
 lmCleanup(&lm);	// Not really needed since we're just going to exit.
 }
@@ -405,14 +410,12 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc != 3)
     usage();
 maxChainSize = optionInt("size", maxChainSize);
 minUse = optionInt("minUse", minUse);
 maxNonsenseSize = optionInt("maxNonsenseSize", maxNonsenseSize);
-lower = optionExists("lower");
-unpunc = optionExists("unpunc");
 fullOnly = optionExists("fullOnly");
-alphaChain(argv[1], maxChainSize);
+alphaChain(argv[1], argv[2]);
 return 0;
 }
