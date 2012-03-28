@@ -64,78 +64,51 @@ void learningLibs(char *textFile)
 /* learningLibs - A program to help learn the kent libraries.*/
 {
   /*Open and Assign file to pointer:   similar to twoBit.c line 962 */
-  struct lineFile *lf = lineFileOpen(textFile, TRUE); 
+  /*struct lineFile *lf = lineFileOpen(textFile, TRUE); */
 
   /* tokenizer.h L29; and similar to lib/rqlParse.c*/
-   struct tokenizer *tkz=tokenizerOnLineFile(lf);
+   struct tokenizer *tkz=tokenizerNew(textFile);
   /* Create a new tokenizer on open lineFile. */
 
   /* initialize hash: similar to hash.h line 3 */
   struct hash *hash = hashNew(0); 
-  #define COUNT 140
-  #define INIT 1
-  char *line;
 
-  int i;
-  int wordCount;
   int totalWords;
   struct wordTracker *wordList = NULL;
   totalWords=0;
-
-  while (lineFileNextReal(lf, &line)) 
+  char *word; 
+  /*while (lineFileNextReal(lf, &line)) */
+  while ((word=tokenizerNext(tkz))!=NULL) /* provides a string */
       {
 	if (allCaps)
-	  strUpper(line);
+	  strUpper(word);
 	
-	char *words[COUNT];
-	/*char *tmpWords[COUNT];*/
-	/*character array named 'words' and an unspecified number of elements. */
-	/* initialize inside of block so that automatic storage duration is set recreate each loop */
-	
-	/* printf(line); */
-	/* Chop line by white space. common.h line 893*/
-	wordCount=chopLine(line, words);
-	/* add tokenizerLib here ?? or in loop below; rqlParse.c L290*/
-	/* HERE?  char *words = tokenizerNext(tkz); */
-	/*char *tokenizerNext(struct tokenizer *tkz);*/
-    
-	
-	/* sum all words to generate frequency of each word in document */
-	totalWords=totalWords + wordCount;
-      /* totalWords summation is working:  1789 words obs */
-      /* printf("%6d\n",totalWords);*/
+	totalWords++;
 
       /* process each element of array words[] */
-      for (i = 0; i < wordCount; i++)
+	verbose(2,"%4d\t%20s\n",totalWords,word);
+	struct wordTracker *tracker = hashFindVal(hash, word);
+	if (!tracker)
 	  {
-	  verbose(2,"%4d\t%20s\n",i,words[i]);
-	  char *word = tokenizerNext(tkz);
-          /*char *word = words[i];*/
-          struct wordTracker *tracker = hashFindVal(hash, word);
-          if (!tracker)
-	    {
-	      AllocVar(tracker);
-	      hashAddSaveName(hash, word, tracker, &tracker->word);
-              slAddHead(&wordList, tracker);
-	    }
-          tracker->count += 1;
+	    AllocVar(tracker);
+	    hashAddSaveName(hash, word, tracker, &tracker->word);
+	    slAddHead(&wordList, tracker);
+	  }
+	tracker->count += 1;
 	  /* store each word into a hash counter */
 	  /* if exists in hash:  increment counter */
 	  /* else inialize hash with count = 1 */
 	  /*hashAdd(hash, words[i], INIT) ; */
-	  }
+      }
       
-    }
-
   // Sort, loop through list and iterate.     
   slSort(&wordList, wordTrackerCmpCount);
   struct wordTracker *tracker;
   for (tracker = wordList; tracker != NULL; tracker = tracker->next)
     printf("%s %d\n", tracker->word, tracker->count);
 		
-      lineFileClose(&lf);
+  tokenizerFree(&tkz);
 }
-
 
 
 int main(int argc, char *argv[])
@@ -144,6 +117,7 @@ int main(int argc, char *argv[])
 
 optionInit(&argc, argv, options);
 allCaps = optionExists("allCaps");
+uglyf("allCaps=%d\n", allCaps);
 if (argc != 2)
      usage();
 learningLibs(argv[1]);
