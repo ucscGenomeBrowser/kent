@@ -1,4 +1,4 @@
-# Data Agreement File for RIKEN CAGE project $Revision: 1.8 $
+# Data Agreement File for RIKEN CAGE project $Revision: 1.9 $
 
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -58,8 +58,3 @@ sql		 bedRnaElements
 hasReplicates    no 
 required         no
 
-view             TssGencV7
-type             gtf
-hasReplicates    no 
-required         no
-downloadOnly     yes

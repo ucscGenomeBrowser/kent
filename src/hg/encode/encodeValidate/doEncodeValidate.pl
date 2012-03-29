@@ -892,23 +892,6 @@ sub validateCsfasta
     return ();
 }
 
-sub validateSAM
-{
-    my ($path, $file, $type) = @_;
-    doTime("beginning validateSAM") if $opt_timing;
-    HgAutomate::verbose(2, "validateSAM($path,$file,$type)\n");
-    my $paramList = validationSettings("validateFiles","SAM");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=SAM $file"]);
-    if(my $err = $safe->exec()) {
-        print STDERR  "ERROR: failed validateSAM : " . $safe->stderr() . "\n";
-        # don't show end-user pipe error(s)
-        return("failed validateSAM for '$file'");
-    }
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateSAM") if $opt_timing;
-    return ();
-}
-
 
 sub validateBam
 {
