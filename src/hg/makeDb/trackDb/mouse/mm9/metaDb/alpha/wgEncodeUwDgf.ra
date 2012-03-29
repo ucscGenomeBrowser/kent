@@ -150,16 +150,16 @@ tableName wgEncodeUwDgf3134RiiiMImmortalSigRep1
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwDgf416bC57bl6MAdult8wksAlnRep1
+metaObject wgEncodeUwDgf416bB6d2f1jImmortalAlnRep1
 objType file
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgf416bC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgf416bC57bl6MAdult8wksAlnRep1.bam.bai
+fileName wgEncodeUwDgf416bB6d2f1jImmortalAlnRep1.bam,wgEncodeUwDgf416bB6d2f1jImmortalAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labExpId DS14099
@@ -169,21 +169,21 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 5238
 tissueSourceType Pooled
 view Alignments
 
-metaObject wgEncodeUwDgf416bC57bl6MAdult8wksHotspotsRep1
+metaObject wgEncodeUwDgf416bB6d2f1jImmortalHotspotsRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgf416bC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
+fileName wgEncodeUwDgf416bB6d2f1jImmortalHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS14099
@@ -193,22 +193,22 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 5238
-tableName wgEncodeUwDgf416bC57bl6MAdult8wksHotspotsRep1
+tableName wgEncodeUwDgf416bB6d2f1jImmortalHotspotsRep1
 tissueSourceType Pooled
 view Hotspots
 
-metaObject wgEncodeUwDgf416bC57bl6MAdult8wksPkRep1
+metaObject wgEncodeUwDgf416bB6d2f1jImmortalPkRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgf416bC57bl6MAdult8wksPkRep1.narrowPeak.gz
+fileName wgEncodeUwDgf416bB6d2f1jImmortalPkRep1.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS14099
@@ -218,22 +218,22 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 5238
-tableName wgEncodeUwDgf416bC57bl6MAdult8wksPkRep1
+tableName wgEncodeUwDgf416bB6d2f1jImmortalPkRep1
 tissueSourceType Pooled
 view Peaks
 
-metaObject wgEncodeUwDgf416bC57bl6MAdult8wksRawDataRep1
+metaObject wgEncodeUwDgf416bB6d2f1jImmortalRawDataRep1
 objType file
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgf416bC57bl6MAdult8wksRawDataRep1.fastq.tgz
+fileName wgEncodeUwDgf416bB6d2f1jImmortalRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion DS14099
@@ -242,21 +242,21 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 5238
 tissueSourceType Pooled
 view RawData
 
-metaObject wgEncodeUwDgf416bC57bl6MAdult8wksRawRep1
+metaObject wgEncodeUwDgf416bB6d2f1jImmortalRawRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgf416bC57bl6MAdult8wksRawRep1.bigWig
+fileName wgEncodeUwDgf416bB6d2f1jImmortalRawRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS14099
@@ -266,22 +266,22 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 5238
-tableName wgEncodeUwDgf416bC57bl6MAdult8wksRawRep1
+tableName wgEncodeUwDgf416bB6d2f1jImmortalRawRep1
 tissueSourceType Pooled
 view RawSignal
 
-metaObject wgEncodeUwDgf416bC57bl6MAdult8wksSigRep1
+metaObject wgEncodeUwDgf416bB6d2f1jImmortalSigRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgf416bC57bl6MAdult8wksSigRep1.bigWig
+fileName wgEncodeUwDgf416bB6d2f1jImmortalSigRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS14099
@@ -291,9 +291,9 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 5238
-tableName wgEncodeUwDgf416bC57bl6MAdult8wksSigRep1
+tableName wgEncodeUwDgf416bB6d2f1jImmortalSigRep1
 tissueSourceType Pooled
 view Signal
 
@@ -1185,16 +1185,16 @@ tableName wgEncodeUwDgfLungC57bl6MAdult8wksSigRep1
 tissueSourceType Pooled
 view Signal
 
-metaObject wgEncodeUwDgfMelC57bl6MAdult8wksAlnRep1
+metaObject wgEncodeUwDgfMelUknImmortalAlnRep1
 objType file
-age adult-8wks
+age immortalized
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfMelC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfMelC57bl6MAdult8wksAlnRep1.bam.bai
+fileName wgEncodeUwDgfMelUknImmortalAlnRep1.bam,wgEncodeUwDgfMelUknImmortalAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labExpId DS13036
@@ -1204,21 +1204,21 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain Unknown
 subId 5247
 tissueSourceType Pooled
 view Alignments
 
-metaObject wgEncodeUwDgfMelC57bl6MAdult8wksHotspotsRep1
+metaObject wgEncodeUwDgfMelUknImmortalHotspotsRep1
 objType table
-age adult-8wks
+age immortalized
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfMelC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
+fileName wgEncodeUwDgfMelUknImmortalHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS13036
@@ -1228,22 +1228,22 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain Unknown
 subId 5247
-tableName wgEncodeUwDgfMelC57bl6MAdult8wksHotspotsRep1
+tableName wgEncodeUwDgfMelUknImmortalHotspotsRep1
 tissueSourceType Pooled
 view Hotspots
 
-metaObject wgEncodeUwDgfMelC57bl6MAdult8wksPkRep1
+metaObject wgEncodeUwDgfMelUknImmortalPkRep1
 objType table
-age adult-8wks
+age immortalized
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfMelC57bl6MAdult8wksPkRep1.narrowPeak.gz
+fileName wgEncodeUwDgfMelUknImmortalPkRep1.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS13036
@@ -1253,22 +1253,22 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain Unknown
 subId 5247
-tableName wgEncodeUwDgfMelC57bl6MAdult8wksPkRep1
+tableName wgEncodeUwDgfMelUknImmortalPkRep1
 tissueSourceType Pooled
 view Peaks
 
-metaObject wgEncodeUwDgfMelC57bl6MAdult8wksRawDataRep1
+metaObject wgEncodeUwDgfMelUknImmortalRawDataRep1
 objType file
-age adult-8wks
+age immortalized
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfMelC57bl6MAdult8wksRawDataRep1.fastq.tgz
+fileName wgEncodeUwDgfMelUknImmortalRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion DS13036
@@ -1277,21 +1277,21 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain Unknown
 subId 5247
 tissueSourceType Pooled
 view RawData
 
-metaObject wgEncodeUwDgfMelC57bl6MAdult8wksRawRep1
+metaObject wgEncodeUwDgfMelUknImmortalRawRep1
 objType table
-age adult-8wks
+age immortalized
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfMelC57bl6MAdult8wksRawRep1.bigWig
+fileName wgEncodeUwDgfMelUknImmortalRawRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS13036
@@ -1301,22 +1301,22 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain Unknown
 subId 5247
-tableName wgEncodeUwDgfMelC57bl6MAdult8wksRawRep1
+tableName wgEncodeUwDgfMelUknImmortalRawRep1
 tissueSourceType Pooled
 view RawSignal
 
-metaObject wgEncodeUwDgfMelC57bl6MAdult8wksSigRep1
+metaObject wgEncodeUwDgfMelUknImmortalSigRep1
 objType table
-age adult-8wks
+age immortalized
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfMelC57bl6MAdult8wksSigRep1.bigWig
+fileName wgEncodeUwDgfMelUknImmortalSigRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS13036
@@ -1326,9 +1326,9 @@ project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
 sex M
-strain C57BL/6
+strain Unknown
 subId 5247
-tableName wgEncodeUwDgfMelC57bl6MAdult8wksSigRep1
+tableName wgEncodeUwDgfMelUknImmortalSigRep1
 tissueSourceType Pooled
 view Signal
 
@@ -2214,4 +2214,4 @@ tableName wgEncodeUwDgfWbrainC57bl6ME14halfSigRep1
 tissueSourceType Pooled
 view Signal
 
-# MAGIC: -1392881651
+# MAGIC: -2055006366

@@ -5,7 +5,7 @@ longLabel ENCODE HudsonAlpha CpG Methylation by Illumina Methyl27
 group regulation
 # subGroup1 view Views Peaks=Peaks
 subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562 HepG2=HepG2
-subGroup2 replicate Replicate 1=1 2=2
+subGroup2 replicate Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=replicate
 sortOrder cellType=+ replicate=+
 dragAndDrop subTracks
@@ -22,7 +22,7 @@ wgEncode 1
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel HepG2 1
     longLabel ENCODE HudsonAlpha Methyl27 HepG2 replicate 1
-    subGroups replicate=1 cellType=HepG2
+    subGroups replicate=rep1 cellType=HepG2
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
@@ -34,7 +34,7 @@ wgEncode 1
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel HepG2 2
     longLabel ENCODE HudsonAlpha Methyl27 HepG2 replicate 2
-    subGroups replicate=2 cellType=HepG2
+    subGroups replicate=rep2 cellType=HepG2
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
@@ -46,7 +46,7 @@ wgEncode 1
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel GM12878 1
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 1
-    subGroups replicate=1 cellType=GM12878
+    subGroups replicate=rep1 cellType=GM12878
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
@@ -58,7 +58,7 @@ wgEncode 1
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel GM12878 2
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 2
-    subGroups replicate=2 cellType=GM12878
+    subGroups replicate=rep2 cellType=GM12878
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
@@ -70,7 +70,7 @@ wgEncode 1
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel K562 1
     longLabel ENCODE HudsonAlpha Methyl27 K562 replicate 1
-    subGroups replicate=1 cellType=K562
+    subGroups replicate=rep1 cellType=K562
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
@@ -82,7 +82,7 @@ wgEncode 1
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel K562 2
     longLabel ENCODE HudsonAlpha Methyl27 K562 replicate 2
-    subGroups replicate=2 cellType=K562
+    subGroups replicate=rep2 cellType=K562
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03

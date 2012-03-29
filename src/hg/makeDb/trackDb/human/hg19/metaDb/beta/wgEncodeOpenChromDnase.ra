@@ -3719,6 +3719,7 @@ geoSampleAccession GSM816659
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
+md5sum 1fb150f2b518adec143582cf934c4fd4
 origAssembly hg18
 project wgEncode
 subId 6244
@@ -12245,4 +12246,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -81127175
+# MAGIC: -1890514158
