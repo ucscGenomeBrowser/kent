@@ -18,7 +18,7 @@
 #NOTE:  The optional columns do not have to be in the DDF for validation.  They do not show up in the file names, just the metadata.
 
 
-dafVersion        3.1
+dafVersion        3.0
 
 # Lab and general info
 grant             Giddings
