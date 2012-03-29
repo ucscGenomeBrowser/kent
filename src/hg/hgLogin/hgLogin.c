@@ -401,7 +401,6 @@ hPrintf
     "</p>"
     "<h3>Password has been changed.</h3>"
     "Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>"
-    , email
     );
 
 updatePasswordsFile(conn);
@@ -556,7 +555,6 @@ hPrintf(
 "<span style='color:red;'>%s</span>"
 "<h3>Account Login</h3>"
 "<form method=post action=\"hgLogin\" name=accountLoginForm >"
-"<input TYPE=\"hidden\" NAME=\"hgLogin_click\" VALUE=\"postLogin\" >"
 "<table>"
 "<tr><td>User Name</td><td><input type=text name=hgLogin_userName value=\"%s\" size=20> <BR> "
 "<tr><td>Password</td><td><input type=password name=hgLogin_password value=\"%s\" size=10></td></tr><BR>"
@@ -591,16 +589,6 @@ if (sameString(userName,""))
     displayLoginPage(conn);
     return;
     }
-/*************************************************************
-char *email = cartUsualString(cart, "hgLogin_email", "");
-if (sameString(email,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Email cannot be blank.");
-    displayLoginPage(conn);
-    return;
-    }
-****************************************************************/
 /* for password security, use cgi hash instead of cart */
 char *password = cgiUsualString("hgLogin_password", "");
 if (sameString(password,""))
@@ -631,26 +619,16 @@ sqlFreeResult(&sr);
 if (checkPwd(password,m->password))
     {
 hPrintf("<h1>Login succesful !!!! calling displayLoginSuccess now.</h1>\n");
-      displayLoginSuccess();
+      unsigned int userID=m->idx;
+      hPrintf("Before call userID is  %d\n",userID);
+      displayLoginSuccess(userName,userID);
 // htmlSetCookie("hgLogin_User", "chinhli", NULL, NULL, ".cse.ucsc.edu", FALSE);
 // hPrintf("<meta http-equiv=\"set-cookie\" content=\"hgLogin_User=chinhli;expires=Fri, 30 Dec 2015 12:00:00 GMT; path=cse.ucsc.edu\">");
       return;
-//htmlSetCookie("hgLogin_User", "Chin Li", NULL, NULL,
-//".cse.ucsc.edu", FALSE);
-//    hPrintf("<h1>Login Information for %s:</h1>\n",m->email);
-//    hPrintf("<table>\n");
-//    hPrintf("<tr><td align=right>name:</td><td>%s</td><tr>\n",m->userName);
-//    hPrintf("<tr><td align=right>activated:</td><td>%s</td><tr>\n",m->activated);
-//    hPrintf("</table>\n");
-//    hPrintf("<br>\n");
-//    hPrintf("Return to <a href=\"hgSession\">Session</A>.<br>\n");
-//    hPrintf("Return to <a href=\"hgLogin\">signup</A>.<br>\n");
-//
-//    hPrintf("Go to <a href=\"/\">UCSC Genome Browser</A>.<br>\n");
     }
 else
     {
-    hPrintf("<h1>Invalid User/Password</h1>\n",m->email);
+    hPrintf("<h1>Invalid User/Password</h1>\n");
     hPrintf("Return to <a href=\"hgLogin\">signup</A>.<br>\n");
     }
 
@@ -661,50 +639,84 @@ gbMembersFree(&m);
 
 
 
-void  displayLoginSuccess()
+
+void  displayLoginSuccess(char *userName, int userID)
 /* display login success msg, and set cookie */
 {
 hPrintf(
 "<h2>UCSC Genome Browser</h2>"
 "<p align=\"left\">"
 "</p>"
-"<span style='color:red;'>%s</span>"
+"<span style='color:red;'></span>"
 "\n"
-//"<script type=\"text/javascript\">\n"
-//"function setCookie(c_name,value,exdays) "
-//"{"
-//"var exdate=new Date();"
-//"exdate.setDate(exdate.getDate() + exdays);"
-//"var c_value=escape(value) + \" 30 Dec 2015 12:00:00 GMT\";"
-//"document.cookie=c_name + \"=\" + c_value;"
-//"} <\/script> \n");
-//hPrintf("setCookie(\"hgLogin_User\",\"chinhl\", 180);");
 );
-//hPrintf("document.cookie = \"hgLogin_User=chinhli\";");
-//hPrintf("<body onload=\"setCookie()\"> </body>");
-
 hPrintf(
 "<script language=\"JavaScript\">"
-" document.write(\"Hello World!\");"
-"<\/script><script language=\"JavaScript\">"
+" document.write(\"Login successful, setting cookies now...\");"
+" document.write(\" in Call userID is %d\n\");"
+"</script>\n"
+
+"<script language=\"JavaScript\">"
+"document.cookie =  \"hgLogin_UserName=%s; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\"; "
 "\n"
-"document.write(\"Hello, Cookie Monster!\");"
-"document.cookie =  \"hgLogin_UserName=hgLogin001; domain=cse.ucsc.edu; expires=Mon, 30 Apr 2012 20:47:11 UTC; path=/\"; "
-"\n"
-"document.cookie =  \"hgLogin_UserID=3043; domain=cse.ucsc.edu; expires=Mon, 30 Apr 2012 20:47:11 UTC; path=/\";"
+"document.cookie =  \"hgLogin_UserID=%d; domain=ucsc.edu; expires=Thu, 31 Dec 2099, 20:47:11 UTC; path=/\";"
 " </script>"
-"\n"
-);
+"\n",
+userID, userName,userID);
 hPrintf(
-"<script type=\"text/javascript\">\n"
+"<script  language=\"JavaScript\">\n"
 "<!-- "
 "\n"
+/* delay for 5 seconds then go back to page X */
+/* TODO: afterDelayBackTo("http....") */
+"window.setTimeout(afterDelay, 5000);\n"
+"function afterDelay() {\n"
 "window.location =\"http://hgwdev-chinhli.cse.ucsc.edu/cgi-bin/hgSession?hgS_doMainPage=1\";"
+"\n}"
 "\n"
 "//-->"
 "\n"
 "</script>"
 );
+}
+
+
+void  displayLogoutSuccess()
+/* display logout success msg, and reset cookie */
+{
+hPrintf(
+"<h2>UCSC Genome Browser Sign Out</h2>"
+"<p align=\"left\">"
+"</p>"
+"<span style='color:red;'></span>"
+"\n"
+);
+hPrintf(
+"<script language=\"JavaScript\">"
+"document.cookie =  \"hgLogin_UserName=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\"; "
+"\n"
+"document.cookie =  \"hgLogin_UserID=; domain=ucsc.edu; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/\";"
+"</script>\n"
+);
+/* return to session */
+/*******************************/
+hPrintf(
+"<script  language=\"JavaScript\">\n"
+"<!-- "
+"\n"
+/* delay for 5 seconds then go back to page X */
+/* TODO: afterDelayBackTo("http....") */
+"window.setTimeout(afterDelay, 5000);\n"
+"function afterDelay() {\n" 
+"window.location =\"http://hgwdev-chinhli.cse.ucsc.edu/cgi-bin/hgSession?hgS_doMainPage=1\";"
+"\n}"
+"\n"
+"//-->"
+"\n"
+"</script>"
+);
+/****************************/
+
 }
 
 
@@ -765,7 +777,7 @@ if (checkPwd(password,m->password))
     }
 else
     {
-    hPrintf("<h1>Invalid User/Password</h1>\n",m->userName);
+    hPrintf("<h1>Invalid User/Password</h1>\n");
     hPrintf("Return to <a href=\"hgLogin\">signup</A>.<br>\n");
     }
 /**************************************************/
@@ -864,6 +876,8 @@ else if (cartVarExists(cart, "hgLogin.do.displayLoginPage"))
     displayLoginPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayLogin"))
     displayLogin(conn);
+else if (cartVarExists(cart, "hgLogin.do.displayLogout"))
+    displayLogoutSuccess();
 else if (cartVarExists(cart, "hgLogin.do.signup"))
     signup(conn);
 else

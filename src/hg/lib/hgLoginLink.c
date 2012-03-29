@@ -94,7 +94,9 @@ if (! hgLoginLinkEnabled())
     errAbort("hgLoginLinkUserLogoutUrl called when hgLogin is not enable (specified "
 	     "in hg.conf).");
 safef(buf, sizeof(buf),
-      "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
+   /*   "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
+ *   */
+      "http://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
       hgLoginLinkHost(), retEnc);
 freez(&retEnc);
 return(cloneString(buf));
