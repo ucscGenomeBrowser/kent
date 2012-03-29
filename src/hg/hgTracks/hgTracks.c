@@ -5497,8 +5497,7 @@ if(!trackImgOnly)
     printf("<H1>PDF Output</H1>\n");
     printf("PDF images can be printed with Acrobat Reader "
            "and edited by many drawing programs such as Adobe "
-           "Illustrator or Inkscape.<BR> To save a file to disk, right-click "
-           "on one of the following links and select \"Save As...\".");
+           "Illustrator or Inkscape.<BR>");
     }
 doTrackForm(psTn.forCgi, &ideoPsTn);
 
