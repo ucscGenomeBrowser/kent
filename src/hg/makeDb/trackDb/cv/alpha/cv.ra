@@ -8938,6 +8938,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
 validation Human_-_HDAC2_(SC-6296)(Immunoprecipitation-Western_blot,MassSpec):human_HDAC2_SC-6296_validation_Myers.pdf
 label  HDAC2 (sc-6296)
 
+term Hdac6_(A301-341A)
+tag HDAC6A301341A
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target Hdac6
+targetDescription Histone deacetylase 6 (HDAC6) is a class II histone deacetylase that catalyzes the deacetylation of lysine residues on the N-terminus of core histones. HDAC6 has also been identified as a cytoplasmic deacetylase that acts on tubulin and HSP90 to influence cell motility. Recently HDAC6 has been found to be involved in the stress response as a component of cytoplasmic stress granules. PROVISIONAL
+vendorName Bethyl
+vendorId A301-341A
+orderUrl http://www.bethyl.com/product/A301-341A/HDAC6_Antibody
+lab Bernstein
+lots A301-341A-1
+targetId GeneCard:HDAC6
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC6
+validation Human_-_Hdac6_(A301-341A)(Western_blot,ChIP-String):human_Hdac6_A301-341A_validation_Bernstein.pdf
+label HDAC6 (A301-341A)
+
 term HEY1
 tag HEY1
 type Antibody
