@@ -15,8 +15,7 @@ include wgEncodeBroadChipSeq.ra beta,public
 include wgEncodeBroadHmm.ra
 
 # Caltech RNA-seq (wrangler: braney)
-include wgEncodeCaltechRnaSeq.ra beta,public
-include wgEncodeCaltechRnaSeq.patch.ra alpha
+include wgEncodeCaltechRnaSeq.ra
 
 
 # CSHL short rna-seq (wrangler: braney)
@@ -33,8 +32,7 @@ include wgEncodeChromatinMap.new.ra alpha
 include wgEncodeChromatinMap.ra beta,public
 
 # GIS RNA-seq (wrangler: braney)
-include wgEncodeGisRnaSeq.ra beta,public
-include wgEncodeGisRnaSeq.patch.ra alpha
+include wgEncodeGisRnaSeq.ra
 
 # GIS DNA Pet (wrangler: braney)
 include wgEncodeGisDnaPet.ra
@@ -50,8 +48,7 @@ include wgEncodeHudsonalphaRnaSeq.ra
 include wgEncodeHudsonalphaCnv.ra
 
 # HudsonAlpha Methyl-seq (wrangler: braney)
-include wgEncodeHudsonalphaMethylSeq.ra beta,public
-include wgEncodeHudsonalphaMethylSeq.patch.ra alpha
+include wgEncodeHudsonalphaMethylSeq.ra
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
 #include wgEncodeHudsonalphaChipSeq.ra beta,public
@@ -1727,8 +1724,7 @@ searchPriority 2.5
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 # HudsonAlpha Methyl27 (wrangler: braney)
-include wgEncodeHudsonalphaMethyl27.ra beta,public
-include wgEncodeHudsonalphaMethyl27.patch.ra alpha
+include wgEncodeHudsonalphaMethyl27.ra
 
 # UMass Weng Lab TFBS Validation (wrangler: kate)
 
