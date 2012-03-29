@@ -58,10 +58,13 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	dipOrd1 proCap1 ochPri2 myoLuc1 myoLuc2 \
 	micMur1 \
 	dasNov1 dasNov2 \
+	triMan1 \
 	loxAfr1 loxAfr2 loxAfr3 \
 	echTel1 \
 	monDom1 monDom4 monDom5 \
+	chrPic1 \
 	anoCar1 anoCar2 \
+	melUnd1 \
 	galGal2 galGal3 galGal4 \
 	melGal1 \
 	taeGut1 \
