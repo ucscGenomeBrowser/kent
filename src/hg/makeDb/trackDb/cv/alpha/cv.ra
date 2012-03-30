@@ -11853,6 +11853,11 @@ tag PROTEINRNAEXTRACTS
 type rnaExtract
 description RNA associated with RNA binding proteins
 
+term riboZeroGold
+tag RIBOZEROG
+type rnaExtract
+description Ribo-Zero&trade; Gold Kits, removes both cytoplasmic (nuclear-encoded) rRNA and mitochondrial rRNA from 1 to 5 &micro;g of human, mouse, or rat total RNA PROVISIONAL
+
 ### promoters
 
 term SV40
