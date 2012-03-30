@@ -597,7 +597,7 @@ sub validateBed {
             unless ($fields[6] =~ m/$floatRegEx/) {
                 push @localerrors, "$prefix field 7 ($fields[6]) in $type must be a float.\n";
             }
-            unless ($fields[7] =~ m/$floatRegEx/) {
+            unless ($fields[7] =~ m/$floatRegEx/ or $fields[7] =~ m/\.$/) {
                 push @localerrors, "$prefix field 8 ($fields[7]) in $type must be a float.\n";
             }
             unless ($fields[8] =~ m/^\d+$/) {
@@ -854,7 +854,11 @@ sub validateFastQ
     my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq \"$file\""]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateFastQ : " . $safe->stderr() . "\n";
+
         # don't show end-user pipe error(s)
+        return("failed validateFastQ for '$file'");
+    }
+
     return ();
 }
 
