@@ -18876,35 +18876,30 @@ subId 4529
 view TssGencV7
 
 metaObject wgEncodeRikenCageNhekNucleusPapTssHmm
-objType table
-bioRep 028N
+objType file
+bioRep 027N
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-30
-dateUnrestricted 2012-12-30
+dateSubmitted 2011-11-04
+dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001154
 dccRep 1
-donorId 4F1155J
 expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
-labExpId CTig10011
-labProtocolId 028N+cage
+labExpId K09
+labProtocolId 027N+cage
 labVersion IDR
 localization nucleus
 md5sum 61b623a918f76f2b37d4c2dd36528213
 objStatus replaced - this version has scores that exceed chromosome lengths
 origAssembly hg19
 project wgEncode
-readType 1x36
 rnaExtract longPolyA
-seqPlatform Illumina_GA2x
-sex F
-subId 6726
-tableName wgEncodeRikenCageNhekNucleusPapTssHmm
+subId 5078
 view TssHmm
 
 metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV2
@@ -18953,6 +18948,32 @@ rnaExtract longPolyA
 subId 5611
 submittedDataVersion V3 - Repacing . with -1 for missing data
 tableName wgEncodeRikenCageNhekNucleusPapTssHmmV3
+view TssHmm
+
+metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV4
+objType table
+bioRep 028N
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-30
+dateUnrestricted 2012-12-30
+donorId 4F1155J
+fileName wgEncodeRikenCageNhekNucleusPapTssHmmV4.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId CTig10011
+labProtocolId 028N+cage
+localization nucleus
+project wgEncode
+readType 1x36
+rnaExtract longPolyA
+seqPlatform Illumina_GA2x
+sex F
+subId 6726
+submittedDataVersion V4 - replaces old version 3 that had broken values
+tableName wgEncodeRikenCageNhekNucleusPapTssHmmV4
 view TssHmm
 
 metaObject wgEncodeRikenCageNhemfm2CellPapAlnRep1
@@ -20796,4 +20817,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -1897983929
+# MAGIC: 2008792687
