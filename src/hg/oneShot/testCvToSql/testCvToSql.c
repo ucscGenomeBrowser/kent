@@ -3,7 +3,10 @@
 /* Currently this is implemented in three main steps:
  *    1) Read in cv.ra into a list of stanzaTypes.
  *    2) Rearrange stanzaTypes a bit to reduce redundancy and standardize names. 
- *    3) Output in a variety of formats.  In some formats will stream through cv.ra again. */
+ *    3) Output in a variety of formats.  In some formats will stream through cv.ra again. 
+ * In other implementation notes, this module is deliberately casual about memory
+ * handling.  It assumes nothing will be freed, a valid strategy since cv.ra
+ * is quite small, only about 1/2 meg even after 4 years of use. */
 
 #include "common.h"
 #include "linefile.h"
@@ -29,77 +32,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct fieldLabel
-/* Information on labels that describe a field. Just used to make a big static table */
-    {
-    char *typePattern;   /* Types this applies to.  Put more specific types first. */
-    char *fieldName;     /* Name of field */
-    char *description;       /* The actual comment. */
-    };
-
-struct fieldLabel fieldDescriptions[] = {
-/* Descriptions of fields, with types being from most to least specific. */
-   {"cellLine", "lineage", "High level developmental lineage of cell."},
-   {"cellLine", "tier", "ENCODE cell line tier. 1-3 with 1 being most commonly used, 3 least."},
-   {"cellLine", "protocol", "Scientific protocol used for growing cells"},
-   {"cellLine", "category", "Category of cell source - Tissue, primaryCells, etc."},
-   {"cellLine", "childOf", "Name of cell line or tissue this cell is descended from."},
-   {"cellLine", "derivedFrom", "Tissue or other souce of original cells."},
-   {"antibody", "target", "Molecular target of antibody."},
-   {"antibody", "targetDescription", "Sentence or so description of antibody target."},
-   {"antibody", "targetUrl", "Web page associated with antibody target."},
-   {"antibody", "validation", "How antibody was validated to be specific for target."},
-   {"antibody", "displayName", "Descriptive short but not necessarily unique name for antibody."},
-   {"antibody", "targetId", "Identifier for target, either a Gencode gene id (TRUE Wranglers) or prefixed with source of ID"},
-   {"dataType", "dataGroup", "High level grouping of experimental data."},
-   {"age", "stage", "High level place within life cycle of organism."},
-   {"lab", "labInst", "The institution where the lab is located."},
-   {"lab", "labPi", "Last name or other short identifier for lab's primary investigator"},
-   {"lab", "labPiFull", "Full name of lab's primary investigator."},
-   {"lab", "grantPi", "Last name of primary investigator on grant paying for data."},
-   {"encodeGrant", "grantInst", "Name of instution awarded grant paying for data."},
-   {"encodeGrant", "projectName", "Short name describing grant."},
-   {"typeOfTerm", "searchable", "Describes how to search for term. 'No' for unsearchable."},
-   {"typeOfTerm", "cvDefined", "Is there a controlled vocabulary for this term. Is 'yes' or 'no.'"},
-   {"typeOfTerm", "validate", "Describes how to validate field. Use 'none' for no validation."},
-   {"typeOfTerm", "hidden", "Hide field in user interface? Can be 'yes' or 'no' or a release list"},
-   {"typeOfTerm", "priority", "Order to display or search terms, lower is earlier."},
-   {"*", "symbol", "A short human and machine readable symbol with just alphanumeric characters."},
-   {"*", "deprecated", "If non-empty, the reason why this entry is obsolete."},
-   {"*", "shortLabel", "A one or two word (less than 18 character) label."},
-   {"*", "longLabel", "A sentence or two label."},
-   {"*", "organism", "Common name of organism."},
-   {"*", "tissue", "Tissue source of sample."},
-   {"*", "vendorName", "Name of vendor selling reagent."},
-   {"*", "vendorId", "Catalog number of other way of identifying reagent."},
-   {"*", "orderUrl", "Web page to order regent."},
-   {"*", "karyotype", "Status of chromosomes in cell - usually either normal or cancer."},
-   {"*", "termId", "ID of term in external controlled vocabulary. See also termUrl."},
-   {"*", "termUrl", "URL describing controlled vocabulary."},
-   {"*", "color", "Red,green,blue components of color to visualize, each 0-255."},
-   {"*", "sex", "M for male, F for female, B for both, U for unknown."},
-   {"*", "lab", "Scientific lab producing data."},
-   {"*", "lots", "The specific lots of reagent used."},
-   {"*", "age", "Age of organism cells come from."},
-   {"*", "strain", "Strain of organism."},
-   {"*", "geoPlatformName", "Short description of sequencing platform, used by GEO."},
-};
-
-char *searchFieldDescription(char *type, char *field)
-/* Search field description table for match to field. */
-{
-int i;
-for (i=0; i<ArraySize(fieldDescriptions); ++i)
-    {
-    struct fieldLabel *d = &fieldDescriptions[i];
-    if (wildMatch(d->typePattern, type) && sameString(d->fieldName, field))
-        return d->description;
-    }
-errAbort("Can't find description for %s.%s.  Please add to fieldDescriptions in source code.", 
-         type, field);
-return NULL;
-}
-
 typedef char *(*StringMerger)(char *a, char *b);
 /* Given two strings, produce a third. */
 
@@ -122,6 +54,89 @@ struct stanzaField
     StringMerger mergeChildren; /* Function to merge two children if any */
     struct stanzaField *children;  /* Allows fields to be in a tree. */
     };
+
+struct stanzaType
+/* A particular type of stanza, as defined by the type field within the stanza */
+    {
+    struct stanzaType *next;
+    char *name;         /* Name of type - something like Cell Line. */
+    char *symbol;       /* Similar to name, but no white space and always camelCased. */
+    int count;          /* Number of times stanza type observed. */
+    struct stanzaField *fieldList;      /* Fields, in order of observance. */
+    FILE *f;            /* File to output data in if any */
+    };
+
+struct fieldLabel
+/* Information on labels that describe a field. Just used to make a big static table */
+    {
+    char *typePattern;   /* Types this applies to.  Put more specific types first. */
+    char *fieldName;     /* Name of field */
+    char *description;       /* The actual comment. */
+    };
+
+struct fieldLabel fieldDescriptions[] = {
+/* Descriptions of fields, with types being from most to least specific. */
+   {"cellLine", "lineage", "High level developmental lineage of cell."},
+   {"cellLine", "tier", "ENCODE cell line tier. 1-3 with 1 being most commonly used, 3 least."},
+   {"cellLine", "protocol", "Scientific protocol used for growing cells"},
+   {"cellLine", "category", "Category of cell source - Tissue, primaryCells, etc."},
+   {"cellLine", "childOf", "Name of cell line or tissue this cell is descended from."},
+   {"cellLine", "derivedFrom", "Tissue or other souce of original cells. Depreciated?"},
+   {"antibody", "validation", "How antibody was validated to be specific for target."},
+   {"antibody", "displayName", "Descriptive short but not necessarily unique name for antibody."},
+   {"antibody", "target", "Molecular target of antibody."},
+   {"antibodyTarget", "target", "Molecular target of antibody."},
+   {"antibodyTarget", "targetDescription", "Short description of antibody target."},
+   {"antibodyTarget", "externalUrl", "Web page associated with antibody target."},
+   {"antibodyTarget", "externalId", "Identifier for target, prefixed with source of ID, usually GeneCards"},
+   {"dataType", "dataGroup", "High level grouping of experimental assay type."},
+   {"age", "stage", "High level place within life cycle of donor organism."},
+   {"lab", "labInst", "The institution where the lab is located."},
+   {"lab", "labPi", "Last name or other short identifier for lab's primary investigator"},
+   {"lab", "labPiFull", "Full name of lab's primary investigator."},
+   {"lab", "grantPi", "Last name of primary investigator on grant paying for data."},
+   {"encodeGrant", "grantInst", "Name of instution awarded grant paying for data."},
+   {"encodeGrant", "projectName", "Short name describing grant."},
+   {"typeOfTerm", "searchable", "Describes how to search for term in Genome Browser. 'No' for unsearchable."},
+   {"typeOfTerm", "cvDefined", "Is there a controlled vocabulary for this term. Is 'yes' or 'no.'"},
+   {"typeOfTerm", "validate", "Describes how to validate field typeOfTerm refers to. Use 'none' for no validation."},
+   {"typeOfTerm", "hidden", "Hide field in user interface? Can be 'yes' or 'no' or a release list"},
+   {"typeOfTerm", "priority", "Order to display or search terms, lower is earlier."},
+   {"*", "symbol", "A short human and machine readable symbol with just alphanumeric characters."},
+   {"*", "deprecated", "If non-empty, the reason why this entry is obsolete."},
+   {"*", "shortLabel", "A one or two word (less than 18 character) label."},
+   {"*", "longLabel", "A sentence or two label."},
+   {"*", "organism", "Common name of donor organism."},
+   {"*", "tissue", "Tissue source of sample."},
+   {"*", "vendorName", "Name of vendor selling reagent."},
+   {"*", "vendorId", "Catalog number of other way of identifying reagent."},
+   {"*", "orderUrl", "Web page to order regent."},
+   {"*", "karyotype", "Status of chromosomes in cell - usually either normal or cancer."},
+   {"*", "termId", "ID of term in external controlled vocabulary. See also termUrl."},
+   {"*", "termUrl", "External URL describing controlled vocabulary."},
+   {"*", "color", "Red,green,blue components of color to visualize, each 0-255."},
+   {"*", "sex", "M for male, F for female, B for both, U for unknown."},
+   {"*", "lab", "Scientific lab producing data."},
+   {"*", "lots", "The specific lots of reagent used."},
+   {"*", "age", "Age of donor organism."},
+   {"*", "strain", "Strain of organism."},
+   {"*", "geoPlatformName", "Short description of sequencing platform. Matches term used by GEO."},
+};
+
+char *searchFieldDescription(char *type, char *field)
+/* Search field description table for match to field. */
+{
+int i;
+for (i=0; i<ArraySize(fieldDescriptions); ++i)
+    {
+    struct fieldLabel *d = &fieldDescriptions[i];
+    if (wildMatch(d->typePattern, type) && sameString(d->fieldName, field))
+        return d->description;
+    }
+errAbort("Can't find description for %s.%s.  Please add to fieldDescriptions in source code.", 
+         type, field);
+return NULL;
+}
 
 void setValType(struct stanzaField *field)
 /* Set valType field based on count, countFloat, countUnsigned, countInt */
@@ -204,17 +219,32 @@ for (el = list; el != NULL; el = el->next)
 return el;
 }
 
-struct stanzaType
-/* A particular type of stanza, as defined by the type field within the stanza */
+char *typeLabelToSymbol(char *label)
+/* Convert a label that may have spaces or bad casing to something else. Rather than being
+ * generic this just handles the two known special cases, and does some sanity checks. */
+{
+if (sameString(label, "Cell Line"))
     {
-    struct stanzaType *next;
-    char *name;         /* Name of type - something like Cell Line. */
-    char *symbol;       /* Similar to name, but no white space and always camelCased. */
-    int count;          /* Number of times stanza type observed. */
-    struct stanzaField *fieldList;      /* Fields, in order of observance. */
-    FILE *f;            /* File to output data in if any */
-    };
+    return "cellLine";
+    }
+else if (sameString(label, "Antibody"))
+    return "antibody";
+else
+    {
+    enforceCamelCase(label);
+    return label;
+    }
+}
 
+struct stanzaType *stanzaTypeNew(char *name, struct hash *typeHash)
+/* Allocate new stanzaType and save it in hash. */
+{
+struct stanzaType *type;
+AllocVar(type);
+hashAddSaveName(typeHash, name, type, &type->name);
+type->symbol = typeLabelToSymbol(name);
+return type;
+}
 
 struct slPair *requiredTag(struct lineFile *lf, struct slPair *stanza, char *tag)
 /* Make sure there is a line that begins with tag in the stanza, and return it. */
@@ -252,23 +282,6 @@ char *end;
 strtod(s, &end);
 int size = end-s;
 return size == strlen(s);
-}
-
-char *typeLabelToSymbol(char *label)
-/* Convert a label that may have spaces or bad casing to something else. Rather than being
- * generic this just handles the two known special cases, and does some sanity checks. */
-{
-if (sameString(label, "Cell Line"))
-    {
-    return "cellLine";
-    }
-else if (sameString(label, "Antibody"))
-    return "antibody";
-else
-    {
-    enforceCamelCase(label);
-    return label;
-    }
 }
 
 struct slPair *nextStanza(struct lineFile *lf)
@@ -326,9 +339,7 @@ while ((stanza = nextStanza(lf)) != NULL)
     struct stanzaType *type = hashFindVal(typeHash, typeName);
     if (type == NULL)
         {
-        AllocVar(type);
-        hashAddSaveName(typeHash, typeName, type, &type->name);
-        type->symbol = typeLabelToSymbol(typeName);
+        type = stanzaTypeNew(typeName, typeHash);
         slAddTail(&typeList, type);
         }
     type->count += 1;
@@ -755,6 +766,108 @@ if (label != NULL && shortLabel != NULL)
     }
 }
 
+struct stanzaField *copyTypesInHash(char *whichFields[], struct hash *fieldHash)
+/* Create copies of fields specified in NULL terminated array whichFields,
+ * and return a list of them.  */
+{
+struct stanzaField *list = NULL;
+char *fieldName, **fieldNames = whichFields;
+while ((fieldName = *fieldNames++) != NULL)
+    {
+    struct stanzaField *oldField = hashFindVal(fieldHash, fieldName);
+    if (oldField == NULL)
+        errAbort("Couldn't find field %s to in table being split", fieldName);
+    struct stanzaField *field = CloneVar(oldField);
+    slAddHead(&list, field);
+    }
+slReverse(&list);
+return list;
+}
+
+struct stanzaType *splitIntoRelatedTables(
+        struct stanzaType *type, struct hash *typeHash, struct hash *typeOfTermHash,
+        char *aFields[], char *bFields[], char *bName, char *bLabel)
+/* Split type into two separate types.  Assumes type is part of a list, and
+ * will replace existing type on list with the two new types. The first of the
+ * two new types will have the same name and the same spot on the list as the
+ * unsplit type, but only the fields listed in the NULL terminated array aFields.
+ * The second of the new types will have the fields listed in bFields, the name
+ * given in bName, and will be inserted into the list after the input type.
+ * The second type will also be intered into typeHash, and a new typeOfTerm
+ * made for that attaches bLabel to it. 
+ *     Returns new table with bType. */
+{
+struct stanzaType *bType = stanzaTypeNew(bName, typeHash);
+
+/* Move fields to a new variable, and also index in a hash. */
+struct stanzaField *fieldList = type->fieldList;       
+type->fieldList = NULL;
+struct hash *fieldHash = hashNew(8);
+struct stanzaField *field;
+for (field = fieldList; field != NULL; field = field->next)
+    hashAdd(fieldHash, field->name, field);
+
+/* Make new field lists for types. */
+type->fieldList = copyTypesInHash(aFields, fieldHash);
+bType->fieldList = copyTypesInHash(bFields, fieldHash);
+
+/* Insert bType in list. */
+bType->next = type->next;
+type->next = bType;
+
+/* Make new typeOfTerm for it. Not sure all these fields are necessary here. 
+ * For the most part following what is defined for Antibody. */
+struct slPair *fakeRa = NULL;
+slPairAdd(&fakeRa, "term", bName);
+slPairAdd(&fakeRa, "tag", strUpper(cloneString(bName)));
+slPairAdd(&fakeRa, "type", "typeOfTerm");
+slPairAdd(&fakeRa, "label", bLabel);
+slPairAdd(&fakeRa, "description", bLabel);
+slPairAdd(&fakeRa, "searchable", "multiSelect");
+slPairAdd(&fakeRa, "cvDefined", "yes");
+slPairAdd(&fakeRa, "validate", "cv");
+slPairAdd(&fakeRa, "priority", "190");
+slReverse(&fakeRa);
+hashAdd(typeOfTermHash, bName, fakeRa);
+
+return bType;
+}
+
+void changeFieldSymbol(struct stanzaType *type, char *name, char *newSymbol)
+/* Find field of given name, and change it's output symbol */
+{
+struct stanzaField *field = stanzaFieldFind(type->fieldList, name);
+if (field == NULL)
+    errAbort("Couldn't change symbol of %s.%s to %s because %s not found.",
+        type->name, name, newSymbol, name);
+field->symbol = newSymbol;
+}
+
+void splitAntibodyTable(struct stanzaType *type, 
+        struct hash *typeHash, struct hash *typeOfTermHash)
+/* Split the antibody table into antibody and target. */
+{
+static char *antibodyKeepFields[] = {
+    "term", "tag", 
+    "antibodyDescription", "deprecated", "lab", "label", "lots",
+    "orderUrl", "tag", "target", "term", "type", "validation",
+    "vendorId", "vendorName", NULL,
+};
+static char *antibodyTargetFields[] = {
+    "target", "targetDescription", "targetId", "targetUrl", NULL,
+};
+
+struct stanzaType *targetType = splitIntoRelatedTables(type, typeHash, typeOfTermHash,
+        antibodyKeepFields, antibodyTargetFields, "antibodyTarget",
+        "Theoretical target of an antibody. May be a protein, modified protein, "
+        "part of a protein, or some other molecule.");
+/* Change label of fields in .as file. */
+changeFieldSymbol(targetType, "target", "symbol");
+changeFieldSymbol(targetType, "targetDescription", "longLabel");
+changeFieldSymbol(targetType, "targetId", "externalId");
+changeFieldSymbol(targetType, "targetUrl", "externalUrl");
+}
+
 void testCvToSql(char *inCvRa, char *outStats, char *outTree, char *outAs, char *outDir)
 /* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
 {
@@ -774,6 +887,8 @@ for (type = typeList; type != NULL; type = type->next)
     {
     if (sameString(type->name, "grant"))
         type->symbol = "encodeGrant";
+    else if (sameString(type->name, "Antibody"))
+        splitAntibodyTable(type, typeHash, typeOfTermHash);
     addDeprecatedField(type);
     mergeLabelAndShortLabel(type);
     removeField(type, "type");
