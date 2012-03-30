@@ -8,7 +8,7 @@ subGroup2 cellType Cell_Line aGM12878=GM12878&nbsp;(Tier_1) aH1hESC=H1hESC&nbsp;
 subGroup3 localization Localization cell=Whole_Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract pAM=PolyA- pAP=PolyA+ total=Total_RNA
 subGroup5 rep Rep rep1=1 rep2=2 rep3=3 rep4=4 Pooled=Pooled
-dimensions dimensionX=cellType dimensionC=rnaExtract dimensionY=localization dimensionB=rep
+dimensions dimensionY=cellType dimensionC=rnaExtract dimensionX=localization dimensionB=rep
 dimensionCchecked pAP,pAM
 dimensionBchecked rep1,Pooled
 filterComposite dimC=multi dimB=multi
