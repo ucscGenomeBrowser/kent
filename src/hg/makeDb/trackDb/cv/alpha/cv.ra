@@ -13596,8 +13596,9 @@ label CD-1
 
 term DBA/2
 tag DBA2
-type strain Inbred strain used for Coat Color Experiments. Was DBA/212 but reclassified as DBA/2 PROVISIONAL
-description 
+type strain 
+description Inbred strain used for Coat Color Experiments. Was DBA/212 but reclassified as DBA/2 PROVISIONAL
+label DBA/2
 
 term NIH/Swiss
 tag NIHS
