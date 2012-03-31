@@ -64,6 +64,7 @@ struct stanzaType
     int count;          /* Number of times stanza type observed. */
     struct stanzaField *fieldList;      /* Fields, in order of observance. */
     FILE *f;            /* File to output data in if any */
+    struct stanzaType *splitSuccessor;  /* If split, the next table in the split. */
     };
 
 struct fieldLabel
@@ -186,7 +187,6 @@ else
     return label;
     }
 }
-
 
 struct stanzaField *stanzaFieldNew(char *name)
 /* Construct a new field tag around given name. */
@@ -554,6 +554,11 @@ while ((ra = raNextStanza(lf)) != NULL)
     char *typeName = hashMustFindVal(ra, "type");
     struct stanzaType *type = hashMustFindVal(typeHash, typeName);
     outputAccordingToType(ra, type, type->f);
+    struct stanzaType *split;
+    for (split = type->splitSuccessor; split != NULL; split = split->splitSuccessor)
+         {
+         outputAccordingToType(ra, split, split->f);
+         }
     hashFree(&ra);
     }
 
@@ -814,6 +819,7 @@ bType->fieldList = copyTypesInHash(bFields, fieldHash);
 /* Insert bType in list. */
 bType->next = type->next;
 type->next = bType;
+type->splitSuccessor = bType;
 
 /* Make new typeOfTerm for it. Not sure all these fields are necessary here. 
  * For the most part following what is defined for Antibody. */
