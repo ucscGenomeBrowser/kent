@@ -13734,7 +13734,7 @@ description Adult 5 weeks
 label Adult 5 weeks
 
 term adult-8wks
-tag ADULT8WKS
+tag ADLT8W
 type age
 stage Adult
 description Adult 8 weeks
@@ -14020,6 +14020,13 @@ tag GPL14965
 geoPlatformName NimbleGen Human 3x720k Whole Genome CGH [100718_HG18_WG_CGH_v3.1_HX3]
 type platform
 description Human 3x720k Whole Genome CGH
+
+term GPL10989
+tag GPL10989
+gepPlatformName NimbleGen Mouse CGH 3x720K Whole-Genome Tiling 
+type platform
+description NimbleGen Mouse CGH 3x720K Whole-Genome Tiling (FSU)
+#PROVISIONAL
 
 term GPL9156
 tag GPL9156
