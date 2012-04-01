@@ -354,3 +354,98 @@ taxId   127582
 #    ln -s `pwd`/triMan1.2bit /gbdb/triMan1/triMan1.2bit
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2012-03-31 - Hiram)
+    # Use -repMatch=650, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 2769099677 / 2897316137 \) \* 1024
+    #	( 2769099677 / 2897316137 ) * 1024 = 978.684388
+    # round up to 1000
+
+    cd /hive/data/genomes/triMan1
+    blat triMan1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/triMan1.11.ooc -repMatch=1000
+    #	Wrote 35505 overused 11-mers to jkStuff/triMan1.11.ooc
+
+    #	copy all of this stuff to the klusters:
+    # there are no non-bridged gaps
+    hgsql -N -e "select bridge from gap;" triMan1 | sort | uniq -c
+    #	160167 yes
+    #	cd /hive/data/genomes/triMan1/jkStuff
+    #	gapToLift triMan1 nonBridged.lift -bedFile=nonBridged.bed
+    cd /hive/data/genomes/triMan1
+    mkdir /hive/data/staging/data/triMan1
+    cp -p jkStuff/triMan1.11.ooc chrom.sizes \
+	triMan1.2bit /hive/data/staging/data/triMan1
+    # request rsync copy from cluster admin
+
+########################################################################
+# GENBANK AUTO UPDATE (WORKING - 2012-03-31 - Hiram)
+    ssh hgwdev
+    screen -S triMan1Genbank	#	use a screen to manage this job
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+
+    #	add the following two lines to src/lib/gbGenome.c
+# static char *triManNames[] = {"Trichechus manatus",
+#                               "Trichechus manatus latirostris", NULL};
+    #	and later:
+#	{"triMan", triManNames},
+
+    git commit \
+	-m "adding Trichechus manatus latirostris (Florida manatee) triMan1" \
+	src/lib/gbGenome.c
+    git push
+    make install-server
+
+    # edit etc/genbank.conf to add latMan1 just before dasNov1
+
+# triMan1  (manatee)
+triMan1.serverGenome = /hive/data/genomes/triMan1/triMan1.2bit
+triMan1.clusterGenome = /hive/data/genomes/triMan1/triMan1.2bit
+triMan1.ooc = /hive/data/genomes/triMan1/jkStuff/triMan1.11.ooc
+triMan1.lift = no
+triMan1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+triMan1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+triMan1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+triMan1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+triMan1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+triMan1.refseq.mrna.native.load = no
+triMan1.refseq.mrna.xeno.load = yes
+triMan1.genbank.mrna.xeno.load = yes
+triMan1.genbank.est.native.load = no
+triMan1.downloadDir = triMan1
+triMan1.perChromTables = no
+
+
+    git commit \
+	-m "adding Trichechus manatus latirostris (Florida manatee) triMan1" \
+	etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -keep -initial triMan1 &
+XXX - running Sat Mar 31 18:44:28 PDT 2012
+    #	 logFile: var/build/logs/2012.03.31-18:39:58.triMan1.initalign.log
+
+    #	real    182m41.068s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad triMan1
+    #	logFile: var/dbload/hgwdev/logs/2010.01.15-15:54:26.dbload.log
+    #	real    31m29.282s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add triMan1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added triMan1 - Manatee" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+########################################################################
