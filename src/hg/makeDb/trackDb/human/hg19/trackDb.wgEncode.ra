@@ -86,7 +86,8 @@ include wgEncodeUwDnase.release4.ra beta,public
 include wgEncodeUwDnase.release5.ra alpha
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.release3.ra
+include wgEncodeUwDgf.release3.ra beta,public
+include wgEncodeUwDgf.release4.ra alpha
 
 ###End Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 

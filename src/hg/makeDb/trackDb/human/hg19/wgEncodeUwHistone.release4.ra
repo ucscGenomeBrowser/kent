@@ -59,12 +59,12 @@ subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tie
 subGroup3 treatment Treatment aNone=None DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_5d DIFFA9D=diffProtA_9d DIFFA14D=diffProtA_14d OHTAM=OH-tam_20nM ZNF2C10C5=ZNF&#95;knockout&#95;2C10&#95;C5 ZNF4C50C4=ZNF&#95;knockout&#95;4C50&#95;C4 ZNFA41C6=ZNF&#95;knockout&#95;A4.1-C6 ZNFF41B2=ZNF&#95;knockout&#95;F4.1-B2 ZNFP5=ZNF&#95;knockout&#95;P5
 subGroup4 factor Factor H3K04ME3=H3K4me3 H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 zInput=Input
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3
-dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
+dimensions dimensionX=treatment dimensionY=cellType dimensionZ=rep dimA=factor
 #dimensionZchecked rep1,rep2
-sortOrder cellType=+ factor=+ rep=+ view=+
-filterComposite dimZ=multi
+sortOrder cellType=+ factor=+ treatment=+ rep=+ view=+
+filterComposite dimZ=multi dimA=multi
 fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View controlId=Control_ID origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-controlledVocabulary encode/cv.ra cellType=cell factor=antibody
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatment
 dragAndDrop subTracks
 priority 0
 type bed 3

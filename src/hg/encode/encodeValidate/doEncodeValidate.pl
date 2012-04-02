@@ -597,7 +597,7 @@ sub validateBed {
             unless ($fields[6] =~ m/$floatRegEx/) {
                 push @localerrors, "$prefix field 7 ($fields[6]) in $type must be a float.\n";
             }
-            unless ($fields[7] =~ m/$floatRegEx/) {
+            unless ($fields[7] =~ m/$floatRegEx/ or $fields[7] =~ m/\.$/) {
                 push @localerrors, "$prefix field 8 ($fields[7]) in $type must be a float.\n";
             }
             unless ($fields[8] =~ m/^\d+$/) {
@@ -772,6 +772,10 @@ sub getInfoFiles
     if (defined $category && $category eq "Tissue" && defined $sex) {
         $cellLineSex=$sex;
     }
+    if (defined $sex) {
+        $cellLineSex = $sex;
+    }
+
 
     my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
     my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
@@ -854,7 +858,11 @@ sub validateFastQ
     my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq \"$file\""]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateFastQ : " . $safe->stderr() . "\n";
+
         # don't show end-user pipe error(s)
+        return("failed validateFastQ for '$file'");
+    }
+
     return ();
 }
 
@@ -896,6 +904,7 @@ sub validateBam
     doTime("beginning validateBam") if $opt_timing;
     HgAutomate::verbose(2, "validateBam($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","bam");
+    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
 
     # index the BAM file
     my $safe = SafePipe->new(CMDS => ["samtools index $file"]);
@@ -905,7 +914,7 @@ sub validateBam
         return("failed validateBam for '$file'");
     }
 
-    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
+    
     $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM -chromInfo=$infoFile -genome=$twoBitFile $file"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateBam : " . $safe->stderr() . "\n";
