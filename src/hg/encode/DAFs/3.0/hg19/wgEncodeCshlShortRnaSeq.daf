@@ -1,4 +1,4 @@
-# Data Agreement File  $Revision: 1.10$
+# Data Agreement File  $Revision: 2.0$
 
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -44,7 +44,7 @@ sql		 bedRnaElements
 hasReplicates    no
 required         no
 
-view             ExonsGencV7
+view             ExonsGencV10
 type             gtf
 hasReplicates    no
 required         no

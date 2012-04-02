@@ -18541,6 +18541,414 @@ subId 1562
 treatment None
 view Alignments
 
+metaObject wgEncodeUwDnaseMcf7Est100nm1hAlnRep1
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Est100nm1hAlnRep1.bam,wgEncodeUwDnaseMcf7Est100nm1hAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS18271
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 6531
+treatment Estradiol_100nM_1hr
+view Alignments
+
+metaObject wgEncodeUwDnaseMcf7Est100nm1hAlnRep2
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Est100nm1hAlnRep2.bam,wgEncodeUwDnaseMcf7Est100nm1hAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS18025
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 6530
+treatment Estradiol_100nM_1hr
+view Alignments
+
+metaObject wgEncodeUwDnaseMcf7Est100nm1hHotspotsRep1
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Est100nm1hHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18271
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 6531
+tableName wgEncodeUwDnaseMcf7Est100nm1hHotspotsRep1
+treatment Estradiol_100nM_1hr
+view Hotspots
+
+metaObject wgEncodeUwDnaseMcf7Est100nm1hHotspotsRep2
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Est100nm1hHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18025
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 6530
+tableName wgEncodeUwDnaseMcf7Est100nm1hHotspotsRep2
+treatment Estradiol_100nM_1hr
+view Hotspots
+
+metaObject wgEncodeUwDnaseMcf7Est100nm1hPkRep1
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Est100nm1hPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18271
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 6531
+tableName wgEncodeUwDnaseMcf7Est100nm1hPkRep1
+treatment Estradiol_100nM_1hr
+view Peaks
+
+metaObject wgEncodeUwDnaseMcf7Est100nm1hPkRep2
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Est100nm1hPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18025
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 6530
+tableName wgEncodeUwDnaseMcf7Est100nm1hPkRep2
+treatment Estradiol_100nM_1hr
+view Peaks
+
+metaObject wgEncodeUwDnaseMcf7Est100nm1hRawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Est100nm1hRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS18271
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 6531
+treatment Estradiol_100nM_1hr
+view RawData
+
+metaObject wgEncodeUwDnaseMcf7Est100nm1hRawDataRep2
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Est100nm1hRawDataRep2.fastq.tgz
+grant Stam
+lab UW
+labExpId DS18025
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 6530
+treatment Estradiol_100nM_1hr
+view RawData
+
+metaObject wgEncodeUwDnaseMcf7Est100nm1hRawRep1
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Est100nm1hRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18271
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 6531
+tableName wgEncodeUwDnaseMcf7Est100nm1hRawRep1
+treatment Estradiol_100nM_1hr
+view RawSignal
+
+metaObject wgEncodeUwDnaseMcf7Est100nm1hRawRep2
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Est100nm1hRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS18025
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 6530
+tableName wgEncodeUwDnaseMcf7Est100nm1hRawRep2
+treatment Estradiol_100nM_1hr
+view RawSignal
+
+metaObject wgEncodeUwDnaseMcf7Estctrl0hAlnRep1
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Estctrl0hAlnRep1.bam,wgEncodeUwDnaseMcf7Estctrl0hAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS18267
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 6529
+treatment Estradiol_ctrl_0hr
+view Alignments
+
+metaObject wgEncodeUwDnaseMcf7Estctrl0hAlnRep2
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Estctrl0hAlnRep2.bam,wgEncodeUwDnaseMcf7Estctrl0hAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS18021
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 6528
+treatment Estradiol_ctrl_0hr
+view Alignments
+
+metaObject wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep1
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18267
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 6529
+tableName wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep1
+treatment Estradiol_ctrl_0hr
+view Hotspots
+
+metaObject wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep2
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18021
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 6528
+tableName wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep2
+treatment Estradiol_ctrl_0hr
+view Hotspots
+
+metaObject wgEncodeUwDnaseMcf7Estctrl0hPkRep1
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Estctrl0hPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18267
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 6529
+tableName wgEncodeUwDnaseMcf7Estctrl0hPkRep1
+treatment Estradiol_ctrl_0hr
+view Peaks
+
+metaObject wgEncodeUwDnaseMcf7Estctrl0hPkRep2
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Estctrl0hPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18021
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 6528
+tableName wgEncodeUwDnaseMcf7Estctrl0hPkRep2
+treatment Estradiol_ctrl_0hr
+view Peaks
+
+metaObject wgEncodeUwDnaseMcf7Estctrl0hRawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Estctrl0hRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS18267
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 6529
+treatment Estradiol_ctrl_0hr
+view RawData
+
+metaObject wgEncodeUwDnaseMcf7Estctrl0hRawDataRep2
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Estctrl0hRawDataRep2.fastq.tgz
+grant Stam
+lab UW
+labExpId DS18021
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 6528
+treatment Estradiol_ctrl_0hr
+view RawData
+
+metaObject wgEncodeUwDnaseMcf7Estctrl0hRawRep1
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Estctrl0hRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18267
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 6529
+tableName wgEncodeUwDnaseMcf7Estctrl0hRawRep1
+treatment Estradiol_ctrl_0hr
+view RawSignal
+
+metaObject wgEncodeUwDnaseMcf7Estctrl0hRawRep2
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUwDnaseMcf7Estctrl0hRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS18021
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 6528
+tableName wgEncodeUwDnaseMcf7Estctrl0hRawRep2
+treatment Estradiol_ctrl_0hr
+view RawSignal
+
 metaObject wgEncodeUwDnaseMcf7HotspotsRep1
 objType table
 cell MCF-7
@@ -24149,4 +24557,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 45086189
+# MAGIC: 1241857996
