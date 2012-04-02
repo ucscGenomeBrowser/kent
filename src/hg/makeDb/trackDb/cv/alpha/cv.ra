@@ -11600,12 +11600,12 @@ description Single 36 nt reads
 term 1x41
 tag R1X41
 type readType
-description Single 41 nt reads PROVISIONAL
+description Single 41 nt reads 
 
 term 1x45
 tag R1X45
 type readType
-description Single 45 nt reads PROVISIONAL
+description Single 45 nt reads 
 
 term 1x50
 tag R1X50
@@ -11615,7 +11615,7 @@ description Single 50 nt reads
 term 1x55
 tag R1X55
 type readType
-description Single 55 nt reads PROVISIONAL
+description Single 55 nt reads 
 
 term 1x75
 tag R1X75
@@ -11650,7 +11650,7 @@ description Paired 76 nt directed reads
 term 2x99D
 tag R2X99D
 type readType
-description Paired 99 nt directed reads PROVISIONAL
+description Paired 99 nt directed reads 
 
 term 2x100
 tag R2X100
@@ -12264,27 +12264,27 @@ label 120 hour diff protocol C
 
 term diffProtD_3hr
 tag DIFFD3h
-description 3 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL 
+description 3 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) 
 type treatment
 
 term diffProtD_7hr
 tag DIFFD7H
-description 7 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
+description 7 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) 
 type treatment
 
 term diffProtD_14hr
 tag DIFFD14H
-description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
+description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) 
 type treatment
 
 term diffProtD_24hr
-tag DIFFD24H
-description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
+tag DIFF24H
+description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) 
 type treatment
 
 term diffProtD_30hr
-tag DIFFD30H
-description 30 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) PROVISIONAL
+tag DIFF30H
+description 30 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) 
 type treatment
 
 term diffProtE_3d
@@ -12394,7 +12394,7 @@ type treatment
 
 term Estradiol_ctrl_0hr
 tag ESTCTRL0H
-description No hormone control, zero timepoint, used to distinguish untreated sample in series (Stam) PROVISIONAL
+description No hormone control, zero timepoint, used to distinguish untreated sample in series (Stam) 
 type treatment
 
 term estrogen
@@ -12492,7 +12492,7 @@ label Micrococcal nuclease
 
 term DIFF_4d
 tag DIFF4D
-description Myocytes differentiated from myoblasts for 4 days. See specific cell protocol for treatment details. (Stam) PROVISIONAL
+description Myocytes differentiated from myoblasts for 4 days. See specific cell protocol for treatment details. (Stam) 
 type treatment
 
 term DIFF_7d
@@ -12577,57 +12577,57 @@ type treatment
 
 term ZNF_knockout_2C10_C5
 tag ZNF2C10C5
-description beta-globin LCR deletion (18Kb), homozygous (Stam) PROVISIONAL
+description beta-globin LCR deletion (18Kb), homozygous (Stam) 
 type treatment
 
 term ZNF_knockout_4C50_C4
 tag ZNF4C50C4
-description beta-globin LCR deletion (18Kb), homozygous (Stam) PROVISIONAL
+description beta-globin LCR deletion (18Kb), homozygous (Stam) 
 type treatment
 
 term ZNF_knockout_4G7_D3
 tag ZNF4G7D3
-description beta-globin LCR deletion (18Kb), homozygous (Stam) PROVISIONAL
+description beta-globin LCR deletion (18Kb), homozygous (Stam) 
 type treatment
 
 term ZNF_knockout_A4.1-C6
 tag ZNFA41C6
-description off-target control (Stam) PROVISIONAL
+description off-target control (Stam) 
 type treatment
 
 term ZNF_knockout_A4.1-E2
 tag ZNFA41E2
-description off-target control (Stam) PROVISIONAL
+description off-target control (Stam) 
 type treatment
 
 term ZNF_knockout_B3.4-A8
 tag ZNFB34A8
-description beta-globin LCR inversion, heterozygous (Stam) PROVISIONAL
+description beta-globin LCR inversion, heterozygous (Stam) 
 type treatment
 
 term ZNF_knockout_E10.3-C6
 tag ZNFE103C6
-description beta-globin LCR inversion, heterozygous (Stam) PROVISIONAL
+description beta-globin LCR inversion, heterozygous (Stam) 
 type treatment
 
 term ZNF_knockout_E6.1-A1
 tag ZNFE61A1
-description beta-globin LCR deletion (18Kb), heterozygous (Stam) PROVISIONAL
+description beta-globin LCR deletion (18Kb), heterozygous (Stam) 
 type treatment
 
 term ZNF_knockout_F4.1-B2
 tag ZNFF41B2
-description beta-globin LCR deletion (18Kb), heterozygous (Stam) PROVISIONAL
+description beta-globin LCR deletion (18Kb), heterozygous (Stam) 
 type treatment
 
 term ZNF_knockout_G5.4-A11
 tag ZNFG54A11
-description beta-globin LCR deletion (18Kb), heterozygous (Stam) PROVISIONAL
+description beta-globin LCR deletion (18Kb), heterozygous (Stam) 
 type treatment
 
 term ZNF_knockout_P5
 tag ZNFP5
-description Parental K562 clone (Stam) PROVISIONAL
+description Parental K562 clone (Stam) 
 type treatment
 
 
@@ -12870,7 +12870,7 @@ description Expression level estimates for GENCODE V10 exons in gtf format deriv
 term ExonsEnsV65IAcuff
 tag EXONENSV65
 type view
-description Expression level estimates for ENSEMBL V65 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon PROVISIONAL
+description Expression level estimates for ENSEMBL V65 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon 
 
 term Fasta3p
 tag FASTA3P
@@ -12948,7 +12948,7 @@ description Expression level estimates at the gene level for the GENCODE CRCh37.
 term GeneEnsV65IAcuff
 tag GENENSV65
 type view
-description Expression level estimates at the gene level for the ENSEMBL V65 annotation in gtf format PROVISIONAL
+description Expression level estimates at the gene level for the ENSEMBL V65 annotation in gtf format 
 
 term HMM
 tag HMM
@@ -13219,7 +13219,7 @@ description Expression level estimates at the transcript level for the GENCODE C
 term TranscriptEnsV65IAcuff
 tag TRANSENSV65
 type view
-description Expression level estimates at the transcript level for the ENSEMBL V65 annotation in gtf format PROVISIONAL
+description Expression level estimates at the transcript level for the ENSEMBL V65 annotation in gtf format 
 
 term Transfrags
 tag TRANSFRAGS
