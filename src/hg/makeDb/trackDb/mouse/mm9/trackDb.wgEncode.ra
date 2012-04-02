@@ -52,3 +52,6 @@ include wgEncodeCshlLongRnaSeq.ra
 
 # Caltech RNA-Seq (wrangler: Venkat)
 include wgEncodeCaltechRnaSeq.ra alpha
+
+# FSU Repli-Seq (wrangler: Venkat)
+include wgEncodeFsuRepliSeq.ra
