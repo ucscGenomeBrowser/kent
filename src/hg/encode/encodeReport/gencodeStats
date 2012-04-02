@@ -40,15 +40,13 @@ for transcriptClass in $(hgsql -Ne "select distinct(transcriptClass) from wgEnco
 done
 cnt=$(hgsql -Ne "select count(distinct attrs.transcriptId) from wgEncodeGencodeAttrs${ver} attrs" ${db})
 par=$(hgsql -Ne "select count(distinct transcriptId) from wgEncodeGencodeTag${ver} where tag = \"PAR\"" ${db})
-echo "Par genes is $par"
-echo "cnt is $cnt"
 cnt=$(( $cnt+$par ))
 echo "All	All	$cnt"
 
 # generate gene stats
 reportGeneCounts() {
     local baseSel="select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencodeGeneSource${ver} src where src.geneId = attrs.geneId"
-    local baseSelPar="select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencode${type}${ver} genes, wgEncodeGencodeGeneSource${ver} src where genes.name = attrs.transcriptId and src.geneId = attrs.geneId and genes.chrom = \"chrX\" and genes.name in (select name from wgEncodeGencode${type}${ver} where chrom = \"chrY\")"
+    local baseSelPar="select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencodeTag${ver} tag, wgEncodeGencodeGeneSource${ver} src where tag.transcriptId = attrs.transcriptId and src.geneId = attrs.geneId and tag.tag = \"PAR\""
     local cnt
     local par
     cnt=$(hgsql -Ne "${baseSel} and src.source like \"ensembl_havana%\"" ${db})
@@ -83,8 +81,6 @@ echo "source	count"
 reportGeneCounts
 cnt=$(hgsql -Ne "select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs" ${db})
 par=$(hgsql -Ne "select count(distinct attrs.geneId) from wgEncodeGencodeAttrs${ver} attrs, wgEncodeGencodeTag${ver} tag where attrs.transcriptId = tag.transcriptId and tag.tag = \"PAR\"" ${db})
-echo "parGenes is $par"
-echo "cnt is $cnt"
 cnt=$(( $cnt+$par ))
 echo "All	$cnt"
 cnt=$(hgsql -Ne "select count(distinct name) from wgEncodeGencode2wayConsPseudo${ver};" ${db})
