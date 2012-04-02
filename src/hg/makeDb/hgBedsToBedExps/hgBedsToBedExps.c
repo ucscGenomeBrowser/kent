@@ -207,7 +207,8 @@ for (ref = list; ref != NULL; ref = ref->next)
 	    level = 1000;
 	if (level > maxLevel)
 	    maxLevel = level;
-	levels[site->source->sourceIx] = level;
+        double prevLevel = levels[site->source->sourceIx];
+	levels[site->source->sourceIx] = max(level, prevLevel);
 	}
 
     /* Output. */

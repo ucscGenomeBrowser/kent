@@ -73,6 +73,7 @@ var encodeProject = (function () {
         },
 
         // Utility
+        // Candidates for generic lib
 
         cmpNoCase: function (a, b) {
             // Case-insensitive sort.  
@@ -87,6 +88,11 @@ var encodeProject = (function () {
                 a.label.toLowerCase().localeCompare(b.label.toLowerCase()) : 
                 a.term.toLowerCase().localeCompare(b.term.toLowerCase()));
         },
+
+        isIE8: function() {
+            // Detect IE version 8
+            return ($.browser.msie  && parseInt($.browser.version, 10) === 8);
+        }, 
 
         getSearchType: function () {
             return $('input:radio[name=searchType]:checked').val();

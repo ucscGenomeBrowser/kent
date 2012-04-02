@@ -938,7 +938,7 @@ tg->longLabel = "Your Sequence from Blat Search";
 tg->shortLabel = "Blat Sequence";
 tg->loadItems = loadUserPsl;
 tg->mapItemName = lfMapNameFromExtra;
-tg->priority = 100;
+tg->priority = 101;
 tg->defaultPriority = tg->priority;
 tg->groupName = "map";
 tg->defaultGroupName = cloneString(tg->groupName);
@@ -3613,7 +3613,7 @@ if (!psOutput)
 if (!psOutput)
     {
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
-        cartSessionId(cart), "PDF/PS");
+        cartSessionId(cart), "PS/PDF");
     }
 
 if (!psOutput)
@@ -4180,8 +4180,8 @@ registerTrackHandlers();
 loadFromTrackDb(&trackList);
 if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
     slSafeAddHead(&trackList, pcrResultTg());
-if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
-slSafeAddHead(&trackList, oligoMatchTg());
+if (userSeqString != NULL) 
+    slSafeAddHead(&trackList, userPslTg());
 if (restrictionEnzymesOk())
     {
     slSafeAddHead(&trackList, cuttersTg());
@@ -5494,37 +5494,34 @@ trashDirFile(&psTn, "hgt", "hgt", ".eps");
 if(!trackImgOnly)
     {
     hotLinks();
-    printf("<H1>PostScript/PDF Output</H1>\n");
-    printf("PostScript images can be printed at high resolution "
+    printf("<H1>PDF Output</H1>\n");
+    printf("PDF images can be printed with Acrobat Reader "
            "and edited by many drawing programs such as Adobe "
-           "Illustrator.");
+           "Illustrator or Inkscape.<BR>");
     }
 doTrackForm(psTn.forCgi, &ideoPsTn);
-
-// postscript
-printf("<UL>\n");
-printf("<LI><A HREF=\"%s\">Click here</A> "
-       "to download the current browser graphic in PostScript.\n", psTn.forCgi);
-if (strlen(ideoPsTn.forCgi))
-    printf("<LI><A HREF=\"%s\">Click here</A> "
-           "to download the current chromosome ideogram in PostScript.\n", ideoPsTn.forCgi);
-printf("</UL>\n");
 
 pdfFile = convertEpsToPdf(psTn.forCgi);
 if (strlen(ideoPsTn.forCgi))
     ideoPdfFile = convertEpsToPdf(ideoPsTn.forCgi);
 if(pdfFile != NULL)
     {
-    printf("<BR>PDF can be viewed with Adobe Acrobat Reader.\n");
     printf("<UL>\n");
-    printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
-       "to download the current browser graphic in PDF.\n", pdfFile);
+    printf("<LI><A TARGET=_blank HREF=\"%s\">"
+       "Download the current browser graphic</A> in PDF.\n", pdfFile);
     if (ideoPdfFile != NULL)
-        printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
-               "to download the current chromosome ideogram in PDF.\n", ideoPdfFile);
+        printf("<LI><A TARGET=_blank HREF=\"%s\">"
+               "Download the current chromosome ideogram</A> in PDF.\n", ideoPdfFile);
     printf("</UL>\n");
     freez(&pdfFile);
     freez(&ideoPdfFile);
+    // postscript
+    printf("<P><SMALL>\n");
+    printf("We still provide postscript files: <A HREF=\"%s\">browser graphic</A> ", psTn.forCgi);
+    if (strlen(ideoPsTn.forCgi))
+        printf("and <A HREF=\"%s\">ideogram</A>", ideoPsTn.forCgi);
+    printf("</SMALL></P>\n");
+
     }
 else
     printf("<BR><BR>PDF format not available");
