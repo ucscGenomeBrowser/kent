@@ -514,7 +514,7 @@ void jsonHashAddString(struct jsonHashElement *h, char *name, char *val)
 // existing values are replaced.
 val = javaScriptLiteralEncode(val);
 char *str = needMem(strlen(val) + 3);
-sprintf(str, "'%s'", val);
+sprintf(str, "\"%s\"", val);
 freez(&val);
 jsonHashAdd(h, name, (struct jsonElement *) newJsonString(str));
 }

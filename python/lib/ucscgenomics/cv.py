@@ -2,6 +2,18 @@ import re
 import os
 from ucscgenomics import ra
 
+def extractValue(val, prefix='', removeComments=1):
+    val2 = val.replace(prefix, '')
+    if removeComments and '#' in val2:
+        val2 = val2.split('#', 1)[0]
+    return val2.strip()
+
+def extractList(val, prefix='', removeComments=1):
+    val2 = val.replace(prefix, '')
+    if removeComments and '#' in val2:
+        val2 = val2.split('#', 1)[0]
+    return map(str.strip, val2.split(','))
+
 class CvFile(ra.RaFile):
     '''
     cv.ra representation. Mainly adds CV-specific validation to the RaFile
@@ -37,6 +49,8 @@ class CvFile(ra.RaFile):
         if protocolPath == None:
             self.protocolPath == os.path.expanduser('~/htdocsExtras/ENCODE/')
         
+        self.missingTypes = set()
+        
         self.read(filePath)
 
     def raiseException(self, exception):
@@ -45,38 +59,38 @@ class CvFile(ra.RaFile):
 
     def readStanza(self, stanza, key=None):
         '''overriden method from RaFile which makes specialized stanzas based on type'''
-        e = ra.RaStanza()
-        ek, ev = e.readStanza(stanza)
-        type = e['type']
+        # e = ra.RaStanza()
+        # ek, ev = e.readStanza(stanza)
+        # type = e['type']
 
-        if type == 'Antibody':
-            entry = AntibodyStanza()
-        elif type == 'Cell Line':
-            if e['organism'] == 'human':
-                entry = CellLineStanza()
-            elif e['organism'] == 'mouse':
-                entry = MouseStanza()
-            else:
-                self.handler(NonmatchKeyError(e.name, e['organism'], 'organism'))
-                return ek, ev, None
-        elif type == 'age':
-            entry = AgeStanza()
-        elif type == 'dataType':
-            entry = DataTypeStanza()
-        elif type == 'lab':
-            entry = LabStanza()
-        elif type == 'seqPlatform':
-            entry = SeqPlatformStanza()
-        elif type == 'typeOfTerm':
-            entry = TypeOfTermStanza()
-        elif type == 'view':
-            entry = ViewStanza()
-        elif type == 'localization':
-            entry = LocalizationStanza()
-        elif type == 'grant':
-            entry = GrantStanza()
-        else:
-            entry = CvStanza()
+        # if type == 'Antibody':
+            # entry = AntibodyStanza()
+        # elif type == 'Cell Line':
+            # if e['organism'] == 'human':
+                # entry = CellLineStanza()
+            # elif e['organism'] == 'mouse':
+                # entry = MouseStanza()
+            # else:
+                # self.handler(NonmatchKeyError(e.name, e['organism'], 'organism'))
+                # return ek, ev, None
+        # elif type == 'age':
+            # entry = AgeStanza()
+        # elif type == 'dataType':
+            # entry = DataTypeStanza()
+        # elif type == 'lab':
+            # entry = LabStanza()
+        # elif type == 'seqPlatform':
+            # entry = SeqPlatformStanza()
+        # elif type == 'typeOfTerm':
+            # entry = TypeOfTermStanza()
+        # elif type == 'view':
+            # entry = ViewStanza()
+        # elif type == 'localization':
+            # entry = LocalizationStanza()
+        # elif type == 'grant':
+            # entry = GrantStanza()
+        # else:
+        entry = CvStanza()
 
         key, val = entry.readStanza(stanza)
         return key, val, entry
@@ -85,8 +99,14 @@ class CvFile(ra.RaFile):
     def validate(self):
         '''base validation method which calls all stanzas' validate'''
         for stanza in self.itervalues():
-                stanza.validate(self)
+            stanza.validate(self)
+        print self.missingTypes
 
+    def getTypeOfTermStanza(self, type):
+        types = self.filter(lambda s: s['term'] == type and s['type'] == 'typeOfTerm', lambda s: s)
+        if len(types) != 1:
+            return None
+        return types[0]
                 
 class CvStanza(ra.RaStanza):
     '''base class for a single stanza in the cv, which adds validation'''
@@ -140,7 +160,93 @@ class CvStanza(ra.RaStanza):
             else:
                 self[raKey] = raVal
         
-    def validate(self, ra, necessary=None, optional=None):
+    def validate(self, cvfile):
+        type = self['type']
+        if self['type'] == 'Cell Line': # :(
+            if 'organism' in self and self['organism'] == 'human':
+                type = 'cellType'
+            elif 'organism' in self and self['organism'] == 'mouse':
+                type = 'mouseCellType'
+            else:
+                cvfile.handler(OrganismError(self))
+        
+        typeStanza = cvfile.getTypeOfTermStanza(type)
+        if typeStanza == None:
+            cvfile.handler(InvalidTypeError(self, self['type']))
+            return
+        required = list()
+        if 'requiredVars' in typeStanza:
+            required = extractList(typeStanza['requiredVars'])
+        optional = list()
+        if 'optionalVars' in typeStanza:
+            optional = extractList(typeStanza['optionalVars'])
+        
+        self.checkMandatory(cvfile, required)
+        required.extend(optional)
+        self.checkExtraneous(cvfile, required)
+        self.checkDuplicates(cvfile)
+        
+        for key in self.iterkeys():
+            
+            itemType = cvfile.getTypeOfTermStanza(key)
+            if itemType == None:
+                cvfile.missingTypes.add(key)
+                #cvfile.handler(InvalidTypeError(self, key)) #RELEASE THE FLOODGATES
+                continue
+            validation = itemType['validate']
+            val = self[key]
+            
+            if validation.startswith('cv'):
+                if validation == 'cv or None' and val == 'None':
+                    pass
+                else:
+                    self.checkRelational(cvfile, val, key)
+            elif validation == 'date':
+                try:
+                    d = datetime.datetime.strptime(val, '%Y-%m-%d')
+                except:
+                    cvfile.handler(InvalidDateError(self, val))
+            elif validation == 'exists':
+                if not os.path.exists(val):
+                    cvfile.handler(MissingFileError(self, val))
+            elif validation == 'float':
+                try:
+                    f = float(val)
+                except:
+                    cvfile.handler(InvalidFloatError(self, val))
+            elif validation == 'integer':
+                try:
+                    i = int(val)
+                except:
+                    cvfile.handler(InvalidIntError(self, val))
+            elif validation.startswith('list:'):
+                validVals = extractList(validation, 'list:')
+                if val not in validVals:
+                    cvfile.handler(InvalidListError(self, val, validVals))
+            elif validation == 'none':
+                pass
+            elif validation.startswith('regex:'):
+                regex = extractValue(validation, 'regex:')
+                if not re.match(val, regex):
+                    cvfile.handler(UnmatchedRegexError(self, val, regex))
+            # else:
+                # cvfile.handler(TypeValidationError(itemType))
+        
+        #     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
+#           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.
+#               "cv or control" indicates that cv-defined terms of type "control" are also acceptable.
+#         date: must be date in YYYY-MM-DD format
+#       exists: not enforced.  (e.g. fileName could be validated to exist in download directory)
+#        float: must be floating point number
+#      integer: must be integer
+#      "list:": must be one of several terms in comma delimeited list (e.g. "list: yes,no,maybe" )  # ("list:" includes colon)
+#         none: not validated in any way
+#     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
+#    # NOTE: that validate rules may end comment delimited by a '#'
+
+        
+        
+    def validate2(self, cvfile, necessary=None, optional=None):
         '''default validation for a generic cv stanza. Should be called with all arguments if overidden'''
         
         if necessary == None:
@@ -155,46 +261,46 @@ class CvStanza(ra.RaStanza):
             baseNecessary.add('description')
         
         baseOptional = {'deprecated', 'label'}
-        self.checkMandatory(ra, necessary | baseNecessary)
-        self.checkExtraneous(ra, necessary | baseNecessary | optional | baseOptional)
+        self.checkMandatory(cvfile, necessary | baseNecessary)
+        self.checkExtraneous(cvfile, necessary | baseNecessary | optional | baseOptional)
         
         temptype = self['type']
-        if self['type'] == 'Cell Line': # cv, you disgust me with your inconsistencies
+        if self['type'] == 'Cell Line': # :(
             temptype = 'cellType'
-        if len(ra.filter(lambda s: s['term'] == temptype and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
-            ra.handler(InvalidTypeError(self, self['type']))
+        if len(cvfile.filter(lambda s: s['term'] == temptype and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
+            cvfile.handler(InvalidTypeError(self, self['type']))
 
-        self.checkDuplicates(ra)
+        self.checkDuplicates(cvfile)
         
         
-    def checkDuplicates(self, ra):
+    def checkDuplicates(self, cvfile):
         '''ensure that all keys are present and not blank in the stanza'''
         for key in self.iterkeys():
             if '__$$' in key:
                 newkey = key.split('__$$', 1)[0]
-                ra.handler(DuplicateKeyError(self, newkey))
+                cvfile.handler(DuplicateKeyError(self, newkey))
         
-    def checkMandatory(self, ra, keys):
+    def checkMandatory(self, cvfile, keys):
         '''ensure that all keys are present and not blank in the stanza'''
         for key in keys:
             if not key in self.keys():
-                ra.handler(MissingKeyError(self, key))
+                cvfile.handler(MissingKeyError(self, key))
             elif self[key] == '':
-                ra.handler(BlankKeyError(self, key))
+                cvfile.handler(BlankKeyError(self, key))
                 
-    # def checkOptional(self, ra, keys):
+    # def checkOptional(self, cvfile, keys):
         # '''ensure that all keys are present and not blank in the stanza'''
         # for key in keys:
             # if key in self and self[key] == '':
-                # ra.handler(BlankKeyError(self, key))
+                # cvfile.handler(BlankKeyError(self, key))
         
-    def checkExtraneous(self, ra, keys):
+    def checkExtraneous(self, cvfile, keys):
         '''check for keys that are not in the list of keys'''
         for key in self.iterkeys():
             if key not in keys and '__$$' not in key:
-                ra.handler(ExtraKeyError(self, key))
+                cvfile.handler(ExtraKeyError(self, key))
     
-    def checkFullRelational(self, ra, key, other, type):
+    def checkFullRelational(self, cvfile, key, other, type):
         '''check that the value at key matches the value of another
         stanza's value at other, where the stanza type is specified by type'''
         
@@ -202,30 +308,33 @@ class CvStanza(ra.RaStanza):
         if key not in self:
             return
         
-        for entry in ra.itervalues():
+        for entry in cvfile.itervalues():
             if 'type' in entry and other in entry:
                 if entry['type'] == type and self[key] == entry[other]:
                     p = 1
                     break
         if p == 0:
-            ra.handler(NonmatchKeyError(self, key, other))
+            cvfile.handler(NonmatchKeyError(self, key, other))
     
-    def checkRelational(self, ra, key, other):
+    def checkRelational(self, cvfile, key, other):
         '''check that the value at key matches the value at other'''
+        
+        
+        
         p = 0
         
         if key not in self:
             return
         
-        for entry in ra.itervalues():
+        for entry in cvfile.itervalues():
             if 'type' in entry and other in entry:
                 if entry['type'] == key and self[key] == entry[other]:
                     p = 1
                     break
         if p == 0:
-            ra.handler(NonmatchKeyError(self, key, other))
+            cvfile.handler(NonmatchKeyError(self, key, other))
             
-    def checkListRelational(self, ra, key, other):
+    def checkListRelational(self, cvfile, key, other):
         '''check that the value at key matches the value at other'''
         
         if key not in self:
@@ -235,25 +344,25 @@ class CvStanza(ra.RaStanza):
             val = val.strip()
             p = 0
         
-            for entry in ra.itervalues():
+            for entry in cvfile.itervalues():
                 if 'type' in entry and other in entry:
 
                     if entry['type'] == key and val == entry[other]:
                         p = 1
                         break
             if p == 0:
-                ra.handler(NonmatchKeyError(self, key, other))
+                cvfile.handler(NonmatchKeyError(self, key, other))
 
-    def checkProtocols(self, ra, path):
+    def checkProtocols(self, cvfile, path):
         if 'protocol' in self:
             protocols = self['protocol'].split()
             for protocol in protocols:
                 if ':' not in protocol:
-                    ra.handler(InvalidProtocolError(self, protocol))
+                    cvfile.handler(InvalidProtocolError(self, protocol))
                 else:
                     p = protocol.split(':', 1)[1]
-                    if ra.protocolPath != None and not os.path.isfile(ra.protocolPath + path + p):
-                        ra.handler(InvalidProtocolError(self, protocol))
+                    if cvfile.protocolPath != None and not os.path.isfile(cvfile.protocolPath + path + p):
+                        cvfile.handler(InvalidProtocolError(self, protocol))
                 
 class CvError(Exception):
     '''base error class for the cv.'''
@@ -361,150 +470,69 @@ class InvalidTypeError(CvError):
     # def __str__(self):
         # return str(self.stanza + ': ' + self.key + ' does not match any types')
         
-
-class LabStanza(CvStanza):
+class TypeValidationError(CvError):
+    '''raised if the terms type of term has an invalid validation value'''
     
-    def __init__(self):
-        CvStanza.__init__(self)
-
-    def validate(self, ra):
-        necessary = {'organism', 'labPi'}
-        optional = {'labInst', 'labPiFull', 'grantPi'}
-        CvStanza.validate(self, ra, necessary, optional)
-
-        self.checkRelational(ra, 'organism', 'term')
-        
-
-class AgeStanza(CvStanza):
+    def __init__(self, stanza):
+        CvError.__init__(self, stanza)
+        self.msg = 'validation ' + stanza['validation']
+        self.strict = 1
+       
+class InvalidDateError(CvError):
+    '''raised if the value is an invalid date'''
     
-    def __init__(self):
-        CvStanza.__init__(self)
+    def __init__(self, stanza, val):
+        CvError.__init__(self, stanza)
+        self.msg = val + ' does not match a YYYY-MM-DD date'
+        self.strict = 1      
 
-    def validate(self, ra):
-        necessary = {'stage'}
-        CvStanza.validate(self, ra, necessary)
-
-
-class DataTypeStanza(CvStanza):
+class MissingFileError(CvError):
+    '''raised if the value is a filename that does not exist'''
     
-    def __init__(self):
-        CvStanza.__init__(self)
+    def __init__(self, stanza, val):
+        CvError.__init__(self, stanza)
+        self.msg = val + ' does not exist'
+        self.strict = 1        
 
-    def validate(self, ra):
-        necessary = {'label', 'dataGroup'}
-        CvStanza.validate(self, ra, necessary)
-
-
-class CellLineStanza(CvStanza):
-
-    def __init__(self):
-        CvStanza.__init__(self)
-
-    def validate(self, ra):
-        necessary = {'organism', 'vendorName', 'orderUrl', 'sex', 'tier'}
-        optional = {'tissue', 'vendorId', 'karyotype', 'lineage', 'termId', 'termUrl', 'color', 'protocol', 'category', 'lots', 'derivedFrom', 'lab'}
-        CvStanza.validate(self, ra, necessary, optional)
-
-        self.checkRelational(ra, 'organism', 'term')
-        self.checkRelational(ra, 'sex', 'term')
-        self.checkRelational(ra, 'category', 'term')
-        self.checkRelational(ra, 'tier', 'term')
-        self.checkListRelational(ra, 'lab', 'labPi')
-        
-        # ensure the derivedFrom matches a valid cell line
-        if 'derivedFrom' in self and len(ra.filter(lambda s: s['term'] == self['derivedFrom'] and s['type'] == 'Cell Line', lambda s: s)) == 0:
-            ra.handler(NonmatchKeyError(self, self['derivedFrom'], 'Cell Line'))
-            
-        # ensure that there are no other non-related stanzas that have the same vendorId
-        if 'derivedFrom' not in self or ra[self['derivedFrom']]['vendorId'] != self['vendorId']:
-            otherstanzas = ra.filter(lambda s: s['type'] == 'Cell Line' and s != self and s['vendorId'] == self['vendorId'] and ('derivedFrom' not in s or ra[s['derivedFrom']]['vendorId'] != s['vendorId']), lambda s: s)
-            if len(otherstanzas) > 0:
-                ra.handler(DuplicateVendorIdError(self))
-            
-        self.checkProtocols(ra, 'protocols/cell/human/')
-        
-
-class SeqPlatformStanza(CvStanza):
+class InvalidFloatError(CvError):
+    '''raised if the value not a float'''
     
-    def __init__(self):
-        CvStanza.__init__(self)
-
-    def validate(self, ra):
-        optional = {'geo'}
-        CvStanza.validate(self, ra, None, optional)
-
-
-class AntibodyStanza(CvStanza):
-
-    def __init__(self):
-        CvStanza.__init__(self)
-
-    def validate(self, ra):
-        necessary = {'target', 'antibodyDescription', 'targetDescription', 'vendorName', 'vendorId', 'orderUrl', 'targetId', 'lab'}
-        optional = {'validation', 'targetUrl', 'lots', 'displayName'}
-        CvStanza.validate(self, ra, necessary, optional)
-        self.checkListRelational(ra, 'lab', 'labPi')
-        self.checkProtocols(ra, 'validation/antibodies/')
-
-
-class ViewStanza(CvStanza):
+    def __init__(self, stanza, val):
+        CvError.__init__(self, stanza)
+        self.msg = val + ' is not a float'
+        self.strict = 1           
+        
+class InvalidIntError(CvError):
+    '''raised if the value is not an int'''
     
-    def __init__(self):
-        CvStanza.__init__(self)
-
-    def validate(self, ra):
-        necessary = {'label'}
-        CvStanza.validate(self, ra, necessary)
+    def __init__(self, stanza, val):
+        CvError.__init__(self, stanza)
+        self.msg = val + ' is not an int'
+        self.strict = 1   
         
-
-class TypeOfTermStanza(CvStanza):
+class InvalidListError(CvError):
+    '''raised if the value is not among the given list of values'''
     
-    def __init__(self):
-        CvStanza.__init__(self)
-
-    def validate(self, ra):
-        necessary = {'searchable', 'cvDefined', 'validate', 'priority'}
-        optional = {'hidden'}
-        CvStanza.validate(self, ra, necessary, optional)
+    def __init__(self, stanza, val, list):
+        CvError.__init__(self, stanza)
+        self.msg = val + ' is not in ' + list.join(',')
+        self.strict = 1   
         
-        if len(ra.filter(lambda s: s['term'] == self['type'] and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
-            ra.handler(InvalidTypeError(self, self['type']))
-                
-
-class MouseStanza(CvStanza):
+class UnmatchedRegexError(CvError):
+    '''raised if the value is a filename that does not exist'''
     
-    def __init__(self):
-        CvStanza.__init__(self)
+    def __init__(self, stanza, val, regex):
+        CvError.__init__(self, stanza)
+        self.msg = val + ' does not match the regex ' + regex
+        self.strict = 1       
 
-    def validate(self, ra):
-        necessary = {'organism', 'vendorName', 'orderUrl', 'age', 'strain', 'sex'}
-        optional = {'tissue', 'termId', 'termUrl', 'color', 'protocol', 'category', 'vendorId', 'lots'}
-        CvStanza.validate(self, ra, necessary, optional)
-        
-        self.checkRelational(ra, 'organism', 'term')
-        self.checkRelational(ra, 'sex', 'term')
-        self.checkRelational(ra, 'category', 'term')
-        self.checkRelational(ra, 'age', 'term')
-        self.checkRelational(ra, 'strain', 'term')
-        self.checkProtocols(ra, 'protocols/cell/mouse/')
-
-        
-class LocalizationStanza(CvStanza):
+class OrganismError(CvError):
+    '''raised if the value is a filename that does not exist'''
     
-    def __init__(self):
-        CvStanza.__init__(self)
-
-    def validate(self, ra):
-        necessary = {'termId', 'termUrl'}
-        CvStanza.validate(self, ra, necessary)
-        
-        
-class GrantStanza(CvStanza):
-    
-    def __init__(self):
-        CvStanza.__init__(self)
-
-    def validate(self, ra):
-        necessary = {'grantInst', 'projectName'}
-        CvStanza.validate(self, ra, necessary, None)
-        
+    def __init__(self, stanza):
+        CvError.__init__(self, stanza)
+        if 'organism' in stanza:
+            self.msg = 'organism ' + stanza['organism'] + ' does not match human or mouse'
+        else:
+            self.msg = 'organism does not exist in stanza'
+        self.strict = 1           

@@ -21,12 +21,11 @@ include wgEncodePsuTfbs.patch.ra alpha
 include wgEncodePsuHistone.ra alpha,beta
 
 # LICR Histone (wrangler: Fang)
-include wgEncodeLicrHistone.ra beta,public
-include wgEncodeLicrHistone.release2.ra alpha
+include wgEncodeLicrHistone.release2.ra
 
 # LICR TFBS (wrangler: Fang)
-include wgEncodeLicrTfbs.ra beta,public
-include wgEncodeLicrTfbs.release2.ra alpha
+include wgEncodeLicrTfbs.ra public
+include wgEncodeLicrTfbs.release2.ra alpha,beta
 
 # Stan/Yale RNA-Seq (wrangler: Venkat)
 include wgEncodeSydhRnaSeq.ra alpha

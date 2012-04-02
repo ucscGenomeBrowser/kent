@@ -12181,14 +12181,10 @@ struct pubsExtra
     char* mouseOver;
 };
 
-static char* pubsFeatureLabel(char* authors, char* year) 
+static char* pubsFeatureLabel(char* author, char* year) 
 /* create label <author><year> given authors and year strings */
 {
 char* authorYear = NULL;
-
-char* author = firstWordInLine(authors);
-stripChar(author, ',');
-stripChar(author, ';');
 
 if (isEmpty(author))
     author = "NoAuthor";
@@ -12207,17 +12203,17 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 struct pubsExtra *extra = NULL;
 
-safef(query, sizeof(query), "SELECT authors, year, title FROM %s WHERE articleId = '%s'", 
+safef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE articleId = '%s'", 
     articleTable, lf->name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
 {
-    char* authors = row[0];
+    char* firstAuthor = row[0];
     char* year    = row[1];
     char* title   = row[2];
 
     extra = needMem(sizeof(struct pubsExtra));
-    extra->label = pubsFeatureLabel(authors, year);
+    extra->label = pubsFeatureLabel(firstAuthor, year);
     if (isEmpty(title))
         extra->mouseOver = extra->label;
     else
@@ -12228,25 +12224,18 @@ sqlFreeResult(&sr);
 return extra;
 }
 
-static void pubsLookupAuthors(struct track *tg)
-/* add authorYear and title to all linkedFeatures->extra */
+static void pubsAddExtra(struct track* tg, struct linkedFeatures* lf)
+/* add authorYear and title to linkedFeatures->extra */
 {
-enum trackVisibility vis = tg->visibility;
-if (vis == tvDense || vis == tvSquish) 
-    return;
-
-char *articleTable = pubsArticleTable(tg);
+char *articleTable = trackDbSettingClosestToHome(tg->tdb, "pubsArticleTable");
 if(isEmpty(articleTable))
     return;
-
-struct linkedFeatures *lf = NULL;
+if (lf->extra != NULL)
+    return;
 
 struct sqlConnection *conn = hAllocConn(database);
-for (lf = tg->items; lf != NULL; lf = lf->next)
-{
-    struct pubsExtra* extra = pubsMakeExtra(articleTable, conn, lf);
-    lf->extra = extra;
-}
+struct pubsExtra* extra = pubsMakeExtra(articleTable, conn, lf);
+lf->extra = extra;
 hFreeConn(&conn);
 }
 
@@ -12334,22 +12323,18 @@ if (articleId!=NULL)
 }
 }
 
-static void pubsLoadItems(struct track *tg)
-/* filter items and stuff item data from other tables (author name, title) into extra field */
-{
-pubsLoadKeywordYearItems(tg);
-pubsLookupAuthors(tg);
-}
-
 char *pubsItemName(struct track *tg, void *item)
 /* get author/year from extra field */
 {
 struct linkedFeatures *lf = item;
+pubsAddExtra(tg, lf);
+
 struct pubsExtra* extra = lf->extra;
 if (extra!=NULL)
     return extra->label;
 else
     return lf->name;
+
 }
 
 static void pubsMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -12360,12 +12345,11 @@ static void pubsMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb)) 
 {
     struct linkedFeatures *lf = item;
+    pubsAddExtra(tg, lf);
+    struct pubsExtra* extra = lf->extra;
     char* mouseOver = NULL;
-    if (lf->extra != NULL) 
-    {
-        struct pubsExtra *extra = lf->extra;
+    if (extra != NULL) 
         mouseOver = extra->mouseOver;
-    }
     else
         mouseOver = itemName;
 
@@ -12432,7 +12416,7 @@ static char *pubsArticleDispId(struct track *tg, struct sqlConnection *conn, cha
 char* dispLabel = NULL;
 char *articleTable = pubsArticleTable(tg);
 char query[LARGEBUF];
-safef(query, sizeof(query), "SELECT authors, year FROM %s WHERE articleId = '%s'", 
+safef(query, sizeof(query), "SELECT firstAuthor, year FROM %s WHERE articleId = '%s'", 
     articleTable, articleId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 if (sr!=NULL)
@@ -12508,7 +12492,7 @@ tg->mapItem   = pubsMapItem;
 static void pubsBlatMethods(struct track *tg)
 /* publication blat tracks are bed12+2 tracks of sequences in text, mapped with BLAT */
 {
-tg->loadItems = pubsLoadItems;
+tg->loadItems = pubsLoadKeywordYearItems;
 tg->itemName  = pubsItemName;
 tg->mapItem   = pubsMapItem;
 }

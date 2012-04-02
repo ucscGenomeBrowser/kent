@@ -56,6 +56,8 @@ static char *oryCunNames[] = {"Oryctolagus cuniculus", NULL};
 static char *cavPorNames[] = {"Cavia porcellus", NULL};
 static char *loxAfrNames[] = {"Loxodonta africana", NULL};
 static char *macEugNames[] = {"Macropus eugenii", NULL};
+static char *triManNames[] = {"Trichechus manatus",
+				"Trichechus manatus latirostris", NULL};
 static char *dasNovNames[] = {"Dasypus novemcinctus", NULL};
 static char *ailMelNames[] = {"Ailuropoda melanoleuca", NULL};
 static char *canFamNames[] = {"Canis familiaris", "Canis sp.",
@@ -136,6 +138,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"felCat", felCatNames},
     {"loxAfr", loxAfrNames},
     {"macEug", macEugNames},
+    {"triMan", triManNames},
     {"dasNov", dasNovNames},
     {"echTel", echTelNames},
     {"oryCun", oryCunNames},

@@ -34,17 +34,28 @@ static int pubsSecChecked[] ={
 
 static char* pubsSequenceTable;
 
+static char* mangleUrl(char* url) 
+/* add publisher specific parameters to url and return new url*/
+{
+if (!stringIn("sciencedirect.com", url))
+    return url;
+    
+// cgi param to add the "UCSC matches" sciverse application to elsevier's sciencedirect
+char* sdAddParam = "?svAppaddApp=298535"; 
+char* longUrl = catTwoStrings(url, sdAddParam);
+char* newUrl = replaceChars(longUrl, "article", "svapps");
+return newUrl;
+}
+
 static void printFilterLink(char* pslTrack, char* articleId)
 /* print a link to hgTracks with an additional cgi param to activate the single article filter */
 {
     int start = cgiInt("o");
     int end = cgiInt("t");
-    printf("&nbsp; <A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d&amp;pubsFilterArticleId=%s&amp;%s=pack\">",
+    printf("<P><A HREF=\"%s&amp;db=%s&amp;position=%s%%3A%d-%d&amp;pubsFilterArticleId=%s&amp;%s=pack\">",
                       hgTracksPathAndSettings(), database, seqName, start+1, end, articleId, pslTrack);
-    char startBuf[64], endBuf[64];
-    sprintLongWithCommas(startBuf, start + 1);
-    sprintLongWithCommas(endBuf, end);
-    printf("Show these sequence matches individually on genome browser</A>");
+    printf("Show these sequence matches individually on genome browser</A> (activates track \""
+        "Individual matches for article\")</P>");
 }
 
 static char* makeSqlMarkerList(void)
@@ -83,7 +94,7 @@ char query[4000];
 sqlUpdate(conn, "SET SESSION group_concat_max_len = 100000");
 
 safef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, pmid, "  
-    "group_concat(snippet, section SEPARATOR ' (...) ') FROM %s "
+    "group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
     "WHERE markerId='%s' AND section in (%s) "
     "GROUP by articleId "
@@ -180,10 +191,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     char* citation  = row[4];
     char* pmid      = row[5];
     char* snippets  = row[6];
-    char* addParam  = "";
-    if (strstrNoCase(url, "sciencedirect.com"))
-        addParam = "?svAppaddApp=298535"; // add the "UCSC matches" sciverse application to article view
-    printf("<A HREF=\"%s%s\">%s</A> ", url, addParam, title);
+    url = mangleUrl(url);
+    printf("<A HREF=\"%s\">%s</A> ", url, title);
     printf("<SMALL>%s</SMALL>; ", authors);
     printf("<SMALL>%s ", citation);
     if (!isEmpty(pmid) && strcmp(pmid, "0")!=0 )
@@ -224,6 +233,8 @@ static char* printArticleInfo(struct sqlConnection *conn, char* item, char* pubs
     char* cit      = row[4];
     char* abstract = row[5];
     char* pmid     = row[6];
+
+    url = mangleUrl(url);
     if (strlen(abstract)==0) 
             abstract = "(No abstract available for this article. "
                 "Please follow the link to the fulltext above.)";
@@ -274,6 +285,7 @@ static struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, \
 }
 
 static void printSeqHeaders(bool showDesc, bool isClickedSection) 
+/* print table and headers */
 {
     printf("<TABLE style=\"background-color: #%s\" WIDTH=\"100%%\" CELLPADDING=\"2\">\n", HG_COL_BORDER);
     printf("<TR style=\"background-color: #%s; color: #FFFFFF\">\n", HG_COL_TABLE_LABEL);
@@ -323,14 +335,14 @@ if (linkText==NULL)
     char startBuf[64], endBuf[64];
     sprintLongWithCommas(startBuf, start + 1);
     sprintLongWithCommas(endBuf, end);
-    safef(buf, sizeof(buf), "%s:%s-%s (%s)", seqName, startBuf, endBuf, db);
+    safef(buf, sizeof(buf), "%s:%s-%s (%s)", chrom, startBuf, endBuf, db);
     linkText = buf;
 }
 
 if (optUrlStr==NULL)
     optUrlStr = "";
     
-printf("<A HREF=\"%s&amp;db=%s&amp;position=%d-%d&amp;%s\">%s</A>\n", hgTracksPathAndSettings(), db, start, end, optUrlStr, linkText);
+printf("<A HREF=\"%s&amp;db=%s&amp;position=%s:%d-%d&amp;%s\">%s</A>\n", hgTracksPathAndSettings(), db, chrom, start, end, optUrlStr, linkText);
 }
 
 void printGbLinks(struct slName* locs) 
@@ -343,16 +355,16 @@ for (el = locs; el != NULL; el = el->next)
     char* db       = cloneNextWordByDelimiter(&locString, '/');
     char* chrom    = cloneNextWordByDelimiter(&locString, ':');
     char* startStr = cloneNextWordByDelimiter(&locString, '-');
-    char* endStr   = locString;
+    char* endStr   = cloneString(locString);
 
     int start = atoi(startStr);
     int end = atoi(endStr);
     printHgTracksLink(db, chrom, start, end, NULL, NULL);
     printf("<BR>");
-    //freeMem(endStr); //XX why can't I free these?
-    //freeMem(chrom);
-    //freeMem(startStr);
-    //freeMem(db);
+    freeMem(endStr); //XX why can't I free these?
+    freeMem(chrom);
+    freeMem(startStr);
+    freeMem(db);
 }
 }
 
@@ -386,7 +398,15 @@ static bool printSeqSection(char* articleId, char* title, bool showDesc, struct 
     title, cartSidUrlString(cart), cgiString("o"), cgiString("t"), cgiString("g"), cgiString("i"), 
     !fasta, otherFormat);
 
-    webNewSection(fullTitle);
+    webNewSection("%s", fullTitle);
+
+    if (isClickedSection)
+    {
+        printFilterLink(pslTable, articleId);
+        printf("</TD></TR>");
+    }
+    else
+        printf("</TD><TR><TD>");
 
     if (!fasta) 
         printSeqHeaders(showDesc, isClickedSection);
@@ -458,16 +478,11 @@ static bool printSeqSection(char* articleId, char* title, bool showDesc, struct 
                 }
 
             }
-        printf("</TR>\n");
+            printf("</TR>\n");
         }
 	}
-    printf("</TR>\n");
+    printf("</TR></TABLE>\n"); // finish section
 
-    if (isClickedSection)
-    {
-        printf("</TABLE></TABLE><TR><TD><P>&nbsp;");
-        printFilterLink(pslTable, articleId);
-    }
     webEndSectionTables();
     sqlFreeResult(&sr);
     return foundSkippedRows;
@@ -571,6 +586,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     seq->size = strlen(seq->dna);
     }
 sqlFreeResult(&sr);
+
 return seq;
 }
 
@@ -587,10 +603,44 @@ if (psl == NULL)
     errAbort("Couldn't find alignment at %s:%s", pslTable, item);
 
 oSeq = getSeq(conn, seqTable, item);
+
 if (oSeq == NULL)  
     errAbort("%s is in pslTable but not in sequence table. Internal error.", item);
-showSomeAlignment(psl, oSeq, gftDna, 0, oSeq->size, NULL, 0, 0);
-printf("hihi");
+
+enum gfType qt;
+if (psl->qSize!=oSeq->size) 
+{
+    qt = gftProt;
+    // trying to correct pslMap's changes to qSize/qStarts and blockSizes
+    psl->strand[1]=psl->strand[0];
+    psl->strand[0]='+';
+    psl->strand[2]=0;
+    psl->qSize = psl->qSize/3;
+    psl->match = psl->match/3;
+    // Take care of codons that go over block boundaries:
+    // Convert a block with blockSizes=58,32 and qStarts=0,58,
+    // to blockSizes=19,11 and qStarts=0,19
+    int i;
+    int remaind = 0;
+    for (i=0; i<psl->blockCount; i++)
+    {
+        psl->qStarts[i] = psl->qStarts[i]/3;
+
+        int bs = psl->blockSizes[i];
+        remaind += (bs % 3);
+        if (remaind>=3)
+        {
+            bs += 1;
+            remaind -= 3;
+        }
+        psl->blockSizes[i] = bs/3; 
+    }
+
+}
+else
+    qt = gftDna;
+
+showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL, 0, 0);
 }
 
 void doPubsDetails(struct trackDb *tdb, char *item)

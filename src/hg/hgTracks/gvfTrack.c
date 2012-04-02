@@ -124,7 +124,8 @@ int ix = stringArrayIx("var_origin", gvf->attrTags, gvf->attrCount);
 if (ix >= 0)
     {
     char *origin = gvf->attrVals[ix];
-    if (sameWord(origin, "Not tested"))
+    if (sameWord(origin, "Not tested") || sameWord(origin, "Not reported") ||
+	sameWord(origin, "Tested - inconclusive"))
 	dyStringPrintf(name, "%s_unk", gvf->name);
     else if (sameWord(origin, "De novo"))
 	dyStringPrintf(name, "%s_dnovo", gvf->name);
@@ -134,6 +135,12 @@ if (ix >= 0)
 	dyStringPrintf(name, "%s_pat", gvf->name);
     else if (sameWord(origin, "Biparental"))
 	dyStringPrintf(name, "%s_bip", gvf->name);
+    else if (sameWord(origin, "Uniparental"))
+	dyStringPrintf(name, "%s_unip", gvf->name);
+    else if (sameWord(origin, "Germline"))
+	dyStringPrintf(name, "%s_germ", gvf->name);
+    else if (sameWord(origin, "Somatic"))
+	dyStringPrintf(name, "%s_som", gvf->name);
     else
 	dyStringPrintf(name, "%s_%s", gvf->name, origin);
     }
