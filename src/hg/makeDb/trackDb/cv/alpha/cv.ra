@@ -12570,7 +12570,7 @@ label TNF-alpha
 
 term  UT189
 tag UT189
-label UT189 E.Coli
+label UT189 E. coli
 description UT189 E.Coli treatment 1 hour, followed by 24 hour incubation
 type treatment
 
