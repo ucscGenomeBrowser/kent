@@ -12458,6 +12458,7 @@ type treatment
 
 term IFNa4h
 tag IFNA4H
+label IFN-a 4 h
 description 4 hours of 500 U/ml Interferon alpha (Crawford)
 type treatment
 
@@ -12474,6 +12475,7 @@ type treatment
 
 term IFNg4h
 tag IFNG4H
+label IFN-g 4 h
 description Interferon gamma treatment - 4 hours with 5 ng/ml (Crawford)
 type treatment
 
@@ -12560,7 +12562,7 @@ term TGFb
 tag TGFB
 description 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
 type treatment
-label TGF-beta
+label TGF-b
 
 term TNFa
 tag TNFA
