@@ -6,7 +6,7 @@ longLabel Affymetrix Exon Array from ENCODE/Duke
 group expression
 subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) 38988T=8988T A549=A549 AOSMC=AoSMC  CHORION=Chorion CLL=CLL COLO829=Colo829 FIBROBL=Fibrobl FIBROPAG08395=FibroP_(AG08395) FIBROPAG08396=FibroP_(AG08396) FIBROPAG20443=FibroP_(AG20443) GLIOBLA=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H7ES=H7-hESC H9ES=H9ES HEK293T=HEK293T HEPATO=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMFSHD=HSMM&#95;FSHD HSMMT=HSMMtube HSMMTUBEFSHD=HSMMtube&#95;FSHD HTR8=HTR8svn HUH7=Huh-7 HUH75=Huh-7.5 IPSCWRU1=iPS_(CWRU1) IPSNIHI7=iPS_(NIHi7) IPSNIHIZ11=iPS_(NIHi11) LNCAP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MEL2183=Mel_2183 MELANO=Melano MYOMETR=Myometr NHA=NH-A NHEK=NHEK OSTEO=Osteobl PROGFIB=ProgFib STELLATE=Stellate UCH1=UCH-1 UROTHEL=Urothelia
 subGroup2 rep Rep rep1=1 rep2=2 rep3=3 rep4=4
-subGroup3 treatment Treatment zNONE=None CTCFSHRNA=CTCF_shRNA_knockdown RANDSHRNA=Randomized_shRNA_control HYPOXLAC=Hypoxia,_Lactic_acidosis ESTRO=Estradiol_100_nM VEH=Vehicle IFNA4H=IFN-&alpha;_4_h IFNG4H=IFN-&gamma;_4_h METHYLTRI=Methyltrienolone NABUT=Sodium_Butyrate SERUMFREE=Serum-free_media TGFB=TGF-&beta; UT189=UT189_<em>E._Coli</em>  
+subGroup3 treatment Treatment zNONE=None CTCFSHRNA=CTCF_shRNA_knockdown RANDSHRNA=Randomized_shRNA_control HYPOXLAC=Hypoxia,_Lactic_acidosis ESTRO=Estradiol_100_nM VEH=Vehicle IFNA4H=IFN-&alpha;_4_h IFNG4H=IFN-&gamma;_4_h METHYLTRI=Methyltrienolone NABUT=Sodium_Butyrate SERUMFREE=Serum-free_media TGFB=TGF-&beta; UT189=UT189_<em>E._coli</em>  
 dimensions dimensionA=rep dimensionY=cellType dimensionX=treatment
 dimensionAchecked rep1,rep2
 sortOrder cellType=+ treatment=+ rep=+
@@ -842,7 +842,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonUrothelUt189SimpleSignalRep1V2
         parent wgEncodeDukeAffyExon off
         shortLabel Uro UT189 1
-        longLabel Urothelia UT189 E. Coli Exon array Signal Rep 1 from ENCODE/Duke
+        longLabel Urothelia UT189 E. coli Exon array Signal Rep 1 from ENCODE/Duke
         subGroups cellType=UROTHEL treatment=UT189 rep=rep1
         type bigBed 6 +
         # subId=5987 dateSubmitted=2012-03-08
@@ -1271,7 +1271,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonUrothelUt189SimpleSignalRep2
         parent wgEncodeDukeAffyExon off
         shortLabel Uro UT189 2
-        longLabel Urothelia UT189 E. Coli Exon array Signal Rep 2 from ENCODE/Duke
+        longLabel Urothelia UT189 E. coli Exon array Signal Rep 2 from ENCODE/Duke
         subGroups cellType=UROTHEL treatment=UT189 rep=rep2
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
