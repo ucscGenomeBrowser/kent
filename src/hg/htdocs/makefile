@@ -72,6 +72,7 @@ doSymLink: doRsync
 	ln -sfn /gbdb/hg18/RNA-img ${destDir}/RNA-img/hg18
 	ln -sfn /gbdb/hg19/RNA-img ${destDir}/RNA-img/hg19
 	ln -sfn /gbdb/mm9/RNA-img  ${destDir}/RNA-img/mm9
+	ln -sfn /gbdb/mm10/RNA-img  ${destDir}/RNA-img/mm10
 	ln -sfn /gbdb/rn4/RNA-img  ${destDir}/RNA-img/rn4
 	ln -sfn /gbdb/ailMel1/RNA-img  ${destDir}/RNA-img/ailMel1
 	ln -sfn /gbdb/caePb1/RNA-img  ${destDir}/RNA-img/caePb1
