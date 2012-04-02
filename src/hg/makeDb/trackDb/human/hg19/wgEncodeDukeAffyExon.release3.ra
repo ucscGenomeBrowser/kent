@@ -882,7 +882,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonFibropag08395SimpleSignalRep1
         parent wgEncodeDukeAffyExon off
         shortLabel FibroP_AG08395 1
-        longLabel FibroP AG08395 Exon array Signal Rep 1 from ENCODE/Duke
+        longLabel FibroP (AG08395) Exon array Signal Rep 1 from ENCODE/Duke
         subGroups cellType=FIBROPAG08395 treatment=zNONE rep=rep1
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -890,7 +890,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonFibropag08395SimpleSignalRep2
         parent wgEncodeDukeAffyExon off
         shortLabel FibroP_AG08395 2
-        longLabel FibroP AG08395 Exon array Signal Rep 2 from ENCODE/Duke
+        longLabel FibroP (AG08395) Exon array Signal Rep 2 from ENCODE/Duke
         subGroups cellType=FIBROPAG08395 treatment=zNONE rep=rep2
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -898,7 +898,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonFibropag08395SimpleSignalRep3
         parent wgEncodeDukeAffyExon off
         shortLabel FibroP_AG08395 3
-        longLabel FibroP AG08395 Exon array Signal Rep 3 from ENCODE/Duke
+        longLabel FibroP (AG08395) Exon array Signal Rep 3 from ENCODE/Duke
         subGroups cellType=FIBROPAG08395 treatment=zNONE rep=rep3
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -906,7 +906,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonFibropag08396SimpleSignalRep1
         parent wgEncodeDukeAffyExon off
         shortLabel FibroP_AG08396 1
-        longLabel FibroP AG08396 Exon array Signal Rep 1 from ENCODE/Duke
+        longLabel FibroP (AG08396) Exon array Signal Rep 1 from ENCODE/Duke
         subGroups cellType=FIBROPAG08396 treatment=zNONE rep=rep1
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -914,7 +914,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonFibropag08396SimpleSignalRep2
         parent wgEncodeDukeAffyExon off
         shortLabel FibroP_AG08396 2
-        longLabel FibroP AG08396 Exon array Signal Rep 2 from ENCODE/Duke
+        longLabel FibroP (AG08396) Exon array Signal Rep 2 from ENCODE/Duke
         subGroups cellType=FIBROPAG08396 treatment=zNONE rep=rep2
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -922,7 +922,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonFibropag08396SimpleSignalRep3
         parent wgEncodeDukeAffyExon off
         shortLabel FibroP_AG08396 3
-        longLabel FibroP AG08396 Exon array Signal Rep 3 from ENCODE/Duke
+        longLabel FibroP (AG08396) Exon array Signal Rep 3 from ENCODE/Duke
         subGroups cellType=FIBROPAG08396 treatment=zNONE rep=rep3
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -930,7 +930,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonFibropag20443SimpleSignalRep1
         parent wgEncodeDukeAffyExon off
         shortLabel FibroP_AG20443 1
-        longLabel FibroP AG20443 Exon array Signal Rep 1 from ENCODE/Duke
+        longLabel FibroP (AG20443) Exon array Signal Rep 1 from ENCODE/Duke
         subGroups cellType=FIBROPAG20443 treatment=zNONE rep=rep1
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -938,7 +938,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonFibropag20443SimpleSignalRep2
         parent wgEncodeDukeAffyExon off
         shortLabel FibroP_AG20443 2
-        longLabel FibroP AG20443 Exon array Signal Rep 2 from ENCODE/Duke
+        longLabel FibroP (AG20443) Exon array Signal Rep 2 from ENCODE/Duke
         subGroups cellType=FIBROPAG20443 treatment=zNONE rep=rep2
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -946,7 +946,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonFibropag20443SimpleSignalRep3
         parent wgEncodeDukeAffyExon off
         shortLabel FibroP_AG20443 3
-        longLabel FibroP AG20443 Exon array Signal Rep 3 from ENCODE/Duke
+        longLabel FibroP (AG20443) Exon array Signal Rep 3 from ENCODE/Duke
         subGroups cellType=FIBROPAG20443 treatment=zNONE rep=rep3
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -1074,7 +1074,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonIpscwru1SimpleSignalRep1
         parent wgEncodeDukeAffyExon off
         shortLabel iPS_CWRU1 1
-        longLabel iPS_(CWRU1) Exon array Signal Rep 1 from ENCODE/Duke
+        longLabel iPS (CWRU1) Exon array Signal Rep 1 from ENCODE/Duke
         subGroups cellType=IPSCWRU1 treatment=zNONE rep=rep1
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -1082,7 +1082,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonIpscwru1SimpleSignalRep2
         parent wgEncodeDukeAffyExon off
         shortLabel iPS_CWRU1 2
-        longLabel iPS_(CWRU1) Exon array Signal Rep 2 from ENCODE/Duke
+        longLabel iPS (CWRU1) Exon array Signal Rep 2 from ENCODE/Duke
         subGroups cellType=IPSCWRU1 treatment=zNONE rep=rep2
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -1090,7 +1090,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonIpsnihi11SimpleSignalRep1
         parent wgEncodeDukeAffyExon off
         shortLabel iPS_NIHi11 1
-        longLabel iPS_(NIHi11) Exon array Signal Rep 1 from ENCODE/Duke
+        longLabel iPS (NIHi11) Exon array Signal Rep 1 from ENCODE/Duke
         subGroups cellType=IPSNIHIZ11 treatment=zNONE rep=rep1
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -1098,7 +1098,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonIpsnihi11SimpleSignalRep2
         parent wgEncodeDukeAffyExon off
         shortLabel iPS_NIHi11 2
-        longLabel iPS_(NIHi11) Exon array Signal Rep 2 from ENCODE/Duke
+        longLabel iPS (NIHi11) Exon array Signal Rep 2 from ENCODE/Duke
         subGroups cellType=IPSNIHIZ11 treatment=zNONE rep=rep2
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -1106,7 +1106,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonIpsnihi7SimpleSignalRep1
         parent wgEncodeDukeAffyExon off
         shortLabel iPS_NIHi7 1
-        longLabel iPS_(NIHi7) Exon array Signal Rep 1 from ENCODE/Duke
+        longLabel iPS (NIHi7) Exon array Signal Rep 1 from ENCODE/Duke
         subGroups cellType=IPSNIHI7 treatment=zNONE rep=rep1
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
@@ -1114,7 +1114,7 @@ scoreFilter 10
         track wgEncodeDukeAffyExonIpsnihi7SimpleSignalRep2
         parent wgEncodeDukeAffyExon off
         shortLabel iPS_NIHi7 2
-        longLabel iPS_(NIHi7) Exon array Signal Rep 2 from ENCODE/Duke
+        longLabel iPS (NIHi7) Exon array Signal Rep 2 from ENCODE/Duke
         subGroups cellType=IPSNIHI7 treatment=zNONE rep=rep2
         type bigBed 6 +
         # subId=5988 dateSubmitted=2012-03-08
