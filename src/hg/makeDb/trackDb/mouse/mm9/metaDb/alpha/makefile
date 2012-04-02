@@ -3,6 +3,7 @@ wgEncodeCaltechHist.ra \
 wgEncodeCaltechRnaSeq.ra \
 wgEncodeCaltechTfbs.ra \
 wgEncodeCshlLongRnaSeq.ra \
+wgEncodeFsuRepliSeq.ra \
 wgEncodeLicrHistone.ra \
 wgEncodeLicrRnaSeq.ra \
 wgEncodeLicrTfbs.ra \
