@@ -12576,6 +12576,7 @@ type treatment
 
 term vehicle
 tag VEH
+label Vehicle
 description Charcoal stripped hormone-free FBS for 72 hours (Crawford)
 type treatment
 
