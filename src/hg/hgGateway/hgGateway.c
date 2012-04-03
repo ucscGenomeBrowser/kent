@@ -297,6 +297,84 @@ hgGateway();
 cartWebEnd();
 }
 
+static void checkForGeoMirrorRedirect()
+{
+// Implement Geo/IP based redirection
+//
+// NOTE that we want to redirect people as quickly as possible, so for efficiency purposes, this code is designed to be
+// called from main BEFORE the cart is loaded (so we only use CGI parameters and/or cookies).
+
+char *thisNodeStr = geoMirrorNode();
+if (thisNodeStr)
+    {
+    char *redirectCookie = findCookieData("redirect");
+    char *redirect = cgiOptionalString("redirect");
+
+    fprintf(stderr, "GALT redirectCookie=%s redirect=%s\n", 
+            redirectCookie, redirect); fflush(stderr); // DEBUG REMOVE
+
+    if (redirect == NULL && redirectCookie == NULL)
+        {
+        int thisNode = sqlUnsigned(thisNodeStr);
+        struct sqlConnection *centralConn = hConnectCentral();
+        char query[1024];
+        char *ipStr = cgiRemoteAddr();
+        bits32 ip = 0;
+        internetDottedQuadToIp(ipStr, &ip);
+
+        // we assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient.
+        safef(query, sizeof query, "select ipStart, ipEnd, node from geoIpNode where %u >= ipStart order by ipStart desc limit 1", ip);
+        char **row;
+        struct sqlResult *sr = sqlGetResult(centralConn, query);
+        int defaultNode = 1;
+        if ((row = sqlNextRow(sr)) != NULL)
+            {
+            uint ipStart = sqlUnsigned(row[0]);
+            uint ipEnd = sqlUnsigned(row[1]);
+            if (ipStart <= ip && ipEnd >= ip)
+                {
+                defaultNode = sqlSigned(row[2]);
+                }
+            }
+        sqlFreeResult(&sr);
+
+        fprintf(stderr, "GALT thisNodeStr=%s thisNode=%d ipStr=%s ip=%u defaultNode (for user) %d\n", 
+		thisNodeStr, thisNode,
+		ipStr, ip, defaultNode); fflush(stderr); // DEBUG REMOVE
+
+        // get location of redirect node
+        if (thisNode != defaultNode)
+            {
+            safef(query, sizeof query, "select domain from gbNode where node = %d", defaultNode);
+            char *newDomain = sqlQuickString(centralConn, query);
+            fprintf(stderr, "GALT newDomain=%s\n", newDomain); fflush(stderr); // DEBUG REMOVE
+            char *oldDomain = cgiServerName();
+            char *port = cgiServerPort();
+            char *uri = cgiRequestUri();
+            char *sep = strchr(uri, '?') ? "&" : "?";
+            int newUriSize = strlen(uri) + 1024;
+            char *newUri = needMem(newUriSize);
+            // TODO what about https?
+            safef(newUri, newUriSize, "http://%s:%s%s%sredirect=auto&source=%s", newDomain, port, uri, sep, oldDomain);
+            struct dyString *dy = dyStringNew(256);
+            dyStringPrintf(dy,
+                           "HTTP/1.1 302 found: \n"
+                           "Content-Type: text/html; charset=iso-8859-1\n"
+                           "Connection: close\n"
+                           "Location: %s\n"
+                           "\n"
+                           "<html><head><title>Redirecting to closer site</title></head>\n"
+                           "<body><a href=\"%s\">%s</a></body>\n"
+                           , newUri , newUri, newUri);
+            fprintf(stderr, "GALT redirect response:\n%s", dy->string); fflush(stderr); // DEBUG REMOVE
+            puts(dyStringContents(dy));
+            exit(0);
+            }
+        hDisconnectCentral(&centralConn);
+        }
+    }
+}
+
 char *excludeVars[] = {NULL};
 
 int main(int argc, char *argv[])
@@ -306,81 +384,7 @@ oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
 if(cgiIsOnWeb())
-    {
-    // check IP for redirection
-    // NOTE that we want to redirect people as quickly as possible, so for efficiency purposes, this code is designed to be
-    // called BEFORE the cart is loaded (so we only use CGI parameters and/or cookies).
-
-    char *thisNodeStr = geoMirrorNode();
-    if (thisNodeStr)
-	{
-	char *redirectCookie = findCookieData("redirect");
-        char *redirect = cgiOptionalString("redirect");
-
-	fprintf(stderr, "GALT redirectCookie=%s redirect=%s\n", 
-		redirectCookie, redirect); fflush(stderr); // DEBUG REMOVE
-
-	if (redirect == NULL && redirectCookie == NULL)
-	    {
-	    int thisNode = sqlUnsigned(thisNodeStr);
-	    struct sqlConnection *centralConn = hConnectCentral();
-	    char query[1024];
-	    char *ipStr = cgiRemoteAddr();
-	    bits32 ip = 0;
-	    internetDottedQuadToIp(ipStr, &ip);
-
-            // we assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient.
-	    safef(query, sizeof query, "select ipStart, ipEnd, node from geoIpNode where %u >= ipStart order by ipStart desc limit 1", ip);
-	    char **row;
-	    struct sqlResult *sr = sqlGetResult(centralConn, query);
-	    int defaultNode = 1;
-	    if ((row = sqlNextRow(sr)) != NULL)
-		{
-		uint ipStart = sqlUnsigned(row[0]);
-		uint ipEnd = sqlUnsigned(row[1]);
-		if (ipStart <= ip && ipEnd >= ip)
-		    {
-		    defaultNode = sqlSigned(row[2]);
-		    }
-		}
-	    sqlFreeResult(&sr);
-
-	    fprintf(stderr, "GALT thisNodeStr=%s thisNode=%d ipStr=%s ip=%u defaultNode (for user) %d\n", 
-		thisNodeStr, thisNode,
-		ipStr, ip, defaultNode); fflush(stderr); // DEBUG REMOVE
-
-	    // get location of redirect node
-	    if (thisNode != defaultNode)
-		{
-		safef(query, sizeof query, "select domain from gbNode where node = %d", defaultNode);
-		char *newDomain = sqlQuickString(centralConn, query);
-		fprintf(stderr, "GALT newDomain=%s\n", newDomain); fflush(stderr); // DEBUG REMOVE
-		char *oldDomain = cgiServerName();
-		char *port = cgiServerPort();
-		char *uri = cgiRequestUri();
-		char *sep = strchr(uri, '?') ? "&" : "?";
-		int newUriSize = strlen(uri) + 1024;
-		char *newUri = needMem(newUriSize);
-		// TODO what about https?
-		safef(newUri, newUriSize, "http://%s:%s%s%sredirect=auto&source=%s", newDomain, port, uri, sep, oldDomain);
-		struct dyString *dy = dyStringNew(256);
-		dyStringPrintf(dy,
-		    "HTTP/1.1 302 found: \n"
-		    "Content-Type: text/html; charset=iso-8859-1\n"
-		    "Connection: close\n"
-		    "Location: %s\n"
-		    "\n"
-		    "<html><head><title>Redirecting to closer site</title></head>\n"
-		    "<body><a href=\"%s\">%s</a></body>\n"
-		    , newUri , newUri, newUri);
-		fprintf(stderr, "GALT redirect response:\n%s", dy->string); fflush(stderr); // DEBUG REMOVE
-		puts(dyStringContents(dy));
-		exit(0);
-		}
-	    hDisconnectCentral(&centralConn);
-	    }
-	}
-    }
+    checkForGeoMirrorRedirect();
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
