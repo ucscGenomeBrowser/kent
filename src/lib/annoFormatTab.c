@@ -121,16 +121,17 @@ words[0] = dyStringCannibalize(&dy);
 return words;
 }
 
-static char **wordsFromRow(struct annoRow *row, boolean *retFreeWhenDone)
-/* If row->type is arWords, return its words.  Otherwise translate row->data into words. */
+static char **wordsFromRow(struct annoRow *row, struct annoStreamer *source,
+			   boolean *retFreeWhenDone)
+/* If source->rowType is arWords, return its words.  Otherwise translate row->data into words. */
 {
 if (row == NULL)
     return NULL;
 boolean freeWhenDone = FALSE;
 char **words = NULL;
-if (row->type == arWords)
+if (source->rowType == arWords || source->rowType == arVcf)
     words = row->data;
-else if (row->type == arWig)
+else if (source->rowType == arWig)
     {
     freeWhenDone = TRUE;
     //#*** config options: avg? more stats? list of values?
@@ -141,7 +142,7 @@ else if (row->type == arWig)
 	words = wordsFromWigRowVals(row);
     }
 else
-    errAbort("annoFormatTab: unrecognized row type %d", row->type);
+    errAbort("annoFormatTab: unrecognized row type %d", source->rowType);
 if (retFreeWhenDone != NULL)
     *retFreeWhenDone = freeWhenDone;
 return words;
@@ -172,11 +173,12 @@ for (i = 0, grRef = self->gratorRowLists;  i < numGrators;  i++, grRef = grRef->
 	maxRows = gratorRowCount;
     }
 // Print out enough rows to make sure that all grator rows are included.
+struct annoStreamer *primarySource = vSelf->query->primarySource;
 for (i = 0;  i < maxRows;  i++)
     {
     boolean freeWhenDone = FALSE;
-    char **primaryData = wordsFromRow(self->primaryRow, &freeWhenDone);
-    printColumns(self->f, vSelf->query->primarySource, primaryData, TRUE);
+    char **primaryData = wordsFromRow(self->primaryRow, primarySource, &freeWhenDone);
+    printColumns(self->f, primarySource, primaryData, TRUE);
     if (freeWhenDone)
 	freeWords1(primaryData);
     struct annoStreamer *grator = (struct annoStreamer *)self->formatter.query->integrators;
@@ -184,7 +186,7 @@ for (i = 0;  i < maxRows;  i++)
 	     grator = grator->next)
 	{
 	struct annoRow *gratorRow = slElementFromIx(grRef->val, i);
-	char **gratorWords = wordsFromRow(gratorRow, &freeWhenDone);
+	char **gratorWords = wordsFromRow(gratorRow, grator, &freeWhenDone);
 	printColumns(self->f, grator, gratorWords, FALSE);
 	if (freeWhenDone)
 	    freeWords1(gratorWords);

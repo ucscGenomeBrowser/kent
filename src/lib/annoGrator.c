@@ -40,7 +40,7 @@ for (qRow = self->qHead;  qRow != NULL;  qRow = nextQRow)
 	    prevQRow->next = qRow->next;
 	if (self->qTail == qRow)
 	    self->qTail = prevQRow;
-	annoRowFree(&qRow, self->numSrcCols);
+	annoRowFree(&qRow, (struct annoStreamer *)self);
 	}
     else
 	prevQRow = qRow;
@@ -78,7 +78,7 @@ while (!self->eof &&
 	int cDifNewP = strcmp(newRow->chrom, chrom);
 	if (cDifNewP < 0)
 	    // newRow->chrom comes before chrom; skip over newRow
-	    annoRowFree(&newRow, self->numSrcCols);
+	    annoRowFree(&newRow, (struct annoStreamer *)self);
 	else
 	    {
 	    // Add newRow to qTail
@@ -118,7 +118,7 @@ for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
     {
     if (qRow->start < primaryRow->end && qRow->end > primaryRow->start)
 	{
-	slAddHead(&rowList, annoRowClone(qRow, self->numSrcCols));
+	slAddHead(&rowList, annoRowClone(qRow, (struct annoStreamer *)self));
 	if (rjFailHard && qRow->rightJoinFail)
 	    {
 	    *retRJFilterFailed = TRUE;
@@ -137,7 +137,7 @@ if (pSelf == NULL)
     return;
 struct annoGrator *self = *(struct annoGrator **)pSelf;
 self->mySource->close(&(self->mySource));
-annoRowFreeList(&(self->qHead), self->numSrcCols);
+annoRowFreeList(&(self->qHead), (struct annoStreamer *)self);
 freeMem(self->prevPChrom);
 freez(pSelf);
 }
@@ -155,7 +155,7 @@ static void agReset(struct annoGrator *self)
 freez(&self->prevPChrom);
 self->prevPStart = 0;
 self->eof = FALSE;
-annoRowFreeList(&(self->qHead), self->numSrcCols);
+annoRowFreeList(&(self->qHead), (struct annoStreamer *)self);
 self->qTail = NULL;
 }
 
@@ -183,12 +183,12 @@ struct annoGrator *self;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, mySource->getAutoSqlObject(mySource));
+streamer->rowType = mySource->rowType;
 streamer->setRegion = annoGratorSetRegion;
 streamer->setQuery = annoGratorSetQuery;
 streamer->nextRow = noNextRow;
 streamer->close = annoGratorClose;
 self->integrate = annoGratorIntegrate;
 self->mySource = mySource;
-self->numSrcCols = slCount(mySource->asObj->columnList);
 return self;
 }

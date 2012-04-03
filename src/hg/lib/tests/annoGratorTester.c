@@ -2,17 +2,22 @@
 
 #include "annoGratorQuery.h"
 #include "annoStreamDb.h"
+#include "annoStreamVcf.h"
 #include "annoStreamWig.h"
 #include "annoGrateWig.h"
 #include "annoFormatTab.h"
 #include "dystring.h"
 #include "pgSnp.h"
+#include "vcf.h"
 
 // Names of tests:
 static const char *pgSnpDbToTabOut = "pgSnpDbToTabOut";
 static const char *pgSnpKgDbToTabOutShort = "pgSnpKgDbToTabOutShort";
 static const char *pgSnpKgDbToTabOutLong = "pgSnpKgDbToTabOutLong";
 static const char *snpConsDbToTabOutShort = "snpConsDbToTabOutShort";
+static const char *snpConsDbToTabOutLong = "snpConsDbToTabOutLong";
+static const char *vcfEx1 = "vcfEx1";
+static const char *vcfEx2 = "vcfEx2";
 
 void usage()
 /* explain usage and exit */
@@ -27,7 +32,12 @@ errAbort(
     "    %s\n"
     "    %s\n"
     "    %s\n"
-    , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong, snpConsDbToTabOutShort
+    "    %s\n"
+    "    %s\n"
+    "    %s\n"
+    , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong,
+    snpConsDbToTabOutShort, snpConsDbToTabOutLong,
+    vcfEx1, vcfEx2
     );
 }
 
@@ -35,40 +45,60 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-struct dbSource
-/* Enough info to create a streamer or grator that gets data from sql. */
+struct streamerInfo
+/* Enough info to create a streamer or grator that gets data from sql, file or URL. */
     {
-    struct dbSource *next;
-    char *db;
-    char *table;
-    enum annoRowType type;
-    struct asObject *asObj; // not used if type is arWig
+    struct streamerInfo *next;
+    char *db;			// If non-NULL, then we are using this SQL database
+    char *tableFileUrl;		// If db is non-NULL, table name; else file or URL
+    enum annoRowType type;	// Data type (wig or words?)
+    struct asObject *asObj;	// not used if type is arWig
     };
 
-void dbToTabOut(struct dbSource *srcList, struct twoBitFile *tbf, char *outFile,
+struct annoStreamer *streamerFromInfo(struct streamerInfo *info)
+/* Figure out which constructor to call, call it and return the results. */
+{
+struct annoStreamer *streamer = NULL;
+if (info->type == arWig)
+    streamer = annoStreamWigDbNew(info->db, info->tableFileUrl, BIGNUM);
+else if (info->db != NULL)
+    streamer = annoStreamDbNew(info->db, info->tableFileUrl, info->asObj);
+else if (info->type == arVcf)
+    {
+    boolean looksLikeTabix = endsWith(info->tableFileUrl, ".gz");
+    streamer = annoStreamVcfNew(info->tableFileUrl, looksLikeTabix, BIGNUM);
+    }
+else
+    errAbort("Make a generic file streamer for %s!", info->tableFileUrl);
+return streamer;
+}
+
+void dbToTabOut(struct streamerInfo *infoList, struct twoBitFile *tbf, char *outFile,
 		char *chrom, uint start, uint end)
 /* Get data from one or more database tables and print all fields to tab-sep output. */
 {
-struct annoStreamer *primary;
-if (srcList->type == arWig)
-    primary = annoStreamWigDbNew(srcList->db, srcList->table, BIGNUM);
-else
-    primary = annoStreamDbNew(srcList->db, srcList->table, srcList->asObj);
+struct streamerInfo *primaryInfo = infoList;
+struct streamerInfo *gratorInfoList = infoList->next;
+struct annoStreamer *primary = streamerFromInfo(primaryInfo);
 struct annoGrator *gratorList = NULL;
-struct dbSource *src;
-for (src = srcList->next;  src != NULL;  src = src->next)
+struct streamerInfo *grInfo;
+for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     {
-    if (src->type == arWig)
-	slAddHead(&gratorList, annoGrateWigDbNew(src->db, src->table, BIGNUM));
+    struct annoGrator *grator = NULL;
+    if (grInfo->type == arWig)
+	grator = annoGrateWigDbNew(grInfo->db, grInfo->tableFileUrl, BIGNUM);
     else
 	{
-	struct annoStreamer *str = annoStreamDbNew(src->db, src->table, src->asObj);
-	slAddHead(&gratorList, annoGratorNew(str));
+	struct annoStreamer *src = streamerFromInfo(grInfo);
+	grator = annoGratorNew(src);
 	}
+    slAddHead(&gratorList, grator);
     }
 slReverse(&gratorList);
 struct annoFormatter *tabOut = annoFormatTabNew(outFile);
-struct annoGratorQuery *query = annoGratorQueryNew(srcList->db, NULL, tbf,
+//#*** If we're using db==NULL as a flag, we still need to get assembly name in there.... take from 2bit filename???
+char *assemblyName = primaryInfo->db ? primaryInfo->db : "hardcoded, Doh!";
+struct annoGratorQuery *query = annoGratorQueryNew(assemblyName, NULL, tbf,
 						   primary, gratorList, tabOut);
 annoGratorQuerySetRegion(query, chrom, start, end);
 annoGratorQueryExecute(query);
@@ -88,7 +118,10 @@ if (!doAllTests)
     if (sameString(argv[2], pgSnpDbToTabOut) ||
 	sameString(argv[2], pgSnpKgDbToTabOutShort) ||
 	sameString(argv[2], pgSnpKgDbToTabOutLong) ||
-	sameString(argv[2], snpConsDbToTabOutShort))
+	sameString(argv[2], snpConsDbToTabOutShort) ||
+	sameString(argv[2], snpConsDbToTabOutLong) ||
+	sameString(argv[2], vcfEx1) ||
+	sameString(argv[2], vcfEx2))
 	test = cloneString(argv[2]);
     else
 	{
@@ -101,26 +134,49 @@ struct dyString *dbDotTwoBit = dyStringCreate("/hive/data/genomes/%s/%s.2bit", d
 struct twoBitFile *tbf = twoBitOpen(dbDotTwoBit->string);
 
 // First test: some rows of a pgSnp table
-struct dbSource src1 = { NULL, db, "pgNA12878", arWords, pgSnpAsObj() };
+struct streamerInfo pgSnpInfo = { NULL, db, "pgNA12878", arWords, pgSnpAsObj() };
 if (doAllTests || sameString(test, pgSnpDbToTabOut))
-    dbToTabOut(&src1, tbf, "stdout", "chr1", 705881, 752721);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 705881, 752721);
 
 // Second test: some rows of a pgSnp table integrated with knownGene
-struct dbSource src2 = { NULL, db, "knownGene", arWords, asParseFile("../knownGene.as") };
-src1.next = &src2;
+struct streamerInfo kgInfo = { NULL, db, "knownGene", arWords, asParseFile("../knownGene.as") };
+pgSnpInfo.next = &kgInfo;
 if (doAllTests || sameString(test, pgSnpKgDbToTabOutShort))
-    dbToTabOut(&src1, tbf, "stdout", "chr1", 705881, 752721);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 705881, 752721);
 
 // Third test: all rows of a pgSnp table integrated with knownGene
 if (doAllTests || sameString(test, pgSnpKgDbToTabOutLong))
-    dbToTabOut(&src1, tbf, "stdout", NULL, 0, 0);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", NULL, 0, 0);
 
 // Fourth test: some rows of snp135 integrated with phyloP scores
-struct dbSource src3 = { NULL, db, "snp135", arWords, asParseFile("../snp132Ext.as") };
-struct dbSource src4 = { NULL, db, "phyloP46wayPlacental", arWig, NULL };
-src3.next = &src4;
-if (doAllTests || sameString(test, snpConsDbToTabOutShort))
-    dbToTabOut(&src3, tbf, "stdout", "chr1", 737224, 738475);
+if (doAllTests || sameString(test, snpConsDbToTabOutShort) ||
+    sameString(test, snpConsDbToTabOutLong))
+    {
+    struct streamerInfo snp135Info = { NULL, db, "snp135", arWords, asParseFile("../snp132Ext.as") };
+    struct streamerInfo phyloPInfo = { NULL, db, "phyloP46wayPlacental", arWig, NULL };
+    snp135Info.next = &phyloPInfo;
+    if (sameString(test, snpConsDbToTabOutShort))
+	dbToTabOut(&snp135Info, tbf, "stdout", "chr1", 737224, 738475);
+    else
+	dbToTabOut(&snp135Info, tbf, "stdout", NULL, 0, 0);
+    }
+
+// Fifth test: VCF with genotypes
+if (doAllTests || sameString(test, vcfEx1))
+    {
+    struct streamerInfo vcfEx1 = { NULL, NULL,
+			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExample.vcf.gz",
+				   arVcf, vcfAsObj() };
+    dbToTabOut(&vcfEx1, tbf, "stdout", NULL, 0, 0);
+    }
+
+if (doAllTests || sameString(test, vcfEx2))
+    {
+    struct streamerInfo vcfEx2 = { NULL, NULL,
+			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExampleTwo.vcf",
+				   arVcf, vcfAsObj() };
+    dbToTabOut(&vcfEx2, tbf, "stdout", NULL, 0, 0);
+    }
 
 return 0;
 }

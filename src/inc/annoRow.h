@@ -5,7 +5,10 @@
 
 #include "common.h"
 
-enum annoRowType { arWords, arWig };
+enum annoRowType { arUnknown, arWords, arWig, arVcf };
+
+// stub in order to avoid problems with circular .h references:
+struct annoStreamer;
 
 struct annoRow
 /* Representation of a row from a database table or file.  The chrom, start and end
@@ -20,7 +23,6 @@ struct annoRow
     uint start;
     uint end;
     void *data;
-    enum annoRowType type;
     boolean rightJoinFail;
     };
 
@@ -32,14 +34,14 @@ struct annoRow *annoRowWigNew(char *chrom, uint start, uint end, boolean rightJo
 			      float *values);
 /* Allocate & return an annoRowWig, with clone of values; length of values is (end-start). */
 
-struct annoRow *annoRowClone(struct annoRow *rowIn, int numCols);
+struct annoRow *annoRowClone(struct annoRow *rowIn, struct annoStreamer *source);
 /* Allocate & return a single annoRow cloned from rowIn.
  * numCols is used only if rowIn->type is arWords. */
 
-void annoRowFree(struct annoRow **pRow, int numCols);
+void annoRowFree(struct annoRow **pRow, struct annoStreamer *source);
 /* Free a single annoRow. */
 
-void annoRowFreeList(struct annoRow **pList, int numCols);
+void annoRowFreeList(struct annoRow **pList, struct annoStreamer *source);
 /* Free a list of annoRows. */
 
 #endif//ndef ANNOROW_H

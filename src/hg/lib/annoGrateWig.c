@@ -64,7 +64,7 @@ struct annoRow *rowIn, *rowOutList = NULL;;
 for (rowIn = rowsIn;  rowIn != NULL;  rowIn = rowIn->next)
     tidyUp(rowIn, &rowOutList, primaryRow->start, primaryRow->end);
 slReverse(&rowOutList);
-annoRowFreeList(&rowsIn, -1);
+annoRowFreeList(&rowsIn, self->mySource);
 return rowOutList;
 }
 

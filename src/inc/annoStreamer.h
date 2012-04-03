@@ -39,8 +39,11 @@ struct annoStreamer
     void (*close)(struct annoStreamer **pSelf);
     // For use by annoGratorQuery only: hook up query object after creation
     void (*setQuery)(struct annoStreamer *self, struct annoGratorQuery *query);
-    // Private members -- callers are on the honor system to access these using only methods above.
+    // Public members -- callers are on the honor system to access these read-only.
     struct annoGratorQuery *query;	// The query object that owns this streamer.
+    enum annoRowType rowType;
+    int numCols;
+    // Private members -- callers are on the honor system to access these using only methods above.
     boolean positionIsGenome;
     char *chrom;
     uint regionStart;

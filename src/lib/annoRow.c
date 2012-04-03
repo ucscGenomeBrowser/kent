@@ -1,6 +1,7 @@
 /* annoRow -- basic data interchange unit of annoGratorQuery framework. */
 
 #include "annoRow.h"
+#include "annoStreamer.h"
 
 struct annoRow *annoRowFromStringArray(char *chrom, uint start, uint end, boolean rightJoinFail,
 				       char **wordsIn, int numCols)
@@ -11,7 +12,6 @@ AllocVar(aRow);
 aRow->chrom = cloneString(chrom);
 aRow->start = start;
 aRow->end = end;
-aRow->type = arWords;
 aRow->rightJoinFail = rightJoinFail;
 char **words;
 AllocArray(words, numCols);
@@ -32,24 +32,23 @@ row->chrom = cloneString(chrom);
 row->start = start;
 row->end = end;
 row->data = cloneMem(values, (end - start) * sizeof(values[0]));
-row->type = arWig;
 row->rightJoinFail = rightJoinFail;
 return row;
 }
 
-struct annoRow *annoRowClone(struct annoRow *rowIn, int numCols)
+struct annoRow *annoRowClone(struct annoRow *rowIn, struct annoStreamer *source)
 /* Allocate & return a single annoRow cloned from rowIn. */
 {
 if (rowIn == NULL)
     return NULL;
-if (rowIn->type == arWords)
+if (source->rowType == arWords || source->rowType == arVcf)
     return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
-				  rowIn->data, numCols);
-else if (rowIn->type == arWig)
+				  rowIn->data, source->numCols);
+else if (source->rowType == arWig)
     return annoRowWigNew(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
 			 (float *)rowIn->data);
 else
-    errAbort("annoRowClone: unrecognized type %d", rowIn->type);
+    errAbort("annoRowClone: unrecognized type %d", source->rowType);
 return NULL;
 }
 
@@ -79,21 +78,20 @@ freeMem(row->data);
 freez(pRow);
 }
 
-void annoRowFree(struct annoRow **pRow, int numCols)
+void annoRowFree(struct annoRow **pRow, struct annoStreamer *source)
 /* Free a single annoRow. */
 {
 if (pRow == NULL)
     return;
-struct annoRow *row = *pRow;
-if (row->type == arWords)
-    annoRowWordsFree(pRow, numCols);
-else if (row->type == arWig)
+if (source->rowType == arWords || source->rowType == arVcf)
+    annoRowWordsFree(pRow, source->numCols);
+else if (source->rowType == arWig)
     annoRowWigFree(pRow);
 else
-    errAbort("annoRowFree: unrecognized type %d", row->type);
+    errAbort("annoRowFree: unrecognized type %d", source->rowType);
 }
 
-void annoRowFreeList(struct annoRow **pList, int numCols)
+void annoRowFreeList(struct annoRow **pList, struct annoStreamer *source)
 /* Free a list of annoRows. */
 {
 if (pList == NULL)
@@ -102,6 +100,6 @@ struct annoRow *row, *nextRow;
 for (row = *pList;  row != NULL;  row = nextRow)
     {
     nextRow = row->next;
-    annoRowFree(&row, numCols);
+    annoRowFree(&row, source);
     }
 }

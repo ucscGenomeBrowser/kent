@@ -5,7 +5,6 @@
 #include "jksql.h"
 #include "wiggle.h"
 
-//#*** Should this be defined elsewhere?
 char *annoRowWigAsText = 
 "table annoRowWig\n"
 "\"autoSql description of a single annoRowWig value, for filtering\"\n"
@@ -120,7 +119,7 @@ while (!done)
 	rowOut = annoRowWigNew(wigRow->chrom, wigRow->start, wigRow->end, rightFail, vector);
 	done = TRUE;
 	}
-    annoRowFree(&wigRow, WIGGLE_NUM_COLS);
+    annoRowFree(&wigRow, self->wigStr);
     }
 return rowOut;
 }
@@ -143,6 +142,7 @@ struct annoStreamWig *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, asParseText(annoRowWigAsText));
+streamer->rowType = arWig;
 streamer->setRegion = aswSetRegion;
 streamer->setQuery = aswSetQuery;
 streamer->nextRow = aswNextRow;

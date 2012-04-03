@@ -124,12 +124,11 @@ while ((primaryRow = primarySrc->nextRow(primarySrc)) != NULL)
 	    formatter->discard(formatter);
 	else
 	    formatter->formatOne(formatter);
-    annoRowFree(&primaryRow, slCount(primarySrc->asObj->columnList));
+    annoRowFree(&primaryRow, primarySrc);
     struct slRef *oneRowList = gratorRowLists;
     grator = (struct annoStreamer *)(query->integrators);
     for (;  oneRowList != NULL;  oneRowList = oneRowList->next, grator = grator->next)
-	annoRowFreeList((struct annoRow **)&(oneRowList->val),
-			slCount(grator->asObj->columnList));
+	annoRowFreeList((struct annoRow **)&(oneRowList->val), grator);
     slFreeList(&oneRowList);
     }
 }

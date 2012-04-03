@@ -80,6 +80,7 @@ self->positionIsGenome = TRUE;
 self->asObj = asObj;
 self->filters = annoFiltersFromAsObject(asObj);
 self->columns = annoColumnsFromAsObject(asObj);
+self->numCols = slCount(asObj->columnList);
 }
 
 void annoStreamerFree(struct annoStreamer **pSelf)

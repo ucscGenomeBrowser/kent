@@ -627,44 +627,60 @@ for (i = 0;  i < record->infoCount;  i++)
     }
 }
 
+struct vcfRecord *vcfRecordFromRow(struct vcfFile *vcff, char **words)
+/* Parse words from a VCF data line into a VCF record structure. */
+{
+struct vcfRecord *record = vcfFileAlloc(vcff, sizeof(struct vcfRecord));
+record->file = vcff;
+record->chrom = vcfFilePooledStr(vcff, words[0]);
+record->chromStart = lineFileNeedNum(vcff->lf, words, 1) - 1;
+// chromEnd may be overwritten by parseRefAndAlt and parseInfoColumn.
+record->chromEnd = record->chromStart+1;
+record->name = vcfFilePooledStr(vcff, words[2]);
+parseRefAndAlt(vcff, record, words[3], words[4]);
+record->qual = vcfFilePooledStr(vcff, words[5]);
+parseFilterColumn(vcff, record, words[6]);
+parseInfoColumn(vcff, record, words[7]);
+if (vcff->genotypeCount > 0)
+    {
+    record->format = vcfFilePooledStr(vcff, words[8]);
+    record->genotypeUnparsedStrings = vcfFileAlloc(vcff,
+						   vcff->genotypeCount * sizeof(char *));
+    int i;
+    // Don't bother actually parsing all these until & unless we need the info:
+    for (i = 0;  i < vcff->genotypeCount;  i++)
+	record->genotypeUnparsedStrings[i] = vcfFileCloneStr(vcff, words[9+i]);
+    }
+return record;
+}
+
+struct vcfRecord *vcfNextRecord(struct vcfFile *vcff)
+/* Parse the words in the next line from vcff into a vcfRecord. Return NULL at end of file.
+ * Note: this does not store record in vcff->records! */
+{
+char *words[VCF_MAX_COLUMNS];
+int wordCount;
+if ((wordCount = lineFileChop(vcff->lf, words)) <= 0)
+    return NULL;
+int expected = 8;
+if (vcff->genotypeCount > 0)
+    expected = 9 + vcff->genotypeCount;
+lineFileExpectWords(vcff->lf, expected, wordCount);
+return vcfRecordFromRow(vcff, words);
+}
+
 static void vcfParseData(struct vcfFile *vcff, int maxRecords)
 /* Given a vcfFile into which the header has been parsed, and whose lineFile is positioned
  * at the beginning of a data row, parse and store all data rows from lineFile. */
 {
 if (vcff == NULL)
     return;
-int recCount = 0, expected = 8;
-if (vcff->genotypeCount > 0)
-    expected = 9 + vcff->genotypeCount;
-char *words[VCF_MAX_COLUMNS];
-int wordCount;
-while ((wordCount = lineFileChop(vcff->lf, words)) > 0)
+int recCount = 0;
+struct vcfRecord *record;
+while ((record = vcfNextRecord(vcff)) != NULL)
     {
     if (maxRecords >= 0 && recCount >= maxRecords)
 	break;
-    lineFileExpectWords(vcff->lf, expected, wordCount);
-    struct vcfRecord *record;
-    AllocVar(record);
-    record->file = vcff;
-    record->chrom = vcfFilePooledStr(vcff, words[0]);
-    record->chromStart = lineFileNeedNum(vcff->lf, words, 1) - 1;
-    // chromEnd may be overwritten by parseRefAndAlt and parseInfoColumn.
-    record->chromEnd = record->chromStart+1;
-    record->name = vcfFilePooledStr(vcff, words[2]);
-    parseRefAndAlt(vcff, record, words[3], words[4]);
-    record->qual = vcfFilePooledStr(vcff, words[5]);
-    parseFilterColumn(vcff, record, words[6]);
-    parseInfoColumn(vcff, record, words[7]);
-    if (vcff->genotypeCount > 0)
-	{
-	record->format = vcfFilePooledStr(vcff, words[8]);
-	record->genotypeUnparsedStrings = vcfFileAlloc(vcff,
-						       vcff->genotypeCount * sizeof(char *));
-	int i;
-	// Don't bother actually parsing all these until & unless we need the info:
-	for (i = 0;  i < vcff->genotypeCount;  i++)
-	    record->genotypeUnparsedStrings[i] = vcfFileCloneStr(vcff, words[9+i]);
-	}
     slAddHead(&(vcff->records), record);
     recCount++;
     }
@@ -672,10 +688,12 @@ slReverse(&(vcff->records));
 lineFileClose(&(vcff->lf));
 }
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords)
-/* Parse a VCF file into a vcfFile object.  If maxErr not zero, then
- * continue to parse until this number of error have been reached.  A maxErr
- * less than zero does not stop and reports all errors. */
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords, boolean parseAll)
+/* Open fileOrUrl and parse VCF header; return NULL if unable.
+ * If parseAll, then read in all lines, parse and store in
+ * vcff->records; if maxErr >= zero, then continue to parse until
+ * there are maxErr+1 errors.  A maxErr less than zero does not stop
+ * and reports all errors. */
 {
 struct lineFile *lf = NULL;
 if (startsWith("http://", fileOrUrl) || startsWith("ftp://", fileOrUrl) ||
@@ -684,17 +702,19 @@ if (startsWith("http://", fileOrUrl) || startsWith("ftp://", fileOrUrl) ||
 else
     lf = lineFileMayOpen(fileOrUrl, TRUE);
 struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
-vcfParseData(vcff, maxRecords);
+if (parseAll)
+    vcfParseData(vcff, maxRecords);
 return vcff;
 }
 
 struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
 				    int maxErr, int maxRecords)
-/* Parse header and rows within the given position range from a VCF file that has been
- * compressed and indexed by tabix into a vcfFile object; return NULL if or if file has
- * no items in range.
- * If maxErr not zero, then continue to parse until this number of error have been reached.
- * A maxErr less than zero does not stop and reports all errors. */
+/* Open a VCF file that has been compressed and indexed by tabix and
+ * parse VCF header, or return NULL if unable.  If chrom is non-NULL,
+ * seek to the position range and parse all lines in range into
+ * vcff->records.  If maxErr >= zero, then continue to parse until
+ * there are maxErr+1 errors.  A maxErr less than zero does not stop
+ * and reports all errors. */
 {
 struct lineFile *lf = lineFileTabixMayOpen(fileOrUrl, TRUE);
 struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
