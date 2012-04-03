@@ -20,6 +20,7 @@
 #include "suggest.h"
 #include "search.h"
 #include "internet.h"
+#include "geoMirror.h"
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -304,26 +305,22 @@ int main(int argc, char *argv[])
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
-#ifdef SUPPORT_EURONODE
-boolean onWeb = cgiIsOnWeb();
-if (onWeb)
+if(cgiIsOnWeb())
     {
     // check IP for redirection
-    char *thisNodeStr = cfgOption("browser.node");
+    // NOTE that we want to redirect people as quickly as possible, so for efficiency purposes, this code is designed to be
+    // called BEFORE the cart is loaded (so we only use CGI parameters and/or cookies).
+
+    char *thisNodeStr = geoMirrorNode();
     if (thisNodeStr)
 	{
-	char *redirect = cgiOptionalString("redirect");
-	char *source = cgiOptionalString("source");
-	// check for the cookie called redirect (which suppress redirection)
 	char *redirectCookie = findCookieData("redirect");
+        char *redirect = cgiOptionalString("redirect");
 
-	fprintf(stderr, "GALT redirectCookie=%s redirect=%s source=%s\n", 
-		redirectCookie, redirect, source); fflush(stderr); // DEBUG REMOVE
+	fprintf(stderr, "GALT redirectCookie=%s redirect=%s\n", 
+		redirectCookie, redirect); fflush(stderr); // DEBUG REMOVE
 
-	if (!(
-              (redirect && !source) ||   // we are on main site after user has actively choose to leave mirror and come back to the main site
-              redirectCookie             // main site after above has happened (XXXX I think)
-              ))
+	if (redirect == NULL && redirectCookie == NULL)
 	    {
 	    int thisNode = sqlUnsigned(thisNodeStr);
 	    struct sqlConnection *centralConn = hConnectCentral();
@@ -331,6 +328,7 @@ if (onWeb)
 	    char *ipStr = cgiRemoteAddr();
 	    bits32 ip = 0;
 	    internetDottedQuadToIp(ipStr, &ip);
+
             // we assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient.
 	    safef(query, sizeof query, "select ipStart, ipEnd, node from geoIpNode where %u >= ipStart order by ipStart desc limit 1", ip);
 	    char **row;
@@ -360,19 +358,12 @@ if (onWeb)
 		char *oldDomain = cgiServerName();
 		char *port = cgiServerPort();
 		char *uri = cgiRequestUri();
-		    //   /cgi-bin/test.cgi?x=15&y=youdog
-		char *sep = "?";
-		if (strchr(uri,'?') != 0)
-		    sep = "&";
-
-		int newUriSize = strlen(uri)+1024;
+		char *sep = strchr(uri, '?') ? "&" : "?";
+		int newUriSize = strlen(uri) + 1024;
 		char *newUri = needMem(newUriSize);
 		// TODO what about https?
-		safef(newUri, newUriSize, "http://%s:%s%s%sredirect=mirror&source=%s", newDomain, port, uri, sep, oldDomain);
-
-		 //   "set-cookie: redirect=; path=/; expires=Mon, 18-Apr-2011 21:45:28 GMT"  
-                 //     the time of the set-cookie expire was immediately now()
-		struct dyString *dy = dyStringNew(256);		
+		safef(newUri, newUriSize, "http://%s:%s%s%sredirect=auto&source=%s", newDomain, port, uri, sep, oldDomain);
+		struct dyString *dy = dyStringNew(256);
 		dyStringPrintf(dy,
 		    "HTTP/1.1 302 found: \n"
 		    "Content-Type: text/html; charset=iso-8859-1\n"
@@ -390,7 +381,6 @@ if (onWeb)
 	    }
 	}
     }
-#endif
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
