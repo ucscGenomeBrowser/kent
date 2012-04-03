@@ -173,7 +173,21 @@ Python a fair bit as well, tabs are best avoided altogether.
 The proper settings for the vi editor to interpret tabs correctly
 in existing code, and avoid tabs in new code are:
      set ts=8 set sw=4 set expandtab
-Lines should be no more than 100 characters wide.  
+
+Lines should be no more than 100 characters wide.  Lines that are 
+longer than this are broken and indented at least 8 spaces
+more than the original line to indicate the line continuation.
+Line continuations may be unavoidable when calling functions with long
+parameter lists and in a few other situations.  Where possible though
+simplifying techniques should be applied to the code in preference
+to the line continuations.  Complex expressions can be broken into
+parts that are assigned to intermediate variables.  Long variable names
+can be revisited and sometimes shortened. Deep indenting can be
+avoided by simplifying logic and moving blocks into their own functions.
+These are just some ways you can productively shorten long lines without
+resorting to continuations, which no matter how they are done will tend
+to obscure the logic apparent in the indentation.
+
 
 NAMES
 
@@ -297,13 +311,13 @@ for (i=0; i<end; i += 4)
     *pt++ = packDna4(dna+i);
     }
 
-/* Take care of conversion of last few bases, padding with 'T'. */
+/* Take care of conversion of last few bases, padding arbitrarily with 'T'. */
 DNA last4[4];   
 last4[0] = last4[1] = last4[2] = last4[3] = 'T';
 memcpy(last4, dna+i, seq->size-i);
 *pt = packDna4(last4);
 
-/* Deal with blocks of N. */
+/* Deal with blocks of N, saving end points of blocks. */
 twoBit->nBlockCount = countBlocksOfN(dna, seq->size);
 if (twoBit->nBlockCount > 0)
     {
@@ -312,7 +326,7 @@ if (twoBit->nBlockCount > 0)
     storeBlocksOfN(dna, seq->size, twoBit->nStarts, twoBit->nSizes);
     }
 
-/* Deal with masking */
+/* Deal with masking, saving end points of blocks. */
 if (doMask)
     {
     twoBit->maskBlockCount = countBlocksOfLower(dna, seq->size);
@@ -326,6 +340,11 @@ if (doMask)
     }
 return twoBit;
 }
+
+Though code paragraphs help make long functions readable, in general
+smaller functions are preferred. It is rare that a longer function
+couldn't be improved by moving some blocks of code into new functions
+or simplifying.
 
 ====================================================================
 This file last updated: $Date: 2010/06/03 16:48:53 $
