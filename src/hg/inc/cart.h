@@ -13,9 +13,6 @@ struct cart;         // forward definition for use in trackDb.h
 #include "linefile.h"
 #include "trackDb.h"
 
-// SUPPORT_EURONODE used to turn on euronode support code (redmine #3104).
-// #define SUPPORT_EURONODE 1
-
 // If cgi set as CART_VAR_EMPTY, then removed from cart
 // If If cgi created new and oldVars are stored, then will be CART_VAR_EMPTY in old vars
 #define CART_VAR_EMPTY "[]"
