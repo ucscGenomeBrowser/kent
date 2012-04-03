@@ -125,6 +125,7 @@ labExpId 11011
 localization cell
 mapAlgorithm TH1014
 md5sum 274b28e7c78fd36d50ae235b0cdabf84
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -153,6 +154,7 @@ labExpId 11010
 localization cell
 mapAlgorithm TH1014
 md5sum 9fe2006c7b68c99f0754b416c011b0b8
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -181,6 +183,7 @@ labExpId 11011
 localization cell
 mapAlgorithm TH1014
 md5sum 796ea64e608aa0595d2ebbe8c29c6c40
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -209,6 +212,7 @@ labExpId 11010
 localization cell
 mapAlgorithm TH1014
 md5sum 931c4a6cf89825cef98e6715d0ce31f0
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -381,6 +385,102 @@ replicate 2
 rnaExtract longPolyA
 subId 2930
 tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep1V4
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11011
+mapAlgorithm TH1014
+md5sum f37fa3493066587a50b17ffc394d32d7
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6348
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep1V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep2V4
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11010
+mapAlgorithm TH1014
+md5sum 7bc4828239ea17d7150170af857a7753
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6349
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep2V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep1V4
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11011
+mapAlgorithm TH1014
+md5sum 4478fcc2b27bca503c7259de48a997da
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6348
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep1V4
+treatment None
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep2V4
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11010
+mapAlgorithm TH1014
+md5sum 58c0ff926915396ed71ccfb3d417e888
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6349
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep2V4
+treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2
@@ -838,6 +938,7 @@ labExpId 10565
 localization cell
 mapAlgorithm TH1014
 md5sum 5a3e592682a9ca5cdb0f56fa6a318170
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -867,6 +968,7 @@ labExpId 10515
 localization cell
 mapAlgorithm TH1014
 md5sum 05b45de0139756182c45c28ce9f9c6bb
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1362,6 +1464,7 @@ labExpId 10516
 localization cell
 mapAlgorithm TH1014
 md5sum 3233c6f99568decaced3d0c368a6d493
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1510,6 +1613,29 @@ subId 1647
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1V4
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10565
+mapAlgorithm TH1014
+md5sum 41464ad5a124820f3e2ebb1480cbbd55
+project wgEncode
+readType 2x75
+replicate 1
+subId 6277
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
 objType table
 cell GM12878
@@ -1538,6 +1664,29 @@ subId 1856
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2V4
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10515
+mapAlgorithm TH1014
+md5sum b3a79785ba671d9626b77ba107e61798
+project wgEncode
+readType 2x75
+replicate 2
+subId 6276
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
 objType table
 cell GM12878
@@ -1564,6 +1713,31 @@ replicate 2
 rnaExtract longPolyA
 subId 1672
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400USigRep2V4
+objType table
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400USigRep2V4.bigWig
+grant Myers
+insertLength 400
+lab Caltech
+labExpId 10516
+mapAlgorithm TH1014
+md5sum 640a798dc5b97be74bbb2c0f84d97311
+project wgEncode
+readType 2x75
+replicate 2
+sex U
+subId 6243
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400USigRep2V4
+treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2
@@ -1960,6 +2134,7 @@ labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 66bf7283455942fcd9bf748d60673699
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1988,6 +2163,7 @@ labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 6052488b6f4d0262fad04ef84e7e046b
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2215,6 +2391,52 @@ rnaExtract longPolyA
 subId 3665
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
+
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep1V4
+objType table
+cell GM12891
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11038
+mapAlgorithm TH1014
+md5sum 6b36048e03b7e362fcb6d40b6555117f
+project wgEncode
+readType 2x75
+replicate 1
+subId 6275
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep1V4
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep2V4
+objType table
+cell GM12891
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId SL2971
+mapAlgorithm TH1014
+md5sum 28deb7e7f53c31807200320e1a710cf1
+project wgEncode
+readType 2x75
+replicate 2
+subId 6274
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12891R2x75Th1014Il200SigRep2V4
+view Signal
 
 metaObject wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2
 objType table
@@ -2799,6 +3021,7 @@ labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum 5c1108a75f664374703c09328e1b349c
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2827,6 +3050,7 @@ labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 687f03d3c4be21942ed9bdf90cd8db29
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2855,6 +3079,7 @@ labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum c382c17fa4074ff762eb61cf10122b54
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -3192,6 +3417,75 @@ subId 3744
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep1V4
+objType table
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11039
+mapAlgorithm TH1014
+md5sum 9a6917f13d90cdf628d2b505cb5161fa
+project wgEncode
+readType 2x75
+replicate 1
+subId 6273
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep1V4
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep2V4
+objType table
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId SL2970
+mapAlgorithm TH1014
+md5sum d53fc33946e709ec193ef5b706fe166d
+project wgEncode
+readType 2x75
+replicate 2
+subId 6272
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep2V4
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep3V4
+objType table
+cell GM12892
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep3V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId SL2973
+mapAlgorithm TH1014
+md5sum 6092c8311a0a1eff2301d2d5b39428bf
+project wgEncode
+readType 2x75
+replicate 3
+subId 6271
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqGm12892R2x75Th1014Il200SigRep3V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2
 objType table
 cell H1-hESC
@@ -3315,6 +3609,7 @@ labExpId 10947
 localization cell
 mapAlgorithm TH1014
 md5sum 1972c29a1ea829cadbde34409a9054e6
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -3343,6 +3638,7 @@ labExpId 11009
 localization cell
 mapAlgorithm TH1014
 md5sum 6c001d66964b67f4a4e9a227de3a84a2
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -3371,6 +3667,7 @@ labExpId 10947
 localization cell
 mapAlgorithm TH1014
 md5sum 02ed40a6a7e0b72ffbc8f8c439edd1fd
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -3399,6 +3696,7 @@ labExpId 11009
 localization cell
 mapAlgorithm TH1014
 md5sum 99f78462d0c1c7cf0c165f3ba05dd3ec
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -3571,6 +3869,102 @@ replicate 2
 rnaExtract longPolyA
 subId 2932
 tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep1V4
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 10947
+mapAlgorithm TH1014
+md5sum d84ab9fdb76a8796b9a9b990007dc86b
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6350
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep1V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep2V4
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11009
+mapAlgorithm TH1014
+md5sum 09dffde3daa4dd3138de4e3a689d4924
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6351
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep2V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep1V4
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 10947
+mapAlgorithm TH1014
+md5sum f046924bcc462e7868950f5fb456a17c
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6350
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep1V4
+treatment None
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep2V4
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11009
+mapAlgorithm TH1014
+md5sum 5eca011ec0a4675e87273ac1bb85a5d4
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6351
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep2V4
+treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2
@@ -4352,6 +4746,7 @@ labExpId 11286
 localization cell
 mapAlgorithm TH1014
 md5sum 9c66037fd6939d0eec272e82919844e5
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4381,6 +4776,7 @@ labExpId 11288
 localization cell
 mapAlgorithm TH1014
 md5sum cab0e7f4fb64d26b33654673f641dbbc
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4410,6 +4806,7 @@ labExpId 11289
 localization cell
 mapAlgorithm TH1014
 md5sum f6fcb1da349c20e382cf85fc546813cc
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4439,6 +4836,7 @@ labExpId 10874
 localization cell
 mapAlgorithm TH1014
 md5sum 559320c18d02ed9b5f400970518ba648
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5098,6 +5496,7 @@ labExpId 10876
 localization cell
 mapAlgorithm TH1014
 md5sum 9344f8b1b4c668c4023d1af54b890072
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -5246,6 +5645,29 @@ subId 1670
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1V4
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11286
+mapAlgorithm TH1014
+md5sum b3446f00d2f8a30106e58f355c319a6d
+project wgEncode
+readType 2x75
+replicate 1
+subId 6269
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2
 objType table
 cell H1-hESC
@@ -5272,6 +5694,29 @@ replicate 2
 rnaExtract longPolyA
 subId 1668
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2V4
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11288
+mapAlgorithm TH1014
+md5sum 96affc7571a63ebe43310e084ef99ede
+project wgEncode
+readType 2x75
+replicate 2
+subId 6268
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2V4
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3
@@ -5302,6 +5747,29 @@ subId 1667
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3V4
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11289
+mapAlgorithm TH1014
+md5sum 16f749045acd1c4506153016d8eadd68
+project wgEncode
+readType 2x75
+replicate 3
+subId 6267
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4
 objType table
 cell H1-hESC
@@ -5330,6 +5798,29 @@ subId 1666
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4V4
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10874
+mapAlgorithm TH1014
+md5sum cfecf521e746be262c060d5254d0a9e9
+project wgEncode
+readType 2x75
+replicate 4
+subId 6266
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1
 objType table
 cell H1-hESC
@@ -5356,6 +5847,29 @@ replicate 1
 rnaExtract longPolyA
 subId 1669
 tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1V4
+objType table
+cell H1-hESC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1V4.bigWig
+grant Myers
+insertLength 400
+lab Caltech
+labExpId 10876
+mapAlgorithm TH1014
+md5sum 3cab3f7690217ffbfcde842ffd61e5cc
+project wgEncode
+readType 2x75
+replicate 1
+subId 6278
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1V4
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2
@@ -5750,6 +6264,7 @@ labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum 63c5505af9d35ca6a86312980f9989ba
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -5778,6 +6293,7 @@ labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum de34ec8697426f7334f6193dc2e53d5e
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -6006,6 +6522,52 @@ subId 3583
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
 
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep1V4
+objType table
+cell HCT-116
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 12096
+mapAlgorithm TH1014
+md5sum 605c379cee663c1e75fdc882a9cd6dca
+project wgEncode
+readType 2x75
+replicate 1
+subId 6265
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep1V4
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep2V4
+objType table
+cell HCT-116
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 12097
+mapAlgorithm TH1014
+md5sum 744e69bf87bcac918f08b7bec40d89db
+project wgEncode
+readType 2x75
+replicate 2
+subId 6264
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHct116R2x75Th1014Il200SigRep2V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2
 objType table
 cell HeLa-S3
@@ -6130,6 +6692,7 @@ labExpId 11208
 localization cell
 mapAlgorithm TH1014
 md5sum d35c6a6014b9881bfe5e7d4bd584bad6
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6158,6 +6721,7 @@ labExpId 11207
 localization cell
 mapAlgorithm TH1014
 md5sum 00a530d87d7b234d7140f3e7d947b8c5
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6186,6 +6750,7 @@ labExpId 11208
 localization cell
 mapAlgorithm TH1014
 md5sum 93586c9a5eee279751814b2ce4ce6523
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6214,6 +6779,7 @@ labExpId 11207
 localization cell
 mapAlgorithm TH1014
 md5sum 12fa4856564ab778bbc609cb9fee3b6d
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6386,6 +6952,102 @@ replicate 2
 rnaExtract longPolyA
 subId 2936
 tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep1V4
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11208
+mapAlgorithm TH1014
+md5sum 998532b3eb2e4915fc7bb305310dda9f
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6354
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep1V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep2V4
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11207
+mapAlgorithm TH1014
+md5sum 1bb7aea844d7bcbbd1f232717fa9aeb0
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6355
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep2V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep1V4
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11208
+mapAlgorithm TH1014
+md5sum 7b73bba7bc3e3ed2a520b95293751089
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6354
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep1V4
+treatment None
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep2V4
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11207
+mapAlgorithm TH1014
+md5sum 8c68652122e00eb4507ee1f148072b58
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6355
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep2V4
+treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2
@@ -6787,6 +7449,7 @@ labExpId 10881
 localization cell
 mapAlgorithm TH1014
 md5sum c0ee13a431fac2ff6b4d00aa0c574e3d
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6816,6 +7479,7 @@ labExpId 10882
 localization cell
 mapAlgorithm TH1014
 md5sum e5f56f3743d2022316e23e5a5b26c457
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -7074,6 +7738,29 @@ subId 1663
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1V4
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10881
+mapAlgorithm TH1014
+md5sum a1b162e27140c5b624d612664eb8e4b8
+project wgEncode
+readType 2x75
+replicate 1
+subId 6259
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
 objType table
 cell HeLa-S3
@@ -7100,6 +7787,29 @@ replicate 2
 rnaExtract longPolyA
 subId 1662
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2V4
+objType table
+cell HeLa-S3
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10882
+mapAlgorithm TH1014
+md5sum 4a02e545384cc9aee6d7c41fb8f035fe
+project wgEncode
+readType 2x75
+replicate 2
+subId 6258
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2V4
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3
@@ -7225,6 +7935,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum b932cc8ab994eacd9712860c5e264429
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7252,6 +7963,7 @@ lab Caltech
 localization cell
 mapAlgorithm TH1014
 md5sum 12f047541ec03066a394905c53914db6
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7280,6 +7992,7 @@ labExpId 11210
 localization cell
 mapAlgorithm TH1014
 md5sum 37e539c184fc5397dfd723917bcd32b8
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7308,6 +8021,7 @@ labExpId 11209
 localization cell
 mapAlgorithm TH1014
 md5sum 900fc07abdf7a8173a7211f2bfe56e17
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7480,6 +8194,102 @@ replicate 2
 rnaExtract longPolyA
 subId 2938
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep1V4
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11210
+mapAlgorithm TH1014
+md5sum 7cdb8ca0da91f2b82cd42788e29d92f2
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6356
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep1V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep2V4
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11209
+mapAlgorithm TH1014
+md5sum aa58d67bab9fc717094a980de346ef69
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6357
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep2V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep1V4
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11210
+mapAlgorithm TH1014
+md5sum d47c42f3ee5fa83131902ea810f20235
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6356
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep1V4
+treatment None
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep2V4
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11209
+mapAlgorithm TH1014
+md5sum b9e0e8b271246106275fdb895ea3df62
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6357
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep2V4
+treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2
@@ -7881,6 +8691,7 @@ labExpId 10878
 localization cell
 mapAlgorithm TH1014
 md5sum 1448d05c49419c2e920038aa17ed92ab
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -7910,6 +8721,7 @@ labExpId 10879
 localization cell
 mapAlgorithm TH1014
 md5sum 0523fcec9023c565ea343480ea3aea93
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8168,6 +8980,29 @@ subId 1661
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1V4
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10878
+mapAlgorithm TH1014
+md5sum ac40996bbdd0c0438168c5aab5473766
+project wgEncode
+readType 2x75
+replicate 1
+subId 6257
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2
 objType table
 cell HepG2
@@ -8194,6 +9029,29 @@ replicate 2
 rnaExtract longPolyA
 subId 1660
 tableName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2V4
+objType table
+cell HepG2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10879
+mapAlgorithm TH1014
+md5sum c63b25f38723d211ef77e8b1250b4cbd
+project wgEncode
+readType 2x75
+replicate 2
+subId 6256
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2V4
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2
@@ -8588,6 +9446,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 585d42e0bd089c9871cb41113d82ebed
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -8616,6 +9475,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum d658dbe83ca0589d0c5dc533dcd2f860
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -8871,6 +9731,29 @@ subId 1907
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1V4
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11584
+mapAlgorithm TH1014
+md5sum e0c3f7d68ff6997b5e74a0c43ccd5403
+project wgEncode
+readType 2x75
+replicate 1
+subId 6263
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
 objType table
 cell HSMM
@@ -8896,6 +9779,29 @@ replicate 2
 rnaExtract longPolyA
 subId 1908
 tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2V4
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11585
+mapAlgorithm TH1014
+md5sum 327c10dc6dd82c2e5792d73813dbe9c7
+project wgEncode
+readType 2x75
+replicate 2
+subId 6262
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2V4
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2
@@ -9022,6 +9928,7 @@ labExpId 11206
 localization cell
 mapAlgorithm TH1014
 md5sum 73ba941c3fdbde6165fb5c30a5544309
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -9050,6 +9957,7 @@ labExpId 11205
 localization cell
 mapAlgorithm TH1014
 md5sum c78b4ae4c72220140d2f5142fcc0c7f0
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -9078,6 +9986,7 @@ labExpId 11206
 localization cell
 mapAlgorithm TH1014
 md5sum ca26ee3657cf78405c62db7ab68ae0c8
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -9106,6 +10015,7 @@ labExpId 11205
 localization cell
 mapAlgorithm TH1014
 md5sum 270fbe452be9af18347e8968ae1395f8
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -9278,6 +10188,102 @@ replicate 2
 rnaExtract longPolyA
 subId 2934
 tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep1V4
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11206
+mapAlgorithm TH1014
+md5sum 97e5c43eb6b2934d0ab4f69a3439cf5c
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6352
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep1V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep2V4
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11205
+mapAlgorithm TH1014
+md5sum d8be96747aa55460a0560db00cf92d60
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6353
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep2V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep1V4
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11206
+mapAlgorithm TH1014
+md5sum e515f657ea24194ea1af5639acf3a37e
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6352
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep1V4
+treatment None
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep2V4
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11205
+mapAlgorithm TH1014
+md5sum 0b3856fa998a1c05b61a67d7f4d6b4fd
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6353
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep2V4
+treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2
@@ -9679,6 +10685,7 @@ labExpId 10883
 localization cell
 mapAlgorithm TH1014
 md5sum 6acf3fae13efbb3c5fc7370c3a37845a
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9708,6 +10715,7 @@ labExpId 10885
 localization cell
 mapAlgorithm TH1014
 md5sum c36ecbfd3419222d3de11218db0890e5
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9966,6 +10974,29 @@ subId 1665
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1V4
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10883
+mapAlgorithm TH1014
+md5sum a75fdcff8f9ff1d0d82d709536f05301
+project wgEncode
+readType 2x75
+replicate 1
+subId 6261
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2
 objType table
 cell HUVEC
@@ -9992,6 +11023,29 @@ replicate 2
 rnaExtract longPolyA
 subId 1664
 tableName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2V4
+objType table
+cell HUVEC
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10885
+mapAlgorithm TH1014
+md5sum a53719c77fdb0671c24ccb5e2ddbf8d2
+project wgEncode
+readType 2x75
+replicate 2
+subId 6260
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2V4
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2
@@ -10117,6 +11171,7 @@ labExpId 11008
 localization cell
 mapAlgorithm TH1014
 md5sum fdb819265e284825df5cff86de0ed7e7
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -10145,6 +11200,7 @@ labExpId 11007
 localization cell
 mapAlgorithm TH1014
 md5sum fdb48ca7d5939f7424c66379a6b81ebe
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -10173,6 +11229,7 @@ labExpId 11008
 localization cell
 mapAlgorithm TH1014
 md5sum 0d2b0934c588b1bc9a12f034edb5a25c
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -10201,6 +11258,7 @@ labExpId 11007
 localization cell
 mapAlgorithm TH1014
 md5sum 0739f36a41f598b55ba3bd9b88fd20a0
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -10373,6 +11431,102 @@ replicate 2
 rnaExtract longPolyA
 subId 2940
 tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep1V4
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11008
+mapAlgorithm TH1014
+md5sum b9e898b101d67c8ac44d2d0960c52b6b
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6358
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep1V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep2V4
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11007
+mapAlgorithm TH1014
+md5sum d9f06a4dc53c43733726bab9693b3be4
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6359
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep2V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep1V4
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11008
+mapAlgorithm TH1014
+md5sum d9183c7ed78ce951c620d1dec39d366e
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6358
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep1V4
+treatment None
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep2V4
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep2V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11007
+mapAlgorithm TH1014
+md5sum 429220fd702924f6a842eba80ba331cb
+project wgEncode
+readType 1x75D
+replicate 2
+sex U
+subId 6359
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep2V4
+treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2
@@ -10884,6 +12038,7 @@ labExpId 10517
 localization cell
 mapAlgorithm TH1014
 md5sum 6eff8e54b260d433c5e76ed4c49a7be4
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10913,6 +12068,7 @@ labExpId 10567
 localization cell
 mapAlgorithm TH1014
 md5sum 9c1bda38fc8905540249b4682f1782a1
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -11171,6 +12327,29 @@ subId 1659
 tableName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1V4
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10517
+mapAlgorithm TH1014
+md5sum 1ac9727992f3457169c3d159c07e1d4f
+project wgEncode
+readType 2x75
+replicate 1
+subId 6255
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2
 objType table
 cell K562
@@ -11197,6 +12376,29 @@ replicate 2
 rnaExtract longPolyA
 subId 1658
 tableName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2V4
+objType table
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10567
+mapAlgorithm TH1014
+md5sum d515e68f475eb0fa8db58bef58273aca
+project wgEncode
+readType 2x75
+replicate 2
+subId 6254
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2V4
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2
@@ -11612,6 +12814,7 @@ labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 150ebbcc928783917a0c494c934b4faa
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -11757,6 +12960,7 @@ labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum 4befd19107433f9a45def29778e3f5e2
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -11878,6 +13082,55 @@ rnaExtract longPolyA
 subId 3594
 submittedDataVersion V3 - New Elements Formats
 view TranscriptGencV3c
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200Diff7dSigRep1V4
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-26
+dateUnrestricted 2012-12-26
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200Diff7dSigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11622
+mapAlgorithm TH1014
+md5sum 904e04aa6655eb361a0b09fbca0bcfae
+project wgEncode
+readType 2x75
+replicate 1
+subId 6252
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200Diff7dSigRep1V4
+treatment DIFF_7d
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200USigRep1V4
+objType table
+cell LHCN-M2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-26
+dateUnrestricted 2012-12-26
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200USigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11621
+mapAlgorithm TH1014
+md5sum 835a2d56cddf8b2ac7b729b0191a10e0
+project wgEncode
+readType 2x75
+replicate 1
+sex U
+subId 6253
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Th1014Il200USigRep1V4
+treatment None
+view Signal
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2
 objType table
@@ -12460,6 +13713,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum e107a0fa82bce0044c13a7a8ff1cab31
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -12488,6 +13742,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 0669978e2325c8ccb73da658fd2cb72b
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -12516,6 +13771,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 3c5c7b34f0d917a331a60da7ac1f16d6
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -12881,6 +14137,29 @@ subId 3025
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1V4
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11581
+mapAlgorithm TH1014
+md5sum b6ab03e286e27a798dcc9f13d187c1b0
+project wgEncode
+readType 2x75
+replicate 1
+subId 6251
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
 objType table
 cell MCF-7
@@ -12907,6 +14186,52 @@ replicate 2
 rnaExtract longPolyA
 subId 3024
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2V4
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11582
+mapAlgorithm TH1014
+md5sum adf89737de8e79527598e10700e9e30a
+project wgEncode
+readType 2x75
+replicate 2
+subId 6250
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2V4
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep3V4
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep3V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 12098
+mapAlgorithm TH1014
+md5sum 345732a0c766765f6865f39e42fe4224
+project wgEncode
+readType 2x75
+replicate 3
+subId 6249
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep3V4
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2
@@ -12980,6 +14305,7 @@ labExpId 11204
 localization cell
 mapAlgorithm TH1014
 md5sum 82d92f5f5cbaa6eab722700cd7696b8e
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -13008,6 +14334,7 @@ labExpId 11204
 localization cell
 mapAlgorithm TH1014
 md5sum 436e6ce59d1134369466d67c2a75a304
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -13098,6 +14425,54 @@ replicate 1
 rnaExtract longPolyA
 subId 2941
 tableName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
+view PlusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014UMinusRawRep1V4
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014UMinusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11204
+mapAlgorithm TH1014
+md5sum 17efd764fabddeba093ed51739445c8b
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6360
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqNhekR1x75dTh1014UMinusRawRep1V4
+treatment None
+view MinusRawSignal
+
+metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014UPlusRawRep1V4
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-27
+dateUnrestricted 2012-12-27
+fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014UPlusRawRep1V4.bigWig
+grant Myers
+lab Caltech
+labExpId 11204
+mapAlgorithm TH1014
+md5sum 8c3317fbb68d7e78d707f9a2f33f50a9
+project wgEncode
+readType 1x75D
+replicate 1
+sex U
+subId 6360
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqNhekR1x75dTh1014UPlusRawRep1V4
+treatment None
 view PlusRawSignal
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2
@@ -13496,6 +14871,7 @@ labExpId 10884
 localization cell
 mapAlgorithm TH1014
 md5sum 1e9e843579cee9d96de24ebad982f317
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -13524,6 +14900,7 @@ labExpId 11586
 localization cell
 mapAlgorithm TH1014
 md5sum 9b6df67c3c4c4d62678db0707b307634
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -13806,6 +15183,56 @@ replicate 2
 rnaExtract longPolyA
 subId 1909
 tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep1V4
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-26
+dateUnrestricted 2012-12-26
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10884
+mapAlgorithm TH1014
+md5sum 029a4ba2638395fc44b93f5aa1927153
+project wgEncode
+readType 2x75
+replicate 1
+sex U
+subId 6248
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep1V4
+treatment None
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep2V4
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-26
+dateUnrestricted 2012-12-26
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11586
+mapAlgorithm TH1014
+md5sum 057a9d2d67632f22659ff41718fc1777
+project wgEncode
+readType 2x75
+replicate 2
+sex U
+subId 6247
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200USigRep2V4
+treatment None
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2
@@ -14200,6 +15627,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 33a394274d02da08fdf7e8b6f09b6bf2
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -14228,6 +15656,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 1b981f54d2b5c0343e1df4f9f18f42d4
+objStatus replaced - Any previous versions of the data are bad, please use the V4 version.
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -14483,6 +15912,29 @@ subId 1906
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1V4
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11587
+mapAlgorithm TH1014
+md5sum 64697dfe0c39ca6d4af451fdfbb72533
+project wgEncode
+readType 2x75
+replicate 1
+subId 6246
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1V4
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 objType table
 cell NHLF
@@ -14510,4 +15962,27 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 1387740363
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 11588
+mapAlgorithm TH1014
+md5sum 72612280557b555f369c297c1fde1fc9
+project wgEncode
+readType 2x75
+replicate 2
+subId 6245
+submittedDataVersion V4 - Previous version off by one base
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4
+view Signal
+
+# MAGIC: 626265093

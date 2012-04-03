@@ -21,8 +21,7 @@ include wgEncodePsuTfbs.patch.ra alpha
 include wgEncodePsuHistone.ra alpha,beta
 
 # LICR Histone (wrangler: Fang)
-include wgEncodeLicrHistone.ra public
-include wgEncodeLicrHistone.release2.ra alpha,beta
+include wgEncodeLicrHistone.release2.ra
 
 # LICR TFBS (wrangler: Fang)
 include wgEncodeLicrTfbs.ra public
@@ -53,3 +52,6 @@ include wgEncodeCshlLongRnaSeq.ra
 
 # Caltech RNA-Seq (wrangler: Venkat)
 include wgEncodeCaltechRnaSeq.ra alpha
+
+# FSU Repli-Seq (wrangler: Venkat)
+include wgEncodeFsuRepliSeq.ra

@@ -1,4 +1,4 @@
-# Data Agreement File $Revision: 1.8 $
+# Data Agreement File $Revision: 1.9 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -30,8 +30,10 @@ compositeSuffix   CaltechRnaSeq
 group             expression
 variables         cell,readType,mapAlgorithm,insertLength,treatment
 assembly          hg19
+dataVersion       4
+dataVersionComment Previous version off by one base
 
-validationSettings validateFiles.bam:bamPercent=98,mismatches=6
+validationSettings validateFiles.bam:mismatches=6
 
 # Track/view definition
 
@@ -63,12 +65,12 @@ hasReplicates    yes
 required         no
 
 # ONE TYPE OF SIGNAL SHOULD BE WITH EVERY SUBMISSION
-view             MinusSignal
+view             MinusRawSignal
 type             bigWig
 hasReplicates    yes
 required         no
 
-view             PlusSignal
+view             PlusRawSignal
 type             bigWig
 hasReplicates    yes
 required         no
