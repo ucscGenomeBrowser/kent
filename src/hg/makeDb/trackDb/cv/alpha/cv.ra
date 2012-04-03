@@ -5874,7 +5874,7 @@ type Cell Line
 organism mouse
 category primaryCells
 description epidermal stem cell PROVISIONAL
-age EO
+age E0
 strain 129
 vendorName Gilbert lab
 vendorId EpiSC5
@@ -5891,7 +5891,7 @@ type Cell Line
 organism mouse
 category primaryCells
 description epidermal stem cell PROVISIONAL
-age EO
+age E0
 strain 129
 vendorName Gilbert lab
 vendorId EpiSC7
@@ -5908,7 +5908,7 @@ type Cell Line
 organism mouse
 category primaryCells
 description ES-cells isolated from 129. PROVISIONAL
-age EO
+age E0
 strain 129
 vendorName Smith lab
 vendorId ES-46C
@@ -5992,7 +5992,7 @@ type Cell Line
 organism mouse
 category primaryCells
 description ES-cells isolated from C57BL/6xCBA PROVISIONAL
-age EO
+age E0
 strain B6CBAF1/J
 vendorName Shinkai lab
 vendorId ES-TT2
@@ -6347,7 +6347,7 @@ orderUrl http://www.genome.gov/10000336
 termId 7040
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7040
 color 86,180,233
-sex U
+sex F
 protocol Hardison:MEP_Hardison_protocol.pdf
 
 term MEF
