@@ -22,27 +22,36 @@ struct annoStreamer
  * will do all the actual work. */
     {
     struct annoStreamer *next;
+
     // Public methods
-    // Get autoSql representation (do not modify or free!)
     struct asObject *(*getAutoSqlObject)(struct annoStreamer *self);
-    // Set genomic region for query (should be called only by annoGratorQuerySetRegion)
+    /* Get autoSql representation (do not modify or free!) */
+
     void (*setRegion)(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
-    // Get and set filters
+    /* Set genomic region for query (should be called only by annoGratorQuerySetRegion) */
+
     struct annoFilter *(*getFilters)(struct annoStreamer *self);
     void (*setFilters)(struct annoStreamer *self, struct annoFilter *newFilters);
-    // Get and set output fields
+    /* Get and set filters */
+
     struct annoColumn *(*getColumns)(struct annoStreamer *self);
     void (*setColumns)(struct annoStreamer *self, struct annoColumn *newColumns);
-    // Get next item's output fields from this source
+    /* Get and set output fields */
+
     struct annoRow *(*nextRow)(struct annoStreamer *self);
-    // Close connection to source and free self.
+    /* Get next item's output fields from this source */
+
     void (*close)(struct annoStreamer **pSelf);
-    // For use by annoGratorQuery only: hook up query object after creation
+    /* Close connection to source and free self. */
+
     void (*setQuery)(struct annoStreamer *self, struct annoGratorQuery *query);
+    /* For use by annoGratorQuery only: hook up query object after creation */
+
     // Public members -- callers are on the honor system to access these read-only.
     struct annoGratorQuery *query;	// The query object that owns this streamer.
     enum annoRowType rowType;
     int numCols;
+
     // Private members -- callers are on the honor system to access these using only methods above.
     boolean positionIsGenome;
     char *chrom;
