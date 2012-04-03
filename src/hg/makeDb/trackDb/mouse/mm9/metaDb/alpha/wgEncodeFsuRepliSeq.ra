@@ -1,3 +1,8 @@
+metaObject wgEncodeFsuRepliSeq
+objType composite
+composite wgEncodeFsuRepliSeq
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeFsuRepliSeqCh12FRawDataRep1
 objType file
 age immortalized
@@ -92,7 +97,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEpisc5MRawDataRep1
 objType file
-age EO
+age E0
 attic auxSup
 cell EpiSC-5
 composite wgEncodeFsuRepliSeq
@@ -115,7 +120,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEpisc5MRawDataRep2
 objType file
-age EO
+age E0
 attic auxSup
 cell EpiSC-5
 composite wgEncodeFsuRepliSeq
@@ -138,7 +143,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEpisc5MWaveSignalRep1
 objType table
-age EO
+age E0
 cell EpiSC-5
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -161,7 +166,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEpisc5MWaveSignalRep2
 objType table
-age EO
+age E0
 cell EpiSC-5
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -184,7 +189,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEpisc7FRawDataRep1
 objType file
-age EO
+age E0
 attic auxSup
 cell EpiSC-7
 composite wgEncodeFsuRepliSeq
@@ -207,7 +212,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEpisc7FRawDataRep2
 objType file
-age EO
+age E0
 attic auxSup
 cell EpiSC-7
 composite wgEncodeFsuRepliSeq
@@ -230,7 +235,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEpisc7FWaveSignalRep1
 objType table
-age EO
+age E0
 cell EpiSC-7
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -253,7 +258,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEpisc7FWaveSignalRep2
 objType table
-age EO
+age E0
 cell EpiSC-7
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -276,7 +281,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEs46cMDifff6dRawDataRep1
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-46C
 composite wgEncodeFsuRepliSeq
@@ -299,7 +304,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEs46cMDifff6dWaveSignalRep1
 objType table
-age EO
+age E0
 cell ES-46C
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -322,7 +327,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEs46cMRawDataRep1
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-46C
 composite wgEncodeFsuRepliSeq
@@ -345,7 +350,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEs46cMWaveSignalRep1
 objType table
-age EO
+age E0
 cell ES-46C
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -368,7 +373,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe3dRawDataRep1
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-D3
 composite wgEncodeFsuRepliSeq
@@ -391,7 +396,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe3dRawDataRep2
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-D3
 composite wgEncodeFsuRepliSeq
@@ -414,7 +419,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe3dWaveSignalRep1
 objType table
-age EO
+age E0
 cell ES-D3
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -437,7 +442,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe3dWaveSignalRep2
 objType table
-age EO
+age E0
 cell ES-D3
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -460,7 +465,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe6dRawDataRep1
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-D3
 composite wgEncodeFsuRepliSeq
@@ -483,7 +488,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe6dRawDataRep2
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-D3
 composite wgEncodeFsuRepliSeq
@@ -506,7 +511,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe6dWaveSignalRep1
 objType table
-age EO
+age E0
 cell ES-D3
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -529,7 +534,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe6dWaveSignalRep2
 objType table
-age EO
+age E0
 cell ES-D3
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -552,7 +557,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe9dRawDataRep1
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-D3
 composite wgEncodeFsuRepliSeq
@@ -575,7 +580,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe9dRawDataRep2
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-D3
 composite wgEncodeFsuRepliSeq
@@ -598,7 +603,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe9dWaveSignalRep1
 objType table
-age EO
+age E0
 cell ES-D3
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -621,7 +626,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEsd3MDiffe9dWaveSignalRep2
 objType table
-age EO
+age E0
 cell ES-D3
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -644,7 +649,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEsd3MRawDataRep1
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-D3
 composite wgEncodeFsuRepliSeq
@@ -667,7 +672,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEsd3MRawDataRep2
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-D3
 composite wgEncodeFsuRepliSeq
@@ -690,7 +695,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEsd3MWaveSignalRep1
 objType table
-age EO
+age E0
 cell ES-D3
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -713,7 +718,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEsd3MWaveSignalRep2
 objType table
-age EO
+age E0
 cell ES-D3
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -736,7 +741,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEstt2MDifff9dRawDataRep1
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-TT2
 composite wgEncodeFsuRepliSeq
@@ -759,7 +764,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEstt2MDifff9dRawDataRep2
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-TT2
 composite wgEncodeFsuRepliSeq
@@ -782,7 +787,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEstt2MDifff9dWaveSignalRep1
 objType table
-age EO
+age E0
 cell ES-TT2
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -805,7 +810,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEstt2MDifff9dWaveSignalRep2
 objType table
-age EO
+age E0
 cell ES-TT2
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -828,7 +833,7 @@ view WaveSignal
 
 metaObject wgEncodeFsuRepliSeqEstt2MRawDataRep1
 objType file
-age EO
+age E0
 attic auxSup
 cell ES-TT2
 composite wgEncodeFsuRepliSeq
@@ -851,7 +856,7 @@ view RawData
 
 metaObject wgEncodeFsuRepliSeqEstt2MWaveSignalRep1
 objType table
-age EO
+age E0
 cell ES-TT2
 composite wgEncodeFsuRepliSeq
 dataType RepliSeq
@@ -1102,4 +1107,4 @@ tableName wgEncodeFsuRepliSeqMelMWaveSignalRep2
 treatment None
 view WaveSignal
 
-# MAGIC: 1418978299
+# MAGIC: 1236971708

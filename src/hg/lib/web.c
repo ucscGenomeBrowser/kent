@@ -26,6 +26,7 @@
 #include <utime.h>
 #include <htmlPage.h>
 #include <signal.h>
+#include "geoMirror.h"
 /* phoneHome business */
 
 
@@ -386,24 +387,20 @@ else if (dbIsFound)
 
 #endif
 
-#ifdef SUPPORT_EURONODE
-
-if (endsWith(scriptName, "hgGateway"))  // DEBUG
+if (endsWith(scriptName, "hgGateway") && geoMirrorEnabled())
     {
+    // Show an opt-out alert if user is on a host to which user has been automatically redirected (just once, right after they have been redirected)
     char *source = cgiOptionalString("source");
-    if (source)
+    char *redirect = cgiOptionalString("redirect");
+    if (source != NULL && redirect != NULL && sameString(redirect, "auto"))
 	{
 	char *domain = cgiServerName();
 	char *port = cgiServerPort();
-	char *uri = cgiRequestUri();
-	    //   /cgi-bin/test.cgi?x=15&y=youdog
-	int newUriSize = strlen(uri)+1024;
-	char *newUri = needMem(newUriSize);
+        // We don't bother maintaining stuff in request URI, because it may contain items like hgsid and other host specific values
+        int newUriSize = 2048;
+	char *newUri = needMem(2048);
 	// TODO what about https?
-	safef(newUri, newUriSize, "http://%s:%s%s", source, port, uri);
-	char *zTerm = rStringIn("&source=", newUri);
-	if (zTerm)
-	    *zTerm = 0;
+	safef(newUri, newUriSize, "http://%s:%s/cgi-bin/hgGateway?redirect=manual&source=%s", source, port, domain);
 
 	//empty TD disappears
 	/*
@@ -433,8 +430,6 @@ if (endsWith(scriptName, "hgGateway"))  // DEBUG
 	    , domain, newUri, source );
 	}
     }
-
-#endif
 
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */

@@ -56,6 +56,11 @@ boolean annoFilterRowFails(struct annoFilter *filterList, char **row, int rowSiz
  * each word of row.  Return TRUE if any filter fails.  Set retRightJoin to TRUE
  * if a rightJoin filter has failed. */
 
+boolean annoFilterWigValueFails(struct annoFilter *filterList, double value,
+				boolean *retRightJoin);
+/* Apply filters to value.  Return TRUE if any filter fails.  Set retRightJoin to TRUE
+ * if a rightJoin filter has failed. */
+
 struct annoFilter *annoFilterCloneList(struct annoFilter *list);
 /* Shallow-copy a list of annoFilters.  Callers: do not modify any filter's columnDef! */
 
