@@ -1,3 +1,8 @@
+metaObject wgEncodeFsuRepliSeq
+objType composite
+composite wgEncodeFsuRepliSeq
+expVars lab,dataType,cell,treatment
+
 metaObject wgEncodeFsuRepliSeqCh12FRawDataRep1
 objType file
 age immortalized
@@ -1102,4 +1107,4 @@ tableName wgEncodeFsuRepliSeqMelMWaveSignalRep2
 treatment None
 view WaveSignal
 
-# MAGIC: 1418976191
+# MAGIC: 1236971708

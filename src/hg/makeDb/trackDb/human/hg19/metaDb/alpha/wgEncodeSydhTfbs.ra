@@ -18386,50 +18386,6 @@ subId 1358
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHct116InputUcdAlnRep1V2
-objType file
-antibody Input
-cell HCT-116
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HCT-116/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-29
-dateUnrestricted 2012-12-29
-fileName wgEncodeSydhTfbsHct116InputUcdAlnRep1V2.bam,wgEncodeSydhTfbsHct116InputUcdAlnRep1V2.bam.bai
-grant Snyder
-lab USC
-project wgEncode
-replicate 1
-setType input
-subId 6576
-submittedDataVersion V2 - Updated control used for new experiments
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHct116InputUcdRawDataRep1V2
-objType file
-antibody Input
-cell HCT-116
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HCT-116/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-29
-dateUnrestricted 2012-12-29
-fileName wgEncodeSydhTfbsHct116InputUcdRawDataRep1V2.fastq.tgz
-grant Snyder
-lab USC
-project wgEncode
-replicate 1
-setType input
-subId 6576
-submittedDataVersion V2 - Updated control used for new experiments
-treatment None
-view RawData
-
 metaObject wgEncodeSydhTfbsHct116InputUcdSig
 objType table
 antibody Input
@@ -18452,29 +18408,6 @@ project wgEncode
 setType input
 subId 3053
 tableName wgEncodeSydhTfbsHct116InputUcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsHct116InputUcdSigV2
-objType table
-antibody Input
-cell HCT-116
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HCT-116/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-03-29
-dateUnrestricted 2012-12-29
-fileName wgEncodeSydhTfbsHct116InputUcdSigV2.bigWig
-grant Snyder
-lab USC
-labVersion PeakSeq1.0
-project wgEncode
-setType input
-subId 6576
-submittedDataVersion V2 - Updated control used for new experiments
-tableName wgEncodeSydhTfbsHct116InputUcdSigV2
 treatment None
 view Signal
 
@@ -58444,4 +58377,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1757858078
+# MAGIC: -193238192

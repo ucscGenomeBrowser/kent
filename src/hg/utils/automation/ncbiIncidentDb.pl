@@ -111,13 +111,13 @@ my $sampleDebug = 0;
     while (my $line = <FH>) {
 	chomp $line;
 	my @a = split('\t', $line);
-	if (scalar(@a) != 17) {
-	    die "do not find 17 columns in issue.tab in $sequenceName";
+	if (scalar(@a) != 19) {
+	    die "do not find 19 columns in issue.tab in $sequenceName";
 	}
 	my ($id, $type, $key2, $assignedChr, $accession1, $accession2,
 	    $reportType, $summary, $status, $statusText, $description,
 	    $experimentType, $externalInfoType, $upd, $resolution, 
-	    $resolutionText, $location) = split('\t', $line);
+	    $resolutionText, $affectVersion, $fixVersion, $location) = split('\t', $line);
 	die "ERROR: id $id already seen in $file" if (exists($issueId[$id]));
 	die "ERROR: key $key2 already exists" if (exists($issues{$key2}));
 	my %issue;

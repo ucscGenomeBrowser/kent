@@ -182,3 +182,32 @@ for (i = 0, filter = filterList;  i < rowSize && filter != NULL;  i++, filter = 
     }
 return FALSE;
 }
+
+boolean annoFilterWigValueFails(struct annoFilter *filterList, double value,
+				boolean *retRightJoin)
+/* Apply filters to value.  Return TRUE if any filter fails.  Set retRightJoin to TRUE
+ * if a rightJoin filter has failed. */
+{
+struct annoFilter *filter;
+// First pass: left-join filters (failure means omit this row from output);
+for (filter = filterList; filter != NULL; filter = filter->next)
+    {
+    if (filter->op == afNoFilter || filter->rightJoin)
+	continue;
+    if (annoFilterDouble(filter, value))
+	return TRUE;
+    }
+// Second pass: right-join filters (failure means omit not only this row, but the primary row too)
+for (filter = filterList; filter != NULL; filter = filter->next)
+    {
+    if (filter->op == afNoFilter || !filter->rightJoin)
+	continue;
+    if (annoFilterDouble(filter, value))
+	{
+	if (retRightJoin != NULL)
+	    *retRightJoin = TRUE;
+	return TRUE;
+	}
+    }
+return FALSE;
+}
