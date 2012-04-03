@@ -4978,6 +4978,24 @@ sex U
 tier 3
 protocol Stam:SkMC_Stam_protocol.pdf
 
+term SkMC
+tag SKMC
+type Cell Line
+tier 3
+organism human
+description Skeletal Striated Muscle Cells from two individuals, SkMC_9011302 SkMC_8121902.17 from M. pectoralis / Mm. intercostales
+lineage missing
+karyotype normal
+sex B
+tissue muscle
+vendorName PromoCell
+vendorId SkMC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
+termId BTO:0002916
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
+lab Gingeras
+protocol Gingeras:SkMC9011302_Gingeras_protocol.pdf Gingeras:SkMC8121902.17_Gingeras_protocol.pdf
+
 term SkMC_9011302
 tag SKMC9011302
 type Cell Line
@@ -5047,25 +5065,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 #protocol Myers:T98G_Myers_protocol.pdf
-
-# Never submitted data. ~Jeff
-#term T98G
-#tag T98G
-#type Cell Line
-#organism human
-#description fibroblast cell line derived from a glioblastoma multiforme. (PMID: 222778)
-#karyotype cancer
-#tissue brain
-#lineage ectoderm
-#vendorName ATCC
-#vendorId CRL-1690
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
-#termId BTO:0001583
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
-#sex M
-#tier 3
-#protocol Myers:T98G_Myers_protocol.pdf
-# Never submitted data. ~Jeff
 
 term TBEC
 tag TBEC
@@ -10100,8 +10099,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
 validation Human_-_TBP(Immunoblot):human_TBP_validation_Snyder.pdf Mouse_-_:missing
 label TBP (ab62126)
 
-tag TBPSC273
 term TBP_(sc-273)
+tag TBPSC273
 type Antibody
 antibodyDescription Rabbit polyclonal, raised against full length TFIID of human origin. Antibody Target: TBP
 target TBP
@@ -11336,7 +11335,7 @@ type localization
 description Whole cell
 termId GO:0005623
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
-label cell 
+label cell
 
 term nucleus
 tag NUCLEUS
@@ -14918,6 +14917,7 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 035
+
 
 
 
