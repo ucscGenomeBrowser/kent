@@ -229,6 +229,7 @@ lf->bufSize = 64 * 1024;
 lf->buf = needMem(lf->bufSize);
 lf->zTerm = zTerm;
 lf->tabix = tabix;
+lf->tabixIter = ti_iter_first();
 freez(&tbiName);
 return lf;
 #else // no USE_TABIX
