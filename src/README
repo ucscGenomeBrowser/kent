@@ -167,7 +167,7 @@ level as the block they enclose:
 Each block of code is indented by 4 from the previous block.
 As per Unix standard practice, tab stops are set to 8, not 4
 as is the common practice in Windows, so some care must be
-taken to use tabs for indenting.  Since tabs are especially
+taken when using tabs for indenting.  Since tabs are especially
 problematic for Python code, and we are starting to use
 Python a fair bit as well, tabs are best avoided altogether.
 The proper settings for the vi editor to interpret tabs correctly
@@ -222,8 +222,8 @@ ERROR HANDLING AND MEMORY ALLOCATION
 
 Another convention is that errors are reported
 at a fairly low level, and the programs simply
-print an error message and abort.  If you
-need to catch errors underneath you see the
+print an error message and abort using errAbort.  If 
+you need to catch errors underneath you see the
 file errAbort.h and install an "abort handler".
 
 Memory is generally allocated through "needMem"
@@ -344,7 +344,7 @@ return twoBit;
 Though code paragraphs help make long functions readable, in general
 smaller functions are preferred. It is rare that a longer function
 couldn't be improved by moving some blocks of code into new functions
-or simplifying.
+or simplifying what the function is trying to do.
 
 ====================================================================
 This file last updated: $Date: 2010/06/03 16:48:53 $
