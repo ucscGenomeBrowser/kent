@@ -10100,8 +10100,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
 validation Human_-_TBP(Immunoblot):human_TBP_validation_Snyder.pdf Mouse_-_:missing
 label TBP (ab62126)
 
-tag TBPSC273
 term TBP_(sc-273)
+tag TBPSC273
 type Antibody
 antibodyDescription Rabbit polyclonal, raised against full length TFIID of human origin. Antibody Target: TBP
 target TBP
