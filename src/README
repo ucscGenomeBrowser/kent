@@ -342,9 +342,33 @@ return twoBit;
 }
 
 Though code paragraphs help make long functions readable, in general
-smaller functions are preferred. It is rare that a longer function
-couldn't be improved by moving some blocks of code into new functions
-or simplifying what the function is trying to do.
+smaller functions are preferred. It is rare that a function longer than 
+100 lines couldn't be improved by moving some blocks of code into new 
+functions or simplifying what the function is trying to do.
+
+STRUCTURE OF A TYPICAL C MODULE
+
+To avoid having to declare function prototypes, C modules are generally
+ordered with the lowest level functions written before higher level
+functions. In particular, if a module includes a main() routine, then
+it is the last function in the module. 
+
+If a structure is broadly used in a module, it is declared near the start
+of the module, just after the module opening comment and any includes.  
+This is followed by broadly used module local (static) variables.  Less 
+broadly used structs and variables may be grouped with the functions they 
+are used with.
+
+If a module is used by other modules, it will be represented in a header 
+file.  In the majority of cases one .h file corresponds to one .c file.
+Typically the opening comment is duplicated in .h and .c files, as are
+the public structure and function declarations and opening comments. 
+
+In general we try, with mixed success, to keep modules less than 2000 lines.
+Sadly many of the Genome Browser specific modules are currently quite long.
+On the bright side the vast majority of the library modules are reasonably
+sized.
+
 
 ====================================================================
 This file last updated: $Date: 2010/06/03 16:48:53 $
