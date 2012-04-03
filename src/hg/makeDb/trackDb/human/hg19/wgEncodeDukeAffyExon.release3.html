@@ -67,14 +67,14 @@ constitutive or non-constitutive based on whether it was present in all protein-
 For genes with at least 4 constitutive probes, only constitutive probesets were used to
 estimate gene expression. For all other genes, including all non-protein-coding genes, 
 all (non-cross-hybridizing) probesets that mapped to an expressed exon in any transcript of the gene were used. 
-Gene-level expression estimates were normalized using Affymetrix Power Tools (APT) 
+Gene-level expression estimates were normalized using Affymetrix Power Tools (APT) (Lockstone 2011)
 with the chipstream command "rma-bg, med-norm, pm-gcbg, med-polish". This chipstream calls 
 for an RMA normalization with gc-background correction using antigenomic background probes. 
 </P>
 <p>
 While the data was generated using the same microarray platform, two different experimental
 backgrounds were present due to a change in labeling reagents (Affymetrix vs. NuGEN; see Methods above). 
-We found batch effects related to this change were causing array data to group by experimental protocol
+It was found that batch effects related to this change were causing array data to group by experimental protocol
 rather than cell type relatedness. We used an R script (ComBat) to correct for this batch effect (Johnson <em>et al.</em> 2007).
 <p>
 
@@ -93,9 +93,9 @@ This is release 3 of this track (April 2012). Several new cell types have been a
 <P>
 RNA was extracted from each cell type by Greg Crawford's group at 
 <a href="http://www.genome.duke.edu/labs/crawford/" target=_blank>Duke University</a>.
-RNA was purified and hybridized to Affymetrix Exon arrays by <a href="www.albany.edu/genomics/bios/bio-chittur.html" target="_blank">Sridar Chittur</a> and
-<a href="www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml" target="_blank">Scott Tenenbaum</a> at the University of Albany-SUNY. 
-Data analyses were primarily performed by <a href="www.genome.duke.edu/labs/crawford/members/nathan_sheffield/" target="_blank">Nathan Sheffield</a> (Duke University) with assistance from <a href="http://www.soe.ucsc.edu/people/cline" target="_blank">Melissa Cline</a> (UCSC), <a href="http://www.unc.edu/~zczhang/" target="blank">Zhancheng Zhang</a> (UNC Chapel Hill), and <a href="http://www.genome.duke.edu/cores/computational/contact/" target="_blank">Darin London</a> (Duke University). 
+RNA was purified and hybridized to Affymetrix Exon arrays by <a href="http://www.albany.edu/genomics/bios/bio-chittur.html" target="_blank">Sridar Chittur</a> and
+<a href="http://www.albany.edu/cancergenomics/faculty/stenenbaum/index.shtml" target="_blank">Scott Tenenbaum</a> at the University of Albany-SUNY. 
+Data analyses were primarily performed by <a href="http://www.genome.duke.edu/labs/crawford/members/nathan_sheffield/" target="_blank">Nathan Sheffield</a> (Duke University) with assistance from <a href="http://www.soe.ucsc.edu/people/cline" target="_blank">Melissa Cline</a> (UCSC), <a href="http://www.unc.edu/~zczhang/" target="blank">Zhancheng Zhang</a> (UNC Chapel Hill), and <a href="http://www.genome.duke.edu/cores/computational/contact/" target="_blank">Darin London</a> (Duke University). 
 </P>
 
 <p>Contact: 

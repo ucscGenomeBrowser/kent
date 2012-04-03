@@ -500,4 +500,23 @@ int spanInUse(struct sqlConnection *conn, char *table, char *chrom,
 	int winStart, int winEnd, struct cart *cart);
 /*	determine span used in drawing in hgTracks	*/
 
+#define wiggleAsText \
+"table wiggle\n" \
+"\"Wiggle track values to display as y-values (first 6 fields are bed6)\"\n" \
+"    (\n" \
+"    string chrom;         \"Reference sequence chromosome or scaffold\"\n" \
+"    uint chromStart;      \"Start position in chromosome\"\n" \
+"    uint chromEnd;        \"End position in chromosome\"\n" \
+"    string name;          \"Name of item\"\n" \
+"    uint span;            \"each value spans this many bases\"\n" \
+"    uint count;           \"number of values in this block\"\n" \
+"    uint offset;          \"offset in File to fetch data\"\n" \
+"    string file;          \"path name to data file, one byte per value\"\n" \
+"    double lowerLimit;    \"lowest data value in this block\"\n" \
+"    double dataRange;     \"lowerLimit + dataRange = upperLimit\"\n" \
+"    uint validCount;      \"number of valid data values in this block\"\n" \
+"    double sumData;       \"sum of the data points, for average and stddev calc\"\n" \
+"    double sumSquares;    \"sum of data points squared, for stddev calc\"\n" \
+"    )\n"
+
 #endif /* WIGGLE_H */
