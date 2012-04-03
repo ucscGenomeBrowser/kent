@@ -177,21 +177,21 @@ in existing code, and avoid tabs in new code are:
 Lines should be no more than 100 characters wide.  Lines that are 
 longer than this are broken and indented at least 8 spaces
 more than the original line to indicate the line continuation.
-Line continuations may be unavoidable when calling functions with long
-parameter lists and in a few other situations.  Where possible though
-simplifying techniques should be applied to the code in preference
-to the line continuations.  Complex expressions can be broken into
-parts that are assigned to intermediate variables.  Long variable names
-can be revisited and sometimes shortened. Deep indenting can be
-avoided by simplifying logic and moving blocks into their own functions.
-These are just some ways you can productively shorten long lines without
-resorting to continuations, which no matter how they are done will tend
-to obscure the logic apparent in the indentation.
+Where possible simplifying techniques should be applied to the code 
+in preference to using line continuations, since line continuations
+obscure the logic conveyed in the indentation of the program.
 
+Line continuations may be unavoidable when calling functions with long
+parameter lists.  In most other situations lines can be shortened 
+in better ways than line continuations.  Complex expressions can be 
+broken into parts that are assigned to intermediate variables.  Long 
+variable names can be revisited and sometimes shortened. Deep indenting 
+can be avoided by simplifying logic and by moving blocks into their own 
+functions. These are just some ways of avoiding long lines.
 
 NAMES
 
-Symbol names begin with a lower-case letter.  The second 
+Symbol names generally begin with a lower-case letter.  The second 
 and subsequent words in a name begin with a capital letter 
 to help visually separate the words.  Abbreviation of words 
 is strongly discouraged.  Words of five letters and less should
