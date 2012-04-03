@@ -1,4 +1,4 @@
-from ucscgenomics import ra
+from ucscgenomics import ra, ordereddict
 
 class DataType(object):
 
@@ -82,6 +82,10 @@ class MdbFile(ra.RaFile):
     '''
     
     @property
+    def name(self):
+        return self.compositeStanza['metaObject']
+    
+    @property
     def expVars(self):
         '''the experimental variables used in this track'''
         try:
@@ -99,13 +103,10 @@ class MdbFile(ra.RaFile):
             self._dataType = None
             for e in self.experiments.itervalues():
                 if self._dataType == None and e.dataType != None:
-                    print e.dataType
                     self._dataType = e.dataType
                 elif self._dataType != e.dataType or e.dataType == None:
-                    print 'multiple data types!'
                     self._dataType = None
                     break
-            print 'still none'
             return self._dataType
     
     @property
@@ -116,7 +117,7 @@ class MdbFile(ra.RaFile):
         except AttributeError:
             self._compositeStanza = self.filter(lambda s: s['objType'] == 'composite', lambda s: s)
             if len(self._compositeStanza) != 1:
-                raise KeyError
+                raise KeyError(self.filename)
             else:
                 self._compositeStanza = self._compositeStanza[0]
             return self._compositeStanza
@@ -149,6 +150,24 @@ class MdbFile(ra.RaFile):
         val1, val2 = entry.readStanza(stanza, key)
         return val1, val2, entry
 
+    def expIdRange(self, expIds):
+        '''
+        Takes in a list of strings, and returns a list containing the 
+        valid range of expId keys that the inputted range encompasses.
+        '''
+        ids = dict()
+        tempids = list()
+        for id in expIds:
+            if '-' in id:
+                start, end = id.split('-', 1)
+                tempids.extend(range(int(start), int(end) + 1))
+            else:
+                tempids.append(int(id))
+        for id in tempids:
+            if str(id) in self.experiments.keys():
+                ids.append(str(id))
+        return ids
+        
 class MdbStanza(ra.RaStanza):
     
     @property
@@ -171,6 +190,11 @@ class MdbStanza(ra.RaStanza):
         ra.RaStanza.__init__(self)
         self._parent = parent
         
+    def __setitem__(self, key, value):
+        ordereddict.OrderedDict.__setitem__(self, key, value)
+        ordereddict.OrderedDict.sort(self)
+        ordereddict.OrderedDict.reorder(self, 0, 'metaObject')
+        ordereddict.OrderedDict.reorder(self, 1, 'objType')
         
 class MdbExp(list):
     '''
@@ -184,24 +208,47 @@ class MdbExp(list):
         return self._id
         
     @property
+    def title(self):
+        try:
+            return self._title
+        except AttributeError:
+            self._title = None
+            for s in self.normalStanzas:
+                if self._title == None:
+                    self._title = s.title
+                elif self._title != s.title:
+                    self._title = None
+                    break
+            return self._title
+        
+    @property
     def dataType(self):
         '''The data type of the experiment. 'None' if inconsistent.'''
         try:
             return self._dataType
         except AttributeError:
             self._dataType = None
-            for s in self:
+            for s in self.normalStanzas:
                 if 'dataType' in s:
                     if self._dataType == None:
-                        print dataTypes[s['dataType']]
                         self._dataType = dataTypes[s['dataType']]
                     elif self._dataType.name != s['dataType']:
-                        print 'exp multiple data types!'
                         self._dataType = None
                         break
-                        
-            print 'still none (exp)'
             return self._dataType
+    
+    @property
+    def normalStanzas(self):
+        '''Returns the list of stanzas without revoked items'''
+        try:
+            return self._normal
+        except AttributeError:
+            self._normal = list()
+            for s in self:
+                if 'objStatus' not in s:
+                    self._normal.append(s)
+            return self._normal
+                
     
     def __init__(self, id, parent, stanzas):
         list.__init__(self)
