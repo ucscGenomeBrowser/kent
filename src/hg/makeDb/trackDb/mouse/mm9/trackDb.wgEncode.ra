@@ -22,6 +22,7 @@ include wgEncodePsuHistone.ra alpha,beta
 
 # LICR Histone (wrangler: Fang)
 include wgEncodeLicrHistone.release2.ra alpha,beta,public
+include wgEncodeLicrHistone.release3.ra alpha
 
 # LICR TFBS (wrangler: Fang)
 include wgEncodeLicrTfbs.ra public
