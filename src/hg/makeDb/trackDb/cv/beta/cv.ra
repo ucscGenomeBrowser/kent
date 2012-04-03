@@ -5059,7 +5059,7 @@ termId BTO:0001583
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
 sex M
 tier 3
-protocol Myers:T98G_Myers_protocol.pdf
+#protocol Myers:T98G_Myers_protocol.pdf
 
 term TBEC
 tag TBEC
