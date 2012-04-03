@@ -9040,7 +9040,7 @@ TMPDIR=/scratch/tmp
       # Do the actual clustering 
       hgBedsToBedExps -dupeLetterOk cluster.cfg peak.bed peak.exps
 
-      # Load database
+      # Load database (reloaded 3/26/2012 to fix a relatively rare bug)
       hgLoadBed hg19 wgEncodeRegTfbsClustered peak.bed
       hgLoadSqlTab hg19 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
 

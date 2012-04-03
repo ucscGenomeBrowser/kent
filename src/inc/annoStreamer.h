@@ -39,8 +39,11 @@ struct annoStreamer
     void (*close)(struct annoStreamer **pSelf);
     // For use by annoGratorQuery only: hook up query object after creation
     void (*setQuery)(struct annoStreamer *self, struct annoGratorQuery *query);
-    // Private members -- callers are on the honor system to access these using only methods above.
+    // Public members -- callers are on the honor system to access these read-only.
     struct annoGratorQuery *query;	// The query object that owns this streamer.
+    enum annoRowType rowType;
+    int numCols;
+    // Private members -- callers are on the honor system to access these using only methods above.
     boolean positionIsGenome;
     char *chrom;
     uint regionStart;
@@ -76,7 +79,7 @@ void annoStreamerInit(struct annoStreamer *self, struct asObject *asObj);
 /* Initialize a newly allocated annoStreamer with default annoStreamer methods and
  * default filters and columns based on asObj.
  * In general, subclasses' constructors will call this first; override nextRow, close,
- * and probably setRegion; and then initialize their private data. */
+ * and probably setRegion and setQuery; and then initialize their private data. */
 
 void annoStreamerFree(struct annoStreamer **pSelf);
 /* Free self. This should be called at the end of subclass close methods, after
