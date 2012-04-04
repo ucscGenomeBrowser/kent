@@ -11688,7 +11688,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 md5sum 56eee21eb31d98493397dc6cded5542a,56aa83c1e73ef28b092b6ff2fd18a8f3
-objStatus revoked - The data was replaced by a newer dataset
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11715,7 +11714,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 md5sum 6f287af22265443f12cc6c7138ee350c,d69252ce55d0dec451d4a9456d6d1902
-objStatus revoked - The data was replaced by a newer dataset
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11742,7 +11740,6 @@ grant Stam
 lab UW
 labVersion Hotspot-v5.1
 md5sum 6086024c86ecd20311d6ec90f41d0b1c
-objStatus revoked - The data was replaced by a newer dataset
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11770,7 +11767,6 @@ grant Stam
 lab UW
 labVersion Hotspot-v5.1
 md5sum 94133af757d48d3191be31dcd01a94fc
-objStatus revoked - The data was replaced by a newer dataset
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11798,7 +11794,6 @@ grant Stam
 lab UW
 labVersion lmax-v1.0
 md5sum a8915260eebf556c3c266234874d3a59
-objStatus revoked - The data was replaced by a newer dataset
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11826,7 +11821,6 @@ grant Stam
 lab UW
 labVersion lmax-v1.0
 md5sum 30ff65d27454b550a7bc7d4ba26353dd
-objStatus revoked - The data was replaced by a newer dataset
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11853,7 +11847,6 @@ fileName wgEncodeUwHistoneH7esH3k4me3StdRawDataRep1.fastq.gz
 grant Stam
 lab UW
 md5sum ffed2845ad22de65ef5570d8dace28dd
-objStatus revoked - The data was replaced by a newer dataset
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11879,7 +11872,6 @@ fileName wgEncodeUwHistoneH7esH3k4me3StdRawDataRep2.fastq.gz
 grant Stam
 lab UW
 md5sum 215423621fc0b347ae433f541671bcf2
-objStatus revoked - The data was replaced by a newer dataset
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11906,7 +11898,6 @@ grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
 md5sum 33f9d6cfba6adecfc3ff42e23f0d3cfd
-objStatus revoked - The data was replaced by a newer dataset
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11934,7 +11925,6 @@ grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
 md5sum 7ed90e605c87ef2f21805e4e4ef549fa
-objStatus revoked - The data was replaced by a newer dataset
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -31818,4 +31808,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 25127222
+# MAGIC: -1273036402
