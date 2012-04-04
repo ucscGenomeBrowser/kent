@@ -3,7 +3,7 @@ XINC = -I$(MYSQLINC)
 
 O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
-    altGraphX.o ancientRref.o annoGrateWig.o annoStreamDb.o annoStreamWig.o atomDb.o  axtInfo.o \
+    altGraphX.o ancientRref.o annoGratorGpVar.o  annoGrateWig.o annoStreamDb.o annoStreamWig.o atomDb.o  axtInfo.o \
     axtLib.o bactigPos.o hgBam.o baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o bed8Attrs.o bed12Source.o \
     bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bioImage.o \
@@ -48,7 +48,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     geneBands.o geneCheck.o geneCheckDetails.o geneCheckWidget.o \
     geneGraph.o genePred.o genePredReader.o geneSimilarities.o genoLay.o \
     genomeRangeTreeFile.o genomicDups.o \
-    genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
+    genomicSuperDups.o geoMirror.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     ggTypes.o glDbRep.o goa.o goaPart.o googleAnalytics.o \
     growthCondition.o grp.o gwasCatalog.o \
     hapmapAllelesOrtho.o hapmapAllelesSummary.o hapmapPhaseIIISummary.o \
