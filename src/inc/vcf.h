@@ -181,20 +181,24 @@ switch (type)
     }
 }
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords);
-/* Parse a VCF file into a vcfFile object; return NULL if unable.
- * If maxErr not zero, then continue to parse until this number of error have been reached.
- * A maxErr less than zero does not stop and reports all errors.
- * If maxRecords >= 0, then at most that many records will be parsed. */
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords, boolean parseAll);
+/* Open fileOrUrl and parse VCF header; return NULL if unable.
+ * If parseAll, then read in all lines, parse and store in
+ * vcff->records; if maxErr >= zero, then continue to parse until
+ * there are maxErr+1 errors.  A maxErr less than zero does not stop
+ * and reports all errors. */
 
 struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
 				    int maxErr, int maxRecords);
-/* Parse header and rows within the given position range from a VCF file that has been
- * compressed and indexed by tabix into a vcfFile object; return NULL if or if file has
- * no items in range.
- * If maxErr not zero, then continue to parse until this number of error have been reached.
- * A maxErr less than zero does not stop and reports all errors.
- * If maxRecords >= 0, then at most that many records will be parsed. */
+/* Open a VCF file that has been compressed and indexed by tabix and
+ * parse VCF header, or return NULL if unable.  If chrom is non-NULL,
+ * seek to the position range and parse all lines in range into
+ * vcff->records.  If maxErr >= zero, then continue to parse until
+ * there are maxErr+1 errors.  A maxErr less than zero does not stop
+ * and reports all errors. */
+
+struct vcfRecord *vcfRecordFromRow(struct vcfFile *vcff, char **words);
+/* Parse words from a VCF data line into a VCF record structure. */
 
 void vcfFileFree(struct vcfFile **vcffPtr);
 /* Free a vcfFile object. */
@@ -219,6 +223,8 @@ const struct vcfGenotype *vcfRecordFindGenotype(struct vcfRecord *record, char *
 struct vcfInfoDef *vcfInfoDefForGtKey(struct vcfFile *vcff, const char *key);
 /* Look up the type of genotype FORMAT component key, in the definitions from the header,
  * and failing that, from the keys reserved in the spec. */
+
+#define VCF_NUM_COLS 10
 
 struct asObject *vcfAsObj();
 // Return asObject describing fields of VCF
