@@ -12280,7 +12280,7 @@ description 14 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol 
 type treatment
 
 term diffProtD_24hr
-tag DIFF24H
+tag DIFFD24H
 description 24 hours differentiation of G1E-ER4 cells with 10 nM beta-estradiol (Hardison) 
 type treatment
 
