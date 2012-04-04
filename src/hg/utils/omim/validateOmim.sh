@@ -5,9 +5,15 @@ tooMuch=0.1000   # how much change (either gain or loss) is too much
 
 for i in `cat ../../omim.tables`
 do 
-    echo "select * from $i" |  hgsql $db | tail -n +2 | sort > $i.out
+    if test $i == "omimGeneMap" 
+    then
+	fields="month,day,year,location,geneSymbol,geneStatus,title1,title2,omimId,method,comment1,comment2,disorders1,disorders2,disorders3,mouseCorrelate,reference"
+    else
+	fields='*'
+    fi
+    echo "select $fields from $i" |  hgsql $db | tail -n +2 | sort > $i.out
     f=$i"New"
-    echo "select * from $f" |hgsql $db | tail -n +2 | sort > $f.out
+    echo "select $fields from $f" |hgsql $db | tail -n +2 | sort > $f.out
     oldCount=`cat $i.out | wc -l`
     newCount=`cat $f.out | wc -l`
     common=`join -t '\001'  $i.out $f.out | wc -l`

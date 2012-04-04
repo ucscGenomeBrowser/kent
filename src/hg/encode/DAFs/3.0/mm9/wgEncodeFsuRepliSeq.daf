@@ -27,7 +27,7 @@ dataType          RepliSeq
 compositeSuffix   FsuRepliSeq
 group             regulation
 variables         cell,sex,treatment
-assembly          hg19
+assembly          mm9
 dafVersion        2.0
 
 validationSettings validateFiles.bigWig:

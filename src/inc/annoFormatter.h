@@ -26,20 +26,27 @@ struct annoFormatter
  * output. */
     {
     struct annoFormatter *next;
+
     // Public methods
-    // Get and set output options
     struct annoFormatterOption *(*getOptions)(struct annoFormatter *self);
     void (*setOptions)(struct annoFormatter *self, struct annoFormatterOption *options);
-    // Initialize output (header, etc) and set query pointer
+    /* Get and set output options */
+
     void (*initialize)(struct annoFormatter *self, struct annoGratorQuery *query);
-    // Collect data from one source
+    /* Initialize output (header, etc) and set query pointer */
+
     void (*collect)(struct annoFormatter *self, struct annoStreamer *source, struct annoRow *rows);
-    // Discard data collected so far (filter failure)
+    /* Collect data from one source */
+
     void (*discard)(struct annoFormatter *self);
-    // Aggregate all sources' data for a single primarySource item into output:
+    /* Discard data collected so far (filter failure) */
+
     void (*formatOne)(struct annoFormatter *self);
-    // End of input; finish output, close connection/handle and free self.
+    /* Aggregate all sources' data for a single primarySource item into output: */
+
     void (*close)(struct annoFormatter **pSelf);
+    /* End of input; finish output, close connection/handle and free self. */
+
     // Private members -- callers are on the honor system to access these using only methods above.
     struct annoFormatterOption *options;
     struct annoGratorQuery *query;

@@ -1,4 +1,4 @@
-# Data Agreement File for PET Ditag project $Revision: 1.9 $
+# Data Agreement File for PET Ditag project $Revision: 2.0 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -29,44 +29,37 @@ compositeSuffix   GisRnaPet
 group             expression
 variables         cell, localization, rnaExtract
 assembly          hg19
-validationSettings validateFiles.bam:mmCheckOneInN=10000,mismatches=3,mmPerPair
-noAutoCreate      yes #do we need this?
+validationSettings validateFiles.bam:mismatches=3,mmPerPair
 
 
 # Track/view definition
 view             PlusRawSignal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no 
 
 view             MinusRawSignal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no 
 
 view             Alignments
 type             bam
 hasReplicates    yes
-required         yes
+required         no 
 
 view             Clusters
-type             bed 12
-hasReplicates    yes
+type             bedRnaElements
+hasReplicates    no 
 required         no
 
 view             FastqRd1
 type             fastq  
 hasReplicates    yes
-required         yes
+required         no 
 
 view             FastqRd2
 type             fastq  
 hasReplicates    yes
-required         yes
-
-# Optional extra elements view
-view             TSS
-type             gtf
-hasReplicates    yes
 required         no 
-downloadOnly     yes
+
