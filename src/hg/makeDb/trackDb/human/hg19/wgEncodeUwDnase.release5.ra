@@ -62,7 +62,7 @@ fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAss
 dragAndDrop subTracks
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
-html wgEncodeUwDnase.release4
+html wgEncodeUwDnase.release5
 priority 4
 type bed 3 +
 wgEncode 1
@@ -1856,7 +1856,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04450PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG04450 Pk 1
-        longLabel AG04450 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel AG04450 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=AG04450 rep=rep1 treatment=None
         type narrowPeak
         # subId=1550 dateSubmitted=2010-06-17
@@ -1864,7 +1864,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09309PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG09309 Pk 1
-        longLabel AG09309 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel AG09309 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=AG09309 rep=rep1 treatment=None
         type narrowPeak
         # subId=1551 dateSubmitted=2010-06-17
@@ -1872,7 +1872,7 @@ wgEncode 1
         track wgEncodeUwDnaseSaecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SAEC Pk 1
-        longLabel SAEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel SAEC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=SAEC rep=rep1 treatment=None
         type narrowPeak
         # subId=1557 dateSubmitted=2010-06-17
@@ -1880,7 +1880,7 @@ wgEncode 1
         track wgEncodeUwDnaseNb4PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NB4 Pk 1
-        longLabel NB4 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel NB4 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NB4 rep=rep1 treatment=None
         type narrowPeak
         # subId=1559 dateSubmitted=2010-06-17
@@ -1888,7 +1888,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhlfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHLF Pk 1
-        longLabel NHLF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel NHLF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NHLF rep=rep1 treatment=None
         type narrowPeak
         # subId=1560 dateSubmitted=2010-06-17
@@ -1896,7 +1896,7 @@ wgEncode 1
         track wgEncodeUwDnaseHgfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HGF Pk 1
-        longLabel HGF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HGF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HGF rep=rep1 treatment=None
         type narrowPeak
         # subId=1563 dateSubmitted=2010-06-17
@@ -1904,7 +1904,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12865PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM12865 Pk 1
-        longLabel GM12865 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel GM12865 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=GM12865 rep=rep1 treatment=None
         type narrowPeak
         # subId=1564 dateSubmitted=2010-06-17
@@ -1912,7 +1912,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaePkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAEpiC Pk 1
-        longLabel HAEpiC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HAEpiC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HAE rep=rep1 treatment=None
         type narrowPeak
         # subId=1565 dateSubmitted=2010-06-17
@@ -1920,7 +1920,7 @@ wgEncode 1
         track wgEncodeUwDnaseHl60PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HL60 Pk 1
-        longLabel HL-60 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HL-60 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HL60 rep=rep1 treatment=None
         type narrowPeak
         # subId=1571 dateSubmitted=2010-06-17
@@ -1928,7 +1928,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMEC Pk 1
-        longLabel HMEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HMEC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMEC rep=rep1 treatment=None
         type narrowPeak
         # subId=1572 dateSubmitted=2010-06-17
@@ -1936,7 +1936,7 @@ wgEncode 1
         track wgEncodeUwDnaseSkmcPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKMC Pk 1
-        longLabel SKMC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel SKMC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=SKZMC rep=rep1 treatment=None
         type narrowPeak
         # subId=1573 dateSubmitted=2010-06-17
@@ -1944,7 +1944,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg10803PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG10803 Pk 1
-        longLabel AG10803 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel AG10803 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=AG10803 rep=rep1 treatment=None
         type narrowPeak
         # subId=1576 dateSubmitted=2010-06-17
@@ -1952,7 +1952,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrcePkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRCEpiC Pk 1
-        longLabel HRCEpiC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HRCEpiC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HRCE rep=rep1 treatment=None
         type narrowPeak
         # subId=1577 dateSubmitted=2010-06-17
@@ -1960,7 +1960,7 @@ wgEncode 1
         track wgEncodeUwDnaseCmkPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CMK Pk 1
-        longLabel CMK DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel CMK DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=CMK rep=rep1 treatment=None
         type narrowPeak
         # subId=1586 dateSubmitted=2010-06-17
@@ -1968,7 +1968,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12878PkRep1
         parent wgEncodeUwDnaseViewaPeaks
         shortLabel GM12878 Pk 1
-        longLabel GM12878 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel GM12878 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1GM12878 rep=rep1 treatment=None
         type narrowPeak
         color 153,38,0
@@ -1977,7 +1977,7 @@ wgEncode 1
         track wgEncodeUwDnaseH1hescPkRep1
         parent wgEncodeUwDnaseViewaPeaks
         shortLabel H1hESC Pk 1
-        longLabel H1-hESC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel H1-hESC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1H1 rep=rep1 treatment=None
         type narrowPeak
         color 0,107,27
@@ -1986,7 +1986,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCF Pk 1
-        longLabel HCF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HCF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HCF rep=rep1 treatment=None
         type narrowPeak
         # subId=1591 dateSubmitted=2010-06-18
@@ -1994,7 +1994,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcpePkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCPEpiC Pk 1
-        longLabel HCPEpiC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HCPEpiC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HCPE rep=rep1 treatment=None
         type narrowPeak
         # subId=1598 dateSubmitted=2010-06-18
@@ -2002,7 +2002,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcmPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCM Pk 1
-        longLabel HCM DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HCM DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HCM rep=rep1 treatment=None
         type narrowPeak
         # subId=1600 dateSubmitted=2010-06-18
@@ -2010,7 +2010,7 @@ wgEncode 1
         track wgEncodeUwDnaseHeePkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HEEpiC Pk 1
-        longLabel HEEpiC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HEEpiC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HEE rep=rep1 treatment=None
         type narrowPeak
         # subId=1601 dateSubmitted=2010-06-18
@@ -2018,7 +2018,7 @@ wgEncode 1
         track wgEncodeUwDnaseHelas3PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HeLaS3 Pk 1
-        longLabel HeLa-S3 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=2HELA rep=rep1 treatment=None
         type narrowPeak
         color 0,119,158
@@ -2027,7 +2027,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm06990PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM06990 Pk 1
-        longLabel GM06990 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel GM06990 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=GM06990 rep=rep1 treatment=None
         type narrowPeak
         # subId=1616 dateSubmitted=2010-06-18
@@ -2035,7 +2035,7 @@ wgEncode 1
         track wgEncodeUwDnaseHepg2PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HepG2 Pk 1
-        longLabel HepG2 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HepG2 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=2HEPG2 rep=rep1 treatment=None
         type narrowPeak
         color 189,0,157
@@ -2044,7 +2044,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpcePkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HNPCEpiC Pk 1
-        longLabel HNPCEpiC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HNPCEpiC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HNPCE rep=rep1 treatment=None
         type narrowPeak
         # subId=1619 dateSubmitted=2010-06-18
@@ -2052,7 +2052,7 @@ wgEncode 1
         track wgEncodeUwDnasePanc1PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel PANC1 Pk 1
-        longLabel PANC-1 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel PANC-1 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=PANC1 rep=rep1 treatment=None
         type narrowPeak
         # subId=1627 dateSubmitted=2010-06-19
@@ -2060,7 +2060,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel MCF7 Pk 1
-        longLabel MCF-7 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel MCF-7 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=MCF7 rep=rep1 treatment=None
         type narrowPeak
         # subId=1628 dateSubmitted=2010-06-19
@@ -2068,7 +2068,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfneoPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDFneo Pk 1
-        longLabel NHDF-neo DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel NHDF-neo DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NHDFneo rep=rep1 treatment=None
         type narrowPeak
         # subId=1629 dateSubmitted=2010-06-19
@@ -2076,7 +2076,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhekPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHEK Pk 1
-        longLabel NHEK DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel NHEK DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NHEK rep=rep1 treatment=None
         type narrowPeak
         color 179,0,134
@@ -2085,7 +2085,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknshraPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKNSHRA Pk 1
-        longLabel SK-N-SH_RA DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel SK-N-SH_RA DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=SKNSHRA rep=rep1 treatment=None
         type narrowPeak
         # subId=1640 dateSubmitted=2010-06-19
@@ -2093,7 +2093,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh1PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th1 Pk 1
-        longLabel Th1 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel Th1 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=Th1 rep=rep1 treatment=None
         type narrowPeak
         # subId=1641 dateSubmitted=2010-06-19
@@ -2101,7 +2101,7 @@ wgEncode 1
         track wgEncodeUwDnaseCaco2PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Caco2 Pk 1
-        longLabel Caco-2 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel Caco-2 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=CACO2 rep=rep1 treatment=None
         type narrowPeak
         # subId=1644 dateSubmitted=2010-06-19
@@ -2109,7 +2109,7 @@ wgEncode 1
         track wgEncodeUwDnaseBjPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel BJ Pk 1
-        longLabel BJ DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel BJ DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=BJ rep=rep1 treatment=None
         type narrowPeak
         # subId=1648 dateSubmitted=2010-06-19
@@ -2117,7 +2117,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562PkRep1
         parent wgEncodeUwDnaseViewaPeaks
         shortLabel K562 Pk 1
-        longLabel K562 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel K562 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 rep=rep1 treatment=None
         type narrowPeak
         color 46,0,184
@@ -2126,7 +2126,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh2PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th2 Pk 1
-        longLabel Th2 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel Th2 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=Th2 rep=rep1 treatment=None
         type narrowPeak
         # subId=1677 dateSubmitted=2010-06-19
@@ -2134,7 +2134,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04449PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG04449 Pk 1
-        longLabel AG04449 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel AG04449 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=AG04449 rep=rep1 treatment=None
         type narrowPeak
         # subId=1257 dateSubmitted=2010-06-07
@@ -2142,7 +2142,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04449PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG04449 Pk 2
-        longLabel AG04449 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel AG04449 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=AG04449 rep=rep2 treatment=None
         type narrowPeak
         # subId=1548 dateSubmitted=2010-06-17
@@ -2150,7 +2150,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04450PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG04450 Pk 2
-        longLabel AG04450 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel AG04450 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=AG04450 rep=rep2 treatment=None
         type narrowPeak
         # subId=1549 dateSubmitted=2010-06-17
@@ -2158,7 +2158,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09309PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG09309 Pk 2
-        longLabel AG09309 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel AG09309 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=AG09309 rep=rep2 treatment=None
         type narrowPeak
         # subId=1552 dateSubmitted=2010-06-17
@@ -2166,7 +2166,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG09319 Pk 2
-        longLabel AG09319 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel AG09319 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=AG09319 rep=rep2 treatment=None
         type narrowPeak
         # subId=1553 dateSubmitted=2010-06-17
@@ -2174,7 +2174,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg10803PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG10803 Pk 2
-        longLabel AG10803 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel AG10803 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=AG10803 rep=rep2 treatment=None
         type narrowPeak
         # subId=1555 dateSubmitted=2010-06-17
@@ -2182,7 +2182,7 @@ wgEncode 1
         track wgEncodeUwDnaseSaecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SAEC Pk 2
-        longLabel SAEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel SAEC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=SAEC rep=rep2 treatment=None
         type narrowPeak
         # subId=1556 dateSubmitted=2010-06-17
@@ -2190,7 +2190,7 @@ wgEncode 1
         track wgEncodeUwDnaseNb4PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NB4 Pk 2
-        longLabel NB4 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel NB4 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NB4 rep=rep2 treatment=None
         type narrowPeak
         # subId=1558 dateSubmitted=2010-06-17
@@ -2198,7 +2198,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhlfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHLF Pk 2
-        longLabel NHLF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel NHLF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NHLF rep=rep2 treatment=None
         type narrowPeak
         # subId=1561 dateSubmitted=2010-06-17
@@ -2206,7 +2206,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel MCF7 Pk 2
-        longLabel MCF-7 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel MCF-7 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=MCF7 rep=rep2 treatment=None
         type narrowPeak
         # subId=1562 dateSubmitted=2010-06-17
@@ -2214,7 +2214,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrcePkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRCEpiC Pk 2
-        longLabel HRCEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HRCEpiC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HRCE rep=rep2 treatment=None
         type narrowPeak
         # subId=1566 dateSubmitted=2010-06-17
@@ -2222,7 +2222,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfneoPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDFneo Pk 2
-        longLabel NHDF-neo DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel NHDF-neo DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NHDFneo rep=rep2 treatment=None
         type narrowPeak
         # subId=1568 dateSubmitted=2010-06-17
@@ -2230,7 +2230,7 @@ wgEncode 1
         track wgEncodeUwDnasePanc1PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel PANC1 Pk 2
-        longLabel PANC-1 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel PANC-1 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=PANC1 rep=rep2 treatment=None
         type narrowPeak
         # subId=1569 dateSubmitted=2010-06-17
@@ -2238,7 +2238,7 @@ wgEncode 1
         track wgEncodeUwDnaseHl60PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HL60 Pk 2
-        longLabel HL-60 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HL-60 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HL60 rep=rep2 treatment=None
         type narrowPeak
         # subId=1570 dateSubmitted=2010-06-17
@@ -2246,7 +2246,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaePkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAEpiC Pk 2
-        longLabel HAEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HAEpiC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HAE rep=rep2 treatment=None
         type narrowPeak
         # subId=1579 dateSubmitted=2010-06-17
@@ -2254,7 +2254,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12865PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM12865 Pk 2
-        longLabel GM12865 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel GM12865 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=GM12865 rep=rep2 treatment=None
         type narrowPeak
         # subId=1589 dateSubmitted=2010-06-17
@@ -2262,7 +2262,7 @@ wgEncode 1
         track wgEncodeUwDnaseCaco2PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Caco2 Pk 2
-        longLabel Caco-2 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel Caco-2 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=CACO2 rep=rep2 treatment=None
         type narrowPeak
         # subId=1590 dateSubmitted=2010-06-18
@@ -2270,7 +2270,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCF Pk 2
-        longLabel HCF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HCF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HCF rep=rep2 treatment=None
         type narrowPeak
         # subId=1593 dateSubmitted=2010-06-18
@@ -2278,7 +2278,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcmPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCM Pk 2
-        longLabel HCM DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HCM DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HCM rep=rep2 treatment=None
         type narrowPeak
         # subId=1595 dateSubmitted=2010-06-18
@@ -2286,7 +2286,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcpePkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCPEpiC Pk 2
-        longLabel HCPEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HCPEpiC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HCPE rep=rep2 treatment=None
         type narrowPeak
         # subId=1599 dateSubmitted=2010-06-18
@@ -2294,7 +2294,7 @@ wgEncode 1
         track wgEncodeUwDnaseHeePkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HEEpiC Pk 2
-        longLabel HEEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HEEpiC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HEE rep=rep2 treatment=None
         type narrowPeak
         # subId=1602 dateSubmitted=2010-06-18
@@ -2302,7 +2302,7 @@ wgEncode 1
         track wgEncodeUwDnaseHgfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HGF Pk 2
-        longLabel HGF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HGF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HGF rep=rep2 treatment=None
         type narrowPeak
         # subId=1603 dateSubmitted=2010-06-18
@@ -2310,7 +2310,7 @@ wgEncode 1
         track wgEncodeUwDnaseHelas3PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HeLaS3 Pk 2
-        longLabel HeLa-S3 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HeLa-S3 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=2HELA rep=rep2 treatment=None
         type narrowPeak
         color 0,119,158
@@ -2319,7 +2319,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm06990PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM06990 Pk 2
-        longLabel GM06990 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel GM06990 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=GM06990 rep=rep2 treatment=None
         type narrowPeak
         # subId=1614 dateSubmitted=2010-06-18
@@ -2327,7 +2327,7 @@ wgEncode 1
         track wgEncodeUwDnaseHepg2PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HepG2 Pk 2
-        longLabel HepG2 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HepG2 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=2HEPG2 rep=rep2 treatment=None
         type narrowPeak
         color 189,0,157
@@ -2336,7 +2336,7 @@ wgEncode 1
         track wgEncodeUwDnaseSkmcPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKMC Pk 2
-        longLabel SKMC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel SKMC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=SKZMC rep=rep2 treatment=None
         type narrowPeak
         # subId=1642 dateSubmitted=2010-06-19
@@ -2344,7 +2344,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknshraPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKNSHRA Pk 2
-        longLabel SK-N-SH_RA DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel SK-N-SH_RA DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=SKNSHRA rep=rep2 treatment=None
         type narrowPeak
         # subId=1643 dateSubmitted=2010-06-19
@@ -2352,7 +2352,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12878PkRep2
         parent wgEncodeUwDnaseViewaPeaks 
         shortLabel GM12878 Pk 2
-        longLabel GM12878 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel GM12878 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1GM12878 rep=rep2 treatment=None
         type narrowPeak
         color 153,38,0
@@ -2361,7 +2361,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562PkRep2
         parent wgEncodeUwDnaseViewaPeaks
         shortLabel K562 Pk 2
-        longLabel K562 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel K562 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 rep=rep2 treatment=None
         type narrowPeak
         color 46,0,184
@@ -2370,7 +2370,7 @@ wgEncode 1
         track wgEncodeUwDnaseBjPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel BJ Pk 2
-        longLabel BJ DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel BJ DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=BJ rep=rep2 treatment=None
         type narrowPeak
         # subId=1249 dateSubmitted=2010-06-06
@@ -2378,7 +2378,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfadPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDF-Ad Pk 1
-        longLabel NHDF-Ad DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel NHDF-Ad DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NHDF-Ad rep=rep1 treatment=None
         type narrowPeak
         # subId=2081 dateSubmitted=2010-07-26
@@ -2386,7 +2386,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfadPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDF-Ad Pk 2
-        longLabel NHDF-Ad DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel NHDF-Ad DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NHDF-Ad rep=rep2 treatment=None
         type narrowPeak
         # subId=2080 dateSubmitted=2010-07-26
@@ -2394,7 +2394,7 @@ wgEncode 1
         track wgEncodeUwDnaseHvmfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HVMF Pk 1
-        longLabel HVMF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HVMF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HVMF rep=rep1 treatment=None
         type narrowPeak
         # subId=2079 dateSubmitted=2010-07-26
@@ -2402,7 +2402,7 @@ wgEncode 1
         track wgEncodeUwDnaseHvmfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HVMF Pk 2
-        longLabel HVMF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HVMF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HVMF rep=rep2 treatment=None
         type narrowPeak
         # subId=2078 dateSubmitted=2010-07-26
@@ -2410,7 +2410,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpdlfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPdLF Pk 1
-        longLabel HPdLF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HPdLF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HPdLF rep=rep1 treatment=None
         type narrowPeak
         # subId=2077 dateSubmitted=2010-07-26
@@ -2418,7 +2418,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpdlfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPdLF Pk 2
-        longLabel HPdLF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HPdLF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HPdLF rep=rep2 treatment=None
         type narrowPeak
         # subId=2076 dateSubmitted=2010-07-26
@@ -2426,7 +2426,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPF Pk 1
-        longLabel HPF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HPF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HPF rep=rep1 treatment=None
         type narrowPeak
         # subId=2075 dateSubmitted=2010-07-26
@@ -2434,7 +2434,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPF Pk 2
-        longLabel HPF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HPF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HPF rep=rep2 treatment=None
         type narrowPeak
         # subId=2074 dateSubmitted=2010-07-26
@@ -2442,7 +2442,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpafPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPAF Pk 2
-        longLabel HPAF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HPAF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HPAF rep=rep2 treatment=None
         type narrowPeak
         # subId=2073 dateSubmitted=2010-07-26
@@ -2450,7 +2450,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpafPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPAF Pk 1
-        longLabel HPAF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HPAF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HPAF rep=rep1 treatment=None
         type narrowPeak
         # subId=2072 dateSubmitted=2010-07-26
@@ -2458,7 +2458,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdneoPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdNeo Pk 1
-        longLabel HMVEC-dNeo DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HMVEC-dNeo DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDNEO rep=rep1 treatment=None
         type narrowPeak
         # subId=2071 dateSubmitted=2010-07-26
@@ -2466,7 +2466,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdneoPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdNeo Pk 2
-        longLabel HMVEC-dNeo DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HMVEC-dNeo DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDNEO rep=rep2 treatment=None
         type narrowPeak
         # subId=2070 dateSubmitted=2010-07-26
@@ -2474,7 +2474,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyneoPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdLyNeo Pk 1
-        longLabel HMVEC-dLy-Neo DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HMVEC-dLy-Neo DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDLYNEO rep=rep1 treatment=None
         type narrowPeak
         # subId=2069 dateSubmitted=2010-07-26
@@ -2482,7 +2482,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyneoPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdLyNeo Pk 2
-        longLabel HMVEC-dLy-Neo DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HMVEC-dLy-Neo DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDLYNEO rep=rep2 treatment=None
         type narrowPeak
         # subId=2068 dateSubmitted=2010-07-26
@@ -2490,7 +2490,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyadPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdLyAd Pk 1
-        longLabel HMVEC-dLy-Ad DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HMVEC-dLy-Ad DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDLYAD rep=rep1 treatment=None
         type narrowPeak
         # subId=2067 dateSubmitted=2010-07-26
@@ -2498,7 +2498,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyadPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdLyAd Pk 2
-        longLabel HMVEC-dLy-Ad DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HMVEC-dLy-Ad DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDLYAD rep=rep2 treatment=None
         type narrowPeak
         # subId=2066 dateSubmitted=2010-07-26
@@ -2506,7 +2506,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdblneoPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdBlNeo Pk 1
-        longLabel HMVEC-dBl-Neo DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HMVEC-dBl-Neo DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDBLNEO rep=rep1 treatment=None
         type narrowPeak
         # subId=2065 dateSubmitted=2010-07-26
@@ -2514,7 +2514,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdblneoPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdBlNeo Pk 2
-        longLabel HMVEC-dBl-Neo DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HMVEC-dBl-Neo DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDBLNEO rep=rep2 treatment=None
         type narrowPeak
         # subId=2064 dateSubmitted=2010-07-26
@@ -2522,7 +2522,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdbladPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdBlAd Pk 1
-        longLabel HMVEC-dBl-Ad DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HMVEC-dBl-Ad DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDBLAD rep=rep1 treatment=None
         type narrowPeak
         # subId=2063 dateSubmitted=2010-07-26
@@ -2530,7 +2530,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdbladPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdBlAd Pk 2
-        longLabel HMVEC-dBl-Ad DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HMVEC-dBl-Ad DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDBLAD rep=rep2 treatment=None
         type narrowPeak
         # subId=2062 dateSubmitted=2010-07-26
@@ -2538,7 +2538,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecllyPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLLy Pk 2
-        longLabel HMVEC-LLy DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HMVEC-LLy DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECLLy rep=rep2 treatment=None
         type narrowPeak
         # subId=2061 dateSubmitted=2010-07-26
@@ -2546,7 +2546,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecllyPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLLy Pk 1
-        longLabel HMVEC-LLy DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HMVEC-LLy DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECLLy rep=rep1 treatment=None
         type narrowPeak
         # subId=2060 dateSubmitted=2010-07-26
@@ -2554,7 +2554,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmveclblPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLBl Pk 2
-        longLabel HMVEC-LBl DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HMVEC-LBl DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECLBL rep=rep2 treatment=None
         type narrowPeak
         # subId=2059 dateSubmitted=2010-07-26
@@ -2562,7 +2562,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMF Pk 2
-        longLabel HMF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HMF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMF rep=rep2 treatment=None
         type narrowPeak
         # subId=2058 dateSubmitted=2010-07-26
@@ -2570,7 +2570,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMF Pk 1
-        longLabel HMF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HMF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMF rep=rep1 treatment=None
         type narrowPeak
         # subId=2057 dateSubmitted=2010-07-26
@@ -2578,7 +2578,7 @@ wgEncode 1
         track wgEncodeUwDnaseHconfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HConF Pk 1
-        longLabel HConF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HConF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HCONF rep=rep1 treatment=None
         type narrowPeak
         # subId=2056 dateSubmitted=2010-07-26
@@ -2586,7 +2586,7 @@ wgEncode 1
         track wgEncodeUwDnaseHconfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HConF Pk 2
-        longLabel HConF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HConF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HCONF rep=rep2 treatment=None
         type narrowPeak
         # subId=2055 dateSubmitted=2010-07-26
@@ -2594,7 +2594,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfaaPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCFaa Pk 2
-        longLabel HCFaa DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HCFaa DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HCFaa rep=rep2 treatment=None
         type narrowPeak
         # subId=2054 dateSubmitted=2010-07-26
@@ -2602,7 +2602,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfaaPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCFaa Pk 1
-        longLabel HCFaa DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HCFaa DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HCFaa rep=rep1 treatment=None
         type narrowPeak
         # subId=2053 dateSubmitted=2010-07-26
@@ -2610,7 +2610,7 @@ wgEncode 1
         track wgEncodeUwDnaseAoafPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AoAF Pk 1
-        longLabel AoAF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel AoAF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=AOAF rep=rep1 treatment=None
         type narrowPeak
         # subId=2052 dateSubmitted=2010-07-26
@@ -2618,7 +2618,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMEC Pk 2
-        longLabel HMEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HMEC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMEC rep=rep2 treatment=None
         type narrowPeak
         # subId=2044 dateSubmitted=2010-07-24
@@ -2626,7 +2626,7 @@ wgEncode 1
         track wgEncodeUwDnaseHct116PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCT116 Pk 1
-        longLabel HCT-116 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HCT-116 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HCT116 rep=rep1 treatment=None
         type narrowPeak
         # subId=2043 dateSubmitted=2010-07-24
@@ -2634,7 +2634,7 @@ wgEncode 1
         track wgEncodeUwDnaseHct116PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCT116 Pk 2
-        longLabel HCT-116 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HCT-116 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HCT116 rep=rep2 treatment=None
         type narrowPeak
         # subId=2040 dateSubmitted=2010-07-24
@@ -2642,7 +2642,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmveclblPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLBl Pk 1
-        longLabel HMVEC-LBl DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HMVEC-LBl DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECLBL rep=rep1 treatment=None
         type narrowPeak
         # subId=2039 dateSubmitted=2010-07-24
@@ -2650,7 +2650,7 @@ wgEncode 1
         track wgEncodeUwDnaseAoafPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AoAF Pk 2
-        longLabel AoAF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel AoAF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=AOAF rep=rep2 treatment=None
         type narrowPeak
         # subId=2038 dateSubmitted=2010-07-24
@@ -2658,7 +2658,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7h Pk 2
-        longLabel H7-hESC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel H7-hESC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=H7ES rep=rep2 treatment=None
         type narrowPeak
         # subId=2037 dateSubmitted=2010-07-24
@@ -2666,7 +2666,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhaPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHA Pk 2
-        longLabel NH-A DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel NH-A DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NHAA rep=rep2 treatment=None
         type narrowPeak
         # subId=2089 dateSubmitted=2010-07-31
@@ -2674,7 +2674,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbmecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HBMEC Pk 2
-        longLabel HBMEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HBMEC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HBMEC rep=rep2 treatment=None
         type narrowPeak
         # subId=2087 dateSubmitted=2010-07-31
@@ -2682,7 +2682,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhaPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHA Pk 1
-        longLabel NH-A DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel NH-A DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NHAA rep=rep1 treatment=None
         type narrowPeak
         # subId=2088 dateSubmitted=2010-07-31
@@ -2690,7 +2690,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbmecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HBMEC Pk 1
-        longLabel HBMEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HBMEC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HBMEC rep=rep1 treatment=None
         type narrowPeak
         # subId=2090 dateSubmitted=2010-07-31
@@ -2698,7 +2698,7 @@ wgEncode 1
         track wgEncodeUwDnaseA549PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel A549 Pk 1
-        longLabel A549 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel A549 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=A549 rep=rep1 treatment=None
         type narrowPeak
         # subId=3156 dateSubmitted=2011-01-04
@@ -2706,7 +2706,7 @@ wgEncode 1
         track wgEncodeUwDnaseA549PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel A549 Pk 2
-        longLabel A549 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel A549 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=A549 rep=rep2 treatment=None
         type narrowPeak
         # subId=3158 dateSubmitted=2011-01-05
@@ -2714,7 +2714,7 @@ wgEncode 1
         track wgEncodeUwDnaseBe2cPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel BE2_C Pk 1
-        longLabel BE2_C DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel BE2_C DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=BE2C rep=rep1 treatment=None
         type narrowPeak
         # subId=3166 dateSubmitted=2011-01-06
@@ -2722,7 +2722,7 @@ wgEncode 1
         track wgEncodeUwDnaseBe2cPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel BE2_C Pk 2
-        longLabel BE2_C DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel BE2_C DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=BE2C rep=rep2 treatment=None
         type narrowPeak
         # subId=3167 dateSubmitted=2011-01-06
@@ -2730,7 +2730,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12864PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM12864 Pk 1
-        longLabel GM12864 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel GM12864 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=GM12864 rep=rep1 treatment=None
         type narrowPeak
         # subId=3168 dateSubmitted=2011-01-06
@@ -2738,7 +2738,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaspPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAsp Pk 1
-        longLabel HA-sp DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HA-sp DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HAASP rep=rep1 treatment=None
         type narrowPeak
         # subId=3169 dateSubmitted=2011-01-06
@@ -2746,7 +2746,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaspPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAsp Pk 2
-        longLabel HA-sp DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HA-sp DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HAASP rep=rep2 treatment=None
         type narrowPeak
         # subId=3170 dateSubmitted=2011-01-06
@@ -2754,7 +2754,7 @@ wgEncode 1
         track wgEncodeUwDnaseHipePkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HIPEpiC Pk 1
-        longLabel HIPEpiC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HIPEpiC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HIPE rep=rep1 treatment=None
         type narrowPeak
         # subId=3171 dateSubmitted=2011-01-06
@@ -2762,7 +2762,7 @@ wgEncode 1
         track wgEncodeUwDnaseHipePkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HIPEpiC Pk 2
-        longLabel HIPEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HIPEpiC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HIPE rep=rep2 treatment=None
         type narrowPeak
         # subId=3172 dateSubmitted=2011-01-06
@@ -2770,7 +2770,7 @@ wgEncode 1
         track wgEncodeUwDnaseHsmmPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HSMM Pk 1
-        longLabel HSMM DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HSMM DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HSMM rep=rep1 treatment=None
         type narrowPeak
         # subId=3173 dateSubmitted=2011-01-06
@@ -2778,7 +2778,7 @@ wgEncode 1
         track wgEncodeUwDnaseHsmmPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HSMM Pk 2
-        longLabel HSMM DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HSMM DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HSMM rep=rep2 treatment=None
         type narrowPeak
         # subId=3174 dateSubmitted=2011-01-06
@@ -2786,7 +2786,7 @@ wgEncode 1
         track wgEncodeUwDnaseHsmmtPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HSMMtube Pk 1
-        longLabel HSMMtube DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HSMMtube DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HSMMt rep=rep1 treatment=None
         type narrowPeak
         # subId=3175 dateSubmitted=2011-01-06
@@ -2794,7 +2794,7 @@ wgEncode 1
         track wgEncodeUwDnaseHuvecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HUVEC Pk 2
-        longLabel HUVEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HUVEC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=2HUVEC rep=rep2 treatment=None
         type narrowPeak
         color 224,75,0
@@ -2803,7 +2803,7 @@ wgEncode 1
         track wgEncodeUwDnaseJurkatPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Jurkat Pk 2
-        longLabel Jurkat DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel Jurkat DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=Jurkat rep=rep2 treatment=None
         type narrowPeak
         # subId=3177 dateSubmitted=2011-01-06
@@ -2811,7 +2811,7 @@ wgEncode 1
         track wgEncodeUwDnaseJurkatPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Jurkat Pk 1
-        longLabel Jurkat DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel Jurkat DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=Jurkat rep=rep1 treatment=None
         type narrowPeak
         # subId=3178 dateSubmitted=2011-01-06
@@ -2819,7 +2819,7 @@ wgEncode 1
         track wgEncodeUwDnaseLncapPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel LNCaP Pk 2
-        longLabel LNCaP DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel LNCaP DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=LNCaP rep=rep2 treatment=None
         type narrowPeak
         color 0,119,158
@@ -2828,7 +2828,7 @@ wgEncode 1
         track wgEncodeUwDnaseLncapPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel LNCaP Pk 1
-        longLabel LNCaP DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel LNCaP DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=LNCaP rep=rep1 treatment=None
         type narrowPeak
         color 0,119,158
@@ -2837,7 +2837,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhekPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHEK Pk 2
-        longLabel NHEK DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel NHEK DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NHEK rep=rep2 treatment=None
         type narrowPeak
         color 179,0,134
@@ -2846,7 +2846,7 @@ wgEncode 1
         track wgEncodeUwDnaseRptecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel RPTEC Pk 1
-        longLabel RPTEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel RPTEC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=RPTEC rep=rep1 treatment=None
         type narrowPeak
         # subId=3182 dateSubmitted=2011-01-06
@@ -2854,7 +2854,7 @@ wgEncode 1
         track wgEncodeUwDnaseRptecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel RPTEC Pk 2
-        longLabel RPTEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel RPTEC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=RPTEC rep=rep2 treatment=None
         type narrowPeak
         # subId=3183 dateSubmitted=2011-01-06
@@ -2862,7 +2862,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknmcPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKNMC Pk 1
-        longLabel SK-N-MC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel SK-N-MC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=SKNMC rep=rep1 treatment=None
         type narrowPeak
         # subId=3184 dateSubmitted=2011-01-06
@@ -2870,7 +2870,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknmcPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKNMC Pk 2
-        longLabel SK-N-MC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel SK-N-MC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=SKNMC rep=rep2 treatment=None
         type narrowPeak
         # subId=3185 dateSubmitted=2011-01-06
@@ -2878,7 +2878,7 @@ wgEncode 1
         track wgEncodeUwDnaseWerirb1PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WERIRb1 Pk 2
-        longLabel WERI-Rb-1 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel WERI-Rb-1 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=WERIRb1 rep=rep2 treatment=None
         type narrowPeak
         # subId=3186 dateSubmitted=2011-01-06
@@ -2886,7 +2886,7 @@ wgEncode 1
         track wgEncodeUwDnaseWerirb1PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WERIRb1 Pk 1
-        longLabel WERI-Rb-1 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel WERI-Rb-1 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=WERIRb1 rep=rep1 treatment=None
         type narrowPeak
         # subId=3187 dateSubmitted=2011-01-06
@@ -2894,7 +2894,7 @@ wgEncode 1
         track wgEncodeUwDnaseHacPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAc Pk 1
-        longLabel HAc DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HAc DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HAC rep=rep1 treatment=None
         type narrowPeak
         # subId=3201 dateSubmitted=2011-01-11
@@ -2902,7 +2902,7 @@ wgEncode 1
         track wgEncodeUwDnaseHacPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAc Pk 2
-        longLabel HAc DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HAc DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HAC rep=rep2 treatment=None
         type narrowPeak
         # subId=3202 dateSubmitted=2011-01-11
@@ -2910,7 +2910,7 @@ wgEncode 1
         track wgEncodeUwDnaseHahPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAh Pk 1
-        longLabel HA-h DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HA-h DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HAAH rep=rep1 treatment=None
         type narrowPeak
         # subId=3203 dateSubmitted=2011-01-11
@@ -2918,7 +2918,7 @@ wgEncode 1
         track wgEncodeUwDnaseHahPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAh Pk 2
-        longLabel HA-h DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HA-h DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HAAH rep=rep2 treatment=None
         type narrowPeak
         # subId=3204 dateSubmitted=2011-01-11
@@ -2926,7 +2926,7 @@ wgEncode 1
         track wgEncodeUwDnaseHffPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HFF Pk 1
-        longLabel HFF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HFF DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HFF rep=rep1 treatment=None
         type narrowPeak
         # subId=3205 dateSubmitted=2011-01-11
@@ -2934,7 +2934,7 @@ wgEncode 1
         track wgEncodeUwDnaseHffPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HFF Pk 2
-        longLabel HFF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HFF DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HFF rep=rep2 treatment=None
         type narrowPeak
         # subId=3206 dateSubmitted=2011-01-11
@@ -2942,7 +2942,7 @@ wgEncode 1
         track wgEncodeUwDnaseHffmycPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HFFMyc Pk 2
-        longLabel HFF-Myc DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HFF-Myc DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HFFMyc rep=rep2 treatment=None
         type narrowPeak
         # subId=3207 dateSubmitted=2011-01-11
@@ -2950,7 +2950,7 @@ wgEncode 1
         track wgEncodeUwDnaseHffmycPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HFFMyc Pk 1
-        longLabel HFF-Myc DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HFF-Myc DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HFFMyc rep=rep1 treatment=None
         type narrowPeak
         # subId=3208 dateSubmitted=2011-01-11
@@ -2958,7 +2958,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrgecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRGEC Pk 1
-        longLabel HRGEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HRGEC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HRGEC rep=rep1 treatment=None
         type narrowPeak
         # subId=3209 dateSubmitted=2011-01-11
@@ -2966,7 +2966,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrgecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRGEC Pk 2
-        longLabel HRGEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HRGEC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HRGEC rep=rep2 treatment=None
         type narrowPeak
         # subId=3210 dateSubmitted=2011-01-11
@@ -2974,7 +2974,7 @@ wgEncode 1
         #track wgEncodeUwDnaseMonocd14PkRep1
         #parent wgEncodeUwDnaseViewaPeaks off
         #shortLabel Mono-CD14+ Pk 1
-        #longLabel Monocytes-CD14+ DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        #longLabel Monocytes-CD14+ DNaseI HS Peaks  Rep 1 from ENCODE/UW
         #subGroups view=Peaks cellType=CD14MONO rep=rep1 treatment=None
         #type narrowPeak
         # subId=3211 dateSubmitted=2011-01-11
@@ -2982,7 +2982,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI38 Pk 1
-        longLabel WI-38 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel WI-38 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=WI38 rep=rep1 treatment=None
         type narrowPeak
         # subId=3212 dateSubmitted=2011-01-11
@@ -2990,7 +2990,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI38 Pk 2
-        longLabel WI-38 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel WI-38 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=WI38 rep=rep2 treatment=None
         type narrowPeak
         # subId=3213 dateSubmitted=2011-01-11
@@ -2998,7 +2998,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38OhtamPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI38 OHTM Pk 1
-        longLabel WI-38 4-hydroxytamoxifen DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=WI38 treatment=OHTAM rep=rep1
         type narrowPeak
         # subId=3214 dateSubmitted=2011-01-11
@@ -3006,7 +3006,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38OhtamPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI38 OHTM Pk 2
-        longLabel WI-38 4-hydroxytamoxifen DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=WI38 treatment=OHTAM rep=rep2
         type narrowPeak
         # subId=3215 dateSubmitted=2011-01-11
@@ -3014,7 +3014,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319PkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG09319 Pk 1
-        longLabel AG09319 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel AG09319 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=AG09319 rep=rep1 treatment=None
         type narrowPeak
         # subId=3261 dateSubmitted=2011-01-14
@@ -3022,7 +3022,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esPkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7h Pk 1
-        longLabel H7-hESC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel H7-hESC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=H7ES rep=rep1 treatment=None
         type narrowPeak
         # subId=3261 dateSubmitted=2011-01-14
@@ -3030,7 +3030,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpcePkRep2V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HNPCEpiC Pk 2
-        longLabel HNPCEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HNPCEpiC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HNPCE rep=rep2 treatment=None
         type narrowPeak
         # subId=3261 dateSubmitted=2011-01-14
@@ -3038,7 +3038,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrePkRep2V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRE Pk 2
-        longLabel HRE DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HRE DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HRE rep=rep2 treatment=None
         type narrowPeak
         # subId=3261 dateSubmitted=2011-01-14
@@ -3046,7 +3046,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrePkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRE Pk 1
-        longLabel HRE DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HRE DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HRE rep=rep1 treatment=None
         type narrowPeak
         # subId=3261 dateSubmitted=2011-01-14
@@ -3054,7 +3054,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpePkRep2V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRPEpiC Pk 2
-        longLabel HRPEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HRPEpiC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HRPE rep=rep2 treatment=None
         type narrowPeak
         # subId=3261 dateSubmitted=2011-01-14
@@ -3062,7 +3062,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpePkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRPEpiC Pk 1
-        longLabel HRPEpiC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HRPEpiC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HRPE rep=rep1 treatment=None
         type narrowPeak
         # subId=3261 dateSubmitted=2011-01-14
@@ -3070,7 +3070,7 @@ wgEncode 1
         track wgEncodeUwDnaseHuvecPkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HUVEC Pk 1
-        longLabel HUVEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HUVEC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=2HUVEC rep=rep1 treatment=None
         type narrowPeak
         color 224,75,0
@@ -3079,7 +3079,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdadPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdAd Pk 2
-        longLabel HMVEC-dAd DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HMVEC-dAd DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDAD rep=rep2 treatment=None
         type narrowPeak
         # subId=4402 dateSubmitted=2011-06-29
@@ -3087,7 +3087,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdadPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECdAd Pk 1
-        longLabel HMVEC-dAd DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HMVEC-dAd DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDAD rep=rep1 treatment=None
         type narrowPeak
         # subId=4403 dateSubmitted=2011-06-29
@@ -3095,7 +3095,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpaecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPAEC Pk 1
-        longLabel HPAEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel HPAEC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HPAEC rep=rep1 treatment=None
         type narrowPeak
         # subId=4404 dateSubmitted=2011-06-25
@@ -3103,7 +3103,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd34mobilizedPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD34+ Mob Pk 1
-        longLabel CD34+ Mobilized DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel CD34+ Mobilized DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=CD34MOBILIZED rep=rep1 treatment=None
         type narrowPeak
         # subId=4401 dateSubmitted=2011-06-25
@@ -3111,7 +3111,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD20+ Pk 2
-        longLabel CD20+ DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel CD20+ (RO01778) DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=CD20RO01778 rep=rep2 treatment=None
         type narrowPeak
         # subId=4400 dateSubmitted=2011-06-25
@@ -3122,7 +3122,7 @@ wgEncode 1
         #track wgEncodeUwDnaseMonocd14ro1746PkRep1V2
         #parent wgEncodeUwDnaseViewaPeaks off
         #shortLabel Mono-CD14+ Pk 1
-        #longLabel Monocytes-CD14+ DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        #longLabel Monocytes-CD14+ DNaseI HS Peaks  Rep 1 from ENCODE/UW
         #subGroups view=Peaks cellType=CD14MONO rep=rep1 treatment=None
         #type narrowPeak
         # subId=4398 dateSubmitted=2011-06-25
@@ -3131,7 +3131,7 @@ wgEncode 1
         track wgEncodeUwDnaseMonocd14ro1746PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD14+ Mono Pk 2
-        longLabel Monocytes-CD14+ DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel CD14+ Monocytes DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=CD14MONO rep=rep2 treatment=None
         type narrowPeak
         # subId=4399 dateSubmitted=2011-06-25
@@ -3140,7 +3140,7 @@ wgEncode 1
         track wgEncodeUwDnaseNt2d1PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NT2D1 Pk 1
-        longLabel NT2-D1 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel NT2-D1 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NT2D1 rep=rep1 treatment=None
         type narrowPeak
         # subId=4407 dateSubmitted=2011-06-25
@@ -3148,7 +3148,7 @@ wgEncode 1
         track wgEncodeUwDnasePrecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel PReC Pk 2
-        longLabel PReC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel PReC DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=PREC rep=rep2 treatment=None
         type narrowPeak
         # subId=4408 dateSubmitted=2011-06-25
@@ -3156,7 +3156,7 @@ wgEncode 1
         track wgEncodeUwDnaseHsmmtPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HSMMtube Pk 2
-        longLabel HSMMtube DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel HSMMtube DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HSMMt rep=rep2 treatment=None
         type narrowPeak
         # subId=4405 dateSubmitted=2011-06-25
@@ -3164,7 +3164,7 @@ wgEncode 1
         track wgEncodeUwDnaseNt2d1PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NT2D1 Pk 2
-        longLabel NT2-D1 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
+        longLabel NT2-D1 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NT2D1 rep=rep2 treatment=None
         type narrowPeak
         # subId=4406 dateSubmitted=2011-06-25
@@ -3172,7 +3172,7 @@ wgEncode 1
         track wgEncodeUwDnasePrecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel PReC Pk 1
-        longLabel PReC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        longLabel PReC DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=PREC rep=rep1 treatment=None
         type narrowPeak
         # subId=4409 dateSubmitted=2011-06-25
@@ -3180,7 +3180,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD20+ Pk 1
-        longLabel CD20+ RO01778 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
+        longLabel CD20+ (RO01778) DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=CD20RO01778 rep=rep1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3189,7 +3189,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04503PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM04503 Pk 2
-        longLabel GM04503 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW 
+        longLabel GM04503 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=GM04503 rep=rep2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3198,7 +3198,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04504PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM04504 Pk 1
-        longLabel GM04504 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
+        longLabel GM04504 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=GM04504 rep=rep1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3207,7 +3207,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04504PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM04504 Pk 2
-        longLabel GM04504 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW 
+        longLabel GM04504 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=GM04504 rep=rep2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3216,7 +3216,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa14dPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7h difPA14 Pk 2
-        longLabel H7-hESC diffProtA 14d DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 14d DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=H7ES treatment=DIFFA14D rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3225,7 +3225,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa5dPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7h difPA5 Pk 2
-        longLabel H7-hESC diffProtA 5d DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 5d DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=H7ES treatment=DIFFA5D rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3234,7 +3234,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa14dPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7h difPA14 Pk 1
-        longLabel H7-hESC diffProtA 14d DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 14d DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=H7ES treatment=DIFFA14D rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3243,7 +3243,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa2dPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7h difPA2 Pk 1
-        longLabel H7-hESC diffProtA 2d DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 2d DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=H7ES treatment=DIFFA2D rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3252,7 +3252,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa5dPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7h difPA5 Pk 1
-        longLabel H7-hESC diffProtA 5d DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 5d DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=H7ES treatment=DIFFA5D rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3261,7 +3261,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbvpPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HBVP Pk 1
-        longLabel HBVP DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
+        longLabel HBVP DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HBVP rep=rep1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3270,7 +3270,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbvsmcPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HBVSCM Pk 2
-        longLabel HBVSMC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW 
+        longLabel HBVSCM DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HBVSMC rep=rep2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3279,7 +3279,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbvsmcPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HBVSCM Pk 1
-        longLabel HBVSMC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
+        longLabel HBVSCM DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HBVSMC rep=rep1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3288,7 +3288,7 @@ wgEncode 1
         track wgEncodeUwDnaseM059jPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel M059J Pk 2
-        longLabel M059J DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW 
+        longLabel M059J DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=M059J rep=rep2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3297,7 +3297,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhberaPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHBE RA Pk 2
-        longLabel NHBE RA DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW 
+        longLabel NHBE RA DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NHBERA rep=rep2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3306,7 +3306,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhberaPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHBE RA Pk 1
-        longLabel NHBE RA DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
+        longLabel NHBE RA DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NHBERA rep=rep1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3315,7 +3315,7 @@ wgEncode 1
         track wgEncodeUwDnaseT47dPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel T47D Pk 2
-        longLabel T-47D DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW 
+        longLabel T-47D DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=TA47D rep=rep2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3324,7 +3324,7 @@ wgEncode 1
         track wgEncodeUwDnaseT47dPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel T47D Pk 1
-        longLabel T-47D DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
+        longLabel T-47D DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=TA47D rep=rep1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -3333,7 +3333,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04503PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM04503 Pk 1
-        longLabel GM04503 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW 
+        longLabel GM04503 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=GM04503 rep=rep1 treatment=None
         type narrowPeak
         origAssembly hg19
