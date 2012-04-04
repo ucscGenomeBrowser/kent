@@ -1287,7 +1287,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38OhtamHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel WI-38 OHTM Hspt 1
-        longLabel WI-38 4-hydroxytamoxifen DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=WI38O treatment=OHTAM rep=rep1
         type broadPeak
         # subId=3214 dateSubmitted=2011-01-11
@@ -1295,7 +1295,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38OhtamHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel WI-38 OHTM Hspt 2
-        longLabel WI-38 4-hydroxytamoxifen DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=WI38O treatment=OHTAM rep=rep2
         type broadPeak
         # subId=3215 dateSubmitted=2011-01-11
@@ -1335,7 +1335,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel CD20+ Hspt 2
-        longLabel CD20+ DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        longLabel CD20+ (RO01778) DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=CD20RO01778 rep=rep2 treatment=None
         type broadPeak
         # subId=4400 dateSubmitted=2011-06-25
@@ -1355,7 +1355,7 @@ wgEncode 1
         track wgEncodeUwDnaseMonocd14ro1746HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel Mono-CD14+ Hspt 2
-        longLabel Monocytes-CD14+ DNaseI HS Hotspots Rep 2 from ENCODE/UW
+        longLabel CD14+ Monocytes DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=CD14MONO rep=rep2 treatment=None
         type broadPeak
         # subId=4399 dateSubmitted=2011-06-25
@@ -1404,7 +1404,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel CD20+_01778 1
-        longLabel CD20+ RO01778 DNaseI HS Hotspots Rep 1 from ENCODE/UW 
+        longLabel CD20+ (RO01778) DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=CD20RO01778 rep=rep1 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1413,7 +1413,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04503HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel GM04503 2
-        longLabel GM04503 DNaseI HS Hotspots Rep 2 from ENCODE/UW 
+        longLabel GM04503 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=GM04503 rep=rep2 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1422,7 +1422,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04504HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel GM04504 1
-        longLabel GM04504 DNaseI HS Hotspots Rep 1 from ENCODE/UW 
+        longLabel GM04504 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=GM04504 rep=rep1 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1431,7 +1431,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04504HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel GM04504 2
-        longLabel GM04504 DNaseI HS Hotspots Rep 2 from ENCODE/UW 
+        longLabel GM04504 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=GM04504 rep=rep2 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1440,7 +1440,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa14dHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel H7-hESC 2
-        longLabel H7-hESC diffProtA 14d DNaseI HS Hotspots Rep 2 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 14d DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=H7ES treatment=DIFFA14D rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1449,7 +1449,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa5dHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel H7-hESC 2
-        longLabel H7-hESC diffProtA 5d DNaseI HS Hotspots Rep 2 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 5d DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=H7ES treatment=DIFFA5D rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1458,7 +1458,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa14dHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel H7-hESC 1
-        longLabel H7-hESC diffProtA 14d DNaseI HS Hotspots Rep 1 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 14d DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=H7ES treatment=DIFFA14D rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1467,7 +1467,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa2dHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel H7-hESC 1
-        longLabel H7-hESC diffProtA 2d DNaseI HS Hotspots Rep 1 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 2d DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=H7ES treatment=DIFFA2D rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1476,7 +1476,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa5dHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel H7-hESC 1
-        longLabel H7-hESC diffProtA 5d DNaseI HS Hotspots Rep 1 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 5d DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=H7ES treatment=DIFFA5D rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1485,7 +1485,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbvpHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel HBVP 1
-        longLabel HBVP DNaseI HS Hotspots Rep 1 from ENCODE/UW 
+        longLabel HBVP DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HBVP rep=rep1 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1494,7 +1494,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbvsmcHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel HBVSMC 2
-        longLabel HBVSMC DNaseI HS Hotspots Rep 2 from ENCODE/UW 
+        longLabel HBVSCM DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HBVSMC rep=rep2 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1503,7 +1503,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbvsmcHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel HBVSMC 1
-        longLabel HBVSMC DNaseI HS Hotspots Rep 1 from ENCODE/UW 
+        longLabel HBVSCM DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HBVSMC rep=rep1 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1512,7 +1512,7 @@ wgEncode 1
         track wgEncodeUwDnaseM059jHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel M059J 2
-        longLabel M059J DNaseI HS Hotspots Rep 2 from ENCODE/UW 
+        longLabel M059J DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=M059J rep=rep2 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1521,7 +1521,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhberaHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel NHBE_RA 2
-        longLabel NHBE RA DNaseI HS Hotspots Rep 2 from ENCODE/UW 
+        longLabel NHBE RA DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=NHBERA rep=rep2 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1530,7 +1530,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhberaHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel NHBE_RA 1
-        longLabel NHBE RA DNaseI HS Hotspots Rep 1 from ENCODE/UW 
+        longLabel NHBE RA DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=NHBERA rep=rep1 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1539,7 +1539,7 @@ wgEncode 1
         track wgEncodeUwDnaseT47dHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel T-47D 2
-        longLabel T-47D DNaseI HS Hotspots Rep 2 from ENCODE/UW 
+        longLabel T-47D DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=TA47D rep=rep2 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1548,7 +1548,7 @@ wgEncode 1
         track wgEncodeUwDnaseT47dHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel T-47D 1
-        longLabel T-47D DNaseI HS Hotspots Rep 1 from ENCODE/UW 
+        longLabel T-47D DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=TA47D rep=rep1 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1557,7 +1557,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04503HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel GM04503 1
-        longLabel GM04503 DNaseI HS Hotspots Rep 1 from ENCODE/UW 
+        longLabel GM04503 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=GM04503 rep=rep1 treatment=None
         type broadPeak
         origAssembly hg19
@@ -1566,7 +1566,7 @@ wgEncode 1
         track wgEncodeUwDnaseM059jHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel M059J 1
-        longLabel M059J DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel M059J DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=M059J treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1575,7 +1575,7 @@ wgEncode 1
         track wgEncodeUwDnaseRpmi7951HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel RPMI-7951 1
-        longLabel RPMI-7951 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel RPMI-7951 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=RPMI7951 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1584,7 +1584,7 @@ wgEncode 1
         track wgEncodeUwDnaseRpmi7951HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel RPMI-7951 2
-        longLabel RPMI-7951 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel RPMI-7951 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=RPMI7951 treatment=None rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1593,7 +1593,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel LHCN-M2 1
-        longLabel LHCN-M2 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=LHCNM2 treatment=None rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1602,7 +1602,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel LHCN-M2 2
-        longLabel LHCN-M2 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=LHCNM2 treatment=None rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1611,7 +1611,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2Diff4dHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel LHCN-M2 1
-        longLabel LHCN-M2 DIFF 4d DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DIFF 4d DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=LHCNM2 treatment=DIFF4D rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1620,7 +1620,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2Diff4dHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel LHCN-M2 2
-        longLabel LHCN-M2 DIFF 4d DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DIFF 4d DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=LHCNM2 treatment=DIFF4D rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1629,7 +1629,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znff41b2HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 2
-        longLabel K562 ZNF knockout F4.1-B2 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFF41B2 rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1639,7 +1639,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znff41b2HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 1
-        longLabel K562 ZNF knockout F4.1-B2 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFF41B2 rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1649,7 +1649,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfg54a11HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 2
-        longLabel K562 ZNF knockout G5.4-A11 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFG54A11 rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1659,7 +1659,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfp5HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 1
-        longLabel K562 ZNF knockout P5 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout-P5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFP5 rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1669,7 +1669,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf2c10c5HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 1
-        longLabel K562 ZNF knockout 2C10 C5 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNF2C10C5 rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1679,7 +1679,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf2c10c5HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 2
-        longLabel K562 ZNF knockout 2C10 C5 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNF2C10C5 rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1689,7 +1689,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4c50c4HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 1
-        longLabel K562 ZNF knockout 4C50 C4 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNF4C50C4 rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1699,7 +1699,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4c50c4HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 2
-        longLabel K562 ZNF knockout 4C50 C4 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNF4C50C4 rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1709,7 +1709,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4g7d3HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 1
-        longLabel K562 ZNF knockout 4G7 D3 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNF4G7D3 rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1719,7 +1719,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4g7d3HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 2
-        longLabel K562 ZNF knockout 4G7 D3 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNF4G7D3 rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1729,7 +1729,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfa41c6HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 1
-        longLabel K562 ZNF knockout A4.1-C6 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFA41C6 rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1739,7 +1739,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfa41c6HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 2
-        longLabel K562 ZNF knockout A4.1-C6 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFA41C6 rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1749,7 +1749,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfb34a8HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 1
-        longLabel K562 ZNF knockout B3.4-A8 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFB34A8 rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1759,7 +1759,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfb34a8HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 2
-        longLabel K562 ZNF knockout B3.4-A8 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFB34A8 rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1769,7 +1769,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfe103c6HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 1
-        longLabel K562 ZNF knockout E10.3-C6 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFE103C6 rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1779,7 +1779,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfg54a11HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 1
-        longLabel K562 ZNF knockout G5.4-A11 DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFG54A11 rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1789,7 +1789,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfp5HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 2
-        longLabel K562 ZNF knockout P5 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout-P5 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFP5 rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1799,7 +1799,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfe103c6HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel K562 2
-        longLabel K562 ZNF knockout E10.3-C6 DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1K562 treatment=ZNFE103C6 rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1809,7 +1809,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel MCF-7 2
-        longLabel MCF-7 Estradiol ctrl 0hr DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=MCF7 treatment=ESTCTRL0H rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1818,7 +1818,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel MCF-7 1
-        longLabel MCF-7 Estradiol ctrl 0hr DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=MCF7 treatment=ESTCTRL0H rep=rep1
         type broadPeak
         origAssembly hg19
@@ -1827,7 +1827,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Est100nm1hHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel MCF-7 2
-        longLabel MCF-7 Estradiol 100nM 1hr DNase-seq Hotspots Rep 2 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol 100 nM 1 hr DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=MCF7 treatment=EST100NM1H rep=rep2
         type broadPeak
         origAssembly hg19
@@ -1836,7 +1836,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Est100nm1hHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
         shortLabel MCF-7 1
-        longLabel MCF-7 Estradiol 100nM 1hr DNase-seq Hotspots Rep 1 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol 100 nM 1 hr DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=MCF7 treatment=EST100NM1H rep=rep1
         type broadPeak
         origAssembly hg19
@@ -3342,7 +3342,7 @@ wgEncode 1
         track wgEncodeUwDnaseM059jPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel M059J Pk 1
-        longLabel M059J DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel M059J DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=M059J treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3351,7 +3351,7 @@ wgEncode 1
         track wgEncodeUwDnaseRpmi7951PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel RPMI-7951 Pk 1
-        longLabel RPMI-7951 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel RPMI-7951 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=RPMI7951 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3360,7 +3360,7 @@ wgEncode 1
         track wgEncodeUwDnaseRpmi7951PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel RPMI-7951 Pk 2
-        longLabel RPMI-7951 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel RPMI-7951 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=RPMI7951 treatment=None rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3369,7 +3369,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel LHCN-M2 Pk 1
-        longLabel LHCN-M2 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=LHCNM2 treatment=None rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3378,7 +3378,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel LHCN-M2 Pk 2
-        longLabel LHCN-M2 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=LHCNM2 treatment=None rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3387,7 +3387,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2Diff4dPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel LHCN-M2 Pk 1
-        longLabel LHCN-M2 DIFF 4d DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DIFF 4d DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=LHCNM2 treatment=DIFF4D rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3396,7 +3396,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2Diff4dPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel LHCN-M2 Pk 2
-        longLabel LHCN-M2 DIFF 4d DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DIFF 4d DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=LHCNM2 treatment=DIFF4D rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3405,7 +3405,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znff41b2PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 2
-        longLabel K562 ZNF knockout F4.1-B2 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFF41B2 rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3415,7 +3415,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znff41b2PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 1
-        longLabel K562 ZNF knockout F4.1-B2 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFF41B2 rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3425,7 +3425,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfg54a11PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 2
-        longLabel K562 ZNF knockout G5.4-A11 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFG54A11 rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3435,7 +3435,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfp5PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 1
-        longLabel K562 ZNF knockout P5 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout-P5 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFP5 rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3445,7 +3445,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf2c10c5PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 1
-        longLabel K562 ZNF knockout 2C10 C5 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNF2C10C5 rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3455,7 +3455,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf2c10c5PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 2
-        longLabel K562 ZNF knockout 2C10 C5 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNF2C10C5 rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3465,7 +3465,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4c50c4PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 1
-        longLabel K562 ZNF knockout 4C50 C4 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNF4C50C4 rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3475,7 +3475,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4c50c4PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 2
-        longLabel K562 ZNF knockout 4C50 C4 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNF4C50C4 rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3485,7 +3485,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4g7d3PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 1
-        longLabel K562 ZNF knockout 4G7 D3 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNF4G7D3 rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3495,7 +3495,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4g7d3PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 2
-        longLabel K562 ZNF knockout 4G7 D3 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNF4G7D3 rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3505,7 +3505,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfa41c6PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 1
-        longLabel K562 ZNF knockout A4.1-C6 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFA41C6 rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3515,7 +3515,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfa41c6PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 2
-        longLabel K562 ZNF knockout A4.1-C6 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFA41C6 rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3525,7 +3525,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfb34a8PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 1
-        longLabel K562 ZNF knockout B3.4-A8 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFB34A8 rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3535,7 +3535,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfb34a8PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 2
-        longLabel K562 ZNF knockout B3.4-A8 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFB34A8 rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3545,7 +3545,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfe103c6PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 1
-        longLabel K562 ZNF knockout E10.3-C6 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFE103C6 rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3555,7 +3555,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfg54a11PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 1
-        longLabel K562 ZNF knockout G5.4-A11 DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFG54A11 rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3565,7 +3565,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfp5PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 2
-        longLabel K562 ZNF knockout P5 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout-P5 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFP5 rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3575,7 +3575,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfe103c6PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 2
-        longLabel K562 ZNF knockout E10.3-C6 DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFE103C6 rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3585,7 +3585,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel MCF-7 Pk 2
-        longLabel MCF-7 Estradiol ctrl 0hr DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=MCF7 treatment=ESTCTRL0H rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3594,7 +3594,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel MCF-7 Pk 1
-        longLabel MCF-7 Estradiol ctrl 0hr DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=MCF7 treatment=ESTCTRL0H rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -3603,7 +3603,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Est100nm1hPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel MCF-7 Pk 2
-        longLabel MCF-7 Estradiol 100nM 1hr DNase-seq Peaks Rep 2 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol 100 nM 1 hr DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=MCF7 treatment=EST100NM1H rep=rep2
         type narrowPeak
         origAssembly hg19
@@ -3612,7 +3612,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Est100nm1hPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel MCF-7 Pk 1
-        longLabel MCF-7 Estradiol 100nM 1hr DNase-seq Peaks Rep 1 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol 100 nM 1 hr DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=MCF7 treatment=EST100NM1H rep=rep1
         type narrowPeak
         origAssembly hg19
@@ -4841,7 +4841,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38OhtamRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel WI-38 OHTM Sig 1
-        longLabel WI-38 4-hydroxytamoxifen DNaseI HS Raw Signal Rep 1 from ENCODE/UW
+        longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=WI38O treatment=OHTAM rep=rep1
         type bigWig 1.000000 21917.000000
         # subId=3214 dateSubmitted=2011-01-11
@@ -4849,7 +4849,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38OhtamRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel WI-38 OHTM Sig 2
-        longLabel WI-38 4-hydroxytamoxifen DNaseI HS Raw Signal Rep 2 from ENCODE/UW
+        longLabel WI-38 4-OHTAM 20 nM 72 hr DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=WI38O treatment=OHTAM rep=rep2
         type bigWig 1.000000 24297.000000
         # subId=3215 dateSubmitted=2011-01-11
@@ -4889,7 +4889,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel CD20+ Sig 2
-        longLabel CD20+ DNaseI HS Raw Signal Rep 2 from ENCODE/UW
+        longLabel CD20+ (RO01778) DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=CD20RO01778 rep=rep2 treatment=None
         type bigWig 1.000000 31470.000000
         # subId=4400 dateSubmitted=2011-06-25
@@ -4909,7 +4909,7 @@ wgEncode 1
         track wgEncodeUwDnaseMonocd14ro1746RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Mono-CD14+ Sig 2
-        longLabel Monocytes-CD14+ DNaseI HS Raw Signal Rep 2 from ENCODE/UW
+        longLabel CD14+ Monocytes DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=CD14MONO rep=rep2 treatment=None
         type bigWig 1.000000 36131.000000
         # subId=4399 dateSubmitted=2011-06-25
@@ -4958,7 +4958,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel CD20+_01778 Raw 1
-        longLabel CD20+ RO01778 DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
+        longLabel CD20+ (RO01778) DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=CD20RO01778 rep=rep1 treatment=None
         type bigWig 1.000000 17468.000000
         origAssembly hg19
@@ -4967,7 +4967,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04503RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM04503 Raw 2
-        longLabel GM04503 DNaseI HS Raw Signal Rep 2 from ENCODE/UW 
+        longLabel GM04503 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=GM04503 rep=rep2 treatment=None
         type bigWig 1.000000 23104.000000
         origAssembly hg19
@@ -4976,7 +4976,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04504RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM04504 Raw 1
-        longLabel GM04504 DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
+        longLabel GM04504 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=GM04504 rep=rep1 treatment=None
         type bigWig 1.000000 23185.000000
         origAssembly hg19
@@ -4985,7 +4985,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04504RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM04504 Raw 2
-        longLabel GM04504 DNaseI HS Raw Signal Rep 2 from ENCODE/UW 
+        longLabel GM04504 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=GM04504 rep=rep2 treatment=None
         type bigWig 1.000000 35885.000000
         origAssembly hg19
@@ -4994,7 +4994,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa14dRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel H7-hESC Raw 2
-        longLabel H7-hESC diffProtA 14d DNaseI HS Raw Signal Rep 2 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 14d DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=H7ES treatment=DIFFA14D rep=rep2
         type bigWig 1.000000 40639.000000
         origAssembly hg19
@@ -5003,7 +5003,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa5dRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel H7-hESC Raw 2
-        longLabel H7-hESC diffProtA 5d DNaseI HS Raw Signal Rep 2 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 5d DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=H7ES treatment=DIFFA5D rep=rep2
         type bigWig 1.000000 23171.000000
         origAssembly hg19
@@ -5012,7 +5012,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa14dRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel H7-hESC Raw 1
-        longLabel H7-hESC diffProtA 14d DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 14d DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=H7ES treatment=DIFFA14D rep=rep1
         type bigWig 1.000000 37917.000000
         origAssembly hg19
@@ -5021,7 +5021,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa2dRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel H7-hESC Raw 1
-        longLabel H7-hESC diffProtA 2d DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 2d DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=H7ES treatment=DIFFA2D rep=rep1
         type bigWig 1.000000 12124.000000
         origAssembly hg19
@@ -5030,7 +5030,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esDiffa5dRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel H7-hESC Raw 1
-        longLabel H7-hESC diffProtA 5d DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
+        longLabel H7-hESC diffProtA 5d DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=H7ES treatment=DIFFA5D rep=rep1
         type bigWig 1.000000 30533.000000
         origAssembly hg19
@@ -5039,7 +5039,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbvpRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HBVP Raw 1
-        longLabel HBVP DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
+        longLabel HBVP DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=HBVP rep=rep1 treatment=None
         type bigWig 1.000000 35148.000000
         origAssembly hg19
@@ -5048,7 +5048,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbvsmcRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HBVSMC Raw 2
-        longLabel HBVSMC DNaseI HS Raw Signal Rep 2 from ENCODE/UW 
+        longLabel HBVSCM DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=HBVSMC rep=rep2 treatment=None
         type bigWig 1.000000 19274.000000
         origAssembly hg19
@@ -5057,7 +5057,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbvsmcRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HBVSMC Raw 1
-        longLabel HBVSMC DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
+        longLabel HBVSCM DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=HBVSMC rep=rep1 treatment=None
         type bigWig 1.000000 24532.000000
         origAssembly hg19
@@ -5066,7 +5066,7 @@ wgEncode 1
         track wgEncodeUwDnaseM059jRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel M059J Raw 2
-        longLabel M059J DNaseI HS Raw Signal Rep 2 from ENCODE/UW 
+        longLabel M059J DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=M059J rep=rep2 treatment=None
         type bigWig 1.000000 28155.000000
         origAssembly hg19
@@ -5075,7 +5075,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhberaRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHBE_RA Raw 2
-        longLabel NHBE RA DNaseI HS Raw Signal Rep 2 from ENCODE/UW 
+        longLabel NHBE RA DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=NHBERA rep=rep2 treatment=None
         type bigWig 1.000000 74173.000000
         origAssembly hg19
@@ -5084,7 +5084,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhberaRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHBE_RA Raw 1
-        longLabel NHBE RA DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
+        longLabel NHBE RA DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=NHBERA rep=rep1 treatment=None
         type bigWig 1.000000 55859.000000
         origAssembly hg19
@@ -5093,7 +5093,7 @@ wgEncode 1
         track wgEncodeUwDnaseT47dRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel T-47D Raw 2
-        longLabel T-47D DNaseI HS Raw Signal Rep 2 from ENCODE/UW 
+        longLabel T-47D DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=TA47D rep=rep2 treatment=None
         type bigWig 1.000000 107581.000000
         origAssembly hg19
@@ -5102,7 +5102,7 @@ wgEncode 1
         track wgEncodeUwDnaseT47dRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel T-47D Raw 1
-        longLabel T-47D DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
+        longLabel T-47D DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=TA47D rep=rep1 treatment=None
         type bigWig 1.000000 75983.000000
         origAssembly hg19
@@ -5111,7 +5111,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm04503RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM04503 Raw 1
-        longLabel GM04503 DNaseI HS Raw Signal Rep 1 from ENCODE/UW 
+        longLabel GM04503 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=GM04503 rep=rep1 treatment=None
         type bigWig 1.000000 34082.000000
         origAssembly hg19
@@ -5120,7 +5120,7 @@ wgEncode 1
         track wgEncodeUwDnaseM059jRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel M059J Raw 1
-        longLabel M059J DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel M059J DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=M059J treatment=None rep=rep1
         type bigWig 1.000000 31327.000000
         origAssembly hg19
@@ -5129,7 +5129,7 @@ wgEncode 1
         track wgEncodeUwDnaseRpmi7951RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel RPMI-7951 Raw 1
-        longLabel RPMI-7951 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel RPMI-7951 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=RPMI7951 treatment=None rep=rep1
         type bigWig 1.000000 24313.000000
         origAssembly hg19
@@ -5138,7 +5138,7 @@ wgEncode 1
         track wgEncodeUwDnaseRpmi7951RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel RPMI-7951 Raw 2
-        longLabel RPMI-7951 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel RPMI-7951 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=RPMI7951 treatment=None rep=rep2
         type bigWig 1.000000 30485.000000
         origAssembly hg19
@@ -5147,7 +5147,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel LHCN-M2 Raw 1
-        longLabel LHCN-M2 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=LHCNM2 treatment=None rep=rep1
         type bigWig 1.000000 38573.000000
         origAssembly hg19
@@ -5156,7 +5156,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel LHCN-M2 Raw 2
-        longLabel LHCN-M2 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=LHCNM2 treatment=None rep=rep2
         type bigWig 1.000000 59976.000000
         origAssembly hg19
@@ -5165,7 +5165,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2Diff4dRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel LHCN-M2 Raw 1
-        longLabel LHCN-M2 DIFF 4d DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DIFF 4d DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=LHCNM2 treatment=DIFF4D rep=rep1
         type bigWig 1.000000 148959.000000
         origAssembly hg19
@@ -5174,7 +5174,7 @@ wgEncode 1
         track wgEncodeUwDnaseLhcnm2Diff4dRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel LHCN-M2 Raw 2
-        longLabel LHCN-M2 DIFF 4d DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel LHCN-M2 DIFF 4d DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=LHCNM2 treatment=DIFF4D rep=rep2
         type bigWig 1.000000 91784.000000
         origAssembly hg19
@@ -5183,7 +5183,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znff41b2RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 2
-        longLabel K562 ZNF knockout F4.1-B2 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFF41B2 rep=rep2
         type bigWig 1.000000 159021.000000
         origAssembly hg19
@@ -5193,7 +5193,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znff41b2RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 1
-        longLabel K562 ZNF knockout F4.1-B2 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout F4.1-B2 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFF41B2 rep=rep1
         type bigWig 1.000000 217621.000000
         origAssembly hg19
@@ -5203,7 +5203,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfg54a11RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 2
-        longLabel K562 ZNF knockout G5.4-A11 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFG54A11 rep=rep2
         type bigWig 1.000000 117664.000000
         origAssembly hg19
@@ -5213,7 +5213,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfp5RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 1
-        longLabel K562 ZNF knockout P5 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout-P5 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFP5 rep=rep1
         type bigWig 1.000000 50373.000000
         origAssembly hg19
@@ -5223,7 +5223,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf2c10c5RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 1
-        longLabel K562 ZNF knockout 2C10 C5 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNF2C10C5 rep=rep1
         type bigWig 1.000000 386011.000000
         origAssembly hg19
@@ -5233,7 +5233,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf2c10c5RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 2
-        longLabel K562 ZNF knockout 2C10 C5 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 2C10-C5 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNF2C10C5 rep=rep2
         type bigWig 1.000000 425180.000000
         origAssembly hg19
@@ -5243,7 +5243,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4c50c4RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 1
-        longLabel K562 ZNF knockout 4C50 C4 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNF4C50C4 rep=rep1
         type bigWig 1.000000 55348.000000
         origAssembly hg19
@@ -5253,7 +5253,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4c50c4RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 2
-        longLabel K562 ZNF knockout 4C50 C4 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4C50-C4 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNF4C50C4 rep=rep2
         type bigWig 1.000000 61222.000000
         origAssembly hg19
@@ -5263,7 +5263,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4g7d3RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 1
-        longLabel K562 ZNF knockout 4G7 D3 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNF4G7D3 rep=rep1
         type bigWig 1.000000 81631.000000
         origAssembly hg19
@@ -5273,7 +5273,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znf4g7d3RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 2
-        longLabel K562 ZNF knockout 4G7 D3 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout 4G7-D3 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNF4G7D3 rep=rep2
         type bigWig 1.000000 85504.000000
         origAssembly hg19
@@ -5283,7 +5283,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfa41c6RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 1
-        longLabel K562 ZNF knockout A4.1-C6 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFA41C6 rep=rep1
         type bigWig 1.000000 101358.000000
         origAssembly hg19
@@ -5293,7 +5293,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfa41c6RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 2
-        longLabel K562 ZNF knockout A4.1-C6 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout A4.1-C6 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFA41C6 rep=rep2
         type bigWig 1.000000 110727.000000
         origAssembly hg19
@@ -5303,7 +5303,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfb34a8RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 1
-        longLabel K562 ZNF knockout B3.4-A8 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFB34A8 rep=rep1
         type bigWig 1.000000 140934.000000
         origAssembly hg19
@@ -5313,7 +5313,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfb34a8RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 2
-        longLabel K562 ZNF knockout B3.4-A8 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout B3.4-A8 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFB34A8 rep=rep2
         type bigWig 1.000000 133824.000000
         origAssembly hg19
@@ -5323,7 +5323,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfe103c6RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 1
-        longLabel K562 ZNF knockout E10.3-C6 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFE103C6 rep=rep1
         type bigWig 1.000000 88193.000000
         origAssembly hg19
@@ -5333,7 +5333,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfg54a11RawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 1
-        longLabel K562 ZNF knockout G5.4-A11 DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout G5.4-A11 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFG54A11 rep=rep1
         type bigWig 1.000000 45489.000000
         origAssembly hg19
@@ -5343,7 +5343,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfp5RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 2
-        longLabel K562 ZNF knockout P5 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout-P5 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFP5 rep=rep2
         type bigWig 1.000000 89488.000000
         origAssembly hg19
@@ -5353,7 +5353,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562Znfe103c6RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Raw 2
-        longLabel K562 ZNF knockout E10.3-C6 DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel K562 ZNF knockout E10.3-C6 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 treatment=ZNFE103C6 rep=rep2
         type bigWig 1.000000 53196.000000
         origAssembly hg19
@@ -5363,7 +5363,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel MCF-7 Raw 2
-        longLabel MCF-7 Estradiol ctrl 0hr DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=MCF7 treatment=ESTCTRL0H rep=rep2
         type bigWig 1.000000 138143.000000
         origAssembly hg19
@@ -5372,7 +5372,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Estctrl0hRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel MCF-7 Raw 1
-        longLabel MCF-7 Estradiol ctrl 0hr DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol ctrl 0 hr DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=MCF7 treatment=ESTCTRL0H rep=rep1
         type bigWig 1.000000 60405.000000
         origAssembly hg19
@@ -5381,7 +5381,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Est100nm1hRawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel MCF-7 Raw 2
-        longLabel MCF-7 Estradiol 100nM 1hr DNase-seq Raw signal Rep 2 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol 100 nM 1 hr DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=MCF7 treatment=EST100NM1H rep=rep2
         type bigWig 1.000000 125232.000000
         origAssembly hg19
@@ -5390,7 +5390,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7Est100nm1hRawRep1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel MCF-7 Raw 1
-        longLabel MCF-7 Estradiol 100nM 1hr DNase-seq Raw signal Rep 1 from ENCODE/UW #autogenerated
+        longLabel MCF-7 Estradiol 100 nM 1 hr DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=MCF7 treatment=EST100NM1H rep=rep1
         type bigWig 1.000000 88562.000000
         origAssembly hg19
