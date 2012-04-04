@@ -543,6 +543,22 @@ sex U
 tier 3
 protocol Crawford:Astrocytes_Crawford_protocol.pdf
 
+term B_cells_CD20+
+tag BCELLSCD20
+type Cell Line
+tier 2
+organism human
+description B cells CD20+ from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis PROVISIONAL  
+sex F
+tissue blood
+childOf B-Cells-CD20+
+vendorName Rajinder Kaul, UW
+vendorId CD20+
+orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
+termId BTO:0000776
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
+protocol Stam:CD20+_Stam_protocol.pdf
+
 term BC_Adipose_UHN00001
 tag BCADIPOSE
 type Cell Line
@@ -1213,9 +1229,10 @@ protocol Stam:MonoCD14_Stam_protocol.pdf
 term CD20+
 tag CD20
 type Cell Line
-tier 3
+tier 2
 organism human
-description B cells from donors RO01778 and RO01794.
+derprecated SEE B_cells_CD20+
+description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis PROVISIONAL 
 sex F
 tissue blood
 vendorName Heimfeld Lab, FHCRC
@@ -1228,13 +1245,13 @@ protocol Stam:CD20+_Stam_protocol.pdf
 term CD20+_RO01778
 tag CD20RO01778
 type Cell Line
-tier 3
+tier 2
 organism human
-description B cells, caucasian, draw number 1
+description B cells, caucasian, draw number 1, newly promoted to tier 2: not in 2011 analysis PROVISIONAL 
 sex F
 age 43
 tissue blood
-childOf B-Cells-CD20+
+childOf B_Cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01778
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
@@ -1245,13 +1262,13 @@ protocol Stam:CD20+_Stam_protocol.pdf
 term CD20+_RO01794
 tag CD20RO01794
 type Cell Line
-tier 3
+tier 2
 organism human
-description B cells, African American, draw number 1
+description B cells, African American, draw number 1, newly promoted to tier 2: not in 2011 analysis PROVISIONAL 
 sex F
 age 27
 tissue blood
-childOf B-Cells-CD20+
+childOf B_Cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01794
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
@@ -1262,13 +1279,13 @@ protocol Stam:CD20+_Stam_protocol.pdf
 term CD20+_RO01746
 tag CD20RO01746
 type Cell Line
-tier 3
+tier 2
 organism human
-description B cells, caucasian, draw number 2
+description B cells, caucasian, draw number 2 (draw 1 is RO01794), newly promoted to tier 2: not in 2011 analysis PROVISIONAL 
 sex F
 age 27
 tissue blood
-childOf B-Cells-CD20+
+childOf B_Cells_CD20+
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01746
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
