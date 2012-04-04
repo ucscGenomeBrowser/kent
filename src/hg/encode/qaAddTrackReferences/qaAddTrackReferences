@@ -33,32 +33,8 @@ def parsePmc(doc, id):
             if good == 1 and child.tag == "Value":
                 return parseInit(child.text) 
             
-            
-    for i in ids:
-        good = 0
-        for j in i:
-            if j.tag == "IdType" and j.text == "pmid":
-                good = 1
-            if j.tag == "Value" and good:
-                print j.text
-
-
-    for element in doc:
-        if element.tag != "DocSum":
-            continue
-        items = element.findall("Item")
-        for i in items:
-            if i.attrib['Name'] == "PmId":
-                #pass
-                return parseInit(i.text)
-            if i.attrib['Name'] == "Author":
-                authors = list()
-                for j in i.text.split(","):
-                    authors.append(j.lstrip())
-                infoDict['Authors'] = authors
-            if i.attrib['Name'] in attribList:
-                infoDict[i.attrib['Name']] = i.text
-    return infoDict
+    print "Unable to find pubmed id for pubmed central id: %s" % id
+    sys.exit()
 
 def parseInit(id):
     urlbase = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?"
