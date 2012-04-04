@@ -7863,7 +7863,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -7891,7 +7891,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -7919,7 +7919,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -7946,7 +7946,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-04-04
@@ -7971,7 +7971,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -7999,7 +7999,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-04-04
@@ -8025,7 +8025,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -8053,7 +8053,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-04-04
@@ -8079,7 +8079,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -8105,7 +8105,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-04-04
@@ -8129,7 +8129,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -8157,7 +8157,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-04-04
@@ -8183,7 +8183,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8210,7 +8210,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8237,7 +8237,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8265,7 +8265,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8293,7 +8293,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8321,7 +8321,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8349,7 +8349,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8375,7 +8375,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8401,7 +8401,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8429,7 +8429,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8457,7 +8457,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-04-04
@@ -8482,7 +8482,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8509,7 +8509,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-04-04
@@ -8535,7 +8535,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8563,7 +8563,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-04-04
@@ -8589,7 +8589,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8617,7 +8617,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-04-04
@@ -8641,7 +8641,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8667,7 +8667,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-04-04
@@ -8693,7 +8693,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8721,7 +8721,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8748,7 +8748,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8775,7 +8775,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8803,7 +8803,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8831,7 +8831,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8859,7 +8859,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8887,7 +8887,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8913,7 +8913,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8939,7 +8939,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8967,7 +8967,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -8995,7 +8995,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -9024,7 +9024,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -9053,7 +9053,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -9082,7 +9082,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -9111,7 +9111,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -9138,7 +9138,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -9165,7 +9165,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -9194,7 +9194,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -9275,7 +9275,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9302,7 +9302,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9329,7 +9329,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9357,7 +9357,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9385,7 +9385,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9413,7 +9413,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9441,7 +9441,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9467,7 +9467,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9493,7 +9493,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9521,7 +9521,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9549,7 +9549,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9576,7 +9576,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9603,7 +9603,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9631,7 +9631,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9659,7 +9659,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9687,7 +9687,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9715,7 +9715,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9741,7 +9741,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9767,7 +9767,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9795,7 +9795,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9823,7 +9823,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9850,7 +9850,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9877,7 +9877,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9905,7 +9905,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9933,7 +9933,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9961,7 +9961,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -9989,7 +9989,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10015,7 +10015,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10041,7 +10041,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10069,7 +10069,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10097,7 +10097,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10124,7 +10124,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10151,7 +10151,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10179,7 +10179,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10207,7 +10207,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10235,7 +10235,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10263,7 +10263,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10289,7 +10289,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10315,7 +10315,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10343,7 +10343,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10635,7 +10635,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10662,7 +10662,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10689,7 +10689,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10717,7 +10717,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10745,7 +10745,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10773,7 +10773,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10801,7 +10801,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10827,7 +10827,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10853,7 +10853,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10881,7 +10881,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10909,7 +10909,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10936,7 +10936,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10963,7 +10963,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -10991,7 +10991,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11019,7 +11019,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11047,7 +11047,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11075,7 +11075,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11101,7 +11101,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11127,7 +11127,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11155,7 +11155,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11183,7 +11183,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11210,7 +11210,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11237,7 +11237,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11265,7 +11265,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11293,7 +11293,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11321,7 +11321,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11349,7 +11349,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11375,7 +11375,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11401,7 +11401,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11429,7 +11429,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11457,7 +11457,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11484,7 +11484,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11511,7 +11511,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11539,7 +11539,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11567,7 +11567,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11595,7 +11595,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11623,7 +11623,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11649,7 +11649,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11675,7 +11675,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -11703,7 +11703,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -12233,7 +12233,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -12260,7 +12260,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -12286,7 +12286,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_14d/Input/std
+controlId wgEncodeEH002532
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-12
@@ -12314,7 +12314,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -12341,7 +12341,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -12367,7 +12367,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_2d/Input/std
+controlId wgEncodeEH002543
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -12395,7 +12395,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -12422,7 +12422,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -12448,7 +12448,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_5d/Input/std
+controlId wgEncodeEH002544
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -12476,7 +12476,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -12503,7 +12503,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -12529,7 +12529,7 @@ antibody Input
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-controlId H7-hESC/diffProtA_9d/Input/std
+controlId wgEncodeEH002545
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-13
@@ -32075,4 +32075,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 196894835
+# MAGIC: -1025137432
