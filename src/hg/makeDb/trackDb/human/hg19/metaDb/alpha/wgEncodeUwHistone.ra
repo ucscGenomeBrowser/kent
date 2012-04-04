@@ -7873,6 +7873,7 @@ lab UW
 labExpId DS13777
 labVersion Bowtie 0.12.7
 md5sum 6a7b1df7c1cca3ecde1daad57edd74f6,c85ff4040ae3c2291921621113555d5d
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7900,6 +7901,7 @@ lab UW
 labExpId DS14707
 labVersion Bowtie 0.12.7
 md5sum e2a18475998922eddbefa0335c901491,24e4dad3166d352faa2745b538c431f6
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7935,6 +7937,31 @@ subId 5152
 treatment diffProtA_14d
 view Alignments
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep2.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14707
+labVersion Bowtie 0.12.7
+md5sum e2a18475998922eddbefa0335c901491,24e4dad3166d352faa2745b538c431f6
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 6810
+treatment diffProtA_14d
+view Alignments
+
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep1
 objType table
 antibody H3K4me3
@@ -7960,6 +7987,32 @@ replicate 1
 setType exp
 subId 5152
 tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep1
+treatment diffProtA_14d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14707
+labVersion Hotspot-v5.2
+md5sum 0a7169553c00b9e906d1e11c3544df9f
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 6810
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep2
 treatment diffProtA_14d
 view Hotspots
 
@@ -7991,6 +8044,32 @@ tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep1
 treatment diffProtA_14d
 view Peaks
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14707
+labVersion lmax-v1.0
+md5sum 3a9a0021ec2e8736c196e2714f782a22
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 6810
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep2
+treatment diffProtA_14d
+view Peaks
+
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawDataRep1
 objType file
 antibody H3K4me3
@@ -8014,6 +8093,30 @@ project wgEncode
 replicate 1
 setType exp
 subId 5152
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawDataRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14707
+md5sum 679de14b207cc23eddee131813a07c0f
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 6810
 treatment diffProtA_14d
 view RawData
 
@@ -8042,6 +8145,32 @@ replicate 1
 setType exp
 subId 5152
 tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep1
+treatment diffProtA_14d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14707
+labVersion WindowDensity-bin20-win+/-75
+md5sum 954a00a6685746ef731cc00453e5e85f
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 6810
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep2
 treatment diffProtA_14d
 view RawSignal
 
@@ -8319,6 +8448,31 @@ tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep2
 treatment diffProtA_2d
 view RawSignal
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep1.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS13777
+labVersion Bowtie 0.12.7
+md5sum 6a7b1df7c1cca3ecde1daad57edd74f6,c85ff4040ae3c2291921621113555d5d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 6811
+treatment diffProtA_5d
+view Alignments
+
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep2
 objType file
 antibody H3K4me3
@@ -8345,6 +8499,32 @@ setType exp
 subId 5158
 treatment diffProtA_5d
 view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS13777
+labVersion Hotspot-v5.2
+md5sum 19b14a68243404d4f382c9843fa40f9d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 6811
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep1
+treatment diffProtA_5d
+view Hotspots
 
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep2
 objType table
@@ -8374,6 +8554,32 @@ tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep2
 treatment diffProtA_5d
 view Hotspots
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS13777
+labVersion lmax-v1.0
+md5sum de9e3b75bc315e4500cfb6ad4f2bd398
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 6811
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep1
+treatment diffProtA_5d
+view Peaks
+
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep2
 objType table
 antibody H3K4me3
@@ -8402,6 +8608,30 @@ tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep2
 treatment diffProtA_5d
 view Peaks
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawDataRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS13777
+md5sum b2b8cafb5c15ec233ba024dca3292eb5
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 6811
+treatment diffProtA_5d
+view RawData
+
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawDataRep2
 objType file
 antibody H3K4me3
@@ -8427,6 +8657,32 @@ setType exp
 subId 5158
 treatment diffProtA_5d
 view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS13777
+labVersion WindowDensity-bin20-win+/-75
+md5sum beb221f55b295ee7ba77fe86c5868ecb
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 6811
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep1
+treatment diffProtA_5d
+view RawSignal
 
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep2
 objType table
@@ -8749,6 +9005,7 @@ lab UW
 labExpId DS13777
 labVersion Hotspot-v5.2
 md5sum 19b14a68243404d4f382c9843fa40f9d
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8777,6 +9034,7 @@ lab UW
 labExpId DS14707
 labVersion Hotspot-v5.2
 md5sum 0a7169553c00b9e906d1e11c3544df9f
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8805,6 +9063,7 @@ lab UW
 labExpId DS13777
 labVersion lmax-v1.0
 md5sum de9e3b75bc315e4500cfb6ad4f2bd398
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8833,6 +9092,7 @@ lab UW
 labExpId DS14707
 labVersion lmax-v1.0
 md5sum 3a9a0021ec2e8736c196e2714f782a22
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8860,6 +9120,7 @@ grant Stam
 lab UW
 labExpId DS13777
 md5sum b2b8cafb5c15ec233ba024dca3292eb5
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8886,6 +9147,7 @@ grant Stam
 lab UW
 labExpId DS14707
 md5sum 679de14b207cc23eddee131813a07c0f
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8913,6 +9175,7 @@ lab UW
 labExpId DS13777
 labVersion WindowDensity-bin20-win+/-75
 md5sum beb221f55b295ee7ba77fe86c5868ecb
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8941,6 +9204,7 @@ lab UW
 labExpId DS14707
 labVersion WindowDensity-bin20-win+/-75
 md5sum 954a00a6685746ef731cc00453e5e85f
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22645,6 +22909,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_2C10_C5
 labVersion Bowtie 0.12.7
+md5sum b1b69c80f8901816ce4d2df6e55b25b6,80186918830095a43883f069f87f7ccc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22669,6 +22934,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_2C10_C5
 labVersion Bowtie 0.12.7
+md5sum d913d13a2bb86930c30a02e8a7271d23,e01e3069a31c2643e7eb528e4b89df6a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22693,6 +22959,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_2C10_C5
 labVersion Hotspot-v5.2
+md5sum 4a05614fe762f0e6c08d16b2265aacb8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22718,6 +22985,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_2C10_C5
 labVersion Hotspot-v5.2
+md5sum f71931abaf1c0dee70a7931613d8129d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22743,6 +23011,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_2C10_C5
 labVersion lmax-v1.0
+md5sum 2a60dc81bbd43695f005faa61a26e7d2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22768,6 +23037,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_2C10_C5
 labVersion lmax-v1.0
+md5sum 79c60447565e5897d65b0d34681c5431
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22792,6 +23062,7 @@ fileName wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawDataRep1.fastq.tgz
 grant Stam
 lab UW
 labExpId ZNF_knockout_2C10_C5
+md5sum 00b3d23aac235ce354f119b1ae152aa0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22815,6 +23086,7 @@ fileName wgEncodeUwHistoneK562H3k04me3StdZnf2c10c5RawDataRep2.fastq.gz
 grant Stam
 lab UW
 labExpId ZNF_knockout_2C10_C5
+md5sum ac12b8986944c7b4edfb49dccac16a43
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22839,6 +23111,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_2C10_C5
 labVersion WindowDensity-bin20-win+/-75
+md5sum 42dc9a77a6e541fc5bf9bc0af987bb3d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22864,6 +23137,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_2C10_C5
 labVersion WindowDensity-bin20-win+/-75
+md5sum 4c4aa9830ece52709aac09b24892c4c6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22889,6 +23163,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_4C50_C4
 labVersion Bowtie 0.12.7
+md5sum c11a7c8df65b011931cee3d33df2029a,c07b5ca15a8cff0a66cf3116da8e3867
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22913,6 +23188,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_4C50_C4
 labVersion Bowtie 0.12.7
+md5sum 66d2e2f912122d8806e2292d992107ae,f0f8bd3810663deb82ae7b465e398c09
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22937,6 +23213,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_4C50_C4
 labVersion Hotspot-v5.2
+md5sum 704852a0d85d42dcef95df001b313195
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22962,6 +23239,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_4C50_C4
 labVersion Hotspot-v5.2
+md5sum bef3c5265dac7ae38fa0ea087d3b9e73
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22987,6 +23265,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_4C50_C4
 labVersion lmax-v1.0
+md5sum ec57aee896798f8037331628e2feb6b3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23012,6 +23291,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_4C50_C4
 labVersion lmax-v1.0
+md5sum 5c1cd200f32e886a8257e464cc3f3552
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23036,6 +23316,7 @@ fileName wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId ZNF_knockout_4C50_C4
+md5sum 31d167bdab05df06a328c64b40ad52a3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23059,6 +23340,7 @@ fileName wgEncodeUwHistoneK562H3k04me3StdZnf4c50c4RawDataRep2.fastq.gz
 grant Stam
 lab UW
 labExpId ZNF_knockout_4C50_C4
+md5sum 5616dfe33f895f0133f2fd589aac7cff
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23083,6 +23365,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_4C50_C4
 labVersion WindowDensity-bin20-win+/-75
+md5sum 064795eab7d2f24ed1ae824d6ce77f6a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23108,6 +23391,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_4C50_C4
 labVersion WindowDensity-bin20-win+/-75
+md5sum 3fc6ef7b6c0e007b01f25599cf0c7436
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23133,6 +23417,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_A4.1-C6
 labVersion Bowtie 0.12.7
+md5sum 45e20c1b0bf7831c1f748ff0840fd725,73c2e4bb6ff2f1c313ec9ad60271c5ca
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23157,6 +23442,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_A4.1-C6
 labVersion Bowtie 0.12.7
+md5sum fcd4a3f05ae4f0107d133ccc6fa1bace,fcc1d1837c589bce1f27ab650a70b204
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23181,6 +23467,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_A4.1-C6
 labVersion Hotspot-v5.2
+md5sum bc9e6d8b9e3a49ffbdeb3880374d76b8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23206,6 +23493,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_A4.1-C6
 labVersion Hotspot-v5.2
+md5sum d78c7e8c82526e358ddf63862e3b950f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23231,6 +23519,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_A4.1-C6
 labVersion lmax-v1.0
+md5sum 798666bb8e1f6affdf2119381073c2ba
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23256,6 +23545,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_A4.1-C6
 labVersion lmax-v1.0
+md5sum b492329d139e8bb3227ac9cf40e6e498
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23280,6 +23570,7 @@ fileName wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId ZNF_knockout_A4.1-C6
+md5sum 05df7b20b8f6b86b7388a74a556fdf4d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23303,6 +23594,7 @@ fileName wgEncodeUwHistoneK562H3k04me3StdZnfa41c6RawDataRep2.fastq.gz
 grant Stam
 lab UW
 labExpId ZNF_knockout_A4.1-C6
+md5sum d5361e1371c509881459e2a06b8fbd60
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23327,6 +23619,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_A4.1-C6
 labVersion WindowDensity-bin20-win+/-75
+md5sum 574db527143d8c4a1b3eb549e227a37f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23352,6 +23645,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_A4.1-C6
 labVersion WindowDensity-bin20-win+/-75
+md5sum ad1c5e351295f490ee2ce9c7deb15a51
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23377,6 +23671,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_F4.1-B2
 labVersion Bowtie 0.12.7
+md5sum 506013571f162f68b80d360e95ada21f,7f5c885afd4c11ec22d43b942308a360
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23401,6 +23696,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_F4.1-B2
 labVersion Bowtie 0.12.7
+md5sum 8c1da1688093a8d9a3cb4eec0e86a4c1,3d8bc04d68ac21b73037fdb97c30928c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23425,6 +23721,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_F4.1-B2
 labVersion Hotspot-v5.2
+md5sum 67b4befa578097f695de1a907c5e176b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23450,6 +23747,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_F4.1-B2
 labVersion Hotspot-v5.2
+md5sum 79a8b2625e74a920d38e80e76c9b2c44
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23475,6 +23773,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_F4.1-B2
 labVersion lmax-v1.0
+md5sum 7d611c6ae394464581bb970f83093a3c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23500,6 +23799,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_F4.1-B2
 labVersion lmax-v1.0
+md5sum b9fcb7a70bb225eb644d4113c7904931
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23524,6 +23824,7 @@ fileName wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId ZNF_knockout_F4.1-B2
+md5sum fead9f0735d735d9ccb63167c5ac2a88
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23547,6 +23848,7 @@ fileName wgEncodeUwHistoneK562H3k04me3StdZnff41b2RawDataRep2.fastq.gz
 grant Stam
 lab UW
 labExpId ZNF_knockout_F4.1-B2
+md5sum 04c38e651a44654d207badd4817a069e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23571,6 +23873,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_F4.1-B2
 labVersion WindowDensity-bin20-win+/-75
+md5sum 9d1315a4dcf5b529fae8a158c76e8b60
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23596,6 +23899,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_F4.1-B2
 labVersion WindowDensity-bin20-win+/-75
+md5sum f22c39eb36ea1e5a0b03a711f078acea
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23621,6 +23925,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_P5
 labVersion Bowtie 0.12.7
+md5sum f21e43f5b33dd1afabdbe9196a655bc3,6adbfbfa7548372abb49f5ae91b24357
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23645,6 +23950,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_P5
 labVersion Bowtie 0.12.7
+md5sum 4418affb519c0fe994586437dc00a9f1,ecfae1635c6004bdfacd7a347c7b52e0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23669,6 +23975,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_P5
 labVersion Hotspot-v5.2
+md5sum 56a0cb5976def76fd285c4ac7994ac99
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23694,6 +24001,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_P5
 labVersion Hotspot-v5.2
+md5sum 473e991aa7b39583c9c08bcabc455c5d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23719,6 +24027,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_P5
 labVersion lmax-v1.0
+md5sum 61a62a2dc0fb4e3039399bd580fadf13
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23744,6 +24053,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_P5
 labVersion lmax-v1.0
+md5sum 181ad6b2f4e54e7e403e201a90baea8b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23768,6 +24078,7 @@ fileName wgEncodeUwHistoneK562H3k04me3StdZnfp5RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId ZNF_knockout_P5
+md5sum 73f10ccd469da6648ae498709e180227
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23791,6 +24102,7 @@ fileName wgEncodeUwHistoneK562H3k04me3StdZnfp5RawDataRep2.fastq.gz
 grant Stam
 lab UW
 labExpId ZNF_knockout_P5
+md5sum 571298442635fc8d226a996458371098
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23815,6 +24127,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_P5
 labVersion WindowDensity-bin20-win+/-75
+md5sum 867adbed0a127643c0e8716262cdd70a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23840,6 +24153,7 @@ grant Stam
 lab UW
 labExpId ZNF_knockout_P5
 labVersion WindowDensity-bin20-win+/-75
+md5sum c26a9d2927d18f6cfcf1b3dc9f771976
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -31758,4 +32072,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -891708091
+# MAGIC: 196371470
