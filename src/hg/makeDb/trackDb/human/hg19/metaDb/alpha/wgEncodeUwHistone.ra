@@ -7873,6 +7873,7 @@ lab UW
 labExpId DS13777
 labVersion Bowtie 0.12.7
 md5sum 6a7b1df7c1cca3ecde1daad57edd74f6,c85ff4040ae3c2291921621113555d5d
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7900,6 +7901,7 @@ lab UW
 labExpId DS14707
 labVersion Bowtie 0.12.7
 md5sum e2a18475998922eddbefa0335c901491,24e4dad3166d352faa2745b538c431f6
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8749,6 +8751,7 @@ lab UW
 labExpId DS13777
 labVersion Hotspot-v5.2
 md5sum 19b14a68243404d4f382c9843fa40f9d
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8777,6 +8780,7 @@ lab UW
 labExpId DS14707
 labVersion Hotspot-v5.2
 md5sum 0a7169553c00b9e906d1e11c3544df9f
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8805,6 +8809,7 @@ lab UW
 labExpId DS13777
 labVersion lmax-v1.0
 md5sum de9e3b75bc315e4500cfb6ad4f2bd398
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8833,6 +8838,7 @@ lab UW
 labExpId DS14707
 labVersion lmax-v1.0
 md5sum 3a9a0021ec2e8736c196e2714f782a22
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8860,6 +8866,7 @@ grant Stam
 lab UW
 labExpId DS13777
 md5sum b2b8cafb5c15ec233ba024dca3292eb5
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8886,6 +8893,7 @@ grant Stam
 lab UW
 labExpId DS14707
 md5sum 679de14b207cc23eddee131813a07c0f
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8913,6 +8921,7 @@ lab UW
 labExpId DS13777
 labVersion WindowDensity-bin20-win+/-75
 md5sum beb221f55b295ee7ba77fe86c5868ecb
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8941,6 +8950,7 @@ lab UW
 labExpId DS14707
 labVersion WindowDensity-bin20-win+/-75
 md5sum 954a00a6685746ef731cc00453e5e85f
+objStatus revoked - treatment name is not included in the object name
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -31808,4 +31818,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -1273036402
+# MAGIC: 367211530
