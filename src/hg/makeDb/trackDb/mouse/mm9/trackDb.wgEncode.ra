@@ -16,6 +16,7 @@ include wgEncodeUwDnase.release2.ra alpha
 # PSU TFBS (wrangler: Venkat)
 include wgEncodePsuTfbs.ra beta,public
 include wgEncodePsuTfbs.patch.ra alpha
+#include wgEncodePsuTfbs.release2.ra alpha
 
 # PSU Histone (wrangler: Venkat)
 include wgEncodePsuHistone.ra alpha,beta
@@ -56,3 +57,6 @@ include wgEncodeCaltechRnaSeq.ra alpha
 
 # FSU Repli-Seq (wrangler: Venkat)
 include wgEncodeFsuRepliSeq.ra
+
+# PSU RNA-Seq (wrangler: Venkat)
+include wgEncodePsuRnaSeq.ra
