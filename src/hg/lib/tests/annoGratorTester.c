@@ -1,6 +1,7 @@
 /* annoGratorTester -- exercise anno* lib modules (in kent/src as well as kent/src/hg) */
 
 #include "annoGratorQuery.h"
+#include "annoGratorGpVar.h"
 #include "annoStreamDb.h"
 #include "annoStreamVcf.h"
 #include "annoStreamWig.h"
@@ -14,6 +15,7 @@
 static const char *pgSnpDbToTabOut = "pgSnpDbToTabOut";
 static const char *pgSnpKgDbToTabOutShort = "pgSnpKgDbToTabOutShort";
 static const char *pgSnpKgDbToTabOutLong = "pgSnpKgDbToTabOutLong";
+static const char *pgSnpKgDbToGpFx = "pgSnpKgDbToGpFx";
 static const char *snpConsDbToTabOutShort = "snpConsDbToTabOutShort";
 static const char *snpConsDbToTabOutLong = "snpConsDbToTabOutLong";
 static const char *vcfEx1 = "vcfEx1";
@@ -74,7 +76,7 @@ return streamer;
 }
 
 void dbToTabOut(struct streamerInfo *infoList, struct twoBitFile *tbf, char *outFile,
-		char *chrom, uint start, uint end)
+		char *chrom, uint start, uint end, bool doGpFx)
 /* Get data from one or more database tables and print all fields to tab-sep output. */
 {
 struct streamerInfo *primaryInfo = infoList;
@@ -87,6 +89,11 @@ for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     struct annoGrator *grator = NULL;
     if (grInfo->type == arWig)
 	grator = annoGrateWigDbNew(grInfo->db, grInfo->tableFileUrl, BIGNUM);
+    else if (doGpFx)
+	{
+	struct annoStreamer *src = streamerFromInfo(grInfo);
+	grator = annoGratorGpVarNew(src);
+	}
     else
 	{
 	struct annoStreamer *src = streamerFromInfo(grInfo);
@@ -118,6 +125,7 @@ if (!doAllTests)
     if (sameString(argv[2], pgSnpDbToTabOut) ||
 	sameString(argv[2], pgSnpKgDbToTabOutShort) ||
 	sameString(argv[2], pgSnpKgDbToTabOutLong) ||
+	sameString(argv[2], pgSnpKgDbToGpFx) ||
 	sameString(argv[2], snpConsDbToTabOutShort) ||
 	sameString(argv[2], snpConsDbToTabOutLong) ||
 	sameString(argv[2], vcfEx1) ||
@@ -136,17 +144,17 @@ struct twoBitFile *tbf = twoBitOpen(dbDotTwoBit->string);
 // First test: some rows of a pgSnp table
 struct streamerInfo pgSnpInfo = { NULL, db, "pgNA12878", arWords, pgSnpAsObj() };
 if (doAllTests || sameString(test, pgSnpDbToTabOut))
-    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 705881, 752721);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 705881, 752721, FALSE);
 
 // Second test: some rows of a pgSnp table integrated with knownGene
 struct streamerInfo kgInfo = { NULL, db, "knownGene", arWords, asParseFile("../knownGene.as") };
 pgSnpInfo.next = &kgInfo;
 if (doAllTests || sameString(test, pgSnpKgDbToTabOutShort))
-    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 705881, 752721);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 705881, 752721, FALSE);
 
 // Third test: all rows of a pgSnp table integrated with knownGene
 if (doAllTests || sameString(test, pgSnpKgDbToTabOutLong))
-    dbToTabOut(&pgSnpInfo, tbf, "stdout", NULL, 0, 0);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", NULL, 0, 0, FALSE);
 
 // Fourth test: some rows of snp135 integrated with phyloP scores
 if (doAllTests || sameString(test, snpConsDbToTabOutShort) ||
@@ -156,9 +164,9 @@ if (doAllTests || sameString(test, snpConsDbToTabOutShort) ||
     struct streamerInfo phyloPInfo = { NULL, db, "phyloP46wayPlacental", arWig, NULL };
     snp135Info.next = &phyloPInfo;
     if (sameString(test, snpConsDbToTabOutShort))
-	dbToTabOut(&snp135Info, tbf, "stdout", "chr1", 737224, 738475);
+	dbToTabOut(&snp135Info, tbf, "stdout", "chr1", 737224, 738475, FALSE);
     else
-	dbToTabOut(&snp135Info, tbf, "stdout", NULL, 0, 0);
+	dbToTabOut(&snp135Info, tbf, "stdout", NULL, 0, 0, FALSE);
     }
 
 // Fifth test: VCF with genotypes
@@ -167,7 +175,7 @@ if (doAllTests || sameString(test, vcfEx1))
     struct streamerInfo vcfEx1 = { NULL, NULL,
 			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExample.vcf.gz",
 				   arVcf, vcfAsObj() };
-    dbToTabOut(&vcfEx1, tbf, "stdout", NULL, 0, 0);
+    dbToTabOut(&vcfEx1, tbf, "stdout", NULL, 0, 0, FALSE);
     }
 
 if (doAllTests || sameString(test, vcfEx2))
@@ -175,8 +183,10 @@ if (doAllTests || sameString(test, vcfEx2))
     struct streamerInfo vcfEx2 = { NULL, NULL,
 			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExampleTwo.vcf",
 				   arVcf, vcfAsObj() };
-    dbToTabOut(&vcfEx2, tbf, "stdout", NULL, 0, 0);
+    dbToTabOut(&vcfEx2, tbf, "stdout", NULL, 0, 0, FALSE);
     }
 
+if (doAllTests || sameString(test, pgSnpKgDbToGpFx))
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 705881, 752721, TRUE);
 return 0;
 }
