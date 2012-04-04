@@ -1,6 +1,6 @@
 /* annoGrator -- annoStreamer that integrates genomic annotations from two annoStreamers */
 
-// Subclasses of annoGrator can do value-add things such as predict function given
+// Subclasses of annoGrator can add new columns of output such as predicted function given
 // a variant and a gene; the base class simply intersects by position, returning
 // all rows from its internal data source that overlap the position of primaryRow.
 // The interface to an annoGrator is almost the same as the interface to an annoStreamer,
@@ -16,10 +16,12 @@ struct annoGrator
  * with data from a primary source. */
     {
     struct annoStreamer streamer;	// external annoStreamer interface
+
     // Public method that makes this a 'grator:
-    // Integrate own source's data with single row of primary source's data
     struct annoRow *(*integrate)(struct annoGrator *self, struct annoRow *primaryRow,
 				 boolean *retRJFilterFailed);
+    /* Integrate internal source's data with single row of primary source's data */
+
     // Private members -- callers are on the honor system to access these using only methods above.
     struct annoStreamer *mySource;	// internal source
     char *prevPChrom;			// for detection of unsorted input from primary
