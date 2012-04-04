@@ -6666,6 +6666,7 @@ view Alignments
 metaObject wgEncodeUwHistoneGm12866H3k04me3StdHotspotsRep1
 objType table
 antibody H3K4me3
+attic auxExp
 cell GM12866
 composite wgEncodeUwHistone
 control std
@@ -6694,6 +6695,7 @@ view Hotspots
 metaObject wgEncodeUwHistoneGm12866H3k04me3StdPkRep1
 objType table
 antibody H3K4me3
+attic auxExp
 cell GM12866
 composite wgEncodeUwHistone
 control std
@@ -6748,6 +6750,7 @@ view RawData
 metaObject wgEncodeUwHistoneGm12866H3k04me3StdRawRep1
 objType table
 antibody H3K4me3
+attic auxExp
 cell GM12866
 composite wgEncodeUwHistone
 control std
@@ -32072,4 +32075,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 196371470
+# MAGIC: 196894835
