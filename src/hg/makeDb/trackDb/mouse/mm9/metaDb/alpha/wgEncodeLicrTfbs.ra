@@ -4398,6 +4398,7 @@ fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 05/21/09 Lane 4
+md5sum 72c91bc888788581ecb63dd571f1a018
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -10283,4 +10284,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1018796495
+# MAGIC: 102782186
