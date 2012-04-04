@@ -426,26 +426,24 @@ triMan1.perChromTables = no
 
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -keep -initial triMan1 &
-XXX - running Sat Mar 31 18:44:28 PDT 2012
     #	 logFile: var/build/logs/2012.03.31-18:39:58.triMan1.initalign.log
-
-    #	real    182m41.068s
+    #	real    2584m45.122s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad triMan1
-    #	logFile: var/dbload/hgwdev/logs/2010.01.15-15:54:26.dbload.log
-    #	real    31m29.282s
+    #	logFile: var/dbload/hgwdev/logs/2012.04.03-15:02:21.dbload.log
+    #   real    66m40.533s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
-    cvsup
+    get pull
     # add triMan1 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    cvs ci -m "Added triMan1 - Manatee" \
-	etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added triMan1 - Manatee" etc/align.dbs etc/hgwdev.dbs
+    git push
     make etc-update
 
 ########################################################################
