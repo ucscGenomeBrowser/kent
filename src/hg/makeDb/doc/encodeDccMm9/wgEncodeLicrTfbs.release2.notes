@@ -1,26 +1,26 @@
 mkChangeNotes v2
 mm9 wgEncodeLicrTfbs Release 2 vs Release 1
-2012-03-15
+2012-04-04
 
 QA Count Summaries for Release 2:
 Tables: 98
-Files: 460
+Files: 458
 Gbdbs: 60
 Supplemental: 0
 Other: 3
 
 REVOKED:
 Tables: 0
-Files: 13
+Files: 22
 Gbdbs: 0
 
 Sizes of New:
 Table: 53 MB
-Files: 97291 MB (95 GB)
+Files: 99618 MB (97 GB)
 Gbdbs: 1837 MB (2 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 99182 MB (97 GB)
+Total: 101509 MB (99 GB)
 
 
 TABLES:
@@ -136,13 +136,13 @@ Revoked/Replaced/Renamed Tables (0):
 
 
 DOWNLOAD FILES:
-New: 222
-Untouched: 238
-Revoked/Replaced/Renamed: 13
-New + Untouched: 460
-Total (New + Untouched + Revoked/Replaced/Renamed): 473
+New: 228
+Untouched: 230
+Revoked/Replaced/Renamed: 22
+New + Untouched: 458
+Total (New + Untouched + Revoked/Replaced/Renamed): 480
 
-New Download Files (222):
+New Download Files (228):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep2.bam
@@ -190,6 +190,12 @@ New Download Files (222):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsHeartInputUE14halfC57bl6StdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep1V2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep1V2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1V2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1V2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2V2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2V2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2.bam
@@ -366,7 +372,7 @@ New Download Files (222):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig.bigWig
 
-Untouched Download Files (238):
+Untouched Download Files (230):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
@@ -503,15 +509,7 @@ Untouched Download Files (238):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep3.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdPk.broadPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
@@ -606,7 +604,7 @@ Untouched Download Files (238):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdSig.bigWig
 
-Revoked/Replaced/Renamed Download Files (13):
+Revoked/Replaced/Renamed Download Files (22):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1.bam
@@ -620,6 +618,15 @@ Revoked/Replaced/Renamed Download Files (13):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep3.fastq.gz
 
 
 GBDBS:
@@ -710,9 +717,8 @@ New Other Files (3):
 Revoked Other Files (0):
 
 
-Files that dropped between releases (3):
+Files that dropped between releases (2):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release1/index.html
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release1/md5sum.history
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release1/preamble.html
 
 
