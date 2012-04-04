@@ -216,7 +216,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?s
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
-protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf, Gingeras:NHEMM27012303_Gingeras_protocol.pdf
+protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf Gingeras:NHEMM27012303_Gingeras_protocol.pdf
 
 term NHEM_M2_7011001.2
 tag NHEMM270110012
@@ -270,7 +270,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?s
 termId BTO:0000847
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 lab Gingeras
-protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf, NHEM.fM26022001_Gingeras_protocol.pdf
+protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf NHEM.fM26022001_Gingeras_protocol.pdf
 
 term NHEM.f_M2_5071302.2
 tag NHEMFM250713022
@@ -2301,7 +2301,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/hu
 termId BTO:0000135
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000135
 lab Gingeras
-protocol Gingeras:HAoAF6090101.11_Gingeras_protocol.pdf, Gingeras:HAoAF6111301.9_Gingeras_protocol.pdf
+protocol Gingeras:HAoAF6090101.11_Gingeras_protocol.pdf Gingeras:HAoAF6111301.9_Gingeras_protocol.pdf
 
 term HAoAF_6090101.11
 tag HAOAF609010111
@@ -2355,7 +2355,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-ce
 termId BTO:0000394
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000394
 lab Gingeras
-protocol Gingeras:HAoEC7071706.1_Gingeras_protocol.pdf, HAoEC8061102.1_Gingeras_protocol.pdf
+protocol Gingeras:HAoEC7071706.1_Gingeras_protocol.pdf HAoEC8061102.1_Gingeras_protocol.pdf
 
 term HAoEC_8061102.1
 tag HAOEC80611021
@@ -2498,7 +2498,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/chondrocytes/?
 termId BTO:0000249
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000249
 lab Gingeras
-protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf, HCH0011308.2P_Gingeras_protocol.pdf
+protocol Gingeras:HCH8100808.2_Gingeras_protocol.pdf HCH0011308.2P_Gingeras_protocol.pdf
 
 term HCH_8100808.2
 tag HCH81008082
@@ -2713,7 +2713,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/follicle-derma
 termId BTO:0001849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001849
 lab Gingeras
-protocol Gingeras:HFDPC0100503.2_Gingeras_protocol.pdf, HFDPC0102703.3_Gingeras_protocol.pdf
+protocol Gingeras:HFDPC0100503.2_Gingeras_protocol.pdf HFDPC0102703.3_Gingeras_protocol.pdf
 
 term HFDPC_0100503.2
 tag HFDPC01005032
@@ -2960,7 +2960,7 @@ orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuc
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 lab Gingeras
-protocol Gingeras:hMNCPB0022330.9_Gingeras_protocol.pdf, hMNCPB0082430.9_Gingeras_protocol.pdf
+protocol Gingeras:hMNCPB0022330.9_Gingeras_protocol.pdf hMNCPB0082430.9_Gingeras_protocol.pdf
 
 term hMNC-PB_0022330.9
 tag HMNCPB00223309
@@ -3014,7 +3014,7 @@ orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mononuc
 termId BTO:0004054
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004054
 lab Gingeras
-protocol Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf, Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf
+protocol Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf Gingeras:hMNCCB9111701.6_Gingeras_protocol.pdf
 
 term hMNC-CB_9111701.6
 tag HMNCCB91117016
@@ -3068,7 +3068,7 @@ orderUrl http://www.promocell.com/products/human-stem-and-blood-cells/mesenchyma
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
 lab Gingeras
-protocol Gingeras:hMSCBM0050602.11_Gingeras_protocol.pdf, Gingeras:hMSCBM0051105.11_Gingeras_protocol.pdf
+protocol Gingeras:hMSCBM0050602.11_Gingeras_protocol.pdf Gingeras:hMSCBM0051105.11_Gingeras_protocol.pdf
 
 term hMSC-BM_0050602.11
 tag HMSCBM005060211
@@ -3122,7 +3122,7 @@ orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesench
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
 lab Gingeras
-protocol Gingeras:hMSCAT0102604.12_Gingeras_protocol.pdf, Gingeras:hMSCAT9061601.12_Gingeras_protocol.pdf
+protocol Gingeras:hMSCAT0102604.12_Gingeras_protocol.pdf Gingeras:hMSCAT9061601.12_Gingeras_protocol.pdf
 
 term hMSC-AT_9061601.12
 tag HMSCAT906160112
@@ -3176,7 +3176,7 @@ orderUrl http://www.promocell.com/nc/products/human-stem-and-blood-cells/mesench
 termId BTO:0003298
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003298
 lab Gingeras
-protocol Gingeras:hMSCUC0081101.7_Gingeras_protocol.pdf, Gingeras:hMSCUC0052501.7_Gingeras_protocol.pdf
+protocol Gingeras:hMSCUC0081101.7_Gingeras_protocol.pdf Gingeras:hMSCUC0052501.7_Gingeras_protocol.pdf
 
 
 term hMSC-UC_0081101.7
@@ -3364,7 +3364,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/osteoblasts/?s
 termId BTO:0004324
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004324
 lab Gingeras
-protocol Gingeras:HOB0090202.1_Gingeras_protocol.pdf, Gingeras:HOB0091301_Gingeras_protocol.pdf
+protocol Gingeras:HOB0090202.1_Gingeras_protocol.pdf Gingeras:HOB0091301_Gingeras_protocol.pdf
 
 term HOB_0090202.1
 tag HOB00902021
@@ -3558,7 +3558,7 @@ orderUrl http://www.promocell.com/products/human-primary-cells/epithelial-cells/
 termId BTO:0001975
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
 lab Gingeras
-protocol Gingeras:HPIEpC9012801.2_Gingeras_protocol.pdf, Gingeras:HPIEpC9041503.2_Gingeras_protocol.pdf
+protocol Gingeras:HPIEpC9012801.2_Gingeras_protocol.pdf Gingeras:HPIEpC9041503.2_Gingeras_protocol.pdf
 
 term HPIEpC_9012801.2
 tag HPIEPC90128012
@@ -3677,7 +3677,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/endothelial-ce
 termId BTO:0003275
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003275
 lab Gingeras
-protocol Gingeras:HSaVEC9100101.15_Gingeras_protocol.pdf, Gingeras:HSaVEC0022202.16_Gingeras_protocol.pdf
+protocol Gingeras:HSaVEC9100101.15_Gingeras_protocol.pdf Gingeras:HSaVEC0022202.16_Gingeras_protocol.pdf
 
 term HSaVEC_9100101.15
 tag HSAVEC910010115
@@ -3923,7 +3923,7 @@ protocol Stam:HVMF_Stam_protocol.pdf
 #termId BTO:0001975
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001975
 #lab Gingeras
-#protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf, Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
+#protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
 
 term HVMF_6100401.3
 tag HVMF61004013
@@ -3995,7 +3995,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/preadipocytes/
 termId BTO:0004042
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0004042
 lab Gingeras
-protocol Gingeras:HWP0092205_Gingeras_protocol.pdf, Gingeras:HWP8120201.5_Gingeras_protocol.pdf
+protocol Gingeras:HWP0092205_Gingeras_protocol.pdf Gingeras:HWP8120201.5_Gingeras_protocol.pdf
 
 term HWP_8120201.5
 tag HWP81202015
@@ -4539,7 +4539,7 @@ orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/no
 termId BTO:0003185
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
 lab Gingeras
-protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf, Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
+protocol Gingeras:NHDF0060801.3_Gingeras_protocol.pdf Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
 
 term NHDF_0060801.3
 tag NHDF00608013
@@ -4978,6 +4978,24 @@ sex U
 tier 3
 protocol Stam:SkMC_Stam_protocol.pdf
 
+term SkMC
+tag SKMC
+type Cell Line
+tier 3
+organism human
+description Skeletal Striated Muscle Cells from two individuals, SkMC_9011302 SkMC_8121902.17 from M. pectoralis / Mm. intercostales
+lineage missing
+karyotype normal
+sex B
+tissue muscle
+vendorName PromoCell
+vendorId SkMC
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/skeletal-muscle-cells/?sword_list%5B%5D=SkMC
+termId BTO:0002916
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002916
+lab Gingeras
+protocol Gingeras:SkMC9011302_Gingeras_protocol.pdf Gingeras:SkMC8121902.17_Gingeras_protocol.pdf
+
 term SkMC_9011302
 tag SKMC9011302
 type Cell Line
@@ -5046,26 +5064,7 @@ termId BTO:0001583
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
 sex M
 tier 3
-protocol Myers:T98G_Myers_protocol.pdf
-
-# Never submitted data. ~Jeff
-#term T98G
-#tag T98G
-#type Cell Line
-#organism human
-#description fibroblast cell line derived from a glioblastoma multiforme. (PMID: 222778)
-#karyotype cancer
-#tissue brain
-#lineage ectoderm
-#vendorName ATCC
-#vendorId CRL-1690
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
-#termId BTO:0001583
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583
-#sex M
-#tier 3
 #protocol Myers:T98G_Myers_protocol.pdf
-# Never submitted data. ~Jeff
 
 term TBEC
 tag TBEC
@@ -10100,8 +10099,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
 validation Human_-_TBP(Immunoblot):human_TBP_validation_Snyder.pdf Mouse_-_:missing
 label TBP (ab62126)
 
-tag TBPSC273
 term TBP_(sc-273)
+tag TBPSC273
 type Antibody
 antibodyDescription Rabbit polyclonal, raised against full length TFIID of human origin. Antibody Target: TBP
 target TBP
@@ -11336,7 +11335,7 @@ type localization
 description Whole cell
 termId GO:0005623
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
-label cell 
+label cell
 
 term nucleus
 tag NUCLEUS
@@ -14918,6 +14917,7 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 035
+
 
 
 

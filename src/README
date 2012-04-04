@@ -164,10 +164,16 @@ level as the block they enclose:
 	doSomething();
 	doSomethingElse();
 	}
-Tab stops are set to 8.  Each block of code is 
-indented by 4 from the previous block.  (In the
-vi editor set ts=8  set sw=4.)  Lines are no more than
-100 characters wide.
+Each block of code is indented by 4 from the previous block.
+As per Unix standard practice, tab stops are set to 8, not 4
+as is the common practice in Windows, so some care must be
+taken to use tabs for indenting.  Since tabs are especially
+problematic for Python code, and we are starting to use
+Python a fair bit as well, tabs are best avoided altogether.
+The proper settings for the vi editor to interpret tabs correctly
+in existing code, and avoid tabs in new code are:
+     set ts=8 set sw=4 set expandtab
+Lines should be no more than 100 characters wide.  
 
 NAMES
 
@@ -188,7 +194,10 @@ first letter is capitalized.
 Numbers are considered words.  You would
 represent "chromosome 22 annotations"
 as "chromosome22Annotations" or "chr22Ann."
-Note the capitalized 'A" after the 22.
+Note the capitalized 'A" after the 22.  Since both numbers and
+single letter words (or abbreviations) disrupt the visual flow
+of the word separation by capitalization, it is better to avoid
+these except at the end of the name.
 
 These naming rules apply to variables, constants, functions, fields,
 and structures.  They generally are used for file names, database tables,
@@ -214,11 +223,9 @@ COMMENTING
 Every module should have a comment at the start of
 a file that explains concisely what the module
 does.  Explanations of algorithms also belong
-at the top of the file in most cases. Comments should
-be of the /*  */ form rather than the // form, which
-is not yet portable across all C compilers in all platforms.
-Structures should be commented following the pattern of this
-example:
+at the top of the file in most cases. Comments can
+be of the /*  */ or the // form.  Structures should be 
+commented following the pattern of this example:
 
 struct dyString
 /* Dynamically resizable string that you can do formatted
@@ -230,7 +237,7 @@ struct dyString
     int stringSize;             /* Size of string. */
     };
 
-That is there is a comment describing the overall purpose
+That is, there is a comment describing the overall purpose
 of the object between the struct name, and the opening brace,
 and there is a short comment by each field.  In many cases
 these may not say much more than well-chosen field names,
@@ -253,7 +260,7 @@ have a comment between their prototype and the opening brace
 as in this example:
 
 char dyStringAppendC(struct dyString *ds, char c)
-/* Append char to end of string. */
+// Append char to end of string. 
 {
 char *s;
 if (ds->stringSize >= ds->bufSize)
@@ -273,28 +280,25 @@ struct twoBit *twoBitFromDnaSeq(struct dnaSeq *seq, boolean doMask)
 /* Convert dnaSeq representation in memory to twoBit representation.
  * If doMask is true interpret lower-case letters as masked. */
 {
-int ubyteSize = packedSize(seq->size);
-UBYTE *pt;
+/* Allocate structure and fill in name and size fields. */
 struct twoBit *twoBit;
-DNA last4[4];   /* Holds few bases. */
-DNA *dna;
-int i, end;
-
-/* Allocate structure and fill in name. */
 AllocVar(twoBit);
-pt = AllocArray(twoBit->data, ubyteSize);
+int ubyteSize = packedSize(seq->size);
+UBYTE *pt = AllocArray(twoBit->data, ubyteSize);
 twoBit->name = cloneString(seq->name);
 twoBit->size = seq->size;
     
 /* Convert to 4-bases per byte representation. */
-dna = seq->dna;
+char *dna = seq->dna;
+int i, end;
 end = seq->size - 4;
 for (i=0; i<end; i += 4)
     {
     *pt++ = packDna4(dna+i);
     }
 
-/* Take care of conversion of last few bases. */
+/* Take care of conversion of last few bases, padding with 'T'. */
+DNA last4[4];   
 last4[0] = last4[1] = last4[2] = last4[3] = 'T';
 memcpy(last4, dna+i, seq->size-i);
 *pt = packDna4(last4);

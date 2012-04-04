@@ -1,15 +1,25 @@
 /* annoGratorTester -- exercise anno* lib modules (in kent/src as well as kent/src/hg) */
 
 #include "annoGratorQuery.h"
+#include "annoGratorGpVar.h"
 #include "annoStreamDb.h"
+#include "annoStreamVcf.h"
+#include "annoStreamWig.h"
+#include "annoGrateWig.h"
 #include "annoFormatTab.h"
 #include "dystring.h"
 #include "pgSnp.h"
+#include "vcf.h"
 
 // Names of tests:
 static const char *pgSnpDbToTabOut = "pgSnpDbToTabOut";
 static const char *pgSnpKgDbToTabOutShort = "pgSnpKgDbToTabOutShort";
 static const char *pgSnpKgDbToTabOutLong = "pgSnpKgDbToTabOutLong";
+static const char *pgSnpKgDbToGpFx = "pgSnpKgDbToGpFx";
+static const char *snpConsDbToTabOutShort = "snpConsDbToTabOutShort";
+static const char *snpConsDbToTabOutLong = "snpConsDbToTabOutLong";
+static const char *vcfEx1 = "vcfEx1";
+static const char *vcfEx2 = "vcfEx2";
 
 void usage()
 /* explain usage and exit */
@@ -23,7 +33,13 @@ errAbort(
     "    %s\n"
     "    %s\n"
     "    %s\n"
-    , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong
+    "    %s\n"
+    "    %s\n"
+    "    %s\n"
+    "    %s\n"
+    , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong,
+    snpConsDbToTabOutShort, snpConsDbToTabOutLong,
+    vcfEx1, vcfEx2
     );
 }
 
@@ -31,48 +47,69 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-void dbToTabOut(char *db, char *table, struct asObject *asObj, char *outFile)
-/* Get data from a pgSnp database table and print all fields to tab-sep output. */
+struct streamerInfo
+/* Enough info to create a streamer or grator that gets data from sql, file or URL. */
+    {
+    struct streamerInfo *next;
+    char *db;			// If non-NULL, then we are using this SQL database
+    char *tableFileUrl;		// If db is non-NULL, table name; else file or URL
+    enum annoRowType type;	// Data type (wig or words?)
+    struct asObject *asObj;	// not used if type is arWig
+    };
+
+struct annoStreamer *streamerFromInfo(struct streamerInfo *info)
+/* Figure out which constructor to call, call it and return the results. */
 {
-struct sqlConnection *conn = sqlConnect(db);
-struct annoStreamer *pgSnpIn = annoStreamDbNew(conn, table, asObj);
-struct annoFormatter *tabOut = annoFormatTabNew(outFile);
-struct dyString *dbDotTwoBit = dyStringCreate("/hive/data/genomes/%s/%s.2bit", db, db);
-struct twoBitFile *tbf = twoBitOpen(dbDotTwoBit->string);
-struct annoGratorQuery *query = annoGratorQueryNew(db, NULL, tbf, pgSnpIn, NULL, tabOut);
-annoGratorQuerySetRegion(query, "chr1", 705881, 752721);
-annoGratorQueryExecute(query);
-annoGratorQueryFree(&query);
-sqlDisconnect(&conn);
-dyStringFree(&dbDotTwoBit);
+struct annoStreamer *streamer = NULL;
+if (info->type == arWig)
+    streamer = annoStreamWigDbNew(info->db, info->tableFileUrl, BIGNUM);
+else if (info->db != NULL)
+    streamer = annoStreamDbNew(info->db, info->tableFileUrl, info->asObj);
+else if (info->type == arVcf)
+    {
+    boolean looksLikeTabix = endsWith(info->tableFileUrl, ".gz");
+    streamer = annoStreamVcfNew(info->tableFileUrl, looksLikeTabix, BIGNUM);
+    }
+else
+    errAbort("Make a generic file streamer for %s!", info->tableFileUrl);
+return streamer;
 }
 
-void twoDbToTabOut(char *db, char *table1, struct asObject *asObj1,
-		   char *table2, struct asObject *asObj2, char *outFile, boolean wholeGenome)
-/* Integrate data from a pgSnp database table and a knownGene db table
- * and print all fields to tab-sep output. */
+void dbToTabOut(struct streamerInfo *infoList, struct twoBitFile *tbf, char *outFile,
+		char *chrom, uint start, uint end, bool doGpFx)
+/* Get data from one or more database tables and print all fields to tab-sep output. */
 {
-struct sqlConnection *conn = sqlConnect(db);
-struct annoStreamer *primary = annoStreamDbNew(conn, table1, asObj1);
-struct sqlConnection *conn2 = sqlConnect(db);
-struct annoStreamer *kgIn = annoStreamDbNew(conn2, table2, asObj2);
-struct annoGrator *geneGrator = annoGratorNew(kgIn);
+struct streamerInfo *primaryInfo = infoList;
+struct streamerInfo *gratorInfoList = infoList->next;
+struct annoStreamer *primary = streamerFromInfo(primaryInfo);
+struct annoGrator *gratorList = NULL;
+struct streamerInfo *grInfo;
+for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
+    {
+    struct annoGrator *grator = NULL;
+    if (grInfo->type == arWig)
+	grator = annoGrateWigDbNew(grInfo->db, grInfo->tableFileUrl, BIGNUM);
+    else if (doGpFx)
+	{
+	struct annoStreamer *src = streamerFromInfo(grInfo);
+	grator = annoGratorGpVarNew(src);
+	}
+    else
+	{
+	struct annoStreamer *src = streamerFromInfo(grInfo);
+	grator = annoGratorNew(src);
+	}
+    slAddHead(&gratorList, grator);
+    }
+slReverse(&gratorList);
 struct annoFormatter *tabOut = annoFormatTabNew(outFile);
-
-struct dyString *dbDotTwoBit = dyStringCreate("/hive/data/genomes/%s/%s.2bit", db, db);
-struct twoBitFile *tbf = twoBitOpen(dbDotTwoBit->string);
-struct annoGratorQuery *query = annoGratorQueryNew(db, NULL, tbf, primary, geneGrator, tabOut);
-
-if (wholeGenome)
-    annoGratorQuerySetRegion(query, NULL, 0, 0);
-else
-    annoGratorQuerySetRegion(query, "chr1", 705881, 752721);
+//#*** If we're using db==NULL as a flag, we still need to get assembly name in there.... take from 2bit filename???
+char *assemblyName = primaryInfo->db ? primaryInfo->db : "hardcoded, Doh!";
+struct annoGratorQuery *query = annoGratorQueryNew(assemblyName, NULL, tbf,
+						   primary, gratorList, tabOut);
+annoGratorQuerySetRegion(query, chrom, start, end);
 annoGratorQueryExecute(query);
-
 annoGratorQueryFree(&query);
-sqlDisconnect(&conn);
-sqlDisconnect(&conn2);
-dyStringFree(&dbDotTwoBit);
 }
 
 int main(int argc, char *argv[])
@@ -87,7 +124,12 @@ if (!doAllTests)
     {
     if (sameString(argv[2], pgSnpDbToTabOut) ||
 	sameString(argv[2], pgSnpKgDbToTabOutShort) ||
-	sameString(argv[2], pgSnpKgDbToTabOutLong))
+	sameString(argv[2], pgSnpKgDbToTabOutLong) ||
+	sameString(argv[2], pgSnpKgDbToGpFx) ||
+	sameString(argv[2], snpConsDbToTabOutShort) ||
+	sameString(argv[2], snpConsDbToTabOutLong) ||
+	sameString(argv[2], vcfEx1) ||
+	sameString(argv[2], vcfEx2))
 	test = cloneString(argv[2]);
     else
 	{
@@ -96,22 +138,55 @@ if (!doAllTests)
 	}
     }
 
-// First test: some rows of a pgSnp table
-char *table1 = "pgNA12878";
-struct asObject *asObj1 = pgSnpAsObj();
-if (doAllTests || sameString(test, pgSnpDbToTabOut))
-    dbToTabOut(db, table1, asObj1, "stdout");
+struct dyString *dbDotTwoBit = dyStringCreate("/hive/data/genomes/%s/%s.2bit", db, db);
+struct twoBitFile *tbf = twoBitOpen(dbDotTwoBit->string);
 
-char *table2 = "knownGene";
-struct asObject *asObj2 = asParseFile("../knownGene.as");
+// First test: some rows of a pgSnp table
+struct streamerInfo pgSnpInfo = { NULL, db, "pgNA12878", arWords, pgSnpAsObj() };
+if (doAllTests || sameString(test, pgSnpDbToTabOut))
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 705881, 752721, FALSE);
 
 // Second test: some rows of a pgSnp table integrated with knownGene
+struct streamerInfo kgInfo = { NULL, db, "knownGene", arWords, asParseFile("../knownGene.as") };
+pgSnpInfo.next = &kgInfo;
 if (doAllTests || sameString(test, pgSnpKgDbToTabOutShort))
-    twoDbToTabOut(db, table1, asObj1, table2, asObj2, "stdout", FALSE);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 705881, 752721, FALSE);
 
 // Third test: all rows of a pgSnp table integrated with knownGene
 if (doAllTests || sameString(test, pgSnpKgDbToTabOutLong))
-    twoDbToTabOut(db, table1, asObj1, table2, asObj2, "stdout", TRUE);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", NULL, 0, 0, FALSE);
 
+// Fourth test: some rows of snp135 integrated with phyloP scores
+if (doAllTests || sameString(test, snpConsDbToTabOutShort) ||
+    sameString(test, snpConsDbToTabOutLong))
+    {
+    struct streamerInfo snp135Info = { NULL, db, "snp135", arWords, asParseFile("../snp132Ext.as") };
+    struct streamerInfo phyloPInfo = { NULL, db, "phyloP46wayPlacental", arWig, NULL };
+    snp135Info.next = &phyloPInfo;
+    if (sameString(test, snpConsDbToTabOutShort))
+	dbToTabOut(&snp135Info, tbf, "stdout", "chr1", 737224, 738475, FALSE);
+    else
+	dbToTabOut(&snp135Info, tbf, "stdout", NULL, 0, 0, FALSE);
+    }
+
+// Fifth test: VCF with genotypes
+if (doAllTests || sameString(test, vcfEx1))
+    {
+    struct streamerInfo vcfEx1 = { NULL, NULL,
+			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExample.vcf.gz",
+				   arVcf, vcfAsObj() };
+    dbToTabOut(&vcfEx1, tbf, "stdout", NULL, 0, 0, FALSE);
+    }
+
+if (doAllTests || sameString(test, vcfEx2))
+    {
+    struct streamerInfo vcfEx2 = { NULL, NULL,
+			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExampleTwo.vcf",
+				   arVcf, vcfAsObj() };
+    dbToTabOut(&vcfEx2, tbf, "stdout", NULL, 0, 0, FALSE);
+    }
+
+if (doAllTests || sameString(test, pgSnpKgDbToGpFx))
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 705881, 752721, TRUE);
 return 0;
 }
