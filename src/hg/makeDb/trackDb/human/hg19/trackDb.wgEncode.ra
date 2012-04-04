@@ -67,8 +67,7 @@ include wgEncodeUw5C.patch.ra beta,public
 include wgEncodeUwAffyExonArray.ra
 
 # Duke Affy Exon (wrangler: cricket)
-include wgEncodeDukeAffyExon.ra public
-include wgEncodeDukeAffyExon.release3.ra alpha,beta
+include wgEncodeDukeAffyExon.release3.ra
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: Matt)
