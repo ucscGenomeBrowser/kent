@@ -136,8 +136,8 @@ void annoGratorClose(struct annoStreamer **pSelf)
 if (pSelf == NULL)
     return;
 struct annoGrator *self = *(struct annoGrator **)pSelf;
+annoRowFreeList(&(self->qHead), self->mySource);
 self->mySource->close(&(self->mySource));
-annoRowFreeList(&(self->qHead), (struct annoStreamer *)self);
 freeMem(self->prevPChrom);
 freez(pSelf);
 }
