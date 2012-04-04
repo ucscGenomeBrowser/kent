@@ -12,6 +12,7 @@ CREATE TABLE bed6 (
     score int unsigned not null,	# Score from 0-1000
     strand char(1) not null,	# + or -
               #Indices
+    dummy varchar(255),                 #dummy column, this file is for a make to not fail
     INDEX(chrom,start),
     INDEX(chrom,end)
 );
