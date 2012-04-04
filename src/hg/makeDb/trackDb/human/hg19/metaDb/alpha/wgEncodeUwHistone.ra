@@ -7937,6 +7937,31 @@ subId 5152
 treatment diffProtA_14d
 view Alignments
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep2.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa14dAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId DS14707
+labVersion Bowtie 0.12.7
+md5sum e2a18475998922eddbefa0335c901491,24e4dad3166d352faa2745b538c431f6
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 6810
+treatment diffProtA_14d
+view Alignments
+
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep1
 objType table
 antibody H3K4me3
@@ -7962,6 +7987,32 @@ replicate 1
 setType exp
 subId 5152
 tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep1
+treatment diffProtA_14d
+view Hotspots
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14707
+labVersion Hotspot-v5.2
+md5sum 0a7169553c00b9e906d1e11c3544df9f
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 6810
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep2
 treatment diffProtA_14d
 view Hotspots
 
@@ -7993,6 +8044,32 @@ tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep1
 treatment diffProtA_14d
 view Peaks
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14707
+labVersion lmax-v1.0
+md5sum 3a9a0021ec2e8736c196e2714f782a22
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 6810
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep2
+treatment diffProtA_14d
+view Peaks
+
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawDataRep1
 objType file
 antibody H3K4me3
@@ -8016,6 +8093,30 @@ project wgEncode
 replicate 1
 setType exp
 subId 5152
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawDataRep2
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS14707
+md5sum 679de14b207cc23eddee131813a07c0f
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 6810
 treatment diffProtA_14d
 view RawData
 
@@ -8044,6 +8145,32 @@ replicate 1
 setType exp
 subId 5152
 tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep1
+treatment diffProtA_14d
+view RawSignal
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep2
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep2.bigWig
+grant Stam
+lab UW
+labExpId DS14707
+labVersion WindowDensity-bin20-win+/-75
+md5sum 954a00a6685746ef731cc00453e5e85f
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 6810
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep2
 treatment diffProtA_14d
 view RawSignal
 
@@ -8321,6 +8448,31 @@ tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep2
 treatment diffProtA_2d
 view RawSignal
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep1.bam,wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS13777
+labVersion Bowtie 0.12.7
+md5sum 6a7b1df7c1cca3ecde1daad57edd74f6,c85ff4040ae3c2291921621113555d5d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 6811
+treatment diffProtA_5d
+view Alignments
+
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dAlnRep2
 objType file
 antibody H3K4me3
@@ -8347,6 +8499,32 @@ setType exp
 subId 5158
 treatment diffProtA_5d
 view Alignments
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS13777
+labVersion Hotspot-v5.2
+md5sum 19b14a68243404d4f382c9843fa40f9d
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 6811
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep1
+treatment diffProtA_5d
+view Hotspots
 
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep2
 objType table
@@ -8376,6 +8554,32 @@ tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep2
 treatment diffProtA_5d
 view Hotspots
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS13777
+labVersion lmax-v1.0
+md5sum de9e3b75bc315e4500cfb6ad4f2bd398
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 6811
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep1
+treatment diffProtA_5d
+view Peaks
+
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep2
 objType table
 antibody H3K4me3
@@ -8404,6 +8608,30 @@ tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep2
 treatment diffProtA_5d
 view Peaks
 
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawDataRep1
+objType file
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS13777
+md5sum b2b8cafb5c15ec233ba024dca3292eb5
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 6811
+treatment diffProtA_5d
+view RawData
+
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawDataRep2
 objType file
 antibody H3K4me3
@@ -8429,6 +8657,32 @@ setType exp
 subId 5158
 treatment diffProtA_5d
 view RawData
+
+metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep1
+objType table
+antibody H3K4me3
+cell H7-hESC
+composite wgEncodeUwHistone
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-04-04
+dateUnrestricted 2013-01-04
+fileName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS13777
+labVersion WindowDensity-bin20-win+/-75
+md5sum beb221f55b295ee7ba77fe86c5868ecb
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 6811
+tableName wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep1
+treatment diffProtA_5d
+view RawSignal
 
 metaObject wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep2
 objType table
@@ -31818,4 +32072,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 367211530
+# MAGIC: 196371470
