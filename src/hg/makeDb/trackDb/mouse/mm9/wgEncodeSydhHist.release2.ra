@@ -51,6 +51,7 @@ visibilityViewDefaults  Peaks=dense Signal=full
 noInherit on
 #dataVersion through the ENCODE Jan 2010 Freeze
 wgEncode 1
+html wgEncodeSydhHist.release2.html
 
 	#####Peak Tracks###########
 	track wgEncodeSydhHistViewPeaks
