@@ -22922,7 +22922,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_2C10_C5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -22947,7 +22947,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_2C10_C5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -22972,7 +22972,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_2C10_C5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -22998,7 +22998,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_2C10_C5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23024,7 +23024,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_2C10_C5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23050,7 +23050,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_2C10_C5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23076,7 +23076,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_2C10_C5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23100,7 +23100,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_2C10_C5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23124,7 +23124,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_2C10_C5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23150,7 +23150,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_2C10_C5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23176,7 +23176,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_4C50_C4/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23201,7 +23201,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_4C50_C4/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23226,7 +23226,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_4C50_C4/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23252,7 +23252,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_4C50_C4/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23278,7 +23278,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_4C50_C4/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23304,7 +23304,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_4C50_C4/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23330,7 +23330,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_4C50_C4/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23354,7 +23354,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_4C50_C4/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23378,7 +23378,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_4C50_C4/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23404,7 +23404,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_4C50_C4/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23430,7 +23430,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_A4.1-C6/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23455,7 +23455,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_A4.1-C6/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23480,7 +23480,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_A4.1-C6/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23506,7 +23506,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_A4.1-C6/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23532,7 +23532,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_A4.1-C6/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23558,7 +23558,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_A4.1-C6/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23584,7 +23584,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_A4.1-C6/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23608,7 +23608,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_A4.1-C6/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23632,7 +23632,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_A4.1-C6/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23658,7 +23658,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_A4.1-C6/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23684,7 +23684,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_F4.1-B2/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23709,7 +23709,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_F4.1-B2/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23734,7 +23734,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_F4.1-B2/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23760,7 +23760,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_F4.1-B2/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23786,7 +23786,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_F4.1-B2/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23812,7 +23812,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_F4.1-B2/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23838,7 +23838,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_F4.1-B2/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23862,7 +23862,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_F4.1-B2/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23886,7 +23886,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_F4.1-B2/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23912,7 +23912,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_F4.1-B2/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23938,7 +23938,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_P5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23963,7 +23963,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_P5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -23988,7 +23988,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_P5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -24014,7 +24014,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_P5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -24040,7 +24040,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_P5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -24066,7 +24066,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_P5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -24092,7 +24092,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_P5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -24116,7 +24116,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_P5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -24140,7 +24140,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_P5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -24166,7 +24166,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwHistone
 control std
-controlId K562/ZNF_knockout_P5/Input/std
+controlId wgEncodeEH000471
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-26
@@ -32095,4 +32095,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 1399775514
+# MAGIC: 1990983602
