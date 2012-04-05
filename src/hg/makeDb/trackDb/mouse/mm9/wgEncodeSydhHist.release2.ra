@@ -1,0 +1,163 @@
+# Stanford/Yale Histone(wrangler:vsmalladi assited by Cricket)
+
+# Notes:
+#       - Track Long Label: Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale
+#       - Track Short Label: Stan/Yale Histone
+#       - View Long Labels: [cell] [factor] [treatment] Histone Mods by ChIP-seq [view] from ENCODE/Stanford/Yale 
+#				- Factor:
+#       - cellType Order: Ordering is alphabetical
+#       - Default View selections
+#               - Peaks = dense
+#               - Signal = full
+#       - Short Labels: 
+#               Template: [cell] [factor] [treatment]
+#               - Cell: Abbreviations for cells
+#               - Factor: Abbreviations for factor
+#               - Treatment
+#                       - DM2P5d = DMSO
+#       - Tracks On: All factors and Cell Types except inputs
+#       - Display matrix:
+#               - Dimension Y - Factor
+#                       - factor Order: Ordering is based on Histone Number then numerically and alphabetaclly. Numerically 09 before 12.
+#               - Dimension X - Cell Type
+#                       - cellType Order: Ordering is based on tier and alphabetical within a tier. :
+#               - Dimension Z - Treatment
+#						- Treatment order: Ordering is based on Treatment alphabetically which None, being forced last. Both treatments are on by default
+
+
+
+track wgEncodeSydhHist
+compositeTrack on
+shortLabel Stan/Yale Histone
+longLabel Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale
+group regulation
+priority 0
+type bed 3
+origAssembly mm9
+nextItemButton on
+subGroup1 view Views Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line CH12=CH12  MEL=MEL
+subGroup3 factor Factor H3K4me3=H3K4me3 zInputIGGYALE=Input_(<i>IgG-Yale</i>)
+subGroup4 control Control IGGYale=IgG-Yale
+subGroup5 treatment Treatment zNone=None DM2P5d=DMSO_2.0pct
+dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
+dimensionZchecked zNone,DM2P5d
+filterComposite dimZ=all
+sortOrder cellType=+ factor=+ view=+ treatment=+ 
+dragAndDrop subTracks
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control treatment=Treatment replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+visibilityViewDefaults  Peaks=dense Signal=full
+noInherit on
+#dataVersion through the ENCODE Jan 2010 Freeze
+wgEncode 1
+
+	#####Peak Tracks###########
+	track wgEncodeSydhHistViewPeaks
+	shortLabel Peaks
+	view Peaks
+	visibility dense
+	viewUi on
+	parent wgEncodeSydhHist
+	signalFilter 0
+	signalFilterLimits 0:18241
+	pValueFilter 2
+	pValueFilterLimits 0:300
+	qValueFilter 2
+	qValueFilterLimits 0:300
+  
+		track wgEncodeSydhHistMelH3k04me3IggyalePk
+		parent wgEncodeSydhHistViewPeaks 
+		shortLabel MEL H3K4me3
+		longLabel MEL H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Stanford/Yale
+		subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=zNone
+		type narrowPeak
+		color 86,180,233 
+		# subId=4611 dateSubmitted=2011-07-19
+
+		track wgEncodeSydhHistMelH3k04me3Dm2p5dIggyalePk
+		parent wgEncodeSydhHistViewPeaks 
+		shortLabel MEL H3K4me3 DMSO
+		longLabel MEL H3K4me3 DMSO 2% Histone Mods by ChIP-seq Peaks from ENCODE/Stanford/Yale
+		subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=DM2P5d
+		type narrowPeak
+		color 86,180,233
+		# subId=3057 dateSubmitted=2011-04-20
+
+		
+		track wgEncodeSydhHistCh12H3k4me3IggyalePk
+		parent wgEncodeSydhHistViewPeaks 
+		shortLabel CH12 H3K4me3
+		longLabel CH12 H3K4me3 Histone Mods by ChIP-seq Peaks from ENCODE/Stanford/Yale
+		subGroups view=Peaks factor=H3K4me3 cellType=CH12 control=IGGYale treatment=zNone
+		type narrowPeak
+		color 86,180,233
+		# subId=1194
+
+	#####Signal Tracks###########
+	track wgEncodeSydhHistViewSig
+	shortLabel Signal
+	view Signal
+	visibility full
+	#viewUi 
+	parent wgEncodeSydhHist
+	viewLimits 10:20
+	autoScale off
+	maxHeightPixels 100:16:16
+	windowingFunction mean+whiskers
+	
+
+		track wgEncodeSydhHistMelH3k4me3IggyaleSig
+		parent wgEncodeSydhHistViewSig 
+		shortLabel MEL H3K4me3
+		longLabel MEL H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=zNone
+		type bigWig 1 38729
+		color 86,180,233 
+		# subId=1166
+
+		track wgEncodeSydhHistMelInputIggyaleSig
+		parent wgEncodeSydhHistViewSig off
+		shortLabel MEL Input
+		longLabel MEL Input Histone Mods by ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=zNone
+		type bigWig 1 80497
+		color 86,180,233
+		# subId=1168
+
+		track wgEncodeSydhHistCh12H3k4me3IggyaleSig
+		parent wgEncodeSydhHistViewSig 
+		shortLabel CH12 H3K4me3
+		longLabel CH12 H3K4me3 Histone Mods by ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=H3K4me3 cellType=CH12 control=IGGYale treatment=zNone
+		type bigWig 1.000000 45491.000000
+		color 86,180,233
+		# subId=1194
+
+		track wgEncodeSydhHistCh12InputIggyaleSig
+		parent wgEncodeSydhHistViewSig off
+		shortLabel CH12 Input
+		longLabel CH12 Input Histone Mods by ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=zInputIGGYALE cellType=CH12 control=IGGYale treatment=zNone
+		type bigWig 1.000000 59055.000000
+		color 86,180,233
+		# subId=1195
+
+		track wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleSig
+		parent wgEncodeSydhHistViewSig 
+		shortLabel MEL H3K4me3 DMSO
+		longLabel MEL H3K4me3 DMSO 2% Histone Mods by ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=DM2P5d
+		type bigWig 1.000000 52086.000000
+		color 86,180,233
+		# subId=3057 dateSubmitted=2011-04-20
+
+		track wgEncodeSydhHistMelInputDm2p5dIggyaleSig
+		parent wgEncodeSydhHistViewSig off
+		shortLabel MEL Input DMSO
+		longLabel MEL Input DMSO 2% Histone Mods by ChIP-seq Signal from ENCODE/Stanford/Yale
+		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=DM2P5d
+		type bigWig 1.000000 78459.000000
+		color 86,180,233
+		# subId=4326 dateSubmitted=2011-06-16
+
