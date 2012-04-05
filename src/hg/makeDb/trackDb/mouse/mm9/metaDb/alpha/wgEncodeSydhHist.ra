@@ -2,6 +2,7 @@ metaObject wgEncodeSydhHist
 objType composite
 composite wgEncodeSydhHist
 expVars lab,dataType,cell,antibody,treatment,control
+geoSeriesAccession GSE32218
 
 metaObject wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep1
 objType file
@@ -775,4 +776,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: -1942266315
+# MAGIC: -1525560472
