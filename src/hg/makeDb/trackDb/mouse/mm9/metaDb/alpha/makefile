@@ -9,6 +9,7 @@ wgEncodeLicrRnaSeq.ra \
 wgEncodeLicrTfbs.ra \
 wgEncodeNhgriBip.ra \
 wgEncodePsuHistone.ra \
+wgEncodePsuRnaSeq.ra \
 wgEncodePsuTfbs.ra \
 wgEncodeSydhHist.ra \
 wgEncodeSydhRnaSeq.ra \

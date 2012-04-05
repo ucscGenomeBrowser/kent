@@ -8411,10 +8411,10 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 2/21/12 angie)
+# NHGRI GWAS CATALOG (DONE 4/4/12 angie)
 # NOTE: This assumes that the corresponding section in hg18.txt has just been run.
 #       It depends on the noCoords.tab file in the corresponding hg18 build directory.
-# Updated 2/21/12 (remove extra whitespace, translate non-ASCII to html), 2/6/12
+# Updated 4/4/12, 2/21/12 (remove extra whitespace, translate non-ASCII to html), 2/6/12
 # Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
 # Updated 4/1/10, 3/1/10
@@ -8436,7 +8436,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 8608 elements of size 22
+#Read 9031 elements of size 22 from gwasCatalog.bed
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
     # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
@@ -8449,7 +8449,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt
-#758 ambigStrand.txt
+#769 ambigStrand.txt
 
 
 ######################################################################## 

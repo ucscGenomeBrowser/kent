@@ -106,6 +106,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002689
+expId 2689
 fileName wgEncodeDukeAffyExonA549SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -126,6 +128,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002689
+expId 2689
 fileName wgEncodeDukeAffyExonA549SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -629,6 +633,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002690
+expId 2690
 fileName wgEncodeDukeAffyExonColo829SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -649,6 +655,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002690
+expId 2690
 fileName wgEncodeDukeAffyExonColo829SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -839,6 +847,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002704
+expId 2704
 fileName wgEncodeDukeAffyExonFibropag08395SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -859,6 +869,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002704
+expId 2704
 fileName wgEncodeDukeAffyExonFibropag08395SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -879,6 +891,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002704
+expId 2704
 fileName wgEncodeDukeAffyExonFibropag08395SimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
@@ -899,6 +913,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002705
+expId 2705
 fileName wgEncodeDukeAffyExonFibropag08396SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -919,6 +935,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002705
+expId 2705
 fileName wgEncodeDukeAffyExonFibropag08396SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -939,6 +957,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002705
+expId 2705
 fileName wgEncodeDukeAffyExonFibropag08396SimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
@@ -959,6 +979,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002706
+expId 2706
 fileName wgEncodeDukeAffyExonFibropag20443SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -979,6 +1001,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002706
+expId 2706
 fileName wgEncodeDukeAffyExonFibropag20443SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -999,6 +1023,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002706
+expId 2706
 fileName wgEncodeDukeAffyExonFibropag20443SimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
@@ -2182,6 +2208,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002691
+expId 2691
 fileName wgEncodeDukeAffyExonH7esSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -2202,6 +2230,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002691
+expId 2691
 fileName wgEncodeDukeAffyExonH7esSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -2222,6 +2252,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002691
+expId 2691
 fileName wgEncodeDukeAffyExonH7esSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
@@ -2333,6 +2365,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002692
+expId 2692
 fileName wgEncodeDukeAffyExonHek293tSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -2353,6 +2387,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002692
+expId 2692
 fileName wgEncodeDukeAffyExonHek293tSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -3294,6 +3330,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002693
+expId 2693
 fileName wgEncodeDukeAffyExonHsmmfshdSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -3314,6 +3352,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002693
+expId 2693
 fileName wgEncodeDukeAffyExonHsmmfshdSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -3334,6 +3374,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002693
+expId 2693
 fileName wgEncodeDukeAffyExonHsmmfshdSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
@@ -3498,6 +3540,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002694
+expId 2694
 fileName wgEncodeDukeAffyExonHsmmtubefshdSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -3518,6 +3562,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002694
+expId 2694
 fileName wgEncodeDukeAffyExonHsmmtubefshdSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -3538,6 +3584,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002694
+expId 2694
 fileName wgEncodeDukeAffyExonHsmmtubefshdSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
@@ -3960,6 +4008,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002701
+expId 2701
 fileName wgEncodeDukeAffyExonIpscwru1SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -3980,6 +4030,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002701
+expId 2701
 fileName wgEncodeDukeAffyExonIpscwru1SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -4000,6 +4052,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002702
+expId 2702
 fileName wgEncodeDukeAffyExonIpsnihi11SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -4020,6 +4074,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002702
+expId 2702
 fileName wgEncodeDukeAffyExonIpsnihi11SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -4040,6 +4096,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002703
+expId 2703
 fileName wgEncodeDukeAffyExonIpsnihi7SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -4060,6 +4118,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002703
+expId 2703
 fileName wgEncodeDukeAffyExonIpsnihi7SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -4080,6 +4140,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002695
+expId 2695
 fileName wgEncodeDukeAffyExonK562NabutSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -4100,6 +4162,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002695
+expId 2695
 fileName wgEncodeDukeAffyExonK562NabutSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -4120,6 +4184,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002695
+expId 2695
 fileName wgEncodeDukeAffyExonK562NabutSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
@@ -4140,6 +4206,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002695
+expId 2695
 fileName wgEncodeDukeAffyExonK562NabutSimpleSignalRep4.bigBed
 grant Crawford
 lab Duke
@@ -4518,6 +4586,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002696
+expId 2696
 fileName wgEncodeDukeAffyExonMcf7CtcfshrnaSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -4538,6 +4608,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002696
+expId 2696
 fileName wgEncodeDukeAffyExonMcf7CtcfshrnaSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -4558,6 +4630,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002696
+expId 2696
 fileName wgEncodeDukeAffyExonMcf7CtcfshrnaSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
@@ -4676,6 +4750,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002697
+expId 2697
 fileName wgEncodeDukeAffyExonMcf7HypoxlacSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -4696,6 +4772,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002698
+expId 2698
 fileName wgEncodeDukeAffyExonMcf7RandshrnaSimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -4716,6 +4794,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002698
+expId 2698
 fileName wgEncodeDukeAffyExonMcf7RandshrnaSimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -4736,6 +4816,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002698
+expId 2698
 fileName wgEncodeDukeAffyExonMcf7RandshrnaSimpleSignalRep3.bigBed
 grant Crawford
 lab Duke
@@ -5045,6 +5127,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002699
+expId 2699
 fileName wgEncodeDukeAffyExonMel2183SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -5065,6 +5149,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002699
+expId 2699
 fileName wgEncodeDukeAffyExonMel2183SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -5879,6 +5965,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002700
+expId 2700
 fileName wgEncodeDukeAffyExonUch1SimpleSignalRep1.bigBed
 grant Crawford
 lab Duke
@@ -5899,6 +5987,8 @@ dataType AffyExonArray
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-16
 dateUnrestricted 2012-12-16
+dccAccession wgEncodeEH002700
+expId 2700
 fileName wgEncodeDukeAffyExonUch1SimpleSignalRep2.bigBed
 grant Crawford
 lab Duke
@@ -6049,4 +6139,4 @@ tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: -1295155011
+# MAGIC: -1120461066
