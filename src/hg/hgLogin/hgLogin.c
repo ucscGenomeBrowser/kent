@@ -224,7 +224,7 @@ hPrintf(
 "<tr><td>E-mail</td><td><input type=text name=hgLogin_email size=20> "
   "(your e-mail is also your user-id)</td></tr>"
 "<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.lostPassword value=submit>"
-"&nbsp;<input type=submit name=hgLogin.do.signupPage value=cancel></td></tr>"
+"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>"
 "</table>"
 "<br>"
 , errMsg ? errMsg : ""
@@ -315,7 +315,7 @@ hPrintf(
 "<tr><td>Current Password</td><td><input type=password name=hgLogin_password value=\"\" size=10></td></tr>\n"
 "<tr><td>New Password</td><td><input type=password name=hgLogin_newPassword value=\"\" size=10></td></tr>\n"
 "<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.changePassword value=submit>"
-"&nbsp;<input type=submit name=hgLogin.do.signupPage value=cancel></td></tr>"
+"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>"
 "</table>"
 "<br>"
 , errMsg ? errMsg : ""
@@ -440,7 +440,8 @@ hPrintf(
 "<tr><td>E-mail</td><td><input type=text name=hgLogin_email value=\"%s\"size=20>\n"
 "<tr><td>Password</td><td><input type=password name=hgLogin_password value=\"%s\" size=10></td></tr>\n"
 "<tr><td>Real name (optional)</td><td><input type=text name=hgLogin_realName value=\"%s\" size=20></td></tr>\n"
-"<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.signup value=submit></td></tr>\n"
+"<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.signup value=submit>"
+"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>\n"
 "</table>\n"
 "<br>\n"
 , getenv("HTTP_HOST")
@@ -545,7 +546,7 @@ hPrintf(
 void displayLoginPage(struct sqlConnection *conn)
 /* draw the account login page */
 {
-char *email = cartUsualString(cart, "hgLogin_email", "");
+char *username = cartUsualString(cart, "hgLogin_userName", "");
 /* for password security, use cgi hash instead of cart */
 char *password = cgiUsualString("hgLogin_password", "");
 hPrintf(
@@ -553,17 +554,20 @@ hPrintf(
 "<p align=\"left\">"
 "</p>"
 "<span style='color:red;'>%s</span>"
-"<h3>Account Login</h3>"
+"<h3>Login</h3>"
 "<form method=post action=\"hgLogin\" name=accountLoginForm >"
 "<table>"
 "<tr><td>User Name</td><td><input type=text name=hgLogin_userName value=\"%s\" size=20> <BR> "
-"<tr><td>Password</td><td><input type=password name=hgLogin_password value=\"%s\" size=10></td></tr><BR>"
-"<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.displayLogin value=submit>"
-"&nbsp;<input type=submit name=hgLogin.do.signupPage value=cancel></td></tr>"
+"<tr><td>Password</td><td><input type=password name=hgLogin_password value=\"%s\" size=20></td></tr><BR>"
+"</table>"
+"<p><a href=\"hgLogin?hgLogin.do.lostPasswordPage=1\">Forgot</a> your password?  <a href=\"hgLogin?do.signupPage=1\">Need an account</a>?</p>"
+"<table>"
+"<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.displayLogin value=login>\n"
+"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>"
 "</table>"
 "<BR>"
 , errMsg ? errMsg : ""
-, email
+, username
 , password
 );
 
