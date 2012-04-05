@@ -72,42 +72,52 @@ if (s != NULL && fluff != NULL)
     }
 }
 
+boolean readFaSeq(struct lineFile *faLf, char **retFaName,  int *retDnaSize, off_t *retFaOffset)
+/* Read the next record, returning it's start location in the file */
+{
+// to get offset, must read first line, save offset, then read the record to
+// get the size
+char *faLine;
+if (!lineFileNext(faLf, &faLine, NULL))
+    return FALSE;
+if (faLine[0] != '>')
+    errAbort("fasta record doesn't start with '>' line %d of %s", faLf->lineIx, faLf->fileName);
+*retFaOffset = faLf->bufOffsetInFile + faLf->lineStart;
+lineFileReuse(faLf);
+DNA *dna;
+boolean gotIt = faMixedSpeedReadNext(faLf, &dna, retDnaSize, retFaName);
+if (!gotIt)
+    internalErr();
+return TRUE;
+}
+
 boolean loadFaSeq(struct lineFile *faLf, HGID extFileId, HGID seqId, FILE *seqTab,
                   struct sqlConnection* conn)
 /* Add next sequence in fasta file to tab file */
 {
 off_t faOffset, faEndOffset;
-int faSize;
-char *s, *faLine;
-int faLineSize, faNameSize;
-int dnaSize = 0;
-char faAcc[256], faAccBuf[513];
+int faSize, dnaSize;
+char *faName, faAcc[256], faAccBuf[513];
 int prefixLen = 0;
 
-/* Get Next FA record. */
-if (!lineFileNext(faLf, &faLine, &faLineSize))
-    return FALSE;;
-if (faLine[0] != '>')
-    internalErr();
-faOffset = faLf->bufOffsetInFile + faLf->lineStart;
-s = firstWordInLine(faLine+1);
+/* Get next FA record. */
+if (!readFaSeq(faLf, &faName, &dnaSize, &faOffset))
+    return FALSE;
+char *s = firstWordInLine(faName);
 abbreviate(s, abbr);
-faNameSize = strlen(s);
-if (faNameSize == 0)
+if (strlen(s) == 0)
     errAbort("Missing accession line %d of %s", faLf->lineIx, faLf->fileName);
 if (prefix != NULL)
     prefixLen = strlen(prefix) + 1;
-if (strlen(faLine+1) + prefixLen >= sizeof(faAcc))
+if (strlen(faName+1) + prefixLen >= sizeof(faAcc))
     errAbort("Fasta name too long line %d of %s", faLf->lineIx, faLf->fileName);
 faAcc[0] = 0;
 if (prefix != NULL)
     {
-    strcat(faAcc, prefix);
-    strcat(faAcc, "-");
+    safecat(faAcc, sizeof(faAcc), prefix);
+    safecat(faAcc, sizeof(faAcc), "-");
     }
 strcat(faAcc, s);
-if (faSeekNextRecord(faLf))
-    lineFileReuse(faLf);
 faEndOffset = faLf->bufOffsetInFile + faLf->lineStart;
 faSize = (int)(faEndOffset - faOffset); 
 
