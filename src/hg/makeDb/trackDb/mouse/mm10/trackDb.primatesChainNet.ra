@@ -129,7 +129,7 @@ html mm10primateChainNet
     visibility dense
     subTrack primateChainNet
 
-        track netOtoGar1
+        track netOtoGar3
         subTrack primateChainNetViewnet on 
         subGroups view=net species=aBushbaby clade=eStrep
         shortLabel $o_Organism Net
