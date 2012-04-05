@@ -16,6 +16,7 @@ fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41AlnRep1.bam,wgEncodePsuRnaSeqCh1
 grant Hardison
 lab PSU-m
 localization cell
+md5sum b008209c8ea2903cc102c9821617af63,2b4c297c616fc6c92fcf356e4af15bbb
 project wgEncode
 readType 1x41
 replicate 1
@@ -41,6 +42,7 @@ fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41AlnRep2.bam,wgEncodePsuRnaSeqCh1
 grant Hardison
 lab PSU-m
 localization cell
+md5sum 823dad184a4afb76312d469bf23fe088,dbcb89e90c3d4054a4d33e3538393a8b
 project wgEncode
 readType 1x41
 replicate 2
@@ -66,6 +68,7 @@ fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
+md5sum edd6abdc1d1d01033185c89250e60528
 project wgEncode
 readType 1x41
 replicate 1
@@ -90,6 +93,7 @@ fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
+md5sum edd6abdc1d1d01033185c89250e60528
 project wgEncode
 readType 1x41
 replicate 2
@@ -114,6 +118,7 @@ fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41SigRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
+md5sum 42502db4cc09db7f3560648ef669acb2
 project wgEncode
 readType 1x41
 replicate 1
@@ -139,6 +144,7 @@ fileName wgEncodePsuRnaSeqCh12FImmortal2a4bR1x41SigRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
+md5sum e00f8215e8c22a0053e5d27b8686df46
 project wgEncode
 readType 1x41
 replicate 2
@@ -164,6 +170,7 @@ fileName wgEncodePsuRnaSeqG1eME0S129R1x36AlnRep1.bam,wgEncodePsuRnaSeqG1eME0S129
 grant Hardison
 lab PSU-m
 localization cell
+md5sum 903e982787f84747d8a94f4388831055,799356e15d12423112e10f6432f21a7c
 project wgEncode
 readType 1x36
 replicate 1
@@ -189,6 +196,7 @@ fileName wgEncodePsuRnaSeqG1eME0S129R1x36RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
+md5sum b3f96e43188e79b6c252ec1b2cf58e21
 project wgEncode
 readType 1x36
 replicate 1
@@ -213,6 +221,7 @@ fileName wgEncodePsuRnaSeqG1eME0S129R1x36SigRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
+md5sum 0abda22c5b47d8267366d6d1bb882616
 project wgEncode
 readType 1x36
 replicate 1
@@ -238,6 +247,7 @@ fileName wgEncodePsuRnaSeqG1eME0S129R1x55AlnRep2.bam,wgEncodePsuRnaSeqG1eME0S129
 grant Hardison
 lab PSU-m
 localization cell
+md5sum 4e7219708e0c2bb39331f092ab33ad26,2de641196f1e956d38f9defd203b53ad
 project wgEncode
 readType 1x55
 replicate 2
@@ -263,6 +273,7 @@ fileName wgEncodePsuRnaSeqG1eME0S129R1x55RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
+md5sum 3dd60c6cec7eeabe1c8b70b4c45c36b2
 project wgEncode
 readType 1x55
 replicate 2
@@ -287,6 +298,7 @@ fileName wgEncodePsuRnaSeqG1eME0S129R1x55SigRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
+md5sum 42e8092be7e13a5e97a0e5a78a1180e4
 project wgEncode
 readType 1x55
 replicate 2
@@ -312,6 +324,7 @@ fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hAlnRep1.bam,wgEncodePsuRnaSe
 grant Hardison
 lab PSU-m
 localization cell
+md5sum 46a0ea35a3cc27a334978506a7bec7db,4b34a985e001676588848236f25fb381
 project wgEncode
 readType 1x36
 replicate 1
@@ -337,6 +350,7 @@ fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hAlnRep2.bam,wgEncodePsuRnaSe
 grant Hardison
 lab PSU-m
 localization cell
+md5sum b72913711f7d2f15c760289396b6dc38,3c64a5550a3d874a313fbb84ea3fb577
 project wgEncode
 readType 1x36
 replicate 2
@@ -362,6 +376,7 @@ fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
+md5sum e1c6c0108e43d28852cf257e6a36b701
 project wgEncode
 readType 1x36
 replicate 1
@@ -386,6 +401,7 @@ fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
 localization cell
+md5sum 49a386e81120c19c1a79889066bdb0aa
 project wgEncode
 readType 1x36
 replicate 2
@@ -410,6 +426,7 @@ fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hSigRep1.bigWig
 grant Hardison
 lab PSU-m
 localization cell
+md5sum ad4d2a6443f6f071d212e97eeb879571
 project wgEncode
 readType 1x36
 replicate 1
@@ -435,6 +452,7 @@ fileName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hSigRep2.bigWig
 grant Hardison
 lab PSU-m
 localization cell
+md5sum da09912372b2b628aa39d6e851156b44
 project wgEncode
 readType 1x36
 replicate 2
@@ -447,4 +465,4 @@ tableName wgEncodePsuRnaSeqG1eer4ME0S129R1x36Diffd24hSigRep2
 treatment diffProtD_24hr
 view Signal
 
-# MAGIC: -2070689494
+# MAGIC: 1672706990
