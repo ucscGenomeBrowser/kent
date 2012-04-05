@@ -1,5 +1,9 @@
 # chainNet tracks
-include trackDb.chainNet.ra
+include trackDb.gliersChainNet.ra
+include trackDb.primatesChainNet.ra
+include trackDb.placentalsChainNet.ra
+include trackDb.vertebrateChainNet.ra
+include trackDb.previousVersionsChainNet.ra
 
 # Local declaration so that local gold.html is picked up.
 track gold override
