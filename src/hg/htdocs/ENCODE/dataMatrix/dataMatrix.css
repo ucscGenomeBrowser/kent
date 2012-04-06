@@ -4,7 +4,7 @@ table {
     border-width: 0px; 
     border-style: hidden; 
     border-collapse: collapse; 
-    font-family: arial, Geneva, Helvetica, sans-serif; 
+    font-family: arial, Geneva, Helvetica, sans-serif;
 }
 
 th {
@@ -25,9 +25,8 @@ td {
 }
 
 .verticalText {
-    /* text-align: center; */
-    /* vertical-align: middle; */
-    width: 1em;
+    /* NOTE: width setting needed by non-IE, but messes up IE, so will add this from JS */
+    /* width: 1em; */
     padding-left: 4px;
     padding-right: 4px;
     white-space: nowrap;

@@ -89,6 +89,11 @@ var encodeProject = (function () {
                 a.term.toLowerCase().localeCompare(b.term.toLowerCase()));
         },
 
+        isIE7: function() {
+            // Detect IE version 7
+            return ($.browser.msie  && parseInt($.browser.version, 10) === 7);
+        }, 
+
         isIE8: function() {
             // Detect IE version 8
             return ($.browser.msie  && parseInt($.browser.version, 10) === 8);

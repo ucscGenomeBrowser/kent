@@ -62,7 +62,7 @@ our $sqlCreate = "/cluster/bin/sqlCreate";
 our @extendedTypes = ("narrowPeak", "broadPeak", "gappedPeak",  "bed5FloatScore", "shortFrags", "peptideMapping");
 # Add type names to this list for types that can be loaded as bigBed via .as files (e.g. tagAlign.as)
 # You also have to make sure the .as file is copied into the $sqlCreate directory.
-our @bigBedTypes = ("pairedTagAlign","tagAlign","bigBed");
+our @bigBedTypes = ("bigBed");
 our @bigWigTypes = ("bigWig");
 our @bamTypes = ("bam");
 

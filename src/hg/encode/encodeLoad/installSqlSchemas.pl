@@ -32,26 +32,3 @@ for my $type (@Encode::extendedTypes) {
     }
 }
 
-# bigBed types need .as files
-for my $type (@Encode::bigBedTypes) {
-    my $file = "$ENV{HOME}/kent/src/hg/lib/encode/${type}.as";
-    if(!(-e $file)) {
-        $file = "$ENV{HOME}/kent/src/hg/lib/${type}.as";
-    }
-    if(-e $file) {
-        my $replace = 1;
-        my $target = "$Encode::sqlCreate/$type.as";
-        if(-e $target) {
-            my $fileStat = stat($file);
-            my $targetStat = stat($target);
-            $replace = $fileStat->mtime > $targetStat->mtime;
-        }
-        my $cmd = "cp $file $target.tmp";
-        !system($cmd) || die  "system '$cmd' failed: $?";
-        $cmd = "mv -f $target.tmp $target";
-        !system($cmd) || die  "system '$cmd' failed: $?";
-    } else {
-        die "can't find as file for type '$type'";
-    }
-}
-

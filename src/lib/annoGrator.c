@@ -40,7 +40,7 @@ for (qRow = self->qHead;  qRow != NULL;  qRow = nextQRow)
 	    prevQRow->next = qRow->next;
 	if (self->qTail == qRow)
 	    self->qTail = prevQRow;
-	annoRowFree(&qRow, (struct annoStreamer *)self);
+	annoRowFree(&qRow, self->mySource);
 	}
     else
 	prevQRow = qRow;
@@ -118,7 +118,7 @@ for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
     {
     if (qRow->start < primaryRow->end && qRow->end > primaryRow->start)
 	{
-	slAddHead(&rowList, annoRowClone(qRow, (struct annoStreamer *)self));
+	slAddHead(&rowList, annoRowClone(qRow, self->mySource));
 	if (rjFailHard && qRow->rightJoinFail)
 	    {
 	    *retRJFilterFailed = TRUE;
@@ -136,8 +136,8 @@ void annoGratorClose(struct annoStreamer **pSelf)
 if (pSelf == NULL)
     return;
 struct annoGrator *self = *(struct annoGrator **)pSelf;
+annoRowFreeList(&(self->qHead), self->mySource);
 self->mySource->close(&(self->mySource));
-annoRowFreeList(&(self->qHead), (struct annoStreamer *)self);
 freeMem(self->prevPChrom);
 freez(pSelf);
 }

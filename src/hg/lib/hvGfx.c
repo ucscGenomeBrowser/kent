@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "hvGfx.h"
+#include "obscure.h"
 
 
 static struct hvGfx *hvGfxAlloc(struct vGfx *vg)
@@ -87,18 +88,6 @@ for (i=0; i<9; ++i)
 return 1000000000;
 }
 
-static void numLabelString(int num, char *label)
-/* Returns a numerical labeling string. */
-{
-char *sign = "";
-if (num < 0)
-    {
-    num = -num;
-    sign = "-";
-    }
-sprintf(label, "%s%d", sign, num);
-}
-
 void hvGfxDrawRulerBumpText(struct hvGfx *hvg, int xOff, int yOff, 
 	int height, int width,
         Color color, MgFont *font,
@@ -113,12 +102,12 @@ int firstTick;
 int remainder;
 int end = startNum + range;
 int x;
-char tbuf[14];
+char tbuf[18];
 int numWid;
 int goodNumTicks;
 int niceNumTicks = width/35;
 
-numLabelString(startNum+range, tbuf);
+sprintLongWithCommas(tbuf, startNum+range);
 numWid = mgFontStringWidth(font, tbuf)+4+bumpX;
 goodNumTicks = width/numWid;
 if (goodNumTicks < 1) goodNumTicks = 1;
@@ -133,7 +122,7 @@ remainder = firstTick % tickSpan;
 firstTick -= remainder;
 for (tickPos=firstTick; tickPos<end; tickPos += tickSpan)
     {
-    numLabelString(tickPos, tbuf);
+    sprintLongWithCommas(tbuf, tickPos);
     numWid = mgFontStringWidth(font, tbuf)+4;
     x = (int)((tickPos-startNum) * scale) + xOff;
     hvGfxBox(hvg, x, yOff, 1, height, color);
