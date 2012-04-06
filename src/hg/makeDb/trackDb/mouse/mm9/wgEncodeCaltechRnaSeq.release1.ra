@@ -107,7 +107,7 @@ html wgEncodeCaltechRnaSeq.release1.html
         color 139,69,19
         # subId=4936 dateSubmitted=2012-02-01
 
-        track wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200Aln
+        track wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200AlnRep1
         parent wgEncodeCaltechRnaSeqViewAlignments
         shortLabel 10T1/2 Aln N
         longLabel 10T1/2 without Treatment Paired-end RNA-seq Alignments from ENCODE/Caltech
@@ -115,8 +115,9 @@ html wgEncodeCaltechRnaSeq.release1.html
         type bam
         color 65,105,225
         # subId=6082 dateSubmitted=2012-03-20
+        # was wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200Aln vsmalladi Fri Apr  6 11:44:34 2012
 
-        track wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAln
+        track wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAlnRep1
         parent wgEncodeCaltechRnaSeqViewAlignments
         shortLabel 10T1/2 Aln T
         longLabel 10T1/2 EqS 2.0pct 60hr Paired-end RNA-seq Alignments from ENCODE/Caltech
@@ -124,5 +125,6 @@ html wgEncodeCaltechRnaSeq.release1.html
         type bam
         color 65,105,225
         # subId=6081 dateSubmitted=2012-03-19
+        # was wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAln vsmalladi Fri Apr  6 11:44:54 2012
 
 
