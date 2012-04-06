@@ -22,11 +22,9 @@ set warningMessage="\n usage:  `basename $0` database tableList\n\
 Pushes tables in list to mysqlbeta and records size. \n\
 Requires sudo access to mypush to run.\n\
 \n\
-Do not redirect output or run in the background, as\n\
-you may be required to re-type your password if any\n\
-single table takes more than the sudo timeout length\n\
-to push. Double-check that all tables have been\n\
-pushed!\n\
+If prompted to re-type password, sudo timeout length\n\
+may not be set to a long enough interval. Check with\n\
+admins if this is the case.\n\
 \n\
 Will report total size of push and write two files:\n\
 db.tables.push -> output for all tables from mypush\n\
