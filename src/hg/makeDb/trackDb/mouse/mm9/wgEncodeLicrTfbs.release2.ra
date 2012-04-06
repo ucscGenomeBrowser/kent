@@ -871,7 +871,7 @@ html wgEncodeLicrTfbs.release2
 
         track wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Placenta 8w Input 
+        shortLabel Plac 8w Input 
         longLabel Placenta Adult 8 weeks Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=1ADULT8WKS factor=INPUT cellType=PLAC control=STD sex=F strain=C57BL6 
         type bigWig 0.120000 60.020000
