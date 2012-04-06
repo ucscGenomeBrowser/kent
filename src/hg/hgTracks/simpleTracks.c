@@ -13223,6 +13223,7 @@ registerTrackHandler("encodeErgeMethProm",encodeErgeMethods);
 registerTrackHandler("encodeErgeStableTransf",encodeErgeMethods);
 registerTrackHandler("encodeErgeSummary",encodeErgeMethods);
 registerTrackHandler("encodeErgeTransTransf",encodeErgeMethods);
+registerTrackHandler("encodeGencodeGenePolyAMar07",bed9Methods);
 registerTrackHandlerOnFamily("encodeStanfordNRSF",encodeStanfordNRSFMethods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
