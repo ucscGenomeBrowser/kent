@@ -435,7 +435,7 @@ showLinkedFields(dtList);
 dt = dbTableNew(db, table);
 slAddHead(&dtList, dt);
 showLinkedTables(joiner, dtList, selFieldLinkedTablePrefix(),
-	hgtaDoSelectFieldsMore, "Allow Selection From Checked Tables");
+	hgtaDoSelectFieldsMore, "allow selection from checked tables");
 
 /* clean up. */
 hPrintf("</FORM>");
@@ -1162,7 +1162,7 @@ showLinkedFilters(dtList);
 dt = dbTableNew(db, table);
 slAddHead(&dtList, dt);
 showLinkedTables(joiner, dtList, filterLinkedTablePrefix,
-	hgtaDoFilterMore, "Allow Filtering Using Fields in Checked Tables");
+	hgtaDoFilterMore, "allow filtering using fields in checked tables");
 
 hPrintf("</FORM>\n");
 cgiDown(0.9);

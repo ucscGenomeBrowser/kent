@@ -1,5 +1,12 @@
 /* sqlNum.h - routines to convert from ascii to
  * unsigned/integer a bit more quickly than atoi. 
+ * Called sqlNum because it was first developed for use with
+ * SQL databases, which tend to require a lot of conversion from
+ * string to binary representation of numbers. In particular the
+ * code generator AutoSQL puts in lots of calls to these routines
+ * into it's parsers.  Other parser in the source tree have come
+ * to use these too though since they are fast and have good error
+ * checking.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */

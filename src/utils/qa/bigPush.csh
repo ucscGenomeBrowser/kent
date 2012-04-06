@@ -22,16 +22,13 @@ set warningMessage="\n usage:  `basename $0` database tableList\n\
 Pushes tables in list to mysqlbeta and records size. \n\
 Requires sudo access to mypush to run.\n\
 \n\
-Do not redirect output or run in the background, as\n\
-you may be required to re-type your password if any\n\
-single table takes more than the sudo timeout length\n\
-to push. Double-check that all tables have been\n\
-pushed!\n\
+If prompted to re-type password, sudo timeout length\n\
+may not be set to a long enough interval. Check with\n\
+admins if this is the case.\n\
 \n\
 Will report total size of push and write two files:\n\
 db.tables.push -> output for all tables from mypush\n\
 db.tables.pushSize -> size of push\n"
-
 
 if ($2 == "") then
   echo $warningMessage
@@ -42,13 +39,7 @@ else
 endif
 
 set trackName=`echo $2 | sed -e "s/Tables//"`
-# echo trackName = $trackName
 
-echo
-echo "Will have to re-type password after very large tables"
-echo "If you take too long to re-type your password, the table"
-echo "the script stalled on might not get pushed."
-echo
 rm -f $db.$trackName.push
 foreach table (`cat $tablelist`)
   echo pushing "$table"

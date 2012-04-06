@@ -1098,7 +1098,7 @@ BLASTZ_T=2
 BLASTZ_K=4500
 BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
 
-# TARGET: Mouse Mm9
+# TARGET: Mouse Mm10
 SEQ1_DIR=/scratch/data/mm10/mm10.2bit
 SEQ1_LEN=/scratch/data/mm10/chrom.sizes
 SEQ1_CHUNK=20000000
@@ -1346,6 +1346,12 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzPapHam1.2012-03-09 lastz.papHam1
 
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzPapHam1.2012-03-09
+    time doRecipBest.pl mm10 papHam1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    899m48.908s
+
     mkdir /hive/data/genomes/papHam1/bed/blastz.mm10.swap
     cd /hive/data/genomes/papHam1/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -1585,6 +1591,12 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzTarSyr1.2012-03-10 lastz.tarSyr1
 
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzTarSyr1.2012-03-10
+    time doRecipBest.pl mm10 tarSyr1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1176m19.336s
+
     mkdir /hive/data/genomes/tarSyr1/bed/blastz.mm10.swap
     cd /hive/data/genomes/tarSyr1/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -1716,6 +1728,12 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzMicMur1.2012-03-13 lastz.micMur1
 
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzMicMur1.2012-03-13
+    time doRecipBest.pl mm10 micMur1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    877m18.105s
+
     mkdir /hive/data/genomes/micMur1/bed/blastz.mm10.swap
     cd /hive/data/genomes/micMur1/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -1828,6 +1846,12 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
     ln -s lastzDipOrd1.2012-03-15 lastz.dipOrd1
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzDipOrd1.2012-03-15
+    time doRecipBest.pl mm10 dipOrd1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    914m20.405s
 
     mkdir /hive/data/genomes/dipOrd1/bed/blastz.mm10.swap
     cd /hive/data/genomes/dipOrd1/bed/blastz.mm10.swap
@@ -2053,6 +2077,12 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzVicPac1.2012-03-16 lastz.vicPac1
 
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzVicPac1.2012-03-16
+    time doRecipBest.pl mm10 vicPac1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    824m37.107s
+
     mkdir /hive/data/genomes/vicPac1/bed/blastz.mm10.swap
     cd /hive/data/genomes/vicPac1/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -2109,6 +2139,12 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzTurTru1.2012-03-16 lastz.turTru1
 
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzTurTru1.2012-03-16
+    time doRecipBest.pl mm10 turTru1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    733m37.272s
+
     mkdir /hive/data/genomes/turTru1/bed/blastz.mm10.swap
     cd /hive/data/genomes/turTru1/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -2164,6 +2200,12 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
     ln -s lastzTupBel1.2012-03-16 lastz.tupBel1
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzTupBel1.2012-03-16
+    time doRecipBest.pl mm10 tupBel1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1090m30.429s
 
     mkdir /hive/data/genomes/tupBel1/bed/blastz.mm10.swap
     cd /hive/data/genomes/tupBel1/bed/blastz.mm10.swap
@@ -2332,13 +2374,18 @@ TMPDIR=/scratch/tmp
 	-continue=cat -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > cat.log 2>&1 &
-XXX - running - Thu Mar 22 09:49:15 PDT 2012
-    #	real    1412m58.641s
+    #	Elapsed time: 65m26s
     cat fb.mm10.chainChoHof1Link.txt 
-    #	669778489 bases of 2652783500 (25.248%) in intersection
+    #	477994856 bases of 2652783500 (18.019%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
     ln -s lastzChoHof1.2012-03-19 lastz.choHof1
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzChoHof1.2012-03-19
+    time doRecipBest.pl mm10 choHof1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1171m56.481s
 
     mkdir /hive/data/genomes/choHof1/bed/blastz.mm10.swap
     cd /hive/data/genomes/choHof1/bed/blastz.mm10.swap
@@ -2347,9 +2394,9 @@ XXX - running - Thu Mar 22 09:49:15 PDT 2012
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    116m54.411s
+    #	real    1613m3.348s
     cat fb.choHof1.chainMm10Link.txt 
-    #	696025630 bases of 1852394361 (37.574%) in intersection
+    #	488047499 bases of 2060419685 (23.687%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/choHof1/bed
     ln -s blastz.mm10.swap lastz.mm10
@@ -2395,6 +2442,12 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
     ln -s lastzPteVam1.2012-03-19 lastz.pteVam1
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzPteVam1.2012-03-19
+    time doRecipBest.pl mm10 pteVam1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    743m57.901s
 
     mkdir /hive/data/genomes/pteVam1/bed/blastz.mm10.swap
     cd /hive/data/genomes/pteVam1/bed/blastz.mm10.swap
@@ -2507,6 +2560,12 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
     ln -s lastzFelCat4.2012-03-19 lastz.felCat4
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzFelCat4.2012-03-19
+    time doRecipBest.pl mm10 felCat4 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1135m12.207s
 
     mkdir /hive/data/genomes/felCat4/bed/blastz.mm10.swap
     cd /hive/data/genomes/felCat4/bed/blastz.mm10.swap
@@ -2678,6 +2737,12 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzDasNov2.2012-03-21 lastz.dasNov2
 
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzDasNov2.2012-03-21
+    time doRecipBest.pl mm10 dasNov2 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1163m1.023s
+
     mkdir /hive/data/genomes/dasNov2/bed/blastz.mm10.swap
     cd /hive/data/genomes/dasNov2/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -2846,6 +2911,12 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzOviAri1.2012-03-21 lastz.oviAri1
 
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzOviAri1.2012-03-21
+    time doRecipBest.pl mm10 oviAri1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1183m43.488s
+
     mkdir /hive/data/genomes/oviAri1/bed/blastz.mm10.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -2901,6 +2972,12 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
     ln -s lastzProCap1.2012-03-21 lastz.proCap1
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzProCap1.2012-03-21
+    time doRecipBest.pl mm10 proCap1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1083m57.139s
 
     mkdir /hive/data/genomes/proCap1/bed/blastz.mm10.swap
     cd /hive/data/genomes/proCap1/bed/blastz.mm10.swap
@@ -2958,6 +3035,12 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzOchPri2.2012-03-22 lastz.ochPri2
 
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzOchPri2.2012-03-22
+    time doRecipBest.pl mm10 ochPri2 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1036m29.080s
+
     mkdir /hive/data/genomes/ochPri2/bed/blastz.mm10.swap
     cd /hive/data/genomes/ochPri2/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -3013,6 +3096,12 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
     ln -s lastzEriEur1.2012-03-22 lastz.eriEur1
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzEriEur1.2012-03-22
+    time doRecipBest.pl mm10 eriEur1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1171m41.349s
 
     mkdir /hive/data/genomes/eriEur1/bed/blastz.mm10.swap
     cd /hive/data/genomes/eriEur1/bed/blastz.mm10.swap
@@ -3070,6 +3159,12 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm10/bed
     ln -s lastzEchTel1.2012-03-22 lastz.echTel1
 
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzEchTel1.2012-03-22
+    time doRecipBest.pl mm10 echTel1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1201m39.275s
+
     mkdir /hive/data/genomes/echTel1/bed/blastz.mm10.swap
     cd /hive/data/genomes/echTel1/bed/blastz.mm10.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -3077,10 +3172,9 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running - Mon Mar 26 09:03:38 PDT 2012
-    #	Elapsed time: 63m22s
+    #	real    269m52.619s
     cat fb.echTel1.chainMm10Link.txt 
-    #	756678903 bases of 2392715236 (31.624%) in intersectio
+    #	298082139 bases of 2111581369 (14.117%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/echTel1/bed
     ln -s blastz.mm10.swap lastz.mm10
@@ -3126,6 +3220,12 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
     ln -s lastzSorAra1.2012-03-22 lastz.sorAra1
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzSorAra1.2012-03-22
+    time doRecipBest.pl mm10 sorAra1 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1074m22.651s
 
     mkdir /hive/data/genomes/sorAra1/bed/blastz.mm10.swap
     cd /hive/data/genomes/sorAra1/bed/blastz.mm10.swap
@@ -3182,6 +3282,12 @@ TMPDIR=/scratch/tmp
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
     ln -s lastzMacEug2.2012-03-22 lastz.macEug2
+
+    # better to have reciprocal best for this one since it is low coverage:
+    cd /hive/data/genomes/mm10/bed/lastzMacEug2.2012-03-22
+    time doRecipBest.pl mm10 macEug2 -buildDir=`pwd` -workhorse=hgwdev \
+	> best.log 2>&1 &
+    #	real    1032m58.798s
 
     mkdir /hive/data/genomes/macEug2/bed/blastz.mm10.swap
     cd /hive/data/genomes/macEug2/bed/blastz.mm10.swap
@@ -3253,9 +3359,10 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm -chainMinScore=5000 -chainLinearGap=medium \
 	-noLoadChainSplit -syntenicNet -workhorse=hgwdev \
 	-smallClusterHub=encodek > cat.log 2>&1 &
-XXX - running - Fri Mar 23 15:44:56 PDT 2012
-    #	real    129m48.444s
+    #	real    285m28.458s
     cat fb.mm10.chainRn5Link.txt
+    #	1786721927 bases of 2652783500 (67.353%) in intersection
+    # FYI: rn4 was:
     #	1449612208 bases of 2652783500 (54.645%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
@@ -3269,11 +3376,1339 @@ XXX - running - Fri Mar 23 15:44:56 PDT 2012
 	-swap -bigClusterHub=swarm -chainMinScore=5000 -chainLinearGap=medium \
 	-noLoadChainSplit -syntenicNet -workhorse=hgwdev \
 	-smallClusterHub=encodek > swap.log 2>&1 &
-    #	real    71m10.645s
+    #	real    121m21.029s
     cat fb.rn5.chainMm10Link.txt
+    #	1808154679 bases of 2572853723 (70.278%) in intersection
+    # FYI, rn4 was:
     #	1449012636 bases of 2571531505 (56.348%) in intersection
+
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/rn5/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# LASTZ wallaby triMan1 (DONE - 2012-03-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10TriMan1
+    mkdir /hive/data/genomes/mm10/bed/lastzTriMan1.2012-03-29
+    cd /hive/data/genomes/mm10/bed/lastzTriMan1.2012-03-29
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    cat << '_EOF_' > DEF
+# manatee vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: manatee TriMan1
+SEQ2_DIR=/hive/data/genomes/triMan1/triMan1.2bit
+SEQ2_LEN=/hive/data/genomes/triMan1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/mm10/bed/lastzTriMan1.2012-03-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    1455m24.772s
+    cat fb.mm10.chainTriMan1Link.txt 
+    #	704207702 bases of 2652783500 (26.546%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzTriMan1.2012-03-29 lastz.triMan1
+
+    mkdir /hive/data/genomes/triMan1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/triMan1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzTriMan1.2012-03-29/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    62m33.530s
+    cat fb.triMan1.chainMm10Link.txt 
+    #	682557025 bases of 2769099677 (24.649%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/triMan1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz Opossum monDom5 (DONE - 2012-03-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10MonDom5
+    mkdir /hive/data/genomes/mm10/bed/lastzMonDom5.2012-03-29
+    cd /hive/data/genomes/mm10/bed/lastzMonDom5.2012-03-29
+
+    cat << '_EOF_' > DEF
+# Mouse vs. opossum
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom5
+SEQ2_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ2_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzMonDom5.2012-03-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    #	Can't do this when there are only the single small set of chroms
+     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    1792m40.071s
+
+    cat fb.mm10.chainMonDom5Link.txt
+    #	254245903 bases of 2652783500 (9.584%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzMonDom5.2012-03-29 lastz.monDom5
+
+    #	and for the swap
+    mkdir /hive/data/genomes/monDom5/bed/blastz.mm10.swap
+    cd /hive/data/genomes/monDom5/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzMonDom5.2012-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    73m49.230s
+    cat  fb.monDom5.chainMm10Link.txt
+    #	252291401 bases of 3501660299 (7.205%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/monDom5/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz Tasmanian Devil sarHar1 (DONE - 2012-03-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10SarHar1
+    mkdir /hive/data/genomes/mm10/bed/lastzSarHar1.2012-03-29
+    cd /hive/data/genomes/mm10/bed/lastzSarHar1.2012-03-29
+
+    cat << '_EOF_' > DEF
+# Mouse vs. tasmanian devil
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: tasmanian devil sarHar1
+SEQ2_DIR=/scratch/data/sarHar1/sarHar1.2bit
+SEQ2_LEN=/scratch/data/sarHar1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzSarHar1.2012-03-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    1208m55.866s
+
+    cat fb.mm10.chainSarHar1Link.txt
+    #	224935746 bases of 2652783500 (8.479%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzSarHar1.2012-03-29 lastz.sarHar1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/sarHar1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/sarHar1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzSarHar1.2012-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    45m53.015s
+    cat  fb.sarHar1.chainMm10Link.txt
+    #	231249436 bases of 2931539702 (7.888%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/sarHar1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz budgerigar melUnd1 (DONE - 2012-03-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10MelUnd1
+    mkdir /hive/data/genomes/mm10/bed/lastzMelUnd1.2012-03-29
+    cd /hive/data/genomes/mm10/bed/lastzMelUnd1.2012-03-29
+
+    cat << '_EOF_' > DEF
+# Mouse vs. budgerigar
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: budgerigar melUnd1
+SEQ2_DIR=/hive/data/genomes/melUnd1/melUnd1.2bit
+SEQ2_LEN=/hive/data/genomes/melUnd1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzMelUnd1.2012-03-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    883m58.198s
+
+    cat fb.mm10.chainMelUnd1Link.txt
+    #	95217653 bases of 2652783500 (3.589%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzMelUnd1.2012-03-29 lastz.melUnd1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/melUnd1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/melUnd1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzMelUnd1.2012-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    9m9.260s
+    cat  fb.melUnd1.chainMm10Link.txt
+    #	79867911 bases of 1086614815 (7.350%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/melUnd1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz platypus ornAna1 (DONE - 2012-03-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10OrnAna1
+    mkdir /hive/data/genomes/mm10/bed/lastzOrnAna1.2012-03-29
+    cd /hive/data/genomes/mm10/bed/lastzOrnAna1.2012-03-29
+
+    cat << '_EOF_' > DEF
+# Mouse vs. platypus
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: platypus ornAna1
+SEQ2_DIR=/scratch/data/ornAna1/ornAna1.2bit
+SEQ2_LEN=/scratch/data/ornAna1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=400
+
+BASE=/hive/data/genomes/mm10/bed/lastzOrnAna1.2012-03-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    1264m1.056s
+
+    cat fb.mm10.chainOrnAna1Link.txt
+    #	141873792 bases of 2652783500 (5.348%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzOrnAna1.2012-03-29 lastz.ornAna1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/ornAna1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/ornAna1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzOrnAna1.2012-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    49m45.308s
+    cat  fb.ornAna1.chainMm10Link.txt
+    #	135101083 bases of 1842236818 (7.334%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/ornAna1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz turtle chrPic1 (DONE - 2012-03-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10ChrPic1
+    mkdir /hive/data/genomes/mm10/bed/lastzChrPic1.2012-03-29
+    cd /hive/data/genomes/mm10/bed/lastzChrPic1.2012-03-29
+
+    cat << '_EOF_' > DEF
+# Mouse vs. turtle
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: turtle chrPic1
+SEQ2_DIR=/hive/data/genomes/chrPic1/chrPic1.2bit
+SEQ2_LEN=/hive/data/genomes/chrPic1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+
+BASE=/hive/data/genomes/mm10/bed/lastzChrPic1.2012-03-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    1243m2.518s
+    cat fb.mm10.chainChrPic1Link.txt
+    #	125499965 bases of 2652783500 (4.731%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzChrPic1.2012-03-29 lastz.chrPic1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/chrPic1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/chrPic1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzChrPic1.2012-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    19m26.835s
+    cat  fb.chrPic1.chainMm10Link.txt
+    #	118436838 bases of 2158289746 (5.488%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/chrPic1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz chicken galGal4 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10GalGal4
+    mkdir /hive/data/genomes/mm10/bed/lastzGalGal4.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzGalGal4.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. chicken
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: chicken galGal4
+SEQ2_DIR=/hive/data/genomes/galGal4/galGal4.2bit
+SEQ2_LEN=/hive/data/genomes/galGal4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/mm10/bed/lastzGalGal4.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    109m21.068s
+    #	broken swarm cluster, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    57m24.155s
+    cat fb.mm10.chainGalGal4Link.txt
+    #	97510773 bases of 2652783500 (3.676%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzGalGal4.2012-04-02 lastz.galGal4
+
+    #	and for the swap
+    mkdir /hive/data/genomes/galGal4/bed/blastz.mm10.swap
+    cd /hive/data/genomes/galGal4/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzGalGal4.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    95m50.996s
+    cat  fb.galGal4.chainMm10Link.txt
+    #	83660034 bases of 1032854810 (8.100%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/galGal4/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz zebra finch taeGut1 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10TaeGut1
+    mkdir /hive/data/genomes/mm10/bed/lastzTaeGut1.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzTaeGut1.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. zebra finch
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: zebra finch taeGut1
+SEQ2_DIR=/scratch/data/taeGut1/taeGut1.2bit
+SEQ2_LEN=/scratch/data/taeGut1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=5
+
+BASE=/hive/data/genomes/mm10/bed/lastzTaeGut1.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    106m11.612s
+    # broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    29m11.090s
+    cat fb.mm10.chainTaeGut1Link.txt
+    #	95469341 bases of 2652783500 (3.599%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzTaeGut1.2012-04-02 lastz.taeGut1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/taeGut1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/taeGut1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzTaeGut1.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    37m17.483s
+    cat  fb.taeGut1.chainMm10Link.txt
+    #	89312133 bases of 1222864691 (7.304%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/taeGut1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz lizard anoCar2 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10AnoCar2
+    mkdir /hive/data/genomes/mm10/bed/lastzAnoCar2.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzAnoCar2.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. lizard
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: lizard anoCar2
+SEQ2_DIR=/scratch/data/anoCar2/anoCar2.2bit
+SEQ2_LEN=/scratch/data/anoCar2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=15
+
+BASE=/hive/data/genomes/mm10/bed/lastzAnoCar2.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    103m17.133s
+    # broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    43m2.183s
+    cat fb.mm10.chainAnoCar2Link.txt
+    #	88356459 bases of 2652783500 (3.331%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzAnoCar2.2012-04-02 lastz.anoCar2
+
+    #	and for the swap
+    mkdir /hive/data/genomes/anoCar2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/anoCar2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzAnoCar2.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    97m50.599s
+    cat  fb.anoCar2.chainMm10Link.txt
+    #	84865552 bases of 1701353770 (4.988%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/anoCar2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz turkey melGal1 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10MelGal1
+    mkdir /hive/data/genomes/mm10/bed/lastzMelGal1.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzMelGal1.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. turkey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: turkey melGal1
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=15
+
+BASE=/hive/data/genomes/mm10/bed/lastzMelGal1.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    101m17.902s
+    # broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    20m47.771s
+    cat fb.mm10.chainMelGal1Link.txt
+    #	93132953 bases of 2652783500 (3.511%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzMelGal1.2012-04-02 lastz.melGal1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzMelGal1.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    88m39.591s
+    cat  fb.melGal1.chainMm10Link.txt
+    #	76848161 bases of 935922386 (8.211%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/melGal1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz frog xenTro3 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10XenTro3
+    mkdir /hive/data/genomes/mm10/bed/lastzXenTro3.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzXenTro3.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: frog xenTro3
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/mm10/bed/lastzXenTro3.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    99m10.611s
+    # broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    37m52.678s
+    cat fb.mm10.chainXenTro3Link.txt
+    #	82900338 bases of 2652783500 (3.125%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzXenTro3.2012-04-02 lastz.xenTro3
+
+    #	and for the swap
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenTro3.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    53m19.485s
+    cat  fb.xenTro3.chainMm10Link.txt
+    #	90345130 bases of 1358334882 (6.651%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz coelacanth latCha1 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10LatCha1
+    mkdir /hive/data/genomes/mm10/bed/lastzLatCha1.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzLatCha1.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. coelacanth
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: coelacanth latCha1
+SEQ2_DIR=/hive/data/genomes/latCha1/latCha1.2bit
+SEQ2_LEN=/hive/data/genomes/latCha1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzLatCha1.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    95m34.477s
+    #	broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    214m7.324s
+    cat fb.mm10.chainLatCha1Link.txt
+    #	72036116 bases of 2652783500 (2.715%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzLatCha1.2012-04-02 lastz.latCha1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/latCha1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/latCha1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzLatCha1.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    14m44.600s
+    cat  fb.latCha1.chainMm10Link.txt
+    #	73798131 bases of 2183592768 (3.380%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/latCha1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz atlantic cod gadMor1 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10GadMor1
+    mkdir /hive/data/genomes/mm10/bed/lastzGadMor1.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzGadMor1.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. atlantic cod
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: atlantic cod gadMor1
+SEQ2_DIR=/hive/data/genomes/gadMor1/gadMor1.2bit
+SEQ2_LEN=/hive/data/genomes/gadMor1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=700
+
+BASE=/hive/data/genomes/mm10/bed/lastzGadMor1.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    91m23.642s
+    # broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    39m41.194s
+    cat fb.mm10.chainGadMor1Link.txt
+    #	45795692 bases of 2652783500 (1.726%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzGadMor1.2012-04-02 lastz.gadMor1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/gadMor1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/gadMor1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzGadMor1.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    62m58.963s
+    cat  fb.gadMor1.chainMm10Link.txt
+    #	41406507 bases of 608038597 (6.810%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/gadMor1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz nile tilapia oreNil1 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10OreNil1
+    mkdir /hive/data/genomes/mm10/bed/lastzOreNil1.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzOreNil1.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. nile tilapia
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: nile tilapia oreNil1
+SEQ2_DIR=/scratch/data/oreNil1/oreNil1.2bit
+SEQ2_LEN=/scratch/data/oreNil1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=10
+
+BASE=/hive/data/genomes/mm10/bed/lastzOreNil1.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    89m6.727s
+    #	broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    24m3.960s
+    cat fb.mm10.chainOreNil1Link.txt
+    #	51915568 bases of 2652783500 (1.957%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzOreNil1.2012-04-02 lastz.oreNil1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/oreNil1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/oreNil1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzOreNil1.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    90m55.298s
+    cat  fb.oreNil1.chainMm10Link.txt
+    #	49709461 bases of 816084674 (6.091%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/oreNil1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz stickleback gasAcu1 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10GasAcu1
+    mkdir /hive/data/genomes/mm10/bed/lastzGasAcu1.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzGasAcu1.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. stickleback
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: stickleback gasAcu1
+SEQ2_DIR=/scratch/data/gasAcu1/gasAcu1.2bit
+SEQ2_LEN=/scratch/data/gasAcu1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=1
+
+BASE=/hive/data/genomes/mm10/bed/lastzGasAcu1.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    87m5.963s
+    # broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    9m49.199s
+    cat fb.mm10.chainGasAcu1Link.txt
+    #	53469711 bases of 2652783500 (2.016%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzGasAcu1.2012-04-02 lastz.gasAcu1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/gasAcu1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/gasAcu1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzGasAcu1.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    12m58.072s
+    cat  fb.gasAcu1.chainMm10Link.txt
+    #	48802831 bases of 446627861 (10.927%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/gasAcu1/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz fugu fr3 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10Fr3
+    mkdir /hive/data/genomes/mm10/bed/lastzFr3.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzFr3.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. fugu
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: fugu fr3
+SEQ2_DIR=/scratch/data/fr3/fr3.2bit
+SEQ2_LEN=/scratch/data/fr3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/mm10/bed/lastzFr3.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    84m37.070s
+    # broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    171m16.627s
+    cat fb.mm10.chainFr3Link.txt
+    #	47460021 bases of 2652783500 (1.789%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzFr3.2012-04-02 lastz.fr3
+
+    #	and for the swap
+    mkdir /hive/data/genomes/fr3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/fr3/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzFr3.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    7m13.151s
+    cat  fb.fr3.chainMm10Link.txt
+    #	42586058 bases of 350961831 (12.134%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/fr3/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz tetraodon tetNig2 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10TetNig2
+    mkdir /hive/data/genomes/mm10/bed/lastzTetNig2.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzTetNig2.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. tetraodon
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: tetraodon tetNig2
+SEQ2_DIR=/scratch/data/tetNig2/tetNig2.2bit
+SEQ2_LEN=/scratch/data/tetNig2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/mm10/bed/lastzTetNig2.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    13m21.638s
+    cat fb.mm10.chainTetNig2Link.txt
+    #	46035322 bases of 2652783500 (1.735%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzTetNig2.2012-04-02 lastz.tetNig2
+
+    #	and for the swap
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzTetNig2.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    7m24.115s
+    cat  fb.tetNig2.chainMm10Link.txt
+    #	41242926 bases of 302314788 (13.642%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/tetNig2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz zebrafish danRer7 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10DanRer7
+    mkdir /hive/data/genomes/mm10/bed/lastzDanRer7.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzDanRer7.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. zebrafish
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: zebrafish danRer7
+SEQ2_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ2_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzDanRer7.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    80m32.118s
+    # broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    40m27.762s
+    cat fb.mm10.chainDanRer7Link.txt
+    #	69028912 bases of 2652783500 (2.602%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzDanRer7.2012-04-02 lastz.danRer7
+
+    #	and for the swap
+    mkdir /hive/data/genomes/danRer7/bed/blastz.mm10.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzDanRer7.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    109m49.939s
+    cat  fb.danRer7.chainMm10Link.txt
+    #	72001768 bases of 1409770109 (5.107%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/danRer7/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz medaka oryLat2 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10OryLat2
+    mkdir /hive/data/genomes/mm10/bed/lastzOryLat2.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzOryLat2.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. medaka
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: medaka oryLat2
+SEQ2_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ2_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzOryLat2.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    78m53.408s
+    #	broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    #	real    113m29.462s
+    cat fb.mm10.chainOryLat2Link.txt
+    #	51344841 bases of 2652783500 (1.936%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzOryLat2.2012-04-02 lastz.oryLat2
+
+    #	and for the swap
+    mkdir /hive/data/genomes/oryLat2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/oryLat2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzOryLat2.2012-04-02/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    7m52.846s
+    cat  fb.oryLat2.chainMm10Link.txt
+    #	45954178 bases of 700386597 (6.561%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/oryLat2/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# lastz lamprey petMar1 (DONE - 2012-04-02 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10PetMar1
+    mkdir /hive/data/genomes/mm10/bed/lastzPetMar1.2012-04-02
+    cd /hive/data/genomes/mm10/bed/lastzPetMar1.2012-04-02
+
+    cat << '_EOF_' > DEF
+# Mouse vs. lamprey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: lamprey petMar1
+SEQ2_DIR=/scratch/data/petMar1/petMar1.2bit
+SEQ2_LEN=/scratch/data/petMar1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+
+BASE=/hive/data/genomes/mm10/bed/lastzPetMar1.2012-04-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    77m3.923s
+    # broken swarm, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -qRepeats=windowmaskerSdust -continue=cat `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > cat.log 2>&1 &
+    # missing qRepeats specification
+    rm axtChain/mm10.petMar1.net
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -qRepeats=windowmaskerSdust -continue=load `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > load.log 2>&1 &
+    #	real    6m31.527s
+    cat fb.mm10.chainPetMar1Link.txt
+    #	29205053 bases of 2652783500 (1.101%) in intersection
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/mm10/bed
+    ln -s lastzPetMar1.2012-04-02 lastz.petMar1
+
+    #	and for the swap
+    mkdir /hive/data/genomes/petMar1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/petMar1/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzPetMar1.2012-04-02/DEF \
+        -qRepeats=windowmaskerSdust -workhorse=hgwdev \
+	-smallClusterHub=encodek -bigClusterHub=swarm \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    17m40.196s
+    cat  fb.petMar1.chainMm10Link.txt
+    #   26274715 bases of 831696438 (3.159%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/petMar1/bed
     ln -s blastz.mm10.swap lastz.mm10
 
 #########################################################################

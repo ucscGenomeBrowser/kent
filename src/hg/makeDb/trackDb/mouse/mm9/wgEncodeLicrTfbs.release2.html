@@ -2,35 +2,35 @@
 <H2> Description </H2>
 
 <P>
-This track shows a comprehensive survey of cis-regulatory elements
+This track shows a comprehensive survey of <i>cis</i>-regulatory elements
 in the mouse genome by using ChIP-seq &#40;Robertson <EM> et al.</EM>, 2007&#41; to identify
 transcription factor binding sites and chromatin modification
-profiles in various mouse &#40;C57Bl/6&#41; tissues, primary cells and cell lines. 
+profiles in various mouse &#40;C57Bl/6&#41; tissues, primary cells, and cell lines. 
 </P> 
 <P>
-In specific, the Ren lab examined RNA polymerase II &#40;PolII&#41;, 
+The Ren lab examined RNA polymerase II &#40;PolII&#41;, 
 co-activator protein p300, the insulator protein CTCF, and 
 the following chromatin modification marks: H3K4me3 and H3K4me1, 
 H3K27ac, H3K36me3, H3K9me3, and H3K27me3 due to their 
 demonstrated utilities in identifying promoters, enhancers, 
 insulator elements, actively transcribed gene bodies, and 
-silent chromatin regions &#40;Barski <EM>et al.</EM>, 2007; Bernstein <EM>et al</EM>, 2006; Blow <EM>et al.</EM>, 2010; 
-Creyghton <EM>et al.</EM>, 2010; Francis <EM>et al</EM>, 2004; Hawkins <EM>et al.</EM>, 2011; Heintzman <EM>et al.</EM>, 2009; Kim <EM>et al.</EM>, 2007; Kim <EM> et al.</EM>,2005a; Krogan <EM>et al</EM>, 2003; Li <EM>et al</EM>, 2002; Peters <EM> et al.</EM>, 2001; Rada-Iglesias <EM>et al.</EM>, 2011; Schotta <EM>et al</EM>, 2001; Visel <EM>et al.</EM>, 2009&#41;.
+silent chromatin regions &#40;Barski <EM>et al.</EM>, 2007; Bernstein <EM>et al.</EM>, 2006; Blow <EM>et al.</EM>, 2010; 
+Creyghton <EM>et al.</EM>, 2010; Francis <EM>et al.</EM>, 2004; Hawkins <EM>et al.</EM>, 2011; Heintzman <EM>et al.</EM>, 2009; Kim <EM>et al.</EM>, 2007; Kim <EM> et al.</EM>, 2005; Krogan <EM>et al.</EM>, 2003; Li <EM>et al.</EM>, 2002; Peters <EM> et al.</EM>, 2001; Rada-Iglesias <EM>et al.</EM>, 2011; Schotta <EM>et al.</EM>, 2002; Visel <EM>et al.</EM>, 2009&#41;.
 Enrichment of PolII signals is a strong indicator of 
-active promoter, the presence of p300 outside of
+an active promoter and the presence of p300 outside of
 promoter regions has been used as a mark for enhancers.  
 CTCF binding sites are considered as a mark for 
-potential indulator elements.  H3K4me3 is an active mark 
-for promoters, and H3K27ac is an active mark for both promoters 
+potential insulator elements.  H3K4me3 is an active mark 
+for promoters and H3K27ac is an active mark for both promoters 
 and enhancers.  In the absence of H3K4me3, H3K4me1 serves as an
 active mark for enhancers.  H3K36me3 is normally found in actively 
 transcribed gene bodies whereas both H3K9me3 and H3K27me3 are common
 repressive marks for transcriptionally silent chromatin regions.
 For each transcription factor or chromatin mark in each tissue, 
 ChIP-seq was carried out with at least two biological 
-replicates. Each experiment produced 20-30 million monoclonal, 
-uniquely mapped tags.
+replicates. Each experiment produced 20-30 million uniquely-mapped monoclonal tags.
 </P>
+
 <H2> Display Conventions and Configuration </H2>
 <P>
 This track is a multi-view composite track that contains multiple data types
@@ -41,8 +41,8 @@ This track contains the following views:
 <DL>
 <DT><I>Peaks</I></DT><DD> Regions of signal enrichment based on processed data
 (normalized data from pooled replicates). Intensity is represented in
-grayscale,  darker shading shows higher intensity (a solid vertical line
-	in the peak region represents the the point with the highest signal).
+grayscale; darker shading shows higher intensity (a solid vertical line
+	in the peak region represents the point with the highest signal).
 </DD>
 <DT><I>Signal</I></DT><DD>Density graph (wiggle) of signal enrichment based on
 processed data.</DD>
@@ -62,18 +62,16 @@ Cells were grown according to the approved
 
 <P><DT><B><I>Enrichment and Library Preparation</I></B></DT>
 
-Chromatin immunoprecipitation was performed according to 
-<A HREF="http://bioinformatics-renlab.ucsd.edu/RenLabChipProtocolV1.pdf" 
+Chromatin immunoprecipitation was performed according to the <A HREF="http://bioinformatics-renlab.ucsd.edu/RenLabChipProtocolV1.pdf" 
 TARGET=_BLANK>Ren Lab ChIP Protocol</A>.
 </P>
 <P>
-Library construction was performed according to 
-<A HREF="http://bioinformatics-renlab.ucsd.edu/RenLabLibraryProtocolV1.pdf"
+Library construction was performed according to the <A HREF="http://bioinformatics-renlab.ucsd.edu/RenLabLibraryProtocolV1.pdf"
 TARGET=_BLANK>Ren Lab Library Protocol</A>.
 </P>
 
 <P><DT><B><I>Sequencing and Analysis</I></B></DT>
-Samples were sequenced on Illumina Genome Analyzer II,
+Samples were sequenced on Illumina Genome Analyzer II
 Genome Analyzer IIx and HiSeq 2000 platforms
 for 36 cycles.  Image analysis, base calling and 
 alignment to the mouse genome version NCBI37/mm9 were performed 
@@ -91,15 +89,17 @@ created using custom perl scripts.
 <h2>Release Notes</h2>
 
 <p>
-This is Release 2 (Feb 2012). It contains a total of 60 ChIP-Seq experiments on transcription factor binding with the addition of 28 new experiments.
+This is Release 2 (Mar 2012). It contains a total of 60 Chip-seq experiments on transcription factor binding with the addition of 28 new experiments.
+<p>
 </p>
-
+An error surrounding the meta-data designation of replicates of the fastq and alignment files of Kidney PolII datasets has been fixed.
+</p>
 
 <H2> Credits </H2>
 
 <P>
 These data were generated and analyzed in
-<A HREF="http://licr-renlab.ucsd.edu/" TARGET=_BLANK>Bing Ren&#39;s laboratory</A>
+<A HREF="http://bioinformatics-renlab.ucsd.edu/rentrac" TARGET=_BLANK>Bing Ren&#39;s laboratory</A>
 at the Ludwig Institute for Cancer Research.
 </P>
 <P>
@@ -110,7 +110,6 @@ Contact: <A HREF="mailto:&#121;&#55;&#115;h&#101;n&#64;&#117;&#99;&#115;&#100;.
 
 
 <H2> References </H2>
-
 <p>
 Barski A, Cuddapah S, Cui K, Roh TY, Schones DE, Wang Z, Wei G, Chepelev I, Zhao K.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/17512414"
@@ -230,6 +229,7 @@ rel="nofollow" target="_blank">
 ChIP-seq accurately predicts tissue-specific activity of enhancers</a>.
 <em>Nature</em>. 2009 Feb 12;457(7231):854-8.
 </p>
+
 
 <H2> Data Release Policy </H2>
 

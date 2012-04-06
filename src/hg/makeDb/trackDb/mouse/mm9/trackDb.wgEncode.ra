@@ -16,17 +16,18 @@ include wgEncodeUwDnase.release2.ra alpha
 # PSU TFBS (wrangler: Venkat)
 include wgEncodePsuTfbs.ra beta,public
 include wgEncodePsuTfbs.patch.ra alpha
+#include wgEncodePsuTfbs.release2.ra alpha
 
 # PSU Histone (wrangler: Venkat)
 include wgEncodePsuHistone.ra alpha,beta
 
 # LICR Histone (wrangler: Fang)
-include wgEncodeLicrHistone.ra public
-include wgEncodeLicrHistone.release2.ra alpha,beta
+include wgEncodeLicrHistone.release2.ra beta,public
+include wgEncodeLicrHistone.release3.ra alpha
 
 # LICR TFBS (wrangler: Fang)
-include wgEncodeLicrTfbs.ra beta,public
-include wgEncodeLicrTfbs.release2.ra alpha
+include wgEncodeLicrTfbs.ra public
+include wgEncodeLicrTfbs.release2.ra alpha,beta
 
 # Stan/Yale RNA-Seq (wrangler: Venkat)
 include wgEncodeSydhRnaSeq.ra alpha
@@ -51,5 +52,12 @@ include wgEncodeUwDgf.ra alpha
 # CSHL Long RNA-Seq (wrangler: Venkat)
 include wgEncodeCshlLongRnaSeq.ra
 
-# Caltech RNA-Seq (wrangler: Venkat)
-include wgEncodeCaltechRnaSeq.ra alpha
+# Caltech RNA-Seq (wrangler: Ruihua)
+#include wgEncodeCaltechRnaSeq.ra alpha
+include wgEncodeCaltechRnaSeq.release1.ra alpha
+
+# FSU Repli-Seq (wrangler: Venkat)
+include wgEncodeFsuRepliSeq.ra
+
+# PSU RNA-Seq (wrangler: Venkat)
+include wgEncodePsuRnaSeq.ra
