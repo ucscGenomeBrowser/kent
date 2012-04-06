@@ -650,6 +650,13 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->freeItems = freeSimpleBed;
 }
 
+void bed9Methods(struct track *tg)
+/* Fill in methods for bed9 tracks. */
+{
+linkedFeaturesMethods(tg);
+tg->loadItems = loadBed9;
+}
+
 void addSimpleFeatures(struct simpleFeature **pSfList, int start, int end, int qStart, boolean  everyBase)
 /* Add simple features from start to end to the list.
  * qStart is the offset in the query.

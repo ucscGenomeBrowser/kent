@@ -679,6 +679,7 @@ dateUnrestricted 2012-11-27
 fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Corestsc30189IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum f36552af2f3326a09b63b8b02c391c90,5203c173453cd660dee3982bdf945944
 project wgEncode
 replicate 1
 setType exp
@@ -703,6 +704,7 @@ dateUnrestricted 2012-11-27
 fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Corestsc30189IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 43ff0358c85450383cd2938ffa1bb543,c2f79ad16baf408f5115f1a35fbed2b2
 project wgEncode
 replicate 2
 setType exp
@@ -728,6 +730,7 @@ fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum f77d02c1aab88e3494ca7c27ecd5ac5b
 project wgEncode
 setType exp
 sex F
@@ -752,6 +755,7 @@ dateUnrestricted 2012-11-27
 fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 0656cb0498c097d06b97e2837c930287
 project wgEncode
 replicate 1
 setType exp
@@ -776,6 +780,7 @@ dateUnrestricted 2012-11-27
 fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum abba383f98dd951bbd346ecd47563292
 project wgEncode
 replicate 2
 setType exp
@@ -801,6 +806,7 @@ fileName wgEncodeSydhTfbsCh12Corestsc30189IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 36bc6d8834eed47cb42f06cc3cfa893f
 project wgEncode
 setType exp
 sex F
@@ -2957,6 +2963,7 @@ dateUnrestricted 2012-11-28
 fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Sin3anb6001263IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 79f5314e39afc0cd7c23e7a644b36def,7ea8975e7a2db33b8f3fe732af467121
 project wgEncode
 replicate 1
 setType exp
@@ -2981,6 +2988,7 @@ dateUnrestricted 2012-11-28
 fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Sin3anb6001263IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum fd7e3877b15456746bd310f5aa19cba6,b5b1b301555d7fd1049bf203c56f5896
 project wgEncode
 replicate 2
 setType exp
@@ -3006,6 +3014,7 @@ fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum dcd95e0d63fa0a5677ef0f85f53ff257
 project wgEncode
 setType exp
 sex F
@@ -3030,6 +3039,7 @@ dateUnrestricted 2012-11-28
 fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 27d6ad9cd28dc912d22074d3e222c0b6
 project wgEncode
 replicate 1
 setType exp
@@ -3054,6 +3064,7 @@ dateUnrestricted 2012-11-28
 fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum af1f762e752ec68036f9c394fa1bbc57
 project wgEncode
 replicate 2
 setType exp
@@ -3079,6 +3090,7 @@ fileName wgEncodeSydhTfbsCh12Sin3anb6001263IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 4d9b06e3e863a6aedc30c655b729a098
 project wgEncode
 setType exp
 sex F
@@ -3434,6 +3446,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsCh12Ubfsc13125IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Ubfsc13125IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 34a5709b61b6d1eb132b308384dd3552,012e79b4d8575f1b8685724983e706fb
 project wgEncode
 replicate 1
 setType exp
@@ -3458,6 +3471,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsCh12Ubfsc13125IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Ubfsc13125IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 4f83ddb298ddf2c3841c3710bee5b473,171cf3f0997daf9c2245d2b494ae0707
 project wgEncode
 replicate 2
 setType exp
@@ -3483,6 +3497,7 @@ fileName wgEncodeSydhTfbsCh12Ubfsc13125IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 93db7637aa311475dee970288f948160
 project wgEncode
 setType exp
 sex F
@@ -3507,6 +3522,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsCh12Ubfsc13125IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 2c52f13298e7116046e48e1b1e181f59
 project wgEncode
 replicate 1
 setType exp
@@ -3531,6 +3547,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsCh12Ubfsc13125IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 6896a2403bdc5784458192ce34278e26
 project wgEncode
 replicate 2
 setType exp
@@ -3556,6 +3573,7 @@ fileName wgEncodeSydhTfbsCh12Ubfsc13125IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 8e6885b30c5a890db8f800ebbaed353f
 project wgEncode
 setType exp
 sex F
@@ -3744,6 +3762,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsCh12Zkscan1hpa006672IggrabAlnRep1.bam,wgEncodeSydhTfbsCh12Zkscan1hpa006672IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum d47a3f3c7331bad6f43f86123c740242,fa01338f574df517a21033a2368083ba
 project wgEncode
 replicate 1
 setType exp
@@ -3768,6 +3787,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsCh12Zkscan1hpa006672IggrabAlnRep2.bam,wgEncodeSydhTfbsCh12Zkscan1hpa006672IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum d24d390eedbb2d2cbf44bd1fd3952f8a,c029acab80515b80fcaebf10c62aad3c
 project wgEncode
 replicate 2
 setType exp
@@ -3793,6 +3813,7 @@ fileName wgEncodeSydhTfbsCh12Zkscan1hpa006672IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 9927430ebe79693f704c28f129a60df7
 project wgEncode
 setType exp
 sex F
@@ -3817,6 +3838,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsCh12Zkscan1hpa006672IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum b94a79217333a80634c6c104fd772eac
 project wgEncode
 replicate 1
 setType exp
@@ -3841,6 +3863,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsCh12Zkscan1hpa006672IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 5c712a5128b7e2247335636158458245
 project wgEncode
 replicate 2
 setType exp
@@ -3866,6 +3889,7 @@ fileName wgEncodeSydhTfbsCh12Zkscan1hpa006672IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum a3a1244ff11200bf9310b23e5106068d
 project wgEncode
 setType exp
 sex F
@@ -3890,6 +3914,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsEse14InputStdAlnRep1.bam,wgEncodeSydhTfbsEse14InputStdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 9ed316c3288be7a3b74ece734db5e152,998ad6b013265e79743734c8e9d4da8e
 project wgEncode
 replicate 1
 setType input
@@ -3914,6 +3939,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsEse14InputStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 6c738687ff52d9070a00cacd72bfbbc6
 project wgEncode
 replicate 1
 setType input
@@ -3939,6 +3965,7 @@ fileName wgEncodeSydhTfbsEse14InputStdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 0c788c4c1a3bdfe50e1f01084287eb6b
 project wgEncode
 setType input
 sex M
@@ -3963,6 +3990,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsEse14MafkStdAlnRep1.bam,wgEncodeSydhTfbsEse14MafkStdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 9dd427c79e49ea88d6e5587dac216490,6eb87a05556720c1ebde379cc88d93af
 project wgEncode
 replicate 1
 setType exp
@@ -3987,6 +4015,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsEse14MafkStdAlnRep2.bam,wgEncodeSydhTfbsEse14MafkStdAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 00d76b8a4e0c1780ad8a6b633565b4a8,8689386b226ee4928f7815ff0954469d
 project wgEncode
 replicate 2
 setType exp
@@ -4012,6 +4041,7 @@ fileName wgEncodeSydhTfbsEse14MafkStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum b4050e7fe9959b75ca83998b150a2b7b
 project wgEncode
 setType exp
 sex M
@@ -4036,6 +4066,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsEse14MafkStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 3b5e2fbb01bf466ee79976866efe888c
 project wgEncode
 replicate 1
 setType exp
@@ -4060,6 +4091,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsEse14MafkStdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 32557a49b8916778765b35596f09f20d
 project wgEncode
 replicate 2
 setType exp
@@ -4085,6 +4117,7 @@ fileName wgEncodeSydhTfbsEse14MafkStdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 6b8a766ff87023722733c9dbeb7b1464
 project wgEncode
 setType exp
 sex M
@@ -5573,6 +5606,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelEts1IggrabAlnRep1.bam,wgEncodeSydhTfbsMelEts1IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 6ccc7e6106f11b29bcb7c1f393af63f5,9338ee0ad4ab76d52307ef10145e88c2
 project wgEncode
 replicate 1
 setType exp
@@ -5597,6 +5631,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelEts1IggrabAlnRep2.bam,wgEncodeSydhTfbsMelEts1IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 76786356b9fc1846478ddba38c6b4bb6,bc42827ebedc9486a846babe3d9a9225
 project wgEncode
 replicate 2
 setType exp
@@ -5622,6 +5657,7 @@ fileName wgEncodeSydhTfbsMelEts1IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum fd99789777a4f4a5ff8cff48b95c2d39
 project wgEncode
 setType exp
 sex M
@@ -5646,6 +5682,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelEts1IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum fb957c52043403d1f66ef6a88b6900ab
 project wgEncode
 replicate 1
 setType exp
@@ -5670,6 +5707,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelEts1IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum e887a6105a70c75158389797c9a16dc3
 project wgEncode
 replicate 2
 setType exp
@@ -5695,6 +5733,7 @@ fileName wgEncodeSydhTfbsMelEts1IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 532b987a3012e39597b84360c2de4bf7
 project wgEncode
 setType exp
 sex M
@@ -5719,6 +5758,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelGata1Dm2p5dStdAlnRep1.bam,wgEncodeSydhTfbsMelGata1Dm2p5dStdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 2a2c5b29cf7cabbb249f43dcc2a9166e,7cabf68ea72e63cdc7a9e59fcddb0750
 project wgEncode
 replicate 1
 setType exp
@@ -5743,6 +5783,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelGata1Dm2p5dStdAlnRep2.bam,wgEncodeSydhTfbsMelGata1Dm2p5dStdAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum ab05e34ae1cad5f08fc99b14b124f135,e56f8fbefc37311f048f5e8ffd23fcb4
 project wgEncode
 replicate 2
 setType exp
@@ -5768,6 +5809,7 @@ fileName wgEncodeSydhTfbsMelGata1Dm2p5dStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 41fbb59831f62063fc9bd2710d2f6122
 project wgEncode
 setType exp
 sex M
@@ -5792,6 +5834,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelGata1Dm2p5dStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 7b64e3cf14a05281978ca1a808e570e5
 project wgEncode
 replicate 1
 setType exp
@@ -5816,6 +5859,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelGata1Dm2p5dStdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 53a59fcacb45db29d7fde8488323c87b
 project wgEncode
 replicate 2
 setType exp
@@ -5841,6 +5885,7 @@ fileName wgEncodeSydhTfbsMelGata1Dm2p5dStdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum bb97c894017dcbeb44dbb8c59534548d
 project wgEncode
 setType exp
 sex M
@@ -6216,6 +6261,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelInputDm2p5dStdAlnRep1V2.bam,wgEncodeSydhTfbsMelInputDm2p5dStdAlnRep1V2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 5ee877112fa0ddf37a5d788bc2e2ff3c,765c2329f33fd7f3cca35bd7f834525c
 project wgEncode
 replicate 1
 setType input
@@ -6268,6 +6314,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelInputDm2p5dStdRawDataRep1V2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 236e791f0780cf765aec1d7944fd3da9
 project wgEncode
 replicate 1
 setType input
@@ -6322,6 +6369,7 @@ fileName wgEncodeSydhTfbsMelInputDm2p5dStdSigV2.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum d99a34468ea3a93f6e4ae8815c957214
 project wgEncode
 setType input
 sex M
@@ -6918,6 +6966,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelMafkDm2p5dStdAlnRep1.bam,wgEncodeSydhTfbsMelMafkDm2p5dStdAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum f038cb06024c1c7a32af8919677bab1c,92958e0d8137459217491aa91e229d27
 project wgEncode
 replicate 1
 setType exp
@@ -6942,6 +6991,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelMafkDm2p5dStdAlnRep2.bam,wgEncodeSydhTfbsMelMafkDm2p5dStdAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum 4ac23b21f4ba6753ae00bd88bd81515c,04fe23436d450d431737e0afcdcd1982
 project wgEncode
 replicate 2
 setType exp
@@ -6967,6 +7017,7 @@ fileName wgEncodeSydhTfbsMelMafkDm2p5dStdPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum c27af31095366fda83e818f7b2d82f20
 project wgEncode
 setType exp
 sex M
@@ -6991,6 +7042,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelMafkDm2p5dStdRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 4e9c33a2b992ce6b9e9fc19f3374c45a
 project wgEncode
 replicate 1
 setType exp
@@ -7015,6 +7067,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelMafkDm2p5dStdRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 63638e6b2d00e88ded941b3ee83424d7
 project wgEncode
 replicate 2
 setType exp
@@ -7040,6 +7093,7 @@ fileName wgEncodeSydhTfbsMelMafkDm2p5dStdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 940f6159a01ba428063e0b68286a9af2
 project wgEncode
 setType exp
 sex M
@@ -9237,6 +9291,7 @@ dateUnrestricted 2012-11-28
 fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabAlnRep1.bam,wgEncodeSydhTfbsMelSin3anb6001263IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 41b606d68db24ecf16b04cb798c77ef2,ece26bcfb75fa7b74b218d5a9f2fa30e
 project wgEncode
 replicate 1
 setType exp
@@ -9261,6 +9316,7 @@ dateUnrestricted 2012-11-28
 fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabAlnRep2.bam,wgEncodeSydhTfbsMelSin3anb6001263IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum fb171ad70ff61306716fc4f27fd29c09,92f77956e2ca591be4eba0ef7b962648
 project wgEncode
 replicate 2
 setType exp
@@ -9286,6 +9342,7 @@ fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum eeba1f068aa6d0596cdb59e55320fbdc
 project wgEncode
 setType exp
 sex M
@@ -9310,6 +9367,7 @@ dateUnrestricted 2012-11-28
 fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 7e09ad936df1f0c1495375229aa9910c
 project wgEncode
 replicate 1
 setType exp
@@ -9334,6 +9392,7 @@ dateUnrestricted 2012-11-28
 fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 048ba38373f41ffe6339ba5a49b1ace0
 project wgEncode
 replicate 2
 setType exp
@@ -9359,6 +9418,7 @@ fileName wgEncodeSydhTfbsMelSin3anb6001263IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 759dfb609b904d513b653d306c8d84b8
 project wgEncode
 setType exp
 sex M
@@ -10086,6 +10146,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelZkscan1hpa006672IggrabAlnRep1.bam,wgEncodeSydhTfbsMelZkscan1hpa006672IggrabAlnRep1.bam.bai
 grant Snyder
 lab Stanford
+md5sum 591a19e266d50e5f4098b104ccd630d7,1357ab93e71733e63e83e8a6ed4e7502
 project wgEncode
 replicate 1
 setType exp
@@ -10110,6 +10171,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelZkscan1hpa006672IggrabAlnRep2.bam,wgEncodeSydhTfbsMelZkscan1hpa006672IggrabAlnRep2.bam.bai
 grant Snyder
 lab Stanford
+md5sum e1ec088c73366e53ec219175dc138b9e,09cfa936abbf9716c31cd7335d407009
 project wgEncode
 replicate 2
 setType exp
@@ -10135,6 +10197,7 @@ fileName wgEncodeSydhTfbsMelZkscan1hpa006672IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum f498776d074cb53f697bf0d8b7707385
 project wgEncode
 setType exp
 sex M
@@ -10159,6 +10222,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelZkscan1hpa006672IggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 5dd3f71f120bae668c0b8cd382355975
 project wgEncode
 replicate 1
 setType exp
@@ -10183,6 +10247,7 @@ dateUnrestricted 2012-12-29
 fileName wgEncodeSydhTfbsMelZkscan1hpa006672IggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum da499e4e145346cb9fb6d2714bf1be2d
 project wgEncode
 replicate 2
 setType exp
@@ -10208,6 +10273,7 @@ fileName wgEncodeSydhTfbsMelZkscan1hpa006672IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum 094d8ade166983bc51e37d19e3c9b643
 project wgEncode
 setType exp
 sex M
@@ -10217,4 +10283,4 @@ tableName wgEncodeSydhTfbsMelZkscan1hpa006672IggrabSig
 treatment None
 view Signal
 
-# MAGIC: -1221213568
+# MAGIC: 1306486363

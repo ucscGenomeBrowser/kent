@@ -97,14 +97,20 @@ $(function () {
         // fill in tables and activate buttons
         tableOut('#refGenomeTable', refGenomeTypes, refGenomeExps, false);
         tableOut('#elementTable', elementTypes, cellAssayExps, false);
-        $('#buttonDataMatrix').click(function () {
-            window.location = 'encodeDataMatrixHuman.html';
-        });
-        // TODO: enable selectable items in antibody table
         tableOut('#tfbsTable', tfbsTypes, tfbsExps, true);
-        $('#buttonChipMatrix').click(function () {
-            window.location = 'encodeChipMatrixHuman.html';
-        });
+
+        if (encodeProject.isIE7()) {
+            // disable buttons on IE7 -- not yet able to display matrix column headers adequately
+            $('#buttonDataMatrix').remove();
+            $('#buttonChipMatrix').remove();
+        } else { 
+            $('#buttonDataMatrix').click(function () {
+                window.location = 'encodeDataMatrixHuman.html';
+            });
+            $('#buttonChipMatrix').click(function () {
+                window.location = 'encodeChipMatrixHuman.html';
+            });
+        }
 
         // add row highlight
         $('.summaryTable').delegate('.even, .odd', 'mouseover mouseleave', function (ev) {
