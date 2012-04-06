@@ -3,6 +3,208 @@ objType composite
 composite wgEncodeCaltechRnaSeq
 expVars lab,dataType,cell,readType,instertLength,treatment
 
+metaObject wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200Aln
+objType table
+age immortalized
+cell 10T1/2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-20
+dateUnrestricted 2012-12-20
+fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200Aln.bam,wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200Aln.bam.bai
+grant Hardison
+insertLength 200
+lab Caltech-m
+labExpId 11154
+mapAlgorithm TH131
+md5sum 8323ccba1b81240540517a9387bb57a4
+project wgEncode
+readType 2x75
+sex F
+strain C3H
+subId 6082
+tableName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200Aln
+treatment None
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAln
+objType table
+age immortalized
+cell 10T1/2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-19
+dateUnrestricted 2012-12-19
+fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAln.bam,wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAln.bam.bai
+grant Hardison
+insertLength 200
+lab Caltech-m
+labExpId 11155
+mapAlgorithm TH131
+md5sum c3a4c88ae962d417dd0fa8cd8c29cbfb
+project wgEncode
+readType 2x75
+sex F
+strain C3H
+subId 6081
+tableName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAln
+treatment EqS_2.0pct_60hr
+view Alignments
+
+metaObject wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd1Rep1
+objType file
+age immortalized
+cell 10T1/2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-19
+dateUnrestricted 2012-12-19
+fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd1Rep1.fastq.gz
+grant Hardison
+insertLength 200
+lab Caltech-m
+labExpId 11155
+mapAlgorithm TH131
+md5sum ca8d85e8a16766b62ffab5019410b786
+project wgEncode
+readType 2x75
+replicate 1
+sex F
+strain C3H
+subId 6081
+treatment EqS_2.0pct_60hr
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd2Rep1
+objType file
+age immortalized
+cell 10T1/2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-19
+dateUnrestricted 2012-12-19
+fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd2Rep1.fastq.gz
+grant Hardison
+insertLength 200
+lab Caltech-m
+labExpId 11155
+mapAlgorithm TH131
+md5sum c8583458863f18be9880b88b53b81d6c
+project wgEncode
+readType 2x75
+replicate 1
+sex F
+strain C3H
+subId 6081
+treatment EqS_2.0pct_60hr
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hRawRep1
+objType table
+age immortalized
+cell 10T1/2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-19
+dateUnrestricted 2012-12-19
+fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hRawRep1.bigWig
+grant Hardison
+insertLength 200
+lab Caltech-m
+labExpId 11155
+mapAlgorithm TH131
+md5sum 0b3f52ff5897d81f7686809026f1a5b7
+project wgEncode
+readType 2x75
+replicate 1
+sex F
+strain C3H
+subId 6081
+tableName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hRawRep1
+treatment EqS_2.0pct_60hr
+view RawSignal
+
+metaObject wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd1Rep1
+objType file
+age immortalized
+cell 10T1/2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-20
+dateUnrestricted 2012-12-20
+fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd1Rep1.fastq.gz
+grant Hardison
+insertLength 200
+lab Caltech-m
+labExpId 11154
+mapAlgorithm TH131
+md5sum d740c81b87f1056f4adad3a47c7389a7
+project wgEncode
+readType 2x75
+replicate 1
+sex F
+strain C3H
+subId 6082
+treatment None
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd2Rep1
+objType file
+age immortalized
+cell 10T1/2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-20
+dateUnrestricted 2012-12-20
+fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd2Rep1.fastq.gz
+grant Hardison
+insertLength 200
+lab Caltech-m
+labExpId 11154
+mapAlgorithm TH131
+md5sum dbe3a3f6644e6bee7ff946057522be11
+project wgEncode
+readType 2x75
+replicate 1
+sex F
+strain C3H
+subId 6082
+treatment None
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200RawRep1
+objType table
+age immortalized
+cell 10T1/2
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-20
+dateUnrestricted 2012-12-20
+fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200RawRep1.bigWig
+grant Hardison
+insertLength 200
+lab Caltech-m
+labExpId 11154
+mapAlgorithm TH131
+md5sum b9986c62138b9178b451d86185b2d67d
+project wgEncode
+readType 2x75
+replicate 1
+sex F
+strain C3H
+subId 6082
+tableName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200RawRep1
+treatment None
+view RawSignal
+
 metaObject wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200AlnRep1
 objType table
 age immortalized
@@ -207,4 +409,4 @@ tableName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200RawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 1187785122
+# MAGIC: -1731110241
