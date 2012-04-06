@@ -3,8 +3,9 @@
 #include "annoGratorGpVar.h"
 #include "genePred.h"
 #include "pgSnp.h"
+#include "gpFx.h"
 
-static char *gpFxDataLineAutoSqlString =
+static char *annoGpVarDataLineAutoSqlString =
 "table knownGeneGpVar"
 "\"Genes based on RefSeq, GenBank, and UniProt.\""
 "("
@@ -21,6 +22,7 @@ static char *gpFxDataLineAutoSqlString =
 "string  proteinID;          \"UniProt display ID for Known Genes,  UniProt accession or RefSeq protein ID for UCSC Genes\" "
 "string  alignID;            \"Unique identifier for each (known gene, alignment position) pair\""
 "uint    gpFxType;           \"Effect type (see annoGratorGpVar.h)\""
+"uint    gpFxNumber;         \"exon or intron number\""
 "uint    gpFxTransOffset;    \"offset in transcript\""
 "string  gpFxBaseChange;     \"base change in transcript\""
 "uint    gpFxCodonChange;    \"codon triplet change in transcript\""
@@ -28,22 +30,47 @@ static char *gpFxDataLineAutoSqlString =
 "uint    gpFxProteinChange;  \"peptide change in protein\""
 ")";
 
-struct asObject *gpFxAsObj()
+struct asObject *annoGpVarAsObj()
 // Return asObject describing fields of genePred (at the moment, knownGene)
 {
-return asParseText(gpFxDataLineAutoSqlString);
+return asParseText(annoGpVarDataLineAutoSqlString);
 }
 
-static struct gpFx *aggvPredEffect(struct pgSnp *pgSnp, struct genePred *pred)
-// return the predicted effect of a variation on a genePred
+static void aggvStringifyGpFx(char **words, struct gpFx *effect)
+// turn gpFx structure into a list of words
 {
-static struct gpFx noEffect;
+int count = 0;
+char buffer[10];
 
-// default is no effect
-noEffect.next = NULL;
-noEffect.type = gpFxNone;
+// gpFxType
+safef(buffer,sizeof buffer, "%d", effect->gpFxType);
+words[count++] = cloneString(buffer);
 
-return &noEffect;
+// gpFxNumber
+safef(buffer,sizeof buffer, "%d", effect->gpFxNumber);
+words[count++] = cloneString(buffer);
+
+// gpFxTransOffset
+safef(buffer,sizeof buffer, "%d", effect->gpFxTransOffset);
+words[count++] = cloneString(buffer);
+
+// gpFxBaseChange
+if ( effect->gpFxBaseChange == NULL)
+    words[count++] = "";
+else
+    words[count++] = effect->gpFxBaseChange;     
+
+// gpFxCodonChange
+safef(buffer,sizeof buffer, "%d", effect->gpFxCodonChange);
+words[count++] = cloneString(buffer);
+
+//  gpFxProteinOffset
+safef(buffer,sizeof buffer, "%d", effect->gpFxProteinOffset);
+words[count++] = cloneString(buffer);
+
+//  gpFxProteinChange
+safef(buffer,sizeof buffer, "%d", effect->gpFxProteinChange);
+words[count++] = cloneString(buffer);
 }
 
 static struct annoRow *aggvEffectToRow( struct annoGrator *self,
@@ -52,20 +79,16 @@ static struct annoRow *aggvEffectToRow( struct annoGrator *self,
 {
 char **wordsOut;
 char **wordsIn = (char **)rowIn->data;
+
+assert(self->streamer.numCols > self->mySource->numCols);
 AllocArray(wordsOut, self->streamer.numCols);
 
-// ?to ASH? do I need to allocate these, or can I just memcpy all of this?
-int ii;
-for(ii=0; ii < self->mySource->numCols; ii++)
-    wordsOut[ii] = cloneString(wordsIn[ii]);
+// copy the genePred fields over
+memcpy(wordsOut, wordsIn, sizeof(char *) * self->mySource->numCols);
 
 // stringify the gpFx structure 
 int count = self->mySource->numCols;
-char buffer[10];
-safef(buffer, sizeof buffer, "%d", effect->type);
-wordsOut[count++] = cloneString(buffer);
-for (; count <  self->streamer.numCols; count++)
-    wordsOut[count] = "";
+aggvStringifyGpFx(&wordsOut[count], effect);
 
 return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, 
     rowIn->rightJoinFail, wordsOut, self->streamer.numCols);
@@ -75,7 +98,7 @@ static struct annoRow *aggvGenRows( struct annoGrator *self,
     struct pgSnp *pgSnp, struct genePred *pred, struct annoRow *inRow)
 // put out annoRows for all the gpFx that arise from pgSnp and pred
 {
-struct gpFx *effects = aggvPredEffect(pgSnp, pred);
+struct gpFx *effects = gpFxPredEffect(pgSnp, pred);
 struct annoRow *rows = NULL;
 
 for(; effects; effects = effects->next)
@@ -88,8 +111,10 @@ slReverse(&rows);
 return rows;
 }
 
-struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *self, struct annoRow *primaryRow,
-				    boolean *retRJFilterFailed)
+struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *self, 
+	struct annoRow *primaryRow, boolean *retRJFilterFailed)
+// integrate a pgSnp and a genePred, generate as many rows as
+// needed to capture all the changes
 {
 struct annoRow *rows = annoGratorIntegrate(self, primaryRow, retRJFilterFailed);
 
@@ -125,7 +150,7 @@ struct annoGrator *self = annoGratorNew(mySource);
 self->integrate = annoGratorGpVarIntegrate;
 
 // TODO: overriding these should be a single function call
-self->streamer.asObj =  gpFxAsObj();
+self->streamer.asObj =  annoGpVarAsObj();
 self->streamer.numCols = slCount(self->streamer.asObj->columnList);
 self->streamer.columns = annoColumnsFromAsObject(self->streamer.asObj);
 
