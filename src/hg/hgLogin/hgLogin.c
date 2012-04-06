@@ -546,29 +546,58 @@ hPrintf(
 void displayLoginPage(struct sqlConnection *conn)
 /* draw the account login page */
 {
-char *username = cartUsualString(cart, "hgLogin_userName", "");
+// char *username = cartUsualString(cart, "hgLogin_userName", "");
 /* for password security, use cgi hash instead of cart */
-char *password = cgiUsualString("hgLogin_password", "");
+// char *password = cgiUsualString("hgLogin_password", "");
+
 hPrintf(
+"<div id=\"hgLoginBox\" class=\"centeredContainer\">\n"
 "<h2>UCSC Genome Browser</h2>"
-"<p align=\"left\">"
-"</p>"
+"\n"
+);
+printf(
+"<P>"
+"Signing in enables you to save current settings into a "
+"named session, and then restore settings from the session later.<BR> "
+"If you wish, you can share named sessions with other users. "
+"</P>"
+);
+hPrintf(
 "<span style='color:red;'>%s</span>"
-"<h3>Login</h3>"
-"<form method=post action=\"hgLogin\" name=accountLoginForm >"
-"<table>"
-"<tr><td>User Name</td><td><input type=text name=hgLogin_userName value=\"%s\" size=20> <BR> "
-"<tr><td>Password</td><td><input type=password name=hgLogin_password value=\"%s\" size=20></td></tr><BR>"
-"</table>"
-"<p><a href=\"hgLogin?hgLogin.do.lostPasswordPage=1\">Forgot</a> your password?  <a href=\"hgLogin?do.signupPage=1\">Need an account</a>?</p>"
-"<table>"
-"<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.displayLogin value=login>\n"
-"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>"
-"</table>"
-"<BR>"
 , errMsg ? errMsg : ""
-, username
-, password
+);
+hPrintf(
+"<h3>Login</h3>"
+"\n"
+"<form method=post action=\"hgLogin\" name=accountLoginForm >"
+"\n");
+hPrintf(
+"<label style=\"display: block; margin-top: 10px;\" " 
+" for=\"userName\">User Name</label>"
+"\n"
+"<input type=text name=\"hgLogin_userName\" value=\"\" size=\"30\" id=\"userName\"> <br>"
+"\n"
+"<label style=\"display: block; margin-top: 10px;\" "
+" for=\"password\">Password</label>"
+"\n"
+"<input type=password name=\"hgLogin_password\" value=\"\" size=\"30\" id=\"password\">"
+"\n"
+"<p>"
+"<a href=\"hgLogin?hgLogin.do.lostPasswordPage=1\">Forgot your password?</a><br>"
+"<a href=\"hgLogin?do.signupPage=1\">Need an account</a>?"
+"</p>"
+"\n"
+"<p>"
+"<input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Login\" id=\"loginButton\">"
+"\n"
+// "&nbsp;<a href=\"\" onclick=\"history.go(-1)\">Cancel</a>"
+"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>"
+"</p>"
+"\n"
+"</form>"
+"</div><!-- END - hgLoginBox -->"
+//, username
+//, password
 );
 
 cartSaveSession(cart);
@@ -626,8 +655,6 @@ hPrintf("<h1>Login succesful !!!! calling displayLoginSuccess now.</h1>\n");
       unsigned int userID=m->idx;
       hPrintf("Before call userID is  %d\n",userID);
       displayLoginSuccess(userName,userID);
-// htmlSetCookie("hgLogin_User", "chinhli", NULL, NULL, ".cse.ucsc.edu", FALSE);
-// hPrintf("<meta http-equiv=\"set-cookie\" content=\"hgLogin_User=chinhli;expires=Fri, 30 Dec 2015 12:00:00 GMT; path=cse.ucsc.edu\">");
       return;
     }
 else
@@ -647,6 +674,8 @@ gbMembersFree(&m);
 void  displayLoginSuccess(char *userName, int userID)
 /* display login success msg, and set cookie */
 {
+char *hgLoginHost = hgLoginLinkHost();
+
 hPrintf(
 "<h2>UCSC Genome Browser</h2>"
 "<p align=\"left\">"
@@ -673,21 +702,23 @@ hPrintf(
 "\n"
 /* delay for 5 seconds then go back to page X */
 /* TODO: afterDelayBackTo("http....") */
-"window.setTimeout(afterDelay, 5000);\n"
+"window.setTimeout(afterDelay, 1000);\n"
 "function afterDelay() {\n"
-"window.location =\"http://hgwdev-chinhli.cse.ucsc.edu/cgi-bin/hgSession?hgS_doMainPage=1\";"
+"window.location =\"http://%s/cgi-bin/hgSession?hgS_doMainPage=1\";"
 "\n}"
 "\n"
 "//-->"
 "\n"
 "</script>"
-);
+,hgLoginHost);
 }
 
 
 void  displayLogoutSuccess()
 /* display logout success msg, and reset cookie */
 {
+char *hgLoginHost = hgLoginLinkHost();
+
 hPrintf(
 "<h2>UCSC Genome Browser Sign Out</h2>"
 "<p align=\"left\">"
@@ -710,15 +741,15 @@ hPrintf(
 "\n"
 /* delay for 5 seconds then go back to page X */
 /* TODO: afterDelayBackTo("http....") */
-"window.setTimeout(afterDelay, 5000);\n"
+"window.setTimeout(afterDelay, 1000);\n"
 "function afterDelay() {\n" 
-"window.location =\"http://hgwdev-chinhli.cse.ucsc.edu/cgi-bin/hgSession?hgS_doMainPage=1\";"
+"window.location =\"http://%s/cgi-bin/hgSession?hgS_doMainPage=1\";"
 "\n}"
 "\n"
 "//-->"
 "\n"
 "</script>"
-);
+,hgLoginHost);
 /****************************/
 
 }

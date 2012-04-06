@@ -17,6 +17,12 @@ char *hgLoginLinkHost()
 return cloneString(cfgOption(CFG_HGLOGIN_HOST));
 }
 
+char *hgLoginLinkSysName()
+/* Return the hgLogin system name specified in hg.conf, or NULL. Allocd here. */
+{
+return cloneString(cfgOption(CFG_HGLOGIN_SYSNAME));
+}
+
 boolean hgLoginLinkEnabled()
 /* Return TRUE if all hgLogin.* parameters are defined in hg.conf . */
 {
@@ -80,7 +86,6 @@ safef(buf, sizeof(buf),
       "http://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s",
       hgLoginLinkHost(), retEnc);
 freez(&retEnc);
-/* DEBUG: */ printf("<BR>DEBUG in hgLoginLink Z: cloneString(buf) is%s<BR>",cloneString(buf));
 
 return(cloneString(buf));
 }

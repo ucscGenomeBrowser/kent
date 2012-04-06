@@ -86,8 +86,7 @@ printf("The wiki also serves as a forum for users "
 
 void welcomeGBUser(char *hgLoginUserName)
 /* Tell the user they are not logged in to the hgLogin and tell them how
- * to
- * do so. */
+ * to do so. */
 {
 char *hgLoginHost = hgLoginLinkHost();
 
@@ -104,22 +103,22 @@ printf("<A HREF=\"%s\"><B>click here to sign out XXXX from hgLogin.</B></A>\n",
 
 void offerGBLogin()
 /* Tell the user they are not logged in to the hgLogin and tell them how
- * to
- * do so. */
+ * to do so. */
 {
 char *hgLoginHost = hgLoginLinkHost();
-
+char *hgLoginSysName = hgLoginLinkSysName();
 cartWebStart(cart, NULL, "Sign in to UCSC Genome Bioinformatics");
 jsInit();
 printf("Signing in enables you to save current settings into a "
        "named session, and then restore settings from the session later.\n"
        "If you wish, you can share named sessions with other users.\n");
-printf("<P>The sign-in page is handled by our XXXX hgLogin "
-       "<A HREF=\"http://%s/\" TARGET=_BLANK>hgLogin system</A>:\n", hgLoginHost);
+printf("<P>The sign-in page is handled by our %s system: "
+       ,hgLoginSysName);
 printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
        hgLoginLinkUserLoginUrl(cartSessionId(cart)));
-printf("The hgLogin also serves as a forum for users "
-       "to share knowledge and ideas.\n");
+printf("To register for an account, "
+       "<A HREF=\"http://%s/cgi-bin/hgLogin?do.signupPage=1\">"
+       "<B>click here to sign up.</B></A>\n",hgLoginHost);
 }
 
 
@@ -498,9 +497,18 @@ cartSaveSession(cart);
 if (isNotEmpty(userName))
     showExistingSessions(userName);
 else if (savedSessionsSupported)
-    printf("<P>If you <A HREF=\"%s\">sign in</A>, "
-	   "you will also have the option to save named sessions.\n",
-	   wikiLinkUserLoginUrl(cartSessionId(cart)));
+         {
+         if (hgLoginLinkEnabled())
+             {
+             printf("<P>If you <A HREF=\"%s\">sign in</A>, "
+	     "you will also have the option to save named sessions.\n",
+	     hgLoginLinkUserLoginUrl(cartSessionId(cart)));
+             } else {
+             printf("<P>If you <A HREF=\"%s\">sign in</A>, "
+             "you will also have the option to save named sessions.\n",
+             wikiLinkUserLoginUrl(cartSessionId(cart)));
+             }
+          }
 showSavingOptions(userName);
 showLoadingOptions(userName, savedSessionsSupported);
 printf("</FORM>\n");
@@ -525,9 +533,18 @@ if (userName != NULL)
     }
 else if (wikiLinkEnabled())
     {
-    printf("<LI>If you <A HREF=\"%s\">sign in</A>, you will be able to save "
-	   "named sessions which will be displayed with Browser and Email "
-	   "links.</LI>\n", wikiLinkUserLoginUrl(cartSessionId(cart)));
+         if (hgLoginLinkEnabled())
+             {
+             printf("<LI>If you <A HREF=\"%s\">sign in</A>, you will be able "
+                    " to save named sessions which will be displayed with "
+                    " Browser and Email links.</LI>\n", 
+                    hgLoginLinkUserLoginUrl(cartSessionId(cart)));
+             } else {
+             printf("<LI>If you <A HREF=\"%s\">sign in</A>, you will be able " 
+                    " to save named sessions which will be displayed with "
+                    " Browser and Email links.</LI>\n",
+                    wikiLinkUserLoginUrl(cartSessionId(cart)));
+             }
     }
 dyStringPrintf(dyUrl, "http://%s%s", cgiServerNamePort(), cgiScriptName());
 
@@ -554,29 +571,20 @@ void doMainPage(char *message)
 puts("Content-Type:text/html\n");
 if (hgLoginLinkEnabled())
   {
-  /* XXXX hgLogin  */
-printf("HELLO HGLOGIN\n");
     char *hgLoginUserName = hgLoginLinkUserName();
-/* DEBUG: */ printf("<BR>DEBUG X: hgLoginUserName is %s<BR>",hgLoginUserName);
 
     if (hgLoginUserName)
         welcomeGBUser(hgLoginUserName);
     else
         offerGBLogin();
 
-/* DEBUG: */ printf("<BR>DEBUG Y: hgLoginUserName is %s<BR>",hgLoginUserName);
-/* DEBUG: */ printf("<BR>DEBUG Z: message is %s<BR>",message);
-
     if (isNotEmpty(message))
         {
-/* DEBUG: */ printf("<BR>DEBUG A: message is %s<BR>", message);
         if (cartVarExists(cart, hgsDoSessionDetail))
             webNewSection("Session Details");
         else
             webNewSection("Updated Session");
         puts(message);
-/* DEBUG: */ printf("<BR>DEBUG B: message is %s<BR>", message);
-
         }
     showSessionControls(hgLoginUserName, TRUE, TRUE);
     showLinkingTemplates(hgLoginUserName);
@@ -598,7 +606,6 @@ if (wikiLinkEnabled())
 	    webNewSection("Updated Session");
 	puts(message);
 	}
-/* DEBUG: */ printf("<BR>DEBUG WIKI message is %s<BR>", message);
     showSessionControls(wikiUserName, TRUE, TRUE);
     showLinkingTemplates(wikiUserName);
     }

@@ -5,12 +5,16 @@
 
 /* hg.conf hgLogin parameters -- hgLoginLink is disabled if any are undefined. */
 #define CFG_HGLOGIN_HOST "hgLogin.host"
+#define CFG_HGLOGIN_SYSNAME "hgLogin.sysName"
 #define CFG_HGLOGIN_USER_NAME_COOKIE "hgLogin.userNameCookie"
 #define CFG_HGLOGIN_LOGGED_IN_COOKIE "hgLogin.loggedInCookie"
 #define CFG_HGLOGIN_SESSION_COOKIE "hgLogin.sessionCookie"
 
 char *hgLoginLinkHost();
 /* Return the hgLogin host specified in hg.conf, or NULL.  Allocd here. */
+
+char *hgLoginLinkSysName();
+/* Return the hgLogin system name specified in hg.conf, or NULL. Allocd here. */
 
 boolean hgLoginLinkEnabled();
 /* Return TRUE if all hgLogin.* parameters are defined in hg.conf . */
