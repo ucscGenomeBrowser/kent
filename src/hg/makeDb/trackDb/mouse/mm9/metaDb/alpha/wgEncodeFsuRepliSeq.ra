@@ -17,6 +17,7 @@ fileName wgEncodeFsuRepliSeqCh12FRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId CH12_R1
+md5sum 6a4baec7996118d272d1eded646f38fc
 platform GPL10989
 project wgEncode
 replicate 1
@@ -40,6 +41,7 @@ fileName wgEncodeFsuRepliSeqCh12FRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId CH12_R2
+md5sum 95ae02079fa301c92187f935e2a6aaa4
 platform GPL10989
 project wgEncode
 replicate 2
@@ -62,6 +64,7 @@ fileName wgEncodeFsuRepliSeqCh12FWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId CH12_R1
+md5sum 82ee718765a63e666fd671d37d8ee7f7
 platform GPL10989
 project wgEncode
 replicate 1
@@ -85,6 +88,7 @@ fileName wgEncodeFsuRepliSeqCh12FWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId CH12_R2
+md5sum 79aab9edf6edc104bcb69d43f69d62f2
 platform GPL10989
 project wgEncode
 replicate 2
@@ -109,6 +113,7 @@ fileName wgEncodeFsuRepliSeqEpisc5MRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EpiSC5_R1
+md5sum 3802d92015edf9809c0c7e68dd67c86f
 platform GPL9156
 project wgEncode
 replicate 1
@@ -132,6 +137,7 @@ fileName wgEncodeFsuRepliSeqEpisc5MRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EpiSC5_R2
+md5sum bf11861b121603ff58dd15ec733cdca6
 platform GPL9156
 project wgEncode
 replicate 2
@@ -154,6 +160,7 @@ fileName wgEncodeFsuRepliSeqEpisc5MWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EpiSC5_R1
+md5sum 0119f3c3e76231cd7bf65e0438c2b139
 platform GPL9156
 project wgEncode
 replicate 1
@@ -177,6 +184,7 @@ fileName wgEncodeFsuRepliSeqEpisc5MWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EpiSC5_R2
+md5sum 2fa77c30c6a59de6c9e4c06021b69bc8
 platform GPL9156
 project wgEncode
 replicate 2
@@ -201,6 +209,7 @@ fileName wgEncodeFsuRepliSeqEpisc7FRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EpiSC7_R1
+md5sum 6fe9c9185175bc8686408e545fc0dfdf
 platform GPL9156
 project wgEncode
 replicate 1
@@ -224,6 +233,7 @@ fileName wgEncodeFsuRepliSeqEpisc7FRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EpiSC7_R2
+md5sum c2a170f7ebc4f8a9c90b64e34bc1d83a
 platform GPL9156
 project wgEncode
 replicate 2
@@ -246,6 +256,7 @@ fileName wgEncodeFsuRepliSeqEpisc7FWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EpiSC7_R1
+md5sum 4d878ef52e7fb275a05ca8d9f3968c1d
 platform GPL9156
 project wgEncode
 replicate 1
@@ -269,6 +280,7 @@ fileName wgEncodeFsuRepliSeqEpisc7FWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EpiSC7_R2
+md5sum 1994fc47e5d50a6913b25bc2829b72b5
 platform GPL9156
 project wgEncode
 replicate 2
@@ -293,6 +305,7 @@ fileName wgEncodeFsuRepliSeqEs46cMDifff6dRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId NP-46C_R1
+md5sum 6e144d5379bc8025226f93084cfeb025
 platform GPL9156
 project wgEncode
 replicate 1
@@ -315,6 +328,7 @@ fileName wgEncodeFsuRepliSeqEs46cMDifff6dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-46C_R1
+md5sum 1dc42d20f48f6610af993f9d9a8514c3
 platform GPL9156
 project wgEncode
 replicate 1
@@ -339,6 +353,7 @@ fileName wgEncodeFsuRepliSeqEs46cMRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId ES-46C_R1
+md5sum 63e98056900b89a80adf9e155b013c57
 platform GPL9156
 project wgEncode
 replicate 1
@@ -361,6 +376,7 @@ fileName wgEncodeFsuRepliSeqEs46cMWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId ES-46C_R1
+md5sum 5bb115409e0cb48deaa21e014d0d32ea
 platform GPL9156
 project wgEncode
 replicate 1
@@ -385,6 +401,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe3dRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EBM3_R1
+md5sum 29f8ac4078a36474d53574079c82d50a
 platform GPL9156
 project wgEncode
 replicate 1
@@ -408,6 +425,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe3dRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EBM3_R2
+md5sum 45ddd24c5e76cf2f28fa55da60f596dd
 platform GPL9156
 project wgEncode
 replicate 2
@@ -430,6 +448,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe3dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EBM3_R1
+md5sum 5b2820f7e93e676901ddefb80d9e7069
 platform GPL9156
 project wgEncode
 replicate 1
@@ -453,6 +472,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe3dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EBM3_R2
+md5sum c23df7f1b037f9e1b6a0c8a8370b6b41
 platform GPL9156
 project wgEncode
 replicate 2
@@ -477,6 +497,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe6dRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EBM6_R1
+md5sum 344d69ccbaaa8f65046c1cb584fe8e39
 platform GPL9156
 project wgEncode
 replicate 1
@@ -500,6 +521,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe6dRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EBM6_R2
+md5sum d8adf2f63f43c810740064351d395f21
 platform GPL9156
 project wgEncode
 replicate 2
@@ -522,6 +544,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe6dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EBM6_R1
+md5sum 66dc9764a0c77e0db7a7c120cfdb0dd1
 platform GPL9156
 project wgEncode
 replicate 1
@@ -545,6 +568,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe6dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EBM6_R2
+md5sum bf2a009ed4099ea626239b14bff09da4
 platform GPL9156
 project wgEncode
 replicate 2
@@ -569,6 +593,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe9dRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId NP-D3_R1
+md5sum 3e36bdca7c93e8045cf16123cc5a5fac
 platform GPL9156
 project wgEncode
 replicate 1
@@ -592,6 +617,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe9dRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId NP-D3_R2
+md5sum 7aaad0807a3cd1e51ef2e7087bfdbfed
 platform GPL9156
 project wgEncode
 replicate 2
@@ -614,6 +640,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe9dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-D3_R1
+md5sum 4bd3bca5255bd413be2975c22c934032
 platform GPL9156
 project wgEncode
 replicate 1
@@ -637,6 +664,7 @@ fileName wgEncodeFsuRepliSeqEsd3MDiffe9dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-D3_R2
+md5sum 982d347ba11c758ef5e29db3998e36f1
 platform GPL9156
 project wgEncode
 replicate 2
@@ -661,6 +689,7 @@ fileName wgEncodeFsuRepliSeqEsd3MRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId ES-D3_R1
+md5sum 7a755648254bfedaafceeeb413084dc5
 platform GPL9156
 project wgEncode
 replicate 1
@@ -684,6 +713,7 @@ fileName wgEncodeFsuRepliSeqEsd3MRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId ES-D3_R2
+md5sum 856247e72120b3ff91bf5ab2ed00bfeb
 platform GPL9156
 project wgEncode
 replicate 2
@@ -706,6 +736,7 @@ fileName wgEncodeFsuRepliSeqEsd3MWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId ES-D3_R1
+md5sum 238e4ddc543daebeefd39b9e765a0b77
 platform GPL9156
 project wgEncode
 replicate 1
@@ -729,6 +760,7 @@ fileName wgEncodeFsuRepliSeqEsd3MWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId ES-D3_R2
+md5sum 7546d2061446d13100fc8007b28976ef
 platform GPL9156
 project wgEncode
 replicate 2
@@ -753,6 +785,7 @@ fileName wgEncodeFsuRepliSeqEstt2MDifff9dRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R1
+md5sum 4a7241f786743cf98baae62963bf9d4d
 platform GPL9156
 project wgEncode
 replicate 1
@@ -776,6 +809,7 @@ fileName wgEncodeFsuRepliSeqEstt2MDifff9dRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R2
+md5sum 6b15c1aab98339c01c9699fc015e07ea
 platform GPL9156
 project wgEncode
 replicate 2
@@ -798,6 +832,7 @@ fileName wgEncodeFsuRepliSeqEstt2MDifff9dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R1
+md5sum 20014a06bff035606e7eb6625a2982d1
 platform GPL9156
 project wgEncode
 replicate 1
@@ -821,6 +856,7 @@ fileName wgEncodeFsuRepliSeqEstt2MDifff9dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R2
+md5sum 99def2a6742c163ef1b99c9862a1ac84
 platform GPL9156
 project wgEncode
 replicate 2
@@ -845,6 +881,7 @@ fileName wgEncodeFsuRepliSeqEstt2MRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId ES-TT2_R1
+md5sum 2ed90a48024536b5d8677ec3b15b840b
 platform GPL9156
 project wgEncode
 replicate 1
@@ -867,6 +904,7 @@ fileName wgEncodeFsuRepliSeqEstt2MWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId ES-TT2_R1
+md5sum 7658cc36932e7be375e007c59a5ebb87
 platform GPL9156
 project wgEncode
 replicate 1
@@ -891,6 +929,7 @@ fileName wgEncodeFsuRepliSeqL1210FRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId L1210_R1
+md5sum 77d07ff16e8ff5a5a292fac903c374e4
 platform GPL9156
 project wgEncode
 replicate 1
@@ -914,6 +953,7 @@ fileName wgEncodeFsuRepliSeqL1210FRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId L1210_R2
+md5sum 99a494ecb821576ebfeb856bdec79fbd
 platform GPL9156
 project wgEncode
 replicate 2
@@ -936,6 +976,7 @@ fileName wgEncodeFsuRepliSeqL1210FWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId L1210_R1
+md5sum 6f63b9997b601ea75c1d9f7a083c8991
 platform GPL9156
 project wgEncode
 replicate 1
@@ -959,6 +1000,7 @@ fileName wgEncodeFsuRepliSeqL1210FWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId L1210_R2
+md5sum 8a0e699578f37c4f8f052f979b7e6a71
 platform GPL9156
 project wgEncode
 replicate 2
@@ -983,6 +1025,7 @@ fileName wgEncodeFsuRepliSeqMefMRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId MEF_R1
+md5sum bc6fa386d51ffb89123f301ea6f4f709
 platform GPL9156
 project wgEncode
 replicate 1
@@ -1005,6 +1048,7 @@ fileName wgEncodeFsuRepliSeqMefMWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId MEF_R1
+md5sum a6fb9b71468795208d174a9b65f827f3
 platform GPL9156
 project wgEncode
 replicate 1
@@ -1029,6 +1073,7 @@ fileName wgEncodeFsuRepliSeqMelMRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId MEL_R1
+md5sum 001c391e81beaebea456dcee925fb72c
 platform GPL10989
 project wgEncode
 replicate 1
@@ -1052,6 +1097,7 @@ fileName wgEncodeFsuRepliSeqMelMRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId MEL_R2
+md5sum 851b3ee93f545a6cf4f28c19ddf4bafc
 platform GPL10989
 project wgEncode
 replicate 2
@@ -1074,6 +1120,7 @@ fileName wgEncodeFsuRepliSeqMelMWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId MEL_R1
+md5sum b468ad266dc63d119d1da4fc86805dbd
 platform GPL10989
 project wgEncode
 replicate 1
@@ -1097,6 +1144,7 @@ fileName wgEncodeFsuRepliSeqMelMWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId MEL_R2
+md5sum 49e18a79e8d02e85e048251474184573
 platform GPL10989
 project wgEncode
 replicate 2
@@ -1107,4 +1155,4 @@ tableName wgEncodeFsuRepliSeqMelMWaveSignalRep2
 treatment None
 view WaveSignal
 
-# MAGIC: 1236971708
+# MAGIC: 2010517090

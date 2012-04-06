@@ -28,70 +28,82 @@ To show only selected subtracks, uncheck the boxes next to the tracks that
 you wish to hide.</P>
 <b>Views</b> available on this track are:
 <dl>
-<dt><i>Genes</i></dt>
-<dd> The gene annotations in this view are divided into three subtracks:
+    <dt><i>Genes</i></dt>
+    <dd> The gene annotations in this view are divided into three subtracks:</dd>
+</dl>
+<ul>
   <li><em>GENCODE Basic set</em> is a subset of the <em>Comprehensive set</em>. 
-    The selection criteria are described in the <a href="#basicSetSelection">methods section</a>.
+    The selection criteria are described in the <a href="#basicSetSelection">methods section</a>.</li>
   <li><em>GENCODE Comprehensive set</em> contains all GENCODE coding and non-coding transcript annotations,
     including polymorphic pseudogenes.  This includes both manual and
-    automatic annotations.  This is a super-set of the <em>Basic set</em>.
-  <li><em>GENCODE Pseudogenes</em> include all annotations except polymorphic pseudogenes.
-</dd>
-<dt><i>2-way</i></dt> 
-<dd><li><em>GENCODE 2-way Pseudogenes</em> contains pseudogenes predicted by both the Yale
-    Pseudopipe and UCSC Retrofinder pipelines. 
-    The set was derived by looking for 50 base pairs
-    of overlap between pseudogenes derived from both sets based on their 
-    chromosomal coordinates.  When multiple Pseudopipe
-    predictions map to a single Retrofinder prediction, only one match is kept
-    for the 2-way consensus set.
-</dd>
-<dt><i>PolyA</i></dt>
-<dd><li><em>GENCODE PolyA</em> contains polyA signals and sites manually annotated on
-    the genome based on transcribed evidence (ESTs and cDNAs) of 3' end of
-    transcripts containing at least 3 A's not matching the genome.
-</dd>
+    automatic annotations.  This is a super-set of the <em>Basic set</em>.</li>
+  <li><em>GENCODE Pseudogenes</em> include all annotations except polymorphic pseudogenes.</li>
+</ul>
+    
+<dl>
+    <dt><i>2-way</i></dt> 
 </dl>
+<ul>
+    <li><em>GENCODE 2-way Pseudogenes</em> contains pseudogenes predicted by both the Yale
+        Pseudopipe and UCSC Retrofinder pipelines. 
+        The set was derived by looking for 50 base pairs
+        of overlap between pseudogenes derived from both sets based on their 
+        chromosomal coordinates.  When multiple Pseudopipe
+        predictions map to a single Retrofinder prediction, only one match is kept
+        for the 2-way consensus set.
+    </li>
+</ul>
 
-<b>Filtering</b> is available for the items in the GENCODE Basic, Comprehensive and Pseudogene tracks
-using the following criteria:
+<dl>
+    <dt><i>PolyA</i></dt>
+</dl>
+<ul>
+<li><em>GENCODE PolyA</em> contains polyA signals and sites manually annotated on
+    the genome based on transcribed evidence (ESTs and cDNAs) of 3' end of
+    transcripts containing at least 3 A's not matching the genome.</li>
+</ul>
+
+
+<p><b>Filtering</b> is available for the items in the GENCODE Basic, Comprehensive and Pseudogene tracks
+using the following criteria:</p>
 <ul>
   <li> Transcript class: filter by the basic biological function of a transcript
-    annotation
+    annotation</li>
     <ul>
-     <li> All - don't filter by transcript class
-     <li> coding - display protein coding transcripts, including polymorphic pseudogenes
-     <li> nonCoding - display non-protein coding transcripts
-     <li> pseudo - display pseudogene transcript annotations
-     <li> problem - display problem transcripts
+     <li> All - don't filter by transcript class</li>
+     <li> coding - display protein coding transcripts, including polymorphic pseudogenes</li>
+     <li> nonCoding - display non-protein coding transcripts</li>
+     <li> pseudo - display pseudogene transcript annotations</li>
+     <li> problem - display problem transcripts</li>
    </ul>
 
-  <li> Transcript Annotation Method: filter by the method used to create the annotation
+  <li> Transcript Annotation Method: filter by the method used to create the annotation</li>
    <ul>
-     <li> All - don't filter by transcript class
+     <li> All - don't filter by transcript class</li>
      <li> manual - display manually created annotations, including those that are 
-       also created automatically
+       also created automatically</li>
      <li> automatic - display automatically created annotations, including those that are 
-       also created manually
+       also created manually</li>
      <li> manual_only - display manually created annotations that were
-       not annotated by the automatic method
+       not annotated by the automatic method</li>
      <li> automatic_only - display automatically created annotations that were
-       not annotated by the manual method
+       not annotated by the manual method</li>
    </ul>
 
   <li> Transcript Biotype: filter transcripts by
-       <a href="http://www.gencodegenes.org/gencode_biotypes.html" target="_blank">biotype</a>
+       <a href="http://www.gencodegenes.org/gencode_biotypes.html" target="_blank">biotype</a></li>
 </ul>
 
-<b>Coloring</b> for the gene annotations is based on the annotation type: 
+<p><b>Coloring</b> for the gene annotations is based on the annotation type: </p>
 <ul><b>
-  <li><font color="#0c0c78">coding</font> 
-  <li><font color="#006400">non-coding</font> 
-  <li><font color="#ff33ff">pseudogene</font> 
-  <li><font color="#fe0000">problem</font>
-  <li><font color="#ff33ff">all 2-way pseudogenes</font>
-  <li><font color="#000000">all polyA annotations</font>
-</ul></b>
+  <li><font color="#0c0c78">coding</font> </li>
+  <li><font color="#006400">non-coding</font> </li>
+  <li><font color="#ff33ff">pseudogene</font> </li>
+  <li><font color="#fe0000">problem</font></li>
+  <li><font color="#ff33ff">all 2-way pseudogenes</font></li>
+  <li><font color="#000000">all polyA annotations</font></li>
+  </b>
+</ul>
 
 <!--<table border="1">
   <tr><th>Manual and automatic
@@ -135,19 +147,19 @@ gene locus.
 </p>
 <ul>
   <li> Criteria for selection of coding transcripts (including polymorphic pseudogenes) at a given
-       locus:
+       locus:</li>
     <ul>
       <li> All full-length coding transcripts (except problem transcripts or transcripts that are
-           not nonsense-mediated decay) were included in the basic set.
+           not nonsense-mediated decay) were included in the basic set.</li>
       <li> If there were no transcripts meeting the above criteria, then the partial coding
-           transcript with the largest CDS was included in the basic set.
+           transcript with the largest CDS was included in the basic set.</li>
     </ul>
-  <li> Criteria for selection of non-coding transcripts at a given locus:
+  <li> Criteria for selection of non-coding transcripts at a given locus:</li>
     <ul>
       <li> All full-length non-coding transcripts with a well characterized biotype (see below) were
-           included in the basic set.
+           included in the basic set.</li>
       <li> If there were no transcripts meeting the above criteria, then the largest non-coding
-           transcript was included in the basic set.
+           transcript was included in the basic set.</li>
     </ul>
 </ul>
 
@@ -159,9 +171,9 @@ and the following criteria:
 </p>
 <ul>
   <li> well characterized: <em>antisense, lincRNA, miRNA, Mt_rRNA, Mt_tRNA,
-      rRNA, snoRNA, snRNA</em>
+      rRNA, snoRNA, snRNA</em></li>
   <li> poorly characterized: <em>non_coding, processed_transcript,
-      retrotransposed, misc_RNA</em>
+      retrotransposed, misc_RNA</em></li>
 </ul>
 
 <p>
@@ -213,7 +225,7 @@ are allowed to differ.</p>
   <li> <a name="tsl3"><b>tsl3</b></a> - the only support is from a single EST</li>
   <li> <a name="tsl4"><b>tsl4</b></a> - the best supporting EST is flagged as suspect</li>
   <li> <a name="tsl5"><b>tsl5</b></a> - no single transcript supports the model structure</li>
-  <li> <a name="tslNA"><b>tslNA</b></a> - the transcript was not analyzed for one of the following reasons:
+  <li> <a name="tslNA"><b>tslNA</b></a> - the transcript was not analyzed for one of the following reasons:</li>
     <ul>
       <li> pseudogene annotation, including transcribed pseudogenes
       <li> human leukocyte antigen (HLA) transcript
