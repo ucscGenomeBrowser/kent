@@ -18,9 +18,6 @@
     #define strtoll strtol
 #endif
 
-/* mask for type in optionSpec.flags */
-#define OPTION_TYPE_MASK (OPTION_BOOLEAN|OPTION_STRING|OPTION_INT|OPTION_FLOAT|OPTION_LONG_LONG|OPTION_DOUBLE)
-
 static struct optionSpec commonOptions[] = {
    {"verbose", OPTION_INT},
    {NULL, 0},

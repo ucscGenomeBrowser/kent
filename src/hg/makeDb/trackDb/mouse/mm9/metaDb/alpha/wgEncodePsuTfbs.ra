@@ -750,114 +750,6 @@ subId 4844
 tableName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputSig
 view Signal
 
-metaObject wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1
-objType file
-age immortalized
-antibody Pol2-4H8
-cell CH12
-composite wgEncodePsuTfbs
-control Input
-controlId wgEncodeEM001923
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2010-11-13
-dateUnrestricted 2011-08-12
-dccAccession wgEncodeEM001924
-expId 1924
-fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam.bai
-grant Hardison
-lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/dan/h/18mar2010ln2-polii-ch12-groomed-reads
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 2972
-view Alignments
-
-metaObject wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk
-objType table
-age immortalized
-antibody Pol2-4H8
-cell CH12
-composite wgEncodePsuTfbs
-control Input
-controlId wgEncodeEM001923
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2010-11-13
-dateUnrestricted 2011-08-12
-dccAccession wgEncodeEM001924
-expId 1924
-fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk.broadPeak.gz
-grant Hardison
-lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/dan/h/18mar2010ln2-polii-ch12-groomed-reads
-project wgEncode
-seqPlatform Illumina_GA2
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 2972
-tableName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk
-view Peaks
-
-metaObject wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputRawDataRep1
-objType file
-age immortalized
-antibody Pol2-4H8
-cell CH12
-composite wgEncodePsuTfbs
-control Input
-controlId wgEncodeEM001923
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2010-11-13
-dateUnrestricted 2011-08-12
-dccAccession wgEncodeEM001924
-expId 1924
-fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputRawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/dan/h/18mar2010ln2-polii-ch12-groomed-reads
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 2972
-view RawData
-
-metaObject wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig
-objType table
-age immortalized
-antibody Pol2-4H8
-cell CH12
-composite wgEncodePsuTfbs
-control Input
-controlId wgEncodeEM001923
-dataType ChipSeq
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2010-11-13
-dateUnrestricted 2011-08-12
-dccAccession wgEncodeEM001924
-expId 1924
-fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig.bigWig
-grant Hardison
-lab PSU-m
-labVersion http://main.g2.bx.psu.edu/u/dan/h/18mar2010ln2-polii-ch12-groomed-reads
-project wgEncode
-seqPlatform Illumina_GA2
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 2972
-tableName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig
-view Signal
-
 metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1
 objType file
 age E14.5
@@ -3274,7 +3166,7 @@ metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep1
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3297,13 +3189,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep2
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3325,13 +3218,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk
 objType table
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3354,13 +3248,14 @@ sex M
 strain 129
 subId 4793
 tableName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep1
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3383,13 +3278,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep2
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3411,13 +3307,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3439,13 +3336,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3467,13 +3365,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepSignalRep1
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3495,13 +3394,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepSignalRep2
 objType file
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3523,13 +3423,14 @@ setType exp
 sex M
 strain 129
 subId 4793
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig
 objType table
 age E0
 antibody CTCF
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3552,13 +3453,14 @@ sex M
 strain 129
 subId 4793
 tableName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3580,13 +3482,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3608,13 +3511,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputPk
 objType table
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3636,13 +3540,14 @@ sex M
 strain 129
 subId 4723
 tableName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3664,13 +3569,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep2
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3692,13 +3598,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3720,13 +3627,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3748,13 +3656,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3776,13 +3685,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep2
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3804,13 +3714,14 @@ setType exp
 sex M
 strain 129
 subId 4723
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputSig
 objType table
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3832,13 +3743,14 @@ sex M
 strain 129
 subId 4723
 tableName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3859,13 +3771,14 @@ setType exp
 sex M
 strain 129
 subId 3033
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputPk
 objType table
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3886,13 +3799,14 @@ sex M
 strain 129
 subId 3033
 tableName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputRawDataRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3913,13 +3827,14 @@ setType exp
 sex M
 strain 129
 subId 3033
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig
 objType table
 age E0
 antibody GATA1_(SC-265)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3940,13 +3855,14 @@ sex M
 strain 129
 subId 3033
 tableName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3967,13 +3883,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -3994,13 +3911,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputPk
 objType table
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4021,13 +3939,14 @@ sex M
 strain 129
 subId 3045
 tableName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep1
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4048,13 +3967,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep2
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4075,13 +3995,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4102,13 +4023,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4129,13 +4051,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4156,13 +4079,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4183,13 +4107,14 @@ setType exp
 sex M
 strain 129
 subId 3045
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputSig
 objType table
 age E0
 antibody GATA2_(SC-9008)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4210,13 +4135,14 @@ sex M
 strain 129
 subId 3045
 tableName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4239,13 +4165,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4267,13 +4194,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4296,13 +4224,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4324,13 +4253,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep1
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4352,13 +4282,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep2
 objType file
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4380,13 +4311,14 @@ setType input
 sex M
 strain 129
 subId 5145
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputSig
 objType table
 age E0
 antibody Input
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4408,13 +4340,14 @@ sex M
 strain 129
 subId 5145
 tableName wgEncodePsuTfbsG1eer4e2InputME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep1
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4435,13 +4368,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep2
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4462,13 +4396,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep3
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4489,13 +4424,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputPk
 objType table
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4516,13 +4452,14 @@ sex M
 strain 129
 subId 3050
 tableName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep1
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4543,13 +4480,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep2
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4570,13 +4508,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep3
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4597,13 +4536,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4624,13 +4564,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4651,13 +4592,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep3
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4678,13 +4620,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4705,13 +4648,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4732,13 +4676,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep3
 objType file
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4759,13 +4704,14 @@ setType exp
 sex M
 strain 129
 subId 3050
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputSig
 objType table
 age E0
 antibody Pol2-4H8
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4786,13 +4732,14 @@ sex M
 strain 129
 subId 3050
 tableName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4813,13 +4760,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4840,13 +4788,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view Alignments
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputPk
 objType table
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4867,13 +4816,14 @@ sex M
 strain 129
 subId 4783
 tableName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputPk
+treatment diffProtD_24hr
 view Peaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep1
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4894,13 +4844,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep2
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4921,13 +4872,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep1
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4948,13 +4900,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep2
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -4975,13 +4928,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RepPeaks
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepSignalRep1
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -5002,13 +4956,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepSignalRep2
 objType file
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -5029,13 +4984,14 @@ setType exp
 sex M
 strain 129
 subId 4783
+treatment diffProtD_24hr
 view RepSignal
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig
 objType table
 age E0
 antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
+cell G1E-ER4
 composite wgEncodePsuTfbs
 control Input
 controlId wgEncodeEM001921
@@ -5056,6 +5012,7 @@ sex M
 strain 129
 subId 4783
 tableName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig
+treatment diffProtD_24hr
 view Signal
 
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1
@@ -5523,6 +5480,630 @@ strain CD-1
 subId 5124
 tableName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputSig
 view Signal
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep1
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep1.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex B
+strain CD-1
+subId 6545
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep2
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep2.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep3
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep3.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep3.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep4
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep4.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1AlnRep4.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 4
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep1
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex B
+strain CD-1
+subId 6545
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep2
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep3
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep3.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep3.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep4
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep4.bam,wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputAlnRep4.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 4
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view Alignments
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputPk
+objType table
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputPk.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+tableName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputPk
+view Peaks
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep1
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep2
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep3
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep3.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep4
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRawDataRep4.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 4
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep1
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RepPeaks
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep2
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RepPeaks
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep3
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep3.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RepPeaks
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep4
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepPeaksRep4.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 4
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RepPeaks
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep1
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RepSignal
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep2
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RepSignal
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep3
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep3.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RepSignal
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep4
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputRepSignalRep4.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 4
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RepSignal
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputSig
+objType table
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputSig.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+tableName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1InputSig
+view Signal
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1RawDataRep1
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1RawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1RawDataRep2
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1RawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1RawDataRep3
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1RawDataRep3.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoTal1BE14halfCd1RawDataRep4
+objType file
+age E14.5
+antibody TAL1_(SC-12984)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-29
+dateUnrestricted 2012-12-29
+fileName wgEncodePsuTfbsMegakaryoTal1BE14halfCd1RawDataRep4.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 4
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 6545
+view RawData
 
 metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1
 objType file
@@ -6540,4 +7121,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1939310484
+# MAGIC: 1562822969

@@ -9,7 +9,7 @@ dragAndDrop subTracks
 visibility hide
 group compGeno
 noInherit on
-priority 496
+priority 497
 color 0,0,0
 altColor 255,255,0
 type bed 3
@@ -18,7 +18,7 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species 
 sortOrder species=+ view=+ clade=+
 configurable on
-html mm9primateChainNet
+html mm10primateChainNet
 
     track primateChainNetViewchain
     shortLabel Chains
@@ -27,13 +27,13 @@ html mm9primateChainNet
     subTrack primateChainNet
     spectrum on
 
-        track chainOtoGar1
+        track chainOtoGar3
         subTrack primateChainNetViewchain on
         subGroups view=chain species=aBushbaby clade=eStrep
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain otoGar1
-        otherDb otoGar1
+        type chain otoGar3
+        otherDb otoGar3
 
         track chainMicMur1
         subTrack primateChainNetViewchain off
@@ -129,13 +129,13 @@ html mm9primateChainNet
     visibility dense
     subTrack primateChainNet
 
-        track netOtoGar1
+        track netOtoGar3
         subTrack primateChainNetViewnet on 
         subGroups view=net species=aBushbaby clade=eStrep
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign otoGar1 chainOtoGar1
-        otherDb otoGar1
+        type netAlign otoGar3 chainOtoGar3
+        otherDb otoGar3
 
         track netMicMur1
         subTrack primateChainNetViewnet off

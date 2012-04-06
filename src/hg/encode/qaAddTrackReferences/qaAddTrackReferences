@@ -23,38 +23,33 @@ def parsePubmed(doc, id):
 
 def parsePmc(doc, id):
     infoDict = dict()
-    id = re.sub("PMC", "", id)
     infoDict['url'] = "http://www.ncbi.nlm.nih.gov/pmc/articles/%s" % id
     attribList = ['Title', 'PubDate', 'Journal', 'Volume', 'Issue', 'Pagination', 'CollectiveName']
-    for element in doc:
-        if element.tag != "DocSum":
-            continue
-        items = element.findall("Item")
-        for i in items:
-            if i.attrib['Name'] == "PmId":
-                #pass
-                return parseInit(i.text)
-            if i.attrib['Name'] == "Author":
-                authors = list()
-                for j in i.text.split(","):
-                    authors.append(j.lstrip())
-                infoDict['Authors'] = authors
-            if i.attrib['Name'] in attribList:
-                infoDict[i.attrib['Name']] = i.text
-    return infoDict
+    for node in doc.iter("ArticleId"):
+        good = 0
+        for child in node:
+            if child.tag == "IdType" and child.text == "pmid":
+                good = 1
+            if good == 1 and child.tag == "Value":
+                return parseInit(child.text) 
+            
+    print "Unable to find pubmed id for pubmed central id: %s" % id
+    sys.exit()
 
 def parseInit(id):
     urlbase = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?"
     db = "Pubmed"
-    if re.match("^PMC", id):
-        db = "pmc"
     url = urlbase + "db=%s" % db + "&id=%s" % id
-
+    if re.match("^PMC", id):
+        db = "PMC"
+        id = re.sub("PMC", "", id)
+        url = urlbase + "db=%s" % db + "&id=%s&version=2.0" % id
+    print "Accessing %s" % url
     fetch = urllib2.urlopen(url)
     doc = ET.XML(fetch.read())
     if db == "Pubmed":
         infoDict = parsePubmed(doc, id)
-    elif db == "pmc":
+    elif db == "PMC":
         infoDict = parsePmc(doc, id)
 
     return infoDict
@@ -106,16 +101,17 @@ def makeHtml(infoDict):
     htmlStr = """
 <p>
 %s
-<a href="%s"
-rel="nofollow" target="_blank">
-%s</a>.
+<a href="%s" target="_blank">
+%s
+</a>.
 <em>%s</em>. %s
 </p>
 """ % (authStr, infoDict['url'], htmlEscape(title), htmlEscape(journal), dateStr)
 
-    return htmlStr
+    return htmlStr, authStr
 
 def main():
+    print "Initializing"
     parser = argparse.ArgumentParser(
         prog='qaAddTrackReferences',
         description='Turns PubMed Ids and PubMedCentral Ids into GB formatted citations in html',
@@ -131,7 +127,8 @@ def main():
 
     for i in ids:
         infoDict = parseInit(i)
-        references[infoDict['Authors'][0]] = makeHtml(infoDict)
+        html, authStr = makeHtml(infoDict)
+        references[authStr] = html
 
     for i in sorted(references.keys()):
         print "%s" % references[i]

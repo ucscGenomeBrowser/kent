@@ -2030,8 +2030,8 @@ for (;;)
     }
 }
 
-/* Return first white space or NULL if none.. */
 char *skipToSpaces(char *s)
+/* Return first white space or NULL if none.. */
 {
 char c;
 if (s == NULL)
@@ -3299,7 +3299,6 @@ char *splitOffNumber(char *db)
 {
 return cloneString(skipToNumeric(db));
 }
-
 
 time_t mktimeFromUtc (struct tm *t)
 /* Return time_t for tm in UTC (GMT)

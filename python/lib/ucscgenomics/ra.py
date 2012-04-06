@@ -74,6 +74,10 @@ class RaFile(OrderedDict):
     Filtering allows you to eliminate a lot of code.
     '''
 
+    @property
+    def filename(self):
+        return self._filename
+    
     def __init__(self, filePath=None, key=None):
         OrderedDict.__init__(self)
         if filePath != None:
@@ -84,7 +88,7 @@ class RaFile(OrderedDict):
         Reads an rafile stanza by stanza, and internalizes it. Don't override
         this for derived types, instead override readStanza.
         '''
-
+        self._filename = filePath
         file = open(filePath, 'r')
 
         #entry = None
@@ -145,6 +149,10 @@ class RaFile(OrderedDict):
         return val1, val2, entry
 
 
+    def write(self, filename):
+        file = open(filename, 'w')
+        file.write(str(self))
+        
     def iter(self):
         pass
 

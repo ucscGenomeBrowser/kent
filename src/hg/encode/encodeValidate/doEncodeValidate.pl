@@ -181,6 +181,7 @@ our %validators = (
     fragLength => \&validateNoValidation,
     setType => \&validateSetType,
     cell => \&validateControlledVocabOrNone,
+    insertLength => \&validateControlledVocabOrNone,
     antibody => \&validateControlledVocabOrControl,
     control => \&validateControlledVocabOrControl,
     ripAntibody => \&validateControlledVocabOrNone,
@@ -345,35 +346,27 @@ sub validateObtainedBy {
 
 # dispatch table
 our %formatCheckers = (
-    wig => \&validateWig,
+    bigWig => \&validateBigWig,
+    bigBed => \&validateBigBed,
+    bam => \&validateBam,
     bed => \&validateBed,
+    wig => \&validateWig,
     bedGraph => \&validateBedGraph,
     bed5FloatScore => \&validateBed,
-    genePred => \&validateGene,
-    gtf => \&validateGtf,
     tagAlign => \&validateTagAlign,
     pairedTagAlign => \&validatePairedTagAlign,
     narrowPeak => \&validateNarrowPeak,
     broadPeak => \&validateBroadPeak,
     gappedPeak => \&validateGappedPeak,
     fastq => \&validateFastQ,
+    fasta  => \&validateFasta,
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
+    genePred => \&validateGene,
+    gtf => \&validateGtf,
     rpkm  => \&validateRpkm,
-    junction  => \&validateFreepass,
-    fpkm1  => \&validateFreepass,
-    fpkm2  => \&validateFreepass,
-    fpkm => \&validateFreepass,
-    insDist  => \&validateFreepass,
-    peptideMapping  => \&validateFreepass,
-    fasta  => \&validateFasta,
-    bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
-    cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
-    bigWig => \&validateBigWig,
-    bigBed => \&validateBigBed,
-    bam => \&validateBam,
-    shortFrags => \&validateBed,
+    peptideMapping  => \&validateFreepass,
     bedLogR => \&validateBed,
     bedRnaElements => \&validateBed,
     bedRrbs => \&validateBed,
@@ -600,6 +593,17 @@ sub validateBed {
         if ($fieldCount >= 5 && $type ne 'bed5FloatScore' && $fields[5] !~ m/^(\+|\-|\.)$/) {
             push @localerrors, "$prefix field 6 ($fields[5]) value must be either + or - or .\n";
         }
+        if ($type eq 'bedRnaElements') {
+            unless ($fields[6] =~ m/$floatRegEx/) {
+                push @localerrors, "$prefix field 7 ($fields[6]) in $type must be a float.\n";
+            }
+            unless ($fields[7] =~ m/$floatRegEx/ or $fields[7] =~ m/\.$/) {
+                push @localerrors, "$prefix field 8 ($fields[7]) in $type must be a float.\n";
+            }
+            unless ($fields[8] =~ m/^\d+$/) {
+                push @localerrors, "$prefix field 9 ($fields[8]) in $type must be an int.\n";
+            }
+        }
         if ($type eq 'bed5FloatScore' && $fieldCount < 6) {
             push @localerrors, "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
             next
@@ -768,6 +772,10 @@ sub getInfoFiles
     if (defined $category && $category eq "Tissue" && defined $sex) {
         $cellLineSex=$sex;
     }
+    if (defined $sex) {
+        $cellLineSex = $sex;
+    }
+
 
     my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
     my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
@@ -811,6 +819,7 @@ sub validateBroadPeak
 }
 
 sub validateGappedPeak
+# Cricket says:  validateFiles does gappedPeak, why are we doing it differently here.
 {
     my ($path, $file, $type) = @_;
     my @list = ({TYPE => "chrom", NAME => "chrom"},
@@ -849,9 +858,11 @@ sub validateFastQ
     my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq \"$file\""]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateFastQ : " . $safe->stderr() . "\n";
+
         # don't show end-user pipe error(s)
         return("failed validateFastQ for '$file'");
     }
+
     return ();
 }
 
@@ -886,23 +897,6 @@ sub validateCsfasta
     return ();
 }
 
-sub validateSAM
-{
-    my ($path, $file, $type) = @_;
-    doTime("beginning validateSAM") if $opt_timing;
-    HgAutomate::verbose(2, "validateSAM($path,$file,$type)\n");
-    my $paramList = validationSettings("validateFiles","SAM");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=SAM $file"]);
-    if(my $err = $safe->exec()) {
-        print STDERR  "ERROR: failed validateSAM : " . $safe->stderr() . "\n";
-        # don't show end-user pipe error(s)
-        return("failed validateSAM for '$file'");
-    }
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateSAM") if $opt_timing;
-    return ();
-}
-
 
 sub validateBam
 {
@@ -910,6 +904,7 @@ sub validateBam
     doTime("beginning validateBam") if $opt_timing;
     HgAutomate::verbose(2, "validateBam($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","bam");
+    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
 
     # index the BAM file
     my $safe = SafePipe->new(CMDS => ["samtools index $file"]);
@@ -919,7 +914,7 @@ sub validateBam
         return("failed validateBam for '$file'");
     }
 
-    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
+    
     $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM -chromInfo=$infoFile -genome=$twoBitFile $file"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateBam : " . $safe->stderr() . "\n";
@@ -946,7 +941,7 @@ sub validateBigBed
         return("failed validateBigBed for '$file'");
     }
     my ($tmpfile, $basedir, $bar) = fileparse($tempfilename);
-    my $bedError = &validateBed($basedir, $tmpfile, "bed");
+    my $bedError = &validateBed($basedir, $tmpfile, $type);
     if ($bedError) {
         $bedError =~ s/$tmpfile/$file/g;
         print STDERR "ERROR: failed validateBigBed : " . $bedError . "\n";
@@ -1064,33 +1059,6 @@ sub validateRpkm
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     doTime("done validateRpkm", $lineNumber) if $opt_timing;
-    return ();
-}
-
-sub validateBowtie
-# Unkown format (for download) from Wold lab.
-# Assume last column is optional
-# Sample lines:-
-# HWI-EAS229_75_30DY0AAXX:7:1:0:1545/1    +       chr1    5983615 NCGTCCATCTCACATCGTCAGGAAAGGGGGAAGCACTGGATGGCTGTGGCCTCACAGGCAGGGAGAGTGGGGTCC     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 0       0:G>N
-# HWI-EAS229_75_30DY0AAXX:7:1:0:1591/1      -       uc002fcb.1|22|70699936  45      CTATTTCCACCAAGCAGCCAAGCTCAAGGGAATCGGGGAGTACGTGAACATCCGCACAGGGATGCCCTGCCACTN     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII     0       0:T>N]
-# HWI-EAS229_75_30DY0AAXX:7:1:0:1766/1    -       chr18   72954304        GCAGCCACCAGAAGCGGGAAGAGGTGAAGACAGAGCCTCCTGCAGAGCTCCCACTCTGCCAACGCCTTGACTTTN     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 0       0:G>N,59:T>G
-{
-    my ($path, $file, $type) = @_;
-    doTime("beginning validateBowtie") if $opt_timing;
-    my $lineNumber = 0;
-    doTime("beginning validateBedGraph") if $opt_timing;
-    my $fh = Encode::openUtil($file, $path);
-    while(<$fh>) {
-        chomp;
-        $lineNumber++;
-        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        die "Failed bowtie validation, file '$file'; line $lineNumber: line=[$_]\n"
-            unless $_ =~ m/^([A-Za-z0-9:>_,\.\|\/-]+)\t([+-])\t([A-Za-z0-9:>_,\.\|\/-]+)\t(\d+)\t(\w+)\t(\w+)\t(\d+)\t([A-Za-z0-9:>_,\.\|\/-]+)?$/;
-        last if($opt_quick && $lineNumber >= $quickCount);
-    }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateBowtie", $lineNumber) if $opt_timing;
     return ();
 }
 

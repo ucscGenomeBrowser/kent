@@ -1178,21 +1178,21 @@ return sr;
 
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query)
-/* (Returns NULL if result was empty. :
- *     old info, only applies with mysql_store_result not mysql_use_result)
- * Otherwise returns a structure that you can do sqlRow() on. */
+/* 
+ * Return a structure that you can do sqlNextRow() on. 
+ * (You need to check the return value of sqlRow to find out if there are
+ * any results.) */
 {
 return sqlUseOrStore(sc,query,mysql_use_result, TRUE);
 }
 
 struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query)
-/* Query database.
- * old comment: If result empty squawk and die.
- *    This only applied back when sqlGetResult was using mysql_store_result.
- * These days, with mysql_use_result, we cannot know ahead of time
+/* 
+ * Return a structure that you can do sqlNextRow() on. 
+ * DOES NOT errAbort() IF THERE ARE NO RESULTS 
+ * (These days, with mysql_use_result, we cannot know ahead of time
  * if there are results, we can only know by actually trying to fetch a row.
- * At then how would we put it back?  So in fact right now sqlMustGetResult
- * is no different than sqlGetResult.  */
+ * So in fact right now sqlMustGetResult is no different than sqlGetResult.) */
 {
 struct sqlResult *res = sqlGetResult(sc,query);
 if (res == NULL)
@@ -1233,19 +1233,6 @@ if (matched != NULL)
 return numChanged;
 }
 
-static boolean isMySql4(struct sqlConnection *conn)
-/* determine if this is at least mysql 4.0 or newer */
-{
-char majorVerBuf[64];
-char *dotPtr = strchr(conn->conn->server_version, '.');
-int len = (dotPtr - conn->conn->server_version);
-assert(dotPtr != NULL);
-strncpy(majorVerBuf, conn->conn->server_version, len);
-majorVerBuf[len] = '\0';
-
-return (sqlUnsigned(majorVerBuf) >= 4);
-}
-
 void sqlWarnings(struct sqlConnection *conn, int numberOfWarnings)
 /* Show the number of warnings requested. New feature in mysql5. */
 {
@@ -1265,6 +1252,13 @@ warn("%s", dy->string);
 dyStringFree(&dy);
 }
 
+int sqlWarnCount(struct sqlConnection *conn)
+/* Return the number of warnings. New feature in mysql5. */
+{
+return sqlQuickNum(conn, "SHOW COUNT(*) WARNINGS");
+}
+
+
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options)
 /* Load a tab-seperated file into a database table, checking for errors.
@@ -1278,7 +1272,6 @@ int numScan, numRecs, numSkipped, numWarnings;
 char *localOpt, *concurrentOpt, *dupOpt;
 const char *info;
 struct sqlResult *sr;
-boolean mysql4 = isMySql4(conn);
 
 /* Doing an "alter table disable keys" command implicitly commits the current
    transaction. Don't want to use that optimization if we need to be transaction
@@ -1319,7 +1312,7 @@ if (options & SQL_TAB_FILE_CONCURRENT)
 else
     {
     concurrentOpt = "";
-    if (mysql4 && doDisableKeys)
+    if (doDisableKeys)
         {
         /* disable update of indexes during load. Inompatible with concurrent,
          * since enable keys locks other's out. */
@@ -1339,6 +1332,7 @@ sr = sqlGetResult(conn, query);
 monitorEnter();
 info = mysql_info(conn->conn);
 monitorLeave();
+
 if (info == NULL)
     errAbort("no info available for result of sql query: %s", query);
 numScan = sscanf(info, "Records: %d Deleted: %*d  Skipped: %d  Warnings: %d",
@@ -1346,6 +1340,18 @@ numScan = sscanf(info, "Records: %d Deleted: %*d  Skipped: %d  Warnings: %d",
 if (numScan != 3)
     errAbort("can't parse sql load info: %s", info);
 sqlFreeResult(&sr);
+
+char *host = getenv("HOST");
+if (  // TODO 2012/03/26 this is temporary and we should eventually get to always checking the warnings.
+    ( sameOk(host,"hgwdev") 
+   || sameOk(host,"hgwbeta") 
+   || sameOk(host,"hgwalpha") 
+    )
+   && !sameOk(cfgOption("detectMysqlLoadWarnings"), "off")) // go gently in case of backwards-compatibility issues
+    {
+    /* mysql 5.0 bug: mysql_info returns unreliable warnings count, so use this instead: */
+    numWarnings = sqlWarnCount(conn);
+    }
 
 if ((numSkipped > 0) || (numWarnings > 0))
     {
@@ -1368,7 +1374,9 @@ if ((numSkipped > 0) || (numWarnings > 0))
              "%d row(s) skipped, %d warning(s) loading %s",
              table, numRecs, numSkipped, numWarnings, path);
     }
-if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && mysql4 && doDisableKeys)
+
+
+if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && doDisableKeys)
     {
     /* reenable update of indexes */
     safef(query, sizeof(query), "ALTER TABLE %s ENABLE KEYS", table);
