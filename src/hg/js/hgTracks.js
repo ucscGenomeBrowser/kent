@@ -310,7 +310,7 @@ var makeItemsByDrag = {
             autoHide: true, movable: false}));
         }
     },
-    
+
     load: function ()
     {
         for (var id in hgTracks.trackDb) {
@@ -2241,30 +2241,38 @@ var rightClick = {
                     //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { rightClick.hit(menuItemClicked, menuObject, "viewImg"); return true; }}});
                 }
 
-                if(rightClick.selectedMenuItem && rec && rec["configureBy"] != 'none') {
+                if(rightClick.selectedMenuItem && rec) {
                     // Add cfg options at just shy of end...
                     var o = new Object();
-                    if(tdbIsLeaf(rec) && (!tdbIsCompositeSubtrack(rec) || rec["configureBy"] != 'clickThrough')) {
-                        // Note that subtracks never do clickThrough because composite cfg is the desired clickThrough
-                        o[rightClick.makeImgTag("wrench.png")+" Configure "+rec.shortLabel] = {
-                            onclick: function(menuItemClicked, menuObject) {
-                                rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup");
-                                return true; }
-                        };
-                        if(rec.parentTrack != undefined)
+                    if(tdbIsLeaf(rec)) {
+
+                        if (rec["configureBy"] != 'none'
+                        && (!tdbIsCompositeSubtrack(rec) || rec["configureBy"] != 'clickThrough')) {
+                            // Note that subtracks never do clickThrough because
+                            // parentTrack cfg is the desired clickThrough
+                            o[rightClick.makeImgTag("wrench.png")+" Configure "+rec.shortLabel] = {
+                                onclick: function(menuItemClicked, menuObject) {
+                                    rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup");
+                                    return true; }
+                            };
+                        }
+                        if(rec.parentTrack != undefined) {
                             o[rightClick.makeImgTag("folderWrench.png")+" Configure "+
                               rec.parentLabel + " track set..."] = {
                                 onclick: function(menuItemClicked, menuObject) {
                                     rightClick.hit(menuItemClicked,menuObject,"hgTrackUi_follow");
                                     return true; }
                               };
-                    } else
+                        }
+                    } else {
+
                         o[rightClick.makeImgTag("folderWrench.png")+" Configure "+rec.shortLabel +
                           " track set..."] = {
                             onclick: function(menuItemClicked, menuObject) {
                                 rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_follow");
                                 return true; }
                           };
+                    }
                     if(jQuery.floatMgr) {
                         o[(rightClick.selectedMenuItem.id == rightClick.floatingMenuItem ?
                                 selectedImg : blankImg) + " float"] = {
@@ -2639,7 +2647,7 @@ var imageV2 = {
         document.TrackHeaderForm.submit();
 
     },
-    
+
     updateImgAndMap: function (response, status)
     {   // Handle ajax response with an updated trackMap image, map and optional ideogram.
         //
