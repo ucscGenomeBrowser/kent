@@ -13,8 +13,8 @@ subGroup7 insertLength InsertLength IL200=200
 subGroup8 treatment Treatment E2P60H=EqS_2.0pct_60hr NONE=None
 subGroup9 rep Replicate rep1=1
 dimensions dimensionX=cellType dimensionY=treatment
-sortOrder cellType=+ strain=+ sex=+ readType=+ treatment=+
-fileSortOrder cell=Cell_Line treatment=Treatment readType=Read-Type rep=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+sortOrder cellType=+ treatment=+
+fileSortOrder cell=Cell_Line treatment=Treatment view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain sex=sex mapAlgorithm=mapAlgorithm insertLength=insertLength treatment=treatment
 dragAndDrop subTracks
 priority 0
