@@ -27,13 +27,13 @@ html mm10primateChainNet
     subTrack primateChainNet
     spectrum on
 
-        track chainOtoGar1
+        track chainOtoGar3
         subTrack primateChainNetViewchain on
         subGroups view=chain species=aBushbaby clade=eStrep
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain otoGar1
-        otherDb otoGar1
+        type chain otoGar3
+        otherDb otoGar3
 
         track chainMicMur1
         subTrack primateChainNetViewchain off
@@ -129,13 +129,13 @@ html mm10primateChainNet
     visibility dense
     subTrack primateChainNet
 
-        track netOtoGar1
+        track netOtoGar3
         subTrack primateChainNetViewnet on 
         subGroups view=net species=aBushbaby clade=eStrep
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign otoGar1 chainOtoGar1
-        otherDb otoGar1
+        type netAlign otoGar3 chainOtoGar3
+        otherDb otoGar3
 
         track netMicMur1
         subTrack primateChainNetViewnet off

@@ -1,11 +1,11 @@
 mkChangeNotes v2
 mm9 wgEncodeLicrTfbs Release 2 vs Release 1
-2012-04-04
+2012-04-05
 
 QA Count Summaries for Release 2:
-Tables: 98
-Files: 458
-Gbdbs: 60
+Tables: 97
+Files: 451
+Gbdbs: 59
 Supplemental: 0
 Other: 3
 
@@ -16,21 +16,21 @@ Gbdbs: 0
 
 Sizes of New:
 Table: 53 MB
-Files: 99618 MB (97 GB)
-Gbdbs: 1837 MB (2 GB)
+Files: 97803 MB (96 GB)
+Gbdbs: 1765 MB (2 GB)
 Supplemental: 0 MB
 Other: 1 MB
-Total: 101509 MB (99 GB)
+Total: 99622 MB (97 GB)
 
 
 TABLES:
-New: 44
+New: 43
 Untouched: 54
 Revoked/Replaced/Renamed: 0
-New + Untouched: 98
-Total (New + Untouched + Revoked/Replaced/Renamed): 98
+New + Untouched: 97
+Total (New + Untouched + Revoked/Replaced/Renamed): 97
 
-New Tables (44):
+New Tables (43):
 wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdSig
 wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdPk
 wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdSig
@@ -54,7 +54,6 @@ wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdSig
 wgEncodeLicrTfbsOlfactInputMAdult8wksC57bl6StdSig
 wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdPk
 wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdSig
-wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdSig
 wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdPk
 wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdSig
 wgEncodeLicrTfbsSmintInputMAdult8wksC57bl6StdSig
@@ -136,13 +135,13 @@ Revoked/Replaced/Renamed Tables (0):
 
 
 DOWNLOAD FILES:
-New: 228
+New: 221
 Untouched: 230
 Revoked/Replaced/Renamed: 22
-New + Untouched: 458
-Total (New + Untouched + Revoked/Replaced/Renamed): 480
+New + Untouched: 451
+Total (New + Untouched + Revoked/Replaced/Renamed): 473
 
-New Download Files (228):
+New Download Files (221):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdAlnRep2.bam
@@ -272,13 +271,6 @@ New Download Files (228):
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeLicrTfbs/release2/wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep2.bam
@@ -630,13 +622,13 @@ Revoked/Replaced/Renamed Download Files (22):
 
 
 GBDBS:
-New: 28
+New: 27
 Untouched: 32
 Revoked/Replaced/Renamed: 0
-New + Untouched: 60
-Total (New + Untouched + Revoked/Replaced/Renamed): 60
+New + Untouched: 59
+Total (New + Untouched + Revoked/Replaced/Renamed): 59
 
-New Gbdb Files (28):
+New Gbdb Files (27):
 /gbdb/mm9/bbi/wgEncodeLicrTfbsBatInputMAdult24wksC57bl6StdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeLicrTfbsBmdmCtcfFAdult8wksC57bl6StdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeLicrTfbsBmdmInputFAdult8wksC57bl6StdSig.bigWig
@@ -652,7 +644,6 @@ New Gbdb Files (28):
 /gbdb/mm9/bbi/wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeLicrTfbsOlfactInputMAdult8wksC57bl6StdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdSig.bigWig
-/gbdb/mm9/bbi/wgEncodeLicrTfbsPlacInputFAdult8wksC57bl6StdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeLicrTfbsSmintInputMAdult8wksC57bl6StdSig.bigWig
 /gbdb/mm9/bbi/wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdSig.bigWig

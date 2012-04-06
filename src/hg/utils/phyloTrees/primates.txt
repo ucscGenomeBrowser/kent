@@ -1,29 +1,40 @@
 
 #	$Id: primates.txt,v 1.1 2010/04/05 19:09:43 hiram Exp $
 
-# Common to all:	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata;
-#	Euteleostomi; Mammalia; Eutheria; Euarchontoglires; Primates;
+# Common to all:        Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Coelomata; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Euarchontoglires; Primates; 
 
-hg	Haplorrhini; Catarrhini; Hominidae; Homo
+# human - homo sapiens
+hg	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Homininae; Homo
 
-panTro	Haplorrhini; Catarrhini; Hominidae; Pan
+# chimp - pan troglodytes
+panTro	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Homininae; Pan
 
-gorGor	Haplorrhini; Catarrhini; Hominidae; Gorilla
+# gorilla - gorilla gorilla gorilla
+gorGor	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Homininae; Gorilla
 
-ponAbe	Haplorrhini; Catarrhini; Hominidae; Pongo
+# orangutan - pongo abelii
+ponAbe	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hominidae; Ponginae; Pongo
 
-nomLeu	Haplorrhini; Catarrhini; Hominidae; Hylobatidae
+# gibbon - nomascus leucogenys
+nomLeu	Haplorrhini; Simiiformes; Catarrhini; Hominoidea; Hylobatidae; Nomascus
 
-rheMac	Haplorrhini; Catarrhini; Cercopithecidae; Cercopithecinae; Macaca
+# rhesus - Macaca mulatta
+rheMac	Haplorrhini; Simiiformes; Catarrhini; Cercopithecoidea; Cercopithecidae; Cercopithecinae; Macaca
 
-papHam	Haplorrhini; Catarrhini; Cercopithecidae; Cercopithecinae; Papio
+# baboon - papio hamadryas
+papHam	Haplorrhini; Simiiformes; Catarrhini; Cercopithecoidea; Cercopithecidae; Cercopithecinae; Papio
 
-saiBol	Haplorrhini; Simiiformes; Platyrrhini; Cebidae; Saimiriinae; Saimiri; Saimiri boliviensis
+# squirrel monkey - Saimiri boliviensis
+saiBol	Haplorrhini; Simiiformes; Platyrrhini; Cebidae; Saimiriinae; Saimiri
 
-calJac	Haplorrhini; Platyrrhini; Cebidae; Callitrichinae; Callithrix
+# marmoset - callithrix jacchus
+calJac	Haplorrhini; Simiiformes; Platyrrhini; Cebidae; Callitrichinae; Callithrix
 
+# tarsier - tarsius syrichta
 tarSyr	Haplorrhini; Tarsiiformes; Tarsiidae; Tarsius
 
+# lemur - microcebus murinus
 micMur	Strepsirrhini; Lemuriformes; Cheirogaleidae; Microcebus
 
+# galago - Otolemur garnettii
 otoGar	Strepsirrhini; Lorisiformes; Galagidae; Otolemur
