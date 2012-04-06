@@ -30,7 +30,6 @@ Will report total size of push and write two files:\n\
 db.tables.push -> output for all tables from mypush\n\
 db.tables.pushSize -> size of push\n"
 
-
 if ($2 == "") then
   echo $warningMessage
   exit
@@ -40,13 +39,7 @@ else
 endif
 
 set trackName=`echo $2 | sed -e "s/Tables//"`
-# echo trackName = $trackName
 
-echo
-echo "Will have to re-type password after very large tables"
-echo "If you take too long to re-type your password, the table"
-echo "the script stalled on might not get pushed."
-echo
 rm -f $db.$trackName.push
 foreach table (`cat $tablelist`)
   echo pushing "$table"
