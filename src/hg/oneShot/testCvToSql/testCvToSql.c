@@ -85,7 +85,11 @@ struct fieldLabel fieldDescriptions[] = {
    {"cellLine", "derivedFrom", "Tissue or other souce of original cells. Depreciated?"},
    {"antibody", "validation", "How antibody was validated to be specific for target."},
    {"antibody", "displayName", "Descriptive short but not necessarily unique name for antibody."},
+   {"antibody", "antibodyDescription", "Short description of antibody itself."},
    {"antibody", "target", "Molecular target of antibody."},
+   {"antibody", "targetDescription", "Short description of antibody target."},
+   {"antibody", "targetUrl", "Web page associated with antibody target."},
+   {"antibody", "targetId", "Identifier for target, prefixed with source of ID, usually GeneCards"},
    {"antibodyTarget", "target", "Molecular target of antibody."},
    {"antibodyTarget", "targetDescription", "Short description of antibody target."},
    {"antibodyTarget", "externalUrl", "Web page associated with antibody target."},
@@ -103,8 +107,12 @@ struct fieldLabel fieldDescriptions[] = {
    {"typeOfTerm", "validate", "Describes how to validate field typeOfTerm refers to. Use 'none' for no validation."},
    {"typeOfTerm", "hidden", "Hide field in user interface? Can be 'yes' or 'no' or a release list"},
    {"typeOfTerm", "priority", "Order to display or search terms, lower is earlier."},
+   {"*", "term", "A relatively short label, no more than a few words"},
    {"*", "symbol", "A short human and machine readable symbol with just alphanumeric characters."},
+   {"*", "tag", "A short human and machine readable symbol with just alphanumeric characters."},
    {"*", "deprecated", "If non-empty, the reason why this entry is obsolete."},
+   {"*", "label", "A relatively short label, no more than a few words"},
+   {"*", "description", "A description up to a paragraph long of plain text."},
    {"*", "shortLabel", "A one or two word (less than 18 character) label."},
    {"*", "longLabel", "A sentence or two label."},
    {"*", "organism", "Common name of donor organism."},
@@ -173,6 +181,7 @@ char *fieldLabelToSymbol(char *label)
 /* Convert a field label to one we want to use.  This one mostly puts system into 
  * something more compatible with what we're used to in other databases. */
 {
+#ifdef DO_IN_SQL_INSTEAD
 if (sameString(label, "term"))
     return "shortLabel";
 else if (sameString(label, "tag"))
@@ -182,6 +191,7 @@ else if (sameString(label, "description"))
 else if (sameString(label, "antibodyDescription"))
     return "longLabel";
 else
+#endif /* DO_IN_SQL_INSTEAD */
     {
     enforceCamelCase(label);
     return label;
@@ -893,12 +903,14 @@ for (type = typeList; type != NULL; type = type->next)
     {
     if (sameString(type->name, "grant"))
         type->symbol = "encodeGrant";
+#ifdef DO_IN_SQL_INSTEAD
     else if (sameString(type->name, "Antibody"))
         splitAntibodyTable(type, typeHash, typeOfTermHash);
-    addDeprecatedField(type);
     mergeLabelAndShortLabel(type);
-    removeField(type, "type");
+    addDeprecatedField(type);
     reorderFields(type, fieldPriority, ArraySize(fieldPriority));
+#endif /* DO_IN_SQL_INSTEAD */
+    removeField(type, "type");
     }
 
 /* Output type tree and actual data */
