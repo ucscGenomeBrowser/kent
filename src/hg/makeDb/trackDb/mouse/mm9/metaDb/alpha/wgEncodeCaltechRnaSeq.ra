@@ -12,6 +12,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-20
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEM002735
+expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200Aln.bam,wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200Aln.bam.bai
 grant Hardison
 insertLength 200
@@ -37,6 +39,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-19
 dateUnrestricted 2012-12-19
+dccAccession wgEncodeEM002734
+expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAln.bam,wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hAln.bam.bai
 grant Hardison
 insertLength 200
@@ -62,6 +66,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-19
 dateUnrestricted 2012-12-19
+dccAccession wgEncodeEM002734
+expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd1Rep1.fastq.gz
 grant Hardison
 insertLength 200
@@ -87,6 +93,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-19
 dateUnrestricted 2012-12-19
+dccAccession wgEncodeEM002734
+expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hFastqRd2Rep1.fastq.gz
 grant Hardison
 insertLength 200
@@ -112,6 +120,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-19
 dateUnrestricted 2012-12-19
+dccAccession wgEncodeEM002734
+expId 2734
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200E2p60hRawRep1.bigWig
 grant Hardison
 insertLength 200
@@ -138,6 +148,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-20
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEM002735
+expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd1Rep1.fastq.gz
 grant Hardison
 insertLength 200
@@ -163,6 +175,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-20
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEM002735
+expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200FastqRd2Rep1.fastq.gz
 grant Hardison
 insertLength 200
@@ -188,6 +202,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-20
 dateUnrestricted 2012-12-20
+dccAccession wgEncodeEM002735
+expId 2735
 fileName wgEncodeCaltechRnaSeq10t12C3hFR2x75Th131Il200RawRep1.bigWig
 grant Hardison
 insertLength 200
@@ -214,6 +230,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEM002732
+expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200AlnRep1.bam,wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200AlnRep1.bam.bai
 grant Hardison
 insertLength 200
@@ -240,6 +258,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEM002733
+expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hAlnRep1.bam,wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hAlnRep1.bam.bai
 grant Hardison
 insertLength 200
@@ -266,6 +286,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEM002733
+expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hFastqRd1Rep1.fastq.gz
 grant Hardison
 insertLength 200
@@ -291,6 +313,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEM002733
+expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hFastqRd2Rep1.fastq.gz
 grant Hardison
 insertLength 200
@@ -316,6 +340,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-01
 dateUnrestricted 2012-11-01
+dccAccession wgEncodeEM002733
+expId 2733
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200E2p60hRawRep1.bigWig
 grant Hardison
 insertLength 200
@@ -342,6 +368,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEM002732
+expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200FastqRd1Rep1.fastq.gz
 grant Hardison
 insertLength 200
@@ -367,6 +395,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEM002732
+expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200FastqRd2Rep1.fastq.gz
 grant Hardison
 insertLength 200
@@ -392,6 +422,8 @@ dataType RnaSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-31
 dateUnrestricted 2012-10-31
+dccAccession wgEncodeEM002732
+expId 2732
 fileName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200RawRep1.bigWig
 grant Hardison
 insertLength 200
@@ -409,4 +441,4 @@ tableName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200RawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -1731110241
+# MAGIC: -427900865
