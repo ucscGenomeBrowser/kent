@@ -20,6 +20,7 @@ var browser;              // browser ("msie", "safari" etc.) // move to utils.js
  * boolean measureTiming  // true if measureTiming is on
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
  */
+
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
     if (!genomePos.original) {
@@ -121,6 +122,13 @@ var genomePos = {
     getOriginalPos: function ()
     {
         return genomePos.original || genomePos.get();
+    },
+
+    revertToOriginalPos: function ()
+    {
+    // undo changes to position (i.e. after user aborts a drag-and-select).
+        this.set(this.original, this.originalSize);
+        this.original = this.originalSize = null;         // not sure if this is necessary.
     },
 
     set: function (position, size)
@@ -569,9 +577,8 @@ var dragSelect = {
                     document.TrackHeaderForm.submit();
                 }
             }
-        } else {  // what is this doing?
-            genomePos.set(genomePos.original, genomePos.originalSize);
-            genomePos.original = genomePos.originalSize = null;         // <- XXXX I think this is unnecessary.
+        } else {
+            genomePos.revertToOriginalPos();
         }
         dragSelect.startTime = null;
         setTimeout('posting.allowMapClicks();',50); // Necessary incase the dragSelect.selectEnd was over a map item. select takes precedence.
@@ -1680,11 +1687,10 @@ var rightClick = {
                         chrom = a[1];
                     a = /hgg_start=(\d+)/.exec(href);
                     if(a && a[1])
-                        // XXXX does chromStart have to be incremented by 1?
-                        chromStart = a[1];
+                        chromStart = parseInt(a[1]) + 1;
                     a = /hgg_end=(\d+)/.exec(href);
                     if(a && a[1])
-                        chromEnd = a[1];
+                        chromEnd = parseInt(a[1]);
                 } else {
                     // a = /hgc.*\W+c=(\w+)/.exec(href);
                     a = /hgc.*\W+c=(\w+)/.exec(href);
@@ -2826,7 +2832,6 @@ var imageV2 = {
 
     navigateButtonClick: function (ele) // called from hgTracks.c
     {   // code to update just the imgTbl in response to navigation buttons (zoom-out etc.).
-        // This is currently experimental code (controlled by IN_PLACE_UPDATE in imageV2.h).
         if(imageV2.inPlaceUpdate) {
             var params = ele.name + "=" + ele.value;
             $(ele).attr('disabled', 'disabled');
@@ -2904,7 +2909,8 @@ var imageV2 = {
     // request an hgTracks image, using params
     // disabledEle is optional; this element will be enabled when update is complete
     // If keepCurrentTrackVisible is true, we try to maintain relative position of the item under the mouse after the in-place update.
-        jQuery('body').css('cursor', '');
+        // Tim thinks we should consider disabling all UI input while we are doing in-place update.
+        jQuery('body').css('cursor', 'wait');
         var currentId, currentIdYOffset;
         if(keepCurrentTrackVisible) {
             var item = rightClick.currentMapItem || imageV2.lastTrack;
@@ -3035,29 +3041,6 @@ var trackSearch = {
 }
 
 
-/*
-
-// wait for jStore to prepare the storage engine (this token reload code is experimental and currently dead).
-jQuery.jStore && jQuery.jStore.ready(function(engine) {
-    // alert(engine.jri);
-    // wait for the storage engine to be ready.
-    engine.ready(function(){
-        var engine = this;
-        var newToken = hgTracks.time;
-        if(newToken) {
-            var oldToken = engine.get("token");
-            if(oldToken && oldToken == newToken) {
-                // user has hit the back button.
-                jQuery('body').css('cursor', 'wait');
-                window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
-            }
-        }
-        engine.set("token", newToken);
-    });
-});
-
-*/
-
   ///////////////
  //// READY ////
 ///////////////
@@ -3078,20 +3061,6 @@ $(document).ready(function()
 
     var db = getDb();
     suggestBox.init(db);
-
-    if(jQuery.jStore) {
-        // Experimental code to handle "user hits back button" problem by reloading the page based on the user's cart
-        if(jQuery.browser.msie && jQuery.browser.version < 8) {
-            // IE 7 requires flash to support jStore.
-            jQuery.extend(jQuery.jStore.defaults, {
-                              project: 'hgTracks',
-                              engine: 'flash',
-                              flash: '/jStore.Flash.html'
-                          });
-        }
-        jQuery.jStore.load();
-    }
-
 
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date (but turn this off for search form).
     if($("FORM").length > 0 && $('#trackSearch').length == 0) {
