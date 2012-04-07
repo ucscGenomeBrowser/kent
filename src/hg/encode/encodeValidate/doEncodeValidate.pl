@@ -772,6 +772,10 @@ sub getInfoFiles
     if (defined $category && $category eq "Tissue" && defined $sex) {
         $cellLineSex=$sex;
     }
+    if (defined $sex) {
+        $cellLineSex = $sex;
+    }
+
 
     my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
     my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
@@ -900,6 +904,7 @@ sub validateBam
     doTime("beginning validateBam") if $opt_timing;
     HgAutomate::verbose(2, "validateBam($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","bam");
+    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
 
     # index the BAM file
     my $safe = SafePipe->new(CMDS => ["samtools index $file"]);
@@ -909,7 +914,7 @@ sub validateBam
         return("failed validateBam for '$file'");
     }
 
-    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
+    
     $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM -chromInfo=$infoFile -genome=$twoBitFile $file"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateBam : " . $safe->stderr() . "\n";

@@ -21,6 +21,7 @@
 
 boolean withNull = FALSE;
 boolean makeJson = FALSE;
+boolean makeDjango = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -40,13 +41,15 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
          "              applications to accept and load data into objects\n"
 	 "              with potential 'missing data' (NULL in SQL)\n"
          "              situations.\n"
-	 "  -json - generate method to output the object in JSON format.\n");
+         "  -django - generate method to output object as django model Python code\n"
+	 "  -json - generate method to output the object in JSON (JavaScript) format.\n");
 }
 
 static struct optionSpec optionSpecs[] = {
     {"dbLink", OPTION_BOOLEAN},
     {"withNull", OPTION_BOOLEAN},
     {"json", OPTION_BOOLEAN},
+    {"django", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -76,6 +79,67 @@ for (col = table->columnList; col != NULL; col = col->next)
 fprintf(f,"              #Indices\n");
 fprintf(f, "    PRIMARY KEY(%s)\n", table->columnList->name);
 fprintf(f, ");\n");
+}
+
+void djangoEnumChoices(struct asColumn *col, FILE *f)
+/* Write out a list of choices to use with a django enum. */
+{
+fprintf(f, "    %sChoices = (\n", col->name);
+struct slName *val;
+for (val = col->values; val != NULL; val = val->next)
+    fprintf(f, "        ('%s', '%s'),\n", val->name, val->name);
+fprintf(f, "    )\n");
+}
+
+int longestValue(struct asColumn *col)
+/* Return length of longest value in col->values list */
+{
+int longest = 0;
+struct slName *val;
+for (val = col->values; val != NULL; val = val->next)
+    {
+    int len = strlen(val->name);
+    if (len > longest)
+        longest = len;
+    }
+return longest;
+}
+
+void djangoColumn(struct asColumn *col, FILE *f)
+/* Print out column in Django flavored python. */
+{
+fprintf(f, "    %s = models.", col->name);
+struct asTypeInfo *lt = col->lowType;
+if (lt->type == t_enum)
+    fprintf(f, "CharField(max_length=%d choices=%sChoices)",  longestValue(col), col->name);
+else if (lt->type == t_set)
+    {
+    warn("Set type fields such as '%s' are not tested in Django and are unlikely to work.",
+        col->name);
+    fprintf(f, "TextField() # A set in autoSql");
+    }
+else if (col->isList || col->isArray)
+    fprintf(f, "TextField()");
+else if (lt->type == t_char)
+    fprintf(f, "CharField(max_length=%d)", col->fixedSize ? col->fixedSize : 1);
+else if (lt->type == t_string)
+    fprintf(f, "CharField(max_length=255)");
+else
+    fprintf(f, "%s()", lt->djangoName);
+fprintf(f, "\t# %s\n", col->comment);
+}
+
+void djangoModel(struct asObject *table, FILE *f)
+/* Print out structure of table in Django flavored python */
+{
+fprintf(f, "class %s(models.Model):\n", table->name);
+struct asColumn *col;
+for (col = table->columnList; col != NULL; col = col->next)
+    if (col->lowType->type == t_enum)
+        djangoEnumChoices(col, f);
+for (col = table->columnList; col != NULL; col = col->next)
+    djangoColumn(col, f);
+fprintf(f, "\n");
 }
 
 static void cSymTypePrName(struct asObject *dbObj, char *name, FILE *f)
@@ -1651,7 +1715,7 @@ fprintf(f, "}\n\n");
 }
 
 void makeJsonOutput(struct asObject *table, FILE *f, FILE *hFile)
-/* Make function that prints table to tab delimited file. */
+/* Make function that prints table in JSON format. */
 {
 char *tableName = table->name;
 struct asColumn *col;
@@ -1676,6 +1740,32 @@ fprintf(f, "fputc('}',f);\n");
 fprintf(f, "}\n\n");
 }
 
+void makeDjangoOutput(struct asObject *table, FILE *f, FILE *hFile)
+/* Make function that prints table as django model in Python code */
+{
+char *tableName = table->name;
+struct asColumn *col;
+
+fprintf(hFile,
+  "void %sDjangoOutput(struct %s *el, FILE *f);\n", tableName, tableName);
+fprintf(hFile, "/* Print out %s as Django model in python. */\n\n", tableName);
+
+fprintf(f,
+  "void %sDjangoOutput(struct %s *el, FILE *f) \n", tableName, tableName);
+fprintf(f, "/* Print out %s as Django model in python. */\n\n", tableName);
+
+fprintf(f, "{\n");
+fprintf(f, "fputc('{',f);\n");
+for (col = table->columnList; col != NULL; col = col->next)
+    {
+    fprintf(f, "/* TBD %s */\n", col->name);
+    // makeColJsonOutput(col, f);
+    if (col->next != NULL)
+        fprintf(f, "fputc(',',f);\n");
+    }
+fprintf(f, "fputc('}',f);\n");
+fprintf(f, "}\n\n");
+}
 
 void cSymColumnDef(struct asColumn *col, FILE *cFile)
 /* output definition used for parsing and formating a symbolic column field */
@@ -1701,7 +1791,7 @@ for (col = obj->columnList; col != NULL; col = col->next)
 }
 
 void genObjectCode(struct asObject *obj, boolean doDbLoadAndSave,
-                   FILE *cFile, FILE *hFile, FILE *sqlFile)
+                   FILE *cFile, FILE *hFile, FILE *sqlFile, FILE *djangoFile)
 /* output code for one object */
 {
 cTable(obj, hFile);
@@ -1710,6 +1800,8 @@ cSymColumnDefs(obj, cFile);
 if (obj->isTable)
     {
     sqlTable(obj, sqlFile);
+    if (makeDjango)
+        djangoModel(obj, djangoFile);
     if (!objectHasVariableLists(obj) && !objectHasSubObjects(obj))
         staticLoadRow(obj, cFile, hFile);
     if(doDbLoadAndSave)
@@ -1739,8 +1831,9 @@ else
 makeOutput(obj, cFile, hFile);
 if (makeJson)
     makeJsonOutput(obj, cFile, hFile);
-printf("Made %s object\n", obj->name);
+verbose(2, "Made %s object\n", obj->name);
 }
+
 
 int main(int argc, char *argv[])
 {
@@ -1749,9 +1842,11 @@ char *outRoot, outTail[256];
 char dotC[256];
 char dotH[256];
 char dotSql[256];
+char dotDjango[256];
 FILE *cFile;
 FILE *hFile;
 FILE *sqlFile;
+FILE *djangoFile = NULL;
 char defineName[256];
 boolean doDbLoadAndSave = FALSE;
 
@@ -1759,6 +1854,7 @@ optionInit(&argc, argv, optionSpecs);
 doDbLoadAndSave = optionExists("dbLink");
 withNull = optionExists("withNull");
 makeJson = optionExists("json");
+makeDjango = optionExists("django");
 
 if (argc != 3)
     usage();
@@ -1768,12 +1864,17 @@ outRoot = argv[2];
 /* don't embed directories in files */
 splitPath(outRoot, NULL, outTail, NULL);
 
-sprintf(dotC, "%s.c", outRoot);
+safef(dotC, sizeof(dotC), "%s.c", outRoot);
 cFile = mustOpen(dotC, "w");
-sprintf(dotH, "%s.h", outRoot);
+safef(dotH, sizeof(dotH), "%s.h", outRoot);
 hFile = mustOpen(dotH, "w");
-sprintf(dotSql, "%s.sql", outRoot);
+safef(dotSql, sizeof(dotSql), "%s.sql", outRoot);
 sqlFile = mustOpen(dotSql, "w");
+if (makeDjango)
+    {
+    safef(dotDjango, sizeof(dotDjango), "%s.django", outRoot);
+    djangoFile = mustOpen(dotDjango, "w");
+    }
 
 /* Print header comment in all files. */
 fprintf(hFile, 
@@ -1792,6 +1893,15 @@ fprintf(sqlFile,
    "# an object which can be loaded and saved from RAM in a fairly \n"
    "# automatic way.\n",
    outTail, outTail, outTail);
+if (makeDjango)
+     {
+     fprintf(djangoFile, 
+         "# %s.python was originally generated by the autoSql program, which also \n"
+         "# generated %s.sql %s.c and %s.h.  This creates the database representation of\n"
+         "# an object which can be loaded and saved from RAM in a fairly \n"
+         "# automatic way.\n\n",
+         outTail, outTail, outTail, outTail);
+     }
 
 /* Bracket H file with definition that keeps it from being included twice. */
 sprintf(defineName, "%s_H", outTail);
@@ -1813,13 +1923,22 @@ fprintf(cFile, "#include \"%s\"\n", dotH);
 fprintf(cFile, "\n");
 fprintf(cFile, "\n");
 
+/* Also generate imports for django. */
+if (makeDjango)
+    {
+    fprintf(djangoFile, "import datetime\n");
+    fprintf(djangoFile, "from django.db import models\n\n");
+    }
+
 /* Process each object in specification file and output to .c, 
- * .h, and .sql. */
+ * .h, and .sql and even Django/Python. */
 for (obj = objList; obj != NULL; obj = obj->next)
-    genObjectCode(obj, doDbLoadAndSave, cFile, hFile, sqlFile);
+    genObjectCode(obj, doDbLoadAndSave, cFile, hFile, sqlFile, djangoFile);
 
 fprintf(cFile, "/* -------------------------------- End autoSql Generated Code -------------------------------- */\n\n");
 fprintf(hFile, "/* -------------------------------- End autoSql Generated Code -------------------------------- */\n\n");
+if (makeDjango)
+    fprintf(djangoFile, "###################### End autoSql Generated Code ######################\n\n");
 /* Finish off H file bracket. */
 fprintf(hFile, "#endif /* %s */\n\n", defineName);
 return 0;

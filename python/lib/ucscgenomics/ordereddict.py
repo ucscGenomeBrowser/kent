@@ -30,12 +30,21 @@ class OrderedDict(dict):
     def remove(self, item):
         self.__ordering.remove(item)
 
+    def sort(self):
+        self.__ordering.sort()
 
+    def reorder(self, position, key):
+        if key in self.__ordering:
+            self.__ordering.remove(key)
+            self.__ordering.insert(position, key)
+        
     def __iter__(self):
         for item in self.__ordering:
             yield item
 
-
+    def values(self):
+        return self.__ordering
+            
     def iterkeys(self):
         self.__iter__()
 

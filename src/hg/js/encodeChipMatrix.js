@@ -137,6 +137,11 @@ $(function () {
         // empirically len/2 em's is right
         $('#columnHeaders th').css('height', (String((maxLen/2 + 2)).concat('em')));
         $('#columnHeaders th').css('width', '1em');
+
+        //also need to set additional width for non-IE
+        if (!$.browser.msie) {
+            $('.verticalText').css('width', '1em');
+        }
     }
 
     function rowAddCells($row, antibodyGroups, antibodyTargetExps, matrix, cellType) {

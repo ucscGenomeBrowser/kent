@@ -1,155 +1,57 @@
-CONTENTS AND COPYRIGHT
+This file describes the most commonly used modules,
+and the code conventions used throughout the code base in
+and under this directory.
 
-This directory contains the entire source tree for Jim Kent and the
-UCSC Genome Bioinformatics Group's suite of biological analysis 
-and web display programs.  All files are copyrighted, but license 
-is hereby granted for personal, academic, and non-profit use.  
-A license is also granted for the contents of the top level lib, inc and
-utils directories for commercial users.  Commercial users should contact 
-kent@soe.ucsc.edu for access to other modules.  Commercial users
-interested in the UCSC Genome Browser in particular please see
-http://genome.ucsc.edu/license/.
+SOURCE TREE ORGANIZATION
 
-Most users will only be interested in the inc and lib
-directories, which contain the interfaces and implementations
-to the library routines,  and in a few specific applications.
-The applications are scattered in other directories.
-Many of them are web based.  A few of them expect
-the MySQL database to be around.
+The major source subdirectories of this source code are:
+o - lib - General purpose library routines, some with a biological bent,
+    many just generally useful for computing.  
+o - inc - Interfaces to the library modules.
+o - utils - Command line utility programs. Like the library a mix of
+    bioinformatically motivated, and general purpose.  
+o - hg - Stuff developed for the Human Genome Project and it's successors.
+    Much of the code in this directory requires MySQL.
+o - hg/lib - Human Genome Project specific libraries.
+o - hg/inc - Interfaces to the same libraries
+o - hg/hgTracks - The part of the UCSC Genome Browser that displays 
+    annotation tracks graphically.
+o - hg/hgc - The part of the Genome Browser that responds to a click
+    on an item in a track.
+o - hg/hgTrackUi - The part of the Genome Browser that allows users to configure
+    a particular track.
+o - hg/hgTables - The UCSC Table Browser
+o - jkOwnLib - Libraries that support blat, isPcr, gfClient, gfServer. 
+In general each program, either command line, or web CGI based, has its source in
+a different subdirectory.  For simple programs, like what is in utils, these often
+just have a single C module that is linked with the libraries.  For more complex
+programs, such as the hgTracks CGI, there may be multiple C source modules in the dir.
 
-GENERAL INSTALL INSTRUCTIONS
-
-1. Get the code.  The best way to do this now for
-   Unix users is via Git following the instructions at:
-     http://genome.ucsc.edu/admin/git.html
-   Or, fetch the entire source in a single file:
-     http://hgdownload.cse.ucsc.edu/admin/jksrc.zip
-   Note futher documentation for the build process in your
-   unpacked source tree in src/product/README.*
-   Especially note README.building.source and the "Known problems"
-   for typical situations you may encounter.
-2. Check that the environment variable MACHTYPE
-   exists on your system.  It should exist on Unix/Linux.  
-   (And making this on non-Unix systems is beyond
-   the scope of this README).  The default MACHTYPE is often a
-   long string: "i386-redhat-linux-gnu"
-   which will not function correctly in this build environment.
-   It needs to be something simple such as one of:
-	i386 i686 sparc alpha x86_64 ppc etc ...
-   with no other alpha characters such as: -
-   To determine what your system reports itself as, try the
-   uname options:  'uname -m' or 'uname -p' or 'uname -a'
-   on your command line.  If necessary set this environment variable.
-   Do this under the bash shell as so:
-       MACHTYPE=something
-       export MACHTYPE
-   or under tcsh as so:
-       setenv MACHTYPE something
-   and place this setting in your home directory .bashrc or .tcshrc
-   environment files so it will be set properly the next time you
-   login.  Remember to "export" it as show here for the bash shell.
-3. Make the directory ~/bin/$MACHTYPE which is
-   where the (non-web) executables will go.
-   Add this directory to your path.
-4. Go to the jksrc/lib directory.  If it doesn't
-   already exist do a mkdir $MACHTYPE.
-5. Type make.  On Alphas there will be 
-   some warning messages about "crudeAli.c"
-   otherwise it should compile cleanly.
-   It's using gcc.
-6. Go to jksrc/jkOwnLib and type make.
-7. Go to the application you want to make and type 
-   make.  (If you're not sure, as a simple test
-   go to jksrc/utils/fixcr and type make,
-   then 'rehash' if necessary so your shell
-   can find the fixcr program in ~/bin/$(MACHTYPE).
-   The fixcr program changes Microsoft style
-   <CR><LF> line terminations to Unix style
-   <LF> terminations.  Look at the "gotCr.c"
-   file in the fixCr directory, and then
-   do a "fixcr gotCr.c" on it.
-
-
-INSTALL INSTRUCTIONS FOR BLAT
-
-1. Follow the general install instructions above.
-2. If you're on an alpha system do a:
-     setenv SOCKETLIB -lxnet
-   on Solaris do
-     setenv SOCKETLIB "-lsocket -lnsl"
-   on SunOS do
-     setenv SOCKETLIB "-lsocket -lnsl -lresolv"
-   on Linux you can skip this step.
-3. Execute make in each of the following directories:
-     jksrc/gfServer
-     jksrc/gfClient
-     jksrc/blat
-     jksrc/utils/faToNib
-
-INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
-(and other code in the jkSrc/hg subdirectory)
-
-1. Follow the general install instructions above.
-2. Make the environment variable MYSQLINC point to
-   where MySQL's include files are.  (On my
-   system they are at /usr/include/mysql.)
-   While you're at it set the MYSQLLIBS
-   variable to point to something like
-   /usr/lib/mysql/libmysqlclient.a -lz
-   When available, the commands: mysql_config --include
-	and mysql_config --libs
-	will display the required arguments for these environment settings.
-3. Execute make in jksrc/hg/lib
-4. Execute make in the directory containing the
-   application you wish to build.
-5. See also: http://genome.ucsc.edu/admin/jk-install.html
-   and more documentation in this source tree about setting up
-   a working browser in README files:
-   jksrc/product/README.building.source
-   jksrc/product/README.local.git.source
-   jksrc/product/README.mysql.setup
-   jksrc/product/README.install
-   jksrc/product/README.trackDb
-   jksrc/hg/makeDb/trackDb/README
-   There are numerous README files in the source tree describing
-	functions or modules in that area of the source tree.
-
-MAJOR MODULES
-
-Here is a list of some of the more useful modules in
-the library.  Unless noted the module is a .h file
-in the inc directory and a .c file in the lib
-directory.
+COMMONLY USED LIBRARY MODULES
 
 o - common  - String handling, singly-linked list handling. 
     Other basic stuff every other module uses.
 o - hash - Simple but effective hash table routines.
 o - linefile - Line oriented file input, on some systems
     much faster than fgets().
+o - dystring - Dynamically sized strings in C.
 o - cheapcgi - Parses out cgi variables for scripts called
     from web pages.
 o - htmshell - Helps generate HTML output for scripts that
     are called from web pages or just want to make web
     pages.
+o - htmlPage - Read html pages, programatically submit html forms.
 o - memgfx - Creates a 256 color image in memory which
     can be drawn on, then saved as a .GIF file which
     can be encorperated into a web page.
-o - fuzzyFind - Align two pieces of DNA that are 
-    relatively similar (~80% base identity or better).
-    Works best when one sequence is less than 30,000
-    bases and the other less than 100,000 bases.
-o - patSpace and supStitch - Align longer pieces of
-    DNA.
-o - xensmall - Align two small pieces of dissimilar DNA.
-    (7 State Pairwise HMM)
-o - xenbig - Align two large pieces of dissimilar DNA.
-o - jksql - Interface to mySQL that frees resources on
-    exit and error conditions.
 o - dnautils and dnaseq - Simple utilities on DNA.
 o - fa - Read/write fasta format files.
-o - serv* and port* - Adapt the code to the peculiarities of
-    various web servers.
-
+o - basicBed - Functions for working with BED format files.
+o - psl - Functions for working with PSL (blat) format files.
+o - twoBit - Functions for working with twoBit DNA files.
+o - bPlusTree - Create/user B+ Tree indexes, the backbone of 
+    many databases.
+o - udc - URL Data Cache - code to locally cache remote files.
 
 CODE CONVENTIONS
 
@@ -164,14 +66,34 @@ level as the block they enclose:
 	doSomething();
 	doSomethingElse();
 	}
-Tab stops are set to 8.  Each block of code is 
-indented by 4 from the previous block.  (In the
-vi editor set ts=8  set sw=4.)  Lines are no more than
-100 characters wide.
+Each block of code is indented by 4 from the previous block.
+As per Unix standard practice, tab stops are set to 8, not 4
+as is the common practice in Windows, so some care must be
+taken when using tabs for indenting.  Since tabs are especially
+problematic for Python code, and we are starting to use
+Python a fair bit as well, tabs are best avoided altogether.
+The proper settings for the vi editor to interpret tabs correctly
+in existing code, and avoid tabs in new code are:
+     set ts=8 set sw=4 set expandtab
+
+Lines should be no more than 100 characters wide.  Lines that are 
+longer than this are broken and indented at least 8 spaces
+more than the original line to indicate the line continuation.
+Where possible simplifying techniques should be applied to the code 
+in preference to using line continuations, since line continuations
+obscure the logic conveyed in the indentation of the program.
+
+Line continuations may be unavoidable when calling functions with long
+parameter lists.  In most other situations lines can be shortened 
+in better ways than line continuations.  Complex expressions can be 
+broken into parts that are assigned to intermediate variables.  Long 
+variable names can be revisited and sometimes shortened. Deep indenting 
+can be avoided by simplifying logic and by moving blocks into their own 
+functions. These are just some ways of avoiding long lines.
 
 NAMES
 
-Symbol names begin with a lower-case letter.  The second 
+Symbol names generally begin with a lower-case letter.  The second 
 and subsequent words in a name begin with a capital letter 
 to help visually separate the words.  Abbreviation of words 
 is strongly discouraged.  Words of five letters and less should
@@ -181,14 +103,16 @@ general it is abbreviated to the first three letters:
 In some cases, for local variables abbreviating
 to a single letter for each word is ok:
    tabSeparatedFile -> tsf
-In rare, complex, cases you may treat the
-abbreviation itself as a word, and only the
-first letter is capitalized.
+In complex cases you may treat the abbreviation itself as a word, and 
+only the first letter is capitalized.
    genscanTabSeparatedFile -> genscanTsf
 Numbers are considered words.  You would
 represent "chromosome 22 annotations"
 as "chromosome22Annotations" or "chr22Ann."
-Note the capitalized 'A" after the 22.
+Note the capitalized 'A" after the 22.  Since both numbers and
+single letter words (or abbreviations) disrupt the visual flow
+of the word separation by capitalization, it is better to avoid
+these except at the end of the name.
 
 These naming rules apply to variables, constants, functions, fields,
 and structures.  They generally are used for file names, database tables,
@@ -199,8 +123,8 @@ ERROR HANDLING AND MEMORY ALLOCATION
 
 Another convention is that errors are reported
 at a fairly low level, and the programs simply
-print an error message and abort.  If you
-need to catch errors underneath you see the
+print an error message and abort using errAbort.  If 
+you need to catch errors underneath you see the
 file errAbort.h and install an "abort handler".
 
 Memory is generally allocated through "needMem"
@@ -214,11 +138,9 @@ COMMENTING
 Every module should have a comment at the start of
 a file that explains concisely what the module
 does.  Explanations of algorithms also belong
-at the top of the file in most cases. Comments should
-be of the /*  */ form rather than the // form, which
-is not yet portable across all C compilers in all platforms.
-Structures should be commented following the pattern of this
-example:
+at the top of the file in most cases. Comments can
+be of the /*  */ or the // form.  Structures should be 
+commented following the pattern of this example:
 
 struct dyString
 /* Dynamically resizable string that you can do formatted
@@ -230,7 +152,7 @@ struct dyString
     int stringSize;             /* Size of string. */
     };
 
-That is there is a comment describing the overall purpose
+That is, there is a comment describing the overall purpose
 of the object between the struct name, and the opening brace,
 and there is a short comment by each field.  In many cases
 these may not say much more than well-chosen field names,
@@ -253,7 +175,7 @@ have a comment between their prototype and the opening brace
 as in this example:
 
 char dyStringAppendC(struct dyString *ds, char c)
-/* Append char to end of string. */
+// Append char to end of string. 
 {
 char *s;
 if (ds->stringSize >= ds->bufSize)
@@ -273,33 +195,30 @@ struct twoBit *twoBitFromDnaSeq(struct dnaSeq *seq, boolean doMask)
 /* Convert dnaSeq representation in memory to twoBit representation.
  * If doMask is true interpret lower-case letters as masked. */
 {
-int ubyteSize = packedSize(seq->size);
-UBYTE *pt;
+/* Allocate structure and fill in name and size fields. */
 struct twoBit *twoBit;
-DNA last4[4];   /* Holds few bases. */
-DNA *dna;
-int i, end;
-
-/* Allocate structure and fill in name. */
 AllocVar(twoBit);
-pt = AllocArray(twoBit->data, ubyteSize);
+int ubyteSize = packedSize(seq->size);
+UBYTE *pt = AllocArray(twoBit->data, ubyteSize);
 twoBit->name = cloneString(seq->name);
 twoBit->size = seq->size;
     
 /* Convert to 4-bases per byte representation. */
-dna = seq->dna;
+char *dna = seq->dna;
+int i, end;
 end = seq->size - 4;
 for (i=0; i<end; i += 4)
     {
     *pt++ = packDna4(dna+i);
     }
 
-/* Take care of conversion of last few bases. */
+/* Take care of conversion of last few bases, padding arbitrarily with 'T'. */
+DNA last4[4];   
 last4[0] = last4[1] = last4[2] = last4[3] = 'T';
 memcpy(last4, dna+i, seq->size-i);
 *pt = packDna4(last4);
 
-/* Deal with blocks of N. */
+/* Deal with blocks of N, saving end points of blocks. */
 twoBit->nBlockCount = countBlocksOfN(dna, seq->size);
 if (twoBit->nBlockCount > 0)
     {
@@ -308,7 +227,7 @@ if (twoBit->nBlockCount > 0)
     storeBlocksOfN(dna, seq->size, twoBit->nStarts, twoBit->nSizes);
     }
 
-/* Deal with masking */
+/* Deal with masking, saving end points of blocks. */
 if (doMask)
     {
     twoBit->maskBlockCount = countBlocksOfLower(dna, seq->size);
@@ -322,6 +241,35 @@ if (doMask)
     }
 return twoBit;
 }
+
+Though code paragraphs help make long functions readable, in general
+smaller functions are preferred. It is rare that a function longer than 
+100 lines couldn't be improved by moving some blocks of code into new 
+functions or simplifying what the function is trying to do.
+
+STRUCTURE OF A TYPICAL C MODULE
+
+To avoid having to declare function prototypes, C modules are generally
+ordered with the lowest level functions written before higher level
+functions. In particular, if a module includes a main() routine, then
+it is the last function in the module. 
+
+If a structure is broadly used in a module, it is declared near the start
+of the module, just after the module opening comment and any includes.  
+This is followed by broadly used module local (static) variables.  Less 
+broadly used structs and variables may be grouped with the functions they 
+are used with.
+
+If a module is used by other modules, it will be represented in a header 
+file.  In the majority of cases one .h file corresponds to one .c file.
+Typically the opening comment is duplicated in .h and .c files, as are
+the public structure and function declarations and opening comments. 
+
+In general we try, with mixed success, to keep modules less than 2000 lines.
+Sadly many of the Genome Browser specific modules are currently quite long.
+On the bright side the vast majority of the library modules are reasonably
+sized.
+
 
 ====================================================================
 This file last updated: $Date: 2010/06/03 16:48:53 $
