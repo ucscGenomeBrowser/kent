@@ -20,6 +20,7 @@
 #include "net.h"
 
 #include "hgLogin.h"
+#include "hgLoginLink.h"
 #include "gbMembers.h"
 
 #include "versionInfo.h"
@@ -421,35 +422,86 @@ optional real name */
 
 {
 hPrintf(
-"<h2>UCSC Genome Browser</h2>\n"
-"<p align=\"left\">"
-"</p>"
-"GSID provides access to data from the 2003 VaxGen HIV vaccine phase III clinical trials on a yearly access-fee basis.<br>\n"
-"Academic and non-profit researchers get a substantial discount. <br>\n"
-"<br>\n"
-"If you are already a member, click <a href=https://%s/>here</a> to access UCSC Genome Browser.<br>\n"
-"To view your existing account, click <a href=\"hgLogin?hgLogin.do.displayUserInfo=1\">here</a>.<br>\n"
+"<div id=\"hgLoginSignupBox\" class=\"centeredContainer\">\n"
+"<h2>UCSC Genome Browser</h2>"
+"\n"
+);
+
+printf(
+"<P>"
+"Signing in enables you to save current settings into a "
+"named session, and then restore settings from the session later.<BR> "
+"If you wish, you can share named sessions with other users. "
+"</P>"
+);
+
+hPrintf(
+"If you are already a member, click <a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">here</a> to log in to UCSC Genome Browser.<br>\n"
 "To change your password, click <a href=\"hgLogin?hgLogin.do.changePasswordPage=1\">here</a>.<br>\n"
 "Lost your password? Click <a href=\"hgLogin?hgLogin.do.lostPasswordPage=1\">here</a>.<br>\n"
+);
+
+hPrintf(
+"<h3>Sign Up</h3>"
+"\n"
+"<form method=post action=\"hgLoginSignup\" name=signupForm >"
 "<span style='color:red;'>%s</span>"
-"<h3>Sign up</h3>\n"
-"<form method=post action=\"hgLogin\" name=mainForm >\n"
-"NOTE: Your e-mail is also your user-id.\n"
-"<table>\n"
+, errMsg ? errMsg : ""
+);
+
+hPrintf(
+"<label style=\"display: block; margin-top: 10px;\" "
+" for=\"userName\">User Name</label>"
+"\n"
+"<input type=text name=\"hgSignup_userName\" value=\"%s\" size=\"30\" id=\"userName\"> <br>"
+"\n"
+"<label style=\"display: block; margin-top: 10px;\" "
+" for=\"emailAddr\">E-mail</label>"
+"\n"
+"<input type=text name=\"hgSignup_emailAddr\" value=\"%s\" size=\"30\" id=\"emailAddr\"> <br>"
+"\n"
+"<label style=\"display: block; margin-top: 10px;\" "
+" for=\"password\">Password</label>"
+"\n"
+"<input type=password name=\"hgSignup_password\" value=\"\" size=\"30\" id=\"password\">"
+"\n"
+"<label style=\"display: block; margin-top: 10px;\" "
+" for=\"confirmPW\">Confirm Password</label>"
+"\n"
+"<input type=password name=\"hgSingup_confirmPWD\" value=\"\" size=\"30\" id=\"confirmPWD\">"
+"\n"
+"<label style=\"display: block; margin-top: 10px;\" "
+" for=\"realName\">Real Name (optional)</label>"
+"\n"
+"<input type=text name=\"hgSignup_realName\" value=\"%s\" size=\"30\" id=\"realName\"> <br>"
+"\n"
+
+
+
+/********
 "<tr><td>Name</td><td><input type=text name=hgLogin_user value=\"%s\" size=20></td></tr>\n"
 "<tr><td>E-mail</td><td><input type=text name=hgLogin_email value=\"%s\"size=20>\n"
 "<tr><td>Password</td><td><input type=password name=hgLogin_password value=\"%s\" size=10></td></tr>\n"
 "<tr><td>Real name (optional)</td><td><input type=text name=hgLogin_realName value=\"%s\" size=20></td></tr>\n"
 "<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.signup value=submit>"
 "&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>\n"
-"</table>\n"
 "<br>\n"
-, getenv("HTTP_HOST")
-, errMsg ? errMsg : ""
 , cartUsualString(cart, "hgLogin_user", "")
 , cartUsualString(cart, "hgLogin_email", "")
-, cartUsualString(cart, "hgLogin_password", "")
+//, cartUsualString(cart, "hgLogin_password", "")
 , cartUsualString(cart, "hgLogin_realName", "")
+);
+****************/
+"<p>"
+"<tr><td>&nbsp;</td><td><input type=submit name=hgLogin.do.signup value=submit>"
+"&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>\n"
+"<br>\n"
+"</p>"
+, cartUsualString(cart, "hgSignup_user", "")
+, cartUsualString(cart, "hgSignup_email", "")
+, cartUsualString(cart, "hgSignup_password", "")
+, cartUsualString(cart, "hgSignup_confirmPWD", "")
+, cartUsualString(cart, "hgSignup_realName", "")
 );
 
 
@@ -546,7 +598,7 @@ hPrintf(
 void displayLoginPage(struct sqlConnection *conn)
 /* draw the account login page */
 {
-// char *username = cartUsualString(cart, "hgLogin_userName", "");
+char *username = cartUsualString(cart, "hgLogin_userName", "");
 /* for password security, use cgi hash instead of cart */
 // char *password = cgiUsualString("hgLogin_password", "");
 
@@ -575,7 +627,7 @@ hPrintf(
 "<label style=\"display: block; margin-top: 10px;\" " 
 " for=\"userName\">User Name</label>"
 "\n"
-"<input type=text name=\"hgLogin_userName\" value=\"\" size=\"30\" id=\"userName\"> <br>"
+"<input type=text name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"userName\"> <br>"
 "\n"
 "<label style=\"display: block; margin-top: 10px;\" "
 " for=\"password\">Password</label>"
@@ -596,7 +648,7 @@ hPrintf(
 "\n"
 "</form>"
 "</div><!-- END - hgLoginBox -->"
-//, username
+, username
 //, password
 );
 
