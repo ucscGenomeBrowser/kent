@@ -12651,7 +12651,7 @@ type treatment
 
 term ZNF_knockout_P5
 tag ZNFP5
-description Parental K562 clone (Stam)
+description Parental K562 (Stam)
 type treatment
 
 
