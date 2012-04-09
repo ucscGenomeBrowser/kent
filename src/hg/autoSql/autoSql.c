@@ -132,7 +132,7 @@ fprintf(f, "\t# %s\n", col->comment);
 void djangoModel(struct asObject *table, FILE *f)
 /* Print out structure of table in Django flavored python */
 {
-fprintf(f, "class %s(models.Model):\n");
+fprintf(f, "class %s(models.Model):\n", table->name);
 struct asColumn *col;
 for (col = table->columnList; col != NULL; col = col->next)
     if (col->lowType->type == t_enum)
