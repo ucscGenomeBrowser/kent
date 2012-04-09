@@ -47,6 +47,7 @@ noInherit on
 priority 0
 type bed 3
 wgEncode 1
+html wgEncodePsuHistone.release2
 
 	#####Peak Tracks###########
 	track wgEncodePsuHistoneViewPeaks

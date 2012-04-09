@@ -26,14 +26,14 @@ def parsePmc(doc, id):
     infoDict['url'] = "http://www.ncbi.nlm.nih.gov/pmc/articles/%s" % id
     attribList = ['Title', 'PubDate', 'Journal', 'Volume', 'Issue', 'Pagination', 'CollectiveName']
     for node in doc.iter("ArticleId"):
-        good = 0
+        foundPubMedId = 0
         for child in node:
             if child.tag == "IdType" and child.text == "pmid":
-                good = 1
-            if good == 1 and child.tag == "Value":
+                foundPubMedId = 1
+            if foundPubMedId == 1 and child.tag == "Value":
                 return parseInit(child.text) 
             
-    print "Unable to find pubmed id for pubmed central id: %s" % id
+    sys.stderr.write("Unable to find pubmed id for pubmed central id: %s\n" % id)
     sys.exit()
 
 def parseInit(id):
@@ -44,7 +44,7 @@ def parseInit(id):
         db = "PMC"
         id = re.sub("PMC", "", id)
         url = urlbase + "db=%s" % db + "&id=%s&version=2.0" % id
-    print "Accessing %s" % url
+    sys.stderr.write("Accessing %s\n" % url)
     fetch = urllib2.urlopen(url)
     doc = ET.XML(fetch.read())
     if db == "Pubmed":
@@ -111,7 +111,6 @@ def makeHtml(infoDict):
     return htmlStr, authStr
 
 def main():
-    print "Initializing"
     parser = argparse.ArgumentParser(
         prog='qaAddTrackReferences',
         description='Turns PubMed Ids and PubMedCentral Ids into GB formatted citations in html',
