@@ -27,7 +27,7 @@
 char msg[2048] = "";
 
 
-char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "hgLogin_password", NULL };
+char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "hgLogin_password","hgLogin_confirmPWD", NULL };
 /* The excludeVars are not saved to the cart. (We also exclude
  * any variables that start "near.do.") */
 
@@ -444,7 +444,7 @@ hPrintf(
 hPrintf(
 "<h3>Sign Up</h3>"
 "\n"
-"<form method=post action=\"hgLoginSignup\" name=signupForm >"
+"<form method=post action=\"hgLogin\" name=mainForm >"
 "<span style='color:red;'>%s</span>"
 , errMsg ? errMsg : ""
 );
@@ -453,27 +453,27 @@ hPrintf(
 "<label style=\"display: block; margin-top: 10px;\" "
 " for=\"userName\">User Name</label>"
 "\n"
-"<input type=text name=\"hgSignup_userName\" value=\"%s\" size=\"30\" id=\"userName\"> <br>"
+"<input type=text name=\"hgLogin_user\" value=\"%s\" size=\"30\" id=\"userName\"> <br>"
 "\n"
 "<label style=\"display: block; margin-top: 10px;\" "
 " for=\"emailAddr\">E-mail</label>"
 "\n"
-"<input type=text name=\"hgSignup_emailAddr\" value=\"%s\" size=\"30\" id=\"emailAddr\"> <br>"
+"<input type=text name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailAddr\"> <br>"
 "\n"
 "<label style=\"display: block; margin-top: 10px;\" "
 " for=\"password\">Password</label>"
 "\n"
-"<input type=password name=\"hgSignup_password\" value=\"\" size=\"30\" id=\"password\">"
+"<input type=password name=\"hgLogin_password\" value=\"%s\" size=\"30\" id=\"password\">"
 "\n"
 "<label style=\"display: block; margin-top: 10px;\" "
 " for=\"confirmPW\">Confirm Password</label>"
 "\n"
-"<input type=password name=\"hgSingup_confirmPWD\" value=\"\" size=\"30\" id=\"confirmPWD\">"
+"<input type=password name=\"hgLogin_confirmPWD\" value=\"%s\" size=\"30\" id=\"confirmPWD\">"
 "\n"
 "<label style=\"display: block; margin-top: 10px;\" "
 " for=\"realName\">Real Name (optional)</label>"
 "\n"
-"<input type=text name=\"hgSignup_realName\" value=\"%s\" size=\"30\" id=\"realName\"> <br>"
+"<input type=text name=\"hgLogin_realName\" value=\"%s\" size=\"30\" id=\"realName\"> <br>"
 "\n"
 
 
@@ -497,11 +497,11 @@ hPrintf(
 "&nbsp;<input type=button value=cancel ONCLICK=\"history.go(-1)\"></td></tr>\n"
 "<br>\n"
 "</p>"
-, cartUsualString(cart, "hgSignup_user", "")
-, cartUsualString(cart, "hgSignup_email", "")
-, cartUsualString(cart, "hgSignup_password", "")
-, cartUsualString(cart, "hgSignup_confirmPWD", "")
-, cartUsualString(cart, "hgSignup_realName", "")
+, cartUsualString(cart, "hgLogin_user", "")
+, cartUsualString(cart, "hgLogin_email", "")
+, cartUsualString(cart, "hgLogin_password", "")
+, cartUsualString(cart, "hgLogin_confirmPWD", "")
+, cartUsualString(cart, "hgLogin_realName", "")
 );
 
 
@@ -580,13 +580,31 @@ hPrintf(
 "<p align=\"left\">\n"
 "</p>\n"
 "<h3>User %s successfully added.</h3>\n"
-, email
+, user
 );
 
+backToHgSession(2);
+/*
+char *hgLoginHost = hgLoginLinkHost();
 
 hPrintf(
-"Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>\n"
-);
+"<script  language=\"JavaScript\">\n"
+"<!-- "
+"\n"
+"window.setTimeout(afterDelay, 1000);\n"
+"function afterDelay() {\n"
+"window.location =\"http://%s/cgi-bin/hgSession?hgS_doMainPage=1\";"
+"\n}"
+"\n"
+"//-->"
+"\n"
+"</script>"
+,hgLoginHost);
+*/
+
+//hPrintf(
+//"Click <a href=hgLogin?hgLogin.do.signupPage=1>here</a> to return.<br>\n"
+//);
 
 
 }
@@ -600,7 +618,7 @@ void displayLoginPage(struct sqlConnection *conn)
 {
 char *username = cartUsualString(cart, "hgLogin_userName", "");
 /* for password security, use cgi hash instead of cart */
-// char *password = cgiUsualString("hgLogin_password", "");
+char *password = cgiUsualString("hgLogin_password", "");
 
 hPrintf(
 "<div id=\"hgLoginBox\" class=\"centeredContainer\">\n"
@@ -786,13 +804,12 @@ hPrintf(
 "</script>\n"
 );
 /* return to session */
-/*******************************/
+backToHgSession(1);
+/*******************************
 hPrintf(
 "<script  language=\"JavaScript\">\n"
 "<!-- "
 "\n"
-/* delay for 5 seconds then go back to page X */
-/* TODO: afterDelayBackTo("http....") */
 "window.setTimeout(afterDelay, 1000);\n"
 "function afterDelay() {\n" 
 "window.location =\"http://%s/cgi-bin/hgSession?hgS_doMainPage=1\";"
@@ -802,11 +819,33 @@ hPrintf(
 "\n"
 "</script>"
 ,hgLoginHost);
-/****************************/
+****************************/
 
 }
 
 
+void backToHgSession(int nSec)
+/* delay for N micro seconds then go back to hgSession page */
+/* TODO: afterDelayBackTo("http....") */
+{
+char *hgLoginHost = hgLoginLinkHost();
+int delay=nSec*1000;
+hPrintf(
+"<script  language=\"JavaScript\">\n"
+"<!-- "
+"\n"
+/* TODO: afterDelayBackTo("http....") */
+"window.setTimeout(afterDelay, %d);\n"
+"function afterDelay() {\n"
+"window.location =\"http://%s/cgi-bin/hgSession?hgS_doMainPage=1\";"
+"\n}"
+"\n"
+"//-->"
+"\n"
+"</script>"
+,delay
+,hgLoginHost);
+}
 
 void displayUserInfo(struct sqlConnection *conn)
 /* display user account info */

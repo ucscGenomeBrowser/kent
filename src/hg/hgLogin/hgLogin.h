@@ -21,4 +21,6 @@ void  displayLoginSuccess(char *userName, int userId);
 /* display login success msg, and set cookie */
 void dosplayLogoutSuccess();
 /* display logout success msg, and reset cookie */
+void backToHgSession(int nSec);
+/* delay for N micro seconds then go back to hgSession page */
 
