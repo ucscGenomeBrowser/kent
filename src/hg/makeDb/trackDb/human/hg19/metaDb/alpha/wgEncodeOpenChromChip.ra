@@ -6314,7 +6314,8 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 723b94a95e35c639b76eace975800a24,85b629776bc0618c9e636d8c33926c74
 project wgEncode
 replicate 1
 setType exp
@@ -6335,7 +6336,8 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 21521dd12af92dff7e795725f80cc72d,26bb4e44008608a09a20fd4c544eb88f
 project wgEncode
 replicate 2
 setType exp
@@ -6357,6 +6359,7 @@ fileName wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 554b5819f928aa71538b29439ddc6fca
 project wgEncode
 setType exp
 subId 5615
@@ -6378,6 +6381,7 @@ fileName wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum ad98c9d0ebbb2d569d21ff92750c60a5
 project wgEncode
 replicate 1
 setType exp
@@ -6399,6 +6403,7 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum a0b6435ccc8d7883fe8a198b7f6e40ca
 project wgEncode
 replicate 1
 setType exp
@@ -6419,6 +6424,7 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 9b93e44c177b71705c5c53f850d8e664
 project wgEncode
 replicate 2
 setType exp
@@ -6440,6 +6446,7 @@ fileName wgEncodeOpenChromChipMcf7CmycSerumstimSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum 9a1b71f2ca22540fe47c89694778c0c2
 project wgEncode
 setType exp
 subId 5615
@@ -6460,7 +6467,8 @@ dateUnrestricted 2012-12-23
 fileName wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep1.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 66077b5998348c24ad85c0af6b06cdd0,207ef645fb949e6605f6c233ac1c49cb
 project wgEncode
 replicate 1
 setType exp
@@ -6481,7 +6489,8 @@ dateUnrestricted 2012-12-23
 fileName wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep2.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum c5156972894d4aaf2647a7d821ac46af,7441c9d4667493cd1f3426fae229e1f5
 project wgEncode
 replicate 2
 setType exp
@@ -6503,6 +6512,7 @@ fileName wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 59469ff8eb88468961627a5ba658d3b1
 project wgEncode
 setType exp
 subId 6196
@@ -6524,6 +6534,7 @@ fileName wgEncodeOpenChromChipMcf7CmycSerumstvdPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 2264dbd85b777cefec625966d59f9942
 project wgEncode
 replicate 1
 setType exp
@@ -6545,6 +6556,7 @@ dateUnrestricted 2012-12-23
 fileName wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 61f6a18cd29019b92c5dd30078135068
 project wgEncode
 replicate 1
 setType exp
@@ -6565,6 +6577,7 @@ dateUnrestricted 2012-12-23
 fileName wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum b4a39f2804b85e11aa784113c500927d
 project wgEncode
 replicate 2
 setType exp
@@ -6586,6 +6599,7 @@ fileName wgEncodeOpenChromChipMcf7CmycSerumstvdSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum e3d6a410c3468491d554b7c294e336ca
 project wgEncode
 setType exp
 subId 6196
@@ -7124,7 +7138,8 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep1.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 7a84ddafe3fae9cac8ac13a7b1989b2e,7163ef8eb6fb00e1320ee766fdee6273
 project wgEncode
 replicate 1
 setType exp
@@ -7145,7 +7160,8 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep2.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 2fa9acc27ccb58ee35fc3cc48a1d73e9,478fa46eec33d3b41cf0d2bda48494f2
 project wgEncode
 replicate 2
 setType exp
@@ -7167,6 +7183,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum df2f4b241ef7cf2325d57b959a72f99b
 project wgEncode
 setType exp
 subId 5613
@@ -7188,6 +7205,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfSerumstimPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 95394af7bd63442938449bc55a19bea7
 project wgEncode
 replicate 1
 setType exp
@@ -7209,6 +7227,7 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 0b4e84205e655e04e3273b17fffd8ed2
 project wgEncode
 replicate 1
 setType exp
@@ -7229,6 +7248,7 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 54facbc63c88f749c570ae272d380100
 project wgEncode
 replicate 2
 setType exp
@@ -7250,6 +7270,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfSerumstimSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum 4c7328d2aea2fc0299f076d188206194
 project wgEncode
 setType exp
 subId 5613
@@ -7270,7 +7291,8 @@ dateUnrestricted 2012-11-12
 fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep1.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 6ac34e5ef7a3aa98b3334203cad14d5b,b454d8d0ab47b73d8948e0fd6ba523f6
 project wgEncode
 replicate 1
 setType exp
@@ -7291,7 +7313,8 @@ dateUnrestricted 2012-11-12
 fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep2.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum e2fab780aaf4bee24f03352db1c37307,b2fbd595cc2eeed9fdb0342e95e4afab
 project wgEncode
 replicate 2
 setType exp
@@ -7313,6 +7336,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 52dc339b43faa0c9fa9606a2701c9037
 project wgEncode
 setType exp
 subId 5616
@@ -7334,6 +7358,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 44b518e1404ae5f3b5ab8c9aeafaca71
 project wgEncode
 replicate 1
 setType exp
@@ -7355,6 +7380,7 @@ dateUnrestricted 2012-11-12
 fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 5857428be9cf64b70d288afd06dcb89c
 project wgEncode
 replicate 1
 setType exp
@@ -7375,6 +7401,7 @@ dateUnrestricted 2012-11-12
 fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum a1b059d72b2b30191ee1028c8d3abbda
 project wgEncode
 replicate 2
 setType exp
@@ -7396,6 +7423,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum 4666feef48ddda62f8822fc93386d5a6
 project wgEncode
 setType exp
 subId 5616
@@ -7854,7 +7882,8 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep1.bam,wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep1.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 8e2263d50f5d33f4f8f8ead8ec42951f,a91009c576f34d97e9a7ef04a7dfb79c
 project wgEncode
 replicate 1
 setType exp
@@ -7875,7 +7904,8 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep2.bam,wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep2.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum b43ed7caee993d1887966e1840793bbe,513f5d7af65f1c75be8a88308c3636eb
 project wgEncode
 replicate 2
 setType exp
@@ -7897,6 +7927,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 817b7951625d19c16bb4ba34b1991cf7
 project wgEncode
 setType exp
 subId 5614
@@ -7918,6 +7949,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2SerumstimPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 5125c16af17d12c111cc557b5d208526
 project wgEncode
 replicate 1
 setType exp
@@ -7939,6 +7971,7 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum fc3ca9538f45aff52889dc81b8555ffc
 project wgEncode
 replicate 1
 setType exp
@@ -7959,6 +7992,7 @@ dateUnrestricted 2012-11-11
 fileName wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 05972ee0669713bb8b447080c827094e
 project wgEncode
 replicate 2
 setType exp
@@ -7980,6 +8014,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2SerumstimSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum 5b48ce173ca0d658d4eb1bdd5d04e4e5
 project wgEncode
 setType exp
 subId 5614
@@ -8000,7 +8035,8 @@ dateUnrestricted 2012-11-12
 fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep1.bam,wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep1.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 208a3ff0a4619915aaebf0b998ae8025,f64c34bd4c310c1098a49ec51ba7e7ea
 project wgEncode
 replicate 1
 setType exp
@@ -8021,7 +8057,8 @@ dateUnrestricted 2012-11-12
 fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep2.bam,wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep2.bam.bai
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 5403f8985ceabd75ddd990ed69a290a7,8debf9358621199b09813d369cee3d35
 project wgEncode
 replicate 2
 setType exp
@@ -8043,6 +8080,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+md5sum 6547f2f1c1c271507eac6019668f75b2
 project wgEncode
 setType exp
 subId 5617
@@ -8064,6 +8102,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+md5sum 6c970fe6171530858254a42b1d2ffae6
 project wgEncode
 replicate 1
 setType exp
@@ -8085,6 +8124,7 @@ dateUnrestricted 2012-11-12
 fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+md5sum b71f74e123f3ce3dfacdfc60a7be3305
 project wgEncode
 replicate 1
 setType exp
@@ -8105,6 +8145,7 @@ dateUnrestricted 2012-11-12
 fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+md5sum 0641919dfd1f8706aa42b3275b49dfa0
 project wgEncode
 replicate 2
 setType exp
@@ -8126,6 +8167,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+md5sum f9c2f559ebf50a142f412bc35d791f02
 project wgEncode
 setType exp
 subId 5617
@@ -8822,4 +8864,4 @@ tableName wgEncodeOpenChromChipProgfibPol2Sig
 treatment None
 view Signal
 
-# MAGIC: 1763061195
+# MAGIC: 535846351
