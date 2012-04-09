@@ -14,6 +14,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
+expId 1127
 fileIndex wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
 grant Crawford
@@ -38,6 +39,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
+expId 1127
 fileIndex wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam
 grant Crawford
@@ -62,6 +64,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
+expId 1127
 fileName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -85,6 +88,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
+expId 1127
 fileName wgEncodeOpenChromChipFibroblCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -108,6 +112,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
+expId 1127
 fileName wgEncodeOpenChromChipFibroblCtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -131,6 +136,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
 dccAccession wgEncodeEH001128
+expId 1128
 fileIndex wgEncodeOpenChromChipFibroblInputAln.bam.bai
 fileName wgEncodeOpenChromChipFibroblInputAln.bam
 grant Crawford
@@ -154,6 +160,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
 dccAccession wgEncodeEH001128
+expId 1128
 fileName wgEncodeOpenChromChipFibroblInputSig.bigWig
 grant Crawford
 lab UT-A
@@ -177,6 +184,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
+expId 1135
 fileIndex wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam
 grant Crawford
@@ -200,6 +208,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
+expId 1135
 fileIndex wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam
 grant Crawford
@@ -223,6 +232,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
+expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -245,6 +255,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
+expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -267,6 +278,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
+expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -288,6 +300,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
+expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -309,6 +322,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
+expId 1135
 fileName wgEncodeOpenChromChipGlioblaCtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -331,6 +345,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001129
+expId 1129
 fileIndex wgEncodeOpenChromChipGlioblaInputAln.bam.bai
 fileName wgEncodeOpenChromChipGlioblaInputAln.bam
 grant Crawford
@@ -353,6 +368,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001129
+expId 1129
 fileName wgEncodeOpenChromChipGlioblaInputRawData.fastq.gz
 grant Crawford
 lab UT-A
@@ -373,6 +389,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001129
+expId 1129
 fileName wgEncodeOpenChromChipGlioblaInputSig.bigWig
 grant Crawford
 lab UT-A
@@ -395,6 +412,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
+expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam
 grant Crawford
 lab UT-A
@@ -417,6 +435,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
+expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam
 grant Crawford
 lab UT-A
@@ -439,6 +458,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
+expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -461,6 +481,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
+expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2PkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -483,6 +504,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
+expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -504,6 +526,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
+expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -525,6 +548,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
+expId 1136
 fileName wgEncodeOpenChromChipGlioblaPol2Sig.bigWig
 grant Crawford
 lab UT-A
@@ -548,6 +572,7 @@ dateResubmitted 2010-06-02
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
+expId 547
 fileIndex wgEncodeOpenChromChipGm12878CmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12878CmycAlnRep1.bam
 grant Crawford
@@ -572,6 +597,7 @@ dateResubmitted 2010-06-02
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
+expId 547
 fileIndex wgEncodeOpenChromChipGm12878CmycAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12878CmycAlnRep2.bam
 grant Crawford
@@ -596,6 +622,7 @@ dateResubmitted 2010-06-02
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
+expId 547
 fileName wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -619,6 +646,7 @@ dateResubmitted 2010-06-02
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
+expId 547
 fileName wgEncodeOpenChromChipGm12878CmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -641,6 +669,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
+expId 547
 fileName wgEncodeOpenChromChipGm12878CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -662,6 +691,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
+expId 547
 fileName wgEncodeOpenChromChipGm12878CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -684,6 +714,7 @@ dateResubmitted 2010-06-02
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
+expId 547
 fileName wgEncodeOpenChromChipGm12878CmycSig.bigWig
 grant Crawford
 lab UT-A
@@ -706,6 +737,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
+expId 532
 fileIndex wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam
 grant Crawford
@@ -729,6 +761,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
+expId 532
 fileIndex wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam
 grant Crawford
@@ -752,6 +785,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
+expId 532
 fileIndex wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam.bai
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam
 grant Crawford
@@ -775,6 +809,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
+expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -797,6 +832,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
+expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -820,6 +856,7 @@ dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000532
+expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -842,6 +879,7 @@ dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000532
+expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -864,6 +902,7 @@ dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000532
+expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep3.fastq.gz
 grant Crawford
 lab UT-A
@@ -885,6 +924,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
+expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -908,6 +948,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
 dccAccession wgEncodeEH000528
+expId 528
 fileIndex wgEncodeOpenChromChipGm12878InputAln.bam.bai
 fileName wgEncodeOpenChromChipGm12878InputAln.bam
 grant Crawford
@@ -930,6 +971,7 @@ dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
 dccAccession wgEncodeEH000528
+expId 528
 fileName wgEncodeOpenChromChipGm12878InputRawData.fastq.gz
 grant Crawford
 lab UT-A
@@ -951,6 +993,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
 dccAccession wgEncodeEH000528
+expId 528
 fileName wgEncodeOpenChromChipGm12878InputSig.bigWig
 grant Crawford
 lab UT-A
@@ -974,6 +1017,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
+expId 592
 fileIndex wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam
 grant Crawford
@@ -998,6 +1042,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
+expId 592
 fileIndex wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam
 grant Crawford
@@ -1022,6 +1067,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
+expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -1045,6 +1091,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
+expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -1067,6 +1114,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
+expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -1088,6 +1136,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
+expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -1110,6 +1159,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
+expId 592
 fileName wgEncodeOpenChromChipGm12878Pol2Sig.bigWig
 grant Crawford
 lab UT-A
@@ -1133,6 +1183,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
+expId 569
 fileIndex wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam
 grant Crawford
@@ -1157,6 +1208,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
+expId 569
 fileIndex wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam
 grant Crawford
@@ -1181,6 +1233,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
+expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -1204,6 +1257,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
+expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -1226,6 +1280,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
+expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -1247,6 +1302,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
+expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -1269,6 +1325,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
+expId 569
 fileName wgEncodeOpenChromChipGm12891CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -1292,6 +1349,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
+expId 562
 fileIndex wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam
 grant Crawford
@@ -1316,6 +1374,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
+expId 562
 fileIndex wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam
 grant Crawford
@@ -1340,6 +1399,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
+expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -1363,6 +1423,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
+expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -1385,6 +1446,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
+expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -1406,6 +1468,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
+expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -1428,6 +1491,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
+expId 562
 fileName wgEncodeOpenChromChipGm12892CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -1451,6 +1515,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
+expId 570
 fileIndex wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam
 grant Crawford
@@ -1475,6 +1540,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
+expId 570
 fileIndex wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam
 grant Crawford
@@ -1499,6 +1565,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
+expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -1522,6 +1589,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
+expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -1544,6 +1612,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
+expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -1565,6 +1634,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
+expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -1587,6 +1657,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
+expId 570
 fileName wgEncodeOpenChromChipGm19238CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -1610,6 +1681,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
+expId 571
 fileIndex wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam
 grant Crawford
@@ -1634,6 +1706,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
+expId 571
 fileIndex wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam
 grant Crawford
@@ -1658,6 +1731,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
+expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -1681,6 +1755,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
+expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -1703,6 +1778,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
+expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -1724,6 +1800,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
+expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -1746,6 +1823,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
+expId 571
 fileName wgEncodeOpenChromChipGm19239CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -1769,6 +1847,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
+expId 572
 fileIndex wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam
 grant Crawford
@@ -1793,6 +1872,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
+expId 572
 fileIndex wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam
 grant Crawford
@@ -1817,6 +1897,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
+expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -1840,6 +1921,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
+expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -1862,6 +1944,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
+expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -1883,6 +1966,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
+expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -1905,6 +1989,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
+expId 572
 fileName wgEncodeOpenChromChipGm19240CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -1928,6 +2013,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
+expId 596
 fileIndex wgEncodeOpenChromChipH1hescCmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipH1hescCmycAlnRep1.bam
 grant Crawford
@@ -1952,6 +2038,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
+expId 596
 fileName wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -1975,6 +2062,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
+expId 596
 fileName wgEncodeOpenChromChipH1hescCmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -1997,6 +2085,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
+expId 596
 fileName wgEncodeOpenChromChipH1hescCmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -2018,6 +2107,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
+expId 596
 fileName wgEncodeOpenChromChipH1hescCmycSig.bigWig
 grant Crawford
 lab UT-A
@@ -2041,6 +2131,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
+expId 560
 fileIndex wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam
 grant Crawford
@@ -2065,6 +2156,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
+expId 560
 fileName wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -2088,6 +2180,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
+expId 560
 fileName wgEncodeOpenChromChipH1hescCtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -2110,6 +2203,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
+expId 560
 fileName wgEncodeOpenChromChipH1hescCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -2131,6 +2225,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
+expId 560
 fileName wgEncodeOpenChromChipH1hescCtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -2154,6 +2249,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
+expId 563
 fileIndex wgEncodeOpenChromChipH1hescPol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipH1hescPol2AlnRep1.bam
 grant Crawford
@@ -2178,6 +2274,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
+expId 563
 fileName wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -2201,6 +2298,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
+expId 563
 fileName wgEncodeOpenChromChipH1hescPol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -2223,6 +2321,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
+expId 563
 fileName wgEncodeOpenChromChipH1hescPol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -2244,6 +2343,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
+expId 563
 fileName wgEncodeOpenChromChipH1hescPol2Sig.bigWig
 grant Crawford
 lab UT-A
@@ -2267,6 +2367,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
+expId 542
 fileIndex wgEncodeOpenChromChipHelas3CmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHelas3CmycAlnRep1.bam
 grant Crawford
@@ -2291,6 +2392,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
+expId 542
 fileIndex wgEncodeOpenChromChipHelas3CmycAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHelas3CmycAlnRep2.bam
 grant Crawford
@@ -2315,6 +2417,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
+expId 542
 fileName wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -2338,6 +2441,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
+expId 542
 fileName wgEncodeOpenChromChipHelas3CmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -2361,6 +2465,7 @@ dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
+expId 542
 fileName wgEncodeOpenChromChipHelas3CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -2383,6 +2488,7 @@ dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
+expId 542
 fileName wgEncodeOpenChromChipHelas3CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -2405,6 +2511,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
+expId 542
 fileName wgEncodeOpenChromChipHelas3CmycSig.bigWig
 grant Crawford
 lab UT-A
@@ -2428,6 +2535,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
+expId 541
 fileIndex wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam
 grant Crawford
@@ -2452,6 +2560,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
+expId 541
 fileIndex wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam
 grant Crawford
@@ -2476,6 +2585,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
+expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -2499,6 +2609,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
+expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -2522,6 +2633,7 @@ dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
+expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -2544,6 +2656,7 @@ dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
+expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -2566,6 +2679,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
+expId 541
 fileName wgEncodeOpenChromChipHelas3CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -2589,6 +2703,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
 dccAccession wgEncodeEH000539
+expId 539
 fileIndex wgEncodeOpenChromChipHelas3InputAln.bam.bai
 fileName wgEncodeOpenChromChipHelas3InputAln.bam
 grant Crawford
@@ -2611,6 +2726,7 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
 dccAccession wgEncodeEH000539
+expId 539
 fileName wgEncodeOpenChromChipHelas3InputRawData.fastq.gz
 grant Crawford
 lab UT-A
@@ -2633,6 +2749,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
 dccAccession wgEncodeEH000539
+expId 539
 fileName wgEncodeOpenChromChipHelas3InputSig.bigWig
 grant Crawford
 lab UT-A
@@ -2656,6 +2773,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
+expId 597
 fileIndex wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam
 grant Crawford
@@ -2680,6 +2798,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
+expId 597
 fileIndex wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam
 grant Crawford
@@ -2704,6 +2823,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
+expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -2727,6 +2847,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
+expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -2749,6 +2870,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
+expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -2771,6 +2893,7 @@ dateResubmitted 2010-12-23
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
+expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -2793,6 +2916,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
+expId 597
 fileName wgEncodeOpenChromChipHelas3Pol2Sig.bigWig
 grant Crawford
 lab UT-A
@@ -2816,6 +2940,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
+expId 545
 fileIndex wgEncodeOpenChromChipHepg2CmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHepg2CmycAlnRep1.bam
 grant Crawford
@@ -2840,6 +2965,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
+expId 545
 fileIndex wgEncodeOpenChromChipHepg2CmycAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHepg2CmycAlnRep2.bam
 grant Crawford
@@ -2864,6 +2990,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
+expId 545
 fileIndex wgEncodeOpenChromChipHepg2CmycAlnRep3.bam.bai
 fileName wgEncodeOpenChromChipHepg2CmycAlnRep3.bam
 grant Crawford
@@ -2888,6 +3015,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
+expId 545
 fileName wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -2911,6 +3039,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
+expId 545
 fileName wgEncodeOpenChromChipHepg2CmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -2934,6 +3063,7 @@ dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
+expId 545
 fileName wgEncodeOpenChromChipHepg2CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -2956,6 +3086,7 @@ dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
+expId 545
 fileName wgEncodeOpenChromChipHepg2CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -2978,6 +3109,7 @@ dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
+expId 545
 fileName wgEncodeOpenChromChipHepg2CmycRawDataRep3.fastq.gz
 grant Crawford
 lab UT-A
@@ -3000,6 +3132,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
+expId 545
 fileName wgEncodeOpenChromChipHepg2CmycSig.bigWig
 grant Crawford
 lab UT-A
@@ -3023,6 +3156,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
+expId 543
 fileIndex wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam
 grant Crawford
@@ -3047,6 +3181,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
+expId 543
 fileIndex wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam
 grant Crawford
@@ -3071,6 +3206,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
+expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -3094,6 +3230,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
+expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -3117,6 +3254,7 @@ dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
+expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -3139,6 +3277,7 @@ dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
+expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -3161,6 +3300,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
+expId 543
 fileName wgEncodeOpenChromChipHepg2CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -3184,6 +3324,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
 dccAccession wgEncodeEH000538
+expId 538
 fileIndex wgEncodeOpenChromChipHepg2InputAln.bam.bai
 fileName wgEncodeOpenChromChipHepg2InputAln.bam
 grant Crawford
@@ -3206,6 +3347,7 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
 dccAccession wgEncodeEH000538
+expId 538
 fileName wgEncodeOpenChromChipHepg2InputRawData.fastq.gz
 grant Crawford
 lab UT-A
@@ -3228,6 +3370,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
 dccAccession wgEncodeEH000538
+expId 538
 fileName wgEncodeOpenChromChipHepg2InputSig.bigWig
 grant Crawford
 lab UT-A
@@ -3251,6 +3394,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
+expId 554
 fileIndex wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam
 grant Crawford
@@ -3275,6 +3419,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
+expId 554
 fileIndex wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam
 grant Crawford
@@ -3299,6 +3444,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
+expId 554
 fileIndex wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam.bai
 fileName wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam
 grant Crawford
@@ -3323,6 +3469,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
+expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -3346,6 +3493,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
+expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -3369,6 +3517,7 @@ dateResubmitted 2010-12-23
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
+expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -3390,6 +3539,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
+expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -3411,6 +3561,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
+expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep3.fastq.gz
 grant Crawford
 lab UT-A
@@ -3433,6 +3584,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
+expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2Sig.bigWig
 grant Crawford
 lab UT-A
@@ -3456,6 +3608,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
+expId 561
 fileIndex wgEncodeOpenChromChipHuvecCmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHuvecCmycAlnRep1.bam
 grant Crawford
@@ -3480,6 +3633,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
+expId 561
 fileName wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -3503,6 +3657,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
+expId 561
 fileName wgEncodeOpenChromChipHuvecCmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -3525,6 +3680,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
+expId 561
 fileName wgEncodeOpenChromChipHuvecCmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -3547,6 +3703,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
+expId 561
 fileName wgEncodeOpenChromChipHuvecCmycSig.bigWig
 grant Crawford
 lab UT-A
@@ -3570,6 +3727,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
+expId 551
 fileIndex wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam
 grant Crawford
@@ -3594,6 +3752,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
+expId 551
 fileIndex wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam
 grant Crawford
@@ -3618,6 +3777,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
+expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -3641,6 +3801,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
+expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -3663,6 +3824,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
+expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -3684,6 +3846,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
+expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -3706,6 +3869,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
+expId 551
 fileName wgEncodeOpenChromChipHuvecCtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -3729,6 +3893,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000550
+expId 550
 fileIndex wgEncodeOpenChromChipHuvecInputAln.bam.bai
 fileName wgEncodeOpenChromChipHuvecInputAln.bam
 grant Crawford
@@ -3751,6 +3916,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000550
+expId 550
 fileName wgEncodeOpenChromChipHuvecInputRawData.fastq.gz
 grant Crawford
 lab UT-A
@@ -3772,6 +3938,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000550
+expId 550
 fileName wgEncodeOpenChromChipHuvecInputSig.bigWig
 grant Crawford
 lab UT-A
@@ -3795,6 +3962,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
+expId 552
 fileIndex wgEncodeOpenChromChipHuvecPol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHuvecPol2AlnRep1.bam
 grant Crawford
@@ -3819,6 +3987,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
+expId 552
 fileIndex wgEncodeOpenChromChipHuvecPol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHuvecPol2AlnRep2.bam
 grant Crawford
@@ -3843,6 +4012,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
+expId 552
 fileName wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -3866,6 +4036,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
+expId 552
 fileName wgEncodeOpenChromChipHuvecPol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -3888,6 +4059,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
+expId 552
 fileName wgEncodeOpenChromChipHuvecPol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -3909,6 +4081,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
+expId 552
 fileName wgEncodeOpenChromChipHuvecPol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -3931,6 +4104,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
+expId 552
 fileName wgEncodeOpenChromChipHuvecPol2Sig.bigWig
 grant Crawford
 lab UT-A
@@ -3954,6 +4128,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
+expId 536
 fileIndex wgEncodeOpenChromChipK562CmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipK562CmycAlnRep1.bam
 grant Crawford
@@ -3978,6 +4153,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
+expId 536
 fileIndex wgEncodeOpenChromChipK562CmycAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipK562CmycAlnRep2.bam
 grant Crawford
@@ -4002,6 +4178,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
+expId 536
 fileIndex wgEncodeOpenChromChipK562CmycAlnRep3.bam.bai
 fileName wgEncodeOpenChromChipK562CmycAlnRep3.bam
 grant Crawford
@@ -4026,6 +4203,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 dccAccession wgEncodeEH000536
+expId 536
 fileName wgEncodeOpenChromChipK562CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -4049,6 +4227,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
+expId 536
 fileName wgEncodeOpenChromChipK562CmycPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -4072,6 +4251,7 @@ dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
+expId 536
 fileName wgEncodeOpenChromChipK562CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -4094,6 +4274,7 @@ dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
+expId 536
 fileName wgEncodeOpenChromChipK562CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -4116,6 +4297,7 @@ dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
+expId 536
 fileName wgEncodeOpenChromChipK562CmycRawDataRep3.fastq.gz
 grant Crawford
 lab UT-A
@@ -4138,6 +4320,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 dccAccession wgEncodeEH000536
+expId 536
 fileName wgEncodeOpenChromChipK562CmycSig.bigWig
 grant Crawford
 lab UT-A
@@ -4161,6 +4344,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
+expId 535
 fileIndex wgEncodeOpenChromChipK562CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipK562CtcfAlnRep1.bam
 grant Crawford
@@ -4185,6 +4369,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
+expId 535
 fileIndex wgEncodeOpenChromChipK562CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipK562CtcfAlnRep2.bam
 grant Crawford
@@ -4209,6 +4394,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
+expId 535
 fileIndex wgEncodeOpenChromChipK562CtcfAlnRep3.bam.bai
 fileName wgEncodeOpenChromChipK562CtcfAlnRep3.bam
 grant Crawford
@@ -4233,6 +4419,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 dccAccession wgEncodeEH000535
+expId 535
 fileName wgEncodeOpenChromChipK562CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -4256,6 +4443,7 @@ dateResubmitted 2011-01-12
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
+expId 535
 fileName wgEncodeOpenChromChipK562CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -4279,6 +4467,7 @@ dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
+expId 535
 fileName wgEncodeOpenChromChipK562CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -4301,6 +4490,7 @@ dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
+expId 535
 fileName wgEncodeOpenChromChipK562CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -4323,6 +4513,7 @@ dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
+expId 535
 fileName wgEncodeOpenChromChipK562CtcfRawDataRep3.fastq.gz
 grant Crawford
 lab UT-A
@@ -4345,6 +4536,7 @@ dateResubmitted 2011-01-12
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 dccAccession wgEncodeEH000535
+expId 535
 fileName wgEncodeOpenChromChipK562CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -4368,6 +4560,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
 dccAccession wgEncodeEH000529
+expId 529
 fileIndex wgEncodeOpenChromChipK562InputAln.bam.bai
 fileName wgEncodeOpenChromChipK562InputAln.bam
 grant Crawford
@@ -4390,6 +4583,7 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
 dccAccession wgEncodeEH000529
+expId 529
 fileName wgEncodeOpenChromChipK562InputRawData.fastq.gz
 grant Crawford
 lab UT-A
@@ -4412,6 +4606,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
 dccAccession wgEncodeEH000529
+expId 529
 fileName wgEncodeOpenChromChipK562InputSig.bigWig
 grant Crawford
 lab UT-A
@@ -4435,6 +4630,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
+expId 555
 fileIndex wgEncodeOpenChromChipK562Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipK562Pol2AlnRep1.bam
 grant Crawford
@@ -4459,6 +4655,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
+expId 555
 fileIndex wgEncodeOpenChromChipK562Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipK562Pol2AlnRep2.bam
 grant Crawford
@@ -4483,6 +4680,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
+expId 555
 fileName wgEncodeOpenChromChipK562Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -4506,6 +4704,7 @@ dateResubmitted 2011-01-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
+expId 555
 fileName wgEncodeOpenChromChipK562Pol2Pk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -4528,6 +4727,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
+expId 555
 fileName wgEncodeOpenChromChipK562Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -4549,6 +4749,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
+expId 555
 fileName wgEncodeOpenChromChipK562Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -4571,6 +4772,7 @@ dateResubmitted 2011-01-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
+expId 555
 fileName wgEncodeOpenChromChipK562Pol2Sig.bigWig
 grant Crawford
 lab UT-A
@@ -4593,6 +4795,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
+expId 1134
 fileIndex wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam
 grant Crawford
@@ -4618,6 +4821,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
+expId 1134
 fileIndex wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam
 grant Crawford
@@ -4643,6 +4847,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
+expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -4666,6 +4871,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
+expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -4690,6 +4896,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
+expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -4713,6 +4920,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
+expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -4736,6 +4944,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
+expId 1134
 fileName wgEncodeOpenChromChipMcf7CmycEstroSig.bigWig
 grant Crawford
 lab UT-A
@@ -4760,6 +4969,7 @@ dateResubmitted 2010-12-23
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000599
+expId 599
 fileName wgEncodeOpenChromChipMcf7CmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -4782,6 +4992,7 @@ dateResubmitted 2010-12-23
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000599
+expId 599
 fileName wgEncodeOpenChromChipMcf7CmycRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -4803,6 +5014,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
+expId 1133
 fileIndex wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam
 grant Crawford
@@ -4827,6 +5039,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
+expId 1133
 fileIndex wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam
 grant Crawford
@@ -4851,6 +5064,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
+expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -4874,6 +5088,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
+expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -4897,6 +5112,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
+expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -4919,6 +5135,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
+expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -4941,6 +5158,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
+expId 1133
 fileName wgEncodeOpenChromChipMcf7CmycVehSig.bigWig
 grant Crawford
 lab UT-A
@@ -4965,6 +5183,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
+expId 598
 fileIndex wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam
 grant Crawford
@@ -4989,6 +5208,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
+expId 598
 fileIndex wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam
 grant Crawford
@@ -5013,6 +5233,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
+expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -5035,6 +5256,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
+expId 1131
 fileIndex wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam
 grant Crawford
@@ -5059,6 +5281,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
+expId 1131
 fileIndex wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam
 grant Crawford
@@ -5083,6 +5306,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
+expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -5106,6 +5330,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
+expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -5129,6 +5354,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
+expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -5151,6 +5377,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
+expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -5173,6 +5400,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
+expId 1131
 fileName wgEncodeOpenChromChipMcf7CtcfEstroSig.bigWig
 grant Crawford
 lab UT-A
@@ -5197,6 +5425,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
+expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -5219,6 +5448,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
+expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -5240,6 +5470,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
+expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -5262,6 +5493,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
+expId 598
 fileName wgEncodeOpenChromChipMcf7CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -5284,6 +5516,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
+expId 1132
 fileIndex wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam
 grant Crawford
@@ -5308,6 +5541,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
+expId 1132
 fileIndex wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam
 grant Crawford
@@ -5332,6 +5566,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
+expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -5355,6 +5590,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
+expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -5378,6 +5614,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
+expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -5400,6 +5637,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
+expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -5422,6 +5660,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
+expId 1132
 fileName wgEncodeOpenChromChipMcf7CtcfVehSig.bigWig
 grant Crawford
 lab UT-A
@@ -5446,6 +5685,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000589
+expId 589
 fileIndex wgEncodeOpenChromChipMcf7InputAln.bam.bai
 fileName wgEncodeOpenChromChipMcf7InputAln.bam
 grant Crawford
@@ -5468,6 +5708,7 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000589
+expId 589
 fileName wgEncodeOpenChromChipMcf7InputRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -5489,6 +5730,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000589
+expId 589
 fileName wgEncodeOpenChromChipMcf7InputSig.bigWig
 grant Crawford
 lab UT-A
@@ -5511,6 +5753,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
+expId 1130
 fileIndex wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam
 grant Crawford
@@ -5534,6 +5777,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
+expId 1130
 fileIndex wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam
 grant Crawford
@@ -5557,6 +5801,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
+expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -5579,6 +5824,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
+expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2PkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -5601,6 +5847,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
+expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -5622,6 +5869,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
+expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -5643,6 +5891,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
+expId 1130
 fileName wgEncodeOpenChromChipMcf7Pol2Sig.bigWig
 grant Crawford
 lab UT-A
@@ -5664,6 +5913,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
+expId 1137
 fileName wgEncodeOpenChromChipMonocd14InputAln.bam
 grant Crawford
 lab UT-A
@@ -5685,6 +5935,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001137
+expId 1137
 fileName wgEncodeOpenChromChipMonocd14InputRawData.fastq.gz
 grant Crawford
 lab UT-A
@@ -5705,6 +5956,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001137
+expId 1137
 fileName wgEncodeOpenChromChipMonocd14InputSig.bigWig
 grant Crawford
 lab UT-A
@@ -5728,6 +5980,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
+expId 559
 fileIndex wgEncodeOpenChromChipNhekCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipNhekCtcfAlnRep1.bam
 grant Crawford
@@ -5752,6 +6005,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
+expId 559
 fileIndex wgEncodeOpenChromChipNhekCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipNhekCtcfAlnRep2.bam
 grant Crawford
@@ -5776,6 +6030,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
+expId 559
 fileName wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -5799,6 +6054,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
+expId 559
 fileName wgEncodeOpenChromChipNhekCtcfPk.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -5821,6 +6077,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
+expId 559
 fileName wgEncodeOpenChromChipNhekCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -5842,6 +6099,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
+expId 559
 fileName wgEncodeOpenChromChipNhekCtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -5864,6 +6122,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
+expId 559
 fileName wgEncodeOpenChromChipNhekCtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -5887,6 +6146,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
+expId 600
 fileIndex wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam
 grant Crawford
@@ -5912,6 +6172,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
+expId 600
 fileIndex wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam
 grant Crawford
@@ -5937,6 +6198,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
+expId 600
 fileName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -5961,6 +6223,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
+expId 600
 fileName wgEncodeOpenChromChipProgfibCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -5986,6 +6249,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
+expId 600
 fileName wgEncodeOpenChromChipProgfibCtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -6010,6 +6274,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000593
+expId 593
 fileIndex wgEncodeOpenChromChipProgfibInputAln.bam.bai
 fileName wgEncodeOpenChromChipProgfibInputAln.bam
 grant Crawford
@@ -6034,6 +6299,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000593
+expId 593
 fileName wgEncodeOpenChromChipProgfibInputSig.bigWig
 grant Crawford
 lab UT-A
@@ -6058,6 +6324,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
+expId 606
 fileIndex wgEncodeOpenChromChipProgfibPol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam
 grant Crawford
@@ -6083,6 +6350,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
+expId 606
 fileIndex wgEncodeOpenChromChipProgfibPol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam
 grant Crawford
@@ -6108,6 +6376,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
+expId 606
 fileName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -6132,6 +6401,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
+expId 606
 fileName wgEncodeOpenChromChipProgfibPol2PkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -6157,6 +6427,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
+expId 606
 fileName wgEncodeOpenChromChipProgfibPol2Sig.bigWig
 grant Crawford
 lab UT-A
@@ -6169,4 +6440,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 574766166
+# MAGIC: 585120521

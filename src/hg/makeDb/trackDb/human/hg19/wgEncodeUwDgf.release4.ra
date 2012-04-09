@@ -38,7 +38,7 @@ sortOrder cellType=+ view=+
 fileSortOrder cell=Cell_Line view=View origAssembly=Original_Assembly dccAccession=UCSC_Accession geoSampleAccession=GEO_Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
-html wgEncodeUwDgf.release3
+html wgEncodeUwDgf.release4
 dragAndDrop subTracks
 priority 5
 type bed 3
@@ -404,7 +404,7 @@ wgEncode 1
 
         track wgEncodeUwDgfK562Znfp5Hotspots
         parent wgEncodeUwDgfViewHotspots
-        shortLabel K562
+        shortLabel K562 ZNFP5 Hot
         longLabel K562 ZNF knockout P5 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=1K562 treatment=ZNFP5
         type broadPeak
@@ -415,7 +415,7 @@ wgEncode 1
 
         track wgEncodeUwDgfLhcnm2Diff4dHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel LHCN-M2
+        shortLabel LHCNM2 DIFF4d Hot
         longLabel LHCN-M2 DIFF 4d DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=LHCNM2 treatment=DIFF4D
         type broadPeak
@@ -425,7 +425,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHgfHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel HGF
+        shortLabel HGF Hot
         longLabel HGF DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HGF treatment=aNONE
         type broadPeak
@@ -435,7 +435,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHmvechHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel HMVEC-LBl
+        shortLabel HMVEC-LBl Hot
         longLabel HMVEC-LBl DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HMVECh treatment=aNONE
         type broadPeak
@@ -445,7 +445,7 @@ wgEncode 1
 
         track wgEncodeUwDgfK562Znfa41c6Hotspots
         parent wgEncodeUwDgfViewHotspots
-        shortLabel K562
+        shortLabel K562 ZNFA41C6 Hot
         longLabel K562 ZNF knockout A4.1-C6 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=1K562 treatment=ZNFA41C6
         type broadPeak
@@ -456,7 +456,7 @@ wgEncode 1
 
         track wgEncodeUwDgfA549Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel A549
+        shortLabel A549 Hot
         longLabel A549 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=A549 treatment=aNONE
         type broadPeak
@@ -466,7 +466,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHcfaaHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel HCFaa
+        shortLabel HCFaa Hot
         longLabel HCFaa DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HCFAA treatment=aNONE
         type broadPeak
@@ -476,7 +476,7 @@ wgEncode 1
 
         track wgEncodeUwDgfLhcnm2Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel LHCN-M2
+        shortLabel LHCNM2 Hot
         longLabel LHCN-M2 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=LHCNM2 treatment=aNONE
         type broadPeak
@@ -486,7 +486,7 @@ wgEncode 1
 
         track wgEncodeUwDgfM059jHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel M059J
+        shortLabel M059J Hot
         longLabel M059J DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=M059J treatment=aNONE
         type broadPeak
@@ -496,7 +496,7 @@ wgEncode 1
 
         track wgEncodeUwDgfRpmi7951Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel RPMI-7951
+        shortLabel RPMI-7951 Hot
         longLabel RPMI-7951 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=RPMI7951 treatment=aNONE
         type broadPeak
@@ -872,7 +872,7 @@ wgEncode 1
 
         track wgEncodeUwDgfK562Znfp5Pk
         parent wgEncodeUwDgfViewPeaks
-        shortLabel K562 Pk
+        shortLabel K562 ZNFP5 Pk
         longLabel K562 ZNF knockout P5 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFP5
         type narrowPeak
@@ -883,7 +883,7 @@ wgEncode 1
 
         track wgEncodeUwDgfLhcnm2Diff4dPk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel LHCN-M2 Pk
+        shortLabel LHCNM2 DIFF4d Pk
         longLabel LHCN-M2 DIFF 4d DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=LHCNM2 treatment=DIFF4D
         type narrowPeak
@@ -913,7 +913,7 @@ wgEncode 1
 
         track wgEncodeUwDgfK562Znfa41c6Pk
         parent wgEncodeUwDgfViewPeaks
-        shortLabel K562 Pk
+        shortLabel K562 ZNFA41C6 Pk
         longLabel K562 ZNF knockout A4.1-C6 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=1K562 treatment=ZNFA41C6
         type narrowPeak
@@ -944,7 +944,7 @@ wgEncode 1
 
         track wgEncodeUwDgfLhcnm2Pk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel LHCN-M2 Pk
+        shortLabel LHCNM2 Pk
         longLabel LHCN-M2 DNaseI DGF Peaks from ENCODE/UW
         subGroups view=Peaks cellType=LHCNM2 treatment=aNONE
         type narrowPeak
@@ -1333,7 +1333,7 @@ wgEncode 1
 
         track wgEncodeUwDgfK562Znfp5Sig
         parent wgEncodeUwDgfViewSignal
-        shortLabel K562 Sig
+        shortLabel K562 ZNFP5 Sig
         longLabel K562 ZNF knockout P5 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=1K562 treatment=ZNFP5
         type bigWig 1.000000 99569.000000
@@ -1344,7 +1344,7 @@ wgEncode 1
 
         track wgEncodeUwDgfLhcnm2Diff4dSig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel LHCN-M2 Sig
+        shortLabel LHCNM2 DIFF4d Sig
         longLabel LHCN-M2 DIFF 4d DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=LHCNM2 treatment=DIFF4D
         type bigWig 1.000000 102421.000000
@@ -1374,7 +1374,7 @@ wgEncode 1
 
         track wgEncodeUwDgfK562Znfa41c6Sig
         parent wgEncodeUwDgfViewSignal
-        shortLabel K562 Sig
+        shortLabel K562 ZNFA41C6 Sig
         longLabel K562 ZNF knockout A4.1-C6 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=1K562 treatment=ZNFA41C6
         type bigWig 1.000000 222442.000000
@@ -1405,7 +1405,7 @@ wgEncode 1
 
         track wgEncodeUwDgfLhcnm2Sig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel LHCN-M2 Sig
+        shortLabel LHCNM2 Sig
         longLabel LHCN-M2 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=LHCNM2 treatment=aNONE
         type bigWig 1.000000 65022.000000
@@ -1794,7 +1794,7 @@ wgEncode 1
 
         track wgEncodeUwDgfK562Znfp5Raw
         parent wgEncodeUwDgfViewzRaw
-        shortLabel K562 Raw
+        shortLabel K562 ZNFP5 Raw
         longLabel K562 ZNF knockout P5 DNaseI DGF Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=1K562 treatment=ZNFP5
         type bigWig 1.000000 525236.000000
@@ -1805,7 +1805,7 @@ wgEncode 1
 
         track wgEncodeUwDgfLhcnm2Diff4dRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel LHCN-M2 Raw
+        shortLabel LHCNM2 DIFF4d Raw
         longLabel LHCN-M2 DIFF 4d DNaseI DGF Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=LHCNM2 treatment=DIFF4D
         type bigWig 1.000000 591867.000000
@@ -1835,7 +1835,7 @@ wgEncode 1
 
         track wgEncodeUwDgfK562Znfa41c6Raw
         parent wgEncodeUwDgfViewzRaw
-        shortLabel K562 Raw
+        shortLabel K562 ZNFA41C6 Raw
         longLabel K562 ZNF knockout A4.1-C6 DNaseI DGF Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=1K562 treatment=ZNFA41C6
         type bigWig 1.000000 712971.000000
@@ -1866,7 +1866,7 @@ wgEncode 1
 
         track wgEncodeUwDgfLhcnm2Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel LHCN-M2 Raw
+        shortLabel LHCNM2 Raw
         longLabel LHCN-M2 DNaseI DGF Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=LHCNM2 treatment=aNONE
         type bigWig 1.000000 308025.000000
