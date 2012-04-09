@@ -1,4 +1,4 @@
-#!/hive/groups/encode/dcc/bin/python
+#!/usr/bin/env python2.7
 import sys, os, urllib2, argparse, re, cgi
 from xml.etree import ElementTree as ET
 

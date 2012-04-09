@@ -3,7 +3,7 @@ include ../../inc/common.mk
 HG_WARN = ${HG_WARN_ERR}
 L += -lm 
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkweb.a
 
 
 O = autoSql.o

@@ -14,9 +14,8 @@ please see
 Most source code users will only be interested in the src/inc and 
 src/lib directories, which contain the interfaces and implementations
 to the library routines,  and in a few specific applications.
-The applications are scattered in other directories.
-Many of them are web based.  A few of them expect
-the MySQL database to be around.
+The applications are scattered in other directories.  Many of them are web based.  
+The UCSC Genome Browser in particular is mostly found in src/hg/hgTracks.
 
 GENERAL INSTALL INSTRUCTIONS
 

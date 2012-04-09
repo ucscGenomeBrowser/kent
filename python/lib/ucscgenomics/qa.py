@@ -4,22 +4,31 @@ import argparse
 import subprocess
 import datetime
 import time
+import pipes
 
 """
     A collection of functions useful to the ENCODE and GB QA Teams.
 """
 
+def callHgsql(database, command):
+    """ Run hgsql command using subprocess, return stdout data if no error."""
+    cmd = ["hgsql", database, "-Ne", command]
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmdout, cmderr = p.communicate()
+    if p.returncode != 0:
+        # keep command arguments nicely quoted
+        cmdstr = " ".join([pipes.quote(arg) for arg in cmd])
+        raise Exception("Error from: " + cmdstr + ": " + cmderr)
+    return cmdout
 
 def getGbdbTables(database, tableset):
     """ Remove tables that aren't pointers to Gbdb files."""
     sep = "','"
     tablestr = sep.join(tableset)
     tablestr = "'" + tablestr + "'"
-
-    cmd = "hgsql %s -e \"select table_name from information_schema.columns where table_name in (%s) and column_name = 'fileName'\"" % (database, tablestr)
-    p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-    cmdoutput = p.stdout.read()
-    gbdbtableset = set(cmdoutput.split("\n")[1:-1])
+    hgsqlOut = callHgsql(database, "select table_name from information_schema.columns where table_name in ("
+                                   + tablestr + ") and column_name = 'fileName'")
+    gbdbtableset = set(hgsqlOut.split())
     return gbdbtableset
 
 def sorted_nicely(l):
@@ -36,26 +45,23 @@ def countPerChrom(database, tables):
     globalseen = set()
     localseen = dict()
 
-    cmd = "hgsql %s -e \"select chrom from chromInfo\"" % database
-    p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-    cmdoutput = p.stdout.read()
+    hgsqlOut = callHgsql(database, "select chrom from chromInfo")
+    chrlist = set(hgsqlOut.split())
 
-    chrlist = set(cmdoutput.split("\n")[1:-1])
     notPositionalTable = set()
-    if not chrlist:
-        output.append("Can't get chromInfo from %s for countPerChrom" % database)
-        return (output, tablecounts)
     if not notgbdbtablelist:
         output.append("No tables to count chroms")
         output.append("")
         return (output, tablecounts)
     for i in notgbdbtablelist:
         counts = dict()
+
         cmd = "hgsql %s -e \"select chrom from %s\"" % (database, i)
         p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
         cmdoutput = p.stdout.read()
 
         chrs = cmdoutput.split("\n")[1:-1]
+
         localseen[i] = set()
 
         if not chrs:
@@ -104,11 +110,8 @@ def checkTableDescriptions(database, tables):
         tablelist.append("tableName = '%s'" % i)
         orsep = " OR "
         orstr = orsep.join(tablelist)
-    cmd = "hgsql %s -e \"select tableName from tableDescriptions where %s\"" % (database, orstr)
-    p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-    cmdoutput = p.stdout.read()
-
-    described = set(cmdoutput.split("\n")[1:-1])
+    hgsqlOut = callHgsql(database, "select tableName from tableDescriptions where " + orstr)
+    described = set(hgsqlOut.split())
     missing = tables - described
     if missing:
         output.append("Tables missing a description:")
@@ -118,7 +121,6 @@ def checkTableDescriptions(database, tables):
     else:
         output.append("No tables missing a description")
         output.append("")
-
     return (output, missing)
 
 def checkTableIndex(database, tables):
@@ -134,11 +136,8 @@ def checkTableIndex(database, tables):
         return (output, missing)
 
     for i in notgbdbtablelist:
-        cmd = "hgsql %s -e \"show indexes from %s\"" % (database, i)
-        p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-        cmdoutput = p.stdout.read()
-
-        index = cmdoutput.split("\n")[1:-1]
+        hgsqlOut = callHgsql(database, "show indexes from " + i)
+        index = hgsqlOut.split()
         if index:
             pass
         else:
