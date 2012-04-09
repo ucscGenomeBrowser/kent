@@ -38,8 +38,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipGm12878CmycPk
         parent wgEncodeOpenChromChipViewPeaks
-        shortLabel GM12878 c-Myc Pk
-        longLabel GM12878 c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        shortLabel GM12878 cMyc Pk
+        longLabel GM12878 cMyc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=Peaks factor=CMYC cellType=1GM12878
         type narrowPeak
         color 153,38,0
@@ -90,8 +90,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipHelas3CmycPk
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel HeLa-S3 c-Myc Pk
-        longLabel HeLa-S3 c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        shortLabel HeLa-S3 cMyc Pk
+        longLabel HeLa-S3 cMyc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=Peaks factor=CMYC cellType=2HeLa-S3
         type narrowPeak
         color 0,119,158
@@ -99,8 +99,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipH1hescCmycPk
         parent wgEncodeOpenChromChipViewPeaks
-        shortLabel H1-hESC c-Myc Pk
-        longLabel H1-hESC c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        shortLabel H1-hESC cMyc Pk
+        longLabel H1-hESC cMyc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=Peaks factor=CMYC cellType=1H1-hESC
         type narrowPeak
         color 0,107,27
@@ -151,8 +151,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipHepg2CmycPk
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel HepG2 c-Myc Pk
-        longLabel HepG2 c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        shortLabel HepG2 cMyc Pk
+        longLabel HepG2 cMyc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=Peaks factor=CMYC cellType=2HepG2
         type narrowPeak
         color 189,0,157
@@ -213,8 +213,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipHuvecCmycPk
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel HUVEC c-Myc Pk
-        longLabel HUVEC c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        shortLabel HUVEC cMyc Pk
+        longLabel HUVEC cMyc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=Peaks factor=CMYC cellType=2HUVEC
         type narrowPeak
         color 224,75,0
@@ -222,8 +222,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipK562CmycPk
         parent wgEncodeOpenChromChipViewPeaks
-        shortLabel K562 c-Myc Pk
-        longLabel K562 c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        shortLabel K562 cMyc Pk
+        longLabel K562 cMyc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=Peaks factor=CMYC cellType=1K562
         type narrowPeak
         color 46,0,184
@@ -298,7 +298,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycVehPkRep1
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel MCF-7 veh cMyc Pk
-        longLabel MCF-7 vehicle c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 vehicle cMyc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups treatment=VEH view=Peaks factor=CMYC cellType=MCF7
         type narrowPeak
         # subId=2504 dateSubmitted=2010-10-16
@@ -322,7 +322,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycEstroPkRep1
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel MCF-7 est cMyc Pk
-        longLabel MCF-7 estrogen c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 estrogen cMyc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups view=Peaks factor=CMYC cellType=MCF7 treatment=ESTRO
         type narrowPeak
         # subId=2503 dateSubmitted=2010-10-16
@@ -354,7 +354,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfSerumstimPkRep1
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel MCF-7 CTCF stm Pk
-        longLabel MCF-7 serum stimulated media CTCF TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum stim CTCF TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups view=Peaks factor=CTCF cellType=MCF7 treatment=SERUMSTIM
         type narrowPeak
         # subId=5613 dateSubmitted=2012-02-11
@@ -362,15 +362,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7Pol2SerumstimPkRep1
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel MCF-7 Pol2 stm Pk
-        longLabel MCF-7 serum stimulated media Pol2 TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum stim Pol2 TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups view=Peaks factor=POL2 cellType=MCF7 treatment=SERUMSTIM
         type narrowPeak
         # subId=5614 dateSubmitted=2012-02-11
 
         track wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel MCF-7 c-Myc stm Pk
-        longLabel MCF-7 serum stimulated media c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        shortLabel MCF-7 cMyc stm Pk
+        longLabel MCF-7 serum stim cMyc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups view=Peaks factor=CMYC cellType=MCF7 treatment=SERUMSTIM
         type narrowPeak
         # subId=5615 dateSubmitted=2012-02-11
@@ -378,7 +378,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfSerumstvdPkRep1
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel MCF-7 CTCF stv Pk
-        longLabel MCF-7 serum starved media CTCF TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum starved CTCF TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups view=Peaks factor=CTCF cellType=MCF7 treatment=SERUMSTAVD
         type narrowPeak
         # subId=5616 dateSubmitted=2012-02-13
@@ -386,15 +386,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel MCF-7 Pol2 stv Pk
-        longLabel MCF-7 serum starved media Pol2 TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum starved Pol2 TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups view=Peaks factor=POL2 cellType=MCF7 treatment=SERUMSTAVD
         type narrowPeak
         # subId=5617 dateSubmitted=2012-02-13
 
         track wgEncodeOpenChromChipMcf7CmycSerumstvdPkRep1
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel MCF-7 c-Myc stv Pk
-        longLabel MCF-7 serum starved media c-Myc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
+        shortLabel MCF-7 cMyc stv Pk
+        longLabel MCF-7 serum starved cMyc TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
         subGroups view=Peaks factor=CMYC cellType=MCF7 treatment=SERUMSTAVD
         type narrowPeak
         # subId=6196 dateSubmitted=2012-03-23
@@ -414,8 +414,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipGm12878CmycSig
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel GM12878 c-Myc DS
-        longLabel GM12878 c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        shortLabel GM12878 cMyc DS
+        longLabel GM12878 cMyc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIG factor=CMYC cellType=1GM12878
         type bigWig 0.000000 0.750000
         color 153,38,0
@@ -466,8 +466,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipHelas3CmycSig
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HeLa-S3 c-Myc DS
-        longLabel HeLa-S3 c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        shortLabel HeLa-S3 cMyc DS
+        longLabel HeLa-S3 cMyc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIG factor=CMYC cellType=2HeLa-S3
         type bigWig 0.000000 0.824800
         color 0,119,158
@@ -475,8 +475,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipH1hescCmycSig
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel H1-hESC c-Myc DS
-        longLabel H1-hESC c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        shortLabel H1-hESC cMyc DS
+        longLabel H1-hESC cMyc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIG factor=CMYC cellType=1H1-hESC
         type bigWig 0.000000 1.701300
         color 0,107,27
@@ -536,8 +536,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipHepg2CmycSig
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HepG2 c-Myc DS
-        longLabel HepG2 c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        shortLabel HepG2 cMyc DS
+        longLabel HepG2 cMyc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIG factor=CMYC cellType=2HepG2
         type bigWig 0.000000 1.815900
         color 189,0,157
@@ -598,8 +598,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipHuvecCmycSig
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HUVEC c-Myc DS
-        longLabel HUVEC c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        shortLabel HUVEC cMyc DS
+        longLabel HUVEC cMyc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIG factor=CMYC cellType=2HUVEC
         type bigWig 0.000000 2.169800
         color 224,75,0
@@ -607,8 +607,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipK562CmycSig
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel K562 c-Myc DS
-        longLabel K562 c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        shortLabel K562 cMyc DS
+        longLabel K562 cMyc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIG factor=CMYC cellType=1K562
         type bigWig 0.000000 1.981500
         color 46,0,184
@@ -751,7 +751,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycVehSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 veh cMyc DS
-        longLabel MCF-7 vehicle c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 vehicle cMyc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups treatment=VEH view=SIG factor=CMYC cellType=MCF7
         type bigWig 0.000000 3.484600
         # subId=2504 dateSubmitted=2010-10-16
@@ -775,7 +775,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycEstroSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 est cMyc DS
-        longLabel MCF-7 estrogen c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 estrogen cMyc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CMYC cellType=MCF7 treatment=ESTRO
         type bigWig 0.000000 0.801700
         # subId=2503 dateSubmitted=2010-10-16
@@ -833,7 +833,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfSerumstimSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 CTCF stm DS
-        longLabel MCF-7 serum stimulated media CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum stim CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=MCF7 treatment=SERUMSTIM
         type bigWig 0.000000 10.246700
         # subId=5613 dateSubmitted=2012-02-11
@@ -841,15 +841,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7Pol2SerumstimSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 Pol2 stm DS
-        longLabel MCF-7 serum stimulated media Pol2 TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum stim Pol2 TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=POL2 cellType=MCF7 treatment=SERUMSTIM
         type bigWig 0.000000 5.031400
         # subId=5614 dateSubmitted=2012-02-11
 
         track wgEncodeOpenChromChipMcf7CmycSerumstimSig
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel MCF-7 c-Myc stm DS
-        longLabel MCF-7 serum stimulated media c-Myc TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        shortLabel MCF-7 cMyc stm DS
+        longLabel MCF-7 serum stim cMyc TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CMYC cellType=MCF7 treatment=SERUMSTIM
         type bigWig 0.000000 4.694000
         # subId=5615 dateSubmitted=2012-02-11
@@ -857,7 +857,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfSerumstvdSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 CTCF stv DS
-        longLabel MCF-7 serum starved media CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum starved CTCF TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CTCF cellType=MCF7 treatment=SERUMSTAVD
         type bigWig 0.000000 8.219700
         # subId=5616 dateSubmitted=2012-02-13
@@ -865,15 +865,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7Pol2SerumstvdSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 Pol2 stv DS
-        longLabel MCF-7 serum starved media Pol2 TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum starved Pol2 TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=POL2 cellType=MCF7 treatment=SERUMSTAVD
         type bigWig 0.000000 4.383900
         # subId=5617 dateSubmitted=2012-02-13
 
         track wgEncodeOpenChromChipMcf7CmycSerumstvdSig
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel MCF-7 c-Myc stv DS
-        longLabel MCF-7 serum starved media c-Myc TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        shortLabel MCF-7 cMyc stv DS
+        longLabel MCF-7 serum starved cMyc TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CMYC cellType=MCF7 treatment=SERUMSTAVD
         type bigWig 0.000000 1.093700
         # subId=6196 dateSubmitted=2012-03-23
@@ -893,8 +893,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel GM12878 c-Myc OS
-        longLabel GM12878 c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        shortLabel GM12878 cMyc OS
+        longLabel GM12878 cMyc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=1GM12878
         type bigWig 0.000000 599.000000
         color 153,38,0
@@ -945,8 +945,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HeLa-S3 c-Myc OS
-        longLabel HeLa-S3 c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        shortLabel HeLa-S3 cMyc OS
+        longLabel HeLa-S3 cMyc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=2HeLa-S3
         type bigWig 0.000000 183.000000
         color 0,119,158
@@ -954,8 +954,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel H1-hESC c-Myc OS
-        longLabel H1-hESC c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        shortLabel H1-hESC cMyc OS
+        longLabel H1-hESC cMyc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=1H1-hESC
         type bigWig 0.000000 626.000000
         color 0,107,27
@@ -1006,8 +1006,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HepG2 c-Myc OS
-        longLabel HepG2 c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        shortLabel HepG2 cMyc OS
+        longLabel HepG2 cMyc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=2HepG2
         type bigWig 0.000000 558.000000
         color 189,0,157
@@ -1068,8 +1068,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HUVEC c-Myc OS
-        longLabel HUVEC c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        shortLabel HUVEC cMyc OS
+        longLabel HUVEC cMyc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=2HUVEC
         type bigWig 0.000000 530.000000
         color 224,75,0
@@ -1077,8 +1077,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromChipK562CmycBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel K562 c-Myc OS
-        longLabel K562 c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        shortLabel K562 cMyc OS
+        longLabel K562 cMyc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=1K562
         type bigWig 0.000000 1968.000000
         color 46,0,184
@@ -1153,7 +1153,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 veh cMyc OS
-        longLabel MCF-7 vehicle c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 vehicle cMyc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups treatment=VEH view=SIGBO factor=CMYC cellType=MCF7
         type bigWig 0.000000 4372.000000
         # subId=2504 dateSubmitted=2010-10-16
@@ -1177,7 +1177,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 est cMyc OS
-        longLabel MCF-7 estrogen c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 estrogen cMyc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups view=SIGBO factor=CMYC cellType=MCF7 treatment=ESTRO
         type bigWig 0.000000 2368.000000
         # subId=2503 dateSubmitted=2010-10-16
@@ -1209,7 +1209,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 CTCF stm OS
-        longLabel MCF-7 serum stimulated media CTCF TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum stim CTCF TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIGBO factor=CTCF cellType=MCF7 treatment=SERUMSTIM
         type bigWig 0.000000 5538.000000
         # subId=5613 dateSubmitted=2012-02-11
@@ -1217,15 +1217,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 Pol2 stm OS
-        longLabel MCF-7 serum stimulated media Pol2 TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum stim Pol2 TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIGBO factor=POL2 cellType=MCF7 treatment=SERUMSTIM
         type bigWig 0.000000 4512.000000
         # subId=5614 dateSubmitted=2012-02-11
 
         track wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel MCF-7 c-Myc stm OS
-        longLabel MCF-7 serum stimulated media c-Myc TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
+        shortLabel MCF-7 cMyc stm OS
+        longLabel MCF-7 serum stim cMyc TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIGBO factor=CMYC cellType=MCF7 treatment=SERUMSTIM
         type bigWig 0.000000 4340.000000
         # subId=5615 dateSubmitted=2012-02-11
@@ -1233,7 +1233,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 CTCF stv OS
-        longLabel MCF-7 serum starved media CTCF TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum starved CTCF TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIGBO factor=CTCF cellType=MCF7 treatment=SERUMSTAVD
         type bigWig 0.000000 4938.000000
         # subId=5616 dateSubmitted=2012-02-13
@@ -1241,15 +1241,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 Pol2 stv OS
-        longLabel MCF-7 serum starved media Pol2 TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
+        longLabel MCF-7 serum starved Pol2 TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIGBO factor=POL2 cellType=MCF7 treatment=SERUMSTAVD
         type bigWig 0.000000 4637.000000
         # subId=5617 dateSubmitted=2012-02-13
 
         track wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel MCF-7 c-Myc stv OS
-        longLabel MCF-7 serum starved media c-Myc TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
+        shortLabel MCF-7 cMyc stv OS
+        longLabel MCF-7 serum starved cMyc TFBS ChIP-seq Overlap Signal from ENCODE/OpenChrom-UTA
         subGroups view=SIGBO factor=CMYC cellType=MCF7 treatment=SERUMSTAVD
         type bigWig 0.000000 2682.000000
         # subId=6196 dateSubmitted=2012-03-23
