@@ -70,7 +70,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-html wgEncodeUwHistone.release3
+html wgEncodeUwHistone.release4
 
     track wgEncodeUwHistoneViewHot
     shortLabel Hotspots
