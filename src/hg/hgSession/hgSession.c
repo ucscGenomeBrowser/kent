@@ -96,7 +96,7 @@ printf("If you are not %s (on the hgLogin at "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
        "and would like to sign out or change identity, \n",
        hgLoginUserName, hgLoginHost, hgLoginHost);
-printf("<A HREF=\"%s\"><B>click here to sign out XXXX from hgLogin.</B></A>\n",
+printf("<A HREF=\"%s\"><B>click here to sign out.</B></A>\n",
        hgLoginLinkUserLogoutUrl(cartSessionId(cart)));
 }
 

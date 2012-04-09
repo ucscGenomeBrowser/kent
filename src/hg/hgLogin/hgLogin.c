@@ -27,7 +27,7 @@
 char msg[2048] = "";
 
 
-char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "hgLogin_password","hgLogin_confirmPWD", NULL };
+char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "hgLogin_password","hgLogin_confirmPW", NULL };
 /* The excludeVars are not saved to the cart. (We also exclude
  * any variables that start "near.do.") */
 
@@ -374,13 +374,14 @@ if (!checkPwd(currentPassword, password))
     return;
     }
 freez(&password);
-if (!newPassword || sameString(newPassword,"") || (strlen(newPassword)<8))
+if (!newPassword || sameString(newPassword,"") || (strlen(newPassword)<5))
     {
     freez(&errMsg);
-    errMsg = cloneString("New password must be at least 8 characters long.");
+    errMsg = cloneString("New password must be at least 5 characters long.");
     changePasswordPage(conn);
     return;
     }
+/***************************
 if (!checkPwdCharClasses(newPassword))
     {
     freez(&errMsg);
@@ -390,6 +391,7 @@ if (!checkPwdCharClasses(newPassword))
     changePasswordPage(conn);
     return;
     }
+********************************************/
 char encPwd[35] = "";
 encryptNewPwd(newPassword, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "update gbMembers set password='%s' where email='%s'", sqlEscapeString(encPwd), sqlEscapeString(email));
@@ -468,7 +470,7 @@ hPrintf(
 "<label style=\"display: block; margin-top: 10px;\" "
 " for=\"confirmPW\">Confirm Password</label>"
 "\n"
-"<input type=password name=\"hgLogin_confirmPWD\" value=\"%s\" size=\"30\" id=\"confirmPWD\">"
+"<input type=password name=\"hgLogin_confirmPW\" value=\"%s\" size=\"30\" id=\"confirmPW\">"
 "\n"
 "<label style=\"display: block; margin-top: 10px;\" "
 " for=\"realName\">Real Name (optional)</label>"
@@ -500,7 +502,7 @@ hPrintf(
 , cartUsualString(cart, "hgLogin_user", "")
 , cartUsualString(cart, "hgLogin_email", "")
 , cartUsualString(cart, "hgLogin_password", "")
-, cartUsualString(cart, "hgLogin_confirmPWD", "")
+, cartUsualString(cart, "hgLogin_confirmPW", "")
 , cartUsualString(cart, "hgLogin_realName", "")
 );
 
@@ -556,6 +558,22 @@ if (!checkPwdCharClasses(password))
     {
     freez(&errMsg);
     errMsg = cloneString("Password must contain characters from 2 of the following 4 classes: [A-Z] [a-z] [0-9] [!@#$%^&*()].");
+    signupPage(conn);
+    return;
+    }
+
+char *confirmPW = cartUsualString(cart, "hgLogin_confirmPW", "");
+if (!confirmPW || sameString(confirmPW,"") )
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Confirm Password cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+if (password && confirmPW && !sameString(password, confirmPW))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Passwords do not match.");
     signupPage(conn);
     return;
     }
@@ -618,7 +636,7 @@ void displayLoginPage(struct sqlConnection *conn)
 {
 char *username = cartUsualString(cart, "hgLogin_userName", "");
 /* for password security, use cgi hash instead of cart */
-char *password = cgiUsualString("hgLogin_password", "");
+// char *password = cgiUsualString("hgLogin_password", "");
 
 hPrintf(
 "<div id=\"hgLoginBox\" class=\"centeredContainer\">\n"
@@ -723,14 +741,18 @@ if (checkPwd(password,m->password))
     {
 hPrintf("<h1>Login succesful !!!! calling displayLoginSuccess now.</h1>\n");
       unsigned int userID=m->idx;
-      hPrintf("Before call userID is  %d\n",userID);
+      // hPrintf("Before call userID is  %d\n",userID);
       displayLoginSuccess(userName,userID);
       return;
     }
 else
     {
-    hPrintf("<h1>Invalid User/Password</h1>\n");
-    hPrintf("Return to <a href=\"hgLogin\">signup</A>.<br>\n");
+    //hPrintf("<h1>Invalid User/Password</h1>\n");
+    errMsg = cloneString("Invalid User/Password.");
+
+    displayLoginPage(conn);
+    // hPrintf("Return to <a href=\"hgLogin\">signup</A>.<br>\n");
+    return;
     }
 
 gbMembersFree(&m);
@@ -787,7 +809,7 @@ hPrintf(
 void  displayLogoutSuccess()
 /* display logout success msg, and reset cookie */
 {
-char *hgLoginHost = hgLoginLinkHost();
+// char *hgLoginHost = hgLoginLinkHost();
 
 hPrintf(
 "<h2>UCSC Genome Browser Sign Out</h2>"

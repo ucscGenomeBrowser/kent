@@ -8,6 +8,7 @@
 
 
 #UCSC Genome Browser members
+DROP TABLE IF EXISTS gbMembers;
 CREATE TABLE gbMembers (
     idx int unsigned not null auto_increment,	# auto-increment unique ID
     userName varchar(255) not null,	        # Name used to login
@@ -18,5 +19,6 @@ CREATE TABLE gbMembers (
     activated char(1) not null,	        # Account activated? Y or N
     dateAuthenticated DATETIME not null, # Date the account activated via email
               #Indices
-    PRIMARY KEY(idx, userName)
+    PRIMARY KEY(idx),
+    INDEX(userName)
 );
