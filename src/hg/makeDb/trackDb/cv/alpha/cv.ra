@@ -1650,7 +1650,7 @@ type Cell Line
 organism human
 description lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM06990
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&PgId=166
@@ -1672,7 +1672,7 @@ lineage mesoderm
 karyotype Instability of heterochromatin of chromosomes 1, 9, and 16 with variable combined immunodeficiency; dysmorphic facial features, developmental delay, malabsorption, and recurrent infections; see GM08747 Fibroblast; donor subject is a compound heterozygote: one allele has a G&gt;A transition at nucleotide 1807 (1807G&gt;A) of the DNMT3B gene resulting in an Ala to Thr substitution at codon 603 [Ala603Thr (A603T)], the mutation occurring in a region between motifs I and IV within the catalytic domain of DNMT3B; the second allele has a G&gt;A transition within intron 22 located 11 nucleotides 5-prime of the normal splice acceptor site [IVS22AS,G&gt;A,-11] resulting in the generation of a novel splice acceptor site and a 9-bp insertion in the processed RNA. This results in the insertion of 3 amino acids (serine, threonine, and proline) at codon 744 (744ins3). The insertion was within the conserved region of the catalytic domain, which is likely to be disrupted by the insertion of a proline residue. This mutation was de novo.
 sex F
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM08714
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM08714&PgId=166
@@ -1691,7 +1691,7 @@ protocol Farnham:GM08714_Farnham_protocol.pdf
 #karyotype unknown
 #sex F
 #tissue blood
-#childOf Lymphoblastoid
+#childOf Lymphoblastoid cell line
 #vendorName Coriell
 #vendorId GM10248
 #orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10248&PgId=166
@@ -1711,7 +1711,7 @@ protocol Farnham:GM08714_Farnham_protocol.pdf
 #karyotype unknown
 #sex F
 #tissue blood
-#childOf Lymphoblastoid
+#childOf Lymphoblastoid cell line
 #vendorName Coriell
 #vendorId GM10266
 #orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10266&PgId=166
@@ -1728,7 +1728,7 @@ organism human
 description lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10847
 vendorName Coriell
 vendorId GM10847
@@ -1744,7 +1744,7 @@ type Cell Line
 organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah, treatment: Epstein-Barr Virus transformed
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12801
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&PgId=166
@@ -1763,7 +1763,7 @@ organism human
 description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
 lineage mesoderm
 karyotype normal
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 sex M
 tissue blood
 vendorName Coriell
@@ -1782,7 +1782,7 @@ organism human
 description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
 lineage mesoderm
 karyotype normal
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 sex F
 tissue blood
 vendorName Coriell
@@ -1800,7 +1800,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12864
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12864&PgId=166
@@ -1817,7 +1817,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12865
 orderUrl http://ccr.coriell.org/sections/Search/Sample_Detail.aspx?Ref=GM12865&PgId=166
@@ -1836,7 +1836,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 lineage mesoderm
 sex M
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12866
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12866&PgId=166
@@ -1854,7 +1854,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 lineage mesoderm
 sex F
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12867
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12867&PgId=166
@@ -1872,7 +1872,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 lineage mesoderm
 sex F
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12868
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12868&PgId=166
@@ -1890,7 +1890,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 lineage mesoderm
 sex F
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12869
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12869&PgId=166
@@ -1908,7 +1908,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 lineage mesoderm
 sex M
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12870
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12870&PgId=166
@@ -1926,7 +1926,7 @@ description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Uta
 lineage mesoderm
 sex M
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12871
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12871&PgId=166
@@ -1942,7 +1942,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12872
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&PgId=166
@@ -1959,7 +1959,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12873
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&PgId=166
@@ -1976,7 +1976,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12874
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&PgId=166
@@ -1993,7 +1993,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1459, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12875
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12875&PgId=166
@@ -2009,7 +2009,7 @@ type Cell Line
 organism human
 description lymphoblastoid, cloned for maternal X inactivation, International HapMap Project, CEPH/Utah, Epstein-Barr Virus
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Hunt Willard at Duke University
 vendorId GM12878-XiMat
 orderUrl http://www.genome.duke.edu/people/faculty/willard/
@@ -2046,7 +2046,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1463, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12891
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12891
@@ -2063,7 +2063,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, CEPH/Utah pedigree 1463, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM12892
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12892
@@ -2080,7 +2080,7 @@ organism human
 description lymphoblastoid NIGMS Human Genetic Cell Repository, DNA Polymorphism Discovery Resource Collection, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM15510
 vendorName Coriell
 vendorId GM15510
@@ -2100,7 +2100,7 @@ protocol Snyder:GM-generalized_Snyder_protocol.pdf
 #karyotype unknown
 #sex F
 #tissue blood
-#childOf Lymphoblastoid
+#childOf Lymphoblastoid cell line
 #vendorName Coriell
 #vendorId GM13976
 #orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM13976&PgId=166
@@ -2120,7 +2120,7 @@ protocol Snyder:GM-generalized_Snyder_protocol.pdf
 #karyotype unknown 
 #sex F
 #tissue blood
-#childOf Lymphoblastoid
+#childOf Lymphoblastoid cell line
 #vendorName Coriell
 #vendorId GM13977
 #orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM13977&PgId=166
@@ -2137,7 +2137,7 @@ organism human
 description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18505
 vendorName Coriell
 vendorId GM18505
@@ -2153,7 +2153,7 @@ type Cell Line
 organism human
 description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 tissue blood
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM18507
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
@@ -2171,7 +2171,7 @@ organism human
 description lymphoblastoid, International HapMap Project, Han Chinese in Beijing, China, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18526
 vendorName Coriell
 vendorId GM18526
@@ -2188,7 +2188,7 @@ organism human
 description lymphoblastoid, International HapMap Project, Japanese in Tokyo, Japan, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18951
 vendorName Coriell
 vendorId GM18951
@@ -2205,7 +2205,7 @@ organism human
 description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19099
 vendorName Coriell
 vendorId GM19099
@@ -2222,7 +2222,7 @@ organism human
 description lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19193
 vendorName Coriell
 vendorId GM19193
@@ -2239,7 +2239,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM19238
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19238
@@ -2256,7 +2256,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM19239
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19239
@@ -2273,7 +2273,7 @@ organism human
 description B-lymphocyte, lymphoblastoid, International HapMap Project, Yoruba in Ibadan, Nigera, treatment: Epstein-Barr Virus transformed
 tissue blood
 lineage mesoderm
-childOf Lymphoblastoid
+childOf Lymphoblastoid cell line
 vendorName Coriell
 vendorId GM19240
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19240
@@ -2293,7 +2293,7 @@ protocol Crawford:GM19240_Crawford_protocol.pdf
 #sex F
 #tissue blood
 #vendorName Coriell
-#childOf Lymphoblastoid
+#childOf Lymphoblastoid cell line
 #vendorId GM20000
 #orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM20000&PgId=166
 #termId BTO:0002062
