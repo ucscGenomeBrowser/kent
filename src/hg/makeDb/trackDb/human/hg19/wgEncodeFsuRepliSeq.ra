@@ -9,7 +9,7 @@ subGroup3 rep Rep rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=rep
 sortOrder cellType=+ rep=+ view=+
 fileSortOrder cell=Cell_Line replicate=Rep view=View platform=Platform labExpId=Lab_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-controlledVocabulary encode/cv.ra cellType
+controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 visibilityViewDefaults WaveSignal=hide 
 priority 0
