@@ -6301,6 +6301,298 @@ subId 3141
 treatment None
 view RawData
 
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 5615
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 5615
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 5615
+tableName wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal
+treatment serum_stimulated_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 5615
+tableName wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1
+treatment serum_stimulated_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 5615
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 5615
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimSig
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+project wgEncode
+setType exp
+subId 5615
+tableName wgEncodeOpenChromChipMcf7CmycSerumstimSig
+treatment serum_stimulated_media
+view Signal
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 6196
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 6196
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 6196
+tableName wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal
+treatment serum_starved_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdPkRep1
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 6196
+tableName wgEncodeOpenChromChipMcf7CmycSerumstvdPkRep1
+treatment serum_starved_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 6196
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 6196
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdSig
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+project wgEncode
+setType exp
+subId 6196
+tableName wgEncodeOpenChromChipMcf7CmycSerumstvdSig
+treatment serum_starved_media
+view Signal
+
 metaObject wgEncodeOpenChromChipMcf7CmycVehAlnRep1
 objType file
 antibody c-Myc
@@ -6819,6 +7111,298 @@ subId 884
 treatment None
 view RawData
 
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep1
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 5613
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep2
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 5613
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 5613
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal
+treatment serum_stimulated_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimPkRep1
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 5613
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstimPkRep1
+treatment serum_stimulated_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep1
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 5613
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep2
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 5613
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimSig
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+project wgEncode
+setType exp
+subId 5613
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstimSig
+treatment serum_stimulated_media
+view Signal
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep1
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 5616
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep2
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 5616
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 5616
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal
+treatment serum_starved_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdPkRep1
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 5616
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstvdPkRep1
+treatment serum_starved_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep1
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 5616
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep2
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 5616
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdSig
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+project wgEncode
+setType exp
+subId 5616
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstvdSig
+treatment serum_starved_media
+view Signal
+
 metaObject wgEncodeOpenChromChipMcf7CtcfSig
 objType table
 antibody CTCF
@@ -7256,6 +7840,298 @@ setType exp
 subId 2495
 treatment None
 view RawData
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep1
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep1.bam,wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 5614
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep2
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep2.bam,wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 5614
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 5614
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal
+treatment serum_stimulated_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimPkRep1
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 5614
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstimPkRep1
+treatment serum_stimulated_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep1
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 5614
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep2
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 5614
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimSig
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_stimulated_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+project wgEncode
+setType exp
+subId 5614
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstimSig
+treatment serum_stimulated_media
+view Signal
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep1
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep1.bam,wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 5617
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep2
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep2.bam,wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 5617
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 5617
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal
+treatment serum_starved_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 5617
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1
+treatment serum_starved_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep1
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 5617
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep2
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 5617
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdSig
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/serum_starved_media/Input
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+project wgEncode
+setType exp
+subId 5617
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstvdSig
+treatment serum_starved_media
+view Signal
 
 metaObject wgEncodeOpenChromChipMcf7Pol2Sig
 objType table
@@ -7946,4 +8822,4 @@ tableName wgEncodeOpenChromChipProgfibPol2Sig
 treatment None
 view Signal
 
-# MAGIC: 486802215
+# MAGIC: 1763061195
