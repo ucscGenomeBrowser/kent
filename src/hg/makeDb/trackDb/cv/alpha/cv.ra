@@ -1183,7 +1183,7 @@ tissue embryonic stem cell
 tier 3
 lineage inner cell mass
 karyotype normal
-derivedFrom BG02ES
+childOf BG02ES
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
