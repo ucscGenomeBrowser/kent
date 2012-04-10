@@ -111,7 +111,7 @@ include wgEncodeCaltechRnaSeq.release2.ra beta,public
 include wgEncodeCaltechRnaSeq.release3.ra alpha
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.ra beta,public
-#include wgEncodeCshlLongRnaSeq.release2.ra alpha
+include wgEncodeCshlLongRnaSeq.release2.ra alpha
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
@@ -152,8 +152,8 @@ include wgEncodeBroadHistone.release2.ra
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.release3.ra beta,public
-include wgEncodeUwHistone.release4.ra alpha
+include wgEncodeUwHistone.release3.ra public
+include wgEncodeUwHistone.release4.ra alpha,beta
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra beta,public
