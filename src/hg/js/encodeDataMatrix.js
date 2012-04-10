@@ -120,7 +120,7 @@ $(function () {
                     $th = $('<th class="elementType"><div class="verticalText">' + 
                                 dataType.label + '</div></th>');
                     if (!encodeProject.isIE8()) {
-                        // Suppress mouseover under IE8 as QA noted flashing effect
+                        // Suppress mouseOver under IE8 as QA noted flashing effect
                         $th.attr('title', dataType.description);
                     }
                     $tableHeaders.append($th);
@@ -135,6 +135,11 @@ $(function () {
         // empirically len/2 em's is right
         $('#columnHeaders th').css('height', (String((maxLen/2 + 2)).concat('em')));
         $('#columnHeaders th').css('width', '1em');
+
+        //also need to set additional width for non-IE
+        if (!$.browser.msie) {
+            $('.verticalText').css('width', '1em');
+        }
     }
 
     function rowAddCells($row, dataGroups, dataTypeExps, matrix, cellType) {

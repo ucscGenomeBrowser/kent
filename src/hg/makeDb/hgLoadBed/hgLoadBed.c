@@ -33,7 +33,7 @@ boolean renameSqlTable = FALSE;	/* Rename table created with -sqlTable to */
 boolean trimSqlTable = FALSE;   /* If we're loading fewer columns than defined */
                                 /* in the SQL table, trim off extra columns */
 int maxChromNameLength = 0;	/* specify to avoid chromInfo */
-int dotIsNull = -1;             /* if > 0, then a dot in this field should be replaced with NULL */
+int dotIsNull = -1;             /* if > 0, then a dot in this field should be replaced with -1 */
 char *tmpDir = (char *)NULL;	/* location to create a temporary file */
 boolean nameIx = TRUE;	        /* FALSE == do not create the name index */
 boolean ignoreEmpty = FALSE;	/* TRUE == empty input files are not an error */
@@ -118,7 +118,7 @@ errAbort(
   "   -fillInScore=colName - if every score value is zero, then use column 'colName' to fill in the score column (from minScore-1000)\n"
   "   -minScore=N - minimum value for score field for -fillInScore option (default 100)\n"
   "   -verbose=N - verbose level for extra information to STDERR\n"
-  "   -dotIsNull=N - if the specified field is a '.' the replace it with NULL\n"
+  "   -dotIsNull=N - if the specified field is a '.' the replace it with -1\n"
   );
 }
 
@@ -282,8 +282,9 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 		    writeFailed(fileName);
 	    }
 	else if ((dotIsNull > 0) && (dotIsNull == i) && sameString(words[i],"."))
+        /* If the . was used to represent NULL, replace with -1 in the tables */
 	    {
-	    if (fputs("\\N", f) == EOF)
+	    if (fputs("-1", f) == EOF)
 		writeFailed(fileName);
 	    }
 	else

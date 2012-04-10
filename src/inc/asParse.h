@@ -41,6 +41,7 @@ struct asTypeInfo
     char *listyName;               /* What functions that load a list are called. */
     char *nummyName;               /* What functions that load a number are called. */
     char *outFormat;		   /* Output format for printf. %d, %u, etc. */
+    char *djangoName;              /* Django type name */
     };
 
 struct asColumn

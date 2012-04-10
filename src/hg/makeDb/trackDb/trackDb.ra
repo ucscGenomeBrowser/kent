@@ -449,9 +449,8 @@ longLabel Publications: Sequences in scientific articles
 group map
 priority 12
 visibility hide
-color 100,0,0
-altColor 100,0,0
-type bed 12 .
+color 0,0,0
+type bed 4
 compositeTrack on
 release alpha
 nextExonText Next Match
@@ -460,26 +459,30 @@ pubsArticleTable hgFixed.pubsArticle
 pubsSequenceTable hgFixed.pubsSequenceAnnot
 pubsPslTrack pubsBlatPsl
 pubsMarkerTable hgFixed.pubsMarkerAnnot
+noInherit on
 
     track pubsBlat
     shortLabel Sequences
     longLabel Sequences in Articles: PubmedCentral (OA subset) and Elsevier
-    parent pubs
+    parent pubs on
     type bed 12 .
     visibility pack
-    priority 1
+    priority 2
     release alpha
-    #configurable off
+    configurable off
+    configureByPopup off
 
     track pubsBlatPsl
     shortLabel Individual Seq. Matches
     longLabel Individual sequence matches of one selected article from sequences track
-    parent pubs
+    parent pubs off
     type psl
     visibility hide
-    priority 2
+    priority 1
     release alpha
-    #configurable off
+    configurable off
+    configureByPopup off
+    color 0,115,70
 
     track pubsMarkerBand
     shortLabel Bands
@@ -489,7 +492,6 @@ pubsMarkerTable hgFixed.pubsMarkerAnnot
     priority 3
     type bed 4
     release alpha
-    #configurable off
 
     track pubsMarkerSnp
     shortLabel SNPs
@@ -499,7 +501,6 @@ pubsMarkerTable hgFixed.pubsMarkerAnnot
     priority 3
     type bed 4
     release alpha
-    #configurable off
 
     track pubsMarkerGene
     shortLabel Genes
@@ -509,7 +510,6 @@ pubsMarkerTable hgFixed.pubsMarkerAnnot
     visibility hide
     type bed 4
     release alpha
-    #configurable off
 
 track transMap
 superTrack on

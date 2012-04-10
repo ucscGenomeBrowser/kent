@@ -62,7 +62,7 @@ our $sqlCreate = "/cluster/bin/sqlCreate";
 our @extendedTypes = ("narrowPeak", "broadPeak", "gappedPeak",  "bed5FloatScore", "shortFrags", "peptideMapping");
 # Add type names to this list for types that can be loaded as bigBed via .as files (e.g. tagAlign.as)
 # You also have to make sure the .as file is copied into the $sqlCreate directory.
-our @bigBedTypes = ("pairedTagAlign","tagAlign","bigBed");
+our @bigBedTypes = ("bigBed");
 our @bigWigTypes = ("bigWig");
 our @bamTypes = ("bam");
 
@@ -382,14 +382,14 @@ sub parseDaf
     # Validate DAF version, and return immediately if not current (production)
     # OR:  During beta test, provide notice about this instead of error
 
-    unless ($daf{dafVersion} eq $dafVersion || $daf{dafVersion} eq $dafVersionOld) {
-        die "NOTICE:\n\n" .
-                "ENCODE pipeline 2.0 testing is in progress." .
-                "Your wrangler will complete this submission and provide you" .
-                " with a version 2.0 DAF file to use for future submissions.\n";
-        #die "ERROR(s) in DAF '$dafFile':\n\n" .
-                #"DAF version '$daf{dafVersion}' does not match current version: $dafVersion\n");
-    }
+    #unless ($daf{dafVersion} eq $dafVersion || $daf{dafVersion} eq $dafVersionOld) {
+    #    die "NOTICE:\n\n" .
+    #            "ENCODE pipeline 2.0 testing is in progress." .
+    #            "Your wrangler will complete this submission and provide you" .
+    #            " with a version 2.0 DAF file to use for future submissions.\n";
+    #    #die "ERROR(s) in DAF '$dafFile':\n\n" .
+    #            #"DAF version '$daf{dafVersion}' does not match current version: $dafVersion\n");
+    #}
 
     # Validate fields
     my @tmp = grep(!/^TRACKS$/, keys %daf);

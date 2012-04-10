@@ -44,7 +44,7 @@ Abbreviations follow rules in src/README:
        tabSeparatedFile -> tabSepFile
     In some cases, for local variables abbreviating to a single letter for each word is okay:
        tabSeparatedFile -> tsf
-    In rare, complex cases you may treat the abbreviation itself as a word, and only the
+    In complex cases you may treat the abbreviation itself as a word, and only the
     first letter is capitalized:
        genscanTabSeparatedFile -> genscanTsf
     Numbers are considered words.  You would represent "chromosome 22 annotations"
@@ -78,7 +78,7 @@ The most correct way to import something in Python is by specifying its containi
     from ucscGenomics import ra
  
     Then, the qualified name can be used:
-        somerRa = ra.RaFile()
+        someRa = ra.RaFile()
    
     Do not import as below, as this may cause local naming conflicts:
         from ucscGenomics.ra import RaFile
@@ -202,7 +202,7 @@ methods which use various asserts or failure checks to determine whether a test 
         5. Define a tearDown method to run after each test.
             def tearDown(self):
 
-        6. To invoke tests with a simple command-line interface add the add the following lines:
+        6. To invoke tests with a simple command-line interface add the following lines:
             if __name__ == '__main__':
                 unittest.main()
            

@@ -22,6 +22,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 #include "hui.h"
+#include "geoMirror.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1346,18 +1347,16 @@ void cartWriteCookie(struct cart *cart, char *cookieName)
 {
 printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\r\n",
 	cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
-#ifdef SUPPORT_EURONODE
-char *redirect = cgiOptionalString("redirect");
-char *source = cgiOptionalString("source");
-if (redirect && !source)
+if(geoMirrorEnabled())
     {
-    printf("Set-Cookie: redirect=mirror; path=/; domain=%s; expires=%s\r\n", cgiServerName(), cookieDate());
-    // DEBUG REMOVE:
-    fprintf(stderr, "GALT Set-Cookie: redirect=mirror; path=/; domain=%s; expires=%s\r\n",
-	cfgVal("central.domain"), cookieDate());
-    fflush(stderr);
+    // This occurs after the user has manually choosen to go back to the original site; we store redirect value into a cookie so we 
+    // can use it in subsequent hgGateway requests before loading the user's cart
+    char *redirect = cgiOptionalString("redirect");
+    if (redirect)
+        {
+        printf("Set-Cookie: redirect=%s; path=/; domain=%s; expires=%s\r\n", redirect, cgiServerName(), cookieDate());
+        }
     }
-#endif
 }
 
 struct cart *cartForSession(char *cookieName, char **exclude,
