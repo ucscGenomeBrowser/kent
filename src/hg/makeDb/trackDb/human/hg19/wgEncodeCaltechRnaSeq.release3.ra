@@ -20,7 +20,7 @@ type bed 3
 noInherit on
 wgEncode 1
 maxWindowToDraw 10000000
-html wgEncodeCaltechRnaSeq.release2
+html wgEncodeCaltechRnaSeq.release3
 
 	track wgEncodeCaltechRnaSeqViewSplices
         shortLabel Splice Juctions
