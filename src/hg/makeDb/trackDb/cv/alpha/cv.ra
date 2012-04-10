@@ -1231,7 +1231,7 @@ tag CD20
 type Cell Line
 tier 2
 organism human
-derprecated SEE B_cells_CD20+
+deprecated SEE B_cells_CD20+
 description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis PROVISIONAL
 sex F
 tissue blood
@@ -12323,12 +12323,12 @@ type treatment
 
 term diffProtF_6d
 tag DIFFF6D
-descrption 6 day differentiation of ES-46C cells in adherent monolayer culture (Gilbert) PROVISIONAL
+description 6 day differentiation of ES-46C cells in adherent monolayer culture (Gilbert) PROVISIONAL
 type treatment
 
 term diffProtF_9d
 tag DIFFF9D
-descrption 9 day differentiation of ES-TT2 cells in adherent monolayer culture (Gilbert) PROVISIONAL
+description 9 day differentiation of ES-TT2 cells in adherent monolayer culture (Gilbert) PROVISIONAL
 type treatment
 
 term DMSO_0.02pct
@@ -12894,6 +12894,7 @@ description Expression level estimates for GENCODE V10 exons in gtf format deriv
 term ExonsEnsV65IAcuff
 tag EXONENSV65
 type view
+label Exons ENSEMBL V65
 description Expression level estimates for ENSEMBL V65 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
 term Fasta3p
@@ -12972,6 +12973,7 @@ description Expression level estimates at the gene level for the GENCODE CRCh37.
 term GeneEnsV65IAcuff
 tag GENENSV65
 type view
+label Genese ENSEMBL V65
 description Expression level estimates at the gene level for the ENSEMBL V65 annotation in gtf format
 
 term HMM
@@ -13243,6 +13245,7 @@ description Expression level estimates at the transcript level for the GENCODE C
 term TranscriptEnsV65IAcuff
 tag TRANSENSV65
 type view
+label Transcript ENSEMBL V65
 description Expression level estimates at the transcript level for the ENSEMBL V65 annotation in gtf format
 
 term Transfrags
@@ -14048,7 +14051,7 @@ description Human 3x720k Whole Genome CGH
 
 term GPL10989
 tag GPL10989
-gepPlatformName NimbleGen Mouse CGH 3x720K Whole-Genome Tiling
+geoPlatformName NimbleGen Mouse CGH 3x720K Whole-Genome Tiling [080603_MM9_WG_CGH_HX3]
 type platform
 description NimbleGen Mouse CGH 3x720K Whole-Genome Tiling (FSU)
 #PROVISIONAL
@@ -15618,6 +15621,7 @@ description ENCODE Cell Tier
 cvDefined no
 validate integer
 priority 999
+searchable no
 requiredVars term,tag,type,description #Provisional
 optionalVars label,deprecated #Provisional
 
