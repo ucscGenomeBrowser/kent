@@ -169,10 +169,11 @@ var encodeMatrix = (function () {
     },
 
     rotateTableCells: function ($table) {
-       // plugin from David Votrubec, handles IE rotate
-       // TODO: restrict to IE
-       $table.rotateTableCellContent({className: 'verticalText'});
-       $(this).attr('disabled', 'disabled');
+        // plugin from David Votrubec, handles IE rotate
+        if ($.browser.msie) {
+            $table.rotateTableCellContent({className: 'verticalText'});
+            $(this).attr('disabled', 'disabled');
+        }
     },
 
     tableMatrixOut: function ($table, matrix, cellTiers, groups, expCounts, rowAddCells) {

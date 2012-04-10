@@ -10,6 +10,7 @@ source `which qaConfig.csh`
 # 
 ###############################################
 
+onintr cleanup
 
 if ( "$HOST" != "hgwdev" ) then
  echo "\n  error: you must run this script on dev!\n"
@@ -51,7 +52,7 @@ if ( $#argv < 2 ||  $#argv > 5 ) then
   echo "        if RR is specified, will use genome-mysql"
   echo "      histogram option prints bar graph, not values"
   echo
-  exit
+  exit 1
 else
   set db=$argv[1]
   set table=$argv[2]
@@ -119,7 +120,7 @@ set chroms=`hgsql -N -e "SELECT chrom FROM chromInfo" $db`
 set split=`getSplit.csh $db $table`
 if ( $status ) then
   echo "\n  the database or table may not exist\n"
-  exit
+  exit 1
 endif
 
 if ( $split == "unsplit" ) then
@@ -219,6 +220,7 @@ else
   cat Xout$$
 endif
 
+cleanup:
 if ( $debug == false ) then
   rm -f Xgraph1$$
   rm -f Xgraph2$$
