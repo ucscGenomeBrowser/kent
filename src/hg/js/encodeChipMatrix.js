@@ -121,8 +121,9 @@ $(function () {
                     return true;
                 }
                 antibodyTarget = encodeProject.getAntibodyTarget(target);
-                $th = $('<th class="elementType"><div class="verticalText">' + 
-                                target + '</div></th>');
+                $th = $('<th class="elementType">' + '<div class="verticalText">'+
+                    '<a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&target=' + 
+                    encodeURIComponent(target) + '">' + target + '</a></div></th>');
                 if (!encodeProject.isIE8()) {
                     // Suppress mouseover under IE8 as QA noted flashing effect
                     $th.attr('title', antibodyTarget.description);

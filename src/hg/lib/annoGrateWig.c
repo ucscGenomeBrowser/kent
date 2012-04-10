@@ -5,7 +5,7 @@
 #include "sqlNum.h"
 #include "wiggle.h"
 
-static void tidyUp(struct annoRow *rowIn, struct annoRow **pOutList,
+static void tidyUp(const struct annoRow *rowIn, struct annoRow **pOutList,
 		   uint primaryStart, uint primaryEnd)
 /* This takes a wiggle chunk coming from a .wig/database row and makes it into
  * zero or more tidy little NAN-less annoRows.  Trim rowIn to the bounds of
@@ -16,6 +16,8 @@ static void tidyUp(struct annoRow *rowIn, struct annoRow **pOutList,
 uint start = max(rowIn->start, primaryStart);
 uint end = min(rowIn->end, primaryEnd);
 float *vector = rowIn->data;
+if (sameString(rowIn->chrom, "chr17_gl000206_random") && rowIn->start > 9000)
+    uglyf("woohoo.\n");
 while (end > start)
     {
     uint offset = start - rowIn->start;
@@ -42,10 +44,11 @@ while (end > start)
 	    uint oldEnd = headRow->end;
 	    uint oldLen = oldEnd - headRow->start;
 	    uint newLen = thisEnd - headRow->start;
-	    headRow->data = needMoreMem(headRow->data, oldLen, newLen);
+	    headRow->data = needMoreMem(headRow->data, oldLen*sizeof(vector[0]),
+					newLen*sizeof(vector[0]));
 	    headRow->end = thisEnd;
 	    float *newData = (float *)rowIn->data + (oldEnd - rowIn->start);
-	    float *newSpace = (float *)headRow->data + (oldEnd - headRow->start);
+	    float *newSpace = (float *)headRow->data + oldLen;
 	    CopyArray(newData, newSpace, (thisEnd - oldEnd));
 	    }
 	start = thisEnd;

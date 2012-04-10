@@ -13,6 +13,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001254
+expId 1254
 fileName wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -33,6 +34,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001255
+expId 1255
 fileName wgEncodeSunyAlbanyTilingGm12878Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -53,6 +55,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001257
+expId 1257
 fileName wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -73,6 +76,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001256
+expId 1256
 fileName wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -93,6 +97,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001258
+expId 1258
 fileName wgEncodeSunyAlbanyTilingK562Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -113,6 +118,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001259
+expId 1259
 fileName wgEncodeSunyAlbanyTilingK562Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -133,6 +139,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001261
+expId 1261
 fileName wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -153,6 +160,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 dccAccession wgEncodeEH001260
+expId 1260
 fileName wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
@@ -163,4 +171,4 @@ subId 1245
 tableName wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 1141846845
+# MAGIC: -354198167

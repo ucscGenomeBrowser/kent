@@ -116,7 +116,8 @@ boolean rjFailHard = (retRJFilterFailed != NULL);
 struct annoRow *qRow;
 for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
     {
-    if (qRow->start < primaryRow->end && qRow->end > primaryRow->start)
+    if (qRow->start < primaryRow->end && qRow->end > primaryRow->start &&
+	sameString(qRow->chrom, primaryRow->chrom))
 	{
 	slAddHead(&rowList, annoRowClone(qRow, self->mySource));
 	if (rjFailHard && qRow->rightJoinFail)
