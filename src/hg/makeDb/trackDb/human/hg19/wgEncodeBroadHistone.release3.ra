@@ -76,7 +76,7 @@ nextItemButton on
 useScore 0
 noInherit on
 #settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100,signalValueFilter0.0,signalValueLimits=0:45000 Signal:viewLimits=1:20,minLimit=-1,maxLimit=473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,minLimit=1,maxLimit=21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
-html wgEncodeBroadHistone.release2
+html wgEncodeBroadHistone.release3
 
     track wgEncodeBroadHistoneViewPeaks
     shortLabel Peaks

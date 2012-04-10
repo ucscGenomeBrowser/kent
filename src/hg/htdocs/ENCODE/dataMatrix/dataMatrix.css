@@ -68,6 +68,7 @@ table div.rotated {
     background-color: #00994D;
     text-align: center;
     border: 1px solid darkgray;
+    cursor: pointer;
 }
 
 .todoExperiment {

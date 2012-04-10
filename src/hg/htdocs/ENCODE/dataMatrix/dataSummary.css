@@ -39,6 +39,7 @@
     text-align: left;
     padding-left: 1em;
     border: none;
+    cursor: pointer;
 }
 
 .summaryTable td+td {
