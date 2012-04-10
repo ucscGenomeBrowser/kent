@@ -1,0 +1,199 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the oreNil2
+# Oreochromis niloticus - Nile Tilapia
+
+# DATE:   31-Jan-2011
+# ORGANISM:       Oreochromis niloticus
+# TAXID:  8128
+# ASSEMBLY LONG NAME:     Orenil1.1
+# ASSEMBLY SHORT NAME:    Orenil1.1
+# ASSEMBLY SUBMITTER:     Broad Institute
+# ASSEMBLY TYPE:  Haploid
+# NUMBER OF ASSEMBLY-UNITS:       1
+# ASSEMBLY ACCESSION:     GCA_000188235.2
+
+# FTP-RELEASE DATE: 09-Feb-2012
+
+#	rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Oreochromis_niloticus/Orenil1.1/
+
+#	Genome ID:
+#	http://www.ncbi.nlm.nih.gov/genome/197
+#       http://www.ncbi.nlm.nih.gov/bioproject/59571
+#       http://www.ncbi.nlm.nih.gov/nuccore/320434504
+#       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AERX01
+#       269x
+
+#	Taxonomy:
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=8128
+
+#	Mitochondrial sequence:
+#       http://www.ncbi.nlm.nih.gov/bioproject/42843 - chrMt NC_013663.1
+
+#	Assembly ID: 354508
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/354508/
+
+
+#############################################################################
+# fetch sequence from genbank (DONE - 2012-04-10 - Hiram)
+    mkdir -p /hive/data/genomes/genomes/oreNil2/genbank
+    cd /hive/data/genomes/genomes/oreNil2/genbank
+
+    rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Oreochromis_niloticus/Orenil1.1/ ./
+
+    # measure sequence to be used here
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/*.fa.gz \
+        Primary_Assembly/unplaced_scaffolds/FASTA/*.fa.gz
+
+    #   927679487 bases (111611440 N's 816068047 real 816068047 upper 0 lower)
+    #   in 5677 sequences in 23 files
+    #   Total size: mean 163410.2 sd 1922362.4
+    #   min 1000 (gi|320342652|gb|AERX01077754.1|)
+    #   max 51042256 (gi|374976115|gb|CM001450.1|) median 2009
+
+#############################################################################
+# fixup names for UCSC standards (DONE - 2012-04-10 - Hiram)
+    mkdir /hive/data/genomes/oreNil2/ucsc
+    cd /hive/data/genomes/oreNil2/ucsc
+
+    ########################  Assembled Chromosomes
+    cat << '_EOF_' > toUcsc.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../genbank/Primary_Assembly/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.agp.gz|") or die "can not read chr${chrN}.agp.gz";
+    open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz|") or die "can not read chr${chrN}.fa.gz";
+    open (UC, ">chr${chrN}.fa") or die "can not write to chr${chrN}.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x toUcsc.pl
+    time ./toUcsc.pl
+    #	real    0m33.257s
+    gzip *.fa *.agp
+    faSize chr*.fa.gz
+    #   657350972 bases (50870875 N's 606480097 real 606480097 upper 0 lower)
+    #   in 22 sequences in 22 files
+    #   Total size: mean 29879589.6 sd 7407420.0 min 17092887 (chrLG10)
+    #   max 51042256 (chrLG7) median 31194787
+
+    ########################  Unplaced scaffolds
+    # verify we don't have any .acc numbers different from .1
+    zcat \
+    ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| cut -f1 | egrep "^GL|^AERX" \
+	| sed -e 's/^GL[0-9][0-9]*//; s/^AERX[0-9][0-9]*//' | sort | uniq -c
+    #  71382 .1
+    #   1737 .2
+
+    # in that case, since they are not all .1, we need to use the full name
+    #   modified to remove the .
+    # this is like the unplaced.pl script in other assemblies except it
+    #	does not add chrUn_ to the names since they are all just scaffolds
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, "|gzip -c > unplaced.agp.gz") or die "can not write to unplaced.agp.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\./-/;    
+        printf UC "%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, "|gzip -c > unplaced.fa.gz") or die "can not write to unplaced.fa.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\|.*//;
+        $line =~ s/\./-/;    
+        printf UC ">$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+    time ./unplaced.pl
+    #   real    1m5.894s
+    # make sure none of the names got to be over 31 characers long:
+    zcat unplaced.agp | grep -v "^#" | cut -f1 | awk '{print length($0)}' \
+        | sort -rn | uniq -c | head
+    #      4077 14
+    #   69042 10
+
+    faSize unplaced.fa.gz
+    #   270328515 bases (60740565 N's 209587950 real 209587950 upper 0 lower)
+    #   in 5655 sequences in 1 files
+    #   Total size: mean 47803.5 sd 238106.9 min 1000 (AERX01077754-1)
+    #   max 7888616 (GL831144-1) median 1992
+
+    # verify we have the same sequence as delivered from genbank:
+    faSize *.fa.gz
+    #   927679487 bases (111611440 N's 816068047 real 816068047 upper 0 lower)
+    #   in 5677 sequences in 23 files
+    #   Total size: mean 163410.2 sd 1922362.4 min 1000 (AERX01077754-1)
+    #   max 51042256 (chrLG7) median 2009
+
+    # from genbank:
+    #   927679487 bases (111611440 N's 816068047 real 816068047 upper 0 lower)
+    #   in 5677 sequences in 23 files
+    #   Total size: mean 163410.2 sd 1922362.4
+    #   min 1000 (gi|320342652|gb|AERX01077754.1|)
+    #   max 51042256 (gi|374976115|gb|CM001450.1|) median 2009
+
+#############################################################################
