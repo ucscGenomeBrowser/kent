@@ -197,3 +197,39 @@ close (UC);
     #   max 51042256 (gi|374976115|gb|CM001450.1|) median 2009
 
 #############################################################################
+#  Initial database build (DONE - 2011-09-08 - Hiram)
+
+    cd /hive/data/genomes/oreNil2
+    cat << '_EOF_' > oreNil2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db oreNil2
+clade vertebrate
+genomeCladePriority 85
+scientificName Oreochromis niloticus
+commonName Nile tilapia
+assemblyDate Jan. 2011
+assemblyLabel Broad Institute of MIT and Harvard Orenil1.1 (GCA_000188235.1)
+assemblyShortLabel Nile tilapia
+ncbiAssemblyName Orenil1.1
+ncbiAssemblyId 354508
+orderKey 4679
+mitoAcc NC_013663
+fastaFiles /cluster/data/oreNil2/ucsc/*.fa.gz
+agpFiles /cluster/data/oreNil2/ucsc/*.agp.gz
+dbDbSpeciesDir oreNil
+taxId 8128
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and agp are OK
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp oreNil2.config.ra > agp.log 2>&1
+    #	real    1m6.870s
+    # verify OK:
+    tail -1 agp.log
+    #   *** All done!  (through the 'agp' step)
+
+    time makeGenomeDb.pl -continue=db oreNil2.config.ra > db.log 2>&1
+    #   real    8m45.076s
+
+##########################################################################
