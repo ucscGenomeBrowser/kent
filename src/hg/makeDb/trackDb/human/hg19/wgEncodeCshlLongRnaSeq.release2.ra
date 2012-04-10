@@ -5668,7 +5668,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel MCF-7 nucleus longPolyA
         longLabel MCF-7 nucleus longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3MCF7 localization=NUCLEUS rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6018 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqMcf7CytosolPapContigs
@@ -5676,7 +5676,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel MCF-7 cytosol longPolyA
         longLabel MCF-7 cytosol longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3MCF7 localization=CYTOSOL rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6019 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHmscbmCellTotalContigs
@@ -5684,7 +5684,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel hMSC-BM cell total
         longLabel hMSC-BM whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HMSCBM localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6020 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqImr90CellTotalContigs
@@ -5692,7 +5692,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel IMR90 cell total
         longLabel IMR90 whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3IMR90 localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6021 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapContigs
@@ -5700,7 +5700,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel Monocytes-CD14+_RO01746 cell longPolyA
         longLabel Monocytes-CD14+ RO01746 whole cell longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3MONOCD14RO1746 localization=CELL rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6022 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqSkmcCellTotalContigs
@@ -5708,7 +5708,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel SkMC cell total
         longLabel SkMC whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=SKMC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6024 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHmscatCellTotalContigs
@@ -5716,7 +5716,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel hMSC-AT cell total
         longLabel hMSC-AT whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HMSCAT localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6025 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqCd20CellPamContigs
@@ -5724,7 +5724,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel CD20+ cell longNonPolyA
         longLabel CD20+ whole cell longNonPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=CD20 localization=CELL rnaExtract=PAM
-        type bedRnaElements
+        type bed 6 +
         # subId=6026 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHsavecCellTotalContigs
@@ -5732,7 +5732,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel HSaVEC cell total
         longLabel HSaVEC whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HSAVEC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6027 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHpiepcCellTotalContigs
@@ -5740,7 +5740,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel HPIEpC cell total
         longLabel HPIEpC whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HPIEPC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6028 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqSknshNucleusPapContigs
@@ -5748,7 +5748,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel SK-N-SH nucleus longPolyA
         longLabel SK-N-SH nucleus longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3SKNSH localization=NUCLEUS rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6029 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHaoecCellTotalContigs
@@ -5756,7 +5756,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel HAoEC cell total
         longLabel HAoEC whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HAOEC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6030 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqSknshCytosolPapContigs
@@ -5764,7 +5764,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel SK-N-SH cytosol longPolyA
         longLabel SK-N-SH cytosol longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3SKNSH localization=CYTOSOL rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6031 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqNhemm2CellTotalContigs
@@ -5772,7 +5772,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel NHEM_M2 cell total
         longLabel NHEM M2 whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=NHEMM2 localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6032 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHwpCellTotalContigs
@@ -5780,7 +5780,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel HWP cell total
         longLabel HWP whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HWP localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6033 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqImr90NucleusPapContigs
@@ -5788,7 +5788,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel IMR90 nucleus longPolyA
         longLabel IMR90 nucleus longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3IMR90 localization=NUCLEUS rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6034 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqCd34mobilizedCellTotalContigs
@@ -5796,7 +5796,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel CD34+_Mobilized cell total
         longLabel CD34+ Mobilized whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=CD34MOBILIZED localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6035 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqA549NucleusPapContigs
@@ -5804,7 +5804,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel A549 nucleus longPolyA
         longLabel A549 nucleus longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3A549 localization=NUCLEUS rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6036 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHpcplCellTotalContigs
@@ -5812,7 +5812,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel HPC-PL cell total
         longLabel HPC-PL whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HPCPL localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6037 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHobCellTotalContigs
@@ -5820,7 +5820,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel HOB cell total
         longLabel HOB whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HOB localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6038 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqCd20CellPapContigs
@@ -5828,7 +5828,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel CD20+ cell longPolyA
         longLabel CD20+ whole cell longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=CD20 localization=CELL rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6039 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqA549CytosolPapContigs
@@ -5836,7 +5836,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel A549 cytosol longPolyA
         longLabel A549 cytosol longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3A549 localization=CYTOSOL rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6040 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqNhdfCellTotalContigs
@@ -5844,7 +5844,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel NHDF cell total
         longLabel NHDF whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=NHDF localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6041 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamContigs
@@ -5852,7 +5852,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel Monocytes-CD14+_RO01746 cell longNonPolyA
         longLabel Monocytes-CD14+ RO01746 whole cell longNonPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3MONOCD14RO1746 localization=CELL rnaExtract=PAM
-        type bedRnaElements
+        type bed 6 +
         # subId=6042 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqImr90CytosolPapContigs
@@ -5860,7 +5860,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel IMR90 cytosol longPolyA
         longLabel IMR90 cytosol longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3IMR90 localization=CYTOSOL rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6043 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqImr90CellPapContigs
@@ -5868,7 +5868,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel IMR90 cell longPolyA
         longLabel IMR90 whole cell longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3IMR90 localization=CELL rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6044 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHmscucCellTotalContigs
@@ -5876,7 +5876,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel hMSC-UC cell total
         longLabel hMSC-UC whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HMSCUC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6045 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHmepcCellTotalContigs
@@ -5884,7 +5884,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel HMEpC cell total
         longLabel HMEpC whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HMEPC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6046 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHfdpcCellTotalContigs
@@ -5892,7 +5892,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel HFDPC cell total
         longLabel HFDPC whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=HFDPC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6016 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqNhemfm2CellTotalContigs
@@ -5900,7 +5900,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel NHEM.f_M2 cell total
         longLabel NHEM.f M2 whole cell total RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=NHEMFM2 localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=6015 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqSknshCellPapContigs
@@ -5908,7 +5908,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel SK-N-SH cell longPolyA
         longLabel SK-N-SH whole cell longPolyA RNA-seq Contigs from ENCODE/CSHL
         subGroups view=Contigs rep=Pooled cellType=3SKNSH localization=CELL rnaExtract=PAP
-        type bedRnaElements
+        type bed 6 +
         # subId=6017 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHchCellTotalContigs
@@ -5916,7 +5916,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel HCH cell total
         longLabel HCH cell total RNA-seq Contigs from ENCODE/CSHL #autogenerated
         subGroups view=Contigs rep=Pooled cellType=HCH localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        type bed 6 +
         # subId=5996 dateSubmitted=2012-03-14
 
         track wgEncodeCshlLongRnaSeqHmncpbCellTotalContigs
@@ -5924,7 +5924,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel hMNC-PB cell total
         longLabel hMNC-PB cell total RNA-seq Contigs from ENCODE/CSHL #autogenerated
         subGroups view=Contigs cellType=HMNCPB localization=CELL rnaExtract=TOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6 +
         # subId=6781 dateSubmitted=2012-03-30
 
         track wgEncodeCshlLongRnaSeqHmnccbCellTotalContigs
@@ -5932,7 +5932,7 @@ html wgEncodeCshlLongRnaSeq.release2
         shortLabel hMNC-CB cell total
         longLabel hMNC-CB cell total RNA-seq Contigs from ENCODE/CSHL #autogenerated
         subGroups view=Contigs cellType=HMNCCB localization=CELL rnaExtract=TOTAL rep=Pooled
-        type bedRnaElements
+        type bed 6 +
         # subId=6782 dateSubmitted=2012-03-30
 
     track wgEncodeCshlLongRnaSeqViewJunctions
@@ -5947,7 +5947,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel A549 cell pA- J
         longLabel A549 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=3A549 localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=3A549 localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         # subId=3601 dateSubmitted=2011-02-18
 
@@ -5955,7 +5955,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel A549 cell pA+ J
         longLabel A549 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=3A549 localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=3A549 localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         # subId=3602 dateSubmitted=2011-02-18
 
@@ -5963,7 +5963,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel AG50 cell pA- J
         longLabel AG04450 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=AG04450 localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=AG04450 localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         # subId=3603 dateSubmitted=2011-02-18
 
@@ -5971,7 +5971,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel AG50 cell pA+ J
         longLabel AG04450 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=AG04450 localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=AG04450 localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         # subId=3604 dateSubmitted=2011-02-18
 
@@ -5979,7 +5979,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel BJ cell pA- J
         longLabel BJ whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=BJ localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=BJ localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         # subId=3605 dateSubmitted=2011-02-18
 
@@ -5987,7 +5987,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel BJ cell pA+ J
         longLabel BJ whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=BJ localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=BJ localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         # subId=3606 dateSubmitted=2011-02-18
 
@@ -5995,7 +5995,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel GM78 cyto pA- J
         longLabel GM12878 cytosol polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM
+        subGroups view=Junctions cellType=1GM12878 localization=CYTOSOL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 153,38,0
         # subId=3607 dateSubmitted=2011-02-18
@@ -6004,7 +6004,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel GM78 cyto pA+ J
         longLabel GM12878 cytosol polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP
+        subGroups view=Junctions cellType=1GM12878 localization=CYTOSOL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 153,38,0
         # subId=3608 dateSubmitted=2011-02-18
@@ -6013,7 +6013,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel GM78 nucl pA- J
         longLabel GM12878 nucleus polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM
+        subGroups view=Junctions cellType=1GM12878 localization=NUCLEUS rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 153,38,0
         # subId=3609 dateSubmitted=2011-02-18
@@ -6022,7 +6022,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel GM78 nucl pA+ J
         longLabel GM12878 nucleus polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP
+        subGroups view=Junctions cellType=1GM12878 localization=NUCLEUS rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 153,38,0
         # subId=3610 dateSubmitted=2011-02-18
@@ -6031,7 +6031,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel GM78 cell pA- J
         longLabel GM12878 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1GM12878 localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=1GM12878 localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 153,38,0
         # subId=3611 dateSubmitted=2011-02-18
@@ -6040,7 +6040,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel GM78 cell pA+ J
         longLabel GM12878 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1GM12878 localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=1GM12878 localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 153,38,0
         # subId=3612 dateSubmitted=2011-02-18
@@ -6049,7 +6049,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel H1ES cell pA- J
         longLabel H1-hESC whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1H1HESC localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=1H1HESC localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 0,107,27
         # subId=3613 dateSubmitted=2011-02-18
@@ -6058,7 +6058,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel H1ES cell pA+ J
         longLabel H1-hESC whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1H1HESC localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=1H1HESC localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 0,107,27
         # subId=3614 dateSubmitted=2011-02-18
@@ -6067,7 +6067,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel H1ES cyto pA- J
         longLabel H1-hESC cytosol polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1H1HESC localization=CYTOSOL rnaExtract=PAM
+        subGroups view=Junctions cellType=1H1HESC localization=CYTOSOL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 0,107,27
         # subId=3615 dateSubmitted=2011-02-18
@@ -6076,7 +6076,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel H1ES cyto pA+ J
         longLabel H1-hESC cytosol polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1H1HESC localization=CYTOSOL rnaExtract=PAP
+        subGroups view=Junctions cellType=1H1HESC localization=CYTOSOL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 0,107,27
         # subId=3616 dateSubmitted=2011-02-18
@@ -6085,7 +6085,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel H1ES nucl pA- J
         longLabel H1-hESC nucleus polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1H1HESC localization=NUCLEUS rnaExtract=PAM
+        subGroups view=Junctions cellType=1H1HESC localization=NUCLEUS rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 0,107,27
         # subId=3617 dateSubmitted=2011-02-18
@@ -6094,7 +6094,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel H1ES nucl pA+ J
         longLabel H1-hESC nucleus polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1H1HESC localization=NUCLEUS rnaExtract=PAP
+        subGroups view=Junctions cellType=1H1HESC localization=NUCLEUS rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 0,107,27
         # subId=3618 dateSubmitted=2011-02-18
@@ -6103,7 +6103,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HMEC cell pA- J
         longLabel HMEC whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=HMEC localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=HMEC localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         # subId=3619 dateSubmitted=2011-02-18
 
@@ -6111,7 +6111,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HMEC cell pA+ J
         longLabel HMEC whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=HMEC localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=HMEC localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         # subId=3620 dateSubmitted=2011-02-18
 
@@ -6119,7 +6119,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HSMM cell pA- J
         longLabel HSMM whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=HSMM localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=HSMM localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         # subId=3621 dateSubmitted=2011-02-18
 
@@ -6127,7 +6127,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HSMM cell pA+ J
         longLabel HSMM whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=HSMM localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=HSMM localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         # subId=3622 dateSubmitted=2011-02-18
 
@@ -6135,7 +6135,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HUVE cyto pA- J
         longLabel HUVEC cytosol polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM
+        subGroups view=Junctions cellType=2HUVEC localization=CYTOSOL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 224,75,0
         # subId=3623 dateSubmitted=2011-02-18
@@ -6144,7 +6144,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HUVE cyto pA+ J
         longLabel HUVEC cytosol polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP
+        subGroups view=Junctions cellType=2HUVEC localization=CYTOSOL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 224,75,0
         # subId=3624 dateSubmitted=2011-02-18
@@ -6153,7 +6153,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HUVE nucl pA- J
         longLabel HUVEC nucleus polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM
+        subGroups view=Junctions cellType=2HUVEC localization=NUCLEUS rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 224,75,0
         # subId=3625 dateSubmitted=2011-02-18
@@ -6162,7 +6162,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HUVE nucl pA+ J
         longLabel HUVEC nucleus polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP
+        subGroups view=Junctions cellType=2HUVEC localization=NUCLEUS rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 224,75,0
         # subId=3626 dateSubmitted=2011-02-18
@@ -6171,7 +6171,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HUVE cell pA- J
         longLabel HUVEC whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HUVEC localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=2HUVEC localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 224,75,0
         # subId=3627 dateSubmitted=2011-02-18
@@ -6180,7 +6180,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HUVE cell pA+ J
         longLabel HUVEC whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HUVEC localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=2HUVEC localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 224,75,0
         # subId=3628 dateSubmitted=2011-02-18
@@ -6189,7 +6189,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HeLa cell pA- J
         longLabel HeLa-S3 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HELAS3 localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=2HELAS3 localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 0,119,158
         # subId=3629 dateSubmitted=2011-02-18
@@ -6198,7 +6198,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HeLa cell pA+ J
         longLabel HeLa-S3 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HELAS3 localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=2HELAS3 localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 0,119,158
         # subId=3630 dateSubmitted=2011-02-18
@@ -6207,7 +6207,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HeLa cyto pA- J
         longLabel HeLa-S3 cytosol polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAM
+        subGroups view=Junctions cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 0,119,158
         # subId=3631 dateSubmitted=2011-02-18
@@ -6216,7 +6216,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HeLa cyto pA+ J
         longLabel HeLa-S3 cytosol polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP
+        subGroups view=Junctions cellType=2HELAS3 localization=CYTOSOL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 0,119,158
         # subId=3632 dateSubmitted=2011-02-18
@@ -6225,7 +6225,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HeLa nucl pA- J
         longLabel HeLa-S3 nucleus polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM
+        subGroups view=Junctions cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 0,119,158
         # subId=3633 dateSubmitted=2011-02-18
@@ -6234,7 +6234,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HeLa nucl pA+ J
         longLabel HeLa-S3 nucleus polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP
+        subGroups view=Junctions cellType=2HELAS3 localization=NUCLEUS rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 0,119,158
         # subId=3634 dateSubmitted=2011-02-18
@@ -6243,7 +6243,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HepG cyto pA- J
         longLabel HepG2 cytosol polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM
+        subGroups view=Junctions cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 189,0,157
         # subId=3635 dateSubmitted=2011-02-18
@@ -6252,7 +6252,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HepG cyto pA+ J
         longLabel HepG2 cytosol polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP
+        subGroups view=Junctions cellType=2HEPG2 localization=CYTOSOL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 189,0,157
         # subId=3636 dateSubmitted=2011-02-18
@@ -6261,7 +6261,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HepG nucl pA- J
         longLabel HepG2 nucleus polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM
+        subGroups view=Junctions cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 189,0,157
         # subId=3637 dateSubmitted=2011-02-18
@@ -6270,7 +6270,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HepG nucl pA+ J
         longLabel HepG2 nucleus polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP
+        subGroups view=Junctions cellType=2HEPG2 localization=NUCLEUS rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 189,0,157
         # subId=3638 dateSubmitted=2011-02-18
@@ -6279,7 +6279,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HepG cell pA- J
         longLabel HepG2 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HEPG2 localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=2HEPG2 localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 189,0,157
         # subId=3639 dateSubmitted=2011-02-18
@@ -6288,7 +6288,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel HepG cell pA+ J
         longLabel HepG2 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=2HEPG2 localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=2HEPG2 localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 189,0,157
         # subId=3640 dateSubmitted=2011-02-18
@@ -6297,7 +6297,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel K562 chrm tot J
         longLabel K562 chromatin total Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL
+        subGroups view=Junctions cellType=1K562 localization=CHROMATIN rnaExtract=TOTAL rep=Pooled
         type bed 6 +
         color 46,0,184
         # subId=3641 dateSubmitted=2011-02-18
@@ -6306,7 +6306,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel K562 cyto pA- J
         longLabel K562 cytosol polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1K562 localization=CYTOSOL rnaExtract=PAM
+        subGroups view=Junctions cellType=1K562 localization=CYTOSOL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 46,0,184
         # subId=3642 dateSubmitted=2011-02-18
@@ -6315,7 +6315,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel K562 cyto pA+ J
         longLabel K562 cytosol polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1K562 localization=CYTOSOL rnaExtract=PAP
+        subGroups view=Junctions cellType=1K562 localization=CYTOSOL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 46,0,184
         # subId=3643 dateSubmitted=2011-02-18
@@ -6324,7 +6324,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel K562 nlos tot J
         longLabel K562 nucleolus total Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL
+        subGroups view=Junctions cellType=1K562 localization=NUCLEOLUS rnaExtract=TOTAL rep=Pooled
         type bed 6 +
         color 46,0,184
         # subId=3644 dateSubmitted=2011-02-18
@@ -6333,7 +6333,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel K562 nplm tot J
         longLabel K562 nucleoplasm total Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL
+        subGroups view=Junctions cellType=1K562 localization=NUCLEOPLASM rnaExtract=TOTAL rep=Pooled
         type bed 6 +
         color 46,0,184
         # subId=3645 dateSubmitted=2011-02-18
@@ -6342,7 +6342,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel K562 nucl pA- J
         longLabel K562 nucleus polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1K562 localization=NUCLEUS rnaExtract=PAM
+        subGroups view=Junctions cellType=1K562 localization=NUCLEUS rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 46,0,184
         # subId=3646 dateSubmitted=2011-02-18
@@ -6351,7 +6351,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel K562 nucl pA+ J
         longLabel K562 nucleus polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1K562 localization=NUCLEUS rnaExtract=PAP
+        subGroups view=Junctions cellType=1K562 localization=NUCLEUS rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 46,0,184
         # subId=3647 dateSubmitted=2011-02-18
@@ -6360,7 +6360,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel K562 cell pA- J
         longLabel K562 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1K562 localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=1K562 localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 46,0,184
         # subId=3648 dateSubmitted=2011-02-18
@@ -6369,7 +6369,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel K562 cell pA+ J
         longLabel K562 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=1K562 localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=1K562 localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 46,0,184
         # subId=3649 dateSubmitted=2011-02-18
@@ -6378,7 +6378,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel MCF7 cell pA- J
         longLabel MCF-7 whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=3MCF7 localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=3MCF7 localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         # subId=3650 dateSubmitted=2011-02-18
 
@@ -6386,7 +6386,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions on
         shortLabel MCF7 cell pA+ J
         longLabel MCF-7 whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=3MCF7 localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=3MCF7 localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         # subId=3651 dateSubmitted=2011-02-18
 
@@ -6394,7 +6394,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHEK cyto pA- J
         longLabel NHEK cytosol polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=NHEK localization=CYTOSOL rnaExtract=PAM
+        subGroups view=Junctions cellType=NHEK localization=CYTOSOL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 179,0,134
         # subId=3652 dateSubmitted=2011-02-18
@@ -6403,7 +6403,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHEK cyto pA+ J
         longLabel NHEK cytosol polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=NHEK localization=CYTOSOL rnaExtract=PAP
+        subGroups view=Junctions cellType=NHEK localization=CYTOSOL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 179,0,134
         # subId=3653 dateSubmitted=2011-02-18
@@ -6412,7 +6412,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHEK nucl pA- J
         longLabel NHEK nucleus polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=NHEK localization=NUCLEUS rnaExtract=PAM
+        subGroups view=Junctions cellType=NHEK localization=NUCLEUS rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 179,0,134
         # subId=3654 dateSubmitted=2011-02-18
@@ -6421,7 +6421,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHEK nucl pA+ J
         longLabel NHEK nucleus polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=NHEK localization=NUCLEUS rnaExtract=PAP
+        subGroups view=Junctions cellType=NHEK localization=NUCLEUS rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 179,0,134
         # subId=3655 dateSubmitted=2011-02-18
@@ -6430,7 +6430,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHEK cell pA- J
         longLabel NHEK whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=NHEK localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=NHEK localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         color 179,0,134
         # subId=3656 dateSubmitted=2011-02-18
@@ -6439,7 +6439,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHEK cell pA+ J
         longLabel NHEK whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=NHEK localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=NHEK localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         color 179,0,134
         # subId=3658 dateSubmitted=2011-02-18
@@ -6448,7 +6448,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHLF cell pA- J
         longLabel NHLF whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=NHLF localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=NHLF localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         # subId=3660 dateSubmitted=2011-02-18
 
@@ -6456,7 +6456,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHLF cell pA+ J
         longLabel NHLF whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=NHLF localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=NHLF localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         # subId=3661 dateSubmitted=2011-02-18
 
@@ -6464,7 +6464,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SKRA cell pA- J
         longLabel SK-N-SH_RA whole cell polyA- Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=SKNSHRA localization=CELL rnaExtract=PAM
+        subGroups view=Junctions cellType=SKNSHRA localization=CELL rnaExtract=PAM rep=Pooled
         type bed 6 +
         # subId=3662 dateSubmitted=2011-02-18
 
@@ -6472,7 +6472,7 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SKRA cell pA+ J
         longLabel SK-N-SH_RA whole cell polyA+ Long RNA-seq Junctions Rep Pooled from ENCODE/CSHL
-        subGroups view=Junctions rep=Pooled cellType=SKNSHRA localization=CELL rnaExtract=PAP
+        subGroups view=Junctions cellType=SKNSHRA localization=CELL rnaExtract=PAP rep=Pooled
         type bed 6 +
         # subId=3663 dateSubmitted=2011-02-18
 
@@ -6480,248 +6480,248 @@ html wgEncodeCshlLongRnaSeq.release2
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHEM.f_M2 cell total
         longLabel NHEM.f M2 cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=NHEMFM2 localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=NHEMFM2 localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6047 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHchCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HCH cell total
         longLabel HCH cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HCH localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HCH localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6048 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHfdpcCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HFDPC cell total
         longLabel HFDPC cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HFDPC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HFDPC localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6049 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqNhemm2CellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHEM_M2 cell total
         longLabel NHEM M2 cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=NHEMM2 localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=NHEMM2 localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6051 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHwpCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HWP cell total
         longLabel HWP cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HWP localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HWP localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6052 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHmscbmCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel hMSC-BM cell total
         longLabel hMSC-BM cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HMSCBM localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HMSCBM localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6057 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHvmfCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HVMF cell total
         longLabel HVMF cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HVMF localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HVMF localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6061 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqSkmcCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SkMC cell total
         longLabel SkMC cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=SKMC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=SKMC localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6062 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHmscatCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel hMSC-AT cell total
         longLabel hMSC-AT cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HMSCAT localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HMSCAT localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6063 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHpcplCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HPC-PL cell total
         longLabel HPC-PL cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HPCPL localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HPCPL localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6065 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHobCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HOB cell total
         longLabel HOB cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HOB localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HOB localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6066 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHsavecCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HSaVEC cell total
         longLabel HSaVEC cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HSAVEC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HSAVEC localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6069 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqNhdfCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel NHDF cell total
         longLabel NHDF cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=NHDF localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=NHDF localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6070 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHpiepcCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HPIEpC cell total
         longLabel HPIEpC cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HPIEPC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HPIEPC localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6073 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHmscucCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel hMSC-UC cell total
         longLabel hMSC-UC cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HMSCUC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HMSCUC localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6075 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqHaoecCellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel HAoEC cell total
         longLabel HAoEC cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=HAOEC localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=HAOEC localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6077 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqSknshCytosolPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SK-N-SH cytosol longPolyA
         longLabel SK-N-SH cytosol longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3SKNSH localization=CYTOSOL rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3SKNSH localization=CYTOSOL rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6050 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqSknshCellPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SK-N-SH cell longPolyA
         longLabel SK-N-SH cell longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3SKNSH localization=CELL rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3SKNSH localization=CELL rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6053 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqImr90NucleusPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel IMR90 nucleus longPolyA
         longLabel IMR90 nucleus longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3IMR90 localization=NUCLEUS rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3IMR90 localization=NUCLEUS rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6054 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqMcf7CytosolPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel MCF-7 cytosol longPolyA
         longLabel MCF-7 cytosol longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3MCF7 localization=CYTOSOL rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3MCF7 localization=CYTOSOL rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6055 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqMcf7NucleusPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel MCF-7 nucleus longPolyA
         longLabel MCF-7 nucleus longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3MCF7 localization=NUCLEUS rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3MCF7 localization=NUCLEUS rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6056 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqImr90CellTotalJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel IMR90 cell total
         longLabel IMR90 cell total RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3IMR90 localization=CELL rnaExtract=TOTAL
-        type bedRnaElements
+        subGroups view=Junctions cellType=3IMR90 localization=CELL rnaExtract=TOTAL rep=Pooled
+        type bed 6 +
         # subId=6058 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqA549NucleusPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel A549 nucleus longPolyA
         longLabel A549 nucleus longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3A549 localization=NUCLEUS rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3A549 localization=NUCLEUS rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6059 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Monocytes-CD14+_RO01746 cell longPolyA
         longLabel Monocytes-CD14+ RO01746 cell longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3MONOCD14RO1746 localization=CELL rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3MONOCD14RO1746 localization=CELL rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6060 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqA549CytosolPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel A549 cytosol longPolyA
         longLabel A549 cytosol longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3A549 localization=CYTOSOL rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3A549 localization=CYTOSOL rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6068 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqMonocd14ro1746CellPamJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel Monocytes-CD14+_RO01746 cell longNonPolyA
         longLabel Monocytes-CD14+ RO01746 cell longNonPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3MONOCD14RO1746 localization=CELL rnaExtract=PAM
-        type bedRnaElements
+        subGroups view=Junctions cellType=3MONOCD14RO1746 localization=CELL rnaExtract=PAM rep=Pooled
+        type bed 6 +
         # subId=6071 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqImr90CytosolPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel IMR90 cytosol longPolyA
         longLabel IMR90 cytosol longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3IMR90 localization=CYTOSOL rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3IMR90 localization=CYTOSOL rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6072 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqImr90CellPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel IMR90 cell longPolyA
         longLabel IMR90 cell longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3IMR90 localization=CELL rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3IMR90 localization=CELL rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6074 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqSknshNucleusPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel SK-N-SH nucleus longPolyA
         longLabel SK-N-SH nucleus longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=3SKNSH localization=NUCLEUS rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=3SKNSH localization=NUCLEUS rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6076 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqCd20CellPamJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel CD20+ cell longNonPolyA
         longLabel CD20+ cell longNonPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=CD20 localization=CELL rnaExtract=PAM
-        type bedRnaElements
+        subGroups view=Junctions cellType=CD20 localization=CELL rnaExtract=PAM rep=Pooled
+        type bed 6 +
         # subId=6064 dateSubmitted=2012-03-16
 
         track wgEncodeCshlLongRnaSeqCd20CellPapJunctions
         parent wgEncodeCshlLongRnaSeqViewJunctions off
         shortLabel CD20+ cell longPolyA
         longLabel CD20+ cell longPolyA RNA-seq Junctions from ENCODE/CSHL #autogenerated
-        subGroups view=Junctions cellType=CD20 localization=CELL rnaExtract=PAP
-        type bedRnaElements
+        subGroups view=Junctions cellType=CD20 localization=CELL rnaExtract=PAP rep=Pooled
+        type bed 6 +
         # subId=6067 dateSubmitted=2012-03-16
 
 
