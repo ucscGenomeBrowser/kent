@@ -52,7 +52,7 @@ if (!streamer->positionIsGenome)
 	}
     }
 verbose(2, "mysql query: '%s'\n", query->string);
-struct sqlResult *sr = sqlStoreResult(self->conn, query->string);
+struct sqlResult *sr = sqlGetResult(self->conn, query->string);
 dyStringFree(&query);
 self->sr = sr;
 }

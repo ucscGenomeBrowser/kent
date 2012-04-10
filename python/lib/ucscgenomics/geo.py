@@ -33,6 +33,26 @@ instrumentModels = {
     'Unknown': 'Illumina Genome Analyzer'
 }
 
+class Submission(object):
+    
+    @property
+    def accessions(self):
+        return self._accessions
+        
+    @property
+    def dateSubmitted(self):
+        return self._submitted
+    
+    @property
+    def dateUpdated(self):
+        return self._updated
+    
+    def __init__(self, geoId):
+        html = getHtml(geoId)
+        self._accessions = getAccessions(html)
+        self._submitted = getDateSubmitted(html)
+        self._updated = getDateUpdated(html)
+
 def getHtml(geoId):
     try:
         response = urllib2.urlopen('http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s' % geoId)
@@ -40,17 +60,21 @@ def getHtml(geoId):
         return None
     return response.read()
     
-def getGeo(geoId):
-    return re.findall('(GSM[0-9]+)</a></td>\n<td valign="top">([^<]+)</td>', getHtml(geoId))
+def getAccessions(html):
+    gsms = re.findall('(GSM[0-9]+)</a></td>\n<td valign="top">([^<]+)</td>', html)
+    d = dict()
+    for gsm in gsms:
+        d[gsm[1]] = gsm[0]
+    return d
     
-def getDateSubmitted(geoId):
-    datestr = re.search('<td>Submission date</td>\n<td>([^<]+)</td>', getHtml(geoId))
+def getDateSubmitted(html):
+    datestr = re.search('<td>Submission date</td>\n<td>([^<]+)</td>', html)
     if datestr == None:
         return None
     return datetime.datetime.strptime(datestr.group(1), '%b %d, %Y')
     
-def getDateUpdated(geoId):
-    datestr = re.search('<td>Last update date</td>\n<td>([^<]+)</td>', getHtml(geoId))
+def getDateUpdated(html):
+    datestr = re.search('<td>Last update date</td>\n<td>([^<]+)</td>', html)
     if datestr == None:
         return None
     return datetime.datetime.strptime(datestr.group(1), '%b %d, %Y')
