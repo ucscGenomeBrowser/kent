@@ -1,0 +1,57 @@
+# UNC / BSU Proteogenomics with both whole genome (hg19) and Gencode search (wrangler: fang)
+
+track wgEncodeUncBsuProtGenc
+compositeTrack on
+superTrack wgEncodeProtGenoSuper dense
+shortLabel UNC/BSU ProtGenc
+longLabel Proteogenomics from ENCODE/Univ. North Carolina/Boise State Univ.
+group expression
+subGroup1 view Views pepMapFt=Peptide_Mapping_Filtered pepMapGcFt=Peptide_Mapping_Gencode_Filtered mPepMapGcFt=Modified_peptide_Mapping_Gencode_Filtered
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) HIHESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)
+subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol membraneFraction=Membrane mito=Mitochondria nucleus=Nucleus
+subGroup4 protocol Protocol FASP=FASP INGEL=In_gel  
+dimensions dimensionX=cellType dimensionY=localization
+sortOrder cellType=+ localization=+ protocol=+
+fileSortOrder cell=Cell_Line localization=Localization protocol=Protocol view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
+controlledVocabulary encode/cv.ra cellType=cell localization=localization protocol=protocol
+dragAndDrop subTracks
+priority 0
+type bed 3  
+noInherit on
+wgEncode 1
+visibility hide
+
+    track wgEncodeUncBsuProtGencViewpepMapFt
+    shortLabel pepMapping
+    view pepMapFt
+    useScore 1
+    scoreFilter 200
+    scoreFilterLimits 200:1000
+    visibility full  
+    parent wgEncodeUncBsuProtGenc
+
+       
+
+    track wgEncodeUncBsuProtGencViewpepMapGcFt
+    shortLabel pepMapping Gc
+    view pepMapGcFt
+    visibility full  
+    parent wgEncodeUncBsuProtGenc
+    useScore 1
+    scoreFilter 200
+    scoreFilterLimits 200:1000
+
+    
+
+    track wgEncodeUncBsuProtGencViewmPepMapGcFt
+    shortLabel pepMapping
+    view pepMapFt
+    useScore 1
+    scoreFilter 200
+    scoreFilterLimits 200:1000
+    visibility full  
+    parent wgEncodeUncBsuProtGenc
+
+       
+
+   
