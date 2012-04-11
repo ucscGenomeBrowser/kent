@@ -350,28 +350,25 @@ our %formatCheckers = (
     bigBed => \&validateBigBed,
     bam => \&validateBam,
     bed => \&validateBed,
-    wig => \&validateWig,
-    bedGraph => \&validateBedGraph,
+    bedLogR => \&validateBed,
+    bedRnaElements => \&validateBed,
+    bedRrbs => \&validateBed,
     bed5FloatScore => \&validateBed,
-    tagAlign => \&validateTagAlign,
-    pairedTagAlign => \&validatePairedTagAlign,
     narrowPeak => \&validateNarrowPeak,
     broadPeak => \&validateBroadPeak,
     gappedPeak => \&validateGappedPeak,
     fastq => \&validateFastQ,
-    fasta  => \&validateFasta,
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
     genePred => \&validateGene,
     gtf => \&validateGtf,
-    rpkm  => \&validateRpkm,
-    psl  => \&validatePsl,
-    peptideMapping  => \&validateFreepass,
-    bedLogR => \&validateBed,
-    bedRnaElements => \&validateBed,
-    bedRrbs => \&validateBed,
     txt  => \&validateFreepass,
     document => \&validateFreepass,
+    fasta  => \&replacedByFastQ,
+    wig => \&replacedByBigWig,
+    bedGraph => \&replacedByBigWig,
+    tagAlign => \&replacedByBam,
+    pairedTagAlign => \&replacedByBam,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -500,42 +497,12 @@ sub validateFreepass
     my ($path, $file, $type) = @_;
     doTime("beginning validateFreepass") if $opt_timing;
     my $fh = Encode::openUtil($file, $path);
-    #my $lineNumber = 0;
-    #while(<$fh>) {
-    #    chomp;
-    #    $lineNumber++;
-    #    last if($opt_quick && $lineNumber >= $quickCount);
-    #}
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' free pass on validation\n");
-
     doTime("done validateFreepass") if $opt_timing;
     return ();
 }
 
-
-sub validateWig
-{
-    my ($path, $file, $type) = @_;
-    my $filePath = defined($path) ? "$path/$file" : $file;
-    doTime("beginning validateWig") if $opt_timing;
-
-    HgAutomate::verbose(2, "validateWig($file,$type) -> wigEncode\n");
-    my @cmds;
-    # wigEncode knows how to handle zipped files so we do not need to special case them.
-    push(@cmds, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData $filePath /dev/null /dev/null");
-    # This can produce /data/tmp/SafePipe_NNN_.err files
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose - 1);
-    if(my $err = $safe->exec()) {
-        my $err = $safe->stderr();
-        chomp($err);
-        return "File \'$file\' failed wiggle validation: " . $err;
-    } else {
-        HgAutomate::verbose(2, "File \'$file\' passed wiggle validation\n");
-    }
-    doTime("done validateWig") if $opt_timing;
-    return ();
-}
 
 sub validateBed {
 # Validate each line of a bed 5 or greater file.
@@ -626,44 +593,46 @@ sub validateBed {
     }
 }
 
-sub validateBedGraph {
+#sub validateBedGraph {
+# This format is no longer accepted by ENCODE, But I was wondering if we wanted to save this code
+# somewhere to be incorporated into another validator. (Mar 2012)
 # Validate each line of a bedGraph file.
-    my ($path, $file, $type) = @_;
-    my $lineNumber = 0;
-    doTime("beginning validateBedGraph") if $opt_timing;
-    my $fh = Encode::openUtil($file, $path);
-    while(<$fh>) {
-        chomp;
-        $lineNumber++;
-        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        my @fields = split /\s+/;
-        my $fieldCount = @fields;
-        next if(!$fieldCount);
-        my $prefix = "Failed bedGraph validation, file '$file'; line $lineNumber:";
-        if(/^(track|browser)/) {
-            ;
-        } elsif($fieldCount != 4) {
-            die "$prefix found " . scalar(@fields) . " fields; need 4\n";
-        } elsif (!$chromInfo{$fields[0]}) {
-            die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
-        } elsif ($fields[1] !~ /^\d+$/) {
-            die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
-        } elsif ($fields[2] !~ /^\d+$/) {
-            die "$prefix field 3 value ($fields[2]) is invalid; value must be a positive number\n";
-        } elsif ($fields[2] < $fields[1]) {
-            die "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
-        } elsif ($fields[3] !~ /^$floatRegEx$/) {
-            die "$prefix field 4 value '$fields[3]' is invalid; must be a float [$floatRegEx]\n";
-        } else {
-            ;
-        }
-        last if($opt_quick && $lineNumber >= $quickCount);
-    }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed bedGraph validation\n");
-    doTime("done validateBedGraph", $lineNumber) if $opt_timing;
-    return ();
-}
+#    my ($path, $file, $type) = @_;
+#    my $lineNumber = 0;
+#    doTime("beginning validateBedGraph") if $opt_timing;
+#    my $fh = Encode::openUtil($file, $path);
+#    while(<$fh>) {
+#        chomp;
+#        $lineNumber++;
+#        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
+#        my @fields = split /\s+/;
+#        my $fieldCount = @fields;
+#        next if(!$fieldCount);
+#        my $prefix = "Failed bedGraph validation, file '$file'; line $lineNumber:";
+#        if(/^(track|browser)/) {
+#            ;
+#        } elsif($fieldCount != 4) {
+#            die "$prefix found " . scalar(@fields) . " fields; need 4\n";
+#        } elsif (!$chromInfo{$fields[0]}) {
+#            die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
+#        } elsif ($fields[1] !~ /^\d+$/) {
+#            die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
+#        } elsif ($fields[2] !~ /^\d+$/) {
+#            die "$prefix field 3 value ($fields[2]) is invalid; value must be a positive number\n";
+#        } elsif ($fields[2] < $fields[1]) {
+#            die "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
+#        } elsif ($fields[3] !~ /^$floatRegEx$/) {
+#            die "$prefix field 4 value '$fields[3]' is invalid; must be a float [$floatRegEx]\n";
+#        } else {
+#            ;
+#        }
+#        last if($opt_quick && $lineNumber >= $quickCount);
+#    }
+#    $fh->close();
+#    HgAutomate::verbose(2, "File \'$file\' passed bedGraph validation\n");
+#    doTime("done validateBedGraph", $lineNumber) if $opt_timing;
+#    return ();
+#}
 
 sub validateGtf {
 # validate GTF by converting to genePred and validating that
@@ -719,33 +688,25 @@ sub validateGene {
     return ();
 }
 
-sub validateTagAlign
-{
-    my ($path, $file, $type) = @_;
-    # validate chroms, chromSize, etc.
-    my $paramList = validationSettings("validateFiles","tagAlign",$assembly);
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=tagAlign $file"]);
-    if(my $err = $safe->exec()) {
-        print STDERR  "ERROR: failed validateTagAlign : " . $safe->stderr() . "\n";
-        # don't show end-user pipe error(s)
-        return("failed validateTagAlign for '$file'");
-    }
-    return ();
+sub replacedByBam {
+# tagAlign and pairedTagAligne are replaced by BAM for ENCODE (Jan 2011)
+# After training the labs, this code should be removed (remove in Jan 2013)
+    my ($type) = @_;
+    return ("Files of type \'$type\' should be submitted as type BAM");
 }
 
-sub validatePairedTagAlign
-# This is like tag align but with two additional sequence fields appended; seq1 and seq2
-{
-    my ($path, $file, $type) = @_;
-    # validate chroms, chromSize, etc.
-    my $paramList = validationSettings("validateFiles","pairedTagAlign",$assembly);
-    my $safe = SafePipe->new(CMDS => ["validateFiles $paramList $quickOpt -chromDb=$assembly -type=pairedTagAlign $file"]);
-    if(my $err = $safe->exec()) {
-        print STDERR  "ERROR: failed validatePairedTagAlign : " . $safe->stderr() . "\n";
-        # don't show end-user pipe error(s)
-        return("failed validatePairedTagAlign for '$file'");
-    }
-    return ();
+sub replacedByBigWig {
+# wigs and bedGraphs are replaced by bigWig for ENCODE (Jan 2011)
+# After training the labs, this code should be removed (remove in Jan 2013)
+    my ($type) = @_;
+    return ("Files of type \'$type\' should be submitted as type bigWig");
+}
+
+sub replacedByFastQ {
+# fasta is replaced by fastQ for ENCODE (Jan 2011)
+# After training the labs, this code should be removed (remove in Jan 2013)
+    my ($type) = @_;
+    return ("Files of type \'$type\' should be submitted as type fastQ");
 }
 
 sub getInfoFiles
@@ -998,71 +959,8 @@ sub validateCsqual
     return ();
 }
 
-sub validateFasta
-# Wold lab & Helicos have fasta files; no quality, one line per sequence
-# Sample fasta lines are:
-#>HWI-EAS229_75_30DY0AAXX:7:1:0:949/1
-#NGCGGATGTTCTCAGTGTCCACAGCGCAGGTGAAATAAGGGAAGCAGTAGCGACGCCCATCTCCACGCGCAGCGC
-#>HWI-EAS229_75_30DY0AAXX:7:1:0:1739/1
-#NAGCCATCAGGAAAGCAAGGAGGGGGCATTAAAGGACAATCAAGGGGTTTGGAGGAAGGAGCAGGCCGGAGGCAA
-{
-    my ($path, $file, $type) = @_;
-    doTime("beginning validateFasta") if $opt_timing;
-    HgAutomate::verbose(2, "validateFasta($path,$file,$type)\n");
-    my $paramList = validationSettings("validateFiles","fasta");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fasta $file"]);
-    if(my $err = $safe->exec()) {
-        print STDERR  "ERROR: failed validateFasta : " . $safe->stderr() . "\n";
-        # don't show end-user pipe error(s)
-        return("failed validateFasta for '$file'");
-    }
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateFasta") if $opt_timing;
-    return ();
-}
-
-sub validateRpkm
-# Wold lab format, has gene name and 2 floats
-#   Allowing Gene name to be composed of any characters but <tab>
-#
-# Example format 1 (3 cols):-
-# HBG2    0.583   1973.85
-# RPS20   0.523   1910.01
-# RPLP0   1.312   1800.51
-#
-# Example format 2 (7 cols):- (*.accepted.rpkm)
-# ENSG00000003056 chr12   8989051 8989354 2.43    303     M6PR
-# ENSG00000006015 chr19   18560887        18561077        1.10    190     C19orf60
-# ENSG00000008516 chr16   3047223 3047380 0.61    157     MMP25
-#
-# Example format 3 (5 cols): (*.final.rpkm)
-#GID    gene    len_kb  RPKM    multi/all
-# OTTHUMG00000151214      IGLC2   0.722   3579.34 0.84
-# FAR3664 FAR3664 0.200   3216.32 0.94
-# OTTHUMG00000021144      TMSB4X  3.551   2767.52 0.35
-{
-    my ($path, $file, $type) = @_;
-    doTime("beginning validateRpkm") if $opt_timing;
-    my $lineNumber = 0;
-    my $fh = Encode::openUtil($file, $path);
-    while(<$fh>) {
-        chomp;
-        $lineNumber++;
-        next if m/^#/;
-        my @fields = split /\s+/;
-        my $cols = scalar(@fields);
-        die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n"
-            unless $cols == 3 or $cols == 5 or $cols == 7;
-#            unless m/^([^\t]+)\t(\d+\.\d+)\t(\d+\.\d+)$/;
-        last if($opt_quick && $lineNumber >= $quickCount);
-    }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateRpkm", $lineNumber) if $opt_timing;
-    return ();
-}
-
-sub validatePsl
+# sub validatePsl
+# We are not accepting this anymore, but I thought that we might want the code as an example (Mar 2012)
 # PSL format (for download) from Wold lab.
 # EXAMPLE FROM http://genome.ucsc.edu/FAQ/FAQformat#format2
 # This adds 2 columns (sequence,<tab>sequence,) to the standard 21 columns
@@ -1076,28 +974,28 @@ sub validatePsl
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #71      3       0       0       0       0       0       0       -       HWI-EAS229_75_30DY0AAXX:4:1:0:743/1     75      1       75      chr2    242951149       184181032       184181106       1  74,      0,      184181032,      agccttttacagcaacacctttacctctgctagatctttctgtagctcgtctgaagccatgggggctgggtcag,     agccttttccagcaacacctttacctcttctagatctttctgtagctcttctgaagccatgggggctgggtcag,
 #72      2       0       0       0       0       0       0       -       HWI-EAS229_75_30DY0AAXX:7:1:0:713/1     75      1       75      chr14   106368585       49540119        49540193        1  74,      0,      49540119,       cgggtgcgggccgagcagttctccgcacctccggtaaaggttcaggaccgggtgatggtctctgcagcagtcag,     ccggtgcgggccgagcagttctccgcacctccggtaaaggtgcaggaccgggtgatggtctctgcagcagtcag,
-{
-    my ($path, $file, $type) = @_;
-    my $lineNumber = 0;
-    doTime("beginning validatePsl") if $opt_timing;
-    my $fh = Encode::openUtil($file, $path);
-    while(<$fh>) {
-        chomp;
-        $lineNumber++;
-        next if $lineNumber == 1 and m/^psLayout version \d+/; # check first line
-        next if $lineNumber == 2 and m/^$/;
-        next if $lineNumber == 3 and m/^match/;
-        next if $lineNumber == 4 and m/^\s+match/;
-        next if $lineNumber == 5 and m/^------/;
-        die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n"
-            unless m/^(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([+-][+-]?)\t([A-Za-z0-9:>\|\/_-]+)\t(\d+)\t(\d+)\t(\d+)\t(\w+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([0-9,]+)\t([0-9,]+)\t([0-9,]+)/;
-        last if($opt_quick && $lineNumber >= $quickCount);
-    }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validatePsl", $lineNumber) if $opt_timing;
-    return ();
-}
+#{
+#    my ($path, $file, $type) = @_;
+#    my $lineNumber = 0;
+#    doTime("beginning validatePsl") if $opt_timing;
+#    my $fh = Encode::openUtil($file, $path);
+#    while(<$fh>) {
+#        chomp;
+#        $lineNumber++;
+#        next if $lineNumber == 1 and m/^psLayout version \d+/; # check first line
+#        next if $lineNumber == 2 and m/^$/;
+#        next if $lineNumber == 3 and m/^match/;
+#        next if $lineNumber == 4 and m/^\s+match/;
+#        next if $lineNumber == 5 and m/^------/;
+#        die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n"
+#            unless m/^(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([+-][+-]?)\t([A-Za-z0-9:>\|\/_-]+)\t(\d+)\t(\d+)\t(\d+)\t(\w+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([0-9,]+)\t([0-9,]+)\t([0-9,]+)/;
+#        last if($opt_quick && $lineNumber >= $quickCount);
+#    }
+#    $fh->close();
+#    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+#    doTime("done validatePsl", $lineNumber) if $opt_timing;
+#    return ();
+#}
 
 
 ############################################################################
