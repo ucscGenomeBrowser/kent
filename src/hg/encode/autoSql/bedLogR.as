@@ -9,6 +9,6 @@ table bedLogR
     char[1] strand;    "+ or -"
     uint thickStart;   "Start of where display should be thick (start codon)"
     uint thickEnd;     "End of where display should be thick (stop codon)"
-    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    string reserved;     "Used as itemRgb as of 2004-11-22"
     float logR;        "logR value"
     )
