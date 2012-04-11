@@ -35,7 +35,7 @@ visibility hide
 
     track wgEncodeUncBsuProtGencViewmPepMapGcFt
     shortLabel modPepMapping Gc
-    view mPepMapFt
+    view mPepMapGcFt
     useScore 1
     scoreFilter 200
     scoreFilterLimits 200:1000
