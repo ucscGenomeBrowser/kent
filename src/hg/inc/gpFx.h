@@ -1,6 +1,8 @@
 #ifndef GPFX_H
 #define GPFX_H
 
+#include "variant.h"
+
 struct gpFx
 {
 struct gpFx *next;
@@ -11,6 +13,8 @@ enum gpFxType {
 	gpFxSynon, 
 	gpFxNonsynon, 
 	gpFxSplice5, 
+	gpFxUpstream, 
+	gpFxDownstream, 
 	gpFxIntron 
 	} gpFxType; ;
 
@@ -22,7 +26,11 @@ int    gpFxProteinOffset;  //offset in protein
 int    gpFxProteinChange;  //peptide change in protein
 };
 
-struct gpFx *gpFxPredEffect(struct pgSnp *pgSnp, struct genePred *pred);
-// return the predicted effect(s) of a variation on a genePred
+struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
+    char **returnTranscript, char **returnCoding);
+// return the predicted effect(s) of a variation list on a genePred
+
+// number of bases up or downstream that we flag
+#define GPRANGE 500
 
 #endif /* GPFX_H */
