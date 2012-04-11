@@ -149,6 +149,7 @@ static void warnAbortHandler(char *format, va_list args)
 {
 puts("Status: 400\n\n");
 vfprintf(stdout, format, args);
+puts("\n");
 exit(-1);
 }
 
@@ -165,21 +166,50 @@ char *cmd = cgiString("cmd");
 char *jsonp = cgiOptionalString("jsonp");
 if (!strcmp(cmd, "experiments"))
     {
-    // Return list of ENCODE experiments
-    // TODO: add filtering by assembly and retire experimentIds command
-    // e.g. http://genome.ucsc.edu/cgi-bin/hgApi?db=hg18&cmd=experiments
-    // NOTE:  This table lives only on development and preview servers -- use preview
+    struct sqlConnection *conn;
+    // Return list of ENCODE experiments, optionally filtering by assembly
+    // e.g. http://genome.ucsc.edu/cgi-bin/hgEncodeApi?cmd=experiments&db=hg19
+    // NOTE:  The experiment table lives only on development and preview servers -- use preview
     //  if not found on localhost
+    char *database = cgiOptionalString("db");
+    int *ids = NULL;
     struct sqlConnection *connExp = sqlConnect(ENCODE_EXP_DATABASE);
     if (!sqlTableExists(connExp, ENCODE_EXP_TABLE))
         {
         sqlDisconnect(&connExp);
         connExp = sqlConnectProfile("preview", ENCODE_EXP_DATABASE);
         }
+    if (database)
+        {
+        // Get ids of all experiments appearing in metadata in this database
+        struct sqlResult *sr;
+        char **row;
+        char query[256];
+        int id, maxId;
+        if (!hDbExists(database))
+            errAbort("Invalid database '%s'", database);
+        maxId = encodeExpIdMax(connExp);
+        conn = hAllocConn(database);
+        safef(query, sizeof(query), "select distinct(%s) from %s where %s='%s'",
+                        MDB_VAL, MDB_DEFAULT_NAME, MDB_VAR, MDB_VAR_ENCODE_EXP_ID);
+        sr = sqlGetResult(conn, query);
+        AllocArray(ids, maxId + 1); // ids start with 1
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            id = sqlUnsigned(row[0]);
+            if (id <= maxId) 
+                ids[id] = 1;
+            }
+        sqlFreeResult(&sr);
+        hFreeConn(&conn);
+        }
     struct encodeExp *exp = NULL, *exps = encodeExpLoadAllFromTable(connExp, ENCODE_EXP_TABLE);
     dyStringPrintf(output, "[\n");
     while ((exp = slPopHead(&exps)) != NULL)
         {
+        // filter out experiments not in the selected database
+        if (database && ids[exp->ix] == 0)
+                continue;
         encodeExpJson(output, exp);
         dyStringAppend(output,",\n");
         }
@@ -187,32 +217,6 @@ if (!strcmp(cmd, "experiments"))
     output->string[dyStringLen(output)-1] = ']';
     dyStringPrintf(output, "\n");
     sqlDisconnect(&connExp);
-    }
-else if (!strcmp(cmd, "experimentIds"))
-    {
-    // Return list of ENCODE expID's found in a database 
-    struct sqlResult *sr;
-    char **row;
-    char query[256];
-
-    char *database = cgiString("db");
-    if (!hDbExists(database))
-        errAbort("Invalid database '%s'", database);
-
-    struct sqlConnection *conn = hAllocConn(database);
-    safef(query, sizeof(query), "select distinct(%s) from %s where %s='%s' order by (%s + 0)",
-                        MDB_VAL, MDB_DEFAULT_NAME, MDB_VAR, MDB_VAR_ENCODE_EXP_ID, MDB_VAL);
-    sr = sqlGetResult(conn, query);
-    dyStringPrintf(output, "[\n");
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        dyStringPrintf(output, "{\"expId\": \"%s\"},\n", row[0]);
-        }
-    output->string[dyStringLen(output)-2] = '\n';
-    output->string[dyStringLen(output)-1] = ']';
-    dyStringPrintf(output, "\n");
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
     }
 else if (!strcmp(cmd, "cv"))
     {

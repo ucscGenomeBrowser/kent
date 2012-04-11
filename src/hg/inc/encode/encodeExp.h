@@ -121,6 +121,9 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 
 #define ENCODE_EXP_HISTORY_TABLE_SUFFIX "History"
 
+int encodeExpIdMax(struct sqlConnection *conn) ;
+/* Return largest ix value */
+
 void encodeExpFieldIndex(char *fieldName);
 /* Get column number of named field in EncodeExp schema */
 
