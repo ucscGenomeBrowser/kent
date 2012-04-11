@@ -574,6 +574,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001487
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001487
 protocol Myers:Myers_BioChain_protocol.pdf
+label Adipose_BC_UHN00001
 #lineage mesoderm
 
 term BC_Adrenal_Gland_H12803N
@@ -592,6 +593,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000047
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000047
 protocol Myers:Myers_BioChain_protocol.pdf
+label Adrenal_Gland_BC_H12803N
 # http://herkules.oulu.fi/isbn951426844X/html/i232188.html
 
 term BC_Bladder_01-11002
@@ -610,8 +612,9 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001418
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001418
 protocol Myers:Myers_BioChain_protocol.pdf
+label Bladder_BC_01-11002
 
-term BC_Brain_H11058N
+term BC_Brain_H11058N 
 tag BCBRAIN
 type Cell Line
 tier 3
@@ -627,6 +630,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000142
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000142
 protocol Myers:Myers_BioChain_protocol.pdf
+label Brain_BC_H11058N
 
 term BC_Breast_02-03015
 tag BCBREAST
@@ -644,6 +648,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000149
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000149
 protocol Myers:Myers_BioChain_protocol.pdf
+label Breast_BC_02-03015
 
 # Maybe some day this cell line will have data. ~Jeff
 #term BC_Cervix_BN0773
@@ -673,6 +678,7 @@ description colon, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue colon
 lineage endoderm
 karyotype normal
+childOf Colon
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234090-05_A903056; BioChain_CP-S10-R1234090-20_B402074
@@ -680,6 +686,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 protocol Myers:Myers_BioChain_protocol.pdf
+label Colon_BC_01-11002
 
 term BC_Colon_H12817N
 tag BCCOLONb
@@ -691,12 +698,14 @@ tissue colon
 lineage endoderm
 karyotype normal
 sex M
+childOf Colon
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234090-05_B111123; BioChain_CP-S10-R1234090-20_B111053
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 protocol Myers:Myers_BioChain_protocol.pdf
+label Colon_BC_H12817N
 
 term BC_Esophagus_01-11002
 tag BCESOPHAGUS
@@ -707,6 +716,7 @@ description esophagus, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue esophagus
 lineage endoderm
 karyotype normal
+childOf Esophagus
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234106-05_A803198; BioChain_CP-S10-R1234106-20_B402075
@@ -714,6 +724,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000959
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000959
 protocol Myers:Myers_BioChain_protocol.pdf
+label Esophagus_BC_01-11002
 
 term BC_Esophagus_H12817N
 tag BCESOPHAGUSb
@@ -724,6 +735,7 @@ description esophagus, donor H12817N, age 71, caucasian, DNA extract
 tissue esophagus
 lineage endoderm
 karyotype normal
+childOf Esophagus
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234106-05_B302113
@@ -731,6 +743,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000959
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000959
 protocol Myers:Myers_BioChain_protocol.pdf
+label Esophagus_BC_H12817N
 
 term BC_Jejunum_H12817N
 tag BCJEJUNUM
@@ -748,6 +761,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000657
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000657
 protocol Myers:Myers_BioChain_protocol.pdf
+label Jejunum_BC_H12817N
 # http://en.wikipedia.org/wiki/Jejunum
 
 term BC_Kidney_01-11002
@@ -759,6 +773,7 @@ description kidney, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue kidney
 lineage mesoderm
 karyotype normal
+childOf Kidney
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234142-05_B402060; BioChain_CP-S10-R1234142-20_A808055
@@ -766,6 +781,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000671
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
 protocol Myers:Myers_BioChain_protocol.pdf
+label Kidney_BC_01-11002
 
 term BC_Kidney_H12817N
 tag BCKIDNEYb
@@ -776,6 +792,7 @@ description kidney, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue kidney
 lineage mesoderm
 karyotype normal
+childOf Kidney
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234142-05_B402061; BioChain_CP-S10-R1234142-20_B111054
@@ -783,6 +800,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000671
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
 protocol Myers:Myers_BioChain_protocol.pdf
+label Kidney_BC_H12817N
 
 term BC_Left_Ventricle_N41
 tag BCLEFVENTRI
@@ -800,6 +818,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001629
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001629
 protocol Myers:Myers_BioChain_protocol.pdf
+label Left_Ventricle_BC_N41
 
 term BC_Leukocyte_UHN00204
 tag BCLEUKOCYTE
@@ -817,6 +836,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001025
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001025
 protocol Myers:Myers_BioChain_protocol.pdf
+label Leukocyte_BC_UHN00204
 
 term BC_Liver_01-11002
 tag BCLIVER
@@ -834,6 +854,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000759
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000759
 protocol Myers:Myers_BioChain_protocol.pdf
+label Liver_BC_01-11002
 
 term BC_Lung_01-11002
 tag BCLUNG
@@ -844,6 +865,7 @@ description lung, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue lung
 lineage endoderm
 karyotype normal
+childOf Lung
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234152-05_A610240; BioChain_CP-S10-R1234152-20_A906114
@@ -851,6 +873,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000763
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
 protocol Myers:Myers_BioChain_protocol.pdf
+label Lung_BC_01-11002
 
 term BC_Lung_H12817N
 tag BCLUNGb
@@ -861,6 +884,7 @@ description lung, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue lung
 lineage endoderm
 karyotype normal
+childOf Lung
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234152-05_B402062; BioChain_CP-S10-R1234152-20_B207133
@@ -868,6 +892,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000763
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
 protocol Myers:Myers_BioChain_protocol.pdf
+label Lung_BC_H12817N
 
 term BC_Pancreas_H12817N
 tag BCPANCREAS
@@ -885,6 +910,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000988
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000988
 protocol Myers:Myers_BioChain_protocol.pdf
+label Pancreas_BC_H12817N
 
 term BC_Penis_H12817N
 tag BCPENIS
@@ -902,6 +928,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000405
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000405
 protocol Myers:Myers_BioChain_protocol.pdf
+label Penis_BC_H12817N
 
 term BC_Pericardium_H12529N
 tag BCPERICARDIUM
@@ -919,6 +946,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000717
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000717
 protocol Myers:Myers_BioChain_protocol.pdf
+label Pericardium_BC_H12529N
 
 term BC_Placenta_UHN00189
 tag BCPLACENTA
@@ -936,6 +964,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001078
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001078
 protocol Myers:Myers_BioChain_protocol.pdf
+label Placenta_BC_UHN00189
 # lineage decidua basalis, chorion frondosum
 
 term BC_Prostate_Gland_H12817N
@@ -954,6 +983,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 protocol Myers:Myers_BioChain_protocol.pdf
+label Prostate_Gland_BC_H12817N
 
 term BC_Rectum_N29
 tag BCRECTUM
@@ -971,6 +1001,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001158
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001158
 protocol Myers:Myers_BioChain_protocol.pdf
+label Rectum_BC_N29
 
 term BC_Skeletal_Muscle_01-11002
 tag BCSKEL
@@ -981,6 +1012,7 @@ description skeletal muscle, donor 01-11002, age 83, caucasian, DNA and RNA extr
 tissue skeletal muscle
 lineage mesoderm
 karyotype normal
+childOf Skeletal_Muscle
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234171-05_A610262; BioChain_CP-S10-R1234171-20_A808148
@@ -988,6 +1020,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001103
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001103
 protocol Myers:Myers_BioChain_protocol.pdf
+label Skeletal_Muscle_BC_01-11002
 
 term BC_Skeletal_Muscle_H12817N
 tag BCSKELb
@@ -998,6 +1031,7 @@ description skeletal muscle, donor H12817N, age 71, caucasian, DNA and RNA extra
 tissue skeletal muscle
 lineage mesoderm
 karyotype normal
+childOf Skeletal_Muscle
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234171-05_B402065; BioChain_CP-S10-R1234230-20_A911037
@@ -1005,6 +1039,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001103
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001103
 protocol Myers:Myers_BioChain_protocol.pdf
+label Skeletal_Muscle_BC_H12817N
 
 term BC_Skin_01-11002
 tag BCSKIN
@@ -1022,6 +1057,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001253
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
 protocol Myers:Myers_BioChain_protocol.pdf
+label Skin_BC_01-11002
 
 term BC_Small_Intestine_01-11002
 tag BCSMINTESTINE
@@ -1039,6 +1075,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0000651
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000651
 protocol Myers:Myers_BioChain_protocol.pdf
+label Small_Intestine_BC_01-11002
 
 # Maybe some day this cell line will have data. ~Jeff
 #term BC_Spleen_01-11002
@@ -1074,6 +1111,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001281
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
 protocol Myers:Myers_BioChain_protocol.pdf
+label Spleen_BC_H12817N
 
 term BC_Stomach_01-11002
 tag BCSTOMACH
@@ -1084,6 +1122,7 @@ description stomach, donor 01-11002, age 83, caucasian, DNA extract
 tissue stomach
 lineage endoderm
 karyotype normal
+childOf Stomach
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234248-05_A808008
@@ -1091,6 +1130,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001307
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
 protocol Myers:Myers_BioChain_protocol.pdf
+label Stomach_BC_01-11002
 
 term BC_Stomach_H12817N
 tag BCSTOMACHb
@@ -1101,6 +1141,7 @@ description stomach, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue stomach
 lineage endoderm
 karyotype normal
+childOf Stomach
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234248-05_B402070; BioChain_CP-S10-R1234248-20_B402077
@@ -1108,6 +1149,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001307
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
 protocol Myers:Myers_BioChain_protocol.pdf
+label Stomach_BC_H12817N
 
 term BC_Testis_N30
 tag BCTESTIS
@@ -1125,6 +1167,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001363
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001363
 protocol Myers:Myers_BioChain_protocol.pdf
+label Testis_BC_N30
 
 term BC_Uterus_BN0765
 tag BCUTERUS
@@ -1141,6 +1184,7 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001424
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001424
 protocol Myers:Myers_BioChain_protocol.pdf
+label Uterus_BC_BN0765
 
 term BE2_C
 tag BE2C
@@ -1183,7 +1227,7 @@ tissue embryonic stem cell
 tier 3
 lineage inner cell mass
 karyotype normal
-derivedFrom BG02ES
+childOf BG02ES
 vendorName BresaGen, Inc.
 vendorId BG02 (hESBGN.02)
 orderUrl http://stemcells.nih.gov/research/registry/BresaGen.asp
@@ -1231,7 +1275,7 @@ tag CD20
 type Cell Line
 tier 2
 organism human
-derprecated SEE B_cells_CD20+
+deprecated SEE B_cells_CD20+
 description B cells from donors RO01778 and RO01794, newly promoted to tier 2: not in 2011 analysis PROVISIONAL
 sex F
 tissue blood
@@ -6383,7 +6427,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 65,105,225
 sex U
-protocol Hardison:MEF_Haridson_protocol.pdf
+protocol Ren:MEF_Ren_protocol.pdf
 
 term Megakaryo
 tag MEGAKARYO
@@ -12323,12 +12367,12 @@ type treatment
 
 term diffProtF_6d
 tag DIFFF6D
-descrption 6 day differentiation of ES-46C cells in adherent monolayer culture (Gilbert) PROVISIONAL
+description 6 day differentiation of ES-46C cells in adherent monolayer culture (Gilbert) PROVISIONAL
 type treatment
 
 term diffProtF_9d
 tag DIFFF9D
-descrption 9 day differentiation of ES-TT2 cells in adherent monolayer culture (Gilbert) PROVISIONAL
+description 9 day differentiation of ES-TT2 cells in adherent monolayer culture (Gilbert) PROVISIONAL
 type treatment
 
 term DMSO_0.02pct
@@ -12894,6 +12938,7 @@ description Expression level estimates for GENCODE V10 exons in gtf format deriv
 term ExonsEnsV65IAcuff
 tag EXONENSV65
 type view
+label Exons ENSEMBL V65
 description Expression level estimates for ENSEMBL V65 exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon
 
 term Fasta3p
@@ -12972,6 +13017,7 @@ description Expression level estimates at the gene level for the GENCODE CRCh37.
 term GeneEnsV65IAcuff
 tag GENENSV65
 type view
+label Genese ENSEMBL V65
 description Expression level estimates at the gene level for the ENSEMBL V65 annotation in gtf format
 
 term HMM
@@ -13243,6 +13289,7 @@ description Expression level estimates at the transcript level for the GENCODE C
 term TranscriptEnsV65IAcuff
 tag TRANSENSV65
 type view
+label Transcript ENSEMBL V65
 description Expression level estimates at the transcript level for the ENSEMBL V65 annotation in gtf format
 
 term Transfrags
@@ -14048,7 +14095,7 @@ description Human 3x720k Whole Genome CGH
 
 term GPL10989
 tag GPL10989
-gepPlatformName NimbleGen Mouse CGH 3x720K Whole-Genome Tiling
+geoPlatformName NimbleGen Mouse CGH 3x720K Whole-Genome Tiling [080603_MM9_WG_CGH_HX3]
 type platform
 description NimbleGen Mouse CGH 3x720K Whole-Genome Tiling (FSU)
 #PROVISIONAL
@@ -15618,6 +15665,7 @@ description ENCODE Cell Tier
 cvDefined no
 validate integer
 priority 999
+searchable no
 requiredVars term,tag,type,description #Provisional
 optionalVars label,deprecated #Provisional
 
