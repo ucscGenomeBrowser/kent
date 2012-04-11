@@ -4182,6 +4182,7 @@ if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
     slSafeAddHead(&trackList, pcrResultTg());
 if (userSeqString != NULL) 
     slSafeAddHead(&trackList, userPslTg());
+slSafeAddHead(&trackList, oligoMatchTg());
 if (restrictionEnzymesOk())
     {
     slSafeAddHead(&trackList, cuttersTg());
