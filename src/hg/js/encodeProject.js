@@ -13,7 +13,7 @@ var encodeProject = (function () {
 
     var server = "genome.ucsc.edu",
         assembly = "hg19",
-        cgi = "/cgi-bin/hgApi?";
+        cgi = "/cgi-bin/hgEncodeApi?";
 
     var accessionPrefix = 'wgEncodeE?';
     var dataTypeLabelHash = {}, dataTypeTermHash = {};
@@ -50,8 +50,8 @@ var encodeProject = (function () {
 
         serverRequests: {
             // Requests for data from server API
-            experiment: "cmd=encodeExperiments",
-            expId: "cmd=encodeExpId",
+            experiment: "cmd=experiments",
+            expId: "cmd=experimentIds",
             dataType: "cmd=cv&type=dataType",
             cellType: "cmd=cv&type=cellType",
             antibody: "cmd=cv&type=antibody"
