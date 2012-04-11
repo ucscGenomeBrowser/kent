@@ -4276,6 +4276,7 @@ grant Ren
 lab LICR-m
 labVersion 05/21/09 Lane 4
 md5sum 0be79c847ecc4c736b4319abfda8ba99,bb1291d0959a4bcacca814737868be53
+objStatus revoked - Data is not used for analysis
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4284,6 +4285,38 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3005
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1V2
+objType file
+age adult-8wks
+antibody Pol2
+cell Kidney
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM001451
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-04-12
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+dccAccession wgEncodeEM001686
+expId 1686
+fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1V2.bam,wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1V2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 05/27/09 Lane 2
+md5sum 0dc6d22b1412fca7329b20fdcac2ccae,374450aec82ee8a92fbef82aeef79546
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3880
+submittedDataVersion V2 - Replaces incorrect file designated at replicate 1 that was not used in analysis
 tissueSourceType Individual
 view Alignments
 
@@ -4307,6 +4340,7 @@ grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 2
 md5sum 0dc6d22b1412fca7329b20fdcac2ccae,374450aec82ee8a92fbef82aeef79546
+objStatus renamed - Renamed to wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1V2.bam, as previous replicate 1 was not used in analysis
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4315,6 +4349,38 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3880
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2V2
+objType file
+age adult-8wks
+antibody Pol2
+cell Kidney
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM001451
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-04-12
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+dccAccession wgEncodeEM001686
+expId 1686
+fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2V2.bam,wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2V2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 01/26/10 Lane 2
+md5sum 340663c09fa363482c56fa335a5d722b,ba4889d7b2d05ff5726c1a58514ce55a
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3880
+submittedDataVersion V2 - Replaces previous file that is now designated as replicate 1
 tissueSourceType Individual
 view Alignments
 
@@ -4338,6 +4404,7 @@ grant Ren
 lab LICR-m
 labVersion 01/26/10 Lane 2
 md5sum 340663c09fa363482c56fa335a5d722b,ba4889d7b2d05ff5726c1a58514ce55a
+objStatus renamed - Renamed to wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep2V2.bam , as previous replicate 2 was designated as replicate 1
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2
@@ -4398,6 +4465,11 @@ fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 05/21/09 Lane 4
+md5sum 72c91bc888788581ecb63dd571f1a018
+<<<<<<< HEAD:src/hg/makeDb/trackDb/mouse/mm9/metaDb/alpha/wgEncodeLicrTfbs.ra
+=======
+objStatus revoked - Data is not used for analysis
+>>>>>>> 7893e3899b96b317de6c25afa40fc6626a4e74b2:src/hg/makeDb/trackDb/mouse/mm9/metaDb/alpha/wgEncodeLicrTfbs.ra
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4406,6 +4478,38 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3005
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep1V2
+objType file
+age adult-8wks
+antibody Pol2
+cell Kidney
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM001451
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-04-12
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+dccAccession wgEncodeEM001686
+expId 1686
+fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep1V2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 05/27/09 Lane 2
+md5sum d6b8e6664aeea5ac72a19e9ec41555c9
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3880
+submittedDataVersion V2 - Replaces incorrect file designated at replicate 1 that was not used in analysis
 tissueSourceType Individual
 view RawData
 
@@ -4429,6 +4533,7 @@ grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 2
 md5sum d6b8e6664aeea5ac72a19e9ec41555c9
+objStatus renamed - Renamed to wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep1V2.fastq.gz , as previous replicate 1 was not used in analysis
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4437,6 +4542,38 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 3880
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep2V2
+objType file
+age adult-8wks
+antibody Pol2
+cell Kidney
+composite wgEncodeLicrTfbs
+control std
+controlId wgEncodeEM001451
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2011-04-12
+dateSubmitted 2010-11-18
+dateUnrestricted 2011-08-18
+dccAccession wgEncodeEM001686
+expId 1686
+fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep2V2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 01/26/10 Lane 2
+md5sum 0537221a1785e08a4730c9510e602e8d
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3880
+submittedDataVersion V2 - Replaces previous file that is now designated as replicate 1
 tissueSourceType Individual
 view RawData
 
@@ -4460,6 +4597,7 @@ grant Ren
 lab LICR-m
 labVersion 01/26/10 Lane 2
 md5sum 0537221a1785e08a4730c9510e602e8d
+objStatus renamed - Renamed to wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdRawDataRep2V2.fastq.gz , as previous replicate 2 was designated as replicate 1
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2
@@ -10283,4 +10421,5 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1018796495
+# MAGIC: 102782186
+
