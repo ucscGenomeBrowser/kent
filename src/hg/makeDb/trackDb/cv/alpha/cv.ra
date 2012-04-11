@@ -669,6 +669,24 @@ label Breast_BC_02-03015
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001421
 #protocol Myers:Myers_BioChain_protocol.pdf
 
+term Colon_BC
+tag COLONBC
+type Cell Line
+tier 3
+organism human
+description colon, parent cell type to donors BC_01-11002 and BC_H12817N 
+tissue colon
+lineage endoderm
+karyotype normal
+sex B
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234090-05_A903056; BioChain_CP-S10-R1234090-20_B402074; BioChain_CP-S13-D1234090-05_B111123; BioChain_CP-S10-R1234090-20_B111053 
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000269
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
+protocol Myers:Myers_BioChain_protocol.pdf
+label Colon_BC
+
 term BC_Colon_01-11002
 tag BCCOLON
 type Cell Line
@@ -678,7 +696,7 @@ description colon, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue colon
 lineage endoderm
 karyotype normal
-childOf Colon
+childOf Colon_BC
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234090-05_A903056; BioChain_CP-S10-R1234090-20_B402074
@@ -698,7 +716,7 @@ tissue colon
 lineage endoderm
 karyotype normal
 sex M
-childOf Colon
+childOf Colon_BC
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234090-05_B111123; BioChain_CP-S10-R1234090-20_B111053
 orderUrl http://www.biochain.com/biochain/homepage.htm
@@ -706,6 +724,24 @@ termId BTO:0000269
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000269
 protocol Myers:Myers_BioChain_protocol.pdf
 label Colon_BC_H12817N
+
+term Esophagus_BC
+tag ESOPHAGUSBC
+type Cell Line
+tier 3
+organism human
+description esophagus, parental cell type to donors 01-11002 and H12817N
+tissue esophagus
+lineage endoderm
+karyotype normal
+sex B
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234106-05_A803198; BioChain_CP-S10-R1234106-20_B402075; BioChain_CP-S13-D1234106-05_B302113
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000959
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000959
+protocol Myers:Myers_BioChain_protocol.pdf
+label Esophagus_BC
 
 term BC_Esophagus_01-11002
 tag BCESOPHAGUS
@@ -716,7 +752,7 @@ description esophagus, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue esophagus
 lineage endoderm
 karyotype normal
-childOf Esophagus
+childOf Esophagus_BC
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234106-05_A803198; BioChain_CP-S10-R1234106-20_B402075
@@ -735,7 +771,7 @@ description esophagus, donor H12817N, age 71, caucasian, DNA extract
 tissue esophagus
 lineage endoderm
 karyotype normal
-childOf Esophagus
+childOf Esophagus_BC
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234106-05_B302113
@@ -764,6 +800,24 @@ protocol Myers:Myers_BioChain_protocol.pdf
 label Jejunum_BC_H12817N
 # http://en.wikipedia.org/wiki/Jejunum
 
+term Kidney_BC
+tag KIDNEYBC
+type Cell Line
+tier 3
+organism human
+description kidney, parental cell type to donors 01-11002 and H12817N
+tissue kidney
+lineage mesoderm
+karyotype normal
+sex B
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234142-05_B402060; BioChain_CP-S10-R1234142-20_A808055; BioChain_CP-S13-D1234142-05_B402061; BioChain_CP-S10-R1234142-20_B111054
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000671
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000671
+protocol Myers:Myers_BioChain_protocol.pdf
+label Kidney_BC
+
 term BC_Kidney_01-11002
 tag BCKIDNEY
 type Cell Line
@@ -773,7 +827,7 @@ description kidney, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue kidney
 lineage mesoderm
 karyotype normal
-childOf Kidney
+childOf Kidney_BC
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234142-05_B402060; BioChain_CP-S10-R1234142-20_A808055
@@ -792,7 +846,7 @@ description kidney, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue kidney
 lineage mesoderm
 karyotype normal
-childOf Kidney
+childOf Kidney_BC
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234142-05_B402061; BioChain_CP-S10-R1234142-20_B111054
@@ -856,6 +910,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Myers:Myers_BioChain_protocol.pdf
 label Liver_BC_01-11002
 
+term Lung_BC
+tag LUNGBC
+type Cell Line
+tier 3
+organism human
+description lung, parental cell type to donors 01-11002 and H12817N
+tissue lung
+lineage endoderm
+karyotype normal
+sex B
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234152-05_A610240; BioChain_CP-S10-R1234152-20_A906114; BioChain_CP-S13-D1234152-05_B402062; BioChain_CP-S10-R1234152-20_B207133
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000763
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000763
+protocol Myers:Myers_BioChain_protocol.pdf
+label Lung_BC
+
 term BC_Lung_01-11002
 tag BCLUNG
 type Cell Line
@@ -865,7 +937,7 @@ description lung, donor 01-11002, age 83, caucasian, DNA and RNA extract
 tissue lung
 lineage endoderm
 karyotype normal
-childOf Lung
+childOf Lung_BC
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234152-05_A610240; BioChain_CP-S10-R1234152-20_A906114
@@ -884,7 +956,7 @@ description lung, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue lung
 lineage endoderm
 karyotype normal
-childOf Lung
+childOf Lung_BC
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234152-05_B402062; BioChain_CP-S10-R1234152-20_B207133
@@ -1003,6 +1075,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Myers:Myers_BioChain_protocol.pdf
 label Rectum_BC_N29
 
+term Skeletal_Muscle_BC
+tag SKELBC
+type Cell Line
+tier 3
+organism human
+description skeletal muscle, parental cell type to donors 01-11002 and H12817N
+tissue skeletal muscle
+lineage mesoderm
+karyotype normal
+sex B
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234171-05_A610262; BioChain_CP-S10-R1234171-20_A808148; BioChain_CP-S13-D1234171-05_B402065; BioChain_CP-S10-R1234230-20_A911037
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001103
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001103
+protocol Myers:Myers_BioChain_protocol.pdf
+label Skeletal_Muscle_BC
+
 term BC_Skeletal_Muscle_01-11002
 tag BCSKEL
 type Cell Line
@@ -1012,7 +1102,7 @@ description skeletal muscle, donor 01-11002, age 83, caucasian, DNA and RNA extr
 tissue skeletal muscle
 lineage mesoderm
 karyotype normal
-childOf Skeletal_Muscle
+childOf Skeletal_Muscle_BC
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234171-05_A610262; BioChain_CP-S10-R1234171-20_A808148
@@ -1031,7 +1121,7 @@ description skeletal muscle, donor H12817N, age 71, caucasian, DNA and RNA extra
 tissue skeletal muscle
 lineage mesoderm
 karyotype normal
-childOf Skeletal_Muscle
+childOf Skeletal_Muscle_BC
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234171-05_B402065; BioChain_CP-S10-R1234230-20_A911037
@@ -1113,6 +1203,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Myers:Myers_BioChain_protocol.pdf
 label Spleen_BC_H12817N
 
+term Stomach_BC
+tag STOMACHBC
+type Cell Line
+tier 3
+organism human
+description stomach, parental cell type to donors 01-11002 and H12817N
+tissue stomach
+lineage endoderm
+karyotype normal
+sex B
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234248-05_A808008; BioChain_CP-S13-D1234248-05_B402070; BioChain_CP-S10-R1234248-20_B402077
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001307
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001307
+protocol Myers:Myers_BioChain_protocol.pdf
+label Stomach_BC
+
 term BC_Stomach_01-11002
 tag BCSTOMACH
 type Cell Line
@@ -1122,7 +1230,7 @@ description stomach, donor 01-11002, age 83, caucasian, DNA extract
 tissue stomach
 lineage endoderm
 karyotype normal
-childOf Stomach
+childOf Stomach_BC
 sex F
 vendorName BioChain
 vendorId BioChain_CP-S12-D1234248-05_A808008
@@ -1141,7 +1249,7 @@ description stomach, donor H12817N, age 71, caucasian, DNA and RNA extract
 tissue stomach
 lineage endoderm
 karyotype normal
-childOf Stomach
+childOf Stomach_BC
 sex M
 vendorName BioChain
 vendorId BioChain_CP-S13-D1234248-05_B402070; BioChain_CP-S10-R1234248-20_B402077
@@ -2058,7 +2166,7 @@ vendorName Hunt Willard at Duke University
 vendorId GM12878-XiMat
 orderUrl http://www.genome.duke.edu/people/faculty/willard/
 lineage mesoderm
-derivedFrom GM12878
+childOf GM12878
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
@@ -2076,7 +2184,7 @@ protocol Myers:GM12878-XiMat_Myers_protocol.pdf
 #vendorId GM12878-XiPat
 #orderUrl http://www.genome.duke.edu/people/faculty/willard/
 #lineage mesoderm
-#derivedFrom GM12878
+#childOf GM12878
 #termId BTO:0002026 (non-specific)
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 #sex F
@@ -2381,7 +2489,7 @@ description embryonic stem cell (hESC) H9, endoderm
 tissue embryonic stem cell
 tier 3
 lineage inner cell mass
-derivedFrom H9ES
+childOf H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2396,7 +2504,7 @@ description embryonic stem cell (hESC), H9-derived, treatment: H9 AFP+
 tissue embryonic stem cell
 tier 3
 lineage inner cell mass
-derivedFrom H9ES
+childOf H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2411,7 +2519,7 @@ description embryonic stem cell (hESC), H9-derived, treatment: H9 AFP-
 tissue embryonic stem cell
 tier 3
 lineage inner cell mass
-derivedFrom H9ES
+childOf H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2426,7 +2534,7 @@ description embryonic stem cell (hESC) H9, embryoid bodies
 tissue embryonic stem cell
 tier 3
 lineage inner cell mass
-derivedFrom H9ES
+childOf H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2441,7 +2549,7 @@ description embryonic stem cell (hESC) H9, embryoid body-derived
 tissue embryonic stem cell
 tier 3
 lineage inner cell mass
-derivedFrom H9ES
+childOf H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2456,7 +2564,7 @@ description embryonic stem cell (hESC) H9, treatment: H9 conditioned medium
 tissue embryonic stem cell
 tier 3
 lineage inner cell mass
-derivedFrom H9ES
+childOf H9ES
 vendorName WiCell
 vendorId WA09 (H9)
 orderUrl http://www.wicell.org/index.php
@@ -2916,7 +3024,7 @@ organism human
 description embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line, hypotriploid, XXX
 lineage mesoderm
 karyotype cancer
-derivedFrom HEK293
+childOf HEK293
 sex F
 tissue kidney
 vendorName Invitrogen
@@ -3023,7 +3131,7 @@ organism human
 description foreskin fibroblast cells expressing canine cMyc
 lineage fibroblast
 karyotype normal
-derivedFrom HFF
+childOf HFF
 sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
@@ -4031,7 +4139,7 @@ organism human
 description skeletal muscle myotubes differentiated from the HSMM cell line
 tissue muscle
 lineage mesoderm
-derivedFrom HSMM
+childOf HSMM
 vendorName Lonza
 vendorId See HSMM
 orderUrl http://www.lonza.com/
@@ -4048,7 +4156,7 @@ type Cell Line
 tier 3
 organism human
 description embryonic myotube
-derivedFrom HSMM_emb
+childOf HSMM_emb
 vendorName Duke/UNC/UT/EBI ENCODE group
 vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980
 orderUrl http://depts.washington.edu/biowww/faculty/hauschka-steve/
@@ -4063,7 +4171,7 @@ type Cell Line
 tier 3
 organism human
 description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient
-derivedFrom HSMM_FSHD
+childOf HSMM_FSHD
 vendorName Duke/UNC/UT/EBI ENCODE group
 vendorId Muscle needle biopsies
 sex U
@@ -5185,7 +5293,7 @@ description neuroblastoma clonal subline of the neuroepithelioma cell line SK-N-
 tissue brain
 vendorName ATCC
 vendorId CC-2266
-derivedFrom SK-N-SH
+childOf SK-N-SH
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
 lineage ectoderm
 karyotype cancer
@@ -5242,7 +5350,7 @@ vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
 lineage ectoderm
 karyotype cancer
-derivedFrom SK-N-SH
+childOf SK-N-SH
 termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 sex F
@@ -14934,7 +15042,7 @@ priority 110
 ### "term cellType", but that requires changing a huge amount of existing code.
 ### (11/18/10)
 requiredVars term,tag,type,description,organism,vendorName,orderUrl,sex,tier #Provisional
-optionalVars label,tissue,vendorId,karyotype,lineage,termId,termUrl,color,protocol,category,lots,derivedFrom,lab,age,deprecated,childOf #Provisional
+optionalVars label,tissue,vendorId,karyotype,lineage,termId,termUrl,color,protocol,category,lots,lab,age,deprecated,childOf #Provisional
 
 term composite
 tag COMPOSITE

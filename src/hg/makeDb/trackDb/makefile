@@ -57,7 +57,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	eriEur1 sorAra1 turTru1 vicVic1 pteVam1 tarSyr1 \
 	dipOrd1 proCap1 ochPri2 myoLuc1 myoLuc2 \
 	micMur1 \
-	dasNov1 dasNov2 \
+	dasNov1 dasNov2 dasNov3 \
 	triMan1 \
 	loxAfr1 loxAfr2 loxAfr3 \
 	echTel1 \
