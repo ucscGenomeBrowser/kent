@@ -3,3 +3,300 @@ objType composite
 composite wgEncodeUncBsuProtGenc
 expVars lab,dataType,cell,localization
 
+metaObject wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcFt
+objType table
+cell GM12878
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 6541
+tableName wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcFt
+view mPepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcUnFt
+objType file
+cell GM12878
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencGm12878CellIngelmPepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 6541
+view mPepMapGcUnFt
+
+metaObject wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcFt
+objType table
+cell GM12878
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 6541
+tableName wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcFt
+view pepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcUnFt
+objType file
+cell GM12878
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencGm12878CellIngelpepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 6541
+view pepMapGcUnFt
+
+metaObject wgEncodeUncBsuProtGencGm12878CytosolIngelmPepMapGcFt
+objType table
+cell GM12878
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencGm12878CytosolIngelmPepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cytosol
+project wgEncode
+protocol In-gel
+subId 6527
+tableName wgEncodeUncBsuProtGencGm12878CytosolIngelmPepMapGcFt
+view mPepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencGm12878CytosolIngelmPepMapGcUnFt
+objType file
+cell GM12878
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencGm12878CytosolIngelmPepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cytosol
+project wgEncode
+protocol In-gel
+subId 6527
+view mPepMapGcUnFt
+
+metaObject wgEncodeUncBsuProtGencGm12878CytosolIngelpepMapGcFt
+objType table
+cell GM12878
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencGm12878CytosolIngelpepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cytosol
+project wgEncode
+protocol In-gel
+subId 6527
+tableName wgEncodeUncBsuProtGencGm12878CytosolIngelpepMapGcFt
+view pepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencGm12878CytosolIngelpepMapGcUnFt
+objType file
+cell GM12878
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencGm12878CytosolIngelpepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cytosol
+project wgEncode
+protocol In-gel
+subId 6527
+view pepMapGcUnFt
+
+metaObject wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcFt
+objType table
+cell H1-hESC
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol FASP
+subId 6542
+tableName wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcFt
+view mPepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcUnFt
+objType file
+cell H1-hESC
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencH1hescCellFaspmPepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol FASP
+subId 6542
+view mPepMapGcUnFt
+
+metaObject wgEncodeUncBsuProtGencH1hescCellFasppepMapGcFt
+objType table
+cell H1-hESC
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencH1hescCellFasppepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol FASP
+subId 6542
+tableName wgEncodeUncBsuProtGencH1hescCellFasppepMapGcFt
+view pepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencH1hescCellFasppepMapGcUnFt
+objType file
+cell H1-hESC
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencH1hescCellFasppepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol FASP
+subId 6542
+view pepMapGcUnFt
+
+metaObject wgEncodeUncBsuProtGencK562CellIngelmPepMapGcFt
+objType table
+cell K562
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencK562CellIngelmPepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 6544
+tableName wgEncodeUncBsuProtGencK562CellIngelmPepMapGcFt
+view mPepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencK562CellIngelmPepMapGcUnFt
+objType file
+cell K562
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencK562CellIngelmPepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 6544
+view mPepMapGcUnFt
+
+metaObject wgEncodeUncBsuProtGencK562CellIngelpepMapGcFt
+objType table
+cell K562
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencK562CellIngelpepMapGcFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 6544
+tableName wgEncodeUncBsuProtGencK562CellIngelpepMapGcFt
+view pepMapGcFt
+
+metaObject wgEncodeUncBsuProtGencK562CellIngelpepMapGcUnFt
+objType file
+cell K562
+composite wgEncodeUncBsuProtGenc
+dataType Proteogenomics
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-28
+dateUnrestricted 2012-12-28
+fileName wgEncodeUncBsuProtGencK562CellIngelpepMapGcUnFt.bigBed
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=1,precursorMassTolerance=20ppm,msMsMassTolerance=500ppm
+localization cell
+project wgEncode
+protocol In-gel
+subId 6544
+view pepMapGcUnFt
+
+# MAGIC: -1332424230
