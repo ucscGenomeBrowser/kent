@@ -293,6 +293,29 @@ fputc('}',f);
 
 /* BEGIN schema-dependent section */
 
+void encodeExpJson(struct dyString *json, struct encodeExp *el)
+/* Print out encodeExp in JSON format. Manually converted from autoSql which outputs
+ * to file pointer.
+ */
+// TODO: Extend autoSql to support in-mem version
+{
+dyStringPrintf(json, "{");
+dyStringPrintf(json, "\"ix\":%u", el->ix);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"organism\":\"%s\"", el->organism);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"lab\":\"%s\"", el->lab);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"dataType\":\"%s\"", el->dataType);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"cellType\":\"%s\"", el->cellType);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"expVars\":\"%s\"", el->expVars);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"accession\":\"%s\"", el->accession);
+dyStringPrintf(json, "}");
+}
+
 static char *encodeExpGetIx(struct encodeExp *exp)
 /* Return ix field of encodeExp */
 {

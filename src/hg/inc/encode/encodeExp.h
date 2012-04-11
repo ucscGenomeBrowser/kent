@@ -121,7 +121,12 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 
 #define ENCODE_EXP_HISTORY_TABLE_SUFFIX "History"
 
-int encodeExpIdMax(struct sqlConnection *conn) ;
+void encodeExpJson(struct dyString *json, struct encodeExp *el);
+/* Print out encodeExp in JSON format. Manually converted from autoSql which outputs
+ * to file pointer.
+*/
+
+int encodeExpIdMax(struct sqlConnection *conn);
 /* Return largest ix value */
 
 void encodeExpFieldIndex(char *fieldName);
