@@ -3,6 +3,7 @@
 #include "annoGratorGpVar.h"
 #include "genePred.h"
 #include "pgSnp.h"
+#include "variant.h"
 #include "gpFx.h"
 
 static char *annoGpVarDataLineAutoSqlString =
@@ -95,10 +96,10 @@ return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end,
 }
 
 static struct annoRow *aggvGenRows( struct annoGrator *self,
-    struct pgSnp *pgSnp, struct genePred *pred, struct annoRow *inRow)
-// put out annoRows for all the gpFx that arise from pgSnp and pred
+    struct variant *variant, struct genePred *pred, struct annoRow *inRow)
+// put out annoRows for all the gpFx that arise from variant and pred
 {
-struct gpFx *effects = gpFxPredEffect(pgSnp, pred);
+struct gpFx *effects = gpFxPredEffect(variant, pred);
 struct annoRow *rows = NULL;
 
 for(; effects; effects = effects->next)
@@ -123,13 +124,14 @@ if ((rows == NULL) || (retRJFilterFailed && *retRJFilterFailed))
 
 char **primaryWords = primaryRow->data;
 struct pgSnp *pgSnp = pgSnpLoad(primaryWords);
+struct variant *variant = variantFromPgSnp(pgSnp);
 struct annoRow *outRows = NULL;
 
 for(; rows; rows = rows->next)
     {
     char **inWords = rows->data;
     struct genePred *gp = genePredLoad(inWords);
-    struct annoRow *outRow = aggvGenRows(self, pgSnp, gp, rows);
+    struct annoRow *outRow = aggvGenRows(self, variant, gp, rows);
     slAddHead(&outRows, outRow);
     }
 
