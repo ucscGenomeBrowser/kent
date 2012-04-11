@@ -213,7 +213,7 @@ pickedWord = NULL;
 curUses = 0;
 totalUses = 0;
 rbTreeTraverse(rbTree, addUse);
-useThreshold = rand() % totalUses;
+useThreshold = rand() % totalUses; 
 rbTreeTraverse(rbTree, pickIfInThreshold);
 assert(pickedWord != NULL);
 return pickedWord;
@@ -409,6 +409,7 @@ lmCleanup(&lm);	// Not really needed since we're just going to exit.
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+srand( (unsigned)time(0) );
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
