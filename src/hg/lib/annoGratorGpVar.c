@@ -99,7 +99,7 @@ static struct annoRow *aggvGenRows( struct annoGrator *self,
     struct variant *variant, struct genePred *pred, struct annoRow *inRow)
 // put out annoRows for all the gpFx that arise from variant and pred
 {
-struct gpFx *effects = gpFxPredEffect(variant, pred);
+struct gpFx *effects = gpFxPredEffect(variant, pred, NULL, NULL);
 struct annoRow *rows = NULL;
 
 for(; effects; effects = effects->next)
