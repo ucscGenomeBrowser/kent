@@ -4579,6 +4579,23 @@ termId BTO:0002104
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002104
 protocol Bernstein:Loucy_Bernstein_protocol.pdf
 
+term Lymphoblastoid_cell_line
+tag LYMPHOBLAST
+type Cell Line
+organism human
+description parental cell type to lymphoblastoid cell lines PROVISIONAL
+tissue blood
+vendorName Coriell
+vendorId various GMXXXXX cell lines
+orderUrl http://ccr.coriell.org
+lineage mesoderm
+karyotype normal
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+sex B
+tier 3
+protocol Stam:Stam_15_protocols.pdf
+
 term M059J
 tag M059J
 type Cell Line
