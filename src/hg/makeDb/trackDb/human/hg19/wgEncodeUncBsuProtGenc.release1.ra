@@ -6,7 +6,7 @@ superTrack wgEncodeProtGenoSuper dense
 shortLabel UNC/BSU ProtGenc
 longLabel Proteogenomics from ENCODE/Univ. North Carolina/Boise State Univ.
 group expression
-subGroup1 view Views pepMapFt=Peptide_Mapping_Filtered pepMapGcFt=Peptide_Mapping_Gencode_Filtered mPepMapGcFt=Modified_peptide_Mapping_Gencode_Filtered
+subGroup1 view Views pepMapGcFt=Peptide_Mapping_Gencode_Filtered mPepMapGcFt=Modified_peptide_Mapping_Gencode_Filtered
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) HIHESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)
 subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol membraneFraction=Membrane mito=Mitochondria nucleus=Nucleus
 subGroup4 protocol Protocol FASP=FASP INGEL=In_gel  
@@ -21,16 +21,6 @@ noInherit on
 wgEncode 1
 visibility hide
 
-    track wgEncodeUncBsuProtGencViewpepMapFt
-    shortLabel pepMapping
-    view pepMapFt
-    useScore 1
-    scoreFilter 200
-    scoreFilterLimits 200:1000
-    visibility full  
-    parent wgEncodeUncBsuProtGenc
-
-       
 
     track wgEncodeUncBsuProtGencViewpepMapGcFt
     shortLabel pepMapping Gc
@@ -44,8 +34,8 @@ visibility hide
     
 
     track wgEncodeUncBsuProtGencViewmPepMapGcFt
-    shortLabel pepMapping
-    view pepMapFt
+    shortLabel modPepMapping Gc
+    view mPepMapFt
     useScore 1
     scoreFilter 200
     scoreFilterLimits 200:1000
