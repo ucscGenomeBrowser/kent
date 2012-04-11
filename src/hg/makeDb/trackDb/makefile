@@ -97,7 +97,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	apiMel2	\
 	triCas2 \
 	ci1 ci2 cioSav2 \
-	strPur1 strPur2 \
+	strPur1 strPur2 strPur4 \
     nemVec1 \
 	aplCal1 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 \
