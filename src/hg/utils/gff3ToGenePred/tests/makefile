@@ -8,7 +8,7 @@ cmdShouldFail = echo "Error: command should have failed" >&2; false
 all::
 
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
-	noIdTest errCases1Test bogusQuotesTest
+	noIdTest errCases1Test bogusQuotesTest noExonsTest
 
 
 geneMRnaTest: mkout
@@ -46,6 +46,10 @@ errCases1Test: mkout
 bogusQuotesTest: mkout
 	if ! ${gff3ToGenePred} input/bogusQuotes.gff3 /dev/null >output/$@.out 2>&1 ; then true ; else ${cmdShouldFail} ; fi
 	diff expected/$@.out output/$@.out
+
+noExonsTest: mkout
+	${gff3ToGenePred} input/noExons.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
 
 
 mkout:

@@ -197,7 +197,7 @@ close (UC);
     #   max 51042256 (gi|374976115|gb|CM001450.1|) median 2009
 
 #############################################################################
-#  Initial database build (DONE - 2011-09-08 - Hiram)
+#  Initial database build (DONE - 2012-04-10 - Hiram)
 
     cd /hive/data/genomes/oreNil2
     cat << '_EOF_' > oreNil2.config.ra
@@ -233,3 +233,197 @@ taxId 8128
     #   real    8m45.076s
 
 ##########################################################################
+# running repeat masker (DONE - 2012-04-10 - Hiram)
+    mkdir /hive/data/genomes/oreNil2/bed/repeatMasker
+    cd /hive/data/genomes/oreNil2/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek oreNil2 > do.log 2>&1 &
+    #   real    67m27.295s
+
+    cat faSize.rmsk.txt
+    #   927696114 bases (111611440 N's 816084674 real 786292709 upper
+    #   29791965 lower) in 5678 sequences in 1 files
+    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
+    #   max 51042256 (chrLG7) median 2009
+    #   %3.21 masked total, %3.65 masked real
+
+    egrep -i "versi|relea" do.log
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+# CC   RELEASE 20110920; 
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+
+    featureBits -countGaps oreNil2 rmsk
+    #	30137751 bases of 927696114 (3.249%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2012-04-10 - Hiram)
+    mkdir /hive/data/genomes/oreNil2/bed/simpleRepeat
+    cd /hive/data/genomes/oreNil2/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	oreNil2 > do.log 2>&1 &
+    #   real    8m53.572s
+    cat fb.simpleRepeat 
+    #	7960749 bases of 866932349 (0.918%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/oreNil2
+    twoBitMask oreNil2.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed oreNil2.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa oreNil2.2bit stdout | faSize stdin > faSize.oreNil2.2bit.txt
+    cat faSize.oreNil2.2bit.txt
+    #	1511735326 bases (153400444 N's 1358334882 real 1024824487 upper
+    #	333510395 lower) in 19550 sequences in 1 files
+    #	%22.06 masked total, %24.55 masked real
+
+    rm /gbdb/oreNil2/oreNil2.2bit
+    ln -s `pwd`/oreNil2.2bit /gbdb/oreNil2/oreNil2.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-04-11 - Hiram)
+    mkdir /hive/data/genomes/oreNil2/bed/gap
+    cd /hive/data/genomes/oreNil2/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../oreNil2.unmasked.2bit > findMotif.txt 2>&1
+    #	real    3m21.738s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits oreNil2 -not gap -bed=notGap.bed
+    #	866932349 bases of 866932349 (100.000%) in intersection
+    time featureBits oreNil2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   50847675 bases of 866932349 (5.865%) in intersection
+    #   real    2m16.940s
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" oreNil2 | sort -n | tail -1
+    #	1004
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" oreNil2 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps oreNil2 other.bed
+    #	50847675 bases of 927696114 (5.481%) in intersection
+    wc -l other.bed
+    #	38113
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad oreNil2 otherGap other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" oreNil2
+    #	 33964
+    hgsql oreNil2 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" oreNil2
+    #	72077
+    # == 33964 + 38113
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 oreNil2 nonBridged.lift -bedFile=nonBridged.bed
+    # see example in danRer7.txt
+    # there are no non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" oreNil2 | sort | uniq -c
+    #   232 no
+    #   71845 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2012-04-10 - Hiram)
+    mkdir /hive/data/genomes/oreNil2/bed/windowMasker
+    cd /hive/data/genomes/oreNil2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev oreNil2 > do.log 2>&1 &
+    #   real    66m1.067s
+
+    # Masking statistics
+    twoBitToFa oreNil2.wmsk.2bit stdout | faSize stdin
+    #   927696114 bases (111611440 N's 816084674 real 612807423 upper
+    #   203277251 lower) in 5678 sequences in 1 files
+    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
+    #   max 51042256 (chrLG7) median 2009
+    #   %21.91 masked total, %24.91 masked real
+
+    twoBitToFa oreNil2.wmsk.sdust.2bit stdout | faSize stdin
+    #   927696114 bases (111611440 N's 816084674 real 608110449 upper
+    #   207974225 lower) in 5678 sequences in 1 files
+    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
+    #   max 51042256 (chrLG7) median 2009
+    #   %22.42 masked total, %25.48 masked real
+
+    hgLoadBed oreNil2 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 5157020 elements of size 3
+
+    featureBits -countGaps oreNil2 windowmaskerSdust
+    #   319585665 bases of 927696114 (34.449%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits oreNil2 -not gap -bed=notGap.bed
+    #	816084674 bases of 816084674 (100.000%) in intersection
+    time nice -n +19 featureBits oreNil2 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   207974225 bases of 816084674 (25.484%) in intersection
+    #	real    1m44.114s
+    #	reload track to get it clean
+    hgLoadBed oreNil2 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 5181510 elements of size 4
+    featureBits -countGaps oreNil2 windowmaskerSdust
+    #   207974225 bases of 927696114 (22.418%) in intersection
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../oreNil2.unmasked.2bit stdin \
+	    -type=.bed oreNil2.cleanWMSdust.2bit
+    twoBitToFa oreNil2.cleanWMSdust.2bit stdout | faSize stdin \
+        > oreNil2.cleanWMSdust.faSize.txt
+    cat oreNil2.cleanWMSdust.faSize.txt
+    #   927696114 bases (111611440 N's 816084674 real 608110449 upper
+    #   207974225 lower) in 5678 sequences in 1 files
+    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
+    #   max 51042256 (chrLG7) median 2009
+    #   %22.42 masked total, %25.48 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps oreNil2 rmsk windowmaskerSdust
+    #   21445936 bases of 927696114 (2.312%) in intersection
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2012-04-11 - Hiram)
+    #	since rmsk masks so very little of the genome, use the clean WM mask
+    #	on the genome sequence
+    cd /hive/data/genomes/oreNil2
+    twoBitMask -add bed/windowMasker/oreNil2.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed oreNil2.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa oreNil2.2bit stdout | faSize stdin > faSize.oreNil2.txt
+    cat faSize.oreNil2.txt
+    #   927696114 bases (111611440 N's 816084674 real 607935500 upper
+    #   208149174 lower) in 5678 sequences in 1 files
+    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
+    #   max 51042256 (chrLG7) median 2009
+    #   %22.44 masked total, %25.51 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/oreNil2/oreNil2.2bit
+    ln -s `pwd`/oreNil2.2bit /gbdb/oreNil2/oreNil2.2bit
+
+########################################################################
