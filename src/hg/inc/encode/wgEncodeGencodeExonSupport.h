@@ -15,9 +15,9 @@ struct wgEncodeGencodeExonSupport
     char *seqId;	/* Identifier of sequence supporting transcript */
     char *seqSrc;	/* Source of supporting sequence */
     char *exonId;	/* GENCODE exon identifier (not stable) */
-    char *chrom;	/* chromosome */
-    int chromStart;	/* start in chromosome */
-    int endStart;	/* end in chromosome */
+    char *chrom;	/* Chromosome */
+    unsigned chromStart;	/* Start position in chromosome */
+    unsigned chromEnd;	/* End position in chromosome */
     };
 
 void wgEncodeGencodeExonSupportStaticLoad(char **row, struct wgEncodeGencodeExonSupport *ret);
