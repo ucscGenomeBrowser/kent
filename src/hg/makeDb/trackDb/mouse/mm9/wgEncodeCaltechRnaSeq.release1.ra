@@ -21,7 +21,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-html wgEncodeCaltechRnaSeq.release1.html
+html wgEncodeCaltechRnaSeq.release1
 
 	track wgEncodeCaltechRnaSeqViewRawSignal
 	shortLabel RawSignal
