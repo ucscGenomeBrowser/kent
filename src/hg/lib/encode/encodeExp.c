@@ -293,7 +293,30 @@ fputc('}',f);
 
 /* BEGIN schema-dependent section */
 
-char *encodeExpGetIx(struct encodeExp *exp)
+void encodeExpJson(struct dyString *json, struct encodeExp *el)
+/* Print out encodeExp in JSON format. Manually converted from autoSql which outputs
+ * to file pointer.
+ */
+// TODO: Extend autoSql to support in-mem version
+{
+dyStringPrintf(json, "{");
+dyStringPrintf(json, "\"ix\":%u", el->ix);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"organism\":\"%s\"", el->organism);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"lab\":\"%s\"", el->lab);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"dataType\":\"%s\"", el->dataType);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"cellType\":\"%s\"", el->cellType);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"expVars\":\"%s\"", el->expVars);
+dyStringPrintf(json, ", ");
+dyStringPrintf(json, "\"accession\":\"%s\"", el->accession);
+dyStringPrintf(json, "}");
+}
+
+static char *encodeExpGetIx(struct encodeExp *exp)
 /* Return ix field of encodeExp */
 {
 char buf[64];
@@ -301,43 +324,43 @@ safef(buf, sizeof(buf), "%d", exp->ix);
 return cloneString(buf);
 }
 
-char *encodeExpGetOrganism(struct encodeExp *exp)
+static char *encodeExpGetOrganism(struct encodeExp *exp)
 /* Return organism field of encodeExp */
 {
 return cloneString(exp->organism);
 }
 
-char *encodeExpGetAccession(struct encodeExp *exp)
+static char *encodeExpGetAccession(struct encodeExp *exp)
 /* Return accession field of encodeExp */
 {
 return cloneString(exp->accession);
 }
 
-char *encodeExpGetLab(struct encodeExp *exp)
+static char *encodeExpGetLab(struct encodeExp *exp)
 /* Return lab field of encodeExp */
 {
 return cloneString(exp->lab);
 }
 
-char *encodeExpGetDataType(struct encodeExp *exp)
+static char *encodeExpGetDataType(struct encodeExp *exp)
 /* Return dataType field of encodeExp */
 {
 return cloneString(exp->dataType);
 }
 
-char *encodeExpGetCellType(struct encodeExp *exp)
+static char *encodeExpGetCellType(struct encodeExp *exp)
 /* Return cellType field of encodeExp */
 {
 return cloneString(exp->cellType);
 }
 
-char *encodeExpGetExpVars(struct encodeExp *exp)
+static char *encodeExpGetExpVars(struct encodeExp *exp)
 /* Return expVars field of encodeExp */
 {
 return cloneString(exp->expVars);
 }
 
-char *encodeExpGetUpdateTime(struct encodeExp *exp)
+static char *encodeExpGetUpdateTime(struct encodeExp *exp)
 /* Return updateTime field of encodeExp */
 {
 return cloneString(exp->updateTime);
@@ -600,6 +623,12 @@ if (escaped)
     if (accession != NULL)
         freez(&accession);
     }
+}
+
+int encodeExpIdMax(struct sqlConnection *conn) 
+/* Return largest ix value */
+{
+return sqlQuickNum(conn, "select max(ix) from " ENCODE_EXP_TABLE);
 }
 
 /* END schema-dependent section */

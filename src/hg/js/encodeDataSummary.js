@@ -11,8 +11,7 @@ $(function () {
             // requests to server API
             encodeProject.serverRequests.experiment,
             encodeProject.serverRequests.dataType,
-            encodeProject.serverRequests.antibody,
-            encodeProject.serverRequests.expId
+            encodeProject.serverRequests.antibody
             ];
 
     var $summaryTables = $('.summaryTable');
@@ -44,8 +43,7 @@ $(function () {
         // Main actions, called when loading data from server is complete
         var experiments = responses[0], 
             dataTypes = responses[1], 
-            antibodies = responses[2], 
-            expIds = responses[3];
+            antibodies = responses[2];
 
         var cellAssayExps = {}, tfbsExps = {},  refGenomeExps = {};
         var refGenomeTypes = [], elementTypes = [], tfbsTypes = [];
@@ -56,14 +54,7 @@ $(function () {
         antibodyGroups = encodeProject.getAntibodyGroups(antibodies);
         encodeProject.getDataGroups(dataTypes);
 
-        // use to filter out experiments not in this assembly
-        expIdHash = encodeProject.getExpIdHash(expIds);
-
         $.each(experiments, function (i, exp) {
-            // exlude experiment not in this assembly
-            if (expIdHash[exp.ix] === undefined) {
-                return true;
-            }
             if (exp.dataType === undefined) {
                 return true;
             }
@@ -86,6 +77,7 @@ $(function () {
                 addDataType(dataType, tfbsExps, true);
             }
         });
+
         // work-around for some supplementary files being accessioned as experiments (5C)
         // they show up in both reference genome and cell assay lists incorrectly
         // remove them from refGenome list of they are in cellAssayExps
