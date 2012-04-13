@@ -88,7 +88,7 @@ int i;
   printf("\n");
 
   i = MD5_DIGEST_LENGTH;
-  printf("MD5_DIGEST_LENGTH is %d\nLength of secondMD5 is %d\n",i, strlen(secondMD5));
+  printf("MD5_DIGEST_LENGTH is %d\nLength of secondMD5 is %d\n",i,strlen(secondMD5));
   printf("secondMD5 before return is: \n%s\n", secondMD5);
 
   strcpy(result, secondMD5);
@@ -101,7 +101,13 @@ void encryptPWD(char *password, char *salt, char *buf, int bufsize)
 // safef(buf,bufsize,crypt(password, salt));
 char md5Returned[100];
 cryptWikiWay(password, salt, md5Returned);
-safef(buf,bufsize,md5Returned);
+safecat(buf,bufsize,":B:");
+safecat(buf,bufsize,salt);
+safecat(buf,bufsize,":");
+safecat(buf,bufsize,md5Returned);
+
+//safef(buf,bufsize,md5Returned);
+
 printf("After encrypt, buf isL K\n%s\n bufsize is %d\n", buf, bufsize); 
 }
 
@@ -110,9 +116,9 @@ void encryptNewPwd(char *password, char *buf, int bufsize)
 /* XXXX TODO: use MD5 in linked SSL */
 {
 unsigned long seed[2];
-char salt[] = "$1$........";
+char salt[] = "........";
 const char *const seedchars =
-"./0123456789ABCDEFGHIJKLMNOPQRST"
+"0123456789ABCDEFGHIJKLMNOPQRST"
 "UVWXYZabcdefghijklmnopqrstuvwxyz";
 int i;
 /* Generate a (not very) random seed. */
@@ -120,15 +126,43 @@ seed[0] = time(NULL);
 seed[1] = getpid() ^ (seed[0] >> 14 & 0x30000);
 /* Turn it into printable characters from `seedchars'. */
 for (i = 0; i < 8; i++)
-    salt[3+i] = seedchars[(seed[i/5] >> (i%5)*6) & 0x3f];
+    salt[i] = seedchars[(seed[i/5] >> (i%5)*6) & 0x3f];
+printf("salt generated: %s\n", salt);
 encryptPWD(password, salt, buf, bufsize);
 }
 
+void findSalt(char *encPassword, char *salt, int saltSize)
+{
+printf("encPassword from database is: %s\n",encPassword);
+char tempStr1[45];
+char tempStr2[45];
+
+int i;
+// Skip the ":B:" part
+for (i = 3; i <= strlen(encPassword); i++)
+    tempStr1[i-3] = encPassword[i];
+printf("encPassword is %s\n",encPassword);
+printf("Trim out the :B: to become %s\n",tempStr1);
+i = strcspn(tempStr1,":");
+printf(" : is at location %d\n", i);
+safencpy(tempStr2, sizeof(tempStr2), tempStr1, i);
+printf("Trimmed salt is %s\n", tempStr2);
+safef(salt, saltSize,tempStr2);
+printf("Final salt is %s\n", salt);
+
+}
 bool checkPwd(char *password, char *encPassword)
 /* check an encrypted password */
 {
-char encPwd[35] = "";
-encryptPWD(password, encPassword, encPwd, sizeof(encPwd));
+
+printf("password type in is: %s\n",password);
+char salt[14];
+int saltSize;
+saltSize = sizeof(salt);
+findSalt(encPassword, salt, saltSize);
+char encPwd[45] = "";
+// encryptPWD(password, encPassword, encPwd, sizeof(encPwd));
+encryptPWD(password, salt, encPwd, sizeof(encPwd));
 if (sameString(encPassword,encPwd))
     {
     return TRUE;
@@ -320,7 +354,7 @@ if (!password)
     }
 freez(&password);
 password = generateRandomPassword();
-char encPwd[35] = "";
+char encPwd[45] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
 
 safef(query,sizeof(query), "update gbMembers set password='%s' where email='%s'", sqlEscapeString(encPwd), sqlEscapeString(email));
@@ -450,7 +484,7 @@ if (!checkPwdCharClasses(newPassword))
     return;
     }
 ********************************************/
-char encPwd[35] = "";
+char encPwd[45] = "";
 encryptNewPwd(newPassword, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "update gbMembers set password='%s' where email='%s'", sqlEscapeString(encPwd), sqlEscapeString(email));
 sqlUpdate(conn, query);
@@ -642,7 +676,7 @@ if (!realName || sameString(realName,""))
     realName = " ";
     }
 
-char encPwd[35] = "";
+char encPwd[45] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "insert into gbMembers set "
     "userName='%s',realName='%s',password='%s',email='%s', "
@@ -1014,7 +1048,7 @@ for(email=list;email;email=email->next)
 	if (!startsWith("$1$",password)) / * upgrade has not already been done * /
 	    {
 	    uglyf("does not start with $1$<br>\n");
-	    char encPwd[35] = "";
+	    char encPwd[45] = "";
     	    encryptNewPwd(password, encPwd, sizeof(encPwd));
 	    safef(query,sizeof(query),"update gbMembers set password = '%s' where email='%s'",
 		sqlEscapeString(encPwd), sqlEscapeString(email->name));
