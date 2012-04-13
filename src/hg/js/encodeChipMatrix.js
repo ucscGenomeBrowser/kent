@@ -10,8 +10,7 @@ $(function () {
         // requests to server API
         encodeProject.serverRequests.experiment,
         encodeProject.serverRequests.cellType,
-        encodeProject.serverRequests.antibody,
-        encodeProject.serverRequests.expId
+        encodeProject.serverRequests.antibody
         ];
 
     var $matrixTable = $('#matrixTable');
@@ -21,10 +20,9 @@ $(function () {
 
         var experiments = responses[0], 
                 cellTypes = responses[1], 
-                antibodies = responses[2], 
-                expIds = responses[3];
+                antibodies = responses[2];
 
-        var antibodyGroups, cellTiers, expIdHash;
+        var antibodyGroups, cellTiers;
         var antibodyTarget, cellType;
         var matrix, antibodyTargetExps = {};
 
@@ -37,18 +35,15 @@ $(function () {
         // set up structures for cell types and their tiers
         cellTiers = encodeProject.getCellTiers(cellTypes);
 
-        // use to filter out experiments not in this assembly
-        expIdHash = encodeProject.getExpIdHash(expIds);
-
         // gather experiments into matrix
-        matrix = makeExperimentMatrix(experiments, expIdHash, antibodyTargetExps);
+        matrix = makeExperimentMatrix(experiments, antibodyTargetExps);
 
        // fill in table using matrix
         encodeMatrix.tableOut($matrixTable, matrix, cellTiers, 
                         antibodyGroups, antibodyTargetExps, tableHeaderOut, rowAddCells);
     }
 
-    function makeExperimentMatrix(experiments, expIdHash, antibodyTargetExps) {
+    function makeExperimentMatrix(experiments, antibodyTargetExps) {
         // Populate antibodyTarget vs. cellType array with counts of experiments
 
         var antibody, target, cellType;
@@ -57,9 +52,6 @@ $(function () {
         $.each(experiments, function (i, exp) {
             // exclude ref genome annotations
             if (exp.cellType === 'None') {
-                return true;
-            }
-            if (expIdHash[exp.ix] === undefined) {
                 return true;
             }
             // todo: filter out with arg to hgApi ?
@@ -121,8 +113,9 @@ $(function () {
                     return true;
                 }
                 antibodyTarget = encodeProject.getAntibodyTarget(target);
-                $th = $('<th class="elementType"><div class="verticalText">' + 
-                                target + '</div></th>');
+                $th = $('<th class="elementType">' + '<div class="verticalText">'+
+                    '<a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&target=' + 
+                    encodeURIComponent(target) + '">' + target + '</a></div></th>');
                 if (!encodeProject.isIE8()) {
                     // Suppress mouseover under IE8 as QA noted flashing effect
                     $th.attr('title', antibodyTarget.description);

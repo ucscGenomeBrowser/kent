@@ -17,6 +17,16 @@ struct annoFormatTab
 static void printHeaderColumns(FILE *f, struct annoStreamer *source, boolean isFirst)
 /* Print names of included columns from this source. */
 {
+if (source->rowType == arWig)
+    {
+    // Fudge in the row's chrom, start, end as output columns even though they're not in autoSql
+    if (isFirst)
+	{
+	fputs("#chrom", f);
+	isFirst = FALSE;
+	}
+    fputs("\tstart\tend", f);
+    }
 struct annoColumn *col;
 int i;
 for (col = source->columns, i = 0;  col != NULL;  col = col->next, i++)
@@ -64,22 +74,6 @@ struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
 self->primaryRow = NULL;
 slFreeList(&(self->gratorRowLists));
 return;
-}
-
-static void printColumns(FILE *f, struct annoStreamer *streamer, char **row, boolean isFirst)
-/* Print columns in streamer's row (if NULL, print the right number of empty fields). */
-{
-struct annoColumn *col;
-int i;
-for (col = streamer->columns, i = 0;  col != NULL;  col = col->next, i++)
-    {
-    if (! col->included)
-	continue;
-    if (!isFirst || i > 0)
-	fputc('\t', f);
-    if (row != NULL)
-	fputs(row[i], f);
-    }
 }
 
 static double wigRowAvg(struct annoRow *row)
@@ -148,11 +142,42 @@ if (retFreeWhenDone != NULL)
 return words;
 }
 
-INLINE void freeWords1(char **words)
-/* Free words and words[0] (alloc'd by wordsFromWig* above. */
+static void printColumns(FILE *f, struct annoStreamer *streamer, struct annoRow *row,
+			 boolean isFirst)
+/* Print columns in streamer's row (if NULL, print the right number of empty fields). */
 {
-freeMem(words[0]);
-freeMem(words);
+boolean freeWhenDone = FALSE;
+char **words = wordsFromRow(row, streamer, &freeWhenDone);
+if (streamer->rowType == arWig)
+    {
+    // Fudge in the row's chrom, start, end as output columns even though they're not in autoSql
+    if (isFirst)
+	{
+	if (row != NULL)
+	    fputs(row->chrom, f);
+	isFirst = FALSE;
+	}
+    if (row != NULL)
+	fprintf(f, "\t%u\t%u", row->start, row->end);
+    else
+	fputs("\t\t", f);
+    }
+struct annoColumn *col;
+int i;
+for (col = streamer->columns, i = 0;  col != NULL;  col = col->next, i++)
+    {
+    if (! col->included)
+	continue;
+    if (!isFirst || i > 0)
+	fputc('\t', f);
+    if (words != NULL)
+	fputs(words[i], f);
+    }
+if (freeWhenDone)
+    {
+    freeMem(words[0]);
+    freeMem(words);
+    }
 }
 
 static void aftFormatOne(struct annoFormatter *vSelf)
@@ -176,20 +201,13 @@ for (i = 0, grRef = self->gratorRowLists;  i < numGrators;  i++, grRef = grRef->
 struct annoStreamer *primarySource = vSelf->query->primarySource;
 for (i = 0;  i < maxRows;  i++)
     {
-    boolean freeWhenDone = FALSE;
-    char **primaryData = wordsFromRow(self->primaryRow, primarySource, &freeWhenDone);
-    printColumns(self->f, primarySource, primaryData, TRUE);
-    if (freeWhenDone)
-	freeWords1(primaryData);
+    printColumns(self->f, primarySource, self->primaryRow, TRUE);
     struct annoStreamer *grator = (struct annoStreamer *)self->formatter.query->integrators;
     for (grRef = self->gratorRowLists;  grRef != NULL;  grRef = grRef->next,
 	     grator = grator->next)
 	{
 	struct annoRow *gratorRow = slElementFromIx(grRef->val, i);
-	char **gratorWords = wordsFromRow(gratorRow, grator, &freeWhenDone);
-	printColumns(self->f, grator, gratorWords, FALSE);
-	if (freeWhenDone)
-	    freeWords1(gratorWords);
+	printColumns(self->f, grator, gratorRow, FALSE);
 	}
     fputc('\n', self->f);
     }

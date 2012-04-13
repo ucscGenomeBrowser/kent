@@ -17,6 +17,7 @@ grant Stam
 lab UW
 labExpId DS14289
 labVersion Bowtie 0.12.7
+md5sum 681eab6b39d87ae012ce9c77ac69e3b0,2c3989fd84b6bb47231b0ea9c748d835
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -36,6 +37,7 @@ grant Stam
 lab UW
 labExpId DS14289
 labVersion Hotspot-v5.2
+md5sum cc42c2a82db60358786bf4ac6fd00d60
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -56,6 +58,7 @@ grant Stam
 lab UW
 labExpId DS14289
 labVersion lmax-v1.0
+md5sum 89aa9966f9acc9d87b73fea34e491dfd
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -76,6 +79,7 @@ grant Stam
 lab UW
 labExpId DS14289
 labVersion WindowDensity-bin20-win+/-75
+md5sum 7a5ff37a9a6d50927e8f3cd176640b8a
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -95,6 +99,7 @@ fileName wgEncodeUwDgfA549RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14289
+md5sum e8457b952eaf0135183814ac9cd8f112
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -113,6 +118,7 @@ fileName wgEncodeUwDgfA549Sig.bigWig
 grant Stam
 lab UW
 labExpId DS14289
+md5sum b84a7662f39f937bf31c11513a3b06a2
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -1450,6 +1456,7 @@ grant Stam
 lab UW
 labExpId DS13480
 labVersion Bowtie 0.12.7
+md5sum 62d874e753b68a18e1283ca65d27d233,f9813f5e81877f16661c18d4b3c360a4
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -1469,6 +1476,7 @@ grant Stam
 lab UW
 labExpId DS13480
 labVersion Hotspot-v5.2
+md5sum dd813a627bb0891fd56aee5453a2121b
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -1489,6 +1497,7 @@ grant Stam
 lab UW
 labExpId DS13480
 labVersion lmax-v1.0
+md5sum 115a1344bd1b052c81ae5e8960cddd91
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -1509,6 +1518,7 @@ grant Stam
 lab UW
 labExpId DS13480
 labVersion WindowDensity-bin20-win+/-75
+md5sum 69b0d04c5d4429a06404d962da65f70e
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -1528,6 +1538,7 @@ fileName wgEncodeUwDgfHcfaaRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13480
+md5sum aaef063cf1d126121e6eee61f73807d5
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -1546,6 +1557,7 @@ fileName wgEncodeUwDgfHcfaaSig.bigWig
 grant Stam
 lab UW
 labExpId DS13480
+md5sum c2a8ce1786f5d71bae5fe416e5d33e76
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -2230,6 +2242,7 @@ grant Stam
 lab UW
 labExpId DS11752
 labVersion Bowtie 0.12.7
+md5sum 1b8d2c25b3ca829f8ecd2adb9fa79bb6,5a17c0446e2c311f1adbb88f2d04f5e2
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -2249,6 +2262,7 @@ grant Stam
 lab UW
 labExpId DS11752
 labVersion Hotspot-v5.2
+md5sum 6c01d0b099daa0964d36a6a2a5536db3
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -2269,6 +2283,7 @@ grant Stam
 lab UW
 labExpId DS11752
 labVersion lmax-v1.0
+md5sum 5de341e9b2a1e78c9607758cf3d8602f
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -2289,6 +2304,7 @@ grant Stam
 lab UW
 labExpId DS11752
 labVersion WindowDensity-bin20-win+/-75
+md5sum b8d846f2d4c4971ee61566527da51146
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -2308,6 +2324,7 @@ fileName wgEncodeUwDgfHgfRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11752
+md5sum 57f4f1481e5238111a3255110f2dcb4c
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -2326,6 +2343,7 @@ fileName wgEncodeUwDgfHgfSig.bigWig
 grant Stam
 lab UW
 labExpId DS11752
+md5sum b9ee427af150117b69c820ca61fa3326
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -3140,6 +3158,7 @@ grant Stam
 lab UW
 labExpId DS13372
 labVersion Bowtie 0.12.7
+md5sum 3b79d83f337c0116034ee37bd22d0e0d,a22744ca467139c15fb4ec56d130c9b7
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -3159,6 +3178,7 @@ grant Stam
 lab UW
 labExpId DS13372
 labVersion Hotspot-v5.2
+md5sum fba53654367afe419822e63e0c962a6f
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -3179,6 +3199,7 @@ grant Stam
 lab UW
 labExpId DS13372
 labVersion lmax-v1.0
+md5sum 2e0a663d9f4cbc4229aac9b4ab1fcf79
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -3199,6 +3220,7 @@ grant Stam
 lab UW
 labExpId DS13372
 labVersion WindowDensity-bin20-win+/-75
+md5sum a11522a2a7fefd8eebc23c357ad2d5c6
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -3218,6 +3240,7 @@ fileName wgEncodeUwDgfHmvechRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13372
+md5sum bd7b4180f097a92b7d654137cf4dad07
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -3236,6 +3259,7 @@ fileName wgEncodeUwDgfHmvechSig.bigWig
 grant Stam
 lab UW
 labExpId DS13372
+md5sum 638c85f0eeba622ad9769ed75c329414
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4279,6 +4303,7 @@ grant Stam
 lab UW
 labExpId DS15363
 labVersion Bowtie 0.12.7
+md5sum 2a722201bbd5d4b535710390affb676d,b85f6e9574e9b022a3f278e11a8a73d2
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4299,6 +4324,7 @@ grant Stam
 lab UW
 labExpId DS15363
 labVersion Hotspot-v5.2
+md5sum aae8243d79d69f84c4ba886cf80f5b8e
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4320,6 +4346,7 @@ grant Stam
 lab UW
 labExpId DS15363
 labVersion lmax-v1.0
+md5sum 552ce2d58ce3a93024d28b388784d1e8
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4341,6 +4368,7 @@ grant Stam
 lab UW
 labExpId DS15363
 labVersion WindowDensity-bin20-win+/-75
+md5sum 9758eed4e2746e1e884a4a454a6f27d3
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4361,6 +4389,7 @@ fileName wgEncodeUwDgfK562Znfa41c6RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15363
+md5sum 475e6905b005bf70c8f92ce6db1a9c12
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4380,6 +4409,7 @@ fileName wgEncodeUwDgfK562Znfa41c6Sig.bigWig
 grant Stam
 lab UW
 labExpId DS15363
+md5sum 81c5d14b69155f9a8144aba929ce00d1
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4401,6 +4431,7 @@ grant Stam
 lab UW
 labExpId DS16924
 labVersion Bowtie 0.12.7
+md5sum ea61bd278181c3a8e913d34a4caff552,9df384ec398f31da8cd810125c5df1f8
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4421,6 +4452,7 @@ grant Stam
 lab UW
 labExpId DS16924
 labVersion Hotspot-v5.2
+md5sum 65d7873975a57f637d6d367952cb49e6
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4442,6 +4474,7 @@ grant Stam
 lab UW
 labExpId DS16924
 labVersion lmax-v1.0
+md5sum 11ae74a5be6b4dad8155f7228558d2ad
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4463,6 +4496,7 @@ grant Stam
 lab UW
 labExpId DS16924
 labVersion WindowDensity-bin20-win+/-75
+md5sum e0216f1e389bd472552396c7cec099c1
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4483,6 +4517,7 @@ fileName wgEncodeUwDgfK562Znfp5RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16924
+md5sum efd75f9fff2de89a45eefb88da254201
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4502,6 +4537,7 @@ fileName wgEncodeUwDgfK562Znfp5Sig.bigWig
 grant Stam
 lab UW
 labExpId DS16924
+md5sum 36a67826a78bbe189739f098adf39728
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4523,6 +4559,7 @@ grant Stam
 lab UW
 labExpId DS20548
 labVersion Bowtie 0.12.7
+md5sum 1bd0a7a6db5110a585b7b9f11f6857c5,8ba130256dc92c42b94128a5b49e1424
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4542,6 +4579,7 @@ grant Stam
 lab UW
 labExpId DS20534
 labVersion Bowtie 0.12.7
+md5sum 36fe3cba57fdf3c6420aca4ec8e8e957,1d726054d7e91e3c6b39740b7ebbfc14
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4562,6 +4600,7 @@ grant Stam
 lab UW
 labExpId DS20534
 labVersion Hotspot-v5.2
+md5sum 718bff0b75342789f4e4c36238545105
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4583,6 +4622,7 @@ grant Stam
 lab UW
 labExpId DS20534
 labVersion lmax-v1.0
+md5sum 7b1dacd18dbdc3a1e54f9805df1f66d0
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4604,6 +4644,7 @@ grant Stam
 lab UW
 labExpId DS20534
 labVersion WindowDensity-bin20-win+/-75
+md5sum 8e48c1f6cf51a1b208d061d80cbac1bc
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4624,6 +4665,7 @@ fileName wgEncodeUwDgfLhcnm2Diff4dRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20534
+md5sum 00d98a8cfb1c7e5cad14720ac4f11407
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4643,6 +4685,7 @@ fileName wgEncodeUwDgfLhcnm2Diff4dSig.bigWig
 grant Stam
 lab UW
 labExpId DS20534
+md5sum 5e88dabb75dfe257cf516e3b6ea4fc65
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4664,6 +4707,7 @@ grant Stam
 lab UW
 labExpId DS20548
 labVersion Hotspot-v5.2
+md5sum c0ed877c5877f194c4a267f95b308b1f
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4684,6 +4728,7 @@ grant Stam
 lab UW
 labExpId DS20548
 labVersion lmax-v1.0
+md5sum 0eec5ba307a32d26c71e636727c075eb
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4704,6 +4749,7 @@ grant Stam
 lab UW
 labExpId DS20548
 labVersion WindowDensity-bin20-win+/-75
+md5sum 830ba753e74a08722a9c210c065e00c4
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4723,6 +4769,7 @@ fileName wgEncodeUwDgfLhcnm2RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20548
+md5sum 7ca7f2cdae3fef94b860e18a45287ef8
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4741,6 +4788,7 @@ fileName wgEncodeUwDgfLhcnm2Sig.bigWig
 grant Stam
 lab UW
 labExpId DS20548
+md5sum 36405c00e72fcb1aaa9b695d2dccee65
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4761,6 +4809,7 @@ grant Stam
 lab UW
 labExpId DS20493
 labVersion Bowtie 0.12.7
+md5sum b3a73737873712837907565b6f36322c,c44c8c58c0622a95c867b1991d40b9ba
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4780,6 +4829,7 @@ grant Stam
 lab UW
 labExpId DS20493
 labVersion Hotspot-v5.2
+md5sum f3c6f2d4d7901c6607dd8227699faaa2
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4800,6 +4850,7 @@ grant Stam
 lab UW
 labExpId DS20493
 labVersion lmax-v1.0
+md5sum ea755484228987e63b6a900e16f754b5
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4820,6 +4871,7 @@ grant Stam
 lab UW
 labExpId DS20493
 labVersion WindowDensity-bin20-win+/-75
+md5sum 3ac4a6684529bfe0858d635ca8325e43
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4839,6 +4891,7 @@ fileName wgEncodeUwDgfM059jRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20493
+md5sum 1b2c4d6274126f2e5e64ed8d92480e2a
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -4857,6 +4910,7 @@ fileName wgEncodeUwDgfM059jSig.bigWig
 grant Stam
 lab UW
 labExpId DS20493
+md5sum 7ed44a911576a4447439c6fdd1186a39
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -5670,6 +5724,7 @@ grant Stam
 lab UW
 labExpId DS20909
 labVersion Bowtie 0.12.7
+md5sum 15cea7708bd7c29a923c03a045696358,b82a5fee1204f109f438bc47f980265a
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -5689,6 +5744,7 @@ grant Stam
 lab UW
 labExpId DS20909
 labVersion Hotspot-v5.2
+md5sum 0574fa2828f3954b55285911e4c87c2c
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -5709,6 +5765,7 @@ grant Stam
 lab UW
 labExpId DS20909
 labVersion lmax-v1.0
+md5sum 2268ac5dd97f326686adf920883153d5
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -5729,6 +5786,7 @@ grant Stam
 lab UW
 labExpId DS20909
 labVersion WindowDensity-bin20-win+/-75
+md5sum 7b9a4d9e9523ec4307b9f00df9071b78
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -5748,6 +5806,7 @@ fileName wgEncodeUwDgfRpmi7951RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS20909
+md5sum acd9e862122c28c114ec6074ec87130f
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -5766,6 +5825,7 @@ fileName wgEncodeUwDgfRpmi7951Sig.bigWig
 grant Stam
 lab UW
 labExpId DS20909
+md5sum 7190c7ede76c6f8566008ebe5074aa30
 origAssembly hg19
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
@@ -6290,4 +6350,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: -823722948
+# MAGIC: -971877884

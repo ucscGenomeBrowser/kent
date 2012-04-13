@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
     <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
     <link rel="stylesheet" href="dataMatrix.css" type="text/css">
-    <link rel="stylesheet" href="chipMatrix.css" type="text/css">
     <script src="/js/jquery.js" type="text/javascript"></script>
     <script src="/js/jquery.floatheader.js" type="text/javascript"></script>
     <script src="/js/jquery.rotateTableCellContent.js" type="text/javascript"></script>
@@ -30,7 +29,7 @@
         <thead>
         <tr id="headerLabelRow"><td></td>
             <td id="elementHeaderLabel" class="axisType" colspan=100 title="Click to view information about all antibodies">
-                <a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=antibody"> Antibody Targets</a></td></tr>
+                <a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=antibody"> Antibody Targets</a></td></tr>
 
         <tr id="columnHeaders">
             <!-- Radiobuttons to select Files or Tracks, created from lib -->
@@ -38,7 +37,7 @@
             <div id="searchTypePanel" class="panel"></div>
             <div align='bottom' id="cellHeaderLabel" class="axisType" title="Click to view information about all cell types">
                 <!-- TODO: configurable for mouse -->
-                <a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=Cell+Line&organism=human">Cell Types</div>
+                <a target="cvWindow" href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=Cell+Line&organism=human">Cell Types</div>
             </td>
         </tr>
         </thead>

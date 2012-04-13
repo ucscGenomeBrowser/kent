@@ -1,6 +1,6 @@
 import re
 import os
-from ucscgenomics import ra
+from ucscgenomics import ra, encode
 
 def extractValue(val, prefix='', removeComments=1):
     val2 = val.replace(prefix, '')
@@ -43,7 +43,7 @@ class CvFile(ra.RaFile):
             self.handler = self.raiseException
             
         if filePath == None:
-            filePath = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/') + 'cv/alpha/cv.ra'
+            filePath = encode.defaultCvPath()
         
         self.protocolPath = protocolPath
         if protocolPath == None:
@@ -59,37 +59,6 @@ class CvFile(ra.RaFile):
 
     def readStanza(self, stanza, key=None):
         '''overriden method from RaFile which makes specialized stanzas based on type'''
-        # e = ra.RaStanza()
-        # ek, ev = e.readStanza(stanza)
-        # type = e['type']
-
-        # if type == 'Antibody':
-            # entry = AntibodyStanza()
-        # elif type == 'Cell Line':
-            # if e['organism'] == 'human':
-                # entry = CellLineStanza()
-            # elif e['organism'] == 'mouse':
-                # entry = MouseStanza()
-            # else:
-                # self.handler(NonmatchKeyError(e.name, e['organism'], 'organism'))
-                # return ek, ev, None
-        # elif type == 'age':
-            # entry = AgeStanza()
-        # elif type == 'dataType':
-            # entry = DataTypeStanza()
-        # elif type == 'lab':
-            # entry = LabStanza()
-        # elif type == 'seqPlatform':
-            # entry = SeqPlatformStanza()
-        # elif type == 'typeOfTerm':
-            # entry = TypeOfTermStanza()
-        # elif type == 'view':
-            # entry = ViewStanza()
-        # elif type == 'localization':
-            # entry = LocalizationStanza()
-        # elif type == 'grant':
-            # entry = GrantStanza()
-        # else:
         entry = CvStanza()
 
         key, val = entry.readStanza(stanza)
@@ -100,7 +69,7 @@ class CvFile(ra.RaFile):
         '''base validation method which calls all stanzas' validate'''
         for stanza in self.itervalues():
             stanza.validate(self)
-        print self.missingTypes
+        #print self.missingTypes
 
     def getTypeOfTermStanza(self, type):
         types = self.filter(lambda s: s['term'] == type and s['type'] == 'typeOfTerm', lambda s: s)
@@ -172,7 +141,7 @@ class CvStanza(ra.RaStanza):
         
         typeStanza = cvfile.getTypeOfTermStanza(type)
         if typeStanza == None:
-            cvfile.handler(InvalidTypeError(self, self['type']))
+            cvfile.handler(InvalidTypeError(self, self['type'] + '(%s)' % type))
             return
         required = list()
         if 'requiredVars' in typeStanza:
@@ -246,31 +215,31 @@ class CvStanza(ra.RaStanza):
 
         
         
-    def validate2(self, cvfile, necessary=None, optional=None):
-        '''default validation for a generic cv stanza. Should be called with all arguments if overidden'''
+    # def validate2(self, cvfile, necessary=None, optional=None):
+        # '''default validation for a generic cv stanza. Should be called with all arguments if overidden'''
         
-        if necessary == None:
-            necessary = set()
+        # if necessary == None:
+            # necessary = set()
             
-        if optional == None:
-            optional = set()
+        # if optional == None:
+            # optional = set()
         
-        baseNecessary = {'term', 'tag', 'type'}
+        # baseNecessary = {'term', 'tag', 'type'}
         
-        if self['type'] != 'Antibody':
-            baseNecessary.add('description')
+        # if self['type'] != 'Antibody':
+            # baseNecessary.add('description')
         
-        baseOptional = {'deprecated', 'label'}
-        self.checkMandatory(cvfile, necessary | baseNecessary)
-        self.checkExtraneous(cvfile, necessary | baseNecessary | optional | baseOptional)
+        # baseOptional = {'deprecated', 'label'}
+        # self.checkMandatory(cvfile, necessary | baseNecessary)
+        # self.checkExtraneous(cvfile, necessary | baseNecessary | optional | baseOptional)
         
-        temptype = self['type']
-        if self['type'] == 'Cell Line': # :(
-            temptype = 'cellType'
-        if len(cvfile.filter(lambda s: s['term'] == temptype and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
-            cvfile.handler(InvalidTypeError(self, self['type']))
+        # temptype = self['type']
+        # if self['type'] == 'Cell Line': # :(
+            # temptype = 'cellType'
+        # if len(cvfile.filter(lambda s: s['term'] == temptype and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
+            # cvfile.handler(InvalidTypeError(self, self['type']))
 
-        self.checkDuplicates(cvfile)
+        # self.checkDuplicates(cvfile)
         
         
     def checkDuplicates(self, cvfile):
@@ -287,13 +256,7 @@ class CvStanza(ra.RaStanza):
                 cvfile.handler(MissingKeyError(self, key))
             elif self[key] == '':
                 cvfile.handler(BlankKeyError(self, key))
-                
-    # def checkOptional(self, cvfile, keys):
-        # '''ensure that all keys are present and not blank in the stanza'''
-        # for key in keys:
-            # if key in self and self[key] == '':
-                # cvfile.handler(BlankKeyError(self, key))
-        
+               
     def checkExtraneous(self, cvfile, keys):
         '''check for keys that are not in the list of keys'''
         for key in self.iterkeys():
@@ -318,9 +281,6 @@ class CvStanza(ra.RaStanza):
     
     def checkRelational(self, cvfile, key, other):
         '''check that the value at key matches the value at other'''
-        
-        
-        
         p = 0
         
         if key not in self:
@@ -383,10 +343,6 @@ class MissingKeyError(CvError):
         self.msg =  key
         self.strict = 1
     
-    # def __str__(self):
-        # return str('%s(%s[%s])' % self.__class__.__name__ self.stanza + ': missing key (' + self.key + ')')
-    
-    
 class DuplicateKeyError(CvError):
     '''raised if a key is duplicated'''
     
@@ -394,10 +350,6 @@ class DuplicateKeyError(CvError):
         CvError.__init__(self, stanza)
         self.msg = key
         self.strict = 1
-    
-    # def __str__(self):
-        # return str(self.stanza + ': duplicate key (' + self.key + ')')
-    
     
 class BlankKeyError(CvError):
     '''raised if a mandatory key is blank'''
@@ -407,10 +359,6 @@ class BlankKeyError(CvError):
         self.msg = key
         self.strict = 0
     
-    # def __str__(self):
-        # return str(self.stanza + ': key (' + self.key + ') is blank')
-    
-    
 class ExtraKeyError(CvError):
     '''raised if an extra key not in the list of keys is found'''
 
@@ -418,10 +366,6 @@ class ExtraKeyError(CvError):
         CvError.__init__(self, stanza)
         self.msg = key
         self.strict = 0
-    
-    # def __str__(self):
-        # return str(self.stanza + ': extra key (' + self.key + ')')    
-
         
 class NonmatchKeyError(CvError):
     '''raised if a relational key does not match any other value'''
@@ -430,10 +374,6 @@ class NonmatchKeyError(CvError):
         CvError.__init__(self, stanza)
         self.msg = '%s does not match %s' % (key, val)
         self.strict = 1
-    
-    # def __str__(self):
-        # return str(self.stanza + ': key (' + self.key + ') does not match any (' + self.val + ')')
-        
         
 class DuplicateVendorIdError(CvError):
     '''When there exists more than one connected component of stanzas (through derivedFrom) with the same vendorId'''
@@ -443,10 +383,6 @@ class DuplicateVendorIdError(CvError):
         self.msg = '%s' % self.stanza['vendorId']
         self.strict = 0
         
-    # def __str__(self):
-        # return str('warning: ' + self.stanza.name + ': vendorId (' + self.stanza['vendorId'] + ') has multiple parent cell lines')
-        
-        
 class InvalidProtocolError(CvError):
     '''raised if a protocol doesnt match anything in the directory'''
     
@@ -455,10 +391,6 @@ class InvalidProtocolError(CvError):
         self.msg = key
         self.strict = 0
     
-    # def __str__(self):
-        # return str(self.stanza.name + ': missing protocol document (' + self.key + ')')    
-    
-        
 class InvalidTypeError(CvError):
     '''raised if a relational key does not match any other value'''
     
@@ -467,9 +399,6 @@ class InvalidTypeError(CvError):
         self.msg = key
         self.strict = 1
     
-    # def __str__(self):
-        # return str(self.stanza + ': ' + self.key + ' does not match any types')
-        
 class TypeValidationError(CvError):
     '''raised if the terms type of term has an invalid validation value'''
     

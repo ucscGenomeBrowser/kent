@@ -1,4 +1,4 @@
-#!/hive/groups/encode/dcc/bin/python
+#!/usr/bin/env python2.7
 import sys, os, re, argparse, subprocess, math
 from ucscgenomics import ra, track
 

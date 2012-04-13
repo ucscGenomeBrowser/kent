@@ -23,7 +23,7 @@ mapAlgorithm TH131
 md5sum 8323ccba1b81240540517a9387bb57a4,af80d8822d5e51bd01ee2a8b48fc1c10
 project wgEncode
 readType 2x75
-rep 1
+replicate 1
 sex F
 strain C3H
 subId 6082
@@ -51,7 +51,7 @@ mapAlgorithm TH131
 md5sum c3a4c88ae962d417dd0fa8cd8c29cbfb,4df4596aa4decb7aa3bc14ac96ff1edc
 project wgEncode
 readType 2x75
-rep 1
+replicate 1
 sex F
 strain C3H
 subId 6081
@@ -443,4 +443,4 @@ tableName wgEncodeCaltechRnaSeqC2c12C3hFR2x75Th131Il200RawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -444698888
+# MAGIC: -425241186

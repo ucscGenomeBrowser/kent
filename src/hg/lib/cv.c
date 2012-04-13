@@ -51,6 +51,75 @@ if (sameWord((char *)sloppyTerm,CV_UGLY_TERM_ANTIBODY))
 return sloppyTerm;
 }
 
+#define CV_UNKNOWN "unknown"
+
+void cvTermJson(struct dyString *json, char *type, struct hash *termHash)
+/* Print out CV term in JSON format. Currently just supports dataType, cellType, antibody
+ * and antibody types */
+{
+dyStringPrintf(json, "{");
+dyStringPrintf(json, "\"" CV_TERM "\":\"%s\"", (char *)hashFindVal(termHash, CV_TERM));
+dyStringPrintf(json, ",");
+if (sameString(type, "dataType"))
+    {
+    dyStringPrintf(json, "\"" CV_LABEL "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_LABEL, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_DATA_GROUP "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_DATA_GROUP, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_DESCRIPTION "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_DESCRIPTION, CV_UNKNOWN));
+    }
+else if (sameString(type, "cellType"))  // NOTE: 'ugly' term by above criteria ?  Should reconcile before publishing API
+    {
+    dyStringPrintf(json, "\"" CV_DESCRIPTION "\":\"");
+    // TODO: handle modularly
+    dyStringAppendEscapeQuotes(json, (char *)hashOptionalVal(termHash, CV_DESCRIPTION, CV_UNKNOWN), '"', '\\');
+    dyStringPrintf(json, "\",");
+    dyStringPrintf(json, "\"" CV_TIER "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_TIER, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_KARYOTYPE "\":\"");
+    dyStringAppendEscapeQuotes(json, (char *)hashOptionalVal(termHash, CV_KARYOTYPE, CV_UNKNOWN), '"', '\\');
+    dyStringPrintf(json, "\",");
+    dyStringPrintf(json, "\"" CV_ORGANISM "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_ORGANISM, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_SEX "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_SEX, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_TISSUE "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_TISSUE, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_VENDOR_NAME "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_VENDOR_NAME, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_VENDOR_ID "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_VENDOR_ID, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_LINEAGE "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_LINEAGE, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_TERM_ID "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_TERM_ID, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_TERM_URL "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_TERM_URL, CV_UNKNOWN));
+    // TODO: add URL protocol file ?
+    }
+else if (sameString(type, "antibody"))
+    {
+    dyStringPrintf(json, "\"" CV_TARGET "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_TARGET, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_ANTIBODY_DESCRIPTION "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_ANTIBODY_DESCRIPTION, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_TARGET_DESCRIPTION "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_TARGET_DESCRIPTION, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_VENDOR_NAME "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_VENDOR_NAME, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_VENDOR_ID "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_VENDOR_ID, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_TERM_LAB "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_TERM_LAB, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_TARGET_ID "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_TARGET_ID, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_TARGET_URL "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_TARGET_URL, CV_UNKNOWN));
+    dyStringPrintf(json, ",");
+    dyStringPrintf(json, "\"" CV_ORDER_URL "\":\"%s\"", (char *)hashOptionalVal(termHash, CV_ORDER_URL, CV_UNKNOWN));
+    // TODO: add validation file(s) ?
+    }
+dyStringPrintf(json, "}\n");
+}
+
 char *cvLabNormalize(const char *sloppyTerm)
 /* CV inconsistency work-arounds.  Return lab name trimmed of parenthesized trailing
  * info (a few ENCODE labs have this in metaDb and/or in CV term --

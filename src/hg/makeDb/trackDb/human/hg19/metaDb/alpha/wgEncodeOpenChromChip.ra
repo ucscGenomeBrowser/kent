@@ -10,7 +10,7 @@ objType file
 antibody CTCF
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -35,7 +35,7 @@ objType file
 antibody CTCF
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -60,7 +60,7 @@ objType table
 antibody CTCF
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -85,7 +85,7 @@ objType table
 antibody CTCF
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -111,7 +111,7 @@ objType file
 antibody CTCF
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -135,7 +135,7 @@ objType file
 antibody CTCF
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -159,7 +159,7 @@ objType table
 antibody CTCF
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -184,7 +184,7 @@ objType file
 antibody Input
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
@@ -208,7 +208,7 @@ objType file
 antibody Input
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
@@ -231,7 +231,7 @@ objType table
 antibody Input
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
@@ -256,7 +256,7 @@ objType file
 antibody Pol2
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -281,7 +281,7 @@ objType file
 antibody Pol2
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -306,7 +306,7 @@ objType table
 antibody Pol2
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -331,7 +331,7 @@ objType table
 antibody Pol2
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -357,7 +357,7 @@ objType file
 antibody Pol2
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -381,7 +381,7 @@ objType file
 antibody Pol2
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -405,7 +405,7 @@ objType table
 antibody Pol2
 cell A549
 composite wgEncodeOpenChromChip
-controlId A549/Input
+controlId wgEncodeEH002077
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
@@ -430,7 +430,7 @@ objType file
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
-controlId Fibrobl/Input
+controlId wgEncodeEH001128
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
@@ -456,7 +456,7 @@ objType file
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
-controlId Fibrobl/Input
+controlId wgEncodeEH001128
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
@@ -482,7 +482,7 @@ objType table
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
-controlId Fibrobl/Input
+controlId wgEncodeEH001128
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
@@ -508,7 +508,7 @@ objType table
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
-controlId Fibrobl/Input
+controlId wgEncodeEH001128
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
@@ -534,7 +534,7 @@ objType table
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
-controlId Fibrobl/Input
+controlId wgEncodeEH001128
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
@@ -560,7 +560,7 @@ objType file
 antibody Input
 cell Fibrobl
 composite wgEncodeOpenChromChip
-controlId Fibrobl/Input
+controlId wgEncodeEH001128
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-14
@@ -585,7 +585,7 @@ objType table
 antibody Input
 cell Fibrobl
 composite wgEncodeOpenChromChip
-controlId Fibrobl/Input
+controlId wgEncodeEH001128
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-14
@@ -611,7 +611,7 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -637,7 +637,7 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -663,7 +663,7 @@ objType table
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -689,7 +689,7 @@ objType table
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -715,7 +715,7 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -740,7 +740,7 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -765,7 +765,7 @@ objType table
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -791,7 +791,7 @@ objType file
 antibody Input
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -816,7 +816,7 @@ objType file
 antibody Input
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -840,7 +840,7 @@ objType table
 antibody Input
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -866,7 +866,7 @@ objType file
 antibody Pol2
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -892,7 +892,7 @@ objType file
 antibody Pol2
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -918,7 +918,7 @@ objType table
 antibody Pol2
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -944,7 +944,7 @@ objType table
 antibody Pol2
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -970,7 +970,7 @@ objType file
 antibody Pol2
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -995,7 +995,7 @@ objType file
 antibody Pol2
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -1020,7 +1020,7 @@ objType table
 antibody Pol2
 cell Gliobla
 composite wgEncodeOpenChromChip
-controlId Gliobla/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -1046,7 +1046,7 @@ objType file
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH001129
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
@@ -1073,7 +1073,7 @@ objType file
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
@@ -1100,7 +1100,7 @@ objType table
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
@@ -1127,7 +1127,7 @@ objType table
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
@@ -1154,7 +1154,7 @@ objType file
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
@@ -1179,7 +1179,7 @@ objType file
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
@@ -1204,7 +1204,7 @@ objType table
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
@@ -1232,7 +1232,7 @@ antibody c-Myc
 attic auxSup
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
@@ -1256,7 +1256,7 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -1282,7 +1282,7 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -1308,7 +1308,7 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -1334,7 +1334,7 @@ objType table
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -1360,7 +1360,7 @@ objType table
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -1386,7 +1386,7 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
@@ -1412,7 +1412,7 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
@@ -1437,7 +1437,7 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
@@ -1463,7 +1463,7 @@ objType table
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -1490,7 +1490,7 @@ antibody CTCF
 attic auxSup
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
@@ -1514,7 +1514,7 @@ objType file
 antibody Input
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1540,7 +1540,7 @@ objType file
 antibody Input
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-07
@@ -1564,7 +1564,7 @@ objType table
 antibody Input
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1591,7 +1591,7 @@ objType file
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -1618,7 +1618,7 @@ objType file
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -1645,7 +1645,7 @@ objType table
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -1672,7 +1672,7 @@ objType table
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -1699,7 +1699,7 @@ objType file
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
@@ -1724,7 +1724,7 @@ objType file
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
@@ -1749,7 +1749,7 @@ objType table
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -1777,7 +1777,7 @@ antibody Pol2
 attic auxSup
 cell GM12878
 composite wgEncodeOpenChromChip
-controlId GM12878/Input
+controlId wgEncodeEH000528
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
@@ -3122,7 +3122,7 @@ objType file
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3149,7 +3149,7 @@ objType file
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3176,7 +3176,7 @@ objType table
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3203,7 +3203,7 @@ objType table
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3230,7 +3230,7 @@ objType file
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
@@ -3256,7 +3256,7 @@ objType file
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
@@ -3282,7 +3282,7 @@ objType table
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3310,7 +3310,7 @@ antibody c-Myc
 attic auxSup
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/None/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
@@ -3334,7 +3334,7 @@ objType file
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3361,7 +3361,7 @@ objType file
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3388,7 +3388,7 @@ objType table
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3415,7 +3415,7 @@ objType table
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3442,7 +3442,7 @@ objType file
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
@@ -3468,7 +3468,7 @@ objType file
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
@@ -3494,7 +3494,7 @@ objType table
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3522,7 +3522,7 @@ antibody CTCF
 attic auxSup
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/None/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
@@ -3546,7 +3546,7 @@ objType file
 antibody Input
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -3572,7 +3572,7 @@ objType file
 antibody Input
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-16
@@ -3597,7 +3597,7 @@ objType table
 antibody Input
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -3624,7 +3624,7 @@ objType file
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3651,7 +3651,7 @@ objType file
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3678,7 +3678,7 @@ objType table
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3705,7 +3705,7 @@ objType table
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3732,7 +3732,7 @@ objType file
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
@@ -3757,7 +3757,7 @@ objType file
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-23
@@ -3783,7 +3783,7 @@ objType table
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3811,7 +3811,7 @@ antibody Pol2
 attic auxSup
 cell HeLa-S3
 composite wgEncodeOpenChromChip
-controlId HeLa-S3/None/Input
+controlId wgEncodeEH000539
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
@@ -3835,7 +3835,7 @@ objType file
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3862,7 +3862,7 @@ objType file
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3889,7 +3889,7 @@ objType file
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3916,7 +3916,7 @@ objType table
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3943,7 +3943,7 @@ objType table
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3970,7 +3970,7 @@ objType file
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
@@ -3996,7 +3996,7 @@ objType file
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
@@ -4022,7 +4022,7 @@ objType file
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
@@ -4048,7 +4048,7 @@ objType table
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4076,7 +4076,7 @@ antibody c-Myc
 attic auxSup
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/None/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
@@ -4100,7 +4100,7 @@ objType file
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4127,7 +4127,7 @@ objType file
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4154,7 +4154,7 @@ objType table
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4181,7 +4181,7 @@ objType table
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4208,7 +4208,7 @@ objType file
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
@@ -4234,7 +4234,7 @@ objType file
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
@@ -4260,7 +4260,7 @@ objType table
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4288,7 +4288,7 @@ antibody CTCF
 attic auxSup
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/None/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
@@ -4312,7 +4312,7 @@ objType file
 antibody Input
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -4338,7 +4338,7 @@ objType file
 antibody Input
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-13
@@ -4363,7 +4363,7 @@ objType table
 antibody Input
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -4390,7 +4390,7 @@ objType file
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4417,7 +4417,7 @@ objType file
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4444,7 +4444,7 @@ objType file
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4471,7 +4471,7 @@ objType table
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4498,7 +4498,7 @@ objType table
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4525,7 +4525,7 @@ objType file
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-23
@@ -4550,7 +4550,7 @@ objType file
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
@@ -4575,7 +4575,7 @@ objType file
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
@@ -4600,7 +4600,7 @@ objType table
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -4628,7 +4628,7 @@ antibody Pol2
 attic auxSup
 cell HepG2
 composite wgEncodeOpenChromChip
-controlId HepG2/None/Input
+controlId wgEncodeEH000538
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
@@ -4652,7 +4652,7 @@ objType file
 antibody c-Myc
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4679,7 +4679,7 @@ objType table
 antibody c-Myc
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4706,7 +4706,7 @@ objType table
 antibody c-Myc
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4733,7 +4733,7 @@ objType file
 antibody c-Myc
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -4758,7 +4758,7 @@ objType table
 antibody c-Myc
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4785,7 +4785,7 @@ objType file
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4812,7 +4812,7 @@ objType file
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4839,7 +4839,7 @@ objType table
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4866,7 +4866,7 @@ objType table
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4893,7 +4893,7 @@ objType file
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
@@ -4918,7 +4918,7 @@ objType file
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
@@ -4943,7 +4943,7 @@ objType table
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4971,7 +4971,7 @@ antibody CTCF
 attic auxSup
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/None/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
@@ -4995,7 +4995,7 @@ objType file
 antibody Input
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -5021,7 +5021,7 @@ objType file
 antibody Input
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
@@ -5045,7 +5045,7 @@ objType table
 antibody Input
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -5072,7 +5072,7 @@ objType file
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5099,7 +5099,7 @@ objType file
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5126,7 +5126,7 @@ objType table
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5153,7 +5153,7 @@ objType table
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5180,7 +5180,7 @@ objType file
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
@@ -5205,7 +5205,7 @@ objType file
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
@@ -5230,7 +5230,7 @@ objType table
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
-controlId HUVEC/Input
+controlId wgEncodeEH000550
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5257,7 +5257,7 @@ objType file
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5284,7 +5284,7 @@ objType file
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5311,7 +5311,7 @@ objType file
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5338,7 +5338,7 @@ objType table
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5365,7 +5365,7 @@ objType table
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5392,7 +5392,7 @@ objType file
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
@@ -5418,7 +5418,7 @@ objType file
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
@@ -5444,7 +5444,7 @@ objType file
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
@@ -5470,7 +5470,7 @@ objType table
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5498,7 +5498,7 @@ antibody c-Myc
 attic auxSup
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
@@ -5522,7 +5522,7 @@ objType file
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5549,7 +5549,7 @@ objType file
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5576,7 +5576,7 @@ objType file
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5603,7 +5603,7 @@ objType table
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5630,7 +5630,7 @@ objType table
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2011-01-12
@@ -5657,7 +5657,7 @@ objType file
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
@@ -5683,7 +5683,7 @@ objType file
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
@@ -5709,7 +5709,7 @@ objType file
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
@@ -5735,7 +5735,7 @@ objType table
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2011-01-12
@@ -5763,7 +5763,7 @@ antibody CTCF
 attic auxSup
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
@@ -5787,7 +5787,7 @@ objType file
 antibody Input
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -5813,7 +5813,7 @@ objType file
 antibody Input
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-05
@@ -5838,7 +5838,7 @@ objType table
 antibody Input
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -5865,7 +5865,7 @@ objType file
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5892,7 +5892,7 @@ objType file
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5919,7 +5919,7 @@ objType table
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5946,7 +5946,7 @@ objType table
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2011-01-12
@@ -5973,7 +5973,7 @@ objType file
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
@@ -5998,7 +5998,7 @@ objType file
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
@@ -6023,7 +6023,7 @@ objType table
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2011-01-12
@@ -6051,7 +6051,7 @@ antibody Pol2
 attic auxSup
 cell K562
 composite wgEncodeOpenChromChip
-controlId K562/Input
+controlId wgEncodeEH000529
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
@@ -6075,7 +6075,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6101,7 +6101,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6127,7 +6127,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6153,7 +6153,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6180,7 +6180,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6205,7 +6205,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6230,7 +6230,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6256,7 +6256,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-23
@@ -6281,7 +6281,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-23
@@ -6301,12 +6301,318 @@ subId 3141
 treatment None
 view RawData
 
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 723b94a95e35c639b76eace975800a24,85b629776bc0618c9e636d8c33926c74
+project wgEncode
+replicate 1
+setType exp
+subId 5615
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycSerumstimAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 21521dd12af92dff7e795725f80cc72d,26bb4e44008608a09a20fd4c544eb88f
+project wgEncode
+replicate 2
+setType exp
+subId 5615
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+md5sum 554b5819f928aa71538b29439ddc6fca
+project wgEncode
+setType exp
+subId 5615
+tableName wgEncodeOpenChromChipMcf7CmycSerumstimBaseOverlapSignal
+treatment serum_stimulated_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+md5sum ad98c9d0ebbb2d569d21ff92750c60a5
+project wgEncode
+replicate 1
+setType exp
+subId 5615
+tableName wgEncodeOpenChromChipMcf7CmycSerumstimPkRep1
+treatment serum_stimulated_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+md5sum a0b6435ccc8d7883fe8a198b7f6e40ca
+project wgEncode
+replicate 1
+setType exp
+subId 5615
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+md5sum 9b93e44c177b71705c5c53f850d8e664
+project wgEncode
+replicate 2
+setType exp
+subId 5615
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstimSig
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CmycSerumstimSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+md5sum 9a1b71f2ca22540fe47c89694778c0c2
+project wgEncode
+setType exp
+subId 5615
+tableName wgEncodeOpenChromChipMcf7CmycSerumstimSig
+treatment serum_stimulated_media
+view Signal
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 66077b5998348c24ad85c0af6b06cdd0,207ef645fb949e6605f6c233ac1c49cb
+project wgEncode
+replicate 1
+setType exp
+subId 6196
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycSerumstvdAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum c5156972894d4aaf2647a7d821ac46af,7441c9d4667493cd1f3426fae229e1f5
+project wgEncode
+replicate 2
+setType exp
+subId 6196
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+md5sum 59469ff8eb88468961627a5ba658d3b1
+project wgEncode
+setType exp
+subId 6196
+tableName wgEncodeOpenChromChipMcf7CmycSerumstvdBaseOverlapSignal
+treatment serum_starved_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdPkRep1
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+md5sum 2264dbd85b777cefec625966d59f9942
+project wgEncode
+replicate 1
+setType exp
+subId 6196
+tableName wgEncodeOpenChromChipMcf7CmycSerumstvdPkRep1
+treatment serum_starved_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+md5sum 61f6a18cd29019b92c5dd30078135068
+project wgEncode
+replicate 1
+setType exp
+subId 6196
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+md5sum b4a39f2804b85e11aa784113c500927d
+project wgEncode
+replicate 2
+setType exp
+subId 6196
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycSerumstvdSig
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-03-23
+dateUnrestricted 2012-12-23
+fileName wgEncodeOpenChromChipMcf7CmycSerumstvdSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+md5sum e3d6a410c3468491d554b7c294e336ca
+project wgEncode
+setType exp
+subId 6196
+tableName wgEncodeOpenChromChipMcf7CmycSerumstvdSig
+treatment serum_starved_media
+view Signal
+
 metaObject wgEncodeOpenChromChipMcf7CmycVehAlnRep1
 objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6332,7 +6638,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6358,7 +6664,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6384,7 +6690,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6410,7 +6716,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6435,7 +6741,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6460,7 +6766,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6486,7 +6792,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -6513,7 +6819,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -6540,7 +6846,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -6567,7 +6873,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6593,7 +6899,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6619,7 +6925,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6645,7 +6951,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6671,7 +6977,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6696,7 +7002,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6721,7 +7027,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6747,7 +7053,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -6774,7 +7080,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
@@ -6799,7 +7105,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
@@ -6819,12 +7125,318 @@ subId 884
 treatment None
 view RawData
 
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep1
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 7a84ddafe3fae9cac8ac13a7b1989b2e,7163ef8eb6fb00e1320ee766fdee6273
+project wgEncode
+replicate 1
+setType exp
+subId 5613
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep2
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfSerumstimAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 2fa9acc27ccb58ee35fc3cc48a1d73e9,478fa46eec33d3b41cf0d2bda48494f2
+project wgEncode
+replicate 2
+setType exp
+subId 5613
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+md5sum df2f4b241ef7cf2325d57b959a72f99b
+project wgEncode
+setType exp
+subId 5613
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstimBaseOverlapSignal
+treatment serum_stimulated_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimPkRep1
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+md5sum 95394af7bd63442938449bc55a19bea7
+project wgEncode
+replicate 1
+setType exp
+subId 5613
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstimPkRep1
+treatment serum_stimulated_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep1
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+md5sum 0b4e84205e655e04e3273b17fffd8ed2
+project wgEncode
+replicate 1
+setType exp
+subId 5613
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep2
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+md5sum 54facbc63c88f749c570ae272d380100
+project wgEncode
+replicate 2
+setType exp
+subId 5613
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstimSig
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstimSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+md5sum 4c7328d2aea2fc0299f076d188206194
+project wgEncode
+setType exp
+subId 5613
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstimSig
+treatment serum_stimulated_media
+view Signal
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep1
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 6ac34e5ef7a3aa98b3334203cad14d5b,b454d8d0ab47b73d8948e0fd6ba523f6
+project wgEncode
+replicate 1
+setType exp
+subId 5616
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep2
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfSerumstvdAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum e2fab780aaf4bee24f03352db1c37307,b2fbd595cc2eeed9fdb0342e95e4afab
+project wgEncode
+replicate 2
+setType exp
+subId 5616
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+md5sum 52dc339b43faa0c9fa9606a2701c9037
+project wgEncode
+setType exp
+subId 5616
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstvdBaseOverlapSignal
+treatment serum_starved_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdPkRep1
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+md5sum 44b518e1404ae5f3b5ab8c9aeafaca71
+project wgEncode
+replicate 1
+setType exp
+subId 5616
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstvdPkRep1
+treatment serum_starved_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep1
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+md5sum 5857428be9cf64b70d288afd06dcb89c
+project wgEncode
+replicate 1
+setType exp
+subId 5616
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep2
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+md5sum a1b059d72b2b30191ee1028c8d3abbda
+project wgEncode
+replicate 2
+setType exp
+subId 5616
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CtcfSerumstvdSig
+objType table
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7CtcfSerumstvdSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+md5sum 4666feef48ddda62f8822fc93386d5a6
+project wgEncode
+setType exp
+subId 5616
+tableName wgEncodeOpenChromChipMcf7CtcfSerumstvdSig
+treatment serum_starved_media
+view Signal
+
 metaObject wgEncodeOpenChromChipMcf7CtcfSig
 objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -6851,7 +7463,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6877,7 +7489,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6903,7 +7515,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6929,7 +7541,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6955,7 +7567,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -6980,7 +7592,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -7005,7 +7617,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -7031,7 +7643,7 @@ objType file
 antibody Input
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
@@ -7057,7 +7669,7 @@ objType file
 antibody Input
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
@@ -7081,7 +7693,7 @@ objType table
 antibody Input
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
@@ -7108,7 +7720,7 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -7134,7 +7746,7 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -7160,7 +7772,7 @@ objType table
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -7186,7 +7798,7 @@ objType table
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -7212,7 +7824,7 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -7237,7 +7849,7 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -7257,12 +7869,318 @@ subId 2495
 treatment None
 view RawData
 
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep1
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep1.bam,wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 8e2263d50f5d33f4f8f8ead8ec42951f,a91009c576f34d97e9a7ef04a7dfb79c
+project wgEncode
+replicate 1
+setType exp
+subId 5614
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep2
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep2.bam,wgEncodeOpenChromChipMcf7Pol2SerumstimAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum b43ed7caee993d1887966e1840793bbe,513f5d7af65f1c75be8a88308c3636eb
+project wgEncode
+replicate 2
+setType exp
+subId 5614
+treatment serum_stimulated_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+md5sum 817b7951625d19c16bb4ba34b1991cf7
+project wgEncode
+setType exp
+subId 5614
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstimBaseOverlapSignal
+treatment serum_stimulated_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimPkRep1
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+md5sum 5125c16af17d12c111cc557b5d208526
+project wgEncode
+replicate 1
+setType exp
+subId 5614
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstimPkRep1
+treatment serum_stimulated_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep1
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+md5sum fc3ca9538f45aff52889dc81b8555ffc
+project wgEncode
+replicate 1
+setType exp
+subId 5614
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep2
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+md5sum 05972ee0669713bb8b447080c827094e
+project wgEncode
+replicate 2
+setType exp
+subId 5614
+treatment serum_stimulated_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstimSig
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-11
+dateUnrestricted 2012-11-11
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstimSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+md5sum 5b48ce173ca0d658d4eb1bdd5d04e4e5
+project wgEncode
+setType exp
+subId 5614
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstimSig
+treatment serum_stimulated_media
+view Signal
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep1
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep1.bam,wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep1.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 208a3ff0a4619915aaebf0b998ae8025,f64c34bd4c310c1098a49ec51ba7e7ea
+project wgEncode
+replicate 1
+setType exp
+subId 5617
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep2
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep2.bam,wgEncodeOpenChromChipMcf7Pol2SerumstvdAlnRep2.bam.bai
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 5403f8985ceabd75ddd990ed69a290a7,8debf9358621199b09813d369cee3d35
+project wgEncode
+replicate 2
+setType exp
+subId 5617
+treatment serum_starved_media
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+md5sum 6547f2f1c1c271507eac6019668f75b2
+project wgEncode
+setType exp
+subId 5617
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstvdBaseOverlapSignal
+treatment serum_starved_media
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+md5sum 6c970fe6171530858254a42b1d2ffae6
+project wgEncode
+replicate 1
+setType exp
+subId 5617
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstvdPkRep1
+treatment serum_starved_media
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep1
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+md5sum b71f74e123f3ce3dfacdfc60a7be3305
+project wgEncode
+replicate 1
+setType exp
+subId 5617
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep2
+objType file
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+md5sum 0641919dfd1f8706aa42b3275b49dfa0
+project wgEncode
+replicate 2
+setType exp
+subId 5617
+treatment serum_starved_media
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7Pol2SerumstvdSig
+objType table
+antibody Pol2
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId wgEncodeEH000589
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-13
+dateUnrestricted 2012-11-12
+fileName wgEncodeOpenChromChipMcf7Pol2SerumstvdSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_MCF7
+md5sum f9c2f559ebf50a142f412bc35d791f02
+project wgEncode
+setType exp
+subId 5617
+tableName wgEncodeOpenChromChipMcf7Pol2SerumstvdSig
+treatment serum_starved_media
+view Signal
+
 metaObject wgEncodeOpenChromChipMcf7Pol2Sig
 objType table
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-controlId MCF-7/Input
+controlId wgEncodeEH000589
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -7288,7 +8206,7 @@ objType file
 antibody Input
 cell Monocytes-CD14+
 composite wgEncodeOpenChromChip
-controlId Monocytes-CD14+/Input
+controlId wgEncodeEH001137
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -7314,7 +8232,7 @@ objType file
 antibody Input
 cell Monocytes-CD14+
 composite wgEncodeOpenChromChip
-controlId Monocytes-CD14+/Input
+controlId wgEncodeEH001137
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -7339,7 +8257,7 @@ objType table
 antibody Input
 cell Monocytes-CD14+
 composite wgEncodeOpenChromChip
-controlId Monocytes-CD14+/Input
+controlId wgEncodeEH001137
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -7366,7 +8284,7 @@ objType file
 antibody Input
 cell Monocytes-CD14+_RO01746
 composite wgEncodeOpenChromChip
-controlId Monocytes-CD14+/Input
+controlId wgEncodeEH001137
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -7391,7 +8309,7 @@ objType file
 antibody Input
 cell Monocytes-CD14+_RO01746
 composite wgEncodeOpenChromChip
-controlId Monocytes-CD14+/Input
+controlId wgEncodeEH001137
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -7415,7 +8333,7 @@ objType table
 antibody Input
 cell Monocytes-CD14+_RO01746
 composite wgEncodeOpenChromChip
-controlId Monocytes-CD14+/Input
+controlId wgEncodeEH001137
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-17
@@ -7626,7 +8544,7 @@ objType file
 antibody CTCF
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -7653,7 +8571,7 @@ objType file
 antibody CTCF
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -7680,7 +8598,7 @@ objType table
 antibody CTCF
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -7707,7 +8625,7 @@ objType table
 antibody CTCF
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -7735,7 +8653,7 @@ objType table
 antibody CTCF
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -7762,7 +8680,7 @@ objType file
 antibody Input
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
@@ -7788,7 +8706,7 @@ objType table
 antibody Input
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
@@ -7815,7 +8733,7 @@ objType file
 antibody Pol2
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -7842,7 +8760,7 @@ objType file
 antibody Pol2
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -7869,7 +8787,7 @@ objType table
 antibody Pol2
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -7896,7 +8814,7 @@ objType table
 antibody Pol2
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -7924,7 +8842,7 @@ objType table
 antibody Pol2
 cell ProgFib
 composite wgEncodeOpenChromChip
-controlId ProgFib/Input
+controlId wgEncodeEH000593
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -7946,4 +8864,4 @@ tableName wgEncodeOpenChromChipProgfibPol2Sig
 treatment None
 view Signal
 
-# MAGIC: 486802215
+# MAGIC: 1831908647
