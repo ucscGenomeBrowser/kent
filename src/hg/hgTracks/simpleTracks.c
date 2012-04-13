@@ -12207,7 +12207,7 @@ safef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE artic
     articleTable, lf->name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
-{
+    {
     char* firstAuthor = row[0];
     char* year    = row[1];
     char* title   = row[2];
@@ -12218,7 +12218,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         extra->mouseOver = extra->label;
     else
         extra->mouseOver = cloneString(title);
-}
+    }
 
 sqlFreeResult(&sr);
 return extra;
@@ -12254,9 +12254,9 @@ if(isNotEmpty(keywords))
     keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
 
 if(isEmpty(yearFilter) && isEmpty(keywords))
-{
+    {
     loadGappedBed(tg);
-}
+    }
 else
     {
     char* oldLabel = tg->longLabel;
@@ -12312,15 +12312,13 @@ static void activatePslTrackIfCgi(struct track *tg)
  */
 {
 char *articleId = cgiOptionalString(PUBSFILTERNAME);
-//if (articleId==NULL) 
-    //articleId = cartOptionalString(cart, PUBSFILTERNAME);
 
 if (articleId!=NULL) 
-{
+    {
     cartSetString(cart, PUBSFILTERNAME, articleId);
     tdbSetCartVisibility(tg->tdb, cart, hCarefulTrackOpenVis(database, tg->track));
     tg->visibility=tvPack;
-}
+    }
 }
 
 char *pubsItemName(struct track *tg, void *item)
@@ -12360,10 +12358,7 @@ if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
 static void pubsLoadMarkerItem (struct track *tg)
 /* copy item names into extra field */
 {
-//loadSimpleBed(tg);
 loadSimpleBedAsLinkedFeaturesPerBase(tg);
-//tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE, FALSE);
-//if (! (hashFindVal(tdb->settingsHash, "pubsMarkerTable")))
 enum trackVisibility vis = tg->visibility;
 if (vis == tvDense || vis == tvSquish) 
     return;
@@ -12419,14 +12414,14 @@ safef(query, sizeof(query), "SELECT firstAuthor, year FROM %s WHERE articleId = 
     articleTable, articleId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 if (sr!=NULL)
-{
+    {
     char **row = NULL;
     row = sqlNextRow(sr);
     if (row != NULL)
         dispLabel = pubsFeatureLabel(row[0], row[1]);
     else
         dispLabel = articleId;
-}
+    }
 else
     dispLabel = articleId;
 sqlFreeResult(&sr);
@@ -12462,7 +12457,7 @@ sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, where, &rowOffset
 struct linkedFeatures *lfList = NULL;
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
-{
+    {
     struct psl *psl = pslLoad(row+rowOffset);
     slAddHead(&lfList, lfFromPsl(psl, TRUE));
     char* shortSeq  = hashFindVal(idToSeq,  lfList->name);
@@ -12471,7 +12466,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     extra->mouseOver=snip;
     extra->label=shortSeq;
     lfList->extra = extra;
-}
+    }
 sqlFreeResult(&sr);
 slReverse(&lfList);
 slSort(&lfList, linkedFeaturesCmp);
