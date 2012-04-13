@@ -33,7 +33,7 @@ noInherit on
 
         track wgEncodeGisChiaPetHct116Pol2SigRep1
         parent wgEncodeGisChiaPetSignal off
-        shortLabel HCT-116 Pol2 Sig 1
+        shortLabel HCT116 Pol2 Sig 1
         longLabel HCT-116 Pol2 ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=POL2 cellType=HCT116 rep=rep1
         type bigWig 1.000000 3688.000000
@@ -49,7 +49,7 @@ noInherit on
 
         track wgEncodeGisChiaPetMcf7Pol2SigRep1
         parent wgEncodeGisChiaPetSignal off
-        shortLabel MCF-7 Pol2 Sig 1
+        shortLabel MCF7 Pol2 Sig 1
         longLabel MCF-7 Pol2 ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=POL2 cellType=MCF7 rep=rep1
         type bigWig 1.000000 8201.000000
@@ -57,7 +57,7 @@ noInherit on
 
         track wgEncodeGisChiaPetMcf7Pol2SigRep2
         parent wgEncodeGisChiaPetSignal off
-        shortLabel MCF-7 Pol2 Sig 2
+        shortLabel MCF7 Pol2 Sig 2
         longLabel MCF-7 Pol2 ChIA-PET Signal Rep 2 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=POL2 cellType=MCF7 rep=rep2
         type bigWig 1.000000 7397.000000
@@ -65,7 +65,7 @@ noInherit on
 
         track wgEncodeGisChiaPetMcf7CtcfSigRep2
         parent wgEncodeGisChiaPetSignal off
-        shortLabel MCF-7 CTCF Sig 2
+        shortLabel MCF7 CTCF Sig 2
         longLabel MCF-7 CTCF ChIA-PET Signal Rep 2 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=CTCF cellType=MCF7 rep=rep2
         type bigWig 1.000000 2958.000000
@@ -73,7 +73,7 @@ noInherit on
 
         track wgEncodeGisChiaPetMcf7CtcfSigRep1
         parent wgEncodeGisChiaPetSignal off
-        shortLabel MCF-7 CTCF Sig 1
+        shortLabel MCF7 CTCF Sig 1
         longLabel MCF-7 CTCF ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=CTCF cellType=MCF7 rep=rep1
         type bigWig 1.000000 3954.000000
@@ -99,7 +99,7 @@ noInherit on
 
         track wgEncodeGisChiaPetMcf7EraaSigRep3
         parent wgEncodeGisChiaPetSignal off
-        shortLabel MCF-7 ERalpha_a Sig 3
+        shortLabel MCF7 ERa Sig 3
         longLabel MCF-7 ERalpha_a ChIA-PET Signal Rep 3 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=ERAA cellType=MCF7 rep=rep3
         type bigWig 1.000000 1735.000000
@@ -107,7 +107,7 @@ noInherit on
 
         track wgEncodeGisChiaPetMcf7EraaSigRep2
         parent wgEncodeGisChiaPetSignal off
-        shortLabel MCF-7 ERalpha_a Sig 2
+        shortLabel MCF7 ERa Sig 2
         longLabel MCF-7 ERalpha_a ChIA-PET Signal Rep 2 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=ERAA cellType=MCF7 rep=rep2
         type bigWig 1.000000 1372.000000
@@ -115,7 +115,7 @@ noInherit on
 
         track wgEncodeGisChiaPetMcf7EraaSigRep1
         parent wgEncodeGisChiaPetSignal off
-        shortLabel MCF-7 ERalpha_a Sig 1
+        shortLabel MCF7 ERa Sig 1
         longLabel MCF-7 ERalpha_a ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=ERAA cellType=MCF7 rep=rep1
         type bigWig 1.000000 973.000000
@@ -132,7 +132,7 @@ noInherit on
 
         track wgEncodeGisChiaPetHelas3Pol2SigRep1
         parent wgEncodeGisChiaPetSignal on
-        shortLabel HeLa-S3 Pol2 Sig 1
+        shortLabel HeLaS3 Pol2 Sig 1
         longLabel HeLa-S3 Pol2 ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=POL2 cellType=2HELAS3 rep=rep1
         type bigWig 1.000000 8395.000000
@@ -141,7 +141,7 @@ noInherit on
 
         track wgEncodeGisChiaPetMcf7Pol2SigRep3
         parent wgEncodeGisChiaPetSignal off
-        shortLabel MCF-7 Pol2 Sig 3
+        shortLabel MCF7 Pol2 Sig 3
         longLabel MCF-7 Pol2 ChIA-PET Signal Rep 3 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=POL2 cellType=MCF7 rep=rep3
         type bigWig 1.000000 3269.000000
@@ -149,7 +149,7 @@ noInherit on
 
         track wgEncodeGisChiaPetMcf7Pol2SigRep4
         parent wgEncodeGisChiaPetSignal off
-        shortLabel MCF-7 Pol2 Sig 4
+        shortLabel MCF7 Pol2 Sig 4
         longLabel MCF-7 Pol2 ChIA-PET Signal Rep 4 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=POL2 cellType=MCF7 rep=rep4
         type bigWig 1.000000 5065.000000
@@ -173,7 +173,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetHct116Pol2InteractionsRep1
 		parent wgEncodeGisChiaPetInteractions off
-		shortLabel HCT-116 Pol2 1
+		shortLabel HCT116 Pol2 1
 		longLabel HCT-116 Pol2 ChIA-PET Interactions Rep 1 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=POL2 cellType=HCT116 rep=rep1
 		type bed 12
@@ -189,7 +189,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetMcf7Pol2InteractionsRep1
 		parent wgEncodeGisChiaPetInteractions off
-		shortLabel MCF-7 Pol2 1
+		shortLabel MCF7 Pol2 1
 		longLabel MCF-7 Pol2 ChIA-PET Interactions Rep 1 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=POL2 cellType=MCF7 rep=rep1
 		type bed 12
@@ -197,7 +197,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetMcf7Pol2InteractionsRep2
 		parent wgEncodeGisChiaPetInteractions off
-		shortLabel MCF-7 Pol2 2
+		shortLabel MCF7 Pol2 2
 		longLabel MCF-7 Pol2 ChIA-PET Interactions Rep 2 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=POL2 cellType=MCF7 rep=rep2
 		type bed 12
@@ -205,7 +205,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetMcf7CtcfInteractionsRep2
 		parent wgEncodeGisChiaPetInteractions off
-		shortLabel MCF-7 CTCF 2
+		shortLabel MCF7 CTCF 2
 		longLabel MCF-7 CTCF ChIA-PET Interactions Rep 2 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=CTCF cellType=MCF7 rep=rep2
 		type bed 12
@@ -213,7 +213,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetMcf7CtcfInteractionsRep1
 		parent wgEncodeGisChiaPetInteractions off
-		shortLabel MCF-7 CTCF 1
+		shortLabel MCF7 CTCF 1
 		longLabel MCF-7 CTCF ChIA-PET Interactions Rep 1 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=CTCF cellType=MCF7 rep=rep1
 		type bed 12
@@ -239,7 +239,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetMcf7EraaInteractionsRep3
 		parent wgEncodeGisChiaPetInteractions off
-		shortLabel MCF-7 ERalpha_a 3
+		shortLabel MCF7 ERa 3
 		longLabel MCF-7 ERalpha_a ChIA-PET Interactions Rep 3 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=ERAA cellType=MCF7 rep=rep3
 		type bed 12
@@ -247,7 +247,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetMcf7EraaInteractionsRep2
 		parent wgEncodeGisChiaPetInteractions off
-		shortLabel MCF-7 ERalpha_a 2
+		shortLabel MCF7 ERa 2
 		longLabel MCF-7 ERalpha_a ChIA-PET Interactions Rep 2 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=ERAA cellType=MCF7 rep=rep2
 		type bed 12
@@ -255,7 +255,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetMcf7EraaInteractionsRep1
 		parent wgEncodeGisChiaPetInteractions off
-		shortLabel MCF-7 ERalpha_a 1
+		shortLabel MCF7 ERa 1
 		longLabel MCF-7 ERalpha_a ChIA-PET Interactions Rep 1 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=ERAA cellType=MCF7 rep=rep1
 		type bed 12
@@ -272,7 +272,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetHelas3Pol2InteractionsRep1
 		parent wgEncodeGisChiaPetInteractions on 
-		shortLabel HeLa-S3 Pol2 1
+		shortLabel HeLaS3 Pol2 1
 		longLabel HeLa-S3 Pol2 ChIA-PET Interactions Rep 1 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=POL2 cellType=2HELAS3 rep=rep1
 		type bed 12
@@ -281,7 +281,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetMcf7Pol2InteractionsRep3
 		parent wgEncodeGisChiaPetInteractions off
-		shortLabel MCF-7 Pol2 3
+		shortLabel MCF7 Pol2 3
 		longLabel MCF-7 Pol2 ChIA-PET Interactions Rep 3 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=POL2 cellType=MCF7 rep=rep3
 		type bed 12
@@ -289,7 +289,7 @@ noInherit on
 
 		track wgEncodeGisChiaPetMcf7Pol2InteractionsRep4
 		parent wgEncodeGisChiaPetInteractions off
-		shortLabel MCF-7 Pol2 4
+		shortLabel MCF7 Pol2 4
 		longLabel MCF-7 Pol2 ChIA-PET Interactions Rep 4 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=POL2 cellType=MCF7 rep=rep4
 		type bed 12
