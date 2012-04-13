@@ -1,0 +1,423 @@
+# for emacs: -*- mode: sh; -*-
+
+#       DATE:   24-Aug-2011
+#       ORGANISM:       Sus scrofa
+#       TAXID:  9823
+#       ASSEMBLY LONG NAME:     Sscrofa10.2
+#       ASSEMBLY SHORT NAME:    Sscrofa10.2
+#       ASSEMBLY SUBMITTER:     Swine Genome Sequencing Consortium
+#       ASSEMBLY TYPE:  Haploid
+#       NUMBER OF ASSEMBLY-UNITS:       1
+#       Assembly Accession:     GCA_000003025.4
+
+#       FTP-RELEASE DATE: 08-Sep-2011
+
+#       http://www.ncbi.nlm.nih.gov/genome/84
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/304498/
+#       http://www.ncbi.nlm.nih.gov/bioproject/13421
+#       http://www.ncbi.nlm.nih.gov/bioproject/28993 - chrMt NC_000845.1
+#                                              included in Sscrofa10
+
+#       http://www.ncbi.nlm.nih.gov/nuccore/326195957
+#       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AEMK01
+#       Genome Coverage : 24x
+
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9823
+
+#       A different chrMt:
+#       http://www.ncbi.nlm.nih.gov/bioproject/34563 - chrMt - NC_012095.1
+
+# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa10.2/ ./
+
+##########################################################################
+# Download sequence (DONE - 2012-04-11 - Hiram)
+    mkdir /hive/data/genomes/susScr3
+    cd /hive/data/genomes/susScr3
+    mkdir genbank
+    cd genbank
+    rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sus_scrofa/Sscrofa10.2/ ./
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/*.fa.gz \
+        Primary_Assembly/placed_scaffolds/FASTA/*.fa.gz \
+        Primary_Assembly/unplaced_scaffolds/FASTA/*.fa.gz
+    #   5138998834 bases (296506722 N's 4842492112 real 4842492112 upper
+    #   0 lower) in 9925 sequences in 41 files
+    #   Total size: mean 517783.3 sd 6498082.1
+    #   min 100 (gi|333451020|gb|GL895433.1|)
+    #   max 315321322 (gi|345632377|gb|CM000812.4|) median 146507
+
+##########################################################################
+# fixup names for UCSC standards (DONE - 2012-04-11 - Hiram)
+    mkdir /hive/data/genomes/susScr3/ucsc
+    cd /hive/data/genomes/susScr3/ucsc
+
+    ########################  Assembled Chromosomes
+    cat << '_EOF_' > toUcsc.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../genbank/Primary_Assembly/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.agp.gz|") or die "can not read chr${chrN}.agp.gz";
+    open (UC, "|gzip -c >chr${chrN}.agp.gz") or die "can not write to chr${chrN}.agp.gz";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz|") or die "can not read chr${chrN}.fa.gz";
+    open (UC, "|gzip -c >chr${chrN}.fa.gz") or die "can not write to chr${chrN}.fa.gz";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x toUcsc.pl
+    time ./toUcsc.pl
+    #   real    11m13.537s
+
+    ########################  Unplaced scaffolds
+    # verify we don't have any .acc numbers different from .1
+    zcat \
+    ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| cut -f1 | egrep "^GL|^AEMK" \
+	| sed -e 's/^GL[0-9][0-9]*//; s/^AEMK[0-9][0-9]*//' | sort | uniq -c
+    #   111316 .1
+    #   130799 .2
+
+    # in that case, since they are not all .1, we need to use the full name
+    #   modified to remove the .
+    # this is like the unplaced.pl script in other assemblies except it
+    #	does not add chrUn_ to the names since they are all just scaffolds
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, "|gzip -c > unplaced.agp.gz") or die "can not write to unplaced.agp.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\./-/;    
+        printf UC "%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, "|gzip -c > unplaced.fa.gz") or die "can not write to unplaced.fa.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\|.*//;
+        $line =~ s/\./-/;    
+        printf UC ">$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+    time ./unplaced.pl
+    #   real    1m2.948s
+
+    # verify nothing lost from original:
+    time faSize *.fa.gz
+    #   2808509378 bases (289538800 N's 2518970578 real 2518970578 upper
+    #   0 lower) in 4582 sequences in 21 files
+    #   Total size: mean 612944.0 sd 9554154.6 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25294
+    #   real    1m3.821s
+
+    # make sure none of the names got to be over 31 characers long:
+    zcat *.agp.gz | grep -v "^#" | cut -f1 | awk '{print length($0)}' \
+        | sort -rn | uniq -c | head
+    #    332154 10
+    #   3879 5
+    #   6787 4
+
+##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2012-04-11 - Hiram)
+    cd /hive/data/genomes/susScr3
+    cat << '_EOF_' > susScr3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db susScr3
+clade mammal
+genomeCladePriority 35
+scientificName Sus scrofa
+commonName Pig
+assemblyDate Aug. 2011
+assemblyLabel SGSC Sscrofa10.2 (NCBI project 13421, GCA_000003025.4, WGS AEMK01)
+assemblyShortLabel SGSC Sscrofa10.2
+ncbiAssemblyName SGSC Sscrofa10.2
+ncbiAssemblyId 304498
+orderKey 2349
+mitoAcc NC_000845
+fastaFiles /hive/data/genomes/susScr3/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/susScr3/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir pig
+taxId 9823
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and agp are OK
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp susScr3.config.ra > agp.log 2>&1
+    #   real    8m23.506s
+    # verify OK:
+    tail -1 agp.log
+    #   *** All done!  (through the 'agp' step)
+
+    # finish it off
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
+        -dbHost=hgwdev susScr3.config.ra > db.log 2>&1
+    #   real    24m50.869s
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/susScr3.unmasked.2bit /gbdb/susScr3/susScr3.2bit
+    #	browser should function now
+
+#########################################################################
+# running repeat masker (DONE - 2012-04-11 - Hiram)
+    mkdir /hive/data/genomes/susScr3/bed/repeatMasker
+    cd /hive/data/genomes/susScr3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek susScr3 > do.log 2>&1 &
+    #   real    990m24.340s
+
+    cat faSize.rmsk.txt
+    #   2808525991 bases (289538800 N's 2518987191 real 1404190109 upper
+    #   1114797082 lower) in 4583 sequences in 1 files
+    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25278
+    #   %39.69 masked total, %44.26 masked real
+
+    egrep -i "versi|relea" do.log
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+# CC   RELEASE 20110920; 
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+
+    featureBits -countGaps susScr3 rmsk
+    #   29525418 bases of 2525996391 (1.169%) in intersection
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2012-04-11 - Hiram)
+    mkdir /hive/data/genomes/susScr3/bed/simpleRepeat
+    cd /hive/data/genomes/susScr3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	susScr3 > do.log 2>&1 &
+    #   real    9m41.939s
+    cat fb.simpleRepeat 
+    #   29525418 bases of 2525996391 (1.169%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/susScr3
+    twoBitMask susScr3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed susScr3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa susScr3.2bit stdout | faSize stdin > faSize.susScr3.2bit.txt
+    cat faSize.susScr3.2bit.txt
+    #   2808525991 bases (289538800 N's 2518987191 real 1403003553 upper
+    #   1115983638 lower) in 4583 sequences in 1 files
+    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25278
+    #   %39.74 masked total, %44.30 masked real
+
+    rm /gbdb/susScr3/susScr3.2bit
+    ln -s `pwd`/susScr3.2bit /gbdb/susScr3/susScr3.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-04-11 - Hiram)
+    mkdir /hive/data/genomes/susScr3/bed/gap
+    cd /hive/data/genomes/susScr3/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../susScr3.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m4.977s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits susScr3 -not gap -bed=notGap.bed
+    #   2525996391 bases of 2525996391 (100.000%) in intersection
+
+    time featureBits susScr3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    wc -l new.gaps.bed
+    #   14502 new.gaps.bed
+    #   39382069 bases of 2403678276 (1.638%) in intersection
+    #   real    2m51.724s
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" susScr3 | sort -n | tail -1
+    #	1382
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" susScr3 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps susScr3 other.bed
+    #   702334 bases of 2808525991 (0.025%) in intersection
+    wc -l other.bed
+    #	14502
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad susScr3 otherGap other.bed
+    #   Read 14502 elements of size 8 from other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" susScr3
+    #	 169119
+    hgsql susScr3 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" susScr3
+    #	183621
+    # == 14502 + 169119
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 susScr3 nonBridged.lift -bedFile=nonBridged.bed
+    #   one of these new ones is adjacent to an existing gap:
+# WARNING: overlapping gap at chr1:16262949-16312949(fragment) and chr1:16312949-16312957(other)
+
+    # see example in danRer7.txt
+    # are there non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" susScr3 | sort | uniq -c
+    #  169119 no
+    #   14502 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2012-04-11 - Hiram)
+    mkdir /hive/data/genomes/susScr3/bed/windowMasker
+    cd /hive/data/genomes/susScr3/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev susScr3 > do.log 2>&1 &
+    #   real    224m8.502s
+
+    # Masking statistics
+    twoBitToFa susScr3.wmsk.2bit stdout | faSize stdin
+    #   2808525991 bases (289538800 N's 2518987191 real 1636028761 upper
+    #   882958430 lower) in 4583 sequences in 1 files
+    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25278
+    #   %31.44 masked total, %35.05 masked real
+
+    twoBitToFa susScr3.wmsk.sdust.2bit stdout | faSize stdin
+    #   2808525991 bases (289538800 N's 2518987191 real 1622625959 upper
+    #   896361232 lower) in 4583 sequences in 1 files
+    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25278
+    #   %31.92 masked total, %35.58 masked real
+
+    hgLoadBed susScr3 windowmaskerSdust windowmasker.sdust.bed.gz
+    #   Read 13770155 elements of size 3 from windowmasker.sdust.bed.gz
+
+    featureBits -countGaps susScr3 windowmaskerSdust
+    #   1185785055 bases of 2808525991 (42.221%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits susScr3 -not gap -bed=notGap.bed
+    #   2525294057 bases of 2525294057 (100.000%) in intersection
+    time nice -n +19 featureBits susScr3 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   902560289 bases of 2525294057 (35.741%) in intersection
+    #   real    3m46.190s
+
+    #	reload track to get it clean
+    hgLoadBed susScr3 windowmaskerSdust cleanWMask.bed.gz
+    #   Read 13751189 elements of size 4 from cleanWMask.bed.gz
+    featureBits -countGaps susScr3 windowmaskerSdust
+    #   902560289 bases of 2808525991 (32.136%) in intersection
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../susScr3.unmasked.2bit stdin \
+	    -type=.bed susScr3.cleanWMSdust.2bit
+    twoBitToFa susScr3.cleanWMSdust.2bit stdout | faSize stdin \
+        > susScr3.cleanWMSdust.faSize.txt
+    cat susScr3.cleanWMSdust.faSize.txt
+    #   2808525991 bases (289538800 N's 2518987191 real 1622625959 upper
+    #   896361232 lower) in 4583 sequences in 1 files
+    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25278
+    #   %31.92 masked total, %35.58 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps susScr3 rmsk windowmaskerSdust
+    #   660954442 bases of 2808525991 (23.534%) in intersection
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2012-04-11 - Hiram)
+    #	since rmsk masks so very little of the genome, use the clean WM mask
+    #	on the genome sequence
+#    cd /hive/data/genomes/susScr3
+#    twoBitMask -add bed/windowMasker/susScr3.cleanWMSdust.2bit \
+#	bed/simpleRepeat/trfMask.bed susScr3.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+#    twoBitToFa susScr3.2bit stdout | faSize stdin > faSize.susScr3.txt
+#    cat faSize.susScr3.txt
+    #   927696114 bases (111611440 N's 816084674 real 607935500 upper
+    #   208149174 lower) in 5678 sequences in 1 files
+    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
+    #   max 51042256 (chrLG7) median 2009
+    #   %22.44 masked total, %25.51 masked real
+
+    #	create symlink to gbdb
+#    rm /gbdb/susScr3/susScr3.2bit
+#    ln -s `pwd`/susScr3.2bit /gbdb/susScr3/susScr3.2bit
+
+########################################################################

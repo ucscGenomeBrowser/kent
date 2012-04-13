@@ -2,6 +2,7 @@ metaObject wgEncodeCaltechRnaSeq
 objType composite
 composite wgEncodeCaltechRnaSeq
 expVars lab,dataType,cell,readType,insertLength,treatment
+geoSeriesAccession GSE33480
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2
 objType table
@@ -16,7 +17,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11011
 localization cell
@@ -46,7 +47,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11010
 localization cell
@@ -76,7 +77,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 localization cell
 md5sum 2ff540ecbc946ff623948c01e89a85bd
@@ -102,7 +103,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 localization cell
 md5sum 5cd378ef1832aabfc8461dd1384514d3
@@ -128,7 +129,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11011
 localization cell
@@ -159,7 +160,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11010
 localization cell
@@ -190,7 +191,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11011
 localization cell
@@ -221,7 +222,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11010
 localization cell
@@ -252,7 +253,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11011
 localization cell
@@ -282,7 +283,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11010
 localization cell
@@ -312,7 +313,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11010
 localization cell
@@ -342,7 +343,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11010
 localization cell
@@ -372,7 +373,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11010
 localization cell
@@ -402,7 +403,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11010
 localization cell
@@ -432,7 +433,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11011
 localization cell
@@ -462,7 +463,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UMinusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11010
 localization cell
@@ -492,7 +493,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11011
 localization cell
@@ -522,7 +523,7 @@ dccAccession wgEncodeEH000125
 expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014UPlusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11010
 localization cell
@@ -610,6 +611,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -638,6 +640,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -832,6 +835,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -860,6 +864,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -888,6 +893,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -916,6 +922,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1003,6 +1010,7 @@ dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1034,6 +1042,7 @@ dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1124,6 +1133,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep1V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1152,6 +1162,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep2V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1180,6 +1191,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1208,6 +1220,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1236,6 +1249,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1264,6 +1278,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1322,6 +1337,7 @@ dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400ExonsGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828355
 grant Myers
 insertLength 400
 lab Caltech
@@ -1462,6 +1478,7 @@ dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828355
 grant Myers
 insertLength 400
 lab Caltech
@@ -1490,6 +1507,7 @@ dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828355
 grant Myers
 insertLength 400
 lab Caltech
@@ -1548,6 +1566,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2.bigWig
+geoSampleAccession GSM828355
 grant Myers
 insertLength 400
 lab Caltech
@@ -1608,6 +1627,7 @@ dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TSSRep2V3.gtf.gz
+geoSampleAccession GSM828355
 grant Myers
 insertLength 400
 lab Caltech
@@ -1636,6 +1656,7 @@ dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828355
 grant Myers
 insertLength 400
 lab Caltech
@@ -1664,6 +1685,7 @@ dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828355
 grant Myers
 insertLength 400
 lab Caltech
@@ -1693,6 +1715,7 @@ dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1752,6 +1775,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000122
 expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
+geoSampleAccession GSM828367
 grant Myers
 insertLength 200
 lab Caltech
@@ -1811,6 +1835,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
+geoSampleAccession GSM828355
 grant Myers
 insertLength 400
 lab Caltech
@@ -3708,7 +3733,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 10947
 localization cell
@@ -3738,7 +3763,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11009
 localization cell
@@ -3768,7 +3793,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 10947
 localization cell
@@ -3795,7 +3820,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 localization cell
 md5sum f8d7f1c78cd33a55e5308b01b9384056
@@ -3821,7 +3846,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 10947
 localization cell
@@ -3852,7 +3877,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11009
 localization cell
@@ -3883,7 +3908,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 10947
 localization cell
@@ -3914,7 +3939,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11009
 localization cell
@@ -3945,7 +3970,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 10947
 localization cell
@@ -3975,7 +4000,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11009
 localization cell
@@ -4005,7 +4030,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 10947
 localization cell
@@ -4035,7 +4060,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -4065,7 +4090,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 10947
 localization cell
@@ -4095,7 +4120,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -4125,7 +4150,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 10947
 localization cell
@@ -4155,7 +4180,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UMinusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11009
 localization cell
@@ -4185,7 +4210,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 10947
 localization cell
@@ -4215,7 +4240,7 @@ dccAccession wgEncodeEH000132
 expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014UPlusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11009
 localization cell
@@ -4363,6 +4388,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4391,6 +4417,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4419,6 +4446,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep3V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4447,6 +4475,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep4V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4691,6 +4720,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4719,6 +4749,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4747,6 +4778,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep3V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4775,6 +4807,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep4V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4803,6 +4836,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4831,6 +4865,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4859,6 +4894,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep3V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -4887,6 +4923,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep4V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5032,6 +5069,7 @@ dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5063,6 +5101,7 @@ dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5094,6 +5133,7 @@ dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2.bigWig
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5125,6 +5165,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2.bigWig
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5275,6 +5316,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep1V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5303,6 +5345,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep2V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5331,6 +5374,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep3V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5359,6 +5403,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep4V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5387,6 +5432,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5415,6 +5461,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5443,6 +5490,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep3V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5471,6 +5519,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep4V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5499,6 +5548,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5527,6 +5577,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5555,6 +5606,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep3V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5583,6 +5635,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep4V3.gtf.gz
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -5641,6 +5694,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400ExonsGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828359
 grant Myers
 insertLength 400
 lab Caltech
@@ -5723,6 +5777,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828359
 grant Myers
 insertLength 400
 lab Caltech
@@ -5751,6 +5806,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828359
 grant Myers
 insertLength 400
 lab Caltech
@@ -5809,6 +5865,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2.bigWig
+geoSampleAccession GSM828359
 grant Myers
 insertLength 400
 lab Caltech
@@ -5869,6 +5926,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TSSRep1V3.gtf.gz
+geoSampleAccession GSM828359
 grant Myers
 insertLength 400
 lab Caltech
@@ -5897,6 +5955,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828359
 grant Myers
 insertLength 400
 lab Caltech
@@ -5925,6 +5984,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828359
 grant Myers
 insertLength 400
 lab Caltech
@@ -5954,6 +6014,7 @@ dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1.bigWig
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -6013,6 +6074,7 @@ dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2.bigWig
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -6072,6 +6134,7 @@ dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3.bigWig
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -6131,6 +6194,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4.bigWig
+geoSampleAccession GSM828372
 grant Myers
 insertLength 200
 lab Caltech
@@ -6190,6 +6254,7 @@ dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000138
 expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1.bigWig
+geoSampleAccession GSM828359
 grant Myers
 insertLength 400
 lab Caltech
@@ -6982,7 +7047,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11208
 localization cell
@@ -7012,7 +7077,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11207
 localization cell
@@ -7042,7 +7107,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11208
 localization cell
@@ -7069,7 +7134,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11207
 localization cell
@@ -7096,7 +7161,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11208
 localization cell
@@ -7127,7 +7192,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11207
 localization cell
@@ -7158,7 +7223,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11208
 localization cell
@@ -7189,7 +7254,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11207
 localization cell
@@ -7220,7 +7285,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11208
 localization cell
@@ -7250,7 +7315,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11207
 localization cell
@@ -7280,7 +7345,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11208
 localization cell
@@ -7310,7 +7375,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11207
 localization cell
@@ -7340,7 +7405,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11208
 localization cell
@@ -7370,7 +7435,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11207
 localization cell
@@ -7400,7 +7465,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11208
 localization cell
@@ -7430,7 +7495,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UMinusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11207
 localization cell
@@ -7460,7 +7525,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11208
 localization cell
@@ -7490,7 +7555,7 @@ dccAccession wgEncodeEH000134
 expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014UPlusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11207
 localization cell
@@ -7578,6 +7643,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -7606,6 +7672,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -7742,6 +7809,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -7770,6 +7838,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -7798,6 +7867,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -7826,6 +7896,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -7913,6 +7984,7 @@ dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -7944,6 +8016,7 @@ dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -8034,6 +8107,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep1V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -8062,6 +8136,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep2V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -8090,6 +8165,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -8118,6 +8194,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -8146,6 +8223,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -8174,6 +8252,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -8203,6 +8282,7 @@ dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1.bigWig
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -8262,6 +8342,7 @@ dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2.bigWig
+geoSampleAccession GSM828354
 grant Myers
 insertLength 200
 lab Caltech
@@ -8322,7 +8403,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11210
 localization cell
@@ -8352,7 +8433,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11209
 localization cell
@@ -8382,7 +8463,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11210
 localization cell
@@ -8409,7 +8490,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11209
 localization cell
@@ -8436,7 +8517,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -8466,7 +8547,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 localization cell
 mapAlgorithm TH1014
@@ -8496,7 +8577,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11210
 localization cell
@@ -8527,7 +8608,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11209
 localization cell
@@ -8558,7 +8639,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11210
 localization cell
@@ -8588,7 +8669,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11209
 localization cell
@@ -8618,7 +8699,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11210
 localization cell
@@ -8648,7 +8729,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11209
 localization cell
@@ -8678,7 +8759,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11210
 localization cell
@@ -8708,7 +8789,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11209
 localization cell
@@ -8738,7 +8819,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11210
 localization cell
@@ -8768,7 +8849,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UMinusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11209
 localization cell
@@ -8798,7 +8879,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11210
 localization cell
@@ -8828,7 +8909,7 @@ dccAccession wgEncodeEH000135
 expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014UPlusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11209
 localization cell
@@ -8916,6 +8997,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -8944,6 +9026,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9080,6 +9163,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9108,6 +9192,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9136,6 +9221,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9164,6 +9250,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9251,6 +9338,7 @@ dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9282,6 +9370,7 @@ dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9372,6 +9461,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep1V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9400,6 +9490,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep2V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9428,6 +9519,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9456,6 +9548,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9484,6 +9577,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9512,6 +9606,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9541,6 +9636,7 @@ dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1.bigWig
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -9600,6 +9696,7 @@ dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2.bigWig
+geoSampleAccession GSM828371
 grant Myers
 insertLength 200
 lab Caltech
@@ -10450,7 +10547,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11206
 localization cell
@@ -10480,7 +10577,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -10510,7 +10607,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11206
 localization cell
@@ -10537,7 +10634,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -10564,7 +10661,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11206
 localization cell
@@ -10595,7 +10692,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -10626,7 +10723,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11206
 localization cell
@@ -10657,7 +10754,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -10688,7 +10785,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11206
 localization cell
@@ -10718,7 +10815,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -10748,7 +10845,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11206
 localization cell
@@ -10778,7 +10875,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -10808,7 +10905,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11206
 localization cell
@@ -10838,7 +10935,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -10868,7 +10965,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11206
 localization cell
@@ -10898,7 +10995,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UMinusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -10928,7 +11025,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11206
 localization cell
@@ -10958,7 +11055,7 @@ dccAccession wgEncodeEH000133
 expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014UPlusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11205
 localization cell
@@ -11046,6 +11143,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11074,6 +11172,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11210,6 +11309,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11238,6 +11338,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11266,6 +11367,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11294,6 +11396,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11381,6 +11484,7 @@ dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11412,6 +11516,7 @@ dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11502,6 +11607,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep1V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11530,6 +11636,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep2V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11558,6 +11665,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11586,6 +11694,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11614,6 +11723,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11642,6 +11752,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11671,6 +11782,7 @@ dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1.bigWig
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11730,6 +11842,7 @@ dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2.bigWig
+geoSampleAccession GSM828373
 grant Myers
 insertLength 200
 lab Caltech
@@ -11790,7 +11903,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11008
 localization cell
@@ -11820,7 +11933,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11007
 localization cell
@@ -11850,7 +11963,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 localization cell
 md5sum e09ea52b7b37de7982296df6351f26ed
@@ -11876,7 +11989,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep2.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11007
 localization cell
@@ -11903,7 +12016,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11008
 localization cell
@@ -11934,7 +12047,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11007
 localization cell
@@ -11965,7 +12078,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11008
 localization cell
@@ -11996,7 +12109,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11007
 localization cell
@@ -12027,7 +12140,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11008
 localization cell
@@ -12057,7 +12170,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11007
 localization cell
@@ -12087,7 +12200,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11008
 localization cell
@@ -12117,7 +12230,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11007
 localization cell
@@ -12147,7 +12260,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11008
 localization cell
@@ -12177,7 +12290,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11007
 localization cell
@@ -12207,7 +12320,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11008
 localization cell
@@ -12237,7 +12350,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014UMinusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11007
 localization cell
@@ -12267,7 +12380,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11008
 localization cell
@@ -12297,7 +12410,7 @@ dccAccession wgEncodeEH000126
 expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014UPlusRawRep2V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11007
 localization cell
@@ -12385,6 +12498,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -12413,6 +12527,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -12663,6 +12778,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -12691,6 +12807,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -12719,6 +12836,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -12747,6 +12865,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -12834,6 +12953,7 @@ dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -12865,6 +12985,7 @@ dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -12955,6 +13076,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep1V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -12983,6 +13105,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep2V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -13011,6 +13134,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -13039,6 +13163,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -13067,6 +13192,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -13095,6 +13221,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -13124,6 +13251,7 @@ dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1.bigWig
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -13183,6 +13311,7 @@ dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2.bigWig
+geoSampleAccession GSM828368
 grant Myers
 insertLength 200
 lab Caltech
@@ -15156,7 +15285,7 @@ dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11204
 localization cell
@@ -15186,7 +15315,7 @@ dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dFastqRep1.fastq.gz
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11204
 localization cell
@@ -15213,7 +15342,7 @@ dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11204
 localization cell
@@ -15244,7 +15373,7 @@ dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11204
 localization cell
@@ -15275,7 +15404,7 @@ dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam.bai
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11204
 localization cell
@@ -15305,7 +15434,7 @@ dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11204
 localization cell
@@ -15335,7 +15464,7 @@ dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11204
 localization cell
@@ -15365,7 +15494,7 @@ dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014UMinusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11204
 localization cell
@@ -15395,7 +15524,7 @@ dccAccession wgEncodeEH000136
 expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014UPlusRawRep1V4.bigWig
 grant Myers
-insertLength None
+insertLength ilNA
 lab Caltech
 labExpId 11204
 localization cell
@@ -15482,6 +15611,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -15510,6 +15640,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -15644,6 +15775,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -15672,6 +15804,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -15700,6 +15833,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -15728,6 +15862,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -15815,6 +15950,7 @@ dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -15845,6 +15981,7 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -15934,6 +16071,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep1V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -15962,6 +16100,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep2V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -15990,6 +16129,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -16018,6 +16158,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -16046,6 +16187,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -16074,6 +16216,7 @@ dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -16103,6 +16246,7 @@ dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1.bigWig
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -16132,6 +16276,7 @@ dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH000131
 expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig
+geoSampleAccession GSM828353
 grant Myers
 insertLength 200
 lab Caltech
@@ -17000,4 +17145,4 @@ tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2V4
 treatment None
 view Signal
 
-# MAGIC: 715102265
+# MAGIC: -1327279966

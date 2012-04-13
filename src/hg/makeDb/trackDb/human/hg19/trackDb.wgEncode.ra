@@ -16,6 +16,9 @@ include wgEncodeGencodeV11.ra
 include wgEncodeUncBsuProt.ra beta,public
 include wgEncodeUncBsuProt.release2.ra alpha
 
+# UNC/BSU Proteogenomics (wrangler: fang)
+include wgEncodeUncBsuProtGenc.release1.ra alpha
+
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra beta,public
 include wgEncodeReg.release2.ra alpha
@@ -107,8 +110,8 @@ include wgEncodeCshlShortRnaSeq.release3.ra alpha
 include wgEncodeGisRnaSeq.ra
 
 # Caltech RNA Seq (wrangler: cricket)
-include wgEncodeCaltechRnaSeq.release2.ra beta,public
-include wgEncodeCaltechRnaSeq.release3.ra alpha
+include wgEncodeCaltechRnaSeq.release2.ra public
+include wgEncodeCaltechRnaSeq.release3.ra alpha,beta
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.ra beta,public
 include wgEncodeCshlLongRnaSeq.release2.ra alpha
@@ -152,8 +155,7 @@ include wgEncodeBroadHistone.release2.ra
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.release3.ra public
-include wgEncodeUwHistone.release4.ra alpha,beta
+include wgEncodeUwHistone.release4.ra
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra beta,public
