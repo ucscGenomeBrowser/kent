@@ -5,7 +5,7 @@ table gappedPeak
     uint chromStart;	"Pseudogene alignment start position"
     uint chromEnd;      "Pseudogene alignment end position"
     string name;        "Name of pseudogene"
-    uint score;         "Score of pseudogene with gene (0-1000)"
+    int score;          "Score of pseudogene with gene (0-1000)"
     char[1] strand;     "+ or - or . for unknown"
     uint thickStart;    "Start of where display should be thick (start codon)"
     uint thickEnd;      "End of where display should be thick (stop codon)"

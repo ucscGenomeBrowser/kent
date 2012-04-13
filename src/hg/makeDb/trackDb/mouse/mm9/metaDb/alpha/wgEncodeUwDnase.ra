@@ -2,6 +2,7 @@ metaObject wgEncodeUwDnase
 objType composite
 composite wgEncodeUwDnase
 expVars lab,dataType,cell,age,treatment
+geoSeriesAccession GSE37074
 
 metaObject wgEncodeUwDnase3134RiiiMImmortalAlnRep1
 objType file
@@ -14502,4 +14503,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -194685991
+# MAGIC: 222020165
