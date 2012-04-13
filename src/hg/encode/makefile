@@ -9,7 +9,8 @@ DIRS = \
 	validateFiles \
 	encodeMkChangeNotes \
 	paraMd5sum \
-	encodeStatus
+	encodeStatus \
+        hgEncodeApi
 
 # broken
 	#ldGencodeIntron \
