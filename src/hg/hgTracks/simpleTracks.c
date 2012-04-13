@@ -12406,7 +12406,6 @@ static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* 
     safef(query, sizeof(query), "SELECT annotId, %s  FROM %s WHERE articleId='%s' ", 
         selectValSql, sequenceTable, articleId);
     struct hash *seqIdHash = sqlQuickHash(conn, query);
-    //freeMem(sequenceTable); // XX Why does this crash??
     return seqIdHash;
 }
 
@@ -12527,13 +12526,10 @@ if (sameWord(type, "bed"))
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
 
-    // XX MaxH: this works as a temp hack, but it is not the right way to do it
-    // XX should I introduce several new track types ? 
-    // XX or rather additional trackDb statements, one per pubs-"track type" ?
+    // FIXME: registerTrackHandler cannot do wildcards
+    // I think this is the only way to a similar behaviour
     if (startsWith("pubs", track->track) && stringIn("Marker", track->track))
         pubsMarkerMethods(track);
-    if (startsWith("pubs", track->track) && stringIn("Blat", track->track))
-        pubsBlatMethods(track);
     }
 /*
 else if (sameWord(type, "bedLogR"))
@@ -12593,10 +12589,6 @@ else if (sameWord(type, "logo"))
 else if (sameWord(type, "psl"))
     {
     pslMethods(track, tdb, wordCount, words);
-
-    // XX what is the right way to do this? new track type? 
-    if (trackDbSettingClosestToHome(track->tdb, "pubsArticleTable") !=NULL)
-        pubsBlatPslMethods(track);
     }
 else if (sameWord(type, "snake"))
     {
@@ -13305,6 +13297,14 @@ registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
+
+/* publications track */
+// FIXME: need a way to register based on pattern, see fillInFromType
+registerTrackHandler("pubsBlat", pubsBlatMethods);
+registerTrackHandler("pubsBlatPsl", pubsBlatPslMethods);
+registerTrackHandler("pubsDevBlat", pubsBlatMethods); // pubs testing tracks
+registerTrackHandler("pubsDevBlatPsl", pubsBlatPslMethods); 
+
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
