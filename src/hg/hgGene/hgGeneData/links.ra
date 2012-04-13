@@ -95,7 +95,7 @@ name gepis
 shortLabel Gepis Tissue
 tables kgXref
 idSql select geneSymbol from kgXref where kgID = '%s'
-url http://www.cgl.ucsf.edu/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
+url http://research-public.gene.com/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
 priority 10
 
 name treeFam

@@ -19,8 +19,8 @@ ret->seqId = row[1];
 ret->seqSrc = row[2];
 ret->exonId = row[3];
 ret->chrom = row[4];
-ret->chromStart = sqlSigned(row[5]);
-ret->endStart = sqlSigned(row[6]);
+ret->chromStart = sqlUnsigned(row[5]);
+ret->chromEnd = sqlUnsigned(row[6]);
 }
 
 struct wgEncodeGencodeExonSupport *wgEncodeGencodeExonSupportLoad(char **row)
@@ -35,8 +35,8 @@ ret->seqId = cloneString(row[1]);
 ret->seqSrc = cloneString(row[2]);
 ret->exonId = cloneString(row[3]);
 ret->chrom = cloneString(row[4]);
-ret->chromStart = sqlSigned(row[5]);
-ret->endStart = sqlSigned(row[6]);
+ret->chromStart = sqlUnsigned(row[5]);
+ret->chromEnd = sqlUnsigned(row[6]);
 return ret;
 }
 
@@ -90,8 +90,8 @@ ret->seqId = sqlStringComma(&s);
 ret->seqSrc = sqlStringComma(&s);
 ret->exonId = sqlStringComma(&s);
 ret->chrom = sqlStringComma(&s);
-ret->chromStart = sqlSignedComma(&s);
-ret->endStart = sqlSignedComma(&s);
+ret->chromStart = sqlUnsignedComma(&s);
+ret->chromEnd = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -147,9 +147,9 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->chromStart);
+fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
-fprintf(f, "%d", el->endStart);
+fprintf(f, "%u", el->chromEnd);
 fputc(lastSep,f);
 }
 
