@@ -28,7 +28,13 @@
 #define CV_TIER                 "tier"
 #define CV_TISSUE               "tissue"
 #define CV_VENDOR_ID            "vendorId"
-#define CV_VENDER_NAME          "vendorName"
+#define CV_VENDOR_NAME          "vendorName"
+#define CV_KARYOTYPE            "karyotype"
+#define CV_ANTIBODY_DESCRIPTION  "antibodyDescription"
+#define CV_TARGET_DESCRIPTION    "targetDescription"
+#define CV_TARGET_ID             "targetId"
+#define CV_TARGET_URL            "targetURL"
+#define CV_DATA_GROUP            "dataGroup"
 
 // Type of Terms defines
 #define CV_TOT                  "typeOfTerm"
@@ -62,6 +68,10 @@
 #define CV_TERM_SEQ_PLATFORM    "seqPlatform"
 
 #define CV_LABEL_EMPTY_IS_NONE  "None"
+
+void cvTermJson(struct dyString *json, char *type, struct hash *termHash);
+/* Print out CV term in JSON format. Currently just supports dataType, cellType, antibody
+ * and antibody types */
 
 void cvFileDeclare(const char *filePath);
 // Declare an altername cv.ra file to use

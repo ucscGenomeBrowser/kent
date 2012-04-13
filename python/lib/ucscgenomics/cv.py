@@ -69,7 +69,7 @@ class CvFile(ra.RaFile):
         '''base validation method which calls all stanzas' validate'''
         for stanza in self.itervalues():
             stanza.validate(self)
-        print self.missingTypes
+        #print self.missingTypes
 
     def getTypeOfTermStanza(self, type):
         types = self.filter(lambda s: s['term'] == type and s['type'] == 'typeOfTerm', lambda s: s)
@@ -141,9 +141,6 @@ class CvStanza(ra.RaStanza):
         
         typeStanza = cvfile.getTypeOfTermStanza(type)
         if typeStanza == None:
-            #print cvfile.filter2(lambda s: s['type'] == 'typeOfTerm').keys()
-            #print '>%s<' % cvfile['mouseCellType ']['term']
-            #print '>%s<' % cvfile['mouseCellType ']['type']
             cvfile.handler(InvalidTypeError(self, self['type'] + '(%s)' % type))
             return
         required = list()

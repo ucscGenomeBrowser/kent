@@ -3,7 +3,7 @@ name gepis
 shortLabel Gepis Tissue
 tables kgXref
 idSql select geneSymbol from kgXref x, knownGene k where kgID = '%s' and name= kgID and cdsStart <> cdsEnd
-url http://www.cgl.ucsf.edu/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
+url http://research-public.gene.com/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
 priority 10
 
 name omim
