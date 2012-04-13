@@ -75,7 +75,7 @@ table div.rotated {
     border: 1px solid darkgray;
 }
 
-.experiment:hover {
+.experimentHover {
    background-color: #FFFF80;
 }
 
