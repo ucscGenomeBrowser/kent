@@ -16,15 +16,17 @@
 #include "obscure.h"
 #include "ra.h"
 
+char *tablePrefix = "cvDb_"; /* prefix to give to table names from command line*/
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "testCvToSql - Test out some ideas for making relational database version of cv.ra\n"
   "usage:\n"
-  "   testCvToSql cv.ra out.stats out.atree out.as outTabDir\n"
+  "   testCvToSql cv.ra out.stats out.atree out.as out.sql outTabDir\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -tablePrefix=cvDb_ - Some prefix to prepend to all table names\n"
   );
 }
 
@@ -62,6 +64,7 @@ struct stanzaType
     char *name;         /* Name of type - something like Cell Line. */
     char *symbol;       /* Similar to name, but no white space and always camelCased. */
     int count;          /* Number of times stanza type observed. */
+    int lastId;		/* Last ID we'll use in output to identify row int table. */
     struct stanzaField *fieldList;      /* Fields, in order of observance. */
     FILE *f;            /* File to output data in if any */
     struct stanzaType *splitSuccessor;  /* If split, the next table in the split. */
@@ -100,13 +103,16 @@ struct fieldLabel fieldDescriptions[] = {
    {"lab", "labPi", "Last name or other short identifier for lab's primary investigator"},
    {"lab", "labPiFull", "Full name of lab's primary investigator."},
    {"lab", "grantPi", "Last name of primary investigator on grant paying for data."},
-   {"encodeGrant", "grantInst", "Name of instution awarded grant paying for data."},
-   {"encodeGrant", "projectName", "Short name describing grant."},
+   {"grantee", "grantInst", "Name of instution awarded grant paying for data."},
+   {"grantee", "projectName", "Short name describing grant."},
    {"typeOfTerm", "searchable", "Describes how to search for term in Genome Browser. 'No' for unsearchable."},
    {"typeOfTerm", "cvDefined", "Is there a controlled vocabulary for this term. Is 'yes' or 'no.'"},
    {"typeOfTerm", "validate", "Describes how to validate field typeOfTerm refers to. Use 'none' for no validation."},
    {"typeOfTerm", "hidden", "Hide field in user interface? Can be 'yes' or 'no' or a release list"},
    {"typeOfTerm", "priority", "Order to display or search terms, lower is earlier."},
+   {"typeOfTerm", "requiredVars", "Required fields for a term of this type."},
+   {"typeOfTerm", "optionalVars", "Optional fields for a term of this type."},
+   {"*", "id", "Unique unsigned integer identifier for this item"},
    {"*", "term", "A relatively short label, no more than a few words"},
    {"*", "symbol", "A short human and machine readable symbol with just alphanumeric characters."},
    {"*", "tag", "A short human and machine readable symbol with just alphanumeric characters."},
@@ -178,24 +184,10 @@ while ((c = *(++s)) != 0)
 }
 
 char *fieldLabelToSymbol(char *label)
-/* Convert a field label to one we want to use.  This one mostly puts system into 
- * something more compatible with what we're used to in other databases. */
+/* Convert a field label to one we want to use.  */
 {
-#ifdef DO_IN_SQL_INSTEAD
-if (sameString(label, "term"))
-    return "shortLabel";
-else if (sameString(label, "tag"))
-    return "symbol";
-else if (sameString(label, "description"))
-    return "longLabel";
-else if (sameString(label, "antibodyDescription"))
-    return "longLabel";
-else
-#endif /* DO_IN_SQL_INSTEAD */
-    {
-    enforceCamelCase(label);
-    return label;
-    }
+enforceCamelCase(label);
+return label;
 }
 
 struct stanzaField *stanzaFieldNew(char *name)
@@ -495,7 +487,7 @@ struct stanzaType *type;
 for (type = typeList; type != NULL; type = type->next)
     {
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s/%s%s",  outDir, type->symbol, suffix);
+    safef(path, sizeof(path), "%s/%s%s%s",  outDir, tablePrefix, type->symbol, suffix);
     type->f = mustOpen(path, "w");
     }
 }
@@ -513,12 +505,17 @@ for (type = typeList; type != NULL; type = type->next)
 void outputAccordingToType(struct hash *ra, struct stanzaType *type, FILE *f)
 /* Output data in ra as tab-separated according to specs in type. */
 {
-struct stanzaField *field;
-for (field = type->fieldList; field != NULL; field = field->next)
-    {
-    if (field != type->fieldList)
-        fputc('\t', f);
 
+/* Output ID which we generate here, and skip over first field since it is output*/
+fprintf(f, "%d", ++type->lastId);
+struct stanzaField *field = type->fieldList;
+assert(field != NULL && sameString(field->name, "id"));
+field = field->next;
+
+/* Loop through rest. */
+for (; field != NULL; field = field->next)
+    {
+    fputc('\t', f);
     /* Figure out what to put here - just a simple ra field lookup unless we have to merge. */
     char *val = NULL;
     if (field->mergeChildren)
@@ -577,16 +574,23 @@ closeTypeFiles(typeList);
 lineFileClose(&lf);
 }
 
+char *nameInTypeOfTerms(char *name)
+/* Do a little symbol shuffling on "Cell Line" exception */
+{
+if (sameString(name, "Cell Line"))
+    return "cellType";
+else
+    return name;
+}
+
 void outputAutoSql(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outFile)
 /* Output start of autoSql files to outDir, one per table. */
 {
-struct stanzaType *type;
 FILE *f = mustOpen(outFile, "w");
+struct stanzaType *type;
 for (type = typeList; type != NULL; type = type->next)
     {
-    char *totKey = type->name;  /* key in typeOfTerm hash */
-    if (sameString(totKey, "Cell Line"))
-        totKey = "cellType";
+    char *totKey = nameInTypeOfTerms(type->name);  /* key in typeOfTerm hash */
     char *typeDescription = "NoTypeDescription";
     struct slPair *typeOfTerm = hashFindVal(typeOfTermHash, totKey);
     if (typeOfTerm != NULL)
@@ -641,6 +645,67 @@ for (type = typeList; type != NULL; type = type->next)
 carefulClose(&f);
 }
 
+void outputSql(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outFile)
+/* Output sql commands to create tables.  Don't populate tables here, will do that
+ * with tab-separated-files. */
+{
+FILE *f = mustOpen(outFile, "w");
+struct stanzaType *type;
+for (type = typeList; type != NULL; type = type->next)
+    {
+    char *totKey = nameInTypeOfTerms(type->name);  /* key in typeOfTerm hash */
+    char *typeDescription = "NoTypeDescription";
+    struct slPair *typeOfTerm = hashFindVal(typeOfTermHash, totKey);
+    if (typeOfTerm != NULL)
+        {
+        struct slPair *description = slPairFind(typeOfTerm, "description");
+        typeDescription = description->val;
+        }
+    fprintf(f, "# %s\n", typeDescription);
+    char *indent = "    ";
+    fprintf(f, "CREATE TABLE %s%s (\n", tablePrefix, type->symbol);
+    struct stanzaField *field;
+    for (field = type->fieldList; field != NULL; field = field->next)
+        {
+	fprintf(f, "%s%s ", indent, field->symbol);
+        switch (field->valType)
+            {
+            case sftString:
+                fputs("VARCHAR(255)", f);
+                break;
+            case sftUnsigned:
+                fputs("INT UNSIGNED", f);
+                break;
+            case sftInt:
+                fputs("INT", f);
+                break;
+            case sftFloat:
+                fputs("FLOAT", f);
+                break;
+            case sftLongString:
+                fputs("LONGBLOB", f);
+                break;
+            default:
+                internalErr();
+                break;
+            }
+	boolean isOptional = (field->count != type->count);
+	if (!isOptional)
+	    fprintf(f, " NOT NULL");
+	if (sameString(field->name, "id"))
+	    fprintf(f, " AUTO_INCREMENT");
+        char *description = searchFieldDescription(type->symbol, field->symbol);
+        if (description == NULL)
+             description = "noDescriptionDefined";
+	fprintf(f, ",\t# %s\n", description);
+        }
+    fprintf(f, "\t\t# Indices\n");
+    fprintf(f, "%sPRIMARY KEY(id)\n", indent);
+    fprintf(f, ");\n\n");
+    }
+carefulClose(&f);
+}
+
 /******* Routines for rearranging stanza types. *********/
 
 struct stanzaField *removeMatchingSymbol(struct stanzaField **pFieldList, char *symbol)
@@ -679,12 +744,11 @@ type->fieldList = slCat(startList, endList);
 
 char *fieldPriority[] = {
 /* List of order we'd like initial fields in */
-   "symbol",
+   "id",
+   "term",
+   "tag",
    "deprecated",
-   "shortLabel",
-   "longLabel",
-   "target",
-   "targetDescription",
+   "description",
 };
 
 struct stanzaField *stanzaFieldFake(char *name, struct stanzaType *parent, boolean isOptional)
@@ -706,6 +770,17 @@ if (!stanzaFieldFind(type->fieldList, "deprecated"))
     struct stanzaField *field = stanzaFieldFake("deprecated", type, TRUE);
     slAddHead(&type->fieldList, field);
     }
+}
+
+void addIdField(struct stanzaType *type)
+/* Add id field, and insure it doesn't already exist */
+{
+if (stanzaFieldFind(type->fieldList, "id"))
+    errAbort("Type %s already has an id field", type->name);
+struct stanzaField *field = stanzaFieldFake("id", type, FALSE);
+field->countFloat = field->countInt = field->countUnsigned = field->count;
+setValType(field);
+slAddHead(&type->fieldList, field);
 }
 
 void removeField(struct stanzaType *type, char *fieldName)
@@ -884,7 +959,8 @@ changeFieldSymbol(targetType, "targetId", "externalId");
 changeFieldSymbol(targetType, "targetUrl", "externalUrl");
 }
 
-void testCvToSql(char *inCvRa, char *outStats, char *outTree, char *outAs, char *outDir)
+void testCvToSql(char *inCvRa, 
+	         char *outStats, char *outTree, char *outAs, char *outSql, char *outDir)
 /* testCvToSql - Test out some ideas for making relational database version of cv.ra. */
 {
 /* Read input into type list and hash */
@@ -901,15 +977,17 @@ stanzaTypesToStats(typeList, outStats);
 struct stanzaType *type;
 for (type = typeList; type != NULL; type = type->next)
     {
+    // Grant is a reserved word in SQL so we have to change it
     if (sameString(type->name, "grant"))
-        type->symbol = "encodeGrant";
+        type->symbol = "grantee";
 #ifdef DO_IN_SQL_INSTEAD
     else if (sameString(type->name, "Antibody"))
         splitAntibodyTable(type, typeHash, typeOfTermHash);
     mergeLabelAndShortLabel(type);
-    addDeprecatedField(type);
-    reorderFields(type, fieldPriority, ArraySize(fieldPriority));
 #endif /* DO_IN_SQL_INSTEAD */
+    addDeprecatedField(type);
+    addIdField(type);
+    reorderFields(type, fieldPriority, ArraySize(fieldPriority));
     removeField(type, "type");
     }
 
@@ -917,6 +995,7 @@ for (type = typeList; type != NULL; type = type->next)
 stanzaTypeToTree(typeList, outTree);
 makeDirsOnPath(outDir);
 outputAutoSql(typeList, typeOfTermHash, outAs);
+outputSql(typeList, typeOfTermHash, outSql);
 outputTabs(typeList, typeHash, inCvRa, outDir);
 }
 
@@ -924,9 +1003,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 6)
+if (argc != 7)
     usage();
+tablePrefix = optionVal("tablePrefix", tablePrefix);
 testBestShortLabel();
-testCvToSql(argv[1], argv[2], argv[3], argv[4], argv[5]);
+testCvToSql(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
