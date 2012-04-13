@@ -1,0 +1,158 @@
+# for emacs: -*- mode: sh; -*-
+
+#       DATE:   03-Oct-2011
+#       ORGANISM:       Tursiops truncatus
+#       TAXID:  9739
+#       ASSEMBLY LONG NAME:     Ttru_1.4
+#       ASSEMBLY SHORT NAME:    Ttru_1.4
+#       ASSEMBLY SUBMITTER:     Baylor College of Medicine
+#       ASSEMBLY TYPE:  Haploid
+#       NUMBER OF ASSEMBLY-UNITS:       1
+#       ASSEMBLY ACCESSION:     GCA_000151865.2
+
+#       FTP-RELEASE DATE: 03-Jan-2012
+
+#       http://www.ncbi.nlm.nih.gov/genome/769
+#       http://www.ncbi.nlm.nih.gov/genome/assembly/325108/
+#       http://www.ncbi.nlm.nih.gov/bioproject/20365
+#       http://www.ncbi.nlm.nih.gov/bioproject/34125 - chrMt NC_012059.1
+
+#       http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABRN02
+#       Genome Coverage : 2.5x Sanger; 3.5x 454; 30x Illumina
+
+#       http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9739
+
+# rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Tursiops_truncatus/Ttru_1.4/
+
+##########################################################################
+# Download sequence (DONE - 2012-04-11 - Hiram)
+    mkdir /hive/data/genomes/turTru2
+    cd /hive/data/genomes/turTru2
+    mkdir genbank
+    cd genbank
+    time rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Tursiops_truncatus/Ttru_1.4/ ./
+    #   real    14m52.432s
+
+    # verify the size of the sequence here:
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+    #   2551980185 bases (219594130 N's 2332386055 real 2332386055 upper
+    #   0 lower) in 240900 sequences in 1 files
+    #   Total size: mean 10593.5 sd 37887.7
+    #   min 200 (gi|366711530|gb|ABRN02115282.1|)
+    #   max 1003560 (gi|366982705|gb|JH472452.1|) median 706
+
+##########################################################################
+# fixup names for UCSC standards (DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/turTru2/ucsc
+    cd /hive/data/genomes/turTru2/ucsc
+
+    ########################  Unplaced scaffolds
+    # verify we don't have any .acc numbers different from .1
+    zcat \
+    ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| cut -f1 | egrep "^JH|^ABRN" \
+	| sed -e 's/^JH[0-9][0-9]*//; s/^ABRN[0-9][0-9]*//' | sort | uniq -c
+    #   868326 .1
+
+    # this is like the unplaced.pl script in other assemblies except it
+    #	does not add chrUn_ to the names since they are all just scaffolds
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, "|gzip -c > unplaced.agp.gz") or die "can not write to unplaced.agp.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;    
+        printf UC "%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, "|gzip -c > unplaced.fa.gz") or die "can not write to unplaced.fa.gz";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\|.*//;
+        $line =~ s/\.1//;    
+        printf UC ">$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+    time ./unplaced.pl
+    #   real    11m26.151s
+
+    # verify nothing lost from original:
+    time faSize *.fa.gz
+    #   2551980185 bases (219594130 N's 2332386055 real 2332386055 upper
+    #   0 lower) in 240900 sequences in 1 files
+    #   Total size: mean 10593.5 sd 37887.7 min 200 (ABRN02115282)
+    #   max 1003560 (JH472452) median 706
+
+    # make sure none of the names got to be over 31 characers long:
+    zcat *.agp.gz | grep -v "^#" | cut -f1 | awk '{print length($0)}' \
+        | sort -rn | uniq -c | head
+    #   181924 12
+    #   686402 8
+
+##########################################################################
+# Initial makeGenomeDb.pl (DONE - 2012-04-13 - Hiram)
+    cd /hive/data/genomes/turTru2
+    cat << '_EOF_' > turTru2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db turTru2
+clade mammal
+genomeCladePriority 35
+scientificName Tursiops truncatus
+commonName Dolphin
+assemblyDate Oct. 2011
+assemblyLabel Baylor College of Medicine Ttru_1.4 (NCBI project 20365, GCA_000151865.2, WGS ABRN02)
+assemblyShortLabel Baylor Ttru_1.4
+ncbiAssemblyName Ttru_1.4
+ncbiAssemblyId 325108
+orderKey 2364
+mitoAcc NC_012059
+fastaFiles /hive/data/genomes/turTru2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/turTru2/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir dolphin
+taxId 9739
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and agp are OK
+    time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
+        -stop=agp turTru2.config.ra > agp.log 2>&1
+    #   real    1m56.055s
+    # verify OK:
+    tail -1 agp.log
+    #   *** All done!  (through the 'agp' step)
+
+    # finish it off
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
+        -dbHost=hgwdev turTru2.config.ra > db.log 2>&1
+    #   real    21m20.515s
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/turTru2.unmasked.2bit /gbdb/turTru2/turTru2.2bit
+    #	browser should function now
+
+#########################################################################
+
