@@ -36,15 +36,16 @@
     cd genbank
     time rsync -a -P \
 rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu1.1/ ./
-    #   real    14m52.432s
+    #   real    real    22m54.139s
 
     # verify the size of the sequence here:
-    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
-    #   2551980185 bases (219594130 N's 2332386055 real 2332386055 upper
-    #   0 lower) in 240900 sequences in 1 files
-    #   Total size: mean 10593.5 sd 37887.7
-    #   min 200 (gi|366711530|gb|ADFV02115282.1|)
-    #   max 1003560 (gi|366982705|gb|JH472452.1|) median 706
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+        non-nuclear/unlocalized_scaffolds/FASTA/chrMT.unlocalized.scaf.fa.gz
+    #   2936052603 bases (179443556 N's 2756609047 real 2756609047 upper 0
+    #   lower) in 17976 sequences in 2 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (gi|350542783|gb|ADFV01197901.1|)
+    #   max 74231199 (gi|306404713|gb|GL397261.1|) median 4849
 
 ##########################################################################
 # fixup names for UCSC standards (DONE - 2012-04-13 - Hiram)
@@ -55,9 +56,9 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Noma
     # verify we don't have any .acc numbers different from .1
     zcat \
     ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
-	| cut -f1 | egrep "^JH|^ADFV" \
-	| sed -e 's/^JH[0-9][0-9]*//; s/^ADFV[0-9][0-9]*//' | sort | uniq -c
-    #   868326 .1
+	| cut -f1 | egrep "^GL|^ADFV" \
+	| sed -e 's/^GL[0-9][0-9]*//; s/^ADFV[0-9][0-9]*//' | sort | uniq -c
+    #   377832 .1
 
     # this is like the unplaced.pl script in other assemblies except it
     #	does not add chrUn_ to the names since they are all just scaffolds
@@ -102,20 +103,99 @@ close (UC);
     # << happy emacs
     chmod +x unplaced.pl
     time ./unplaced.pl
-    #   real    11m26.151s
+    #   real    13m19.283s
 
+genbank/non-nuclear/unlocalized_scaffolds/FASTA
+    ########################  Unlocalized scaffolds
+    cat << '_EOF_' > unlocalized.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+my %chrNames;
+
+open (FH, "<../genbank/non-nuclear/unlocalized_scaffolds/unlocalized.chr2scaf") or
+        die "can not read non-nuclear/unlocalized_scaffolds/unlocalized.chr2scaf";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+    $chrNames{$chrN} += 1;
+}
+close (FH);
+
+foreach my $chrN (keys %chrNames) {
+    my $agpFile =  "../genbank/non-nuclear/unlocalized_scaffolds/AGP/chr$chrN.unlocalized.scaf.agp.gz";
+    my $fastaFile =  "../genbank/non-nuclear/unlocalized_scaffolds/FASTA/chr$chrN.unlocalized.scaf.fa.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    open (UC, "|sed -e 's/chrMT/chrM/g;' | gzip -c >chr${chrN}_random.agp.gz") or die "can not write to chr${chrN}_random.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            chomp $line;
+            my (@a) = split('\t', $line);
+            my $acc = $a[0];
+            my $accNo1 = $acc;
+            $accNo1 =~ s/.1$//;
+            die "ERROR: acc not .1: $acc" if ($accNo1 =~ m/\./);
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${accNo1}_random";
+            printf UC "%s", $ucscName;
+            for (my $i = 1; $i < scalar(@a); ++$i) {
+                printf UC "\t%s", $a[$i];
+            }
+            printf UC "\n";
+        }
+    }
+    close (FH);
+    close (UC);
+    printf "chr%s\n", $chrN;
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    open (UC, "|sed -e 's/chrMT/chrM/g' | gzip -c >chr${chrN}_random.fa.gz") or die "can not write to chr${chrN}_random.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            chomp $line;
+            my $acc = $line;
+            $acc =~ s/.*gb\|//;
+            $acc =~ s/\|.*//;
+            my $accNo1 = $acc;
+            $accNo1 =~ s/.1$//;
+            die "ERROR: acc not .1: $acc" if ($accNo1 =~ m/\./);
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${accNo1}_random";
+            printf UC ">$ucscName\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x unlocalized.pl
+    time ./unlocalized.pl
+    mv chrMT_random.fa.gz chrM_random.fa.gz
+    mv chrMT_random.agp.gz chrM_random.agp.gz
     # verify nothing lost from original:
     time faSize *.fa.gz
-    #   2551980185 bases (219594130 N's 2332386055 real 2332386055 upper
-    #   0 lower) in 240900 sequences in 1 files
-    #   Total size: mean 10593.5 sd 37887.7 min 200 (ADFV02115282)
-    #   max 1003560 (JH472452) median 706
+    #   2936052603 bases (179443556 N's 2756609047 real 2756609047 upper 0
+    #   lower) in 17976 sequences in 2 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
 
     # make sure none of the names got to be over 31 characers long:
     zcat *.agp.gz | grep -v "^#" | cut -f1 | awk '{print length($0)}' \
         | sort -rn | uniq -c | head
-    #   181924 12
-    #   686402 8
+    #       8 24
+    #   10004 12
+    #  367828 8
 
 ##########################################################################
 # Initial makeGenomeDb.pl (DONE - 2012-04-13 - Hiram)
@@ -132,7 +212,7 @@ assemblyDate Jun. 2011
 assemblyLabel Gibbon Genome Sequencing Consortium Nleu1.1 (NCBI project 13975, GCA_000146795.2, WGS ADFV01)
 assemblyShortLabel GGSC Nleu1.1
 ncbiAssemblyName Nleu1.1
-ncbiAssemblyId 325108
+ncbiAssemblyId 313108
 orderKey 329
 mitoAcc none
 fastaFiles /hive/data/genomes/nomLeu2/ucsc/*.fa.gz
@@ -146,7 +226,7 @@ taxId 61853
     # verify sequence and agp are OK
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev -dbHost=hgwdev \
         -stop=agp nomLeu2.config.ra > agp.log 2>&1
-    #   real    1m56.055s
+    #   real    2m4.625s
     # verify OK:
     tail -1 agp.log
     #   *** All done!  (through the 'agp' step)
@@ -154,7 +234,7 @@ taxId 61853
     # finish it off
     time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
         -dbHost=hgwdev nomLeu2.config.ra > db.log 2>&1
-    #   real    21m20.515s
+    #   real    21m42.920s
     #	add the trackDb entries to the source tree, and the 2bit link:
     ln -s `pwd`/nomLeu2.unmasked.2bit /gbdb/nomLeu2/nomLeu2.2bit
     #	browser should function now
@@ -166,7 +246,7 @@ taxId 61853
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek nomLeu2 > do.log 2>&1 &
-XXX - running - Fri Apr 13 12:22:37 PDT 2012
+XXX - running - Fri Apr 13 16:15:03 PDT 2012
     #   real    990m24.340s
 
     cat faSize.rmsk.txt
@@ -195,7 +275,7 @@ XXX - running - Fri Apr 13 12:22:37 PDT 2012
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	nomLeu2 > do.log 2>&1 &
-XXX - running - Fri Apr 13 12:23:16 PDT 2012
+XXX - running - Fri Apr 13 16:15:24 PDT 2012
     #   real    9m41.939s
     cat fb.simpleRepeat 
     #   29525418 bases of 2525996391 (1.169%) in intersection
@@ -224,13 +304,14 @@ XXX - running - Fri Apr 13 12:23:16 PDT 2012
     cd /hive/data/genomes/nomLeu2/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../nomLeu2.unmasked.2bit > findMotif.txt 2>&1
-    #	real    0m26.240s
+    #	real    0m23.121s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
-    featureBits nomLeu2 -not gap -bed=notGap.bed
-    #   2332423317 bases of 2332423317 (100.000%) in intersection
+    time featureBits nomLeu2 -not gap -bed=notGap.bed
+    #   2756609047 bases of 2756609047 (100.000%) in intersection
+    #   real    0m25.158s
 
     time featureBits nomLeu2 allGaps.bed notGap.bed -bed=new.gaps.bed
-XXX
+XXX - running - Fri Apr 13 16:18:57 PDT 2012
     wc -l new.gaps.bed
     #   14502 new.gaps.bed
     #   39382069 bases of 2403678276 (1.638%) in intersection
@@ -293,7 +374,7 @@ close (FH);
     cd /hive/data/genomes/nomLeu2/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev nomLeu2 > do.log 2>&1 &
-XXX - running - Fri Apr 13 12:23:38 PDT 2012
+XXX - running - Fri Apr 13 16:15:46 PDT 2012
     #   real    224m8.502s
 
     # Masking statistics
