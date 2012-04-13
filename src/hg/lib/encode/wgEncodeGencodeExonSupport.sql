@@ -9,9 +9,9 @@ CREATE TABLE wgEncodeGencodeExonSupport (
     seqId varchar(255) not null,	# Identifier of sequence supporting transcript
     seqSrc varchar(255) not null,	# Source of supporting sequence
     exonId varchar(255) not null,	# GENCODE exon identifier (not stable)
-    chrom varchar(255) not null,	# chromosome
-    chromStart int not null,	# start in chromosome
-    endStart int not null,	# end in chromosome
+    chrom varchar(255) not null,	# Chromosome
+    chromStart int unsigned not null,	# Start position in chromosome
+    chromEnd int unsigned not null,	# End position in chromosome
               #Indices
-    index(transcriptId)
+    PRIMARY KEY(transcriptId)
 );
