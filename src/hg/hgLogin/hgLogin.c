@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgColors.h"
 #include <crypt.h>
-
+#include <openssl/md5.h>
 #include "net.h"
 
 #include "hgLogin.h"
@@ -39,17 +39,75 @@ char *errMsg;           /* Error message to show user when form data rejected */
 
 /* -------- password functions ---- */
 
+void cryptWikiWay(char *password, char *salt, char* result)
+// encrypt password as mediawiki does:  ':B:'.$salt.':'. md5($salt.'-'.md5($password )
+{
+int i;
+  unsigned char result1[MD5_DIGEST_LENGTH];
+  unsigned char result2[MD5_DIGEST_LENGTH];
+  char firstMD5[MD5_DIGEST_LENGTH*2 + 1];
+  char secondMD5[MD5_DIGEST_LENGTH*2 + 1];
+  i = MD5_DIGEST_LENGTH;
+  printf("MD5_DIGEST_LENGT is -- %d\n",i);
+  MD5((unsigned char *) password, strlen(password), result1);
+  // output
+  printf("result1 array:\n");
+  for(i = 0; i < MD5_DIGEST_LENGTH; i++)
+    printf("%02x", result1[i]);
+  printf("\n");
+  // Convert the first MD5 value to string
+  printf("Convert result1 to firstMD5 .......\n");
+  for(i = 0; i < MD5_DIGEST_LENGTH; i++)
+    {
+    sprintf(&firstMD5[i*2], "%02x", result1[i]);
+    }
+  printf("\n");
+  printf("firstMD5 string\n");
+  printf("firstMD5 is: %s \n",firstMD5);
+  printf("\n");
+
+  // add the salt with "-" 
+  char saltDashMD5[256];
+  strcpy(saltDashMD5,salt);
+ printf("String3  is: %s \n",saltDashMD5);
+  strcat(saltDashMD5,"-");
+ printf("String3  is: %s \n",saltDashMD5);
+  strcat(saltDashMD5,firstMD5);
+  printf("firstMD5 is: %s \n",firstMD5);
+  printf("saltDashMD5  is: %s \n",saltDashMD5);
+  MD5((unsigned char *) saltDashMD5, strlen(saltDashMD5), result2);
+ // output
+  for(i = 0; i < MD5_DIGEST_LENGTH; i++)
+    printf("%02x", result2[i]);
+  printf("\n");
+ printf("Convert result2 to secondMD5 .......\n");
+  for(i = 0; i < MD5_DIGEST_LENGTH; i++)
+    {
+    sprintf(&secondMD5[i*2], "%02x", result2[i]);
+    }
+  printf("\n");
+
+  i = MD5_DIGEST_LENGTH;
+  printf("MD5_DIGEST_LENGTH is %d\nLength of secondMD5 is %d\n",i, strlen(secondMD5));
+  printf("secondMD5 before return is: \n%s\n", secondMD5);
+
+  strcpy(result, secondMD5);
+
+}
 void encryptPWD(char *password, char *salt, char *buf, int bufsize)
 /* encrypt a password */
 {
 /* encrypt user's password. */
-safef(buf,bufsize,crypt(password, salt));
+// safef(buf,bufsize,crypt(password, salt));
+char md5Returned[100];
+cryptWikiWay(password, salt, md5Returned);
+safef(buf,bufsize,md5Returned);
+printf("After encrypt, buf isL K\n%s\n bufsize is %d\n", buf, bufsize); 
 }
-
 
 void encryptNewPwd(char *password, char *buf, int bufsize)
 /* encrypt a new password */
-/* XXXX TODO: use md5 in linked SSL */
+/* XXXX TODO: use MD5 in linked SSL */
 {
 unsigned long seed[2];
 char salt[] = "$1$........";
@@ -601,7 +659,7 @@ hPrintf(
 , user
 );
 
-backToHgSession(2);
+backToHgSession(15);
 /*
 char *hgLoginHost = hgLoginLinkHost();
 
