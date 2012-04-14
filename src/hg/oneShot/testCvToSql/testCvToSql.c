@@ -705,6 +705,14 @@ for (type = typeList; type != NULL; type = type->next)
 carefulClose(&f);
 }
 
+char *djangoClassName(struct stanzaType *type)
+/* Return type->symbol with initial letter capitalized */
+{
+char *className = cloneString(type->symbol);
+className[0] = toupper(className[0]);
+return className;
+}
+
 void outputDjango(struct stanzaType *typeList, struct hash *typeOfTermHash, char *outFile)
 /* Output python django model declarations. */
 {
@@ -723,7 +731,7 @@ for (type = typeList; type != NULL; type = type->next)
     char *indent = "    ";
     char *typeDescription = getTypeDescription(type, typeOfTermHash);
     fprintf(f, "# %s\n", typeDescription);
-    fprintf(f, "class %s(models.Model):\n", type->symbol);
+    fprintf(f, "class %s(models.Model):\n", djangoClassName(type));
     struct stanzaField *field;
     for (field = type->fieldList; field != NULL; field = field->next)
         {
@@ -742,10 +750,10 @@ for (type = typeList; type != NULL; type = type->next)
                 fputs("IntegerField()", f);
                 break;
             case sftFloat:
-                fputs("FloatField", f);
+                fputs("FloatField()", f);
                 break;
             case sftLongString:
-                fputs("TextField", f);
+                fputs("TextField()", f);
                 break;
             default:
                 internalErr();
@@ -764,6 +772,13 @@ for (type = typeList; type != NULL; type = type->next)
     fprintf(f, "\n");
     fprintf(f, "\n");
     }
+
+/* Write admin section */
+fprintf(f, "\n");
+fprintf(f, "from django.contrib import admin\n");
+for (type = typeList; type != NULL; type = type->next)
+    fprintf(f, "admin.site.register(%s)\n", djangoClassName(type));
+
 carefulClose(&f);
 }
 
