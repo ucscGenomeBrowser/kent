@@ -766,6 +766,11 @@ for (type = typeList; type != NULL; type = type->next)
         }
     fprintf(f, "\n");
 
+    /* Add Meta subclass for extra info including table name that matches C expectations. */
+    fprintf(f, "%sclass Meta:\n", indent);
+    fprintf(f, "%s%sdb_table = '%s%s'\n", indent, indent, tablePrefix, type->symbol);
+    fprintf(f, "\n");
+    
     /* Print unicode method */
     fprintf(f, "%sdef __unicode__(self):\n", indent);
     fprintf(f, "%s%sreturn self.term\n", indent, indent);
