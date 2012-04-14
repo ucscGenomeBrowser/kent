@@ -173,11 +173,13 @@ $(function () {
                     'target' : target,
                     'cellType' : cellType
                 });
-                $td.mouseover(function() {
-                    $(this).attr('title', 'Click to select: ' +
-                                ($(this).data().target) + ' ' + ' in ' + 
-                                $(this).data().cellType +' cells');
-                });
+
+                $td.attr('title', 'Click to select: ' +  target +
+                        ' in ' + cellType +' cells');
+
+                // add highlight when moused over
+                encodeMatrix.hoverExperiment($td);
+
                 $td.click(function() {
                     var url, antibodyTarget;
 
