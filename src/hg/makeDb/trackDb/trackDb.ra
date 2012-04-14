@@ -473,7 +473,7 @@ noInherit on
     configureByPopup off
 
     track pubsBlatPsl
-    shortLabel Individual Seq. Matches
+    shortLabel Indiv. Seq. Matches
     longLabel Individual sequence matches of one selected article from sequences track
     parent pubs off
     type psl

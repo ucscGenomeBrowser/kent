@@ -12492,7 +12492,7 @@ tg->mapItem   = pubsMapItem;
 static void pubsBlatMethods(struct track *tg)
 /* publication blat tracks are bed12+2 tracks of sequences in text, mapped with BLAT */
 {
-bedMethods(tg);
+//bedMethods(tg);
 tg->loadItems = pubsLoadKeywordYearItems;
 tg->itemName  = pubsItemName;
 tg->mapItem   = pubsMapItem;
@@ -12501,7 +12501,7 @@ tg->mapItem   = pubsMapItem;
 static void pubsMarkerMethods(struct track *tg)
 /* publication marker tracks are bed5 tracks of genome marker occurences like rsXXXX found in text*/
 {
-bedMethods(tg);
+//bedMethods(tg);
 tg->bedSize   = 5;
 tg->loadItems = pubsLoadMarkerItem;
 tg->mapItem   = pubsMarkerMapItem;
