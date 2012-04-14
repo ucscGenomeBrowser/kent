@@ -12239,7 +12239,7 @@ lf->extra = extra;
 hFreeConn(&conn);
 }
 
-static void pubsLoadKeywordYearItems(struct track *tg)
+static void pubsBlatLoadItems(struct track *tg)
 /* load items that fulfill keyword and year filter */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -12477,6 +12477,7 @@ hFreeConn(&conn);
 static void pubsBlatPslMethods(struct track *tg)
 /* a track that shows only the indiv matches for one single article */
 {
+//pslMethods(tg, NULL, 0, NULL);
 activatePslTrackIfCgi(tg);
 tg->loadItems = pubsPslLoadItems;
 tg->itemName  = pubsItemName;
@@ -12486,7 +12487,8 @@ tg->mapItem   = pubsMapItem;
 static void pubsBlatMethods(struct track *tg)
 /* publication blat tracks are bed12+2 tracks of sequences in text, mapped with BLAT */
 {
-tg->loadItems = pubsLoadKeywordYearItems;
+bedMethods(tg);
+tg->loadItems = pubsBlatLoadItems;
 tg->itemName  = pubsItemName;
 tg->mapItem   = pubsMapItem;
 }
@@ -12494,6 +12496,7 @@ tg->mapItem   = pubsMapItem;
 static void pubsMarkerMethods(struct track *tg)
 /* publication marker tracks are bed5 tracks of genome marker occurences like rsXXXX found in text*/
 {
+bedMethods(tg);
 tg->bedSize   = 5;
 tg->loadItems = pubsLoadMarkerItem;
 tg->mapItem   = pubsMarkerMapItem;
@@ -12521,8 +12524,8 @@ if (sameWord(type, "bed"))
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
 
-    // FIXME: registerTrackHandler cannot do wildcards
-    // I think this is the only way to a similar behaviour
+    // FIXME: this is in the wrong function, but needs to stay as long as 
+    // registerTrackHandler does not accept wildcards
     if (startsWith("pubs", track->track) && stringIn("Marker", track->track))
         pubsMarkerMethods(track);
     }
@@ -13292,13 +13295,10 @@ registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
-
-/* publications track */
-// FIXME: need a way to register based on pattern, see fillInFromType
 registerTrackHandler("pubsBlat", pubsBlatMethods);
 registerTrackHandler("pubsBlatPsl", pubsBlatPslMethods);
-registerTrackHandler("pubsDevBlat", pubsBlatMethods); // pubs testing tracks
-registerTrackHandler("pubsDevBlatPsl", pubsBlatPslMethods); 
+registerTrackHandler("pubsDevBlat", pubsBlatMethods); // pubs testing track
+registerTrackHandler("pubsDevBlatPsl", pubsBlatPslMethods); // pubs testing track
 
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
