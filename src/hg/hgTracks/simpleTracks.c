@@ -12207,7 +12207,7 @@ safef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE artic
     articleTable, lf->name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
-    {
+{
     char* firstAuthor = row[0];
     char* year    = row[1];
     char* title   = row[2];
@@ -12218,7 +12218,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         extra->mouseOver = extra->label;
     else
         extra->mouseOver = cloneString(title);
-    }
+}
 
 sqlFreeResult(&sr);
 return extra;
@@ -12239,7 +12239,7 @@ lf->extra = extra;
 hFreeConn(&conn);
 }
 
-static void pubsBlatLoadItems(struct track *tg)
+static void pubsLoadKeywordYearItems(struct track *tg)
 /* load items that fulfill keyword and year filter */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -12254,9 +12254,9 @@ if(isNotEmpty(keywords))
     keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
 
 if(isEmpty(yearFilter) && isEmpty(keywords))
-    {
+{
     loadGappedBed(tg);
-    }
+}
 else
     {
     char* oldLabel = tg->longLabel;
@@ -12312,13 +12312,15 @@ static void activatePslTrackIfCgi(struct track *tg)
  */
 {
 char *articleId = cgiOptionalString(PUBSFILTERNAME);
+//if (articleId==NULL) 
+    //articleId = cartOptionalString(cart, PUBSFILTERNAME);
 
 if (articleId!=NULL) 
-    {
+{
     cartSetString(cart, PUBSFILTERNAME, articleId);
     tdbSetCartVisibility(tg->tdb, cart, hCarefulTrackOpenVis(database, tg->track));
     tg->visibility=tvPack;
-    }
+}
 }
 
 char *pubsItemName(struct track *tg, void *item)
@@ -12358,7 +12360,10 @@ if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
 static void pubsLoadMarkerItem (struct track *tg)
 /* copy item names into extra field */
 {
+//loadSimpleBed(tg);
 loadSimpleBedAsLinkedFeaturesPerBase(tg);
+//tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE, FALSE);
+//if (! (hashFindVal(tdb->settingsHash, "pubsMarkerTable")))
 enum trackVisibility vis = tg->visibility;
 if (vis == tvDense || vis == tvSquish) 
     return;
@@ -12401,6 +12406,7 @@ static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* 
     safef(query, sizeof(query), "SELECT annotId, %s  FROM %s WHERE articleId='%s' ", 
         selectValSql, sequenceTable, articleId);
     struct hash *seqIdHash = sqlQuickHash(conn, query);
+    //freeMem(sequenceTable); // XX Why does this crash??
     return seqIdHash;
 }
 
@@ -12487,7 +12493,7 @@ static void pubsBlatMethods(struct track *tg)
 /* publication blat tracks are bed12+2 tracks of sequences in text, mapped with BLAT */
 {
 bedMethods(tg);
-tg->loadItems = pubsBlatLoadItems;
+tg->loadItems = pubsLoadKeywordYearItems;
 tg->itemName  = pubsItemName;
 tg->mapItem   = pubsMapItem;
 }
@@ -12523,8 +12529,8 @@ if (sameWord(type, "bed"))
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
 
-    // FIXME: this is in the wrong function, but needs to stay as long as 
-    // registerTrackHandler does not accept wildcards
+    // FIXME: as long as registerTrackHandler doesn't accept wildcards, 
+    // this probably needs to stay here (it's in the wrong function)
     if (startsWith("pubs", track->track) && stringIn("Marker", track->track))
         pubsMarkerMethods(track);
     if (startsWith("pubs", track->track) && stringIn("Blat", track->track))
@@ -12588,6 +12594,10 @@ else if (sameWord(type, "logo"))
 else if (sameWord(type, "psl"))
     {
     pslMethods(track, tdb, wordCount, words);
+
+    // FIXME: registerTrackHandler doesn't accept wildcards, so this might be the only
+    // way to get this done in a general way. If this was in loaded with registerTrackHandler
+    // pslMethods would need the tdb object, which we don't have for these callbacks
     if (startsWith("pubs", track->track))
         pubsBlatPslMethods(track);
     }
@@ -13298,7 +13308,6 @@ registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
-
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
