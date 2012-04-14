@@ -1,8 +1,8 @@
 class TableQa(object):
-"""
-A generic database table.  Base class for other types of track table types (psl, genePred, etc.),
-for running QA validations and describing table statistics.
-"""
+    """
+    A generic database table.  Base class for other types of track table types (psl, genePred,
+    etc.), for running QA validations and describing table statistics.
+    """
 
     def __init__(self, db, table):
         self.db = db
@@ -26,5 +26,5 @@ for running QA validations and describing table statistics.
         pass
 
     def statistics(self):
-    """Returns a table stats object describing statistics of this table."""
+        """Returns a table stats object describing statistics of this table."""
         pass

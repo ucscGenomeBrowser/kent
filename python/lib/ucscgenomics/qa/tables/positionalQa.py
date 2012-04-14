@@ -1,7 +1,9 @@
+from ucscgenomics.qa.tables.tableQa import TableQa
+
 class PositionalQa(TableQa):
-"""
-A positional table.
-"""
+    """
+    A positional table.
+    """
 
     def __positionalTblCheck(self):
         """Runs positionalTblCheck program on this table. """
@@ -15,7 +17,7 @@ A positional table.
         """Returns a chrom counts object with the number of items per chromosome in this table."""
         pass
 
-    def validate(self, errorLog)
+    def validate(self, errorLog):
         """Adds positional-table-specific checks to basic table checks."""
         pass
 

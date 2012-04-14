@@ -1,8 +1,16 @@
+import subprocess
+import pipes
+from ucscgenomics.qa.tables.genePredQa import GenePredQa
+from ucscgenomics.qa.tables.tableQa import TableQa
+from ucscgenomics.qa.tables.pslQa import PslQa
+from ucscgenomics.qa.tables.positionalQa import PositionalQa
+from ucscgenomics.qa.tables.pointerQa import PointerQa
 
+# TODO: add functions that check whether db and table actually exists
 
-def __getTrackType(db, table):
+def getTrackType(db, table):
     """Looks for a track type via tdbQuery."""
-    cmd = ["tdbQuery", "select type from " + database + " where track='" + table +
+    cmd = ["tdbQuery", "select type from " + db + " where track='" + table +
            "' or table='" + table + "'"]
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     cmdout, cmderr = p.communicate()
@@ -18,13 +26,13 @@ def __getTrackType(db, table):
 
 pslTypes = frozenset(["psl"])
 genePredTypes = frozenset(["genePred"])
-otherPositionalTypes = frozenset(["axt", "bed", "chain", "clonePos", "ctgPos", "expRatio",
-                                  "maf", "netAlign", "rmsk", "sample", "wigMaf", "wig", "bedGraph",
+otherPositionalTypes = frozenset(["axt", "bed", "chain", "clonePos", "ctgPos", "expRatio", "maf",
+                                  "netAlign", "rmsk", "sample", "wigMaf", "wig", "bedGraph",
                                   "chromGraph", "factorSource", "bedDetail", "pgSnp"])
 pointerTypes = frozenset(["bigWig", "bigBed", "bam"])
 
 def tableQaFactory(db, table):
-    """Returns tableQa object according to trackDb track type."""
+    """Returns tableQa object according to trackDb track type.""" 
     tableType = getTrackType(db, table)
     if not tableType:
         return TableQa(db, table)
@@ -37,5 +45,5 @@ def tableQaFactory(db, table):
     elif tableType in pointerTypes:
         return PointerQa(db, table)
     else:
-        raise Exception(database + table + " has unknown track type " + tableType)
+        raise Exception(db + table + " has unknown track type " + tableType)
 
