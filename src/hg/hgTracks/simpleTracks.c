@@ -12477,7 +12477,6 @@ hFreeConn(&conn);
 static void pubsBlatPslMethods(struct track *tg)
 /* a track that shows only the indiv matches for one single article */
 {
-//pslMethods(tg, NULL, 0, NULL);
 activatePslTrackIfCgi(tg);
 tg->loadItems = pubsPslLoadItems;
 tg->itemName  = pubsItemName;
@@ -12528,6 +12527,8 @@ if (sameWord(type, "bed"))
     // registerTrackHandler does not accept wildcards
     if (startsWith("pubs", track->track) && stringIn("Marker", track->track))
         pubsMarkerMethods(track);
+    if (startsWith("pubs", track->track) && stringIn("Blat", track->track))
+        pubsBlatMethods(track);
     }
 /*
 else if (sameWord(type, "bedLogR"))
@@ -12587,6 +12588,8 @@ else if (sameWord(type, "logo"))
 else if (sameWord(type, "psl"))
     {
     pslMethods(track, tdb, wordCount, words);
+    if (startsWith("pubs", track->track))
+        pubsBlatPslMethods(track);
     }
 else if (sameWord(type, "snake"))
     {
@@ -13295,10 +13298,6 @@ registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
-registerTrackHandler("pubsBlat", pubsBlatMethods);
-registerTrackHandler("pubsBlatPsl", pubsBlatPslMethods);
-registerTrackHandler("pubsDevBlat", pubsBlatMethods); // pubs testing track
-registerTrackHandler("pubsDevBlatPsl", pubsBlatPslMethods); // pubs testing track
 
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
