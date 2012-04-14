@@ -16,6 +16,7 @@
 #include "sqlList.h"
 #include "rangeTree.h"
 #include "binRange.h"
+#include "asParse.h"
 #include "basicBed.h"
 
 
@@ -989,8 +990,8 @@ return hash;
 }
 
 int bedParseRgb(char *itemRgb)
-/*	parse a string: "r,g,b" into three unsigned char values
-	returned as 24 bit number, or -1 for failure */
+/*      parse a string: "r,g,b" into three unsigned char values
+        returned as 24 bit number, or -1 for failure */
 {
 char dupe[64];
 int wordCount;
@@ -1001,11 +1002,11 @@ wordCount = chopString(dupe, ",", row, ArraySize(row));
 
 if ((wordCount != 3) || (!isdigit(row[0][0]) ||
     !isdigit(row[1][0]) || !isdigit(row[2][0])))
-	return (-1);
+        return (-1);
 
 return ( ((atoi(row[0]) & 0xff) << 16) |
-	((atoi(row[1]) & 0xff) << 8) |
-	(atoi(row[2]) & 0xff) );
+        ((atoi(row[1]) & 0xff) << 8) |
+        (atoi(row[2]) & 0xff) );
 }
 
 long long bedTotalSize(struct bed *bedList)
@@ -1289,7 +1290,7 @@ if (bedFieldCount >= 7)
 if (bedFieldCount >= 8)
     dyStringAppend(dy, "   uint thickEnd;     \"End of where display should be thick (stop codon)\"\n");
 if (bedFieldCount >= 9)
-    dyStringAppend(dy, "   string reserved;     \"Used as itemRgb as of 2004-11-22\"\n");
+    dyStringAppend(dy, "   uint reserved;     \"Used as itemRgb as of 2004-11-22\"\n");
 if (bedFieldCount >= 10)
     dyStringAppend(dy, "   int blockCount;    \"Number of blocks\"\n");
 if (bedFieldCount >= 11)
@@ -1307,5 +1308,325 @@ for (i=bedFieldCount+1; i<=totalFieldCount; ++i)
     dyStringPrintf(dy, "string field%d;	\"Undocumented field\"\n", i+1);
 dyStringAppend(dy, "   )\n");
 return dyStringCannibalize(&dy);
+}
+
+
+boolean asCompareObjAgainstStandardBed(struct asObject *asYours, int numColumnsToCheck, boolean abortOnDifference)
+/* Compare user's .as object asYours to the standard BED.
+ * abortOnDifference specifies whether to warn or abort if they differ within the first numColumnsToCheck columns.
+ * Returns TRUE if they match. */
+{
+boolean result = FALSE;
+struct asObject *asStandard = NULL;
+if (numColumnsToCheck > 15)
+    errAbort("There are only 15 standard BED columns defined and you have asked for %d.", numColumnsToCheck);
+if (numColumnsToCheck < 3)
+    errAbort("All BED files have at least the first 3 columns the same.");
+char *asStandardText = bedAsDef(15,15);
+asStandard = asParseText(asStandardText);
+result = asCompareObjs("Yours", asYours, "BED Standard", asStandard, numColumnsToCheck, NULL, abortOnDifference);
+freeMem(asStandardText);
+asObjectFreeList(&asStandard);
+return result;
+}
+
+
+void loadAndValidateBed(char *row[], int wordCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt)
+/* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject.
+ * If a customTrack, then some errors are tolerated. */
+{
+int count;
+int *blockSizes = NULL;
+int tempBlockSizes[1024];
+int *chromStarts;
+int tempChromStarts[1024];
+int *expIds;
+int tempExpIds[1024];
+float *expScores;
+float tempExpScores[1024];
+
+bed->chrom = row[0];  // note this value is not cloned for speed, callers may need to clone it.
+
+// This check is usually redundant since the caller should be checking it against actual chromInfo names
+// however hgLoadBed might not always have that info available.
+if (strlen(bed->chrom) >= BB_MAX_CHROM_STRING)  // must leave room for 0 terminator
+    lineFileAbort(lf, "chrom [%s] is too long (must not exceed %d characters)", bed->chrom, BB_MAX_CHROM_STRING - 1);
+if (strlen(bed->chrom) < 1)
+    lineFileAbort(lf, "chrom cannot be blank or empty");
+
+lineFileAllInts(lf, row, 1, &bed->chromStart, FALSE, 4, "integer", FALSE);
+
+lineFileAllInts(lf, row, 2, &bed->chromEnd, FALSE, 4, "integer", FALSE);
+
+if (bed->chromEnd < bed->chromStart)
+    lineFileAbort(lf, "chromStart after chromEnd (%u > %u)",
+    	bed->chromStart, bed->chromEnd);
+if (wordCount > 3)
+    {
+    bed->name = row[3];
+    if (strlen(bed->name) > 255)
+	lineFileAbort(lf, "name [%s] is too long (must not exceed 255 characters)", bed->name);
+    if (isCt)
+	bed->name = cloneString(bed->name);
+    }
+if (wordCount > 4)
+    {
+    lineFileAllInts(lf, row, 4, &bed->score, TRUE, 4, "integer", FALSE);
+    if (!isCt && (bed->score < 0 || bed->score > 1000))
+	    lineFileAbort(lf, "score (%d) must be between 0 and 1000", bed->score);
+    }
+
+if (wordCount > 5)
+    {
+    if (!isCt && strlen(row[5]) > 1)
+      lineFileAbort(lf, "Expecting + or - or . in strand, found [%s]",row[5]);
+    bed->strand[0] = row[5][0];
+    bed->strand[1] = 0;
+    if (bed->strand[0] != '+' && bed->strand[0] != '-' && bed->strand[0] != '.')
+      lineFileAbort(lf, "Expecting + or - or . in strand, found [%s]",row[5]);
+    }
+if (wordCount > 6)
+    lineFileAllInts(lf, row, 6, &bed->thickStart, FALSE, 4, "integer", FALSE);
+else
+    bed->thickStart = bed->chromStart;
+if (wordCount > 7)
+    {
+    lineFileAllInts(lf, row, 7, &bed->thickEnd, FALSE, 4, "integer", FALSE);
+    if (bed->thickEnd < bed->thickStart)
+     lineFileAbort(lf, "thickStart after thickEnd");
+    if ((bed->thickStart != 0) &&
+     ((bed->thickStart < bed->chromStart) ||
+      (bed->thickStart > bed->chromEnd)))
+     lineFileAbort(lf,
+	 "thickStart out of range (chromStart to chromEnd, or 0 if no CDS)");
+    if ((bed->thickEnd != 0) &&
+     ((bed->thickEnd < bed->chromStart) ||
+      (bed->thickEnd > bed->chromEnd)))
+     lineFileAbort(lf,
+	 "thickEnd out of range for %s:%u-%u, thick:%u-%u (chromStart to chromEnd, or 0 if no CDS)",
+		   bed->name, bed->chromStart, bed->chromEnd,
+		   bed->thickStart, bed->thickEnd);
+    }
+else
+     bed->thickEnd = bed->chromEnd;
+
+if (wordCount > 8)
+    {
+    if (strchr(row[8],','))
+	{
+	unsigned char colors[4];
+	char *saveColorString = cloneString(row[8]);
+	int numColors = lineFileAllIntsArray(lf, row, 8, colors, sizeof colors, FALSE, 1, "integer", FALSE);
+	if (numColors == 3)
+	    {
+	    bed->itemRgb = (((unsigned)colors[0]) << 2*8) | (((unsigned)colors[1]) << 1*8) | (unsigned)colors[2];
+	    }
+	else
+	    lineFileAbort(lf, "Expecting color to consist of r,g,b values from 0 to 255. Got [%s]", saveColorString);
+	freeMem(saveColorString);
+	}
+    else 
+	{
+	lineFileAllInts(lf, row, 8, &bed->itemRgb, FALSE, 4, "integer", FALSE);
+	}
+    }
+
+if (wordCount > 9)
+    {
+    lineFileAllInts(lf, row, 9, &bed->blockCount, FALSE, 4, "integer", FALSE);
+    if (!(bed->blockCount >= 1))
+	lineFileAbort(lf, "Expecting blockCount (%d) to be 1 or more.", bed->blockCount);
+    
+    }
+if (wordCount > 10)
+    {
+    if (isCt)
+	{
+	AllocArray(bed->blockSizes,bed->blockCount+1); // having +1 allows us to detect incorrect size
+        count = lineFileAllIntsArray(lf, row, 10, bed->blockSizes, bed->blockCount+1, TRUE, 4, "integer", TRUE);
+	blockSizes = bed->blockSizes;
+	}
+    else
+	{
+        count = lineFileAllIntsArray(lf, row, 10, tempBlockSizes, sizeof tempBlockSizes, TRUE, 4, "integer", TRUE);
+	blockSizes = tempBlockSizes;
+	}
+    if (count != bed->blockCount)
+	lineFileAbort(lf, "Expecting %d elements in blockSizes list, found at least %d", bed->blockCount, count);
+    int i;
+    for (i=0; i < bed->blockCount;  i++)
+	{
+        if (!(blockSizes[i] > 0))
+		lineFileAbort(lf, "BED blockSizes must be greater than 0, blockSize[%d] = %d", i, blockSizes[i]);
+	}
+    }
+if (wordCount > 11)
+    {
+    int i;
+    if (isCt)
+	{
+	AllocArray(bed->chromStarts,bed->blockCount+1); // having +1 allows us to detect incorrect size
+        count = lineFileAllIntsArray(lf, row, 11, bed->chromStarts, bed->blockCount+1, TRUE, 4, "integer", TRUE);
+	chromStarts = bed->chromStarts;
+	}
+    else
+	{
+        count = lineFileAllIntsArray(lf, row, 11, tempChromStarts, sizeof tempChromStarts, TRUE, 4, "integer", TRUE);
+	chromStarts = tempChromStarts;
+	}
+    if (count != bed->blockCount)
+	lineFileAbort(lf, "Expecting %d elements in chromStarts list, found at least %d", bed->blockCount, count);
+    // tell the user if they appear to be using absolute starts rather than
+    // relative... easy to forget!  Also check block order, coord ranges...
+    if (chromStarts[0] != 0)
+	lineFileAbort(lf,
+	    "BED blocks must span chromStart to chromEnd.  "
+	    "BED chromStarts[0] = %d, must be 0 so that (chromStart + "
+	    "chromStarts[0]) equals chromStart.", chromStarts[0]);
+
+    for (i=1; i < bed->blockCount;  i++)
+	{
+
+/*
+printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", lineIx, i, bed->chrom, bed->name, bed->score, bed->blockCount, bed->chromStart, bed->chromEnd, bed->chromStarts[i], bed->blockSizes[i], lastStart, lastEnd);
+*/
+	// extra check to give user help for a common problem
+	if (chromStarts[i]+bed->chromStart >= bed->chromEnd)
+	    {
+	    if (chromStarts[i] >= bed->chromStart)
+		lineFileAbort(lf, "BED chromStarts offsets must be relative to chromStart, "
+				  "not absolute.  Try subtracting chromStart from each offset "
+				  "in chromStarts.");
+	    else
+		lineFileAbort(lf, "BED chromStarts[i]+chromStart must be less than chromEnd.");
+	    }
+	// chrom blocks must ascend without overlap
+        if (!(chromStarts[i] >= chromStarts[i-1] + blockSizes[i-1]))
+		lineFileAbort(lf, "BED blocks must be in ascending order without overlap. Blocks %d and %d overlap.", i-1, i);
+	}
+
+    // last block-end must match chromEnd
+    i = bed->blockCount-1;
+    if ((bed->chromStart + chromStarts[i] + blockSizes[i]) != bed->chromEnd)
+	{
+	lineFileAbort(lf, "BED blocks must span chromStart to chromEnd.  (chromStart + "
+			  "chromStarts[last] + blockSizes[last]) must equal chromEnd.");
+	}
+    }
+
+if (wordCount > 12)
+    // get the microarray/colored-exon fields
+    {
+    lineFileAllInts(lf, row, 12, &bed->expCount, TRUE, 4, "integer", TRUE);
+    if (!(bed->expCount >= 1))
+	lineFileAbort(lf, "Expecting expCount (%d) to be 1 or more.", bed->expCount);
+    if (isCt)
+	{
+	AllocArray(bed->expIds,bed->expCount+1); // having +1 allows us to detect incorrect size
+        count = lineFileAllIntsArray(lf, row, 13, bed->expIds, bed->expCount+1, TRUE, 4, "integer", TRUE);
+	expIds = bed->expIds;
+	}
+    else
+	{
+        count = lineFileAllIntsArray(lf, row, 13, tempExpIds, sizeof tempExpIds, TRUE, 4, "integer", TRUE);
+	expIds = tempExpIds;
+	}
+    if (count != bed->expCount)
+	lineFileAbort(lf, "expecting %d elements in expIds list (bed field 14)", bed->expCount);
+    if (wordCount == 15)
+	{
+	if (isCt)
+	    {
+	    sqlFloatDynamicArray(row[14], &bed->expScores, &count);
+	    expScores = bed->expScores;
+	    }
+	else
+	    {
+	    count = sqlFloatArray(row[14], tempExpScores, sizeof tempExpScores);
+	    expScores = tempExpScores;
+	    }
+	if (count != bed->expCount)
+	    lineFileAbort(lf, "expecting %d elements in expScores list (bed field 15)", bed->expCount);
+	}
+    }
+
+/* Check bedPlus fields are formatted right. */
+/* This could form the basis of an .as-validator independent of BED. I suppose it could go in asParse.c */
+if (as)
+    {
+    struct hash* linkHash = NULL;
+    /* Validate as-fields */
+    struct asColumn *asCol = NULL;
+    asCol = as->columnList;
+    int i;
+    // Pre-scan ALL fields for linked fields
+    for (i=0; i<fieldCount; ++i)
+	{
+	enum asTypes type = asCol->lowType->type;
+	if (! (asCol->isList || asCol->isArray))
+	    {
+	    if (asTypesIsInt(type))
+		{
+		if (asCol->isSizeLink) // save the field value and index for later use in validating a list size.
+		    {
+		    int listSize = 0;  // big enough to hold the list count
+		    lineFileAllInts(lf, row, i, &listSize, TRUE, 4, "integer", TRUE);
+		    if (!linkHash)
+			linkHash = newHash(4);
+		    hashAddInt(linkHash, asCol->name, listSize);
+		    }
+		}
+	    }
+	asCol = asCol->next;
+	}    
+    /* Validate bed-plus fields */
+    asCol = slElementFromIx(as->columnList, wordCount);
+    for (i=wordCount; i<fieldCount; ++i)
+	{
+	enum asTypes type = asCol->lowType->type;
+	if (! (asCol->isList || asCol->isArray))
+	    {
+	    if (asTypesIsInt(type))
+		lineFileAllInts(lf, row, i, NULL, !asTypesIsUnsigned(type), asTypesIntSize(type), asTypesIntSizeDescription(type), FALSE);
+	    else if (asTypesIsFloating(type))
+		lineFileNeedDouble(lf, row, i);
+	    else if (type == t_string)
+		{
+		if (strlen(row[i]) > 255)
+		    lineFileAbort(lf, "expecting length (%ld) of string (%s) not to exceed 255 in field %s", strlen(row[i]), row[i], asCol->name);
+		}
+	    }
+	else if (asCol->isList)
+	    {
+	    if (asTypesIsInt(type))
+		{
+		count = lineFileAllIntsArray(lf, row, i, NULL, 1024,
+		    !asTypesIsUnsigned(type), asTypesIntSize(type), asTypesIntSizeDescription(type), FALSE);
+		if (asCol->fixedSize > 0)
+		    {
+		    if (asCol->fixedSize != count)
+			lineFileAbort(lf, "expecting %d elements in %s list, found %d", asCol->fixedSize, asCol->name, count);
+		    }
+		else
+		    {
+		    if (!linkHash)
+			lineFileAbort(lf, "linked field %s was not found; it is required for determining listSize of %s"
+			    , asCol->linkedSizeName, asCol->name);
+		    int listSize = hashIntValDefault(linkHash, asCol->linkedSizeName, -1);
+		    if (listSize == -1)
+			lineFileAbort(lf, "linked field %s was not found; it is required for determining listSize of %s"
+			    , asCol->linkedSizeName, asCol->name);
+		    if (!(listSize >= 1))
+			lineFileAbort(lf, "invalid list size %d for list %s must be 1 or greater, empty lists are not allowed", listSize, asCol->name);
+		    if (!(listSize == count))
+			lineFileAbort(lf, "expecting %d elements in %s list, found %d", listSize, asCol->name, count);
+		    }
+		}
+	    }
+	asCol = asCol->next;
+	}
+    hashFree(&linkHash);
+    }
+
 }
 

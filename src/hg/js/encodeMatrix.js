@@ -129,6 +129,23 @@ var encodeMatrix = (function () {
         });
     },
 
+    hoverExperiment: function ($td) {
+        // Add highlight on hover of experiment table cell.
+        // NOTE: suppressed in IE due to performance issues
+        // NOTE: tied to class name in dataMatrix.css
+
+        if (!$.browser.msie) {
+            $td.hover(
+                function() {
+                    $(this).addClass("experimentHover");
+                },
+                function () {
+                    $(this).removeClass("experimentHover");
+                }
+            );
+        }
+    },
+
     hoverTableCrossHair: function ($table) {
         // Add Cross-hair effect (column and row hover) to table
         // thanks to Chris Coyier, css-tricks.com
