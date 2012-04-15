@@ -246,23 +246,23 @@ taxId 61853
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek nomLeu2 > do.log 2>&1 &
-XXX - running - Fri Apr 13 16:15:03 PDT 2012
-    #   real    990m24.340s
+    #   real    1161m52.449s
 
     cat faSize.rmsk.txt
-    #   2808525991 bases (289538800 N's 2518987191 real 1404190109 upper
-    #   1114797082 lower) in 4583 sequences in 1 files
-    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
-    #   max 315321322 (chr1) median 25278
-    #   %39.69 masked total, %44.26 masked real
+    #   2936052603 bases (179443556 N's 2756609047 real 1339535283 upper
+    #   1417073764 lower) in 17976 sequences in 1 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+    #   %48.26 masked total, %51.41 masked real
 
     egrep -i "versi|relea" do.log
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
 # CC   RELEASE 20110920; 
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 
-    featureBits -countGaps nomLeu2 rmsk
-    #   29525418 bases of 2525996391 (1.169%) in intersection
+    time featureBits -countGaps nomLeu2 rmsk
+    #   1418576934 bases of 2936052603 (48.316%) in intersection
+    #   real    0m40.362s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -275,10 +275,27 @@ XXX - running - Fri Apr 13 16:15:03 PDT 2012
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	nomLeu2 > do.log 2>&1 &
-XXX - running - Fri Apr 13 16:15:24 PDT 2012
-    #   real    9m41.939s
+    #   real    19m41.095s
+    XXX 1 failed job, which is all on chrM, a known failure for TRF:
+    # ./TrfRun.csh /hive/data/genomes/nomLeu2/TrfPart/000/000.lst.bed
+    # make empty result exist:
+    touch /hive/data/genomes/nomLeu2/TrfPart/000/000.lst.bed
+# Completed: 74 of 75 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      16153s     269.21m     4.49h    0.19d  0.001 y
+# IO & Wait Time:                   198s       3.30m     0.06h    0.00d  0.000 y
+# Average job time:                 221s       3.68m     0.06h    0.00d
+# Longest finished job:            2158s      35.97m     0.60h    0.02d
+# Submission to last job:          2906s      48.43m     0.81h    0.03d
+
+    # continuing:
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	-continue=filter nomLeu2 > filter.log 2>&1 &
+    #   real    0m53.367s
+
     cat fb.simpleRepeat 
-    #   29525418 bases of 2525996391 (1.169%) in intersection
+    #   122433828 bases of 2756609047 (4.441%) in intersection
 
     # add to rmsk after it is done:
     cd /hive/data/genomes/nomLeu2
@@ -288,11 +305,11 @@ XXX - running - Fri Apr 13 16:15:24 PDT 2012
 
     twoBitToFa nomLeu2.2bit stdout | faSize stdin > faSize.nomLeu2.2bit.txt
     cat faSize.nomLeu2.2bit.txt
-    #   2808525991 bases (289538800 N's 2518987191 real 1403003553 upper
-    #   1115983638 lower) in 4583 sequences in 1 files
-    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
-    #   max 315321322 (chr1) median 25278
-    #   %39.74 masked total, %44.30 masked real
+    #   2936052603 bases (179443556 N's 2756609047 real 1338486944 upper
+    #   1418122103 lower) in 17976 sequences in 1 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+    #   %48.30 masked total, %51.44 masked real
 
     rm /gbdb/nomLeu2/nomLeu2.2bit
     ln -s `pwd`/nomLeu2.2bit /gbdb/nomLeu2/nomLeu2.2bit
@@ -311,62 +328,14 @@ XXX - running - Fri Apr 13 16:15:24 PDT 2012
     #   real    0m25.158s
 
     time featureBits nomLeu2 allGaps.bed notGap.bed -bed=new.gaps.bed
-XXX - running - Fri Apr 13 16:18:57 PDT 2012
-    wc -l new.gaps.bed
-    #   14502 new.gaps.bed
-    #   39382069 bases of 2403678276 (1.638%) in intersection
-    #   real    2m51.724s
+    #   0 bases of 2756609047 (0.000%) in intersection
+    #   real    15m56.963s
 
-    #	what is the highest index in the existing gap table:
-    hgsql -N -e "select ix from gap;" nomLeu2 | sort -n | tail -1
-    #	1382
-    cat << '_EOF_' > mkGap.pl
-#!/bin/env perl
+    # no new gaps, nothing to do here
 
-use strict;
-use warnings;
-
-my $ix=`hgsql -N -e "select ix from gap;" nomLeu2 | sort -n | tail -1`;
-chomp $ix;
-
-open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
-while (my $line = <FH>) {
-    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
-    ++$ix;
-    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
-        $chromEnd, $ix, $chromEnd-$chromStart;
-}
-close (FH);
-'_EOF_'
-    # << happy emacs
-    chmod +x ./mkGap.pl
-    ./mkGap.pl > other.bed
-    featureBits -countGaps nomLeu2 other.bed
-    #   702334 bases of 2808525991 (0.025%) in intersection
-    wc -l other.bed
-    #	14502
-    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
-	-noLoad nomLeu2 otherGap other.bed
-    #   Read 14502 elements of size 8 from other.bed
-    #	starting with this many
-    hgsql -e "select count(*) from gap;" nomLeu2
-    #	 169119
-    hgsql nomLeu2 -e 'load data local infile "bed.tab" into table gap;'
-    #	result count:
-    hgsql -e "select count(*) from gap;" nomLeu2
-    #	183621
-    # == 14502 + 169119
-    # verify we aren't adding gaps where gaps already exist
-    # this would output errors if that were true:
-    gapToLift -minGap=1 nomLeu2 nonBridged.lift -bedFile=nonBridged.bed
-    #   one of these new ones is adjacent to an existing gap:
-# WARNING: overlapping gap at chr1:16262949-16312949(fragment) and chr1:16312949-16312957(other)
-
-    # see example in danRer7.txt
     # are there non-bridged gaps here:
     hgsql -N -e "select bridge from gap;" nomLeu2 | sort | uniq -c
-    #  169119 no
-    #   14502 yes
+    #   179932 yes
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2012-04-13 - Hiram)
@@ -374,58 +343,60 @@ close (FH);
     cd /hive/data/genomes/nomLeu2/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev nomLeu2 > do.log 2>&1 &
-XXX - running - Fri Apr 13 16:15:46 PDT 2012
-    #   real    224m8.502s
+    #   real    196m2.385s
 
     # Masking statistics
     twoBitToFa nomLeu2.wmsk.2bit stdout | faSize stdin
-    #   2808525991 bases (289538800 N's 2518987191 real 1636028761 upper
-    #   882958430 lower) in 4583 sequences in 1 files
-    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
-    #   max 315321322 (chr1) median 25278
-    #   %31.44 masked total, %35.05 masked real
+    #   2936052603 bases (179443556 N's 2756609047 real 1711898047 upper
+    #   1044711000 lower) in 17976 sequences in 1 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+    #   %35.58 masked total, %37.90 masked real
 
     twoBitToFa nomLeu2.wmsk.sdust.2bit stdout | faSize stdin
-    #   2808525991 bases (289538800 N's 2518987191 real 1622625959 upper
-    #   896361232 lower) in 4583 sequences in 1 files
-    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
-    #   max 315321322 (chr1) median 25278
-    #   %31.92 masked total, %35.58 masked real
+    #   2936052603 bases (179443556 N's 2756609047 real 1697032515 upper
+    #   1059576532 lower) in 17976 sequences in 1 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+    #   %36.09 masked total, %38.44 masked real
 
     hgLoadBed nomLeu2 windowmaskerSdust windowmasker.sdust.bed.gz
-    #   Read 13770155 elements of size 3 from windowmasker.sdust.bed.gz
+    #   Read 15229701 elements of size 3 from windowmasker.sdust.bed.gz
 
     featureBits -countGaps nomLeu2 windowmaskerSdust
     #   1185785055 bases of 2808525991 (42.221%) in intersection
 
     #	eliminate the gaps from the masking
-    featureBits nomLeu2 -not gap -bed=notGap.bed
-    #   2525294057 bases of 2525294057 (100.000%) in intersection
+    time featureBits nomLeu2 -not gap -bed=notGap.bed
+    #   2756609047 bases of 2756609047 (100.000%) in intersection
+    #   real    0m22.205s
+
     time nice -n +19 featureBits nomLeu2 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #   902560289 bases of 2525294057 (35.741%) in intersection
-    #   real    3m46.190s
+    #   1059576532 bases of 2756609047 (38.438%) in intersection
+    #   real    11m9.332s
 
     #	reload track to get it clean
     hgLoadBed nomLeu2 windowmaskerSdust cleanWMask.bed.gz
-    #   Read 13751189 elements of size 4 from cleanWMask.bed.gz
+    #   Read 15242903 elements of size 4 from cleanWMask.bed.gz
     featureBits -countGaps nomLeu2 windowmaskerSdust
-    #   902560289 bases of 2808525991 (32.136%) in intersection
+    #   1059576532 bases of 2936052603 (36.088%) in intersection
+    #   real    1m38.313s
     zcat cleanWMask.bed.gz \
 	| twoBitMask ../../nomLeu2.unmasked.2bit stdin \
 	    -type=.bed nomLeu2.cleanWMSdust.2bit
     twoBitToFa nomLeu2.cleanWMSdust.2bit stdout | faSize stdin \
         > nomLeu2.cleanWMSdust.faSize.txt
     cat nomLeu2.cleanWMSdust.faSize.txt
-    #   2808525991 bases (289538800 N's 2518987191 real 1622625959 upper
-    #   896361232 lower) in 4583 sequences in 1 files
-    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
-    #   max 315321322 (chr1) median 25278
-    #   %31.92 masked total, %35.58 masked real
+    #   2936052603 bases (179443556 N's 2756609047 real 1697032515 upper
+    #   1059576532 lower) in 17976 sequences in 1 files
+    #   Total size: mean 163331.8 sd 2015356.2
+    #   min 782 (chrM_ADFV01197901_random) max 74231199 (GL397261) median 4849
+    #   %36.09 masked total, %38.44 masked real
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps nomLeu2 rmsk windowmaskerSdust
-    #   660954442 bases of 2808525991 (23.534%) in intersection
+    #   837096446 bases of 2936052603 (28.511%) in intersection
 
 #########################################################################
 # MASK SEQUENCE WITH WM+TRF (DONE - 2012-04-13 - Hiram)
