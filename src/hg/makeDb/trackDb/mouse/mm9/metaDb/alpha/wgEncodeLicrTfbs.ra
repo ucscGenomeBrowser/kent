@@ -4466,10 +4466,7 @@ grant Ren
 lab LICR-m
 labVersion 05/21/09 Lane 4
 md5sum 72c91bc888788581ecb63dd571f1a018
-<<<<<<< HEAD:src/hg/makeDb/trackDb/mouse/mm9/metaDb/alpha/wgEncodeLicrTfbs.ra
-=======
 objStatus revoked - Data is not used for analysis
->>>>>>> 7893e3899b96b317de6c25afa40fc6626a4e74b2:src/hg/makeDb/trackDb/mouse/mm9/metaDb/alpha/wgEncodeLicrTfbs.ra
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2

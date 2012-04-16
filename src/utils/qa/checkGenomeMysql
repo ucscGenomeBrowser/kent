@@ -7,17 +7,16 @@ source `which qaConfig.bash`
 #
 # 06/07/10 Mary Goldman
 #
-# Script to make sure that all expected tables in public genome-mysql
-# server are there and that they are not corrupted.
-# Does this by selecting * from table limit 5 (data from limit 1 is
-# stored in metaDb table automatically made by mysql databases).
+# Script to make sure that tables in public genome-mysql server are not corrupted.
+# Does this by selecting * from table limit 5 (data from limit 1 is stored in metaDb
+# table automatically made by mysql databases).
 #  
 ################################
 
 if [ $# -ne 1 ] 
 then
   echo -e "
-	checks genome-mysql for corrupted tables\n
+	checks genome-mysql servers for corrupted tables\n
 	Note: Due to the bash configurations in this 
 	script, if mysql encounters an error, the script
 	will immediately exit and will not check the 
@@ -35,38 +34,20 @@ then
   exit 1
 fi
 
-allOk=true #keeping track of no errors vs errors
-# get the location of the RR dump file, which contains a mysql "show status"
-# for all tables in all databases. Used to get the list of all table names to test.
-RRdumpFile=$(getRRdumpfile.csh $db) 
+tableList=$(mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -Ne "show tables" $db)
 
-# only get the table name($1) where the row number($5) is greater than 0
-# Also dropping the column header (NR>1).
-# uses 'tawk' (program Mark wrote): awk with tabs as delimiters
-tableList=$(tawk 'NR>1 {if ($5>0) print $1}' $RRdumpFile)
-
-# for each table in list do a select * limit 5 and check for errors
+# for each table in list do a select * limit 5.
 # Want to limit output or else the query would take forever. However,
 # can't do limit 1 since the first row of every table is stored in
 # the metadata and thus, mysql will not actually touch the table
 # if you do a select statement with a limit 1. Thus, we do a limit 5.
+# Throw away result of select statement and allow MySQL errors to be reported.
+# Also, genome-mysql is actually two hosts.  Check both.
 for table in $tableList
 do
-# need to do it this way since if mysql has an error it exits zero (ie can't use status)
-  mysqlResult=$(mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -Ne "select * from $table \
-               limit 5" $db| wc -l)
-  if [ "$mysqlResult" == 0 ]
-  then
-    echo "ERROR:Can't select * from  $table limit 5 from $db." >&2
-    allOk=false
-  fi
+  mysql --user=genome --host=public-mysql1.cse.ucsc.edu -A -Ne "select * from $table limit 5" \
+      $db > /dev/null
+  mysql --user=genome --host=hgfs-sd.cse.ucsc.edu -A -Ne "select * from $table limit 5" \
+      $db > /dev/null
 done
-
-# check for errors
-if [ "$allOk" == false ]
-then
-  exit 1
-else
-  exit 0
-fi
-# cron will send an email if you exit non-zero.
+exit 0
