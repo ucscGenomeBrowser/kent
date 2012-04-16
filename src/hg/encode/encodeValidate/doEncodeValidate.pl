@@ -48,7 +48,6 @@ use vars qw/
     $opt_fileType
     $opt_metaDataOnly
     $opt_outDir
-    $opt_quick
     $opt_skipAll
     $opt_skipAutoCreation
     $opt_skipOutput
@@ -67,8 +66,6 @@ our $configPath;        # full path of configuration directory
 our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary, indexed by type and term
 our %tags;              # controlled vocabulary, indexed by tag
-our $quickCount=100;
-our $quickOpt = "";     # option to pass to validateFiles prog
 our $time0 = time;
 our $timeStart = time;
 our %chromInfo;         # chromInfo from assembly for chrom validation
@@ -104,7 +101,6 @@ options:
     -fileType=type      used only with validateFile option; e.g. narrowPeak
     -metaDataOnly       Process DAF/DDF and just update the projects.metadata field;
                         equal to -allowReloads -skipAll
-    -quick              Validate only first $quickCount lines of files
     -skipAll            Turn on all "-skip..." options
     -skipAutoCreation   Tells script skip creating the auto-created files (e.g. RawSignal, PlusRawSignal, MinusRawSignal)
                         this can save you a lot of time when you are debugging and re-running the script on large projects
@@ -483,7 +479,6 @@ sub validateWithList
                 die "PROGRAM ERROR: inconsistent results from validateWithListUtil\n";
             }
         }
-        last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
@@ -579,7 +574,6 @@ sub validateBed {
             push @localerrors, "$prefix field 6 value '$fields[5]' is invalid; must be a float\n";
             next
         }
-        last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
@@ -626,7 +620,6 @@ sub validateBed {
 #        } else {
 #            ;
 #        }
-#        last if($opt_quick && $lineNumber >= $quickCount);
 #    }
 #    $fh->close();
 #    HgAutomate::verbose(2, "File \'$file\' passed bedGraph validation\n");
@@ -755,7 +748,7 @@ sub validateNarrowPeak
     # validate chroms, chromSize, etc.
     my $paramList = validationSettings("validateFiles","narrowPeak",$assembly);
     my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
-    my $safe = SafePipe->new(CMDS => ["validateFiles -chromInfo=$infoFile $quickOpt $paramList -type=narrowPeak $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles -chromInfo=$infoFile $paramList -type=narrowPeak $file"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateNarrowPeak : " . $safe->stderr() . "\n";
         # don't show end-user pipe error(s)
@@ -770,7 +763,7 @@ sub validateBroadPeak
     # validate chroms, chromSize, etc.
     my $paramList = validationSettings("validateFiles","broadPeak",$assembly);
     my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
-    my $safe = SafePipe->new(CMDS => ["validateFiles -chromInfo=$infoFile $quickOpt $paramList -type=broadPeak $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles -chromInfo=$infoFile $paramList -type=broadPeak $file"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateBroadPeak : " . $safe->stderr() . "\n";
         # don't show end-user pipe error(s)
@@ -816,7 +809,7 @@ sub validateFastQ
     # - The 2 urls above show how to convert between both
     my ($path, $file, $type) = @_;
     my $paramList = validationSettings("validateFiles","fastq");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq \"$file\""]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $paramList -type=fastq \"$file\""]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateFastQ : " . $safe->stderr() . "\n";
 
@@ -847,7 +840,7 @@ sub validateCsfasta
     doTime("beginning validateCsfasta") if $opt_timing;
     HgAutomate::verbose(2, "validateCsfasta($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","csfasta");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=csfasta $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $paramList -type=csfasta $file"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateCsfasta : " . $safe->stderr() . "\n";
         # don't show end-user pipe error(s)
@@ -876,7 +869,7 @@ sub validateBam
     }
 
     
-    $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM -chromInfo=$infoFile -genome=$twoBitFile $file"]);
+    $safe = SafePipe->new(CMDS => ["validateFiles $paramList -type=BAM -chromInfo=$infoFile -genome=$twoBitFile $file"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateBam : " . $safe->stderr() . "\n";
         # don't show end-user pipe error(s)
@@ -921,7 +914,7 @@ sub validateBigWig
     doTime("beginning validateBigWig") if $opt_timing;
     HgAutomate::verbose(2, "validateBigWig($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","bigWig");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=bigWig -chromDb=$daf->{assembly} $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $paramList -type=bigWig -chromDb=$daf->{assembly} $file"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateBigWig : " . $safe->stderr() . "\n";
         # don't show end-user pipe error(s)
@@ -948,7 +941,7 @@ sub validateCsqual
     doTime("beginning validateCsqual") if $opt_timing;
     HgAutomate::verbose(2, "validateCsqual($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","csqual");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=csqual $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $paramList -type=csqual $file"]);
     if(my $err = $safe->exec()) {
         print STDERR  "ERROR: failed validateCsqual : " . $safe->stderr() . "\n";
         # don't show end-user pipe error(s)
@@ -1396,7 +1389,6 @@ my $ok = GetOptions("allowReloads",
                     "fileType=s",
                     "metaDataOnly",
                     "outDir=s",
-                    "quick",
                     "timing",
                     "skipAll",
                     "skipAutoCreation",
@@ -1413,7 +1405,6 @@ my $ok = GetOptions("allowReloads",
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
 $opt_sendEmail = 0 if (!defined $opt_sendEmail);
-$quickOpt = " -quick=100 " if defined ($opt_quick);  # use validateFiles to validate 100 lines
 
 if($opt_skipAll) {
     $opt_skipAutoCreation = $opt_skipOutput = $opt_skipValidateFiles = 1;

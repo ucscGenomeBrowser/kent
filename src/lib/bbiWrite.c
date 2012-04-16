@@ -156,13 +156,8 @@ for (;;)
     char *chrom = row[0];
     int start = lineFileNeedNum(lf, row, 1);
     int end = lineFileNeedNum(lf, row, 2);
-    if (start >= end)
+    if (start > end)
         {
-	if (start == end)
-	    errAbort("line %d of %s: start and end coordinates the same\n"
-	             "They need to be at least one apart"
-		     , lf->lineIx, lf->fileName);
-	else
 	    errAbort("end (%d) before start (%d) line %d of %s",
 	    	end, start, lf->lineIx, lf->fileName);
 	}

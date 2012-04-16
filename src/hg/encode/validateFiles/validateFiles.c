@@ -12,29 +12,26 @@
 #include "errCatch.h"
 #include "obscure.h"
 #include "hmmstats.h"
+#include "basicBed.h"
+#include "asParse.h"
+#include "bigBed.h"
 
-char *version = "4.3";
+char *version = "4.4";
 
-#define MAX_ERRORS 10
 #define PEAK_WORDS 16
 #define TAG_WORDS 9
 #define QUICK_DEFAULT 1000
 
-enum bedType {BED_GRAPH = 0, BROAD_PEAK, NARROW_PEAK, GAPPED_PEAK};
+enum bedType { BED_GRAPH = 0, BROAD_PEAK, NARROW_PEAK, GAPPED_PEAK };
 
-int maxErrors;
 boolean colorSpace;
-boolean zeroSizeOk;
-boolean printOkLines;
-boolean printFailLines;
 boolean mmPerPair;
 boolean nMatch;
-boolean isSort;
+boolean isSorted;
 boolean privateData;
 boolean allowOther;
 boolean allowBadLength;
 boolean complementMinus;
-int quick;
 struct hash *chrHash = NULL;
 char dnaChars[256];
 char qualChars[256];
@@ -49,10 +46,12 @@ int mismatchTotalQuality;
 int mismatches;
 int matchFirst=0;
 int mmCheckOneInN;
-int allowErrors = 0;
 boolean doReport;
 double bamPercent = 0.0;
 boolean showBadAlign;
+char *as = NULL;
+boolean tab = FALSE;
+boolean bigBed = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -83,15 +82,23 @@ void usage()
   "                     (see http://samtools.sourceforge.net/SAM1.pdf)\n"
 #endif
   "         bigWig    : Big Wig\n"
-  "                     (see http://genome.ucsc.edu/goldenPath/help/bigWig.html\n"
+  "                     (see http://genome.ucsc.edu/goldenPath/help/bigWig.html)\n"
+  "         bigBedN[+[P]] : N is between 3 and 15, \n"
+  "                         optional (+) if extra \"bedPlus\" fields, optional P specifies the number of extra fields \n"
+  "                     (see http://genome.ucsc.edu/goldenPath/help/bigBed.html)\n"
+  "         bedN[+[P]]    : N is between 3 and 15, \n"
+  "                         optional (+) if extra \"bedPlus\" fields, optional P specifies the number of extra fields \n"
+  "                     (see http://genome.ucsc.edu/FAQ/FAQformat.html#format1)\n"
   "\n"
+  "   -as=fields.as                If you have extra \"bedPlus\" fields, it's great to put a definition\n"
+  "                                  of each field in a row in AutoSql format here. Applies to bed-related types.\n"
+  "   -tab - If set, expect fields to be tab separated, normally\n"
+  "           expects white space separator. Applies to bed-related types.\n"
   "   -chromDb=db                  Specify DB containing chromInfo table to validate chrom names\n"
   "                                  and sizes\n"
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
   "   -colorSpace                  Sequences include colorspace values [0-3] (can be used \n"
   "                                  with formats such as tagAlign and pairedTagAlign)\n"
-  "   -zeroSizeOk                  For BED-type positional data, allow rows with start==end\n"
-  "                                  otherwise require strictly start < end\n"
   "   -genome=path/to/hg18.2bit    Validate tagAlign or pairedTagAlign sequences match genome\n"
   "                                  in .2bit file\n"
   "   -mismatches=n                Maximum number of mismatches in sequence (or read pair) if \n"
@@ -103,58 +110,68 @@ void usage()
   "   -mmCheckOneInN=n             Check mismatches in only one in 'n' lines (default=1, all)\n"
   "   -nMatch                      N's do not count as a mismatch\n"
   "   -privateData                 Private data so empty sequence is tolerated\n"
-  "   -printOkLines                Print lines which pass validation to stdout\n"
-  "   -quick[=N]                   Just test the first N lines of each file (default 1000)\n"
-  "   -printFailLines              Print lines which fail validation to stdout\n"
-  "   -isSort                      input is sorted by chrom\n"
-//"   -acceptDot                   Accept '.' as 'N' in DNA sequence\n"
-  "   -version                     Print version\n"
+  "   -isSorted                    Input is sorted by chrom, only affects types tagAlign and pairedTagAlign\n"
   "   -allowOther                  allow chromosomes that aren't native in BAM's\n"
-  "   -allowBadLength              allow chromosomes that have the wrong length\n in BAM\n"
+  "   -allowBadLength              allow chromosomes that have the wrong length in BAM\n"
   "   -complementMinus             complement the query sequence on the minus strand (for testing BAM)\n"
-  "   -doReport                    output report in filename.report\n"
   "   -showBadAlign                show non-compliant alignments\n"
   "   -bamPercent=N.N              percentage of BAM alignments that must be compliant\n"
-  "   -allowErrors=N               number of errors allowed to still pass (default 0)\n"
-  "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
-  "                                  stopping (default %d)\n"
-  , MAX_ERRORS);
+  "\n"
+  "   -doReport                    output report in filename.report\n"
+  "   -version                     Print version\n"
+  );
 }
 
 static struct optionSpec options[] = {
-   {"type", OPTION_STRING},
-   {"chromDb", OPTION_STRING},
-   {"chromInfo", OPTION_STRING},
-   {"maxErrors", OPTION_INT},
-   {"colorSpace", OPTION_BOOLEAN},
-   {"zeroSizeOk", OPTION_BOOLEAN},
-   {"mismatchTotalQuality", OPTION_INT},
-   {"printOkLines", OPTION_BOOLEAN},
-   {"printFailLines", OPTION_BOOLEAN},
-   {"genome", OPTION_STRING},
-   {"mismatches", OPTION_INT},
-   {"matchFirst", OPTION_INT},
-   {"mmPerPair", OPTION_BOOLEAN},
-   {"mmCheckOneInN", OPTION_INT},
-   {"quick", OPTION_INT},
-   {"nMatch", OPTION_BOOLEAN},
-   {"privateData", OPTION_BOOLEAN},
-// {"acceptDot", OPTION_BOOLEAN},
-   {"isSort", OPTION_BOOLEAN},
-   {"version", OPTION_BOOLEAN},
-   {"allowOther", OPTION_BOOLEAN},
-   {"allowBadLength", OPTION_BOOLEAN},
-   {"allowErrors", OPTION_INT},
-   {"complementMinus", OPTION_BOOLEAN},
-   {"bamPercent", OPTION_FLOAT},
-   {"showBadAlign", OPTION_BOOLEAN},
-   {"doReport", OPTION_BOOLEAN},
-   {NULL, 0},
+    {"type", OPTION_STRING},
+    {"chromDb", OPTION_STRING},
+    {"chromInfo", OPTION_STRING},
+    {"colorSpace", OPTION_BOOLEAN},
+    {"mismatchTotalQuality", OPTION_INT},
+    {"genome", OPTION_STRING},
+    {"mismatches", OPTION_INT},
+    {"matchFirst", OPTION_INT},
+    {"mmPerPair", OPTION_BOOLEAN},
+    {"mmCheckOneInN", OPTION_INT},
+    {"nMatch", OPTION_BOOLEAN},
+    {"privateData", OPTION_BOOLEAN},
+    {"isSorted", OPTION_BOOLEAN},
+    {"version", OPTION_BOOLEAN},
+    {"allowOther", OPTION_BOOLEAN},
+    {"allowBadLength", OPTION_BOOLEAN},
+    {"complementMinus", OPTION_BOOLEAN},
+    {"bamPercent", OPTION_FLOAT},
+    {"showBadAlign", OPTION_BOOLEAN},
+    {"doReport", OPTION_BOOLEAN},
+    {"as", OPTION_STRING},
+    {"tab", OPTION_BOOLEAN},
+    {NULL, 0},
 };
 
 FILE *reportF;
 
 void vaErrAbort(char *format, va_list args);
+
+void reportErrAbort(char *format, ...)
+/* Abort function, with optional (printf formatted) error message. */
+#ifdef __GNUC__
+__attribute__((format(printf, 1, 2)))
+#endif
+    ;
+
+void reportWarn(char *format, ...)
+/* Issue a warning message. */
+#ifdef __GNUC__
+__attribute__((format(printf, 1, 2)))
+#endif
+    ;
+
+void report(char *format, ...)
+/* Issue a warning message. */
+#ifdef __GNUC__
+__attribute__((format(printf, 1, 2)))
+#endif
+    ;
 
 void reportErrAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
@@ -260,22 +277,7 @@ for (i= (int)'!' ; i <= (int)'~' ; ++i)
     qualChars[i] = 1;
 }
 
-struct hash *chromHash(struct chromInfo *ci)
-// Return a hash table of chrom name to chrom size
-{
-unsigned *size;
-struct hash *h = newHash(0);
-for ( ; ci ; ci = ci->next )
-    {
-    AllocVar(size);
-    *size = ci->size;
-    verbose(3,"[%s %3d] hashAdd(%s -> %p = %u)\n", __func__, __LINE__, ci->chrom, size, *size);
-    hashAdd(h, ci->chrom, size);
-    }
-return h;
-}
-
-boolean checkUnsigned(char *file, int line, char *row, char *s, unsigned *val, char *name)
+boolean checkUnsigned(struct lineFile *lf, char *row, char *s, unsigned *val, char *name)
 /* Convert series of digits to unsigned integer about
  * twice as fast as atoi (by not having to skip white
  * space or stop except at the null byte.)
@@ -293,14 +295,14 @@ while (((c = *(p++)) >= '0') && (c <= '9'))
     }
 if (c != '\0')
     {
-    reportWarn("Error [file=%s, line=%d]: %s field invalid unsigned number (%s) [%s]", file, line, name, s, row);
+    reportWarn("Error [file=%s, line=%d]: %s field invalid unsigned number (%s) [%s]", lf->fileName, lf->lineIx,name, s, row);
     return FALSE;
     }
 *val = res;
 return TRUE;
 }
 
-boolean checkSigned(char *file, int line, char *row, char *s, int *val, char *name)
+boolean checkSigned(struct lineFile *lf, char *row, char *s, int *val, char *name)
 /* Convert string to signed integer.  Unlike atol assumes
  * all of string is number.
  * Returns true if conversion possible, and value is returned in 'val'
@@ -321,7 +323,7 @@ while ((*p >= '0') && (*p <= '9'))
 /* test for invalid character, empty, or just a minus */
 if ((*p != '\0') || (p == p0))
     {
-    reportWarn("Error [file=%s, line=%d]: %s field invalid signed number (%s) [%s]", file, line, name, s, row);
+    reportWarn("Error [file=%s, line=%d]: %s field invalid signed number (%s) [%s]", lf->fileName, lf->lineIx,name, s, row);
     return FALSE;
     }
 if (*s == '-')
@@ -331,18 +333,18 @@ else
 return TRUE;
 }
 
-boolean checkString(char *file, int line, char *row, char *s, char *name)
+boolean checkString(struct lineFile *lf, char *row, char *s, char *name)
 // Return TRUE if string has non-zero length
 // Othewise print warning that name column is empty and return FALSE
 {
 verbose(3,"[%s %3d] %s(%s)\n", __func__, __LINE__, name, s);
 if (strlen(s) > 0)
     return TRUE;
-reportWarn("Error [file=%s, line=%d]: %s column empty [%s]", file, line, name, row);
+reportWarn("Error [file=%s, line=%d]: %s column empty [%s]", lf->fileName, lf->lineIx,name, row);
 return FALSE;
 }
 
-boolean checkChrom(char *file, int line, char *row, char *s, unsigned *chromSize)
+boolean checkChrom(struct lineFile *lf, char *row, char *s, unsigned *chromSize)
 // Return TRUE if string has non-zero length
 // Othewise print warning that name column is empty and return FALSE
 {
@@ -350,6 +352,8 @@ unsigned *size;
 *chromSize = 0;
 if (strlen(s) > 0)
     {
+    if (chrHash == NULL)
+	reportErrAbort("chrom validation requires the -chromInfo or -chromDb option\n");
     if (chrHash)
 	{
 	if ( (size = hashFindVal(chrHash, s)) != NULL)
@@ -360,7 +364,7 @@ if (strlen(s) > 0)
 	    }
 	else
 	    {
-	    reportWarn("Error [file=%s, line=%d]: chrom %s not found [%s]", file, line, s, row);
+	    reportWarn("Error [file=%s, line=%d]: chrom %s not found [%s]", lf->fileName, lf->lineIx, s, row);
 	    return FALSE; // chrom not found
 	    }
 	}
@@ -370,15 +374,15 @@ if (strlen(s) > 0)
 	return TRUE; // chrom name not blank, and not validating against chromInfo
 	}
     }
-reportWarn("Error [file=%s, line=%d]: chrom column empty [%s]", file, line, row);
+reportWarn("Error [file=%s, line=%d]: chrom column empty [%s]", lf->fileName, lf->lineIx, row);
 return FALSE;
 }
 
-int checkSeq(char *file, int line, char *row, char *s, char *name)
+int checkSeq(struct lineFile *lf, char *row, char *s, char *name)
 // Return TRUE if string has non-zero length and contains only chars [ACGTNacgtn0-3]
 // Othewise print warning that name column is empty and return FALSE
 {
-verbose(3,"[%s %3d] inputLine=%d %s seq(%s) [%s]\n", __func__, __LINE__, line, name, s, row);
+verbose(3,"[%s %3d] inputLine=%d %s seq(%s) [%s]\n", __func__, __LINE__, lf->lineIx, name, s, row);
 int i;
 int len = 0;
 for ( i = 0; s[i] ; ++i)
@@ -386,9 +390,9 @@ for ( i = 0; s[i] ; ++i)
     if (!dnaChars[(int)s[i]])
 	{
 	if (s==row)
-	    reportWarn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s)", file, line, name, s);
+	    reportWarn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s)", lf->fileName, lf->lineIx,name, s);
 	else
-	    reportWarn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s) [%s]", file, line, name, s, row);
+	    reportWarn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s) [%s]", lf->fileName, lf->lineIx,name, s, row);
 	return 0;
 	}
     len++;
@@ -398,35 +402,35 @@ if (i == 0)
     if(privateData)  // PrivateData means sequence should be empty
         return 1;
     if (s==row)
-	reportWarn("Error [file=%s, line=%d]: %s empty", file, line, name);
+	reportWarn("Error [file=%s, line=%d]: %s empty", lf->fileName, lf->lineIx,name);
     else
-	reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", file, line, name, row);
+	reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", lf->fileName, lf->lineIx,name, row);
     return 0;
     }
 else if(privateData) { // PrivateData means sequence should be empty
     if (s==row)
-        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data", file, line, name);
+        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data", lf->fileName, lf->lineIx,name);
     else
-        reportWarn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]", file, line, name, row);
+        reportWarn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]", lf->fileName, lf->lineIx,name, row);
     return 0;
     }
 return len;
 }
 
-boolean checkSeqName(char *file, int line, char *s, char firstChar, char *name)
+boolean checkSeqName(struct lineFile *lf, char *s, char firstChar, char *name)
 // Return TRUE if string has non-zero length and contains only seqName[] chars
 // Othewise print warning that seqName is empty and return FALSE
 {
 int i;
 if (s[0] == 0)
     {
-    reportWarn("Error [file=%s, line=%d]: %s empty [%s]", file, line, name, s);
+    reportWarn("Error [file=%s, line=%d]: %s empty [%s]", lf->fileName, lf->lineIx,name, s);
     return FALSE;
     }
 else if (s[0] != firstChar)
     {
     reportWarn("Error [file=%s, line=%d]: %s first char invalid (got '%c', wanted '%c') [%s]",
-	file, line, name, s[0], firstChar, s);
+	lf->fileName, lf->lineIx, name, s[0], firstChar, s);
     return FALSE;
     }
 for ( i = 1; s[i] ; ++i)
@@ -435,7 +439,7 @@ for ( i = 1; s[i] ; ++i)
 	break;
     if (!seqName[(int)s[i]])
 	{
-	reportWarn("Error [file=%s, line=%d]: invalid %s chars in [%s]", file, line, name, s);
+	reportWarn("Error [file=%s, line=%d]: invalid %s chars in [%s]", lf->fileName, lf->lineIx,name, s);
 	return FALSE;
 	}
     }
@@ -472,20 +476,20 @@ else
 //     >920_22_656_F3,1.-152654094.1.35.35.0###,19.43558664.1.35.35.0###
 //     T01301010111200210102321210100112312
 
-boolean checkCsSeqName(char *file, int line, char *s)
+boolean checkCsSeqName(struct lineFile *lf, char *s)
 // Return TRUE if string has non-zero length, matches CS name pattern contains only csSeqName[] chars
 // Othewise print warning that seqName is empty and return FALSE
 {
 char *s0;
 if (s[0] == 0)
     {
-    reportWarn("Error [file=%s, line=%d]: sequence name empty [%s]", file, line, s);
+    reportWarn("Error [file=%s, line=%d]: sequence name empty [%s]", lf->fileName, lf->lineIx,s);
     return FALSE;
     }
 else if (s[0] != '>')
     {
     reportWarn("Error [file=%s, line=%d]: sequence name first char invalid (got '%c', wanted '>') [%s]",
-	file, line, s[0], s);
+	lf->fileName, lf->lineIx, s[0], s);
     return FALSE;
     }
 if ( (s0 = getDigits(s+1))
@@ -495,17 +499,17 @@ if ( (s0 = getDigits(s+1))
       && alpha[(int) *(s0++)] && digits[(int) *(s0++)]
       && checkTrailingCsSeqName(s0) )
     {
-    verbose(2,"[%s %3d] OK [%s] file(%s) line=%d\n", __func__, __LINE__, s, file, line);
+    verbose(2,"[%s %3d] OK [%s] file(%s) line=%d\n", __func__, __LINE__, s, lf->fileName, lf->lineIx);
     return TRUE;
     }
 else
     {
-    reportWarn("Error [file=%s, line=%d]: invalid sequence name [%s]", file, line, s);
+    reportWarn("Error [file=%s, line=%d]: invalid sequence name [%s]", lf->fileName, lf->lineIx,s);
     return FALSE;
     }
 }
 
-boolean checkQual(char *file, int line, char *s, int len)
+boolean checkQual(struct lineFile *lf, char *s, int len)
 // Return TRUE if string has non-zero length and contains only qualChars[] chars
 // Othewise print warning that quality is empty and return FALSE
 {
@@ -514,26 +518,26 @@ for ( i = 0; s[i] ; ++i)
     {
     if (!qualChars[(int)s[i]])
 	{
-	reportWarn("Error [file=%s, line=%d]: invalid quality chars in [%s]", file, line, s);
+	reportWarn("Error [file=%s, line=%d]: invalid quality chars in [%s]", lf->fileName, lf->lineIx,s);
 	return FALSE;
 	}
     }
 if (i == 0)
     {
-    reportWarn("Error [file=%s, line=%d]: quality empty [%s]", file, line, s);
+    reportWarn("Error [file=%s, line=%d]: quality empty [%s]", lf->fileName, lf->lineIx,s);
     return FALSE;
     }
 
 if (i != len)
     {
-    reportWarn("Error [file=%s, line=%d]: quality not as long as sequence (%d bases) [%s]", file, line, len, s);
+    reportWarn("Error [file=%s, line=%d]: quality not as long as sequence (%d bases) [%s]", lf->fileName, lf->lineIx,len, s);
     return FALSE;
     }
 
 return TRUE;
 }
 
-boolean checkCsQual(char *file, int line, char *s)
+boolean checkCsQual(struct lineFile *lf, char *s)
 // Return TRUE if string has non-zero length and contains quality scores
 // Othewise print warning that quality is empty and return FALSE
 {
@@ -542,30 +546,29 @@ for ( i = 0; s[i] ; ++i)
     {
     if (!csQualChars[(int)s[i]])
 	{
-	reportWarn("Error [file=%s, line=%d]: invalid colorspace quality chars in [%s]", file, line, s);
+	reportWarn("Error [file=%s, line=%d]: invalid colorspace quality chars in [%s]", lf->fileName, lf->lineIx,s);
 	return FALSE;
 	}
     }
 if (i == 0)
     {
-    reportWarn("Error [file=%s, line=%d]: colorspace quality empty [%s]", file, line, s);
+    reportWarn("Error [file=%s, line=%d]: colorspace quality empty [%s]", lf->fileName, lf->lineIx,s);
     return FALSE;
     }
 return TRUE;
 }
 
-boolean checkStartEnd(char *file, int line, char *row, char *start, char *end, char *chrom, unsigned chromSize, unsigned *sVal, unsigned *eVal)
+boolean checkStartEnd(struct lineFile *lf, char *row, char *start, char *end, char *chrom, unsigned chromSize, unsigned *sVal, unsigned *eVal)
 // Return TRUE if start and end are both >= 0,
-// and if zeroSizeOk then start <= end
-//        otherwise  then start < end
+// and if start <= end
 // Also check end <= chromSize (special case circular chrM start <= chromSize)
 // start and end values are returned in sVal and eVal
 // Othewise print warning and return FALSE
 {
-verbose(3,"[%s %3d] inputLine=%d [%s..%s] (chrom=%s,size=%u) [%s]\n", __func__, __LINE__, line, start, end, chrom, chromSize, row);
+verbose(3,"[%s %3d] inputLine=%d [%s..%s] (chrom=%s,size=%u) [%s]\n", __func__, __LINE__, lf->lineIx, start, end, chrom, chromSize, row);
 unsigned s, e;
-if (   !checkUnsigned(file, line, row, start, &s, "chromStart")
-    || !checkUnsigned(file, line, row, end, &e, "chromEnd"))
+if (   !checkUnsigned(lf, row, start, &s, "chromStart")
+    || !checkUnsigned(lf, row, end, &e, "chromEnd"))
     return FALSE;
 *sVal = s;
 *eVal = e;
@@ -573,77 +576,64 @@ if (chromSize > 0)
     {
     if (e > chromSize && (differentString(chrom, "chrM") || s > chromSize)) // passes test if end < chromSize or chrM and start < chromSize
 	{
-        reportWarn("Error [file=%s, line=%d]: end(%u) > chromSize(%s=%u) [%s]", file, line, e, chrom, chromSize, row);
+        reportWarn("Error [file=%s, line=%d]: end(%u) > chromSize(%s=%u) [%s]", lf->fileName, lf->lineIx,e, chrom, chromSize, row);
         return FALSE;
         }
     else
-	verbose(2,"[%s %3d] end <= chromSize (%u <= %u)\n", __func__, __LINE__, e, chromSize);
+	verbose(2,"[%s %3u] end <= chromSize (%u <= %u)\n", __func__, __LINE__, e, chromSize);
     }
-if (zeroSizeOk)
+if (e >= s)
     {
-    if (s <= e)
-	{
-	verbose(2,"[%s %3d] start <= end (%u <= %u)\n", __func__, __LINE__, s, e);
-	return TRUE;
-	}
-    else
-	reportWarn("Error [file=%s, line=%d]: start(%u) > end(%u) [%s]", file, line, s, e, row);
+    verbose(2,"[%s %3d] start <= end (%u <= %u)\n", __func__, __LINE__, s, e);
+    return TRUE;
     }
 else
-    {
-    if (s < e)
-	{
-	verbose(2,"[%s %3d] start < end (%u < %u)\n", __func__, __LINE__, s, e);
-	return TRUE;
-	}
-    else
-	reportWarn("Error [file=%s, line=%d]: start(%u) >= end(%u) [%s]", file, line, s, e, row);
-    }
+    reportWarn("Error [file=%s, line=%d]: start(%u) > end(%u) [%s]", lf->fileName, lf->lineIx,s, e, row);
 return FALSE;
 }
 
-boolean checkPeak(char *file, int line, char *row, char *peak, char *start, char *end)
+boolean checkPeak(struct lineFile *lf, char *row, char *peak, char *start, char *end)
 // Return TRUE if peak is >= 0 and <= (end-start)
 // Othewise print warning and return FALSE
 {
-verbose(3,"[%s %3d] inputLine=%d peak(%s) (%s,%s) [%s]\n", __func__, __LINE__, line, peak, start, end, row);
+verbose(3,"[%s %3d] inputLine=%d peak(%s) (%s,%s) [%s]\n", __func__, __LINE__, lf->lineIx, peak, start, end, row);
 unsigned p, s, e;
 int i;
-if (!checkSigned(file, line, row, peak, &i, "peak"))
+if (!checkSigned(lf, row, peak, &i, "peak"))
     return FALSE;
 if (i == -1)
     return TRUE;
 
-if (   !checkUnsigned(file, line, row, peak, &p, "peak")
-    || !checkUnsigned(file, line, row, start, &s, "chromStart")
-    || !checkUnsigned(file, line, row, end, &e, "chromEnd"))
+if (   !checkUnsigned(lf, row, peak, &p, "peak")
+    || !checkUnsigned(lf, row, start, &s, "chromStart")
+    || !checkUnsigned(lf, row, end, &e, "chromEnd"))
     return FALSE;
 if (p > e - s)
     {
-    reportWarn("Error [file=%s, line=%d]: peak(%u) past block length (%u) [%s]", file, line, p, e - s, row);
+    reportWarn("Error [file=%s, line=%d]: peak(%u) past block length (%u) [%s]", lf->fileName, lf->lineIx,p, e - s, row);
     return FALSE;
     }
 return TRUE;
 }
 
-boolean checkIntBetween(char *file, int line, char *row, char *val, char *name, int min, int max)
+boolean checkIntBetween(struct lineFile *lf, char *row, char *val, char *name, int min, int max)
 // Return TRUE if val is integer between min and max
 // Othewise print warning and return FALSE
 {
 int i;
-if (!checkSigned(file, line, row, val, &i, name))
+if (!checkSigned(lf, row, val, &i, name))
     return FALSE;
-verbose(2,"[%s %3d] inputLine=%d [%s] -> [%d] [%s,%d..%d]\n", __func__, __LINE__, line, val, i, name, min, max);
+verbose(2,"[%s %3d] inputLine=%d [%s] -> [%d] [%s,%d..%d]\n", __func__, __LINE__, lf->lineIx, val, i, name, min, max);
 if (i >= min && i <= max)
     {
     verbose(2,"[%s %3d] min <= value <= max (%d <= %d <= %d)\n", __func__, __LINE__, min, i, max);
     return TRUE;
     }
-reportWarn("Error [file=%s, line=%d]: %s %d outside bounds (%d, %d) [%s]", file, line, name, i, min, max, row);
+reportWarn("Error [file=%s, line=%d]: %s %d outside bounds (%d, %d) [%s]", lf->fileName, lf->lineIx,name, i, min, max, row);
 return FALSE;
 }
 
-boolean checkFloat(char *file, int line, char *row, char *val, char *name)
+boolean checkFloat(struct lineFile *lf, char *row, char *val, char *name)
 // Return TRUE if val is floating point number
 // Othewise print warning and return FALSE
 // taken from sqlNum.c
@@ -652,14 +642,14 @@ char* end;
 double discardMe = strtod(val, &end);
 if ((end == val) || (*end != '\0'))
     {
-    reportWarn("Error [file=%s, line=%d]: invalid %s '%s' [%s]", file, line, name, val, row);
+    reportWarn("Error [file=%s, line=%d]: invalid %s '%s' [%s]", lf->fileName, lf->lineIx,name, val, row);
     discardMe = 0.0;
     return FALSE;
     }
 return TRUE;
 }
 
-boolean checkStrand(char *file, int line, char *row, char *strand)
+boolean checkStrand(struct lineFile *lf, char *row, char *strand)
 // Return TRUE if strand == '+' or '-' or '.',
 // Othewise print warning and return FALSE
 {
@@ -668,26 +658,30 @@ if (strlen(strand) == 1 && (*strand == '+' || *strand == '-' || *strand == '.'))
     verbose(2,"[%s %3d] strand(%s)\n", __func__, __LINE__, strand);
     return TRUE;
     }
-reportWarn("Error [file=%s, line=%d]: invalid strand '%s' (want '+','-','.') [%s]", file, line, strand, row);
+reportWarn("Error [file=%s, line=%d]: invalid strand '%s' (want '+','-','.') [%s]", lf->fileName, lf->lineIx,strand, row);
 return FALSE;
 }
 
-boolean wantNewLine(struct lineFile *lf, char *file, int line, char **row, char *msg)
+boolean wantNewLine(struct lineFile *lf, char **row, char *msg)
 {
 boolean res = lineFileNext(lf, row, NULL);
 if (!res)
-    reportWarn("Error [file=%s, line=%d]: %s not found", file, line, msg);
+    reportWarn("Error [file=%s, line=%d]: %s not found", lf->fileName, lf->lineIx, msg);
 return res;
 }
 
-boolean checkColumns(char *file, int line, char *row, char *buf, char *words[], int wordSize, int expected)
+boolean checkColumns(struct lineFile *lf, char *row, char *buf, char *words[], int wordSize, int expected)
 // Split buf into wordSize columns in words[] array
 // Return TRUE if number of columns == expected, otherwise FALSE
 {
-int n = chopByChar(buf, '\t', words, wordSize);
-if ( n != expected)
+int n = 0;
+if (tab)
+    n = chopByChar(buf, '\t', words, wordSize);
+else
+    n = chopByWhite(buf, words, wordSize);
+if (n != expected)
     {
-    reportWarn("Error [file=%s, line=%d]: found %d columns, expected %d [%s]", file, line, n, expected, row);
+    reportWarn("Error [file=%s, line=%d]: found %d columns, expected %d [%s]", lf->fileName, lf->lineIx, n, expected, row);
     return FALSE;
     }
 return TRUE;
@@ -695,7 +689,7 @@ return TRUE;
 
 
 
-boolean checkMismatchesSeq(char *file, int line, char *chrom, unsigned chromStart, unsigned chromEnd, char strand, char *seq)
+boolean checkMismatchesSeq(struct lineFile *lf, char *chrom, unsigned chromStart, unsigned chromEnd, char strand, char *seq)
 {
 int i, mm = 0;
 struct dnaSeq *g;
@@ -710,9 +704,9 @@ if(privateData)  // No way to check private data
 
 if (!genome)
     return TRUE; // only check if 2bit file specified
-if (line % mmCheckOneInN != 0)
+if (lf->lineIx % mmCheckOneInN != 0)
     return TRUE; // dont check if this is not one in N
-if (!isSort)
+if (!isSorted)
     {
     //unsigned end = chromEnd;
     if(sameString(chrom,"chrM"))
@@ -740,7 +734,7 @@ else
     int len = chromEnd - chromStart;
     if (len > sizeof(bigArr))
 	reportErrAbort("static array not big enough for sequence len %d on line %d\n",
-	    len, line);
+	    len, lf->lineIx);
     g = &ourSeq;
     g->dna = bigArr;
     g->size = len;
@@ -753,7 +747,7 @@ if (strand == '-')
 if ((g->size != strlen(seq) || g->size != chromEnd-chromStart) && !chrMSizeAjustment)
     {
     reportWarn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
-        file, line, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
+        lf->fileName, lf->lineIx, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
         chrom, chromStart, chromEnd, strand);
     return FALSE;
     }
@@ -771,15 +765,15 @@ for (i=0 ; i < length; ++i)
 if (mm > mismatches)
     {
     reportWarn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s %d %d %c)\nseq=[%s]\ngen=[%s]\n",
-         file, line, mm, g->size, mismatches, chrom, chromStart, chromEnd, strand, seq, g->dna);
+         lf->fileName, lf->lineIx, mm, g->size, mismatches, chrom, chromStart, chromEnd, strand, seq, g->dna);
     return FALSE;
     }
-if (!isSort)
+if (!isSorted)
     freeDnaSeq(&g);
 return TRUE;
 }
 
-boolean checkMismatchesSeq1Seq2(char *file, int line, char *chrom, unsigned chromStart, unsigned chromEnd, char strand, char *seq1, char *seq2)
+boolean checkMismatchesSeq1Seq2(struct lineFile *lf, char *chrom, unsigned chromStart, unsigned chromEnd, char strand, char *seq1, char *seq2)
 {
 int i, mm1, mm2, len1, len2;
 struct dnaSeq *g1, *g2;
@@ -787,7 +781,7 @@ if(privateData)  // No way to check private data
     return TRUE;
 if (!genome)
     return TRUE; // dont check unless 2bit file specified
-if (line % mmCheckOneInN != 0)
+if (lf->lineIx % mmCheckOneInN != 0)
     return TRUE; // dont check if this is not one in N
 len1 = strlen(seq1);
 len2 = strlen(seq2);
@@ -806,7 +800,7 @@ else
 if (g1->size != len1 || g2->size != len2)
     {
     reportWarn("Error [file=%s, line=%d]: sequence lengths (%d, %d) do not match genomic ones (%d, %d)",
-         file, line, len1, len2, g1->size, g2->size);
+         lf->fileName, lf->lineIx, len1, len2, g1->size, g2->size);
     return FALSE;
     }
 mm1 = 0;
@@ -828,7 +822,7 @@ if (mmPerPair)
     if (mm1 > mismatches || mm2 > mismatches)
         {
         reportWarn("Error [file=%s, line=%d]: too many mismatches in one or both (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
-             file, line, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
+             lf->fileName, lf->lineIx, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
         return FALSE;
         }
     }
@@ -837,7 +831,7 @@ else
     if (mm1+mm2 > mismatches)
         {
         reportWarn("Error [file=%s, line=%d]: too many mismatches in pair (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
-             file, line, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
+             lf->fileName, lf->lineIx, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
         return FALSE;
         }
     }
@@ -846,138 +840,247 @@ freeDnaSeq(&g2);
 return TRUE;
 }
 
-int validateTagOrPairedTagAlign(struct lineFile *lf, char *file, boolean paired)
+void validateTagOrPairedTagAlign(struct lineFile *lf, boolean paired)
 {
 char *row;
 char buf[1024];
 char *words[TAG_WORDS];
-int line = 0;
-int errs = 0;
 unsigned chromSize;
 int size;
-verbose(2,"[%s %3d] paired=%d file(%s)\n", __func__, __LINE__, paired, file);
+verbose(2,"[%s %3d] paired=%d file(%s)\n", __func__, __LINE__, paired, lf->fileName);
 while (lineFileNext(lf, &row, &size))
     {
     unsigned start, end;
-    ++line;
-    if (quick && line > quick)
-	break;
     safecpy(buf, sizeof(buf), row);
-    if ( checkColumns(file, line, row, buf, words, TAG_WORDS, (paired ? 8 : 6))
-	&& checkChrom(file, line, row, words[0], &chromSize)
-         && checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize, &start, &end)
-	&& checkIntBetween(file, line, row, words[4], "score", 0, 1000)
-	&& checkStrand(file, line, row, words[5])
+    if (!( checkColumns(lf, row, buf, words, TAG_WORDS, (paired ? 8 : 6))
+	&& checkChrom(lf, row, words[0], &chromSize)
+         && checkStartEnd(lf, row, words[1], words[2], words[0], chromSize, &start, &end)
+	&& checkIntBetween(lf, row, words[4], "score", 0, 1000)
+	&& checkStrand(lf, row, words[5])
 	&& (paired ?
-		(checkString(file, line, row, words[3], "name")
-		&& checkSeq(file, line, row, words[6], "seq1")
-		&& checkSeq(file, line, row, words[7], "seq2")
-                 && checkMismatchesSeq1Seq2(file, line, words[0], start, end, *words[5], words[6], words[7]))
+		(checkString(lf, row, words[3], "name")
+		&& checkSeq(lf, row, words[6], "seq1")
+		&& checkSeq(lf, row, words[7], "seq2")
+                 && checkMismatchesSeq1Seq2(lf, words[0], start, end, *words[5], words[6], words[7]))
 	    :
-            (checkSeq(file, line, row, words[3], "sequence")
-             && checkMismatchesSeq(file, line, words[0], start, end, *words[5], words[3]))
-	    ) )
+            (checkSeq(lf, row, words[3], "sequence")
+             && checkMismatchesSeq(lf, words[0], start, end, *words[5], words[3]))
+	    ) ) )
 	{
-	if (printOkLines)
-	    printf("%s\n", row);
-	}
-    else
-	{
-	if (printFailLines)
-	    printf("%s\n", row);
-	if (++errs >= maxErrors)
-	    reportErrAbort("Aborting .. found %d errors\n", errs);
+	verbose(2, "%s\n", row);
+	reportErrAbort("Aborting .. found 1 error\n");
 	}
     }
-return errs;
 }
 
 // tagAlign
 // chr1     6082    6117    TCTACTGGCTCTGTGTGTACCAGTCTGTCACTGAG     1000    -
 // chr1     7334    7369    AGCCAGGGGGTGACGTTGTTAGATTAGATTTCTTA     1000    +
 
-int validateTagAlign(struct lineFile *lf, char *file)
+void validateTagAlign(struct lineFile *lf)
 {
-return validateTagOrPairedTagAlign(lf, file, FALSE);
+validateTagOrPairedTagAlign(lf, FALSE);
 }
 
 // pairedTagAlign
 // chr10    96316360        96310862        9       1000    +       TCTCACCCGATAACGACCCCCTCCC       TGATCCTTGACTCACTTGCTAATTT
 // chr8    126727657       126721865       10      1000    +       AATTCTTCACCTCTCCTGTTCAAAG       TGTGTGAGATCCAAGAATCCTCTCT
 
-int validatePairedTagAlign(struct lineFile *lf, char *file)
+void validatePairedTagAlign(struct lineFile *lf)
 {
-return validateTagOrPairedTagAlign(lf, file, TRUE);
+validateTagOrPairedTagAlign(lf, TRUE);
 }
 
-int validateBedVariant(struct lineFile *lf, char *file, enum bedType type)
+void validateBedVariant(struct lineFile *lf, enum bedType type)
 {
 char *row;
 char buf[1024];
 char *words[PEAK_WORDS];
-int line = 0;
-int errs = 0;
 unsigned chromSize;
 int gappedOffset = (type == GAPPED_PEAK ? 6 : 0);
-verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, lf->fileName);
 while (lineFileNextReal(lf, &row))
     {
-    ++line;
     unsigned start, end;
-    if (quick && line > quick)
-	break;
     safecpy(buf, sizeof(buf), row);
-    if ( checkColumns(file, line, row, buf, words, PEAK_WORDS, bedTypeCols[type])
-	&& checkChrom(file, line, row, words[0], &chromSize)
-         && checkStartEnd(file, line, row, words[1], words[2], words[0], chromSize, &start, &end)
+    if (! ( checkColumns(lf, row, buf, words, PEAK_WORDS, bedTypeCols[type])
+	&& checkChrom(lf, row, words[0], &chromSize)
+         && checkStartEnd(lf, row, words[1], words[2], words[0], chromSize, &start, &end)
 	&& ( type == BED_GRAPH ?
-	      (checkFloat(file, line, row, words[3], "value")) // canonical bedGraph has float in 4th column
+	      (checkFloat(lf, row, words[3], "value")) // canonical bedGraph has float in 4th column
 	   : // otherwise BROAD_, NARROW_, or GAPPED_PEAK
-	      (checkString(file, line, row, words[3], "name")
-		  && checkIntBetween(file, line, row, words[4], "score", 0, 1000)
-		  && checkStrand(file, line, row, words[5])
+	      (checkString(lf, row, words[3], "name")
+		  && checkIntBetween(lf, row, words[4], "score", 0, 1000)
+		  && checkStrand(lf, row, words[5])
 		  // && ((type != GAPPED_PEAK) || ()) // for now dont check all the BED 12 gapped fields
-		  && checkFloat(file, line, row, words[6 + gappedOffset], "signalValue")
-		  && checkFloat(file, line, row, words[7 + gappedOffset], "pValue")
-		  && checkFloat(file, line, row, words[8 + gappedOffset], "qValue")
-		  && ((type != NARROW_PEAK) || (checkPeak(file, line, row, words[9], words[1], words[2])))
+		  && checkFloat(lf, row, words[6 + gappedOffset], "signalValue")
+		  && checkFloat(lf, row, words[7 + gappedOffset], "pValue")
+		  && checkFloat(lf, row, words[8 + gappedOffset], "qValue")
+		  && ((type != NARROW_PEAK) || (checkPeak(lf, row, words[9], words[1], words[2])))
 	      )
 	    )
-	)
+	) )
 	{
-	if (printOkLines)
-	    printf("%s\n", row);
+	verbose(2, "%s\n", row);
+	reportErrAbort("Aborting .. found 1 error\n");
+	}
+    }
+}
+
+void validateBroadPeak(struct lineFile *lf)
+{
+validateBedVariant(lf, BROAD_PEAK);
+}
+
+void validateNarrowPeak(struct lineFile *lf)
+{
+validateBedVariant(lf, NARROW_PEAK);
+}
+
+void validateGappedPeak(struct lineFile *lf)
+{
+validateBedVariant(lf, GAPPED_PEAK);
+}
+
+void validateBedGraph(struct lineFile *lf)
+{
+validateBedVariant(lf, BED_GRAPH);
+}
+
+
+
+// Validate regular bed [3-15] . and  +
+
+void validateBed(struct lineFile *lf, int bedN, int bedP, struct asObject *as)
+{
+char *row;
+int bufSize = 1024;  // bufSIze is max row length
+char *buf = needMem(bufSize); 
+char *words[1024];
+unsigned chromSize;
+int fieldCount = 0;
+boolean allocedAs = FALSE;
+struct bed *bed;
+AllocVar(bed);
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, lf->fileName);
+
+while (lineFileNextReal(lf, &row))
+    {
+
+    /* First time through figure out the field count, and if not set, the defined standard field count. */
+    if (fieldCount == 0)
+	{
+	if (as == NULL)
+	    {
+	    fieldCount = chopByChar(row, '\t', NULL, 0);
+	    char *asText = bedAsDef(bedN, fieldCount);
+	    as = asParseText(asText);
+	    allocedAs = TRUE;
+	    freeMem(asText);
+	    }
+	else
+	    {
+	    fieldCount = slCount(as->columnList);
+	    asCompareObjAgainstStandardBed(as, bedN, TRUE); // abort if bedN columns are not standard
+	    }
+	if (bedP == -1)  // user did not specify how many plus columns there are.
+	    {
+	    bedP = fieldCount - bedN;
+	    if (bedP < 1)
+		reportErrAbort("Aborting: [file=%s, line=%d] fieldCount input (%d) did not match the specification (%s)\n"
+		    , lf->fileName, lf->lineIx, fieldCount, optionVal("type", ""));
+	    }
+
+	if (fieldCount != bedN + bedP)
+	    reportErrAbort("Aborting: [file=%s, line=%d] fieldCount input (%d) did not match the specification (%s)\n"
+		, lf->fileName, lf->lineIx, fieldCount, optionVal("type", ""));
+	}
+
+    int rowLen = strlen(row);
+    if (bufSize < rowLen)
+	{
+	bufSize += bufSize;
+	freeMem(buf);
+	buf = needMem(bufSize); 
+	}
+    safecpy(buf, bufSize, row);
+    if (checkColumns(lf, row, buf, words, sizeof words, bedN+bedP)
+     && checkChrom(lf, row, words[0], &chromSize))
+	{
+
+	loadAndValidateBed(words, bedN, fieldCount, lf, bed, as, FALSE);
+
+	if (bed->chromEnd > chromSize)
+	    {
+	    reportErrAbort("Error [file=%s, line=%d]: bed->chromEnd[%u] > chromSize[%u] [%s]"
+		, lf->fileName, lf->lineIx, bed->chromEnd, chromSize, row);
+	    }
 	}
     else
 	{
-	if (printFailLines)
-	    printf("%s\n", row);
-	if (++errs >= maxErrors)
-	    reportErrAbort("Aborting .. found %d errors\n", errs);
+	verbose(2, "%s\n", row);
+	reportErrAbort("Aborting .. found error.\n");
 	}
     }
-return errs;
+
+if (allocedAs)
+    asObjectFreeList(&as);
+freez(&bed);
 }
 
-int validateBroadPeak(struct lineFile *lf, char *file)
+
+
+void validateBedN(struct lineFile *lf)
 {
-return validateBedVariant(lf, file, BROAD_PEAK);
+int bedN = 0;
+int bedP = 0;
+
+// parse type
+char *type = cloneString(optionVal("type", ""));
+char *plus = strchr(type, '+');
+if (plus)
+    {
+    *plus++ = 0;
+    if (isdigit(*plus))
+	bedP = sqlUnsigned(plus);
+    else
+	bedP = -1;
+    }
+
+if (bigBed)
+    {
+    if (!startsWith("bigBed", type))
+	errAbort("type must begin with \"bigBed\"");
+    type +=6;
+    }
+else
+    {
+    if (!startsWith("bed", type))
+	errAbort("type must begin with \"bed\"");
+    type +=3;
+    }
+
+bedN = sqlUnsigned(type);
+
+if (bedN < 3)
+    reportErrAbort("Aborting .. bed must be 3 or higher, found %d\n", bedN);
+if (bedN > 15)  // maybe someday 15 for microarray data?
+    reportErrAbort("Aborting .. bed must be 15 or lower, found %d\n", bedN);
+
+/* Load up as-object if defined in file. */
+struct asObject *asObj = NULL;
+if (as)
+    {
+    /* Parse it and do sanity check. */
+    asObj = asParseFile(as);
+    if (asObj->next != NULL)
+        errAbort("Can only handle .as files containing a single object.");
+    }
+
+validateBed(lf, bedN, bedP, asObj); 
 }
 
-int validateNarrowPeak(struct lineFile *lf, char *file)
-{
-return validateBedVariant(lf, file, NARROW_PEAK);
-}
 
-int validateGappedPeak(struct lineFile *lf, char *file)
-{
-return validateBedVariant(lf, file, GAPPED_PEAK);
-}
-
-int validateBedGraph(struct lineFile *lf, char *file)
-{
-return validateBedVariant(lf, file, BED_GRAPH);
-}
 
 // fasta:
 // >VHE-245683051005-13-1-2-1704
@@ -985,18 +1088,13 @@ return validateBedVariant(lf, file, BED_GRAPH);
 // >VHE-245683051005-13-1-2-1704
 // CTTGCTTTCTAGTTCTTTTAATTGTG
 
-int validateFasta(struct lineFile *lf, char *file)
+void validateFasta(struct lineFile *lf)
 {
 char *seqName, *seq;
-int line = 0;
-int errs = 0;
 boolean startOfFile = TRUE;
-verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, lf->fileName);
 while ( lineFileNext(lf, &seqName, NULL))
     {
-    ++line;
-    if (quick && line > quick)
-	break;
     if (startOfFile)
 	{
 	if (*seqName == '#')
@@ -1004,22 +1102,14 @@ while ( lineFileNext(lf, &seqName, NULL))
 	else
 	    startOfFile = FALSE;
 	}
-    if (checkSeqName(file, line, seqName, '>', "sequence name")
-	&& (wantNewLine(lf, file, ++line, &seq, "fastq sequence line"))
-	&& checkSeq(file, line, seq, seq, "sequence") )
+    if (! (checkSeqName(lf, seqName, '>', "sequence name")
+	&& (wantNewLine(lf, &seq, "fastq sequence line"))
+	&& checkSeq(lf, seq, seq, "sequence") ) )
 	{
-	if (printOkLines)
-	    printf("%s\n%s\n", seqName, seq);
-	}
-    else
-	{
-	if (printFailLines)
-	    printf("%s\n%s\n", seqName, seq);
-	if (++errs >= maxErrors)
-	    reportErrAbort("Aborting .. found %d errors\n", errs);
+	verbose(2, "%s\n%s\n", seqName, seq);
+	reportErrAbort("Aborting .. found 1 error\n");
 	}
     }
-return errs;
 }
 
 // fastq:
@@ -1028,18 +1118,15 @@ return errs;
 // +NINA_1_FC30G3VAAXX:5:1:110:908
 // aa`]`a`XQ^VQQ^`aaaaaaa^[[ZG[aXUX[[[X
 
-int validateFastq(struct lineFile *lf, char *file)
+void validateFastq(struct lineFile *lf)
 {
 char *seqName, *seq, *qName, *qual;
 int line = 0;
-int errs = 0;
 boolean startOfFile = TRUE;
-verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, lf->fileName);
 while ( lineFileNext(lf, &seqName, NULL))
     {
     ++line;
-    if (quick && line > quick)
-	break;
     if (startOfFile)
 	{
 	if (*seqName == '#')
@@ -1048,27 +1135,19 @@ while ( lineFileNext(lf, &seqName, NULL))
 	    startOfFile = FALSE;
 	}
     int len = 0;
-    if (checkSeqName(file, line, seqName, '@', "sequence name")
-	&& (wantNewLine(lf, file, ++line, &seq, "fastq sequence line"))
-	&& (len = checkSeq(file, line, seq, seq, "sequence"))
-	&& (wantNewLine(lf, file, ++line, &qName, "fastq sequence name (quality line)"))
-	&& checkSeqName(file, line, qName, '+', "quality name")
-	&& (wantNewLine(lf, file, ++line, &qual, "quality line"))
-	&& checkQual(file, line, qual, len) )
+    if (!(checkSeqName(lf, seqName, '@', "sequence name")
+	&& (wantNewLine(lf, &seq, "fastq sequence line"))
+	&& (len = checkSeq(lf, seq, seq, "sequence"))
+	&& (wantNewLine(lf, &qName, "fastq sequence name (quality line)"))
+	&& checkSeqName(lf, qName, '+', "quality name")
+	&& (wantNewLine(lf, &qual, "quality line"))
+	&& checkQual(lf, qual, len) ))
 	{
-	if (printOkLines)
-	    printf("%s\n%s\n%s\n%s\n", seqName, seq, qName, qual);
-	}
-    else
-	{
-	if (printFailLines)
-	    printf("%s\n%s\n%s\n%s\n", seqName, seq, qName, qual);
-	if (++errs >= maxErrors)
-	    reportErrAbort("Aborting .. found %d errors\n", errs);
+	verbose(2,"%s\n%s\n%s\n%s\n", seqName, seq, qName, qual);
+	reportErrAbort("Aborting .. found 1 error\n");
 	}
     }
 reportLabelAndLongNumber("number of sequences", line / 4);
-return errs;
 }
 
 /*    Syntax per http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm
@@ -1079,20 +1158,15 @@ T022213002230311203200200322000
 T01301010111200210102321210100112312
 */
 
-int validateCsfasta(struct lineFile *lf, char *file)
+void validateCsfasta(struct lineFile *lf)
 // Validate Colorspace fasta files
 {
 char *seqName = NULL;
 char *seq = NULL;
-int line = 0;
-int errs = 0;
 boolean startOfFile = TRUE;
-verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, lf->fileName);
 while (lineFileNext(lf, &seqName, NULL))
     {
-    ++line;
-    if (quick && line > quick)
-	break;
     if (startOfFile)
 	{
 	if (*seqName == '#')
@@ -1100,22 +1174,14 @@ while (lineFileNext(lf, &seqName, NULL))
 	else
 	    startOfFile = FALSE;
 	}
-    if (checkCsSeqName(file, line, seqName)
-	&& (wantNewLine(lf, file, ++line, &seq, "colorspace sequence name"))
-	&& checkSeq(file, line, seq, seq, "colorspace sequence") )
+    if (! (checkCsSeqName(lf, seqName)
+	&& (wantNewLine(lf, &seq, "colorspace sequence name"))
+	&& checkSeq(lf, seq, seq, "colorspace sequence") ) )
 	{
-	if (printOkLines)
-	    printf("%s\n%s\n", seqName, seq);
-	}
-    else
-	{
-	if (printFailLines)
-	    printf("%s\n%s\n", seqName, seq);
-	if (++errs >= maxErrors)
-	    reportErrAbort("Aborting .. found %d errors\n", errs);
+	verbose(2,"%s\n%s\n", seqName, seq);
+	reportErrAbort("Aborting .. found 1 error\n");
 	}
     }
-return errs;
 }
 
 
@@ -1130,20 +1196,15 @@ return errs;
 16 8 5 12 20 24 19 8 13 17 11 23 8 24 8 7 17 4 20 8 29 7 3 16 3 4 8 20 17 9
 */
 
-int validateCsqual(struct lineFile *lf, char *file)
+void validateCsqual(struct lineFile *lf)
 // Validate Colorspace quality files
 {
 char *seqName = NULL;
 char *qual = NULL;
-int line = 0;
-int errs = 0;
 boolean startOfFile = TRUE;
-verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
+verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, lf->fileName);
 while (lineFileNext(lf, &seqName, NULL))
     {
-    ++line;
-    if (quick && line > quick)
-	break;
     if (startOfFile)
 	{
 	if (*seqName == '#')
@@ -1151,45 +1212,36 @@ while (lineFileNext(lf, &seqName, NULL))
 	else
 	    startOfFile = FALSE;
 	}
-    if (checkCsSeqName(file, line, seqName)
-	&& (wantNewLine(lf, file, ++line, &qual, "colorspace quality line"))
-	&& checkCsQual(file, line, qual) )
+    if (! (checkCsSeqName(lf, seqName)
+	&& (wantNewLine(lf, &qual, "colorspace quality line"))
+	&& checkCsQual(lf, qual) ) )
 	{
-	if (printOkLines)
-	    printf("%s\n%s\n", seqName, qual);
-	}
-    else
-	{
-	if (printFailLines)
-	    printf("%s\n%s\n", seqName, qual);
-	if (++errs >= maxErrors)
-	    reportErrAbort("Aborting .. found %d errors\n", errs);
+	verbose(2,"%s\n%s\n", seqName, qual);
+	reportErrAbort("Aborting .. found 1 error\n");
 	}
     }
-return errs;
 }
 
-int validateBigWig(struct lineFile *lf, char *file)
+void validateBigWig(struct lineFile *lf)
 {
 if (chrHash == NULL)
     reportErrAbort("bigWig validation requires the -chromInfo or -chromDb option\n");
 
-int errs = 0;
 struct bbiFile *bbiFile;
 
-if (!bigWigFileCheckSigs(file))
-    reportErrAbort("bad signatures in file %s\n", file);
+if (!bigWigFileCheckSigs(lf->fileName))
+    reportErrAbort("bad signatures in file %s\n", lf->fileName);
 
-bbiFile = bigWigFileOpen(file);
+bbiFile = bigWigFileOpen(lf->fileName);
 
 if (bbiFile == NULL)
-    reportErrAbort("Aborting... Cannot open bigWig file: %s\n", file);
+    reportErrAbort("Aborting... Cannot open bigWig file: %s\n", lf->fileName);
 
 
 struct bbiChromInfo *bbiChroms = bbiChromList(bbiFile);
 
 if (bbiChroms == NULL)
-    reportErrAbort("Aborting... cannot get bigWig chromosome list in file: %s\n", file);
+    reportErrAbort("Aborting... cannot get bigWig chromosome list in file: %s\n", lf->fileName);
 
 struct bbiChromInfo *chroms = bbiChroms;
 for(; chroms; chroms = chroms->next)
@@ -1198,25 +1250,19 @@ for(; chroms; chroms = chroms->next)
 
     if ( (size = hashFindVal(chrHash, chroms->name)) == NULL)
 	{
-	reportWarn("bigWig contains invalid chromosome name: %s\n", 
+	reportErrAbort("bigWig contains invalid chromosome name: %s\n", 
 	    chroms->name);
-	errs++;
 	}
     else
 	{
 	if (*size != chroms->size)
 	    {
-	    reportWarn("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
+	    reportErrAbort("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
 		chroms->name,
 		*size, chroms->size);
-	    errs++;
 	    }
 	}
     }
-
-
-if (errs)
-    reportErrAbort("Aborting... %d errors found in bigWig file\n", errs);
 
 report("version: %d\n", bbiFile->version);
 report("isCompressed: %s\n", (bbiFile->uncompressBufSize > 0 ? "yes" : "no"));
@@ -1244,7 +1290,6 @@ report("min: %f\n", sum.minVal);
 report("max: %f\n", sum.maxVal);
 report("std: %f\n", calcStdFromSums(sum.sumData, sum.sumSquares, sum.validCount));
 
-return errs;
 }
 
 #ifdef USE_BAM
@@ -1274,7 +1319,7 @@ if ((line % mmCheckOneInN) != 0)
 if ((cacheChrom == NULL) || !sameString(chrom, cacheChrom))
     {
     freeDnaSeq(&cacheSeq);
-    int size =  twoBitSeqSize(genome, chrom);
+    int size = twoBitSeqSize(genome, chrom);
     cacheSeq = twoBitReadSeqFragLower(genome, chrom, 0, size);
     strcpy(cacheChrom, chrom);
     verbose(2, "read in chrom %s size %d: aligns to this point %d\n",
@@ -1470,7 +1515,7 @@ else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos,
     ++(*errs);
     }
     
-if ((bamPercent == 0.0) && (*errs) >= maxErrors)
+if ((bamPercent == 0.0) && (*errs) >= 1)
     reportErrAbort("Aborting .. found %d errors\n", *errs);
 
 if (strand == '+')
@@ -1480,21 +1525,21 @@ else
 return 0;
 }
 
-int validateBAM(struct lineFile *lf, char *file)
+void validateBAM(struct lineFile *lf)
 {
 if (chrHash == NULL)
     reportErrAbort("BAM validation requires the -chromInfo or -chromDb option\n");
 
 int errs = 0;
-samfile_t *fh = samopen(file, "rb", NULL);
+samfile_t *fh = samopen(lf->fileName, "rb", NULL);
 
 if (fh == NULL)
-    reportErrAbort("Aborting... Cannot open BAM file: %s\n", file);
+    reportErrAbort("Aborting... Cannot open BAM file: %s\n", lf->fileName);
 
 bam_header_t *head = fh->header;
 
 if (head == NULL)
-    reportErrAbort("Aborting... Bad BAM header in file: %s\n", file);
+    reportErrAbort("Aborting... Bad BAM header in file: %s\n", lf->fileName);
 
 int ii;
 
@@ -1523,20 +1568,19 @@ for(ii=0; ii < head->n_targets; ii++)
 	}
     }
 
-if (errs > allowErrors)
-    reportErrAbort("Aborting... %d errors found in BAM file\n", errs);
+reportErrAbort("Aborting... %d errors found in BAM file\n", errs);
 
 if (!genome)
-    return errs; // only check sequence if 2bit file specified
+    return; // only check sequence if 2bit file specified
 
-bam_index_t *idx = bam_index_load(file);
+bam_index_t *idx = bam_index_load(lf->fileName);
 
 if (idx == NULL)
-    reportErrAbort("couldn't find index file for %s\n", file);
+    reportErrAbort("couldn't find index file for %s\n", lf->fileName);
 struct bamCallbackData *bd;
 AllocVar(bd);
 
-bd->file = file;
+bd->file = lf->fileName;
 if (bamPercent != 0.0)
     errs = 0;  // if we're testing on percent compliant, don't count header errs
 bd->errs = &errs;
@@ -1596,19 +1640,24 @@ for(ii=0; ii < 256; ii++)
     }
 report("\n");
 
-return errs;
 }
 #endif
 
-void validateFiles(int (*validate)(struct lineFile *lf, char *file), int numFiles, char *files[])
+
+void validateFiles(void (*validate)(struct lineFile *lf), int numFiles, char *files[])
 /* validateFile - validate format of different track input files. */
 {
 int i;
-int errs = 0;
 verbose(2,"[%s %3d] numFiles=%d \n", __func__, __LINE__, numFiles);
+
 for (i = 0; i < numFiles ; ++i)
     {
-    struct lineFile *lf = lineFileOpen(files[i], TRUE);
+    
+    struct lineFile *lf = NULL;
+    if (bigBed)
+	lf = lineFileOnBigBed(files[i]);
+    else
+	lf = lineFileOpen(files[i], TRUE);
 
     char buffer[10 * 1024];
     if (doReport)
@@ -1621,21 +1670,16 @@ for (i = 0; i < numFiles ; ++i)
         reportF = NULL;
 
     report("validateFiles %s %s\n", version, files[i]);
-    errs += validate(lf, files[i]);
+    validate(lf);
 
-    if (quick)
-	{
-	/* set up error catch to allow SIGPIPE errors from gzip */
-	struct errCatch *errCatch = errCatchNew();
-	if (errCatchStart(errCatch))
-	    lineFileClose(&lf);
-	errCatchEnd(errCatch);
-	if (errCatch->gotError)
-	   warn("Ignoring: %s", errCatch->message->string);
-	errCatchFree(&errCatch);
-	}
-    else
+    /* set up error catch to allow SIGPIPE errors from gzip */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
 	lineFileClose(&lf);
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+       warn("Ignoring: %s", errCatch->message->string);
+    errCatchFree(&errCatch);
 
     report("endReport\n");
     if (reportF != NULL)
@@ -1645,10 +1689,6 @@ for (i = 0; i < numFiles ; ++i)
         }
     }
 verbose(2,"[%s %3d] done loop\n", __func__, __LINE__);
-if (errs > allowErrors)
-    errAbort("Aborting ... found %d errors in total\n", errs);
-else
-    printf( "Error count %d\n",errs);
 
 verbose(2,"[%s %3d] done\n", __func__, __LINE__);
 
@@ -1665,41 +1705,12 @@ printf("done.\n");
 return 0;
 }
 
-struct chromInfo *ourChromInfoLoad(char **row)
-/* Load a chromInfo from row fetched with select * from chromInfo
- * from database.  Dispose of this with chromInfoFree(). */
-{
-struct chromInfo *ret;
-
-AllocVar(ret);
-ret->chrom = cloneString(row[0]);
-ret->size = sqlUnsigned(row[1]);
-ret->fileName = NULL;
-return ret;
-}
-
-static struct chromInfo *chromInfoLoadFile(char *fileName) 
-{
-struct chromInfo *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
-
-while (lineFileRow(lf, row))
-    {
-    el = ourChromInfoLoad(row);
-    slAddHead(&list, el);
-    }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *type;
 void *func;
-struct chromInfo *ci = NULL;
 struct hash *funcs = newHash(0);
 char *chromDb, *chromInfo;
 optionInit(&argc, argv, options);
@@ -1712,11 +1723,6 @@ if (argc==0)
 type = optionVal("type", "");
 if (strlen(type) == 0)
     reportErrAbort("please specify type");
-maxErrors      = optionInt("maxErrors", MAX_ERRORS);
-allowErrors    = optionInt("allowErrors", allowErrors);
-zeroSizeOk     = optionExists("zeroSizeOk");
-printOkLines   = optionExists("printOkLines");
-printFailLines = optionExists("printFailLines");
 genome         = optionExists("genome") ? twoBitOpen(optionVal("genome",NULL)) : NULL;
 mismatches     = optionInt("mismatches",0);
 matchFirst     = optionInt("matchFirst",0);
@@ -1724,9 +1730,8 @@ mmPerPair      = optionExists("mmPerPair");
 mismatchTotalQuality = optionInt("mismatchTotalQuality",0);
 nMatch         = optionExists("nMatch");
 privateData    = optionExists("privateData");
-isSort         = optionExists("isSort");
+isSorted         = optionExists("isSorted");
 mmCheckOneInN  = optionInt("mmCheckOneInN", 1);
-quick          = optionExists("quick") ? optionInt("quick",QUICK_DEFAULT) : 0;
 colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
 allowOther     = optionExists("allowOther");
 allowBadLength = optionExists("allowBadLength");
@@ -1734,29 +1739,35 @@ complementMinus = optionExists("complementMinus");
 bamPercent     = optionFloat("bamPercent", bamPercent);
 showBadAlign   = optionExists("showBadAlign");
 doReport       = optionExists("doReport");
+as = optionVal("as", as);
+tab           = optionExists("tab");
 
 if ((bamPercent != 0.0) && (mmCheckOneInN != 1 ))
     reportErrAbort("can't specify bamPercent and mmCheckOneInN");
 
 initArrays();
-dnaChars[(int)'.'] = 1;//optionExists("acceptDot");   // I don't think this is worth adding another option.  But it could be done.
+dnaChars[(int)'.'] = 1;
 
 // Get chromInfo from DB or file
 if ( (chromDb = optionVal("chromDb", NULL)) != NULL)
     {
-    if (!(ci = createChromInfoList(NULL, chromDb)))
-        reportErrAbort("could not load chromInfo from DB %s\n", chromDb);
-    chrHash = chromHash(ci);
-    chromInfoFree(&ci);
+    chrHash = chromHashFromDatabase(chromDb); 
     }
 else if ( (chromInfo=optionVal("chromInfo", NULL)) != NULL)
     {
-    if (!(ci = chromInfoLoadFile(chromInfo)))
-	reportErrAbort("could not load chromInfo file %s\n", chromInfo);
-    chrHash = chromHash(ci);
-    chromInfoFree(&ci);
+    chrHash = chromHashFromFile(chromInfo); 
     }
 verbose(2,"[%s %3d] type=%s\n", __func__, __LINE__, type);
+
+if (startsWith("bed", type) && isdigit(type[3]))
+    type = "bedN";
+
+if (startsWith("bigBed", type) && isdigit(type[6]))
+    {
+    type = "bedN";
+    bigBed = TRUE;
+    }
+
 // Setup the function hash keyed by type
 hashAdd(funcs, "tagAlign",       &validateTagAlign);
 hashAdd(funcs, "pairedTagAlign", &validatePairedTagAlign);
@@ -1772,9 +1783,13 @@ hashAdd(funcs, "bedGraph",       &validateBedGraph);
 hashAdd(funcs, "BAM",            &validateBAM);
 #endif
 hashAdd(funcs, "bigWig",         &validateBigWig);
+
+hashAdd(funcs, "bedN",           &validateBedN);
+
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
     reportErrAbort("Cannot validate %s type files\n", type);
 validateFiles(func, argc, argv);
 return 0;
 }
+

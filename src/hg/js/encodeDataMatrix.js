@@ -15,8 +15,7 @@ $(function () {
     // requests to server API
         encodeProject.serverRequests.experiment, 
         encodeProject.serverRequests.dataType, 
-        encodeProject.serverRequests.cellType,
-        encodeProject.serverRequests.expId
+        encodeProject.serverRequests.cellType
         ];
 
     var $matrixTable = $('#matrixTable');
@@ -27,10 +26,9 @@ $(function () {
         // NOTE: ordering of responses is based on request order
         var experiments = responses[0], 
                           dataTypes = responses[1], 
-                          cellTypes = responses[2], 
-                          expIds = responses[3];
+                          cellTypes = responses[2];
 
-        var dataGroups, cellTiers, expIdHash;
+        var dataGroups, cellTiers;
         var dataType, cellType;
         var matrix, dataTypeExps = {};
 
@@ -44,19 +42,16 @@ $(function () {
         // set up structures for cell types and their tiers
         cellTiers = encodeProject.getCellTiers(cellTypes);
 
-        // use to filter out experiments not in this assembly
-        expIdHash = encodeProject.getExpIdHash(expIds);
-
         // gather experiments into matrix
         // NOTE: dataTypeExps is populated here
-        matrix = makeExperimentMatrix(experiments, expIdHash, dataTypeExps);
+        matrix = makeExperimentMatrix(experiments, dataTypeExps);
 
         // fill in table using matrix
         encodeMatrix.tableOut($matrixTable, matrix, cellTiers, 
                     dataGroups, dataTypeExps, tableHeaderOut, rowAddCells);
     }
 
-    function makeExperimentMatrix(experiments, expIdHash, dataTypeExps) {
+    function makeExperimentMatrix(experiments, dataTypeExps) {
         // Populate dataType vs. cellType array with counts of experiments
 
         var dataType, cellType;
@@ -67,10 +62,7 @@ $(function () {
             if (exp.cellType === 'None') {
                 return true;
             }
-            // exclude experiments lacking an expID (not in this assembly)
-            if (expIdHash[exp.ix] === undefined) {
-                return true;
-            }
+
             // count experiments per dataType so we can prune those having none
             // (the matrix[cellType] indicates this for cell types 
             // so don't need hash for those
@@ -178,12 +170,13 @@ $(function () {
                     'dataType' : dataType,
                     'cellType' : cellType
                 });
+                $td.attr('title', 'Click to select: ' + 
+                        encodeProject.getDataType(dataType).label +
+                        ' in ' + cellType +' cells');
 
-                $td.mouseover(function() {
-                    $(this).attr('title', 'Click to select: ' + 
-                        encodeProject.getDataType($(this).data().dataType).label +
-                        ' ' + ' in ' + $(this).data().cellType +' cells');
-                });
+                // add highlight when moused over
+                encodeMatrix.hoverExperiment($td);
+
                 $td.click(function() {
                     // NOTE: generating full search URL should be generalized & encapsulated
                     var url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());

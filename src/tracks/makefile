@@ -10,7 +10,7 @@ A = tracksWS120.exe
 O = tracks.o 
 
 compile: $O 
-	${CC} $O $(MYLIBS) $(L) 
+	${CC} -lm $O $(MYLIBS) $(L) 
 	mv ${AOUT} $A
 #${STRIP} $A
 	chmod a+rx $A
