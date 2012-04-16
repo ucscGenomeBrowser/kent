@@ -163,15 +163,14 @@ taxId 10181
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek hetGla2 > do.log 2>&1 &
-XXX - running - Fri Apr 13 16:13:13 PDT 2012
-    #   real    990m24.340s
+    #   real    1042m39.868s
 
     cat faSize.rmsk.txt
-    #   2808525991 bases (289538800 N's 2518987191 real 1404190109 upper
-    #   1114797082 lower) in 4583 sequences in 1 files
-    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
-    #   max 315321322 (chr1) median 25278
-    #   %39.69 masked total, %44.26 masked real
+    #   2618204639 bases (303433536 N's 2314771103 real 1567576531 upper
+    #   747194572 lower) in 4229 sequences in 1 files
+    #   Total size: mean 619107.3 sd 3685486.1 min 1000 (AHKG01114633)
+    #   max 78885850 (JH602043) median 1736
+    #   %28.54 masked total, %32.28 masked real
 
     egrep -i "versi|relea" do.log
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
@@ -179,7 +178,8 @@ XXX - running - Fri Apr 13 16:13:13 PDT 2012
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 
     featureBits -countGaps hetGla2 rmsk
-    #   29525418 bases of 2525996391 (1.169%) in intersection
+    #   748037030 bases of 2618204639 (28.571%) in intersection
+    #   real    0m25.109s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -196,7 +196,6 @@ XXX - running - Fri Apr 13 16:13:13 PDT 2012
     cat fb.simpleRepeat 
     #   23745957 bases of 2314771103 (1.026%) in intersection
 
-XXX
     # add to rmsk after it is done:
     cd /hive/data/genomes/hetGla2
     twoBitMask hetGla2.rmsk.2bit \
@@ -205,11 +204,11 @@ XXX
 
     twoBitToFa hetGla2.2bit stdout | faSize stdin > faSize.hetGla2.2bit.txt
     cat faSize.hetGla2.2bit.txt
-    #   2808525991 bases (289538800 N's 2518987191 real 1403003553 upper
-    #   1115983638 lower) in 4583 sequences in 1 files
-    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
-    #   max 315321322 (chr1) median 25278
-    #   %39.74 masked total, %44.30 masked real
+    #   2618204639 bases (303433536 N's 2314771103 real 1566940532 upper
+    #   747830571 lower) in 4229 sequences in 1 files
+    #   Total size: mean 619107.3 sd 3685486.1 min 1000 (AHKG01114633)
+    #   max 78885850 (JH602043) median 1736
+    #   %28.56 masked total, %32.31 masked real
 
     rm /gbdb/hetGla2/hetGla2.2bit
     ln -s `pwd`/hetGla2.2bit /gbdb/hetGla2/hetGla2.2bit
@@ -242,58 +241,62 @@ XXX
     cd /hive/data/genomes/hetGla2/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev hetGla2 > do.log 2>&1 &
-XXX - running - Fri Apr 13 16:14:07 PDT 2012
-    #   real    224m8.502s
+    #   real    198m5.178s
 
     # Masking statistics
     twoBitToFa hetGla2.wmsk.2bit stdout | faSize stdin
-    #   2808525991 bases (289538800 N's 2518987191 real 1636028761 upper
-    #   882958430 lower) in 4583 sequences in 1 files
-    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
-    #   max 315321322 (chr1) median 25278
-    #   %31.44 masked total, %35.05 masked real
+    #   2618204639 bases (303433536 N's 2314771103 real 1603612350 upper
+    #   711158753 lower) in 4229 sequences in 1 files
+    #   Total size: mean 619107.3 sd 3685486.1 min 1000 (AHKG01114633)
+    #   max 78885850 (JH602043) median 1736
+    #   %27.16 masked total, %30.72 masked real
 
     twoBitToFa hetGla2.wmsk.sdust.2bit stdout | faSize stdin
-    #   2808525991 bases (289538800 N's 2518987191 real 1622625959 upper
-    #   896361232 lower) in 4583 sequences in 1 files
-    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
-    #   max 315321322 (chr1) median 25278
-    #   %31.92 masked total, %35.58 masked real
+    #   2618204639 bases (303433536 N's 2314771103 real 1591491612 upper
+    #   723279491 lower) in 4229 sequences in 1 files
+    #   Total size: mean 619107.3 sd 3685486.1 min 1000 (AHKG01114633)
+    #   max 78885850 (JH602043) median 1736
+    #   %27.63 masked total, %31.25 masked real
 
     hgLoadBed hetGla2 windowmaskerSdust windowmasker.sdust.bed.gz
-    #   Read 13770155 elements of size 3 from windowmasker.sdust.bed.gz
+    #   Read 13599339 elements of size 3 from windowmasker.sdust.bed.gz
 
-    featureBits -countGaps hetGla2 windowmaskerSdust
+    time featureBits -countGaps hetGla2 windowmaskerSdust
     #   1185785055 bases of 2808525991 (42.221%) in intersection
 
     #	eliminate the gaps from the masking
-    featureBits hetGla2 -not gap -bed=notGap.bed
+    time featureBits hetGla2 -not gap -bed=notGap.bed
+    #   2314771103 bases of 2314771103 (100.000%) in intersection
+    #   real    0m15.302s
+
     #   2525294057 bases of 2525294057 (100.000%) in intersection
     time nice -n +19 featureBits hetGla2 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #   902560289 bases of 2525294057 (35.741%) in intersection
-    #   real    3m46.190s
+    #   723279491 bases of 2314771103 (31.246%) in intersection
+    #   real    3m10.554s
 
     #	reload track to get it clean
     hgLoadBed hetGla2 windowmaskerSdust cleanWMask.bed.gz
-    #   Read 13751189 elements of size 4 from cleanWMask.bed.gz
-    featureBits -countGaps hetGla2 windowmaskerSdust
-    #   902560289 bases of 2808525991 (32.136%) in intersection
+    #   Read 13672561 elements of size 4 from cleanWMask.bed.gz
+    time featureBits -countGaps hetGla2 windowmaskerSdust
+    #   723279491 bases of 2618204639 (27.625%) in intersection
+    #   real    1m20.945s
+
     zcat cleanWMask.bed.gz \
 	| twoBitMask ../../hetGla2.unmasked.2bit stdin \
 	    -type=.bed hetGla2.cleanWMSdust.2bit
     twoBitToFa hetGla2.cleanWMSdust.2bit stdout | faSize stdin \
         > hetGla2.cleanWMSdust.faSize.txt
     cat hetGla2.cleanWMSdust.faSize.txt
-    #   2808525991 bases (289538800 N's 2518987191 real 1622625959 upper
-    #   896361232 lower) in 4583 sequences in 1 files
-    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
-    #   max 315321322 (chr1) median 25278
-    #   %31.92 masked total, %35.58 masked real
+    #   2618204639 bases (303433536 N's 2314771103 real 1591491612 upper
+    #   723279491 lower) in 4229 sequences in 1 files
+    #   Total size: mean 619107.3 sd 3685486.1 min 1000 (AHKG01114633)
+    #   max 78885850 (JH602043) median 1736
+    #   %27.63 masked total, %31.25 masked real
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps hetGla2 rmsk windowmaskerSdust
-    #   660954442 bases of 2808525991 (23.534%) in intersection
+    #   360810714 bases of 2618204639 (13.781%) in intersection
 
 #########################################################################
 # MASK SEQUENCE WITH WM+TRF (DONE - 2012-04-13 - Hiram)
