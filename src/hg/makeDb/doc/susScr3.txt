@@ -177,7 +177,7 @@ close (UC);
     #   6787 4
 
 ##########################################################################
-# Initial makeGenomeDb.pl (DONE - 2011-05-20 - Hiram)
+# Initial makeGenomeDb.pl (DONE - 2012-04-11 - Hiram)
     cd /hive/data/genomes/susScr3
     cat << '_EOF_' > susScr3.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -224,15 +224,14 @@ taxId 9823
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=encodek susScr3 > do.log 2>&1 &
-XXX - running - Wed Apr 11 16:37:40 PDT 2012
-    #   real    67m27.295s
+    #   real    990m24.340s
 
     cat faSize.rmsk.txt
-    #   927696114 bases (111611440 N's 816084674 real 786292709 upper
-    #   29791965 lower) in 5678 sequences in 1 files
-    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
-    #   max 51042256 (chrLG7) median 2009
-    #   %3.21 masked total, %3.65 masked real
+    #   2808525991 bases (289538800 N's 2518987191 real 1404190109 upper
+    #   1114797082 lower) in 4583 sequences in 1 files
+    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25278
+    #   %39.69 masked total, %44.26 masked real
 
     egrep -i "versi|relea" do.log
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
@@ -240,7 +239,7 @@ XXX - running - Wed Apr 11 16:37:40 PDT 2012
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 
     featureBits -countGaps susScr3 rmsk
-    #	30137751 bases of 927696114 (3.249%) in intersection
+    #   29525418 bases of 2525996391 (1.169%) in intersection
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -253,10 +252,9 @@ XXX - running - Wed Apr 11 16:37:40 PDT 2012
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	susScr3 > do.log 2>&1 &
-    #   real    14m30.394s
-XXX - running - Wed Apr 11 16:37:56 PDT 2012
+    #   real    9m41.939s
     cat fb.simpleRepeat 
-    #	7960749 bases of 866932349 (0.918%) in intersection
+    #   29525418 bases of 2525996391 (1.169%) in intersection
 
     # add to rmsk after it is done:
     cd /hive/data/genomes/susScr3
@@ -266,9 +264,11 @@ XXX - running - Wed Apr 11 16:37:56 PDT 2012
 
     twoBitToFa susScr3.2bit stdout | faSize stdin > faSize.susScr3.2bit.txt
     cat faSize.susScr3.2bit.txt
-    #	1511735326 bases (153400444 N's 1358334882 real 1024824487 upper
-    #	333510395 lower) in 19550 sequences in 1 files
-    #	%22.06 masked total, %24.55 masked real
+    #   2808525991 bases (289538800 N's 2518987191 real 1403003553 upper
+    #   1115983638 lower) in 4583 sequences in 1 files
+    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25278
+    #   %39.74 masked total, %44.30 masked real
 
     rm /gbdb/susScr3/susScr3.2bit
     ln -s `pwd`/susScr3.2bit /gbdb/susScr3/susScr3.2bit
@@ -286,13 +286,14 @@ XXX - running - Wed Apr 11 16:37:56 PDT 2012
     #   2525996391 bases of 2525996391 (100.000%) in intersection
 
     time featureBits susScr3 allGaps.bed notGap.bed -bed=new.gaps.bed
-XXX - running - Wed Apr 11 16:39:32 PDT 2012
+    wc -l new.gaps.bed
+    #   14502 new.gaps.bed
     #   39382069 bases of 2403678276 (1.638%) in intersection
     #   real    2m51.724s
 
     #	what is the highest index in the existing gap table:
     hgsql -N -e "select ix from gap;" susScr3 | sort -n | tail -1
-    #	264
+    #	1382
     cat << '_EOF_' > mkGap.pl
 #!/bin/env perl
 
@@ -315,28 +316,31 @@ close (FH);
     chmod +x ./mkGap.pl
     ./mkGap.pl > other.bed
     featureBits -countGaps susScr3 other.bed
-    #	39382069 bases of 2455541136 (1.604%) in intersection
+    #   702334 bases of 2808525991 (0.025%) in intersection
     wc -l other.bed
-    #	195055
+    #	14502
     hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
 	-noLoad susScr3 otherGap other.bed
-    #   Read 195055 elements of size 8 from other.bed
+    #   Read 14502 elements of size 8 from other.bed
     #	starting with this many
     hgsql -e "select count(*) from gap;" susScr3
-    #	 2528
+    #	 169119
     hgsql susScr3 -e 'load data local infile "bed.tab" into table gap;'
     #	result count:
     hgsql -e "select count(*) from gap;" susScr3
-    #	197583
-    # == 2528 + 195055
+    #	183621
+    # == 14502 + 169119
     # verify we aren't adding gaps where gaps already exist
     # this would output errors if that were true:
     gapToLift -minGap=1 susScr3 nonBridged.lift -bedFile=nonBridged.bed
+    #   one of these new ones is adjacent to an existing gap:
+# WARNING: overlapping gap at chr1:16262949-16312949(fragment) and chr1:16312949-16312957(other)
+
     # see example in danRer7.txt
-    # there are no non-bridged gaps here:
+    # are there non-bridged gaps here:
     hgsql -N -e "select bridge from gap;" susScr3 | sort | uniq -c
-    #   900 no
-    #   196683 yes
+    #  169119 no
+    #   14502 yes
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2012-04-11 - Hiram)
@@ -344,68 +348,68 @@ close (FH);
     cd /hive/data/genomes/susScr3/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev susScr3 > do.log 2>&1 &
-XXX - running - Wed Apr 11 16:38:13 PDT 2012
-    #   real    66m1.067s
+    #   real    224m8.502s
 
     # Masking statistics
     twoBitToFa susScr3.wmsk.2bit stdout | faSize stdin
-    #   927696114 bases (111611440 N's 816084674 real 612807423 upper
-    #   203277251 lower) in 5678 sequences in 1 files
-    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
-    #   max 51042256 (chrLG7) median 2009
-    #   %21.91 masked total, %24.91 masked real
+    #   2808525991 bases (289538800 N's 2518987191 real 1636028761 upper
+    #   882958430 lower) in 4583 sequences in 1 files
+    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25278
+    #   %31.44 masked total, %35.05 masked real
 
     twoBitToFa susScr3.wmsk.sdust.2bit stdout | faSize stdin
-    #   927696114 bases (111611440 N's 816084674 real 608110449 upper
-    #   207974225 lower) in 5678 sequences in 1 files
-    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
-    #   max 51042256 (chrLG7) median 2009
-    #   %22.42 masked total, %25.48 masked real
+    #   2808525991 bases (289538800 N's 2518987191 real 1622625959 upper
+    #   896361232 lower) in 4583 sequences in 1 files
+    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25278
+    #   %31.92 masked total, %35.58 masked real
 
     hgLoadBed susScr3 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 5157020 elements of size 3
+    #   Read 13770155 elements of size 3 from windowmasker.sdust.bed.gz
 
     featureBits -countGaps susScr3 windowmaskerSdust
-    #   319585665 bases of 927696114 (34.449%) in intersection
+    #   1185785055 bases of 2808525991 (42.221%) in intersection
 
     #	eliminate the gaps from the masking
     featureBits susScr3 -not gap -bed=notGap.bed
-    #	816084674 bases of 816084674 (100.000%) in intersection
+    #   2525294057 bases of 2525294057 (100.000%) in intersection
     time nice -n +19 featureBits susScr3 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #   207974225 bases of 816084674 (25.484%) in intersection
-    #	real    1m44.114s
+    #   902560289 bases of 2525294057 (35.741%) in intersection
+    #   real    3m46.190s
+
     #	reload track to get it clean
     hgLoadBed susScr3 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 5181510 elements of size 4
+    #   Read 13751189 elements of size 4 from cleanWMask.bed.gz
     featureBits -countGaps susScr3 windowmaskerSdust
-    #   207974225 bases of 927696114 (22.418%) in intersection
+    #   902560289 bases of 2808525991 (32.136%) in intersection
     zcat cleanWMask.bed.gz \
 	| twoBitMask ../../susScr3.unmasked.2bit stdin \
 	    -type=.bed susScr3.cleanWMSdust.2bit
     twoBitToFa susScr3.cleanWMSdust.2bit stdout | faSize stdin \
         > susScr3.cleanWMSdust.faSize.txt
     cat susScr3.cleanWMSdust.faSize.txt
-    #   927696114 bases (111611440 N's 816084674 real 608110449 upper
-    #   207974225 lower) in 5678 sequences in 1 files
-    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
-    #   max 51042256 (chrLG7) median 2009
-    #   %22.42 masked total, %25.48 masked real
+    #   2808525991 bases (289538800 N's 2518987191 real 1622625959 upper
+    #   896361232 lower) in 4583 sequences in 1 files
+    #   Total size: mean 612813.9 sd 9553116.1 min 100 (GL895433-1)
+    #   max 315321322 (chr1) median 25278
+    #   %31.92 masked total, %35.58 masked real
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps susScr3 rmsk windowmaskerSdust
-    #   21445936 bases of 927696114 (2.312%) in intersection
+    #   660954442 bases of 2808525991 (23.534%) in intersection
 
 #########################################################################
 # MASK SEQUENCE WITH WM+TRF (DONE - 2012-04-11 - Hiram)
     #	since rmsk masks so very little of the genome, use the clean WM mask
     #	on the genome sequence
-    cd /hive/data/genomes/susScr3
-    twoBitMask -add bed/windowMasker/susScr3.cleanWMSdust.2bit \
-	bed/simpleRepeat/trfMask.bed susScr3.2bit
+#    cd /hive/data/genomes/susScr3
+#    twoBitMask -add bed/windowMasker/susScr3.cleanWMSdust.2bit \
+#	bed/simpleRepeat/trfMask.bed susScr3.2bit
     #	safe to ignore the warnings about BED file with >=13 fields
-    twoBitToFa susScr3.2bit stdout | faSize stdin > faSize.susScr3.txt
-    cat faSize.susScr3.txt
+#    twoBitToFa susScr3.2bit stdout | faSize stdin > faSize.susScr3.txt
+#    cat faSize.susScr3.txt
     #   927696114 bases (111611440 N's 816084674 real 607935500 upper
     #   208149174 lower) in 5678 sequences in 1 files
     #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
@@ -413,8 +417,7 @@ XXX - running - Wed Apr 11 16:38:13 PDT 2012
     #   %22.44 masked total, %25.51 masked real
 
     #	create symlink to gbdb
-    ssh hgwdev
-    rm /gbdb/susScr3/susScr3.2bit
-    ln -s `pwd`/susScr3.2bit /gbdb/susScr3/susScr3.2bit
+#    rm /gbdb/susScr3/susScr3.2bit
+#    ln -s `pwd`/susScr3.2bit /gbdb/susScr3/susScr3.2bit
 
 ########################################################################

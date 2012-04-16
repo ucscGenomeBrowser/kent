@@ -7,11 +7,13 @@
 #include "common.h"
 #include "hash.h"
 #include <fcntl.h>
+#include <signal.h>
 #include "dystring.h"
 #include "errabort.h"
 #include "linefile.h"
 #include "pipeline.h"
-#include <signal.h>
+#include "bigBed.h"
+#include "localmem.h"
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -196,6 +198,29 @@ lf->buf = s;
 return lf;
 }
 
+struct lineFile *lineFileOnBigBed(char *bigBedFileName)
+/* Wrap a line file object around a BigBed. */
+{
+struct lineFile *lf;
+AllocVar(lf);
+lf->fileName = cloneString(bigBedFileName);
+lf->bbiHandle = bigBedFileOpen(lf->fileName);
+lf->bbiChromList = bbiChromList(lf->bbiHandle);
+lf->bbiChrom = lf->bbiChromList;
+lf->bbiLm = lmInit(0);
+if (lf->bbiChrom)
+    {
+    lf->bbiIntervalList = bigBedIntervalQuery(
+	lf->bbiHandle, lf->bbiChrom->name, 0, lf->bbiChrom->size, 0, lf->bbiLm);
+    lf->bbiInterval = lf->bbiIntervalList;
+    }
+lf->fd = -1;
+lf->lineIx = 0;
+lf->bufSize = 64 * 1024;
+lf->buf = needMem(lf->bufSize);
+return lf;
+}
+
 struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
 /* Wrap a line file around a data file that has been compressed and indexed
  * by the tabix command line program.  The index file <fileOrUrl>.tbi must be
@@ -327,10 +352,17 @@ if (lf->tabix != NULL)
 #endif // USE_TABIX
 }
 
+INLINE void noBigBedSupport(struct lineFile *lf, char *where)
+{
+if (lf->bbiHandle)
+    lineFileAbort(lf, "%s: not implemented for lineFile on BigBed.", where);
+}
+
 void lineFileSeek(struct lineFile *lf, off_t offset, int whence)
 /* Seek to read next line from given position. */
 {
 noTabixSupport(lf, "lineFileSeek");
+noBigBedSupport(lf, "lineFileSeek");
 if (lf->pl != NULL)
     errnoAbort("Can't lineFileSeek on a compressed file: %s", lf->fileName);
 lf->reuse = FALSE;
@@ -413,6 +445,49 @@ if (lf->reuse)
     *retStart = buf + lf->lineStart;
     if (lf->metaOutput && *retStart[0] == '#')
         metaDataAdd(lf, *retStart);
+    return TRUE;
+    }
+
+if (lf->bbiHandle)
+    {
+    int lineSize = 0;
+    if (!lf->bbiChrom)
+	return FALSE;
+    if (!lf->bbiInterval)
+	return FALSE;
+    lineSize = 1024; // some extra room
+    lineSize += strlen(lf->bbiChrom->name);
+    if (lf->bbiInterval->rest)
+	lineSize += strlen(lf->bbiInterval->rest);
+    
+    if (lineSize > lf->bufSize)
+	lineFileExpandBuf(lf, lineSize * 2);
+    safef(lf->buf, lf->bufSize, "%s\t%u\t%u", lf->bbiChrom->name, lf->bbiInterval->start, lf->bbiInterval->end);
+    if (lf->bbiInterval->rest)
+	{
+	safecat(lf->buf, lf->bufSize, "\t");
+	safecat(lf->buf, lf->bufSize, lf->bbiInterval->rest);
+	}
+    lf->bufOffsetInFile = -1;
+    lf->bytesInBuf = strlen(lf->buf);
+    lf->lineIx++;
+    lf->lineStart = 0;
+    lf->lineEnd = lineSize;
+    *retStart = lf->buf;
+    if (retSize != NULL)
+	*retSize = lineSize;
+
+    lf->bbiInterval = lf->bbiInterval->next;
+    if (!lf->bbiInterval)
+	{
+	lmCleanup(&lf->bbiLm);
+	lf->bbiLm = lmInit(0);
+	lf->bbiChrom = lf->bbiChrom->next;
+	if(lf->bbiChrom)
+	    lf->bbiIntervalList = bigBedIntervalQuery(
+		lf->bbiHandle, lf->bbiChrom->name, 0, lf->bbiChrom->size, 0, lf->bbiLm);
+	}
+
     return TRUE;
     }
 
@@ -642,6 +717,12 @@ if ((lf = *pLf) != NULL)
 	ti_close(lf->tabix);
 	}
 #endif // USE_TABIX
+    if (lf->bbiHandle)
+	{
+    	lmCleanup(&lf->bbiLm);
+	bbiChromInfoFreeList(&lf->bbiChromList);
+	bbiFileClose(&lf->bbiHandle);
+	}
     freeMem(lf->fileName);
     metaDataFree(lf);
     freez(pLf);
@@ -944,6 +1025,191 @@ if (c != '-' && !isdigit(c))
     	wordIx+1, lf->lineIx, lf->fileName, ascii);
 return atoi(ascii);
 }
+
+int lineFileCheckAllIntsNoAbort(char *s, void *val, 
+    boolean isSigned, int byteCount, char *typeString, boolean noNeg, 
+    char *errMsg, int errMsgSize)
+/* Convert string to (signed) integer of the size specified.  
+ * Unlike atol assumes all of string is number, no trailing trash allowed.
+ * Returns 0 if conversion possible, and value is returned in 'val'
+ * Otherwise 1 for empty string or trailing chars, and 2 for numeric overflow,
+ * and 3 for (-) sign in unsigned number.
+ * Error messages if any are written into the provided buffer.
+ * Pass NULL val if you only want validation.
+ * Use noNeg if negative values are not allowed despite the type being signed,
+ * returns 4. */
+{
+unsigned long long res = 0, oldRes = 0;
+boolean isMinus = FALSE;
+
+if ((byteCount != 1) 
+ && (byteCount != 2)
+ && (byteCount != 4)
+ && (byteCount != 8))
+    errAbort("Unexpected error: Invalid byte count for integer size in lineFileCheckAllIntsNoAbort, expected 1 2 4 or 8, got %d.", byteCount);
+
+unsigned long long limit = 0xFFFFFFFFFFFFFFFF >> (8*(8-byteCount));
+
+if (isSigned) 
+    limit >>= 1;
+
+char *p, *p0 = s;
+
+if (*p0 == '-')
+    {
+    if (isSigned)
+	{
+	if (noNeg)
+	    {
+	    safef(errMsg, errMsgSize, "Negative value not allowed");
+	    return 4; 
+	    }
+	p0++;
+	++limit;
+	isMinus = TRUE;
+	}
+    else
+	{
+	safef(errMsg, errMsgSize, "Unsigned %s may not begin with minus sign (-)", typeString);
+	return 3; 
+	}
+    }
+p = p0;
+while ((*p >= '0') && (*p <= '9'))
+    {
+    res *= 10;
+    if (res < oldRes)
+	{
+	safef(errMsg, errMsgSize, "%s%s overflowed", isSigned ? "signed ":"", typeString);
+	return 2; 
+	}
+    oldRes = res;
+    res += *p - '0';
+    if (res < oldRes)
+	{
+	safef(errMsg, errMsgSize, "%s%s overflowed", isSigned ? "signed ":"", typeString);
+	return 2; 
+	}
+    if (res > limit)
+	{
+	safef(errMsg, errMsgSize, "%s%s overflowed, limit=%s%llu", isSigned ? "signed ":"", typeString, isMinus ? "-" : "", limit);
+	return 2; 
+	}
+    oldRes = res;
+    p++;
+    }
+/* test for invalid character, empty, or just a minus */
+if (*p != '\0')
+    {
+    safef(errMsg, errMsgSize, "Trailing characters parsing %s%s", isSigned ? "signed ":"", typeString);
+    return 1;
+    }
+if (p == p0)
+    {
+    safef(errMsg, errMsgSize, "Empty string parsing %s%s", isSigned ? "signed ":"", typeString);
+    return 1;
+    }
+
+if (!val)
+    return 0;  // only validation required
+
+switch (byteCount)
+    {
+    case 1:
+	if (isSigned)
+	    {
+	    if (isMinus)
+		*(char *)val = -res;
+	    else
+		*(char *)val = res;
+	    }
+	else
+	    *(unsigned char *)val = res;
+	break;
+    case 2:
+	if (isSigned)
+	    {
+	    if (isMinus)
+		*(int *)val = -res;
+	    else
+		*(int *)val = res;
+	    }
+	else
+	    *(unsigned *)val = res;
+	break;
+    case 4:
+	if (isSigned)
+	    {
+	    if (isMinus)
+		*(long long *)val = -res;
+	    else
+		*(long long *)val = res;
+	    }
+	else
+	    *(unsigned long long *)val = res;
+	break;
+    case 8:
+	if (isSigned)
+	    {
+	    if (isMinus)
+		*(long long *)val = -res;
+	    else
+		*(long long *) val =res;
+	    }
+	else
+	    *(unsigned long long *)val = res;
+	break;
+    }
+
+
+return 0;
+}
+
+void lineFileAllInts(struct lineFile *lf, char *words[], int wordIx, void *val,
+  boolean isSigned,  int byteCount, char *typeString, boolean noNeg)
+/* Returns long long integer from converting the input string. Aborts on error. */
+{
+char *s = words[wordIx];
+char errMsg[256];
+int res = lineFileCheckAllIntsNoAbort(s, val, isSigned, byteCount, typeString, noNeg, errMsg, sizeof errMsg);
+if (res > 0)
+    {
+    errAbort("%s in field %d line %d of %s, got %s",
+	errMsg, wordIx+1, lf->lineIx, lf->fileName, s);
+    }
+}
+
+int lineFileAllIntsArray(struct lineFile *lf, char *words[], int wordIx, void *array, int arraySize,
+  boolean isSigned,  int byteCount, char *typeString, boolean noNeg)
+/* Convert comma separated list of numbers to an array.  Pass in
+ * array and max size of array. Aborts on error. Returns number of elements in parsed array. */
+{
+char *s = words[wordIx];
+char errMsg[256];
+unsigned count = 0;
+char *cArray = array;
+for (;;)
+    {
+    char *e;
+    if (s == NULL || s[0] == 0 || count == arraySize)
+        break;
+    e = strchr(s, ',');
+    if (e != NULL)
+        *e++ = 0;
+    int res = lineFileCheckAllIntsNoAbort(s, cArray, isSigned, byteCount, typeString, noNeg, errMsg, sizeof errMsg);
+    if (res > 0)
+	{
+	errAbort("%s in column %d of array field %d line %d of %s, got %s",
+	    errMsg, count, wordIx+1, lf->lineIx, lf->fileName, s);
+	}
+    if (cArray) // NULL means validation only.
+	cArray += byteCount;  
+    count++;
+    s = e;
+    }
+return count;
+}
+
 
 double lineFileNeedDouble(struct lineFile *lf, char *words[], int wordIx)
 /* Make sure that words[wordIx] is an ascii double value, and return

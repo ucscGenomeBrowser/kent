@@ -170,12 +170,13 @@ $(function () {
                     'dataType' : dataType,
                     'cellType' : cellType
                 });
+                $td.attr('title', 'Click to select: ' + 
+                        encodeProject.getDataType(dataType).label +
+                        ' in ' + cellType +' cells');
 
-                $td.mouseover(function() {
-                    $(this).attr('title', 'Click to select: ' + 
-                        encodeProject.getDataType($(this).data().dataType).label +
-                        ' ' + ' in ' + $(this).data().cellType +' cells');
-                });
+                // add highlight when moused over
+                encodeMatrix.hoverExperiment($td);
+
                 $td.click(function() {
                     // NOTE: generating full search URL should be generalized & encapsulated
                     var url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
