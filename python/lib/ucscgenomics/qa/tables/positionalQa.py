@@ -17,7 +17,13 @@ class PositionalQa(TableQa):
         """Returns a chrom counts object with the number of items per chromosome in this table."""
         pass
 
+    def __featureBits(self):
+        """Runs featureBits -countGaps for this table and this table intersected with gap."""
+        pass
+
     def validate(self, errorLog):
         """Adds positional-table-specific checks to basic table checks."""
         pass
 
+    def statistics(self):
+        pass
