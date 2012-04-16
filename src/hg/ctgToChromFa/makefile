@@ -9,7 +9,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ctgToChromFa.o 
 
 ctgToChromFa: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ctgToChromFa $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -lm -o ${BINDIR}/ctgToChromFa $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/ctgToChromFa${EXE}
 
 lib:
