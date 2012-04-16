@@ -21,7 +21,7 @@ mkdirs:
 	${MKDIR} output ${BIN_DIR}
 
 errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
-	${CC} ${COPT} -o ${BIN_DIR}/errCatchTest errCatchTest.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/errCatchTest errCatchTest.o ${MYLIBS} ${L}
 	${STRIP} ${BIN_DIR}/errCatchTest${EXE}
 	${BIN_DIR}/errCatchTest secret > output/errCatch.good
 	diff expected/errCatch.good output/errCatch.good
@@ -29,13 +29,13 @@ errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
 	diff expected/errCatch.bad output/errCatch.bad
 
 htmlExpandUrlTest: htmlExpandUrlTest.o ${MYLIBS} mkdirs
-	${CC} ${COPT} -o ${BIN_DIR}/htmlExpandUrlTest htmlExpandUrlTest.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/htmlExpandUrlTest htmlExpandUrlTest.o ${MYLIBS} ${L}
 	${STRIP} ${BIN_DIR}/htmlExpandUrlTest${EXE}
 	${BIN_DIR}/htmlExpandUrlTest > output/htmlExpandUrlTest 2>&1
 	diff expected/htmlExpandUrlTest output/htmlExpandUrlTest
 
 htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
-	${CC} ${COPT} -o ${BIN_DIR}/htmlPageTest htmlPageTest.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/htmlPageTest htmlPageTest.o ${MYLIBS} ${L}
 	${STRIP} ${BIN_DIR}/htmlPageTest${EXE}
 	${BIN_DIR}/htmlPageTest input/google.html > output/google.out
 	diff expected/google.out output/google.out
@@ -100,20 +100,20 @@ pipelineExecError: ${BIN_DIR}/pipelineTester mkdirs
 	diff -b expected/$@.parent.err output/$@.parent.err
 
 ${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} ${L}
 
 
 dyStringTest: ${BIN_DIR}/dyStringTester mkdirs
 	${BIN_DIR}/dyStringTester
 
 ${BIN_DIR}/dyStringTester:  mkdirs dyStringTester.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/dyStringTester dyStringTester.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/dyStringTester dyStringTester.o ${MYLIBS} ${L}
 
 
 mimeTests: mime1 mime2 mime3 mime4 mimeBin mime5 mimeAltHead mimeAutoBoundary mimeBlat
 
 ${BIN_DIR}/mimeTester:  mkdirs mimeTester.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/mimeTester mimeTester.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/mimeTester mimeTester.o ${MYLIBS} ${L}
 
 
 mime1: ${BIN_DIR}/mimeTester mkdirs
@@ -166,7 +166,7 @@ htmlMime1: ${BIN_DIR}/htmlMimeTest mkdirs
 base64Tests: base64Encode base64Decode
 
 ${BIN_DIR}/testBase64:  mkdirs testBase64.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/testBase64 testBase64.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/testBase64 testBase64.o ${MYLIBS} ${L}
 
 base64Encode: ${BIN_DIR}/testBase64 mkdirs
 	${BIN_DIR}/testBase64 'My Test String' > output/$@.out
@@ -181,7 +181,7 @@ base64Decode: ${BIN_DIR}/testBase64 mkdirs
 quotedPTests: quotedPEncode quotedPDecode
 
 ${BIN_DIR}/testQuotedP:  mkdirs testQuotedP.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/testQuotedP testQuotedP.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/testQuotedP testQuotedP.o ${MYLIBS} ${L}
 
 quotedPEncode: ${BIN_DIR}/testQuotedP mkdirs
 	${BIN_DIR}/testQuotedP 'taxes are quite high ' > output/$@.out
@@ -199,7 +199,7 @@ mimeDecodeTest: ${BIN_DIR}/mimeDecodeTest mkdirs
 	diff expected/noName1.html output/noName1.html
 
 ${BIN_DIR}/safeTester:  mkdirs safeTester.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/safeTester safeTester.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/safeTester safeTester.o ${MYLIBS} ${L}
 
 safeTest: ${BIN_DIR}/safeTester mkdirs
 	${BIN_DIR}/safeTester
@@ -207,7 +207,7 @@ safeTest: ${BIN_DIR}/safeTester mkdirs
 hashTest: hashTest1
 
 ${BIN_DIR}/testHash:  mkdirs testHash.o ${MYLIBS}
-	${CC} ${COPT} -o ${BIN_DIR}/testHash testHash.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/testHash testHash.o ${MYLIBS} ${L}
 
 hashTest1: ${BIN_DIR}/testHash mkdirs
 	${BIN_DIR}/testHash input/$@.txt > output/$@.out
@@ -223,7 +223,7 @@ miniBlat:  mkdirs miniBlat.o ${MYLIBS}
 	${CC} ${COPT} -o miniBlat miniBlat.o ${MYLIBS} ${L}
 
 fetchUrlTest:  mkdirs fetchUrlTest.o ${MYLIBS}
-	${CC} ${COPT} -o fetchUrlTest fetchUrlTest.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o fetchUrlTest fetchUrlTest.o ${MYLIBS} ${L}
 
 ##
 # gff3 tests
@@ -249,7 +249,7 @@ gff3DiscontiousTest: ${gff3Tester} mkdirs
 
 ${BIN_DIR}/gff3Tester: gff3Tester.o ${MYLIBS}
 	${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} -o ${BIN_DIR}/gff3Tester gff3Tester.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/gff3Tester gff3Tester.o ${MYLIBS} ${L}
 
 
 # lineFile's tabix support:
@@ -266,7 +266,7 @@ tabixFetch1kGWithGenotypes: ${tabixTester} mkdirs
 
 ${BIN_DIR}/tabixFetch: tabixFetch.o ${MYLIBS}
 	${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} -o ${BIN_DIR}/tabixFetch tabixFetch.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/tabixFetch tabixFetch.o ${MYLIBS} ${L}
 
 
 # vcf:
@@ -287,7 +287,7 @@ vcfParseOldV3:
 
 ${BIN_DIR}/vcfParseTest: vcfParseTest.o ${MYLIBS}
 	${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} -o ${BIN_DIR}/vcfParseTest vcfParseTest.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/vcfParseTest vcfParseTest.o ${MYLIBS} ${L}
 
 
 # hacTree:
@@ -298,7 +298,7 @@ hacTreeTest: ${hacTreeTester} mkdirs
 
 ${BIN_DIR}/hacTreeTest: hacTreeTest.o ${MYLIBS}
 	${MKDIR} ${BIN_DIR}
-	${CC} ${COPT} -o ${BIN_DIR}/hacTreeTest hacTreeTest.o ${MYLIBS} ${L}
+	${CC} ${COPT} -lm -o ${BIN_DIR}/hacTreeTest hacTreeTest.o ${MYLIBS} ${L}
 
 # udc (not part of the top-level test target at this point):
 udcTest: udcTest.o ${MYLIBS} mkdirs
