@@ -55,10 +55,10 @@ return f;
 
 
 void (*rtApply)(struct cnFill *fill, int level, FILE *optFile);
-/* Function rTraverse below applies. */
+/* Function rTraversal below applies. */
 FILE *rtOptFile;
 
-void rTraverse(struct cnFill *fillList, int level)
+void rTraversal(struct cnFill *fillList, int level)
 /* Recursively traverse net. */
 {
 struct cnFill *fill;
@@ -66,7 +66,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     {
     rtApply(fill, level, rtOptFile);
     if (fill->children)
-        rTraverse(fill->children, level+1);
+        rTraversal(fill->children, level+1);
     }
 }
 
@@ -79,7 +79,7 @@ struct chainNet *net;
 rtApply = apply;
 rtOptFile = optFile;
 for (net = netList; net != NULL; net = net->next)
-    rTraverse(net->fillList, 0);
+    rTraversal(net->fillList, 0);
 }
 
 
