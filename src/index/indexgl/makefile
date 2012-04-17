@@ -5,7 +5,7 @@ O = indexgl.o
 
 indexgl: ${O} 
 	${CC} $O ../../lib/${MACHTYPE}/jkweb.a \
-		-lm -o ${BINDIR}/indexgl $L
+		-o ${BINDIR}/indexgl $L
 	${STRIP} ${BINDIR}/indexgl${EXE}
 
 lib:

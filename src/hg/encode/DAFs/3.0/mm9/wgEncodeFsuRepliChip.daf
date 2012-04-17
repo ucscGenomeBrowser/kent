@@ -23,8 +23,8 @@
 # Lab and general info
 grant             Gilbert
 lab               FSU-m
-dataType          RepliSeq
-compositeSuffix   FsuRepliSeq
+dataType          RepliChip
+compositeSuffix   FsuRepliChip
 group             regulation
 variables         cell,sex,treatment
 assembly          mm9

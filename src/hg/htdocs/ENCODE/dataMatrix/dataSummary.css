@@ -39,7 +39,6 @@
     text-align: left;
     padding-left: 1em;
     border: none;
-    cursor: pointer;
 }
 
 .summaryTable td+td {
@@ -52,6 +51,10 @@
     color: white;
     padding-top: 3px;
     font-weight: bold;
+}
+
+.dataItem, .dataLabel {
+    cursor: pointer;
 }
 
 .matrixButton {

@@ -76,6 +76,7 @@ struct lfBigBedData *lfBigBedData = lf->dataForCallBack;
 lmCleanup(&lfBigBedData->bbiLm);
 bbiChromInfoFreeList(&lfBigBedData->bbiChromList);
 bbiFileClose(&lfBigBedData->bbiHandle);
+freez(&lf->dataForCallBack);
 }
 
 

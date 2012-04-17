@@ -27,8 +27,8 @@ include wgEncodeReg.release2.ra alpha
 # UW Repli-Seq track (wrangler: venkat)
 include wgEncodeUwRepliSeq.ra
 
-# FSU Repli-Seq track (wrangler: venkat)
-include wgEncodeFsuRepliSeq.ra alpha
+# FSU Repli-chip track (wrangler: venkat)
+include wgEncodeFsuRepliChip.ra alpha,beta
 
 #include wgEncodeRegNorm.ra alpha
 
@@ -172,7 +172,8 @@ include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
 #include wgEncodeHaibTfbs.patch.ra beta
-include wgEncodeHaibTfbs.release2.ra
+include wgEncodeHaibTfbs.release3.ra alpha
+include wgEncodeHaibTfbs.release2.ra beta,public
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
 include wgEncodeSydhTfbs.release2.ra alpha
