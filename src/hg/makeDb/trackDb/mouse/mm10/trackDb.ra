@@ -1,5 +1,5 @@
 # chainNet tracks
-include trackDb.gliersChainNet.ra
+include trackDb.gliresChainNet.ra
 include trackDb.primatesChainNet.ra
 include trackDb.placentalsChainNet.ra
 include trackDb.vertebrateChainNet.ra
