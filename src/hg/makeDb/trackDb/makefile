@@ -32,7 +32,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	venter1 \
 	panTro1 panTro2 panTro3 panTro4 \
 	gorGor1 gorGor2 gorGor3 \
-        nomLeu1 \
+        nomLeu1 nomLeu2 \
 	ponAbe2 \
 	rheMac2,rheMac3 \
 	papHam1 \
@@ -46,7 +46,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	mm6 mm7 mm8 mm9 mm10 \
 	rn3 rn4 rn5 \
 	speTri1 speTri2 cavPor3 \
-        hetGla1 \
+        hetGla1 hetGla2 \
         sarHar1 \
 	oryCun1 oryCun2 \
 	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 \
