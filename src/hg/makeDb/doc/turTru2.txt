@@ -1,4 +1,7 @@
 # for emacs: -*- mode: sh; -*-
+user    0m0.063s
+sys     0m0.066s
+
 
 #       DATE:   03-Oct-2011
 #       ORGANISM:       Tursiops truncatus
@@ -155,4 +158,213 @@ taxId 9739
     #	browser should function now
 
 #########################################################################
+# running repeat masker (DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/turTru2/bed/repeatMasker
+    cd /hive/data/genomes/turTru2/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=encodek turTru2 > do.log 2>&1 &
+    #   real    1304m42.773s
 
+    cat faSize.rmsk.txt
+    #   2551996573 bases (219594130 N's 2332402443 real 1317197601 upper
+    #   1015204842 lower) in 240901 sequences in 1 files
+    #   Total size: mean 10593.5 sd 37887.7 min 200 (ABRN02115282)
+    #   max 1003560 (JH472452) median 706
+    #   %39.78 masked total, %43.53 masked real
+
+    egrep -i "versi|relea" do.log
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+# CC   RELEASE 20110920; 
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+
+    time featureBits -countGaps turTru2 rmsk
+    #   1019407879 bases of 2551996573 (39.946%) in intersection
+    #   real    2m37.291s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/turTru2/bed/simpleRepeat
+    cd /hive/data/genomes/turTru2/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
+	turTru2 > do.log 2>&1 &
+    #   real    180m2.834s
+    cat fb.simpleRepeat 
+    #   35337050 bases of 2332423317 (1.515%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/turTru2
+    twoBitMask turTru2.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed turTru2.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa turTru2.2bit stdout | faSize stdin > faSize.turTru2.2bit.txt
+    cat faSize.turTru2.2bit.txt
+    #   2551996573 bases (219594130 N's 2332402443 real 1316500848 upper
+    #   1015901595 lower) in 240901 sequences in 1 files
+    #   Total size: mean 10593.5 sd 37887.7 min 200 (ABRN02115282)
+    #   max 1003560 (JH472452) median 706
+    #   %39.81 masked total, %43.56 masked real
+
+    rm /gbdb/turTru2/turTru2.2bit
+    ln -s `pwd`/turTru2.2bit /gbdb/turTru2/turTru2.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/turTru2/bed/gap
+    cd /hive/data/genomes/turTru2/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../turTru2.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m26.240s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits turTru2 -not gap -bed=notGap.bed
+    #   2332423317 bases of 2332423317 (100.000%) in intersection
+
+    time featureBits turTru2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   20874 bases of 2332423317 (0.001%) in intersection
+    #   real    496m11.739s
+    wc -l new.gaps.bed
+    #   20823 new.gaps.bed
+    # the biggest one here is 4 bases:
+    awk '{print $3-$2,$0}' new.gaps.bed | sort -rn | less
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" turTru2 | sort -n | tail -1
+    #	216
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" turTru2 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps turTru2 other.bed
+    #   20874 bases of 2551996573 (0.001%) in intersection
+    #   real    11m57.952s
+    wc -l other.bed
+    #	20823
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad turTru2 otherGap other.bed
+    #   Read 20823 elements of size 8 from other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" turTru2
+    #	 313713
+    hgsql turTru2 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" turTru2
+    #	334536
+    # == 20823 + 313713
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 turTru2 nonBridged.lift -bedFile=nonBridged.bed
+    #   one of these new ones is adjacent to an existing gap:
+
+    # see example in danRer7.txt
+    # are there non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" turTru2 | sort | uniq -c
+    #   334536 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2012-04-13 - Hiram)
+    mkdir /hive/data/genomes/turTru2/bed/windowMasker
+    cd /hive/data/genomes/turTru2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev turTru2 > do.log 2>&1 &
+    #   real    181m2.383s
+
+    # Masking statistics
+    twoBitToFa turTru2.wmsk.2bit stdout | faSize stdin
+    #   2551996573 bases (219594130 N's 2332402443 real 1557512287 upper
+    #   774890156 lower) in 240901 sequences in 1 files
+    #   Total size: mean 10593.5 sd 37887.7 min 200 (ABRN02115282)
+    #   max 1003560 (JH472452) median 706
+    #   %30.36 masked total, %33.22 masked real
+
+    twoBitToFa turTru2.wmsk.sdust.2bit stdout | faSize stdin
+    #   2551996573 bases (219594130 N's 2332402443 real 1545284164 upper
+    #   787118279 lower) in 240901 sequences in 1 files
+    #   Total size: mean 10593.5 sd 37887.7 min 200 (ABRN02115282)
+    #   max 1003560 (JH472452) median 706
+    #   %30.84 masked total, %33.75 masked real
+
+    hgLoadBed turTru2 windowmaskerSdust windowmasker.sdust.bed.gz
+    #   Read 13508939 elements of size 3 from windowmasker.sdust.bed.gz
+
+    time featureBits -countGaps turTru2 windowmaskerSdust
+    #   1006694538 bases of 2551996573 (39.447%) in intersection
+    #   real    3m33.405s
+
+    #	eliminate the gaps from the masking
+    time featureBits turTru2 -not gap -bed=notGap.bed
+    #   2332402443 bases of 2332402443 (100.000%) in intersection
+    #   real    1m30.308s
+    time nice -n +19 featureBits turTru2 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   787118279 bases of 2332402443 (33.747%) in intersection
+    #   real    318m12.378s
+
+    #	reload track to get it clean
+    hgLoadBed turTru2 windowmaskerSdust cleanWMask.bed.gz
+    #   Read 13532042 elements of size 4 from cleanWMask.bed.gz
+    time featureBits -countGaps turTru2 windowmaskerSdust
+    #   787118279 bases of 2551996573 (30.843%) in intersection
+    #   real    3m20.475s
+
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../turTru2.unmasked.2bit stdin \
+	    -type=.bed turTru2.cleanWMSdust.2bit
+    twoBitToFa turTru2.cleanWMSdust.2bit stdout | faSize stdin \
+        > turTru2.cleanWMSdust.faSize.txt
+    cat turTru2.cleanWMSdust.faSize.txt
+    #   2551996573 bases (219594130 N's 2332402443 real 1545284164 upper
+    #   787118279 lower) in 240901 sequences in 1 files
+    #   Total size: mean 10593.5 sd 37887.7 min 200 (ABRN02115282)
+    #   max 1003560 (JH472452) median 706
+    #   %30.84 masked total, %33.75 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    time featureBits -countGaps turTru2 rmsk windowmaskerSdust
+    #   553188559 bases of 2551996573 (21.677%) in intersection
+    #   real    5m33.965s
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2012-04-13 - Hiram)
+    #	since rmsk masks so very little of the genome, use the clean WM mask
+    #	on the genome sequence
+#    cd /hive/data/genomes/turTru2
+#    twoBitMask -add bed/windowMasker/turTru2.cleanWMSdust.2bit \
+#	bed/simpleRepeat/trfMask.bed turTru2.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+#    twoBitToFa turTru2.2bit stdout | faSize stdin > faSize.turTru2.txt
+#    cat faSize.turTru2.txt
+    #   927696114 bases (111611440 N's 816084674 real 607935500 upper
+    #   208149174 lower) in 5678 sequences in 1 files
+    #   Total size: mean 163384.3 sd 1922194.0 min 1000 (AERX01077754-1)
+    #   max 51042256 (chrLG7) median 2009
+    #   %22.44 masked total, %25.51 masked real
+
+    #	create symlink to gbdb
+#    rm /gbdb/turTru2/turTru2.2bit
+#    ln -s `pwd`/turTru2.2bit /gbdb/turTru2/turTru2.2bit
+
+########################################################################

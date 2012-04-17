@@ -463,7 +463,7 @@ noInherit on
 
     track pubsBlat
     shortLabel Sequences
-    longLabel Sequences in Articles: PubmedCentral (OA subset) and Elsevier
+    longLabel Sequences in Articles: PubmedCentral and Elsevier
     parent pubs on
     type bed 12 .
     visibility pack
@@ -473,7 +473,7 @@ noInherit on
     configureByPopup off
 
     track pubsBlatPsl
-    shortLabel Individual Seq. Matches
+    shortLabel Indiv. Seq. Matches
     longLabel Individual sequence matches of one selected article from sequences track
     parent pubs off
     type psl

@@ -7,8 +7,8 @@
 #include "gpFx.h"
 
 static char *annoGpVarDataLineAutoSqlString =
-"table knownGeneGpVar"
-"\"Genes based on RefSeq, GenBank, and UniProt.\""
+"table genePredWithSO"
+"\"genePred with Sequence Ontology annotation\""
 "("
 "string  name;               \"Name of gene\""
 "string  chrom;              \"Reference sequence chromosome or scaffold\""
@@ -22,13 +22,14 @@ static char *annoGpVarDataLineAutoSqlString =
 "uint[exonCount] exonEnds;   \"Exon end positions\""
 "string  proteinID;          \"UniProt display ID for Known Genes,  UniProt accession or RefSeq protein ID for UCSC Genes\" "
 "string  alignID;            \"Unique identifier for each (known gene, alignment position) pair\""
-"uint    gpFxType;           \"Effect type (see annoGratorGpVar.h)\""
-"uint    gpFxNumber;         \"exon or intron number\""
-"uint    gpFxTransOffset;    \"offset in transcript\""
-"string  gpFxBaseChange;     \"base change in transcript\""
-"uint    gpFxCodonChange;    \"codon triplet change in transcript\""
-"uint    gpFxProteinOffset;  \"offset in protein\""
-"uint    gpFxProteinChange;  \"peptide change in protein\""
+"uint    soNumber;           \"Sequence Ontology Number \" "
+"uint    soOther0;           \"Ancillary detail 0\""
+"uint    soOther1;           \"Ancillary detail 1\""
+"uint    soOther2;           \"Ancillary detail 2\""
+"uint    soOther3;           \"Ancillary detail 3\""
+"uint    soOther4;           \"Ancillary detail 4\""
+"uint    soOther5;           \"Ancillary detail 5\""
+"uint    soOther6;           \"Ancillary detail 6\""
 ")";
 
 struct asObject *annoGpVarAsObj()
@@ -37,41 +38,51 @@ struct asObject *annoGpVarAsObj()
 return asParseText(annoGpVarDataLineAutoSqlString);
 }
 
+static char *blankIfNull(char *input)
+{
+if (input == NULL)
+    return "";
+
+return input;
+}
+
+static char *uintToString(uint num)
+{
+char buffer[10];
+
+safef(buffer,sizeof buffer, "%d", num);
+return cloneString(buffer);
+}
+
 static void aggvStringifyGpFx(char **words, struct gpFx *effect)
 // turn gpFx structure into a list of words
 {
 int count = 0;
-char buffer[10];
 
-// gpFxType
-safef(buffer,sizeof buffer, "%d", effect->gpFxType);
-words[count++] = cloneString(buffer);
+words[count++] = uintToString(effect->so.soNumber);
 
-// gpFxNumber
-safef(buffer,sizeof buffer, "%d", effect->gpFxNumber);
-words[count++] = cloneString(buffer);
+switch(effect->so.soNumber)
+    {
+    case intron_variant:
+	words[count++] = cloneString(effect->so.sub.intron.transcript);
+	words[count++] = uintToString(effect->so.sub.intron.intronNumber);
+	break;
 
-// gpFxTransOffset
-safef(buffer,sizeof buffer, "%d", effect->gpFxTransOffset);
-words[count++] = cloneString(buffer);
+    default:
+	// write out ancillary information
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther0);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther1);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther2);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther3);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther4);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther5);
+	words[count++] = blankIfNull(effect->so.sub.generic.soOther6);
+	break;
+    };
 
-// gpFxBaseChange
-if ( effect->gpFxBaseChange == NULL)
-    words[count++] = "";
-else
-    words[count++] = effect->gpFxBaseChange;     
-
-// gpFxCodonChange
-safef(buffer,sizeof buffer, "%d", effect->gpFxCodonChange);
-words[count++] = cloneString(buffer);
-
-//  gpFxProteinOffset
-safef(buffer,sizeof buffer, "%d", effect->gpFxProteinOffset);
-words[count++] = cloneString(buffer);
-
-//  gpFxProteinChange
-safef(buffer,sizeof buffer, "%d", effect->gpFxProteinChange);
-words[count++] = cloneString(buffer);
+int needWords = sizeof(effect->so.sub.generic) / sizeof(char *) + 1;
+while (count < needWords)
+	words[count++] = "";
 }
 
 static struct annoRow *aggvEffectToRow( struct annoGrator *self,

@@ -83,8 +83,9 @@ for(ii=0; ii < pred->exonCount - 1; ii++)
 	{
 	struct gpFx *effects;
 	AllocVar(effects);
-	effects->gpFxType = gpFxIntron;
-	effects->gpFxNumber = ii;
+	effects->so.soNumber = intron_variant;
+	effects->so.sub.intron.transcript = cloneString(pred->name);
+	effects->so.sub.intron.intronNumber = ii;
 	slAddHead(&effectsList, effects);
 	}
     }
@@ -109,9 +110,9 @@ for(; variant ; variant = variant->next)
 	{
 	AllocVar(effects);
 	if (*pred->strand == '+')
-	    effects->gpFxType = gpFxUpstream;
+	    ;//effects->gpFxType = gpFxUpstream;
 	else
-	    effects->gpFxType = gpFxDownstream;
+	    ;//ffects->gpFxType = gpFxDownstream;
 	effectsList = slCat(effectsList, effects);
 	}
 
@@ -120,9 +121,9 @@ for(; variant ; variant = variant->next)
 	{
 	AllocVar(effects);
 	if (*pred->strand == '+')
-	    effects->gpFxType = gpFxDownstream;
+	    ;//ffects->gpFxType = gpFxDownstream;
 	else
-	    effects->gpFxType = gpFxUpstream;
+	    ;//ffects->gpFxType = gpFxUpstream;
 	effectsList = slCat(effectsList, effects);
 	}
     }
@@ -130,11 +131,27 @@ for(; variant ; variant = variant->next)
 return effectsList;
 }
 
+static void checkVariantList(struct variant *variant)
+// check to see that we either have one variant (possibly with multiple
+// alleles) or that if we have a list of variants, they only have
+// one allele a piece.
+{
+if (variant->next == NULL)	 // just one variant
+    return;
+
+for(; variant; variant = variant->next)
+    if (variant->numAlleles != 1)
+	errAbort("gpFxPredEffect needs either 1 variant, or only 1 allele in all variants");
+}
+
 struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
     char **returnTranscript, char **returnCoding)
 // return the predicted effect(s) of a variation list on a genePred
 {
 struct gpFx *effectsList = NULL;
+
+// make sure we can deal with the variants that are coming in
+checkVariantList(variant);
 
 // check to see if SNP is up or downstream in intron 
 effectsList = slCat(effectsList, gpFxCheckBackground(variant, pred));
@@ -151,7 +168,7 @@ struct gpFx *noEffect;
 
 AllocVar(noEffect);
 noEffect->next = NULL;
-noEffect->gpFxType = gpFxNone;
+;//oEffect->gpFxType = gpFxNone;
 
 return noEffect;
 }
