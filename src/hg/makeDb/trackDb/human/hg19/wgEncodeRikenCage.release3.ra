@@ -20,7 +20,6 @@ noInherit on
 priority 0
 type bed 3
 wgEncode 1
-superTrack wgEncodeRnaSeqSuper dense
 html wgEncodeRikenCage.release3
 
     track wgEncodeRikenCageViewPlusSignal

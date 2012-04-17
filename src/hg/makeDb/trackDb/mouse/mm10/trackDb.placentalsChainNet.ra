@@ -18,7 +18,7 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species 
 sortOrder species=+ view=+ clade=+
 configurable on
-html mm10placentalChainNet
+html chainNet
 
     track placentalChainNetViewchain
     shortLabel Chains
@@ -59,13 +59,13 @@ html mm10placentalChainNet
         type chain canFam3
         otherDb canFam3
 
-        track chainFelCat4
+        track chainFelCat5
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=eCat clade=dCarn
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain felCat4
-        otherDb felCat4
+        type chain felCat5
+        otherDb felCat5
 
         track chainEquCab2
         subTrack placentalChainNetViewchain off
@@ -91,13 +91,13 @@ html mm10placentalChainNet
         type chain oviAri1
         otherDb oviAri1
 
-        track chainTurTru1
+        track chainTurTru2
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=iDolphin clade=cLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain turTru1
-        otherDb turTru1
+        type chain turTru2
+        otherDb turTru2
 
         track chainVicPac1
         subTrack placentalChainNetViewchain off
@@ -107,13 +107,13 @@ html mm10placentalChainNet
         type chain vicPac1
         otherDb vicPac1
 
-        track chainSusScr2
+        track chainSusScr3
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=kPig clade=cLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain susScr2
-        otherDb susScr2
+        type chain susScr3
+        otherDb susScr3
 
         track chainEriEur1
         subTrack placentalChainNetViewchain off
@@ -139,13 +139,13 @@ html mm10placentalChainNet
         type chain choHof1
         otherDb choHof1
 
-        track chainDasNov2
+        track chainDasNov3
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=oArmadillo clade=bXena
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain dasNov2
-        otherDb dasNov2
+        type chain dasNov3
+        otherDb dasNov3
 
         track chainProCap1
         subTrack placentalChainNetViewchain off
@@ -217,13 +217,13 @@ html mm10placentalChainNet
         type netAlign canFam3 chainCanFam3
         otherDb canFam3
 
-        track netFelCat4
+        track netFelCat5
         subTrack placentalChainNetViewnet on 
         subGroups view=net species=eCat clade=dCarn
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign felCat4 chainFelCat4
-        otherDb felCat4
+        type netAlign felCat5 chainFelCat5
+        otherDb felCat5
 
         track netEquCab2
         subTrack placentalChainNetViewnet off
@@ -249,13 +249,13 @@ html mm10placentalChainNet
         type netAlign oviAri1 chainOviAri1
         otherDb oviAri1
 
-        track netTurTru1
+        track netTurTru2
         subTrack placentalChainNetViewnet off
         subGroups view=net species=iDolphin clade=cLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign turTru1 chainTurTru1
-        otherDb turTru1
+        type netAlign turTru2 chainTurTru2
+        otherDb turTru2
 
         track netVicPac1
         subTrack placentalChainNetViewnet on
@@ -265,13 +265,13 @@ html mm10placentalChainNet
         type netAlign vicPac1 chainVicPac1
         otherDb vicPac1
 
-        track netSusScr2
+        track netSusScr3
         subTrack placentalChainNetViewnet on
         subGroups view=net species=kPig clade=cLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign susScr2 chainSusScr2
-        otherDb susScr2
+        type netAlign susScr3 chainSusScr3
+        otherDb susScr3
 
         track netEriEur1
         subTrack placentalChainNetViewnet on
@@ -297,13 +297,13 @@ html mm10placentalChainNet
         type netAlign choHof1 chainChoHof1
         otherDb choHof1
 
-        track netDasNov2
+        track netDasNov3
         subTrack placentalChainNetViewnet on
         subGroups view=net species=oArmadillo clade=bXena
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign dasNov2 chainDasNov2
-        otherDb dasNov2
+        type netAlign dasNov3 chainDasNov3
+        otherDb dasNov3
 
         track netProCap1
         subTrack placentalChainNetViewnet on
