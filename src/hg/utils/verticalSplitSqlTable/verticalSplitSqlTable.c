@@ -27,7 +27,7 @@ errAbort(
   "   oldAs is an autoSql file describing the unsplit table\n"
   "   splitSpec is a text file saying how to split the fields, see more below\n"
   "   outDir is a directory that will get populated with files for creating split tables\n"
-  "The splitSpec is a .ra formatted file with fields: table1 table2 fields1 fields2 sharedKey\n"
+  "The splitSpec is a .ra formatted file with tags: table1 table2 fields1 fields2 sharedKey\n"
   "Here's an example of this that splits a 'driver' tabel into a 'person' and 'car' table\n"
   "Where the original driver table has the fields name, phone, ssn, carLicense, carMake, carModel\n"
   "   table1 person\n"
