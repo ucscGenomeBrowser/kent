@@ -51,13 +51,13 @@ html mm10gliersChainNet
         type chain dipOrd1
         otherDb dipOrd1
 
-        track chainHetGla1
+        track chainHetGla2
         subTrack gliersChainNetViewchain off
         subGroups view=chain species=dNMRat clade=aRodent
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain hetGla1
-        otherDb hetGla1
+        type chain hetGla2
+        otherDb hetGla2
 
         track chainCavPor3
         subTrack gliersChainNetViewchain on
@@ -121,13 +121,13 @@ html mm10gliersChainNet
         type netAlign dipOrd1 chainDipOrd1
         otherDb dipOrd1
 
-        track netHetGla1
+        track netHetGla2
         subTrack gliersChainNetViewnet off
         subGroups view=net species=dNMRat clade=aRodent
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign hetGla1 chainHetGla1
-        otherDb hetGla1
+        type netAlign hetGla2 chainHetGla2
+        otherDb hetGla2
 
         track netCavPor3
         subTrack gliersChainNetViewnet on 
