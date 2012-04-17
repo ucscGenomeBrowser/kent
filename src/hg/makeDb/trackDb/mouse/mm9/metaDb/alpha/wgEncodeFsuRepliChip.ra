@@ -1,19 +1,19 @@
-metaObject wgEncodeFsuRepliSeq
+metaObject wgEncodeFsuRepliChip
 objType composite
-composite wgEncodeFsuRepliSeq
+composite wgEncodeFsuRepliChip
 expVars lab,dataType,cell,treatment
 
-metaObject wgEncodeFsuRepliSeqCh12FRawDataRep1
+metaObject wgEncodeFsuRepliChipCh12FRawDataRep1
 objType file
 age immortalized
 attic auxSup
 cell CH12
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqCh12FRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipCh12FRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId CH12_R1
@@ -27,17 +27,17 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqCh12FRawDataRep2
+metaObject wgEncodeFsuRepliChipCh12FRawDataRep2
 objType file
 age immortalized
 attic auxSup
 cell CH12
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqCh12FRawDataRep2.zip.gz
+fileName wgEncodeFsuRepliChipCh12FRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId CH12_R2
@@ -51,16 +51,16 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqCh12FWaveSignalRep1
+metaObject wgEncodeFsuRepliChipCh12FWaveSignalRep1
 objType table
 age immortalized
 cell CH12
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqCh12FWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipCh12FWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId CH12_R1
@@ -71,20 +71,20 @@ replicate 1
 sex F
 strain B10.H-2aH-4bp/Wts
 subId 6809
-tableName wgEncodeFsuRepliSeqCh12FWaveSignalRep1
+tableName wgEncodeFsuRepliChipCh12FWaveSignalRep1
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqCh12FWaveSignalRep2
+metaObject wgEncodeFsuRepliChipCh12FWaveSignalRep2
 objType table
 age immortalized
 cell CH12
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqCh12FWaveSignalRep2.bigWig
+fileName wgEncodeFsuRepliChipCh12FWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId CH12_R2
@@ -95,21 +95,21 @@ replicate 2
 sex F
 strain B10.H-2aH-4bp/Wts
 subId 6809
-tableName wgEncodeFsuRepliSeqCh12FWaveSignalRep2
+tableName wgEncodeFsuRepliChipCh12FWaveSignalRep2
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEpisc5MRawDataRep1
+metaObject wgEncodeFsuRepliChipEpisc5MRawDataRep1
 objType file
 age E0
 attic auxSup
 cell EpiSC-5
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEpisc5MRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipEpisc5MRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EpiSC5_R1
@@ -123,17 +123,17 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEpisc5MRawDataRep2
+metaObject wgEncodeFsuRepliChipEpisc5MRawDataRep2
 objType file
 age E0
 attic auxSup
 cell EpiSC-5
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEpisc5MRawDataRep2.zip.gz
+fileName wgEncodeFsuRepliChipEpisc5MRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EpiSC5_R2
@@ -147,16 +147,16 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEpisc5MWaveSignalRep1
+metaObject wgEncodeFsuRepliChipEpisc5MWaveSignalRep1
 objType table
 age E0
 cell EpiSC-5
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEpisc5MWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipEpisc5MWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EpiSC5_R1
@@ -167,20 +167,20 @@ replicate 1
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEpisc5MWaveSignalRep1
+tableName wgEncodeFsuRepliChipEpisc5MWaveSignalRep1
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEpisc5MWaveSignalRep2
+metaObject wgEncodeFsuRepliChipEpisc5MWaveSignalRep2
 objType table
 age E0
 cell EpiSC-5
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEpisc5MWaveSignalRep2.bigWig
+fileName wgEncodeFsuRepliChipEpisc5MWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EpiSC5_R2
@@ -191,21 +191,21 @@ replicate 2
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEpisc5MWaveSignalRep2
+tableName wgEncodeFsuRepliChipEpisc5MWaveSignalRep2
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEpisc7FRawDataRep1
+metaObject wgEncodeFsuRepliChipEpisc7FRawDataRep1
 objType file
 age E0
 attic auxSup
 cell EpiSC-7
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEpisc7FRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipEpisc7FRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EpiSC7_R1
@@ -219,17 +219,17 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEpisc7FRawDataRep2
+metaObject wgEncodeFsuRepliChipEpisc7FRawDataRep2
 objType file
 age E0
 attic auxSup
 cell EpiSC-7
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEpisc7FRawDataRep2.zip.gz
+fileName wgEncodeFsuRepliChipEpisc7FRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EpiSC7_R2
@@ -243,16 +243,16 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEpisc7FWaveSignalRep1
+metaObject wgEncodeFsuRepliChipEpisc7FWaveSignalRep1
 objType table
 age E0
 cell EpiSC-7
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEpisc7FWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipEpisc7FWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EpiSC7_R1
@@ -263,20 +263,20 @@ replicate 1
 sex F
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEpisc7FWaveSignalRep1
+tableName wgEncodeFsuRepliChipEpisc7FWaveSignalRep1
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEpisc7FWaveSignalRep2
+metaObject wgEncodeFsuRepliChipEpisc7FWaveSignalRep2
 objType table
 age E0
 cell EpiSC-7
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEpisc7FWaveSignalRep2.bigWig
+fileName wgEncodeFsuRepliChipEpisc7FWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EpiSC7_R2
@@ -287,21 +287,21 @@ replicate 2
 sex F
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEpisc7FWaveSignalRep2
+tableName wgEncodeFsuRepliChipEpisc7FWaveSignalRep2
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEs46cMDifff6dRawDataRep1
+metaObject wgEncodeFsuRepliChipEs46cMDifff6dRawDataRep1
 objType file
 age E0
 attic auxSup
 cell ES-46C
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEs46cMDifff6dRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipEs46cMDifff6dRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId NP-46C_R1
@@ -315,16 +315,16 @@ subId 6809
 treatment diffProtF_6d
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEs46cMDifff6dWaveSignalRep1
+metaObject wgEncodeFsuRepliChipEs46cMDifff6dWaveSignalRep1
 objType table
 age E0
 cell ES-46C
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEs46cMDifff6dWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipEs46cMDifff6dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-46C_R1
@@ -335,21 +335,21 @@ replicate 1
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEs46cMDifff6dWaveSignalRep1
+tableName wgEncodeFsuRepliChipEs46cMDifff6dWaveSignalRep1
 treatment diffProtF_6d
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEs46cMRawDataRep1
+metaObject wgEncodeFsuRepliChipEs46cMRawDataRep1
 objType file
 age E0
 attic auxSup
 cell ES-46C
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEs46cMRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipEs46cMRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId ES-46C_R1
@@ -363,16 +363,16 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEs46cMWaveSignalRep1
+metaObject wgEncodeFsuRepliChipEs46cMWaveSignalRep1
 objType table
 age E0
 cell ES-46C
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEs46cMWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipEs46cMWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId ES-46C_R1
@@ -383,21 +383,21 @@ replicate 1
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEs46cMWaveSignalRep1
+tableName wgEncodeFsuRepliChipEs46cMWaveSignalRep1
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe3dRawDataRep1
+metaObject wgEncodeFsuRepliChipEsd3MDiffe3dRawDataRep1
 objType file
 age E0
 attic auxSup
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe3dRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipEsd3MDiffe3dRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EBM3_R1
@@ -411,17 +411,17 @@ subId 6809
 treatment diffProtE_3d
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe3dRawDataRep2
+metaObject wgEncodeFsuRepliChipEsd3MDiffe3dRawDataRep2
 objType file
 age E0
 attic auxSup
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe3dRawDataRep2.zip.gz
+fileName wgEncodeFsuRepliChipEsd3MDiffe3dRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EBM3_R2
@@ -435,16 +435,16 @@ subId 6809
 treatment diffProtE_3d
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe3dWaveSignalRep1
+metaObject wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep1
 objType table
 age E0
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe3dWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EBM3_R1
@@ -455,20 +455,20 @@ replicate 1
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEsd3MDiffe3dWaveSignalRep1
+tableName wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep1
 treatment diffProtE_3d
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe3dWaveSignalRep2
+metaObject wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep2
 objType table
 age E0
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe3dWaveSignalRep2.bigWig
+fileName wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EBM3_R2
@@ -479,21 +479,21 @@ replicate 2
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEsd3MDiffe3dWaveSignalRep2
+tableName wgEncodeFsuRepliChipEsd3MDiffe3dWaveSignalRep2
 treatment diffProtE_3d
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe6dRawDataRep1
+metaObject wgEncodeFsuRepliChipEsd3MDiffe6dRawDataRep1
 objType file
 age E0
 attic auxSup
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe6dRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipEsd3MDiffe6dRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EBM6_R1
@@ -507,17 +507,17 @@ subId 6809
 treatment diffProtE_6d
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe6dRawDataRep2
+metaObject wgEncodeFsuRepliChipEsd3MDiffe6dRawDataRep2
 objType file
 age E0
 attic auxSup
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe6dRawDataRep2.zip.gz
+fileName wgEncodeFsuRepliChipEsd3MDiffe6dRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId EBM6_R2
@@ -531,16 +531,16 @@ subId 6809
 treatment diffProtE_6d
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe6dWaveSignalRep1
+metaObject wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep1
 objType table
 age E0
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe6dWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EBM6_R1
@@ -551,20 +551,20 @@ replicate 1
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEsd3MDiffe6dWaveSignalRep1
+tableName wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep1
 treatment diffProtE_6d
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe6dWaveSignalRep2
+metaObject wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep2
 objType table
 age E0
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe6dWaveSignalRep2.bigWig
+fileName wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId EBM6_R2
@@ -575,21 +575,21 @@ replicate 2
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEsd3MDiffe6dWaveSignalRep2
+tableName wgEncodeFsuRepliChipEsd3MDiffe6dWaveSignalRep2
 treatment diffProtE_6d
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe9dRawDataRep1
+metaObject wgEncodeFsuRepliChipEsd3MDiffe9dRawDataRep1
 objType file
 age E0
 attic auxSup
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe9dRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipEsd3MDiffe9dRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId NP-D3_R1
@@ -603,17 +603,17 @@ subId 6809
 treatment diffProtE_9d
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe9dRawDataRep2
+metaObject wgEncodeFsuRepliChipEsd3MDiffe9dRawDataRep2
 objType file
 age E0
 attic auxSup
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe9dRawDataRep2.zip.gz
+fileName wgEncodeFsuRepliChipEsd3MDiffe9dRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId NP-D3_R2
@@ -627,16 +627,16 @@ subId 6809
 treatment diffProtE_9d
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe9dWaveSignalRep1
+metaObject wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep1
 objType table
 age E0
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe9dWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-D3_R1
@@ -647,20 +647,20 @@ replicate 1
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEsd3MDiffe9dWaveSignalRep1
+tableName wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep1
 treatment diffProtE_9d
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEsd3MDiffe9dWaveSignalRep2
+metaObject wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep2
 objType table
 age E0
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MDiffe9dWaveSignalRep2.bigWig
+fileName wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-D3_R2
@@ -671,21 +671,21 @@ replicate 2
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEsd3MDiffe9dWaveSignalRep2
+tableName wgEncodeFsuRepliChipEsd3MDiffe9dWaveSignalRep2
 treatment diffProtE_9d
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEsd3MRawDataRep1
+metaObject wgEncodeFsuRepliChipEsd3MRawDataRep1
 objType file
 age E0
 attic auxSup
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipEsd3MRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId ES-D3_R1
@@ -699,17 +699,17 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEsd3MRawDataRep2
+metaObject wgEncodeFsuRepliChipEsd3MRawDataRep2
 objType file
 age E0
 attic auxSup
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MRawDataRep2.zip.gz
+fileName wgEncodeFsuRepliChipEsd3MRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId ES-D3_R2
@@ -723,16 +723,16 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEsd3MWaveSignalRep1
+metaObject wgEncodeFsuRepliChipEsd3MWaveSignalRep1
 objType table
 age E0
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipEsd3MWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId ES-D3_R1
@@ -743,20 +743,20 @@ replicate 1
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEsd3MWaveSignalRep1
+tableName wgEncodeFsuRepliChipEsd3MWaveSignalRep1
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEsd3MWaveSignalRep2
+metaObject wgEncodeFsuRepliChipEsd3MWaveSignalRep2
 objType table
 age E0
 cell ES-D3
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEsd3MWaveSignalRep2.bigWig
+fileName wgEncodeFsuRepliChipEsd3MWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId ES-D3_R2
@@ -767,21 +767,21 @@ replicate 2
 sex M
 strain 129
 subId 6809
-tableName wgEncodeFsuRepliSeqEsd3MWaveSignalRep2
+tableName wgEncodeFsuRepliChipEsd3MWaveSignalRep2
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEstt2MDifff9dRawDataRep1
+metaObject wgEncodeFsuRepliChipEstt2MDifff9dRawDataRep1
 objType file
 age E0
 attic auxSup
 cell ES-TT2
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEstt2MDifff9dRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipEstt2MDifff9dRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R1
@@ -795,17 +795,17 @@ subId 6809
 treatment diffProtF_9d
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEstt2MDifff9dRawDataRep2
+metaObject wgEncodeFsuRepliChipEstt2MDifff9dRawDataRep2
 objType file
 age E0
 attic auxSup
 cell ES-TT2
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEstt2MDifff9dRawDataRep2.zip.gz
+fileName wgEncodeFsuRepliChipEstt2MDifff9dRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R2
@@ -819,16 +819,16 @@ subId 6809
 treatment diffProtF_9d
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEstt2MDifff9dWaveSignalRep1
+metaObject wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep1
 objType table
 age E0
 cell ES-TT2
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEstt2MDifff9dWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R1
@@ -839,20 +839,20 @@ replicate 1
 sex M
 strain B6CBAF1/J
 subId 6809
-tableName wgEncodeFsuRepliSeqEstt2MDifff9dWaveSignalRep1
+tableName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep1
 treatment diffProtF_9d
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEstt2MDifff9dWaveSignalRep2
+metaObject wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep2
 objType table
 age E0
 cell ES-TT2
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEstt2MDifff9dWaveSignalRep2.bigWig
+fileName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId NP-TT2_R2
@@ -863,21 +863,21 @@ replicate 2
 sex M
 strain B6CBAF1/J
 subId 6809
-tableName wgEncodeFsuRepliSeqEstt2MDifff9dWaveSignalRep2
+tableName wgEncodeFsuRepliChipEstt2MDifff9dWaveSignalRep2
 treatment diffProtF_9d
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqEstt2MRawDataRep1
+metaObject wgEncodeFsuRepliChipEstt2MRawDataRep1
 objType file
 age E0
 attic auxSup
 cell ES-TT2
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEstt2MRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipEstt2MRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId ES-TT2_R1
@@ -891,16 +891,16 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqEstt2MWaveSignalRep1
+metaObject wgEncodeFsuRepliChipEstt2MWaveSignalRep1
 objType table
 age E0
 cell ES-TT2
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqEstt2MWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipEstt2MWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId ES-TT2_R1
@@ -911,21 +911,21 @@ replicate 1
 sex M
 strain B6CBAF1/J
 subId 6809
-tableName wgEncodeFsuRepliSeqEstt2MWaveSignalRep1
+tableName wgEncodeFsuRepliChipEstt2MWaveSignalRep1
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqL1210FRawDataRep1
+metaObject wgEncodeFsuRepliChipL1210FRawDataRep1
 objType file
 age immortalized
 attic auxSup
 cell L1210
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqL1210FRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipL1210FRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId L1210_R1
@@ -939,17 +939,17 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqL1210FRawDataRep2
+metaObject wgEncodeFsuRepliChipL1210FRawDataRep2
 objType file
 age immortalized
 attic auxSup
 cell L1210
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqL1210FRawDataRep2.zip.gz
+fileName wgEncodeFsuRepliChipL1210FRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId L1210_R2
@@ -963,16 +963,16 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqL1210FWaveSignalRep1
+metaObject wgEncodeFsuRepliChipL1210FWaveSignalRep1
 objType table
 age immortalized
 cell L1210
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqL1210FWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipL1210FWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId L1210_R1
@@ -983,20 +983,20 @@ replicate 1
 sex F
 strain DBA/2
 subId 6809
-tableName wgEncodeFsuRepliSeqL1210FWaveSignalRep1
+tableName wgEncodeFsuRepliChipL1210FWaveSignalRep1
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqL1210FWaveSignalRep2
+metaObject wgEncodeFsuRepliChipL1210FWaveSignalRep2
 objType table
 age immortalized
 cell L1210
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqL1210FWaveSignalRep2.bigWig
+fileName wgEncodeFsuRepliChipL1210FWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId L1210_R2
@@ -1007,21 +1007,21 @@ replicate 2
 sex F
 strain DBA/2
 subId 6809
-tableName wgEncodeFsuRepliSeqL1210FWaveSignalRep2
+tableName wgEncodeFsuRepliChipL1210FWaveSignalRep2
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqMefMRawDataRep1
+metaObject wgEncodeFsuRepliChipMefMRawDataRep1
 objType file
 age ageUnknown
 attic auxSup
 cell MEF
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqMefMRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipMefMRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId MEF_R1
@@ -1035,16 +1035,16 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqMefMWaveSignalRep1
+metaObject wgEncodeFsuRepliChipMefMWaveSignalRep1
 objType table
 age ageUnknown
 cell MEF
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqMefMWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipMefMWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId MEF_R1
@@ -1055,21 +1055,21 @@ replicate 1
 sex M
 strain Unknown
 subId 6809
-tableName wgEncodeFsuRepliSeqMefMWaveSignalRep1
+tableName wgEncodeFsuRepliChipMefMWaveSignalRep1
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqMelMRawDataRep1
+metaObject wgEncodeFsuRepliChipMelMRawDataRep1
 objType file
 age immortalized
 attic auxSup
 cell MEL
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqMelMRawDataRep1.zip.gz
+fileName wgEncodeFsuRepliChipMelMRawDataRep1.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId MEL_R1
@@ -1083,17 +1083,17 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqMelMRawDataRep2
+metaObject wgEncodeFsuRepliChipMelMRawDataRep2
 objType file
 age immortalized
 attic auxSup
 cell MEL
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqMelMRawDataRep2.zip.gz
+fileName wgEncodeFsuRepliChipMelMRawDataRep2.zip.gz
 grant Gilbert
 lab FSU-m
 labExpId MEL_R2
@@ -1107,16 +1107,16 @@ subId 6809
 treatment None
 view RawData
 
-metaObject wgEncodeFsuRepliSeqMelMWaveSignalRep1
+metaObject wgEncodeFsuRepliChipMelMWaveSignalRep1
 objType table
 age immortalized
 cell MEL
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqMelMWaveSignalRep1.bigWig
+fileName wgEncodeFsuRepliChipMelMWaveSignalRep1.bigWig
 grant Gilbert
 lab FSU-m
 labExpId MEL_R1
@@ -1127,20 +1127,20 @@ replicate 1
 sex M
 strain Unknown
 subId 6809
-tableName wgEncodeFsuRepliSeqMelMWaveSignalRep1
+tableName wgEncodeFsuRepliChipMelMWaveSignalRep1
 treatment None
 view WaveSignal
 
-metaObject wgEncodeFsuRepliSeqMelMWaveSignalRep2
+metaObject wgEncodeFsuRepliChipMelMWaveSignalRep2
 objType table
 age immortalized
 cell MEL
-composite wgEncodeFsuRepliSeq
-dataType RepliSeq
+composite wgEncodeFsuRepliChip
+dataType RepliChip
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-03-31
 dateUnrestricted 2012-12-30
-fileName wgEncodeFsuRepliSeqMelMWaveSignalRep2.bigWig
+fileName wgEncodeFsuRepliChipMelMWaveSignalRep2.bigWig
 grant Gilbert
 lab FSU-m
 labExpId MEL_R2
@@ -1151,8 +1151,8 @@ replicate 2
 sex M
 strain Unknown
 subId 6809
-tableName wgEncodeFsuRepliSeqMelMWaveSignalRep2
+tableName wgEncodeFsuRepliChipMelMWaveSignalRep2
 treatment None
 view WaveSignal
 
-# MAGIC: 2010517090
+# MAGIC: 1729812798

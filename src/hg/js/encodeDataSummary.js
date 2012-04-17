@@ -116,9 +116,9 @@ $(function () {
 
     function tableOut(table, types, exps, isChipSeq) {
         // Helper function to output tables to document
-        var total = 0, row = 0;
+        var total = 0, rowNum = 0;
         var dataType, antibodyTarget;
-        var description, term;
+        var description, term, row;
 
         $.each(exps, function (key, value) {
             types.push(key);
@@ -144,11 +144,16 @@ $(function () {
                 }
             }
             // quote the end tags so HTML validator doesn't whine
-            $(table).append("<tr class='" + (row % 2 === 0 ? "even" : "odd") + "'><td title='" + description + "'>" + value + "<\/td><td id='" + term + "' class='dataItem' title='Click to search for " + value + " data'>" + exps[value] + "<\/td><\/tr>");
-            row++;
+            row = "<tr class='dataRow " + (rowNum % 2 === 0 ? "even" : "odd") + "'>" +
+                    "<td class='dataLabel' title='" + description + "'>" + value + "<\/td>" +
+                    "<td id='" + term + "' class='dataItem' title='Click to search for " + value + 
+                        " data'>" + exps[value] + "<\/td>" + 
+                        "<\/tr>";
+            $(table).append(row);
+            rowNum++;
         });
 
-        $(".even, .odd").click(function () {
+        $(".dataRow").click(function () {
             var dataType, target, url, antibodyTarget;
             // NOTE: generating full search URL should be generalized & encapsulated
             url = encodeMatrix.getSearchUrl(encodeProject.getAssembly());
