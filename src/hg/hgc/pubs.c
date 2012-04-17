@@ -461,7 +461,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         printf("<TR><TD><TT>>%s<BR>%s<BR></TT></TD></TR></TABLE>", annotId, seq);
     else
         {
-        printf("<TR style=\"background-color: #%s\">\n", HG_COL_LOCAL_TABLE);
+        printf("<TR>\n");
         if (showDesc)
             printf("<TD style=\"word-break:break-all\">%s\n", fileDesc);
         //printf("<TD>%s</I></TD>\n", snippet); 
