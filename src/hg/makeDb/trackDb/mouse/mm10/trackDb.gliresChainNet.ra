@@ -18,7 +18,7 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species 
 sortOrder species=+ view=+ clade=+
 configurable on
-html mm10gliresChainNet
+html chainNet
 
     track gliresChainNetViewchain
     shortLabel Chains
@@ -51,13 +51,13 @@ html mm10gliresChainNet
         type chain dipOrd1
         otherDb dipOrd1
 
-        track chainHetGla1
+        track chainHetGla2
         subTrack gliresChainNetViewchain off
         subGroups view=chain species=cNMRat clade=aRodent
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain hetGla1
-        otherDb hetGla1
+        type chain hetGla2
+        otherDb hetGla2
 
         track chainCavPor3
         subTrack gliresChainNetViewchain on
@@ -121,13 +121,13 @@ html mm10gliresChainNet
         type netAlign dipOrd1 chainDipOrd1
         otherDb dipOrd1
 
-        track netHetGla1
+        track netHetGla2
         subTrack gliresChainNetViewnet off
         subGroups view=net species=cNMRat clade=aRodent
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign hetGla1 chainHetGla1
-        otherDb hetGla1
+        type netAlign hetGla2 chainHetGla2
+        otherDb hetGla2
 
         track netCavPor3
         subTrack gliresChainNetViewnet on
