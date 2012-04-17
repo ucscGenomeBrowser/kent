@@ -20,8 +20,8 @@
 # Lab and general info
 grant             Gilbert
 lab               FSU
-dataType          RepliSeq
-compositeSuffix   FsuRepliSeq
+dataType          RepliChip
+compositeSuffix   FsuRepliChip
 group             regulation
 variables         cell
 assembly          hg19

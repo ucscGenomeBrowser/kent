@@ -13670,6 +13670,13 @@ label Proteogenomics
 description Mass Spec Proteogenomic Mapping
 dataGroup Other
 
+term RepliChip
+tag REPLICHIP
+type dataType
+label Repli-chip
+description Assessment of DNA Replication Timing PROVISIONAL
+dataGroup Other
+
 term RepliSeq
 tag REPLISEQ
 type dataType
