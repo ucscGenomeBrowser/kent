@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = gbGetEntries.o 
 
 gbGetEntries: $O ../../lib/$(MACHTYPE)/jkweb.a
-	${CC} -o ${BINDIR}/gbGetEntries $O $(MYLIBS) $L
+	${CC} -lm -o ${BINDIR}/gbGetEntries $O $(MYLIBS) $L
 
 test::
 	(cd tests && ${MAKE} test)

@@ -1,6 +1,6 @@
 # Data Agreement File for Caltech RNA-Seq  experiments for mm9
 
-#$Revision: 1.6 $
+#$Revision: 1.7 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -40,6 +40,11 @@ validationSettings validateFiles.bam:mismatches=8,bamPercent=99.99
 
 # Track/view definition
 view             RawSignal
+type             bigWig
+hasReplicates    yes
+required         no
+
+view             Signal
 type             bigWig
 hasReplicates    yes
 required         no

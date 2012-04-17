@@ -57,9 +57,9 @@ wgEncode 1
 	signalFilter 0
 	signalFilterLimits 0:18241
 	pValueFilter 0
-	pValueFilterLimits 0:300
+	pValueFilterLimits 0:320
 	qValueFilter 0
-	qValueFilterLimits 0:300
+	qValueFilterLimits 0:320
 
         track wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -68,7 +68,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K27ME3 cellType=G1E control=INPUT sex=M strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -77,7 +77,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K27ME3 cellType=G1EER4 control=INPUT sex=M strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -86,7 +86,7 @@ wgEncode 1
         subGroups view=Peaks age=IMMORTAL factor=H3K27ME3 cellType=CH12 control=INPUT sex=F strain=2A4B
         type broadPeak
         color 86,180,233
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -95,7 +95,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K04ME3 cellType=G1EER4 control=INPUT sex=M strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eH3k04me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -104,7 +104,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K04ME3 cellType=G1E control=INPUT sex=M strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks 
@@ -113,7 +113,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=G1E control=INPUT sex=M strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -122,7 +122,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=G1E control=INPUT sex=M strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -131,7 +131,7 @@ wgEncode 1
         subGroups view=Peaks age=IMMORTAL factor=H3K36ME3 cellType=CH12 control=INPUT sex=F strain=2A4B
         type broadPeak
         color 86,180,233
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -140,7 +140,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K36ME3 cellType=G1EER4 control=INPUT sex=B strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -149,7 +149,7 @@ wgEncode 1
         subGroups view=Peaks age=IMMORTAL factor=H3K04ME3 cellType=CH12 control=INPUT sex=F strain=2A4B
         type broadPeak
         color 86,180,233
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -158,7 +158,7 @@ wgEncode 1
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type broadPeak
         color 86,180,233
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -167,7 +167,7 @@ wgEncode 1
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type broadPeak
         color 86,180,233
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -176,7 +176,7 @@ wgEncode 1
         subGroups view=Peaks age=IMMORTAL factor=H3K04ME1 cellType=CH12 control=INPUT sex=F strain=2A4B
         type broadPeak
         color 86,180,233
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -185,7 +185,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=G1EER4 control=INPUT sex=M strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -194,7 +194,7 @@ wgEncode 1
         subGroups view=Peaks age=E14HALF factor=H3K27ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -203,7 +203,7 @@ wgEncode 1
         subGroups view=Peaks age=IMMORTAL factor=H3K09ME3 cellType=CH12 control=INPUT sex=F strain=2A4B
         type broadPeak
         color 86,180,233
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eH3k09me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -212,7 +212,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K09ME3 cellType=G1E control=INPUT sex=M strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -221,7 +221,7 @@ wgEncode 1
         subGroups view=Peaks age=E14HALF factor=H3K09ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -230,7 +230,7 @@ wgEncode 1
         subGroups view=Peaks age=E14HALF factor=H3K09ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type broadPeak
         color 86,180,233
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -239,7 +239,7 @@ wgEncode 1
         subGroups view=Peaks age=E14HALF factor=H3K36ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type broadPeak
         color 86,180,233
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -248,7 +248,7 @@ wgEncode 1
         subGroups view=Peaks age=E14HALF factor=H3K36ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -257,7 +257,7 @@ wgEncode 1
         subGroups view=Peaks age=E14HALF factor=H3K04ME1 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -266,7 +266,7 @@ wgEncode 1
         subGroups view=Peaks age=E0 factor=H3K09ME3 cellType=G1EER4 control=INPUT sex=M strain=S129
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -275,7 +275,7 @@ wgEncode 1
         subGroups view=Peaks age=E14HALF factor=H3K04ME3 cellType=ERYTHROBL control=INPUT sex=B strain=CD1
         type broadPeak
         color 153,38,0
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputPk
         parent wgEncodePsuHistoneViewPeaks
@@ -284,7 +284,7 @@ wgEncode 1
         subGroups view=Peaks age=E14HALF factor=H3K27ME3 cellType=MEGAKARYO control=INPUT sex=B strain=CD1
         type broadPeak
         color 86,180,233
-        # subId=5997 dateSubmitted=2012-03-14
+        # subId=5997 dateSubmitted=2012-04-16
 
 	#####Signal Tracks###########
 	track wgEncodePsuHistoneViewSignal

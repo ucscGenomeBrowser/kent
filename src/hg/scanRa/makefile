@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = scanRa.o 
 
 scanRa: $O ../../lib/$(MACHTYPE)/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/scanRa $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -lm -o ${BINDIR}/scanRa $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib && ${MAKE}

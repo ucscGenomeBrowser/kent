@@ -13,11 +13,12 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
+char *version = "2.0";
 
 int blockSize = 256;
 int itemsPerSlot = 512;
-int bedFields = 0;
-int rgbField = 0;
+int bedN = 0;   /* number of standard bed fields */
+int bedP = 0;   /* number of bed plus fields */
 char *as = NULL;
 static boolean doCompress = FALSE;
 static boolean tabSep = FALSE;
@@ -26,7 +27,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bedToBigBed v. %d - Convert bed file to bigBed.\n"
+  "bedToBigBed v. %s - Convert bed file to bigBed. (BigBed version: %d)\n"
   "usage:\n"
   "   bedToBigBed in.bed chrom.sizes out.bb\n"
   "Where in.bed is in one of the ascii bed formats, but not including track lines\n"
@@ -39,44 +40,41 @@ errAbort(
   "     sort -k1,1 -k2,2n unsorted.bed > sorted.bed\n"
   "\n"
   "options:\n"
+  "   -type=bedN[+[P]]  - Bed N is between 3 and 15,\n"
+  "                         optional (+) if extra \"bedPlus\" fields, optional P specifies the number of extra fields \n"
+  "   -as=fields.as - If you have non-standard \"bedPlus\" fields, it's great to put a definition\n"
+  "                   of each field in a row in AutoSql format here.\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
-  "   -bedFields=N - Number of fields that fit standard bed definition.  If undefined\n"
-  "                  assumes all fields in bed are defined.\n"
-  "   -as=fields.as - If have non-standard fields, it's great to put a definition\n"
-  "                   of each field in a row in AutoSql format here.\n"
-  "   -rgbField=N  - the Nth field is a comma separated R,G,B triple.\n"
-  "                  For the usual itemRgb/reserved bed field this is 9.\n"
   "   -unc - If set, do not use compression.\n"
-  "   -tabs - If set, expect fields to be tab separated, normally\n"
+  "   -tab - If set, expect fields to be tab separated, normally\n"
   "           expects white space separator.\n"
-  , bbiCurrentVersion, blockSize, itemsPerSlot
+  , version, bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
 
 static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
-   {"bedFields", OPTION_INT},
-   {"rgbField", OPTION_INT},
+   {"type", OPTION_STRING},
    {"as", OPTION_STRING},
    {"unc", OPTION_BOOLEAN},
-   {"tabs", OPTION_BOOLEAN},
+   {"tab", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 void writeBlocks(struct bbiChromUsage *usageList, struct lineFile *lf, struct asObject *as, 
-	bits16 definedFieldCount, int itemsPerSlot, struct bbiBoundsArray *bounds, 
+	int itemsPerSlot, struct bbiBoundsArray *bounds, 
 	int sectionCount, boolean doCompress, FILE *f, 
 	int resTryCount, int resScales[], int resSizes[],
-	bits16 *retFieldCount, bits16 *retDefinedFieldCount, bits32 *retMaxBlockSize)
+	bits16 *retFieldCount, bits32 *retMaxBlockSize)
 /* Read through lf, writing it in f.  Save starting points of blocks (every itemsPerSlot)
  * to boundsArray */
 {
 int maxBlockSize = 0;
 struct bbiChromUsage *usage = usageList;
-char *line, **row = NULL;
-int fieldCount = 0, fieldAlloc=0, lastField = 0;
+char *line, *row[256];  // limit of 256 columns is arbitrary, but useful to catch pathological input
+int fieldCount = 0, lastField = 0;
 int itemIx = 0, sectionIx = 0;
 bits64 blockOffset = 0;
 int startPos = 0, endPos = 0;
@@ -92,13 +90,15 @@ for (resTry = 0; resTry < resTryCount; ++resTry)
 boolean atEnd = FALSE, sameChrom = FALSE;
 bits32 start = 0, end = 0;
 char *chrom = NULL;
+struct bed *bed;
+AllocVar(bed);
 
 for (;;)
     {
     /* Get next line of input if any. */
     if (lineFileNextReal(lf, &line))
 	{
-	/* First time through figure out the field count, and if not set, the defined field count. */
+	/* First time through figure out the field count and if not set, the bedN. */
 	if (fieldCount == 0)
 	    {
 	    if (as == NULL)
@@ -107,9 +107,14 @@ for (;;)
 		    fieldCount = chopString(line, "\t", NULL, 0);
 		else
 		    fieldCount = chopByWhite(line, NULL, 0);
-		if (definedFieldCount == 0)
-		    definedFieldCount = fieldCount;
-		char *asText = bedAsDef(definedFieldCount, fieldCount);
+		if (bedN == 0)
+		    bedN = fieldCount;
+		if (bedN > 15)
+		    {
+		    bedN = 15;
+		    bedP = fieldCount - bedN;
+		    }
+		char *asText = bedAsDef(bedN, fieldCount);
 		as = asParseText(asText);
 		allocedAs = TRUE;
 		freeMem(asText);
@@ -117,54 +122,39 @@ for (;;)
 	    else
 		{
 		fieldCount = slCount(as->columnList);
+		// if the .as is specified, the -type must be also so that the number of standard BED columns is known. bedN will be >0.
+		asCompareObjAgainstStandardBed(as, bedN, TRUE); // abort if bedN columns are not standard
 		}
-	    fieldAlloc = fieldCount + 1;
+	    if (fieldCount > ArraySize(row))
+		errAbort("Too many fields [%d], current maximum fields limit is %lu", fieldCount, ArraySize(row));
 	    lastField = fieldCount - 1;
-	    AllocArray(row, fieldAlloc);
 	    *retFieldCount = fieldCount;
-	    *retDefinedFieldCount = definedFieldCount;
+
+	    if (bedP == -1)  // user did not specify how many plus columns there are.
+		{
+		bedP = fieldCount - bedN;
+		if (bedP < 1)
+		    errAbort("fieldCount input (%d) did not match the specification (%s)\n"
+			, fieldCount, optionVal("type", ""));
+		}
+	    if (fieldCount != bedN + bedP)
+		errAbort("fieldCount input (%d) did not match the specification (%s)\n"
+		    , fieldCount, optionVal("type", ""));
 	    }
 
 	/* Chop up line and make sure the word count is right. */
 	int wordCount;
 	if (tabSep)
-	    wordCount = chopString(line, "\t", row, fieldAlloc);
+	    wordCount = chopTabs(line, row);
 	else
-	    wordCount = chopByWhite(line, row, fieldAlloc);
+	    wordCount = chopLine(line, row);
 	lineFileExpectWords(lf, fieldCount, wordCount);
 
-	/* Parse out first three fields. */
-	chrom = row[0];
-	start = lineFileNeedNum(lf, row, 1);
-	end = lineFileNeedNum(lf, row, 2);
+	loadAndValidateBed(row, bedN, fieldCount, lf, bed, as, FALSE);
 
-	/* Check remaining fields are formatted right. */
-	if (fieldCount > 3)
-	    {
-	    /* Go through and check that numerical strings really are numerical. */
-	    struct asColumn *asCol = slElementFromIx(as->columnList, 3);
-	    int i;
-	    for (i=3; i<fieldCount; ++i)
-		{
-		enum asTypes type = asCol->lowType->type;
-		if (! (asCol->isList || asCol->isArray))
-		    {
-		    if (rgbField == i + 1)
-			{
-			// we check for error, but save the R,G,B truple in 
-			// the bigBed
-			if (-1 == bedParseRgb(row[i]))
-			    errAbort("ERROR: expecting r,g,b specification, "
-				    "found: '%s'", row[i]);
-			}
-		    else if (asTypesIsInt(type))
-			lineFileNeedFullNum(lf, row, i);
-		    else if (asTypesIsFloating(type))
-			lineFileNeedDouble(lf, row, i);
-		    }
-		asCol = asCol->next;
-		}
-	    }
+	chrom = bed->chrom;
+	start = bed->chromStart;
+	end = bed->chromEnd;
 
 	sameChrom = sameString(chrom, usage->name);
 	}
@@ -282,7 +272,7 @@ for (;;)
 	}
     }
 assert(sectionIx == sectionCount);
-freez(&row);
+freez(&bed);
 if (allocedAs)
     asObjectFreeList(&as);
 *retMaxBlockSize = maxBlockSize;
@@ -447,8 +437,6 @@ void bbFileCreate(
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
 	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
 	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
-	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
-				    * are the defined bed ones. */
 	char *asFileName, /* If non-null points to a .as file that describes fields. */
 	boolean doCompress, /* If TRUE then compress data. */
 	char *outName)    /* BigBed output file name. */
@@ -533,8 +521,8 @@ AllocArray(boundsArray, blockCount);
 lineFileRewind(lf);
 bits16 fieldCount=0;
 bits32 maxBlockSize = 0;
-writeBlocks(usageList, lf, as, definedFieldCount, itemsPerSlot, boundsArray, blockCount, doCompress,
-	f, resTryCount, resScales, resSizes, &fieldCount, &definedFieldCount, &maxBlockSize);
+writeBlocks(usageList, lf, as, itemsPerSlot, boundsArray, blockCount, doCompress,
+	f, resTryCount, resScales, resSizes, &fieldCount, &maxBlockSize);
 verboseTime(1, "pass2 - checking and writing primary data (%lld records, %d fields)", 
 	(long long)bedCount, fieldCount);
 
@@ -625,6 +613,8 @@ bits16 summaryCount = zoomLevels;
 bits32 reserved32 = 0;
 bits64 reserved64 = 0;
 
+bits16 definedFieldCount = bedN;
+
 /* Write fixed header */
 writeOne(f, sig);
 writeOne(f, version);
@@ -680,7 +670,7 @@ asObjectFreeList(&as);
 void bedToBigBed(char *inName, char *chromSizes, char *outName)
 /* bedToBigBed - Convert bed file to bigBed.. */
 {
-bbFileCreate(inName, chromSizes, blockSize, itemsPerSlot, bedFields, as, 
+bbFileCreate(inName, chromSizes, blockSize, itemsPerSlot, as, 
 	doCompress, outName);
 }
 
@@ -690,13 +680,39 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
-bedFields = optionInt("bedFields", bedFields);
-rgbField = optionInt("rgbField", rgbField);
 as = optionVal("as", as);
 doCompress = !optionExists("unc");
-tabSep = optionExists("tabs");
+tabSep = optionExists("tab");
 if (argc != 4)
     usage();
+if (optionExists("type"))
+    {
+    // parse type
+    char *btype = cloneString(optionVal("type", ""));
+    char *plus = strchr(btype, '+');
+    if (plus)
+	{
+	*plus++ = 0;
+	if (isdigit(*plus))
+	    bedP = sqlUnsigned(plus);
+	else
+	    bedP = -1;
+	}
+    if (!startsWith("bed", btype))
+	errAbort("type must begin with \"bed\"");
+    btype +=3;
+    bedN = sqlUnsigned(btype);
+    if (bedN < 3)
+	errAbort("Bed must be 3 or higher, found %d\n", bedN);
+    if (bedN > 15)
+	errAbort("Bed must be 15 or lower, found %d\n", bedN);
+    }
+else
+    {
+    if (as)
+	errAbort("If you specify the .as file, you must specify the -type as well so that the number of standard BED columns is known.");
+    }
+
 bedToBigBed(argv[1], argv[2], argv[3]);
 optionFree();
 if (verboseLevel() > 1)
