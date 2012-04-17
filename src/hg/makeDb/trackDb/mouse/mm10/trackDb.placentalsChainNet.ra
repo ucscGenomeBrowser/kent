@@ -18,7 +18,7 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species 
 sortOrder species=+ view=+ clade=+
 configurable on
-html mm10placentalChainNet
+html chainNet
 
     track placentalChainNetViewchain
     shortLabel Chains
