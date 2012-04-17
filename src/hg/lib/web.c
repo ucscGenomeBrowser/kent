@@ -398,7 +398,7 @@ if (endsWith(scriptName, "hgGateway") && geoMirrorEnabled())
 	char *port = cgiServerPort();
         // We don't bother maintaining stuff in request URI, because it may contain items like hgsid and other host specific values
         int newUriSize = 2048;
-	char *newUri = needMem(2048);
+	char *newUri = needMem(newUriSize);
 	// TODO what about https?
 	safef(newUri, newUriSize, "http://%s:%s/cgi-bin/hgGateway?redirect=manual&source=%s", source, port, domain);
 
