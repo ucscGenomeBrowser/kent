@@ -187,6 +187,6 @@ if (doAllTests || sameString(test, vcfEx2))
     }
 
 if (doAllTests || sameString(test, pgSnpKgDbToGpFx))
-    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 161480624, 161480746, TRUE);
+    dbToTabOut(&pgSnpInfo, tbf, "stdout", "chr1", 161480578, 161481122, TRUE);
 return 0;
 }

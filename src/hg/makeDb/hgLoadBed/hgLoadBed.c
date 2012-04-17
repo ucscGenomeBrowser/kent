@@ -1,4 +1,5 @@
 /* hgLoadBed - Load a generic bed file into database. */
+#include <signal.h>
 #include "common.h"
 #include "options.h"
 #include "linefile.h"
@@ -7,12 +8,15 @@
 #include "jksql.h"
 #include "dystring.h"
 #include "bed.h"
+#include "bedDetail.h"
 #include "hdb.h"
 #include "hgRelate.h"
 #include "portable.h"
-#include <signal.h>
+#include "asParse.h"
+#include "chromInfo.h"
 
-
+struct hash *chrHash = NULL;    /* hash of chrom names and sizes for optional validation */
+ 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -44,6 +48,9 @@ boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options
                                     * -verbose=0, allowStartEqualEnd */
 boolean bedDetail = FALSE;      /* TRUE == bedDetail type, requires tab and sqlTable */
 
+char *type = NULL;              /* type=bedN{+{P}} bed and bedPlus input validation type */
+char *as = NULL;                /* Optional path to .as file for validation support of bedPlus */
+
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"noSort", OPTION_BOOLEAN},
@@ -54,6 +61,9 @@ static struct optionSpec optionSpecs[] = {
     {"sqlTable", OPTION_STRING},
     {"renameSqlTable", OPTION_BOOLEAN},
     {"trimSqlTable", OPTION_BOOLEAN},
+    {"type", OPTION_STRING},
+    {"chromInfo", OPTION_STRING},
+    {"as", OPTION_STRING},
     {"tab", OPTION_BOOLEAN},
     {"hasBin", OPTION_BOOLEAN},
     {"noLoad", OPTION_BOOLEAN},
@@ -91,12 +101,18 @@ errAbort(
   "             the mysql server can access.\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -renameSqlTable Rename table created with -sqlTable to match track\n"
-  "   -trimSqlTable  if sqlTable has n rows, and input has m rows, only load m rows, meaning the last n-m rows in the sqlTable are optional\n"
-  "   -tab  Separate by tabs rather than space\n"
-  "   -hasBin   Input bed file starts with a bin field.\n"
-  "   -noLoad  - Do not load database and do not clean up tab files\n"
+  "   -trimSqlTable   If sqlTable has n rows, and input has m rows, only load m rows, meaning the last n-m rows in the sqlTable are optional\n"
+  "   -type=bedN[+[P]]    Validate as Bed N, N is between 3 and 15, \n"
+  "                     optional (+) if extra \"bedPlus\" fields, optional P specifies the number of extra fields,\n"
+  "                     recommended to use with -as option for better bedPlus validation.\n"
+  "   -as=fields.as   If you have extra \"bedPlus\" fields, it's great to put a definition\n"
+  "                     of each field in a row in AutoSql format here.\n"
+  "   -chromInfo=file.txt    Specify chromInfo file to validate chrom names and sizes.\n"
+  "   -tab       Separate by tabs rather than space\n"
+  "   -hasBin    Input bed file starts with a bin field.\n"
+  "   -noLoad     - Do not load database and do not clean up tab files\n"
   "   -noHistory  - Do not add history table comments (for custom tracks)\n"
-  "   -notItemRgb  - Do not parse column nine as r,g,b when commas seen (bacEnds)\n"
+  "   -notItemRgb - Do not parse column nine as r,g,b when commas seen (bacEnds)\n"
   "   -bedGraph=N - wiggle graph column N of the input file as float dataValue\n"
   "               - bedGraph N is typically 4: -bedGraph=4\n"
   "   -bedDetail  - bedDetail format with id and text for hgc clicks\n"
@@ -193,6 +209,35 @@ if (dif == 0)
 return dif;
 }
 
+
+static void checkChromNameAndSize(struct lineFile *lf, char *s, unsigned chromEnd)
+/* Check that the name is non-empty and exists, and that chromEnd <= chromSize. Abort on error. */
+{
+unsigned *chromSize;
+if (strlen(s) > 0)
+    {
+    if (chrHash)
+	{
+	if ( (chromSize = hashFindVal(chrHash, s)) != NULL)
+	    {
+	    if (chromEnd > *chromSize)
+		lineFileAbort(lf, "chromEnd (%d) > chromEnd (%d)\n", chromEnd, *chromSize);
+	    return; 
+	    }
+	else
+	    {
+	    lineFileAbort(lf, "chrom %s not found", s);
+	    }
+	}
+    else
+	{
+	return; // chrom name not blank, and not validating against chromInfo
+	}
+    }
+lineFileAbort(lf, "chrom column empty");
+}
+
+
 void loadOneBed(struct lineFile *lf, int bedSize, struct bedStub **pList)
 /* Load one bed file.  Make sure all lines have bedSize fields.
  * Put results in *pList. */
@@ -200,6 +245,13 @@ void loadOneBed(struct lineFile *lf, int bedSize, struct bedStub **pList)
 char *words[64], *line, *dupe;
 int wordCount;
 struct bedStub *bed;
+
+int fieldCount = 0;
+int bedN = 0;
+int bedP = 0;
+struct asObject *asObj = NULL;
+struct bed *validateBed;
+AllocVar(validateBed);
 
 verbose(1, "Reading %s\n", lf->fileName);
 while (lineFileNextReal(lf, &line))
@@ -215,6 +267,81 @@ while (lineFileNextReal(lf, &line))
     if (0 == wordCount)
 	continue;
     lineFileExpectWords(lf, bedSize, wordCount);
+
+    if (type)  
+        // TODO also, may need to add a flag to the validateBed() interface to support -allowNegativeScores when not isCt
+        //  although can probably get away without it since usually -allowNegativeScores is used by ct which has already verified it.
+        //  thus -allowNegativeScores is unlikely to be used with -type.
+	{
+	/* First time through figure out the field count, and if not set, the defined standard field count. */
+	if (fieldCount == 0)
+	    {
+	    // parse type
+	    char *btype = cloneString(type);
+	    char *plus = strchr(btype, '+');
+	    if (plus)
+		{
+		*plus++ = 0;
+		if (isdigit(*plus))
+		    bedP = sqlUnsigned(plus);
+		else
+		    bedP = -1;
+		}
+	    if (!startsWith("bed", btype))
+		errAbort("type must begin with \"bed\"");
+	    btype +=3;
+	    bedN = sqlUnsigned(btype);
+
+	    if (bedN < 3)
+		errAbort("Bed must be 3 or higher, found %d\n", bedN);
+	    if (bedN > 15) 
+		errAbort("Bed must be 15 or lower, found %d\n", bedN);
+
+	    /* Load up as-object if defined in file. */
+	    struct asObject *asObj = NULL;
+	    if (as != NULL)
+		{
+		/* Parse it and do sanity check. */
+		asObj = asParseFile(as);
+		if (asObj->next != NULL)
+		    errAbort("Can only handle .as files containing a single object.");
+		fieldCount = slCount(asObj->columnList);
+		asCompareObjAgainstStandardBed(asObj, bedN, TRUE); // abort if bedN columns are not standard
+		}
+	    else
+		{
+		fieldCount = bedSize;
+		if (bedDetail)
+		    {
+		    asObj = bedDetailAsObj();
+		    }
+		else
+		    {
+		    char *asText = bedAsDef(bedN, fieldCount);
+		    asObj = asParseText(asText);
+		    freeMem(asText);
+		    }
+		}
+	    if (bedP == -1)  // user did not specify how many plus columns there are.
+		{
+		bedP = fieldCount - bedN;
+		if (bedP < 1)
+		    lineFileAbort(lf, "fieldCount input (%d) did not match the specification (%s)\n"
+			, fieldCount, type);
+		}
+
+	    if (fieldCount != bedN + bedP)
+		lineFileAbort(lf, "fieldCount input (%d) did not match the specification (%s)\n"
+		    , fieldCount, type);
+	    }
+
+
+	loadAndValidateBed(words, bedN, fieldCount, lf, validateBed, asObj, FALSE);
+
+	checkChromNameAndSize(lf, validateBed->chrom, validateBed->chromEnd);
+	
+	}
+
     AllocVar(bed);
     bed->chrom = cloneString(words[0]);
     bed->chromStart = lineFileNeedNum(lf, words, 1);
@@ -235,6 +362,10 @@ while (lineFileNextReal(lf, &line))
     bed->line = dupe;
     slAddHead(pList, bed);
     }
+
+if (asObj);
+    asObjectFreeList(&asObj);
+freez(&validateBed);
 }
 
 #define writeFailed(fileName) { errAbort("Write to %s failed -- disk full?", fileName); }
@@ -370,6 +501,7 @@ if (numFields != bedSize)
     }
 slFreeList(&fieldNames);
 }
+
 
 static void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedList)
 /* Load database from bedList. */
@@ -614,6 +746,7 @@ else if (! ignoreEmpty)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+char *chromInfo;
 optionInit(&argc, argv, optionSpecs);
 if (argc < 4)
     usage();
@@ -624,6 +757,8 @@ oldTable = optionExists("oldTable");
 sqlTable = optionVal("sqlTable", sqlTable);
 renameSqlTable = optionExists("renameSqlTable");
 trimSqlTable = optionExists("trimSqlTable");
+as = optionVal("as", as);
+type = optionVal("type", type);
 hasBin = optionExists("hasBin");
 noLoad = optionExists("noLoad");
 noHistory = optionExists("noHistory");
@@ -647,6 +782,7 @@ customTrackLoader = optionExists("customTrackLoader");
  * -verbose=0 */
 if (customTrackLoader)
     {
+    type = NULL;   /* because customTrack/Factory has already validated the input */
     ignoreEmpty = TRUE;
     noHistory = TRUE;
     nameIx = FALSE;
@@ -658,6 +794,21 @@ if (customTrackLoader)
     (void) alarm(expireSeconds);	/* CGI timeout */
     }
 fillInScoreColumn = optionVal("fillInScore", NULL);
+
+chromInfo=optionVal("chromInfo", NULL);
+if (chromInfo)
+    {
+    if (!type)
+	errAbort("Only use chromInfo with type for validate");
+    // Get chromInfo from file
+    chrHash = chromHashFromFile(chromInfo); 
+    }
+else if (type)
+    {
+    // Get chromInfo from DB
+    chrHash = chromHashFromDatabase(argv[1]); 
+    }
+
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
