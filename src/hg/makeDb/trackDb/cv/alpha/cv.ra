@@ -180,137 +180,6 @@ sex U
 tier 2
 protocol ENCODE:HUVEC_protocol.pdf
 
-term NHEK
-tag NHEK
-type Cell Line
-organism human
-category Tissue
-description epidermal keratinocytes
-tissue skin
-vendorName Lonza
-vendorId CC-2501
-orderUrl http://www.lonza.com
-lineage ectoderm
-karyotype normal
-termId BTO:0000375
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
-color 179,0,134
-sex U
-tier 3
-protocol ENCODE:Keratinocyte_protocol.pdf
-
-term NHEM_M2
-tag NHEMM2
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 from cheek / temple
-lineage missing
-karyotype normal
-sex B
-tissue skin
-vendorName PromoCell
-vendorId NHEM
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf Gingeras:NHEMM27012303_Gingeras_protocol.pdf
-
-term NHEM_M2_7011001.2
-tag NHEMM270110012
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes (adult) from cheek
-lineage missing
-karyotype normal
-sex M
-tissue skin
-childOf NHEM_M2
-vendorName PromoCell
-vendorId C-14043
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf
-
-term NHEM_M2_7012303
-tag NHEMM27012303
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes (adult) from temple
-lineage missing
-karyotype normal
-sex F
-tissue skin
-childOf NHEM_M2
-vendorName PromoCell
-vendorId C-14043
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEMM27012303_Gingeras_protocol.pdf
-
-term NHEM.f_M2
-tag NHEMFM2
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin
-lineage missing
-karyotype normal
-sex M
-tissue skin
-vendorName PromoCell
-vendorId NHEM
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf NHEM.fM26022001_Gingeras_protocol.pdf
-
-term NHEM.f_M2_5071302.2
-tag NHEMFM250713022
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes (foreskin)
-lineage missing
-karyotype normal
-sex M
-tissue skin
-childOf NHEM.f_M2
-vendorName PromoCell
-vendorId C-14042
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf
-
-term NHEM.f_M2_6022001
-tag NHEMFM26022001
-type Cell Line
-tier 3
-organism human
-description Epidermal Melanocytes (foreskin)
-lineage missing
-karyotype normal
-sex M
-tissue skin
-childOf NHEM.f_M2
-vendorName PromoCell
-vendorId C-14042
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
-termId BTO:0000847
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
-lab Gingeras
-protocol Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
-
 term H1-hESC
 tag H1HESC
 type Cell Line
@@ -328,6 +197,40 @@ color 0,107,27
 sex M
 tier 1
 protocol ENCODE:H1_ES_protocol.pdf
+
+term H1-neurons
+tag H1NEURONS
+type Cell Line
+organism human
+description neurons derived from H1 embryonic stem cells, newly promoted to tier 2: not in 2011 analysis
+tissue neurons
+vendorName CDI 
+vendorId TBD
+orderUrl TBD
+lineage ectoderm
+karyotype normal
+termId BTO:0000938
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000938
+sex M
+tier 2
+protocol missing
+
+term LHCN-M2
+tag LHCNM2
+type Cell Line
+tier 2
+organism human
+description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523, newly promoted to tier 2: not in 2011 analysis.
+lineage mesoderm
+sex M
+tissue skeletal muscle myoblast
+vendorName Woodring Wright, M.D., Ph.D.
+vendorId (None)
+orderUrl http://www.utsouthwestern.edu/findfac/professional/0,,18156,00.html
+termId BTO:0000023
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000023
+protocol Wold:LHCNM2_Wold_protocol.pdf
+
 
 ###### type 3 cells once they have been submitted.
 
@@ -4511,22 +4414,6 @@ sex M
 tier 3
 protocol Myers:Jurkat_protocol.pdf Stam:Jurkat_Stam_protocol.pdf
 
-term LHCN-M2
-tag LHCNM2
-type Cell Line
-tier 3
-organism human
-description skeletal myoblasts derived from satellite cells from the pectoralis major muscle of a 41 year old caucasian heart transplant donor, immortalized with lox-hygro-hTERT ("LH"), and Cdk4-neo ("CN"), Zhu et al. (2007) in Aging Cell, vol. 6, pp 515-523.
-lineage mesoderm
-sex M
-tissue skeletal muscle myoblast
-vendorName Woodring Wright, M.D., Ph.D.
-vendorId (None)
-orderUrl http://www.utsouthwestern.edu/findfac/professional/0,,18156,00.html
-termId BTO:0000023
-termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000023
-protocol Wold:LHCNM2_Wold_protocol.pdf
-
 term LHSR
 tag LHSR
 type Cell Line
@@ -4974,6 +4861,137 @@ termId BTO:0003185
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0003185
 lab Gingeras
 protocol Gingeras:NHDF7071701.2_Gingeras_protocol.pdf
+
+term NHEK
+tag NHEK
+type Cell Line
+organism human
+category Tissue
+description epidermal keratinocytes
+tissue skin
+vendorName Lonza
+vendorId CC-2501
+orderUrl http://www.lonza.com
+lineage ectoderm
+karyotype normal
+termId BTO:0000375
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
+color 179,0,134
+sex U
+tier 3
+protocol ENCODE:Keratinocyte_protocol.pdf
+
+term NHEM_M2
+tag NHEMM2
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (adult) from two individuals, NHEM_M2_7011001.2 and NHEM_M2_7012303 from cheek / temple
+lineage missing
+karyotype normal
+sex B
+tissue skin
+vendorName PromoCell
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf Gingeras:NHEMM27012303_Gingeras_protocol.pdf
+
+term NHEM_M2_7011001.2
+tag NHEMM270110012
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (adult) from cheek
+lineage missing
+karyotype normal
+sex M
+tissue skin
+childOf NHEM_M2
+vendorName PromoCell
+vendorId C-14043
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEMM27011001.2_Gingeras_protocol.pdf
+
+term NHEM_M2_7012303
+tag NHEMM27012303
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (adult) from temple
+lineage missing
+karyotype normal
+sex F
+tissue skin
+childOf NHEM_M2
+vendorName PromoCell
+vendorId C-14043
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEMM27012303_Gingeras_protocol.pdf
+
+term NHEM.f_M2
+tag NHEMFM2
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes from two individuals, NHEM.f_M2_5071302.2 and NHEM.f_M2_6022001 from foreskin
+lineage missing
+karyotype normal
+sex M
+tissue skin
+vendorName PromoCell
+vendorId NHEM
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf NHEM.fM26022001_Gingeras_protocol.pdf
+
+term NHEM.f_M2_5071302.2
+tag NHEMFM250713022
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (foreskin)
+lineage missing
+karyotype normal
+sex M
+tissue skin
+childOf NHEM.f_M2
+vendorName PromoCell
+vendorId C-14042
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEM.fM25071302.2_Gingeras_protocol.pdf
+
+term NHEM.f_M2_6022001
+tag NHEMFM26022001
+type Cell Line
+tier 3
+organism human
+description Epidermal Melanocytes (foreskin)
+lineage missing
+karyotype normal
+sex M
+tissue skin
+childOf NHEM.f_M2
+vendorName PromoCell
+vendorId C-14042
+orderUrl http://www.promocell.com/nc/products/human-primary-cells/melanocytes/?sword_list%5B%5D=NHEM
+termId BTO:0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+lab Gingeras
+protocol Gingeras:NHEM.fM26022001_Gingeras_protocol.pdf
 
 term NHLF
 tag NHLF

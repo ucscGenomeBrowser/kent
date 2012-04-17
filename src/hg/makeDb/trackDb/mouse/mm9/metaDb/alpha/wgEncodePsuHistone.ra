@@ -68,7 +68,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
@@ -76,7 +76,7 @@ expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 305e99d028e05d7c35507346a0871fdc
+md5sum 191309278da41e2f8f0ca13b1c064e20
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -150,7 +150,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
@@ -158,7 +158,7 @@ expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 8e457261ce63f66c1d9eaaeeb1b0862f
+md5sum b45352d1573cb05c3f3af731435bfe1e
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -178,7 +178,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
 dccAccession wgEncodeEM002370
@@ -186,7 +186,7 @@ expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum dd76eb87d595ceadb1c700b622764daa
+md5sum 02613b67e5b605236ead0defbd3e651c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -341,7 +341,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
@@ -349,7 +349,7 @@ expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 85024d06eb1a15162e19f029084d6c42
+md5sum 02f057a645c451691451d3669f0c32cc
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -423,7 +423,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
@@ -431,7 +431,7 @@ expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 91d1ad450b7147b6986fd56e0f734564
+md5sum 6dbf561b352ae95a62b3565cb9a33c1e
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -451,7 +451,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002366
@@ -459,7 +459,7 @@ expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum d8b38e129ffb03cb955bd40c8700deaa
+md5sum 0d86e22dfbf099b1cbc8adbc24da36b1
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -614,7 +614,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
@@ -622,7 +622,7 @@ expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 4c83011ff05bec82f9de1b3ad39a2406
+md5sum 86d264cc1e5407fdd7a7f72299fa33e8
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -642,7 +642,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
@@ -650,7 +650,7 @@ expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 19d13da7deca84b58489167eda45aea2
+md5sum 9becc98d9e41a72630a69bd7f98aa100
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -670,7 +670,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002372
@@ -678,7 +678,7 @@ expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 85ddd37fce75a05bdbe677b7c292a05c
+md5sum 142206f7953b4785b76a2387e1066c50
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -887,7 +887,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
@@ -895,7 +895,7 @@ expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum b984423dbb0957736ed6eead6e33f144
+md5sum 1a69534e5aceb9215e993aacf5532a54
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -969,7 +969,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
@@ -977,7 +977,7 @@ expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum b034af4b7ec3906534b6bb7b9dedf45a
+md5sum b22e1e7bf814543fb9fafedad1a732e2
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -997,7 +997,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002362
@@ -1005,7 +1005,7 @@ expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum da6fb05fd349cd98d7963ae198ef3df1
+md5sum 01562b3870caac196b27c6359d638eb8
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1160,7 +1160,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
@@ -1168,7 +1168,7 @@ expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 929cb2db325618a40f0c1fc27681e7ff
+md5sum 14805e857c7088b116ac4413799b53cd
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -1242,7 +1242,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
@@ -1250,7 +1250,7 @@ expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 6bfe3b03ebf557510d9f191a3dacbd96
+md5sum 19c6e61d2cb02d9f1da29345c80af4ab
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1270,7 +1270,7 @@ control Input
 controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002364
@@ -1278,7 +1278,7 @@ expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 8913af1e229049312d5e9d4da62e630e
+md5sum 566d50a8361a653b7520e0a0ed3ca94d
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1622,7 +1622,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
@@ -1630,7 +1630,7 @@ expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 60a5dd7548c89717135b6b1f79e6a7ac
+md5sum d2029f507b9f28c015369513e61bf6de
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -1650,7 +1650,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
@@ -1658,7 +1658,7 @@ expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 1e7ad282cc73ab1976e001e2bc53d275
+md5sum 4531c0e01a949cd1b274d00bb4fd4f15
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1678,7 +1678,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002376
@@ -1686,7 +1686,7 @@ expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum c0636981504588a4a7eddce1bcee3e60
+md5sum 0a6dec9ece7fbadf2897f28ed4e8ad81
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1895,7 +1895,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
@@ -1903,7 +1903,7 @@ expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 15130e48af164314b008c108999e0b9b
+md5sum b09b43755eb2cd0b5a4fbbb64b4c878e
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -1923,7 +1923,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
@@ -1931,7 +1931,7 @@ expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum d99d1b8820ff7b736e3c3437d5a4a17b
+md5sum e432c01c4e38d6402e402f4415faef77
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1951,7 +1951,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002380
@@ -1959,7 +1959,7 @@ expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum ca2cef3aadafc982e6bbfb54622613ad
+md5sum 0c2400376a914097498825227ef2ae99
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2168,7 +2168,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
@@ -2176,7 +2176,7 @@ expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 3c5285874405646387ba2f7b0463749f
+md5sum 76d64b5f5f3b9b458c2fbd4a31c1d35e
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -2196,7 +2196,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
@@ -2204,7 +2204,7 @@ expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 0352c03eb6afdbf6d2e06823d99cad79
+md5sum 208d7e0889b62a2bc4d8f82a3bc9004d
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2224,7 +2224,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002373
@@ -2232,7 +2232,7 @@ expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 8ddcee787b45d57471144934ceba51de
+md5sum e9562592b10ad9fad550e388006f4acd
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2441,7 +2441,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
@@ -2449,7 +2449,7 @@ expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum a54eb2ceee32d407eb376b5409142218
+md5sum 7162abd5a30d7001cf6b3e55c41ca917
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -2469,7 +2469,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
@@ -2477,7 +2477,7 @@ expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum ae8e690c0fb4d719ebbb94dde1de0fb4
+md5sum 0be6760f0c099d735cbe3f18ea71ccc9
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2497,7 +2497,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
 dccAccession wgEncodeEM002371
@@ -2505,7 +2505,7 @@ expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum ec22283e3e2e28c60aa397924fae0a98
+md5sum e6361824939fc05a0bbe6780cd8a5a61
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2714,7 +2714,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
@@ -2722,7 +2722,7 @@ expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum d76196e33b1136bde8628e2928d80295
+md5sum 0c8495320ef6c4d58cb35cb934e308bb
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -2742,7 +2742,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
@@ -2750,7 +2750,7 @@ expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 9d3e8126cbf494bd9efb4eb8971be4cd
+md5sum aa6dced1893ecfdb0167212dc652b93a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2770,7 +2770,7 @@ control Input
 controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002375
@@ -2778,7 +2778,7 @@ expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum cd0762531f6a06e07b866d752b534167
+md5sum f798745d8c2205315a942155ef2cecd2
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3178,7 +3178,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
@@ -3186,7 +3186,7 @@ expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 3e3533acb5216d78b67719d6d0dd7748
+md5sum 547f82f1a8862d4ed92ae46d28e8e473
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3262,7 +3262,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
@@ -3270,7 +3270,7 @@ expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum c17a4f12b06b86358881c8a4a5080333
+md5sum 7d6719a9c4c414f68a2353ada28e969a
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3290,7 +3290,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 dccAccession wgEncodeEM001915
@@ -3298,7 +3298,7 @@ expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 6ea344540f71dd35ef0a6de5b80467f3
+md5sum aa76443f233231944901d1ffbcfa40af
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3458,7 +3458,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
@@ -3466,7 +3466,7 @@ expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum a441ffc86f8e9015fc8d467ccbb5d688
+md5sum 822ccf2107bbb2f555b90e97a87482f6
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3542,7 +3542,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
@@ -3550,7 +3550,7 @@ expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 0fb77715d4a51bcdc5ceda0c10bf1bee
+md5sum c0c4901d66e286267143164402056679
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3570,7 +3570,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001919
@@ -3578,7 +3578,7 @@ expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum f21fd93ecf09e464f3e880b6ccc6ea6b
+md5sum 474132ca22f1f6b900cbc98e841533df
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3736,7 +3736,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
@@ -3744,7 +3744,7 @@ expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 80a539caf6106228aa654c431db63aa1
+md5sum 79795f855925d68ee71201a8263dbbf9
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3764,7 +3764,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
@@ -3772,7 +3772,7 @@ expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 984e4a15645d8e17508d00d30910d87d
+md5sum 31758335c847bec3a7ce0b6fd2200011
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3792,7 +3792,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM002374
@@ -3800,7 +3800,7 @@ expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 2d2fbf850ef0a979824d38fe446b79e7
+md5sum 2703bdb3c27b84944d7b1ed573811181
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4009,7 +4009,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
@@ -4017,7 +4017,7 @@ expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 87a76a979e80088d5e4ab8475631e5bc
+md5sum 8495266569b8f694d99973c84daab623
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -4091,7 +4091,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
@@ -4099,7 +4099,7 @@ expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 8d6ff57f377949bc3ab300a9a96106a7
+md5sum 06f651857b523c0ad00c59b2c8259fd2
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4119,7 +4119,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEM002363
@@ -4127,7 +4127,7 @@ expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum c8523165214dc683e7f0cb2579387197
+md5sum fd0bb13c0f786edadb183e1ce0c8fb59
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -4282,7 +4282,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
@@ -4290,7 +4290,7 @@ expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 11809537c2d2d5a15b1bea54e641ce6b
+md5sum de41f6602327928024f4513c6acd3029
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -4364,7 +4364,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
@@ -4372,7 +4372,7 @@ expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 2e09d86fe785d947559d6393879cb88b
+md5sum 95311736dad7aadee1117e1417184d2b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4392,7 +4392,7 @@ control Input
 controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEM002365
@@ -4400,7 +4400,7 @@ expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 2b4df2ca328bf6de0f4b17647d678985
+md5sum 7d372bcf6970101cb4dfc85b6460f901
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4746,7 +4746,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
@@ -4754,7 +4754,7 @@ expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 123627b364dda53f114a899a6de8c17b
+md5sum 5deed49d7612e5c970de6ef619766c16
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -4775,7 +4775,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
@@ -4783,7 +4783,7 @@ expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 24f5f2352eaaafb3573c5621722c9fbf
+md5sum 6de0d748630eec7ad4d5674beadffc37
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4804,7 +4804,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
 dccAccession wgEncodeEM001918
@@ -4812,7 +4812,7 @@ expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 3fd278f0162dd243f7d0f72b30727b1b
+md5sum cb1ff86ef636cf989cec9ea64dafaad9
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5031,7 +5031,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
@@ -5039,7 +5039,7 @@ expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 4bbbd7a7b4c90204e4500a744f496062
+md5sum b28eb096ef613d0382b60188e5108b05
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5118,7 +5118,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
@@ -5126,7 +5126,7 @@ expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 83e8251f8fe8dec08b6737d2322de99b
+md5sum 2ab36591bb60e686d1e0b02ddd0a5022
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5147,7 +5147,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
 dccAccession wgEncodeEM001920
@@ -5155,7 +5155,7 @@ expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 330e8568f49d033d1095affe4f01a1b3
+md5sum ff5f98ecdde915c491d9195eae9049a1
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5319,7 +5319,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
@@ -5327,7 +5327,7 @@ expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 1dbf71f3e54772eb6b905bd61348074a
+md5sum 6b97db8a653fe96f4ebe5e299011d647
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5348,7 +5348,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
@@ -5356,7 +5356,7 @@ expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum e8004e80a43f0e6013ca3dc5b8c19e28
+md5sum 46d5fbd7c435a9b5f939d860d76a5dad
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5377,7 +5377,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002377
@@ -5385,7 +5385,7 @@ expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum e11b0739afbcc8a2aa8605ce84027e7b
+md5sum 0667f697de9ffaeae6e2e00a0f91de6a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5602,7 +5602,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
@@ -5610,7 +5610,7 @@ expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 7d9a25b5f973fffd9e3363a2244f80d6
+md5sum 29f3599462e37893d0160fc93bc96f8e
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5687,7 +5687,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
@@ -5695,7 +5695,7 @@ expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 5b95ea4fffa5e8fbf40abc7df8442187
+md5sum 414e26a47796f6d33fca93e57d0de455
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5716,7 +5716,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM001917
@@ -5724,7 +5724,7 @@ expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum b2263c4ef8ee1acb3ff3b23a8ba94c9c
+md5sum d53a1de8ad8067e92d53691d7dc61415
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5885,7 +5885,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
@@ -5893,7 +5893,7 @@ expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum d46858064ea6a4e96afe2654b193fe77
+md5sum 6a15b2a7f84a6d8f5b0d43a29537ef05
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5970,7 +5970,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
@@ -5978,7 +5978,7 @@ expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum a1a8b9eab7af293600afe119e3d04818
+md5sum 656450cfb054431079e4a021d5340bcb
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5999,7 +5999,7 @@ control Input
 controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002368
@@ -6007,7 +6007,7 @@ expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 1c715e28d76e9ff5496b7f18a5ee2a32
+md5sum 0d3b563362440819e3125985dfdfdf66
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6362,7 +6362,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
@@ -6370,7 +6370,7 @@ expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 695188c109ebf5d35100a92333a0f452
+md5sum e3aa47a44bcde38deebc00d35c87b394
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6444,7 +6444,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
@@ -6452,7 +6452,7 @@ expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 0e71e228dbeb90bf3e652ba804aa6ff1
+md5sum aab87d38398c735f87137a780a7903ff
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6472,7 +6472,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
 dccAccession wgEncodeEM002369
@@ -6480,7 +6480,7 @@ expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 41d02dc5c71d6b3103bef7a2d0bf4ce8
+md5sum 5c026a6a64039f07af408b3ccc055567
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6635,7 +6635,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
@@ -6643,7 +6643,7 @@ expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 6398aa96b491c2a55bec0d2c8df44638
+md5sum 98af5f3a72904eb655143cb287841a4d
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6717,7 +6717,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
@@ -6725,7 +6725,7 @@ expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 255357367b47fb1bbfff3bb29fc083fd
+md5sum 81b1ac9e6900c7597fb32385d0ef90b3
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6745,7 +6745,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
 dccAccession wgEncodeEM002367
@@ -6753,7 +6753,7 @@ expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 8e1b8e83fd0404db61b7db79df157b16
+md5sum 5f7e20216d052ebe741aaa328f46a864
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6908,7 +6908,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
@@ -6916,7 +6916,7 @@ expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 39d032124578c10096f685dd60b4c9de
+md5sum 3c21fe7c4c6623aa80e114cbfca3cb59
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6936,7 +6936,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
@@ -6944,7 +6944,7 @@ expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum a5a6482add56c64125bfa221f0bded06
+md5sum cb06367abfe9a5bcfa1cf673618aa38b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6964,7 +6964,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
 dccAccession wgEncodeEM002379
@@ -6972,7 +6972,7 @@ expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 848dceabe96dad181a74909c5d205531
+md5sum 0239535eab6225e239d8eb9df7f60ae9
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7181,7 +7181,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
@@ -7189,7 +7189,7 @@ expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 361691b712888ac59795d71b59e241da
+md5sum 4132641494809f778d1f10fe9317c71a
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7209,7 +7209,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
@@ -7217,7 +7217,7 @@ expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 4b5c613dc639069c531545bba4f4b351
+md5sum 7f2c496fbf6d467e996dcbe2e49b3845
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7237,7 +7237,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
 dccAccession wgEncodeEM002381
@@ -7245,7 +7245,7 @@ expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum c1f0cf080d3854a7307f2fa4c9bae885
+md5sum ba7eff0d9c6a3b4ee355bf2aeeff35b6
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -7454,7 +7454,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
@@ -7462,7 +7462,7 @@ expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 2f45743b959386be358fd1f55674c8c2
+md5sum 641ebece6900a187bc1141d5baa3d4c9
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -7482,7 +7482,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
@@ -7490,7 +7490,7 @@ expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum 2548d3bae80af412dce1d89e6438775f
+md5sum cbcd0486657984ee738d014ce99db859
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -7510,7 +7510,7 @@ control Input
 controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2012-03-14
+dateResubmitted 2012-04-16
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
 dccAccession wgEncodeEM002378
@@ -7518,7 +7518,7 @@ expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
-md5sum c5a08f1824624363a66bf53ac9930172
+md5sum a57ffb2c0283a659ea991a9ad2d9931e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -8041,4 +8041,4 @@ subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -920431513
+# MAGIC: -101941776
