@@ -2527,8 +2527,8 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-// turn off inPlaceUpdate when rows in imgTbl can arbitrarily reappear and disappear (see redmine #7306)
-jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", withLeftLabels || withCenterLabels);
+// turn off inPlaceUpdate when rows in imgTbl can arbitrarily reappear and disappear (see redmine #7306 and #6944)
+jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", withLeftLabels && withCenterLabels);
 jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
 if(newWinWidth)
     {
