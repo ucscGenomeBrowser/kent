@@ -39,11 +39,11 @@ double log4;	/* Log of 4 - used as background sometimes. */
 
 typedef UBYTE State;    /* A state. We'll only have 256 at most for now. */
 
-enum aStates 
+enum aStates
 /* Internal states for HMM. */
 {
     aUtr5,                      /* 5' UTR. */
-    
+
     aKoz0, aKoz1, aKoz2, aKoz3, aKoz4, /* Kozak consensus */
     aStart1, aStart2, aStart3,  /* Start codon. */
     aC1, aC2, aC3,              /* Regular codon. */
@@ -58,7 +58,7 @@ char aVisStates[] =
 /* User visible states of HMM. */
 {
     'U',		     /* 5' UTR. */
-    
+
     'k', 'k', 'k', 'k', 'k',  /* Kozak preamble. */
     'A', 'A', 'A',  /* Start codon. */
     '1', '2', '3',               /* Regular codon. */
@@ -79,7 +79,7 @@ struct trainingData
     double kozak[10][4];	/* Kozak consensus */
     };
 
-double scaledLog(double x)
+double scaleLog(double x)
 /* Scale log (or not) and check for zero */
 {
 if (x <= 0)
@@ -99,7 +99,7 @@ for (i=0; i<4; ++i)
         errAbort("Expecting %c to start line %d of %s", valToNt[i], lf->lineIx, lf->fileName);
     for (j=0; j<4; ++j)
 	{
-	m[i][j] = scaledLog(atof(row[j+1]));
+	m[i][j] = scaleLog(atof(row[j+1]));
 	// uglyf("%c%c %f\n", valToNt[i], valToNt[j], m[i][j]);
 	}
     }
@@ -124,9 +124,9 @@ for (i=0; i<4; ++i)
 	    lineFileRow(lf, row);
 	    start[2] = valToNt[k];
 	    if (!sameString(start, row[0]))
-	        errAbort("Expecting %s to start line %d of %s", 
+	        errAbort("Expecting %s to start line %d of %s",
 			start, lf->lineIx, lf->fileName);
-	    m[i][j][k] = scaledLog(atof(row[1]));
+	    m[i][j][k] = scaleLog(atof(row[1]));
 	    }
 	}
     }
@@ -141,7 +141,7 @@ for (i=0; i<10; ++i)
     char *row[4];
     lineFileRow(lf, row);
     for (j=0; j<4; ++j)
-         kozak[i][j] = scaledLog(atof(row[j]));
+         kozak[i][j] = scaleLog(atof(row[j]));
     }
 }
 
@@ -249,8 +249,8 @@ void makeTransitionProbs(double **transProbLookup)
 /* Allocate transition probabilities and initialize them. */
 {
 /* Make certain transitions reasonably likely. */
-transProbLookup[aUtr5][aUtr5] = scaledLog(0.990);
-transProbLookup[aUtr5][aKoz0] = scaledLog(0.010);
+transProbLookup[aUtr5][aUtr5] = scaleLog(0.990);
+transProbLookup[aUtr5][aKoz0] = scaleLog(0.010);
 transProbLookup[aKoz0][aKoz1] = always;
 transProbLookup[aKoz1][aKoz2] = always;
 transProbLookup[aKoz2][aKoz3] = always;
@@ -261,8 +261,8 @@ transProbLookup[aStart2][aStart3] = always;
 transProbLookup[aStart3][aC1] = always;
 transProbLookup[aC1][aC2] = always;
 transProbLookup[aC2][aC3] = always;
-transProbLookup[aC3][aC1] = scaledLog(0.9970);
-transProbLookup[aC3][aStop1] = scaledLog(0.003);
+transProbLookup[aC3][aC1] = scaleLog(0.9970);
+transProbLookup[aC3][aStop1] = scaleLog(0.003);
 transProbLookup[aStop1][aStop2] = always;
 transProbLookup[aStop2][aStop3] = always;
 transProbLookup[aStop3][aUtr3] =   always;
@@ -274,7 +274,7 @@ transProbLookup[aUtr3][aUtr3] = always;
     int destState = curState; \
     double newScore = -1000000000.0; \
     State parent = aStateCount; \
-    double oneScore; 
+    double oneScore;
 
 #define endState(curState) \
     dyno->curScores[destState] = newScore; \
@@ -282,8 +282,8 @@ transProbLookup[aUtr3][aUtr3] = always;
     }
 
     // int ufoo = uglyf(" start %d(%c)\n", curState, aVisStates[curState]);
-    // uglyf(" end %d(%c) from %d(%c) score %f\n", curState, aVisStates[curState], parent, aVisStates[parent], newScore); 
-    // uglyf("   source %d(%c) transProb %f, emitScore %f, prevScore %f, t+e %f\n", sourceState, aVisStates[sourceState], dyno->transProbLookup[sourceState][destState], emitScore, dyno->prevScores[sourceState],  dyno->transProbLookup[sourceState][destState] + emitScore); 
+    // uglyf(" end %d(%c) from %d(%c) score %f\n", curState, aVisStates[curState], parent, aVisStates[parent], newScore);
+    // uglyf("   source %d(%c) transProb %f, emitScore %f, prevScore %f, t+e %f\n", sourceState, aVisStates[sourceState], dyno->transProbLookup[sourceState][destState], emitScore, dyno->prevScores[sourceState],  dyno->transProbLookup[sourceState][destState] + emitScore);
 
 #define source(sourceState, emitScore) \
     if ((oneScore = dyno->transProbLookup[sourceState][destState] + emitScore + dyno->prevScores[sourceState]) > newScore) \
@@ -356,8 +356,8 @@ for (i=0; i<symCount; ++i)
 if (checkInHash != NULL && checkOut != NULL)
     {
     struct mrnaInfo *mi = hashMustFindVal(checkInHash, seq->name);
-    fprintf(checkOut, "%s\t%d\t%d\t%d\t%d\t%d\n", 
-    	mi->name, mi->size, mi->cdsStart, mi->cdsEnd, 
+    fprintf(checkOut, "%s\t%d\t%d\t%d\t%d\t%d\n",
+    	mi->name, mi->size, mi->cdsStart, mi->cdsEnd,
 	cdsStart, cdsEnd);
     }
 if (cdsOut != NULL)
@@ -381,8 +381,8 @@ return odds;
 }
 
 
-double fullDynamo(struct trainingData *td, struct dynoData *dyno, 
-	struct dnaSeq *seq,  FILE *f, struct hash *checkInHash, 
+double fullDynamo(struct trainingData *td, struct dynoData *dyno,
+	struct dnaSeq *seq,  FILE *f, struct hash *checkInHash,
 	FILE *checkOut, FILE *cdsOut)
 /* Run dynamic programming algorithm on HMM. Return score. */
 {
@@ -410,11 +410,11 @@ for (i=0; i<stateCount; ++i)
 /* Initialize score columns, and set up transitions from start state. */
 for (i=0; i<stateCount; ++i)
     dyno->prevScores[i] = never;
-dyno->prevScores[aUtr5] = scaledLog(0.60);
-dyno->prevScores[aC1] = scaledLog(0.10);
-dyno->prevScores[aC2] = scaledLog(0.10);
-dyno->prevScores[aC3] = scaledLog(0.10);
-dyno->prevScores[aUtr3] = scaledLog(0.20);
+dyno->prevScores[aUtr5] = scaleLog(0.60);
+dyno->prevScores[aC1] = scaleLog(0.10);
+dyno->prevScores[aC2] = scaleLog(0.10);
+dyno->prevScores[aC3] = scaleLog(0.10);
+dyno->prevScores[aUtr3] = scaleLog(0.20);
 
 for (dnaIx=0; dnaIx<scanSize; dnaIx += 1)
     {
@@ -473,7 +473,7 @@ for (dnaIx=0; dnaIx<scanSize; dnaIx += 1)
 
     /* Coding main states */
     startState(aC1)
-        source(aC3, always);	
+        source(aC3, always);
         source(aStart3, always);
     endState(aC1)
 
@@ -528,7 +528,7 @@ for (dnaIx=0; dnaIx<scanSize; dnaIx += 1)
         source(aUtr3, b);
 	source(aStop3, b);
     endState(aUtr3)
-  
+
     dynoFlopScores(dyno);
     last2base = lastBase;
     lastBase = base;
@@ -609,9 +609,9 @@ int main(int argc, char *argv[])
 {
 optionHash(&argc, argv);
 dnaUtilOpen();
-never = scaledLog(neverProb);
-always = scaledLog(1.0);
-log4 = scaledLog(4.0);
+never = scaleLog(neverProb);
+always = scaleLog(1.0);
+log4 = scaleLog(4.0);
 if (argc != 4)
     usage();
 orf(argv[1], argv[2], argv[3], optionVal("checkIn", NULL), optionVal("checkOut", NULL),

@@ -58,10 +58,10 @@ struct lineFile
     struct dyString *rawLines;  // Filled with raw lines used to create the full line
     boolean fullLineReuse;      // If TRUE, next call to lineFileNextFull will get already built fullLine
 
-    struct bbiFile *bbiHandle;                            // BigBed handle
-    struct bbiChromInfo *bbiChrom, *bbiChromList;         // BigBed chrom info
-    struct lm *bbiLm;                                     // BigBed local memory
-    struct bigBedInterval *bbiInterval, *bbiIntervalList; // BigBed intervals
+    void *dataForCallBack;                                 // ptr to data needed for callbacks
+    void(*checkSupport)(struct lineFile *lf, char *where); // check if operation supported 
+    boolean(*nextCallBack)(struct lineFile *lf, char **retStart, int *retSize); // next line callback
+    void(*closeCallBack)(struct lineFile *lf);             // close callback
     };
 
 char *getFileNameFromHdrSig(char *m);
@@ -260,6 +260,8 @@ void lineFileSetMetaDataOutput(struct lineFile *lf, FILE *f);
 void lineFileSetUniqueMetaData(struct lineFile *lf);
 /* suppress duplicate lines in metadata */
 
+void lineFileExpandBuf(struct lineFile *lf, int newSize);
+/* Expand line file buffer. */
 
 void lineFileRemoveInitialCustomTrackLines(struct lineFile *lf);
 /* remove initial browser and track lines */
