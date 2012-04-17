@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = patCount.o
 
 patCount: $O ../../lib/$(MACHTYPE)/jkweb.a 
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/patCount $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -lm -o ${BINDIR}/patCount $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib && ${MAKE}
