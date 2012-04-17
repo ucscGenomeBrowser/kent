@@ -18,7 +18,7 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species 
 sortOrder species=+ view=+ clade=+
 configurable on
-html mm10vertebrateChainNet
+html chainNet
 
     track vertebrateChainNetViewchain
     shortLabel Chains
@@ -147,13 +147,13 @@ html mm10vertebrateChainNet
         type chain fr3
         otherDb fr3
 
-        track chainOreNil1
+        track chainOreNil2
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=pTilapia clade=dPerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain oreNil1
-        otherDb oreNil1
+        type chain oreNil2
+        otherDb oreNil2
 
         track chainTetNig2
         subTrack vertebrateChainNetViewchain off
@@ -313,13 +313,13 @@ html mm10vertebrateChainNet
         type netAlign fr3 chainFr3
         otherDb fr3
 
-        track netOreNil1
+        track netOreNil2
         subTrack vertebrateChainNetViewnet on
         subGroups view=net species=pTilapia clade=dPerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign oreNil1 chainOreNil1
-        otherDb oreNil1
+        type netAlign oreNil2 chainOreNil2
+        otherDb oreNil2
 
         track netTetNig2
         subTrack vertebrateChainNetViewnet on
