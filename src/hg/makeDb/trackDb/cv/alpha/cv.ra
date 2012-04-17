@@ -8266,7 +8266,7 @@ lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
 validation Human_-_ERalpha_a(Immunoprecipitation-Western_blot,MassSpect):human_ERalpha_a_validation_Myers.pdf
-label ERalpha_a (sc-543)
+label ERalpha a (sc-543)
 
 term ERalpha_b
 tag ERAB
@@ -8281,7 +8281,7 @@ lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
 validation 
-label ERalpha_b (MAb-009-050)
+label ERalpha b (MAb-009-050)
 ##This does not appear in metaDb
 
 term Egr-1
