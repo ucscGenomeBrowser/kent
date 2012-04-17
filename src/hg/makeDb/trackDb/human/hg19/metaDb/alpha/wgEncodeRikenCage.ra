@@ -1826,7 +1826,7 @@ tableName wgEncodeRikenCageGm12878CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageGm12878CytosolLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell GM12878
 composite wgEncodeRikenCage
@@ -1844,7 +1844,7 @@ lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
 md5sum ce61eeed6ffb7b9ea07c9e912a2aa65d,057098a2247ac79249d48cc55e6e9ee5
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -1854,7 +1854,7 @@ tableName wgEncodeRikenCageGm12878CytosolLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell GM12878
 composite wgEncodeRikenCage
@@ -1872,7 +1872,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
 md5sum 16f881e10265380521e309683375cf3d
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -1882,7 +1882,7 @@ tableName wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell GM12878
 composite wgEncodeRikenCage
@@ -1900,7 +1900,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
 md5sum 5fec08d3900bf7c1c20a9b35689f5663
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -2408,7 +2408,7 @@ tableName wgEncodeRikenCageGm12878NucleolusTotalAln
 view Alignments
 
 metaObject wgEncodeRikenCageGm12878NucleolusTotalMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell GM12878
 composite wgEncodeRikenCage
@@ -2425,7 +2425,7 @@ grant Gingeras
 lab RIKEN
 localization nucleolus
 md5sum 90b6c133f36725b2bf30b34aee1cc200
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -2462,7 +2462,7 @@ tableName wgEncodeRikenCageGm12878NucleolusTotalMinusSignal
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageGm12878NucleolusTotalPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell GM12878
 composite wgEncodeRikenCage
@@ -2479,7 +2479,7 @@ grant Gingeras
 lab RIKEN
 localization nucleolus
 md5sum 500c1be9022e41ab500e533982de78d5
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -2614,7 +2614,7 @@ tableName wgEncodeRikenCageGm12878NucleolusTotalTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1
-objType table
+objType file
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
@@ -2630,7 +2630,7 @@ lab RIKEN
 labExpId J59
 localization nucleus
 md5sum eff9f038c0e003bc34a4ea4516569c61,bcba902d38cc8707af40ae425eb7d8f1
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2640,7 +2640,7 @@ tableName wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1
 view Alignments
 
 metaObject wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1
-objType table
+objType file
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
@@ -2656,7 +2656,7 @@ lab RIKEN
 labExpId J59
 localization nucleus
 md5sum f88733366681111f6386a981891d2f48
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2666,7 +2666,7 @@ tableName wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1
-objType table
+objType file
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
@@ -2682,7 +2682,7 @@ lab RIKEN
 labExpId J59
 localization nucleus
 md5sum b567929178ba7d6de1e0680babf3d94c
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3157,7 +3157,7 @@ tableName wgEncodeRikenCageGm12878NucleusPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageH1hescCellLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -3174,7 +3174,7 @@ grant Gingeras
 lab RIKEN
 localization cell
 md5sum 9cd926fb78e6a109c6f83f67bba264f3,cdec53868897ea4a8ed857030d454dac
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -3185,7 +3185,7 @@ tableName wgEncodeRikenCageH1hescCellLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -3202,7 +3202,7 @@ grant Gingeras
 lab RIKEN
 localization cell
 md5sum 94db6594e3652cd5d769fbcb24e7ec27
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -3213,7 +3213,7 @@ tableName wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -3230,7 +3230,7 @@ grant Gingeras
 lab RIKEN
 localization cell
 md5sum 7ec869e6e5dc08e4ff210d8f10a53ee6
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -3502,7 +3502,7 @@ tableName wgEncodeRikenCageH1hescCellPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageH1hescCellPapMinusClustersRep1
-objType table
+objType file
 bioRep 005WC
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -3520,7 +3520,7 @@ labExpId J74
 labProtocolId 005WC+cage
 localization cell
 md5sum af71f718325dffa717412c03a20b3a24
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3530,7 +3530,7 @@ tableName wgEncodeRikenCageH1hescCellPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapMinusClustersRep2
-objType table
+objType file
 bioRep 006WC
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -3548,7 +3548,7 @@ labExpId J75
 labProtocolId 006WC+cage
 localization cell
 md5sum 65ec690e4f56dcbbf777be0515a99579
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3612,7 +3612,7 @@ tableName wgEncodeRikenCageH1hescCellPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapPlusClustersRep1
-objType table
+objType file
 bioRep 005WC
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -3630,7 +3630,7 @@ labExpId J74
 labProtocolId 005WC+cage
 localization cell
 md5sum 407e55ddec4a0cb0d4140c5419b06311
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3640,7 +3640,7 @@ tableName wgEncodeRikenCageH1hescCellPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageH1hescCellPapPlusClustersRep2
-objType table
+objType file
 bioRep 006WC
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -3658,7 +3658,7 @@ labExpId J75
 labProtocolId 006WC+cage
 localization cell
 md5sum a7e9cfc789181f09584692acfea929bb
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3851,7 +3851,7 @@ tableName wgEncodeRikenCageH1hescCytosolPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageH1hescCytosolPapMinusClustersRep2
-objType table
+objType file
 bioRep 006C
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -3869,7 +3869,7 @@ labExpId J86
 labProtocolId 006C+cage
 localization cytosol
 md5sum 45702da159378b723c5fe749c9a600b8
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3906,7 +3906,7 @@ tableName wgEncodeRikenCageH1hescCytosolPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2
-objType table
+objType file
 bioRep 006C
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -3924,7 +3924,7 @@ labExpId J86
 labProtocolId 006C+cage
 localization cytosol
 md5sum bacc17901f779ee8551afd858bc7bac7
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4014,7 +4014,7 @@ tableName wgEncodeRikenCageH1hescNucleusPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageH1hescNucleusPapMinusClustersRep2
-objType table
+objType file
 bioRep 006N
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -4032,7 +4032,7 @@ labExpId J95
 labProtocolId 006N+cage
 localization nucleus
 md5sum 3da9ef1cdb0957a337294e60f7edb79d
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4069,7 +4069,7 @@ tableName wgEncodeRikenCageH1hescNucleusPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2
-objType table
+objType file
 bioRep 006N
 cell H1-hESC
 composite wgEncodeRikenCage
@@ -4087,7 +4087,7 @@ labExpId J95
 labProtocolId 006N+cage
 localization nucleus
 md5sum 2a1be0ad1384fa93a1ef60cf3e24adad
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4870,7 +4870,7 @@ tableName wgEncodeRikenCageHelas3CellPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageHelas3CellPapMinusClustersRep1
-objType table
+objType file
 bioRep 011WC
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -4888,7 +4888,7 @@ labExpId J80
 labProtocolId 011WC+cage
 localization cell
 md5sum fb530996757594dd8bec8f8c6cc5e777
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4898,7 +4898,7 @@ tableName wgEncodeRikenCageHelas3CellPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapMinusClustersRep2
-objType table
+objType file
 bioRep 012WC
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -4916,7 +4916,7 @@ labExpId J81
 labProtocolId 012WC+cage
 localization cell
 md5sum 1d44544b712c79cb24e087be43f43d82
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4980,7 +4980,7 @@ tableName wgEncodeRikenCageHelas3CellPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapPlusClustersRep1
-objType table
+objType file
 bioRep 011WC
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -4998,7 +4998,7 @@ labExpId J80
 labProtocolId 011WC+cage
 localization cell
 md5sum fdd5a24977678434f95070287a48f89a
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5008,7 +5008,7 @@ tableName wgEncodeRikenCageHelas3CellPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CellPapPlusClustersRep2
-objType table
+objType file
 bioRep 012WC
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -5026,7 +5026,7 @@ labExpId J81
 labProtocolId 012WC+cage
 localization cell
 md5sum f05df8e18f2f5ad1a406e3349fa3c722
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5192,7 +5192,7 @@ tableName wgEncodeRikenCageHelas3CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -5210,7 +5210,7 @@ labExpId J56
 labProtocolId 
 localization cytosol
 md5sum def431706c70f3d46525988474ed8f89,edb78dd5e763ce19a68cbe3c47336a31
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -5220,7 +5220,7 @@ tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -5238,7 +5238,7 @@ labExpId J56
 labProtocolId 
 localization cytosol
 md5sum f65ac5a8ff72138a0be9c5ec35237a18
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -5248,7 +5248,7 @@ tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -5266,7 +5266,7 @@ labExpId J56
 labProtocolId 
 localization cytosol
 md5sum adeaec4bbf04650b98a3b562d3714081
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -5533,7 +5533,7 @@ tableName wgEncodeRikenCageHelas3CytosolPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageHelas3CytosolPapMinusClustersRep1
-objType table
+objType file
 bioRep 011C
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -5551,7 +5551,7 @@ labExpId J87
 labProtocolId 011C+cage
 localization cytosol
 md5sum 963897966f19b8d1089a8d0d074f9522
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5561,7 +5561,7 @@ tableName wgEncodeRikenCageHelas3CytosolPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapMinusClustersRep2
-objType table
+objType file
 bioRep 012C
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -5579,7 +5579,7 @@ labExpId J88
 labProtocolId 012C+cage
 localization cytosol
 md5sum 9aaf4bb31fd997e3593b3e27458727b5
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5643,7 +5643,7 @@ tableName wgEncodeRikenCageHelas3CytosolPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapPlusClustersRep1
-objType table
+objType file
 bioRep 011C
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -5661,7 +5661,7 @@ labExpId J87
 labProtocolId 011C+cage
 localization cytosol
 md5sum 9eb664071fa7d9dd0f2db954508deeb6
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5671,7 +5671,7 @@ tableName wgEncodeRikenCageHelas3CytosolPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolPapPlusClustersRep2
-objType table
+objType file
 bioRep 012C
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -5689,7 +5689,7 @@ labExpId J88
 labProtocolId 012C+cage
 localization cytosol
 md5sum f08210a600e1121ee30ccdf5c8c3f194
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5881,7 +5881,7 @@ tableName wgEncodeRikenCageHelas3NucleolusTotalAln
 view Alignments
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -5899,7 +5899,7 @@ labExpId J58
 labProtocolId 
 localization nucleolus
 md5sum f349b38f1156fd7c9af1e502a488ce72
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -5935,7 +5935,7 @@ tableName wgEncodeRikenCageHelas3NucleolusTotalMinusSignal
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -5953,7 +5953,7 @@ labExpId J58
 labProtocolId 
 localization nucleolus
 md5sum 7fc3c66d83b13f92308e99d96452ccf3
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -6254,7 +6254,7 @@ tableName wgEncodeRikenCageHelas3NucleusPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageHelas3NucleusPapMinusClustersRep1
-objType table
+objType file
 bioRep 011N
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -6272,7 +6272,7 @@ labExpId J96
 labProtocolId 011N+cage
 localization nucleus
 md5sum e5ee4571965b12cabb39c5a22e984f5d
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6282,7 +6282,7 @@ tableName wgEncodeRikenCageHelas3NucleusPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapMinusClustersRep2
-objType table
+objType file
 bioRep 012N
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -6300,7 +6300,7 @@ labExpId J97
 labProtocolId 012N+cage
 localization nucleus
 md5sum fa076d5af435705fdbd2b3a6272417ba
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6364,7 +6364,7 @@ tableName wgEncodeRikenCageHelas3NucleusPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapPlusClustersRep1
-objType table
+objType file
 bioRep 011N
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -6382,7 +6382,7 @@ labExpId J96
 labProtocolId 011N+cage
 localization nucleus
 md5sum c628400c758e62742bbb79c992d8bde6
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6392,7 +6392,7 @@ tableName wgEncodeRikenCageHelas3NucleusPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleusPapPlusClustersRep2
-objType table
+objType file
 bioRep 012N
 cell HeLa-S3
 composite wgEncodeRikenCage
@@ -6410,7 +6410,7 @@ labExpId J97
 labProtocolId 012N+cage
 localization nucleus
 md5sum 5b58fcac958a5a6f247282695c07a56c
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6630,7 +6630,7 @@ tableName wgEncodeRikenCageHepg2CellPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageHepg2CellPapMinusClustersRep1
-objType table
+objType file
 bioRep 013WC
 cell HepG2
 composite wgEncodeRikenCage
@@ -6648,7 +6648,7 @@ labExpId K01
 labProtocolId 013WC+cage
 localization cell
 md5sum 82ac89a39f86ff1945ccfff997d5042b
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6658,7 +6658,7 @@ tableName wgEncodeRikenCageHepg2CellPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapMinusClustersRep2
-objType table
+objType file
 bioRep 014WC
 cell HepG2
 composite wgEncodeRikenCage
@@ -6676,7 +6676,7 @@ labExpId K02
 labProtocolId 014WC+cage
 localization cell
 md5sum 8393ef3f063acf9007dc29e119ec0a17
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6740,7 +6740,7 @@ tableName wgEncodeRikenCageHepg2CellPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapPlusClustersRep1
-objType table
+objType file
 bioRep 013WC
 cell HepG2
 composite wgEncodeRikenCage
@@ -6758,7 +6758,7 @@ labExpId K01
 labProtocolId 013WC+cage
 localization cell
 md5sum c51b79f62d0642bfe8b157ba6fe8c3b1
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6768,7 +6768,7 @@ tableName wgEncodeRikenCageHepg2CellPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageHepg2CellPapPlusClustersRep2
-objType table
+objType file
 bioRep 014WC
 cell HepG2
 composite wgEncodeRikenCage
@@ -6786,7 +6786,7 @@ labExpId K02
 labProtocolId 014WC+cage
 localization cell
 md5sum cb73a8f5e68669952b6e1435094a268e
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6979,7 +6979,7 @@ submittedDataVersion V2 - Filtered out the off end of chromosome reads
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CytosolLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell HepG2
 composite wgEncodeRikenCage
@@ -6997,7 +6997,7 @@ lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
 md5sum d09381a7e4e875d23af8f89ff8ef6c0e,2bf3965cee622380ecc1bcbda318adc8
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7007,7 +7007,7 @@ tableName wgEncodeRikenCageHepg2CytosolLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageHepg2CytosolLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HepG2
 composite wgEncodeRikenCage
@@ -7025,7 +7025,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
 md5sum c02bc2a4d781f2be6ed726b8ed6dbe3e
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7035,7 +7035,7 @@ tableName wgEncodeRikenCageHepg2CytosolLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HepG2
 composite wgEncodeRikenCage
@@ -7053,7 +7053,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
 md5sum 89550776f2ae3c69924f69c6435bbcea
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7324,7 +7324,7 @@ tableName wgEncodeRikenCageHepg2CytosolPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageHepg2CytosolPapMinusClustersRep1
-objType table
+objType file
 bioRep 013C
 cell HepG2
 composite wgEncodeRikenCage
@@ -7342,7 +7342,7 @@ labExpId J89
 labProtocolId 013C+cage
 localization cytosol
 md5sum 2ea39955c9b1c0f9eeda48377cce7b30
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7352,7 +7352,7 @@ tableName wgEncodeRikenCageHepg2CytosolPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapMinusClustersRep2
-objType table
+objType file
 bioRep 014C
 cell HepG2
 composite wgEncodeRikenCage
@@ -7370,7 +7370,7 @@ labExpId J90
 labProtocolId 014C+cage
 localization cytosol
 md5sum 92820cb9611cfcef2dce9613e83f3a1a
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7434,7 +7434,7 @@ tableName wgEncodeRikenCageHepg2CytosolPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapPlusClustersRep1
-objType table
+objType file
 bioRep 013C
 cell HepG2
 composite wgEncodeRikenCage
@@ -7452,7 +7452,7 @@ labExpId J89
 labProtocolId 013C+cage
 localization cytosol
 md5sum 4f2463a54df250799d0312ffbc678e41
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7462,7 +7462,7 @@ tableName wgEncodeRikenCageHepg2CytosolPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageHepg2CytosolPapPlusClustersRep2
-objType table
+objType file
 bioRep 014C
 cell HepG2
 composite wgEncodeRikenCage
@@ -7480,7 +7480,7 @@ labExpId J90
 labProtocolId 014C+cage
 localization cytosol
 md5sum 2e37e3e1ba081ffe36a3faf2845b337d
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7673,7 +7673,7 @@ tableName wgEncodeRikenCageHepg2NucleolusTotalAln
 view Alignments
 
 metaObject wgEncodeRikenCageHepg2NucleolusTotalMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HepG2
 composite wgEncodeRikenCage
@@ -7690,7 +7690,7 @@ grant Gingeras
 lab RIKEN
 localization nucleolus
 md5sum b4620610e3fcdfe229ef24235b641733
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7727,7 +7727,7 @@ tableName wgEncodeRikenCageHepg2NucleolusTotalMinusSignal
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHepg2NucleolusTotalPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HepG2
 composite wgEncodeRikenCage
@@ -7744,7 +7744,7 @@ grant Gingeras
 lab RIKEN
 localization nucleolus
 md5sum 5d86d5e6d91a02ce636b273fdd482557
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7830,33 +7830,6 @@ rnaExtract total
 subId 4519
 view TssGencV7
 
-metaObject wgEncodeRikenCageHepg2NucleolusTotalTssHmm
-objType file
-bioRep gen0127NL
-cell HepG2
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
-dccAccession wgEncodeEH000344
-dccRep 1
-expId 344
-fileName wgEncodeRikenCageHepg2NucleolusTotalTssHmm.bedRnaElements.gz
-grant Gingeras
-lab RIKEN
-labExpId I68
-labProtocolId gen0127NLtcage
-labVersion IDR
-localization nucleolus
-md5sum baa3c52dcd332cd280df71b425357178
-objStatus replaced - this version has scores that exceed chromosome lengths
-origAssembly hg19
-project wgEncode
-rnaExtract total
-subId 5069
-view TssHmm
-
 metaObject wgEncodeRikenCageHepg2NucleolusTotalTssHmmV2
 objType file
 bioRep gen0127NL
@@ -7906,7 +7879,7 @@ tableName wgEncodeRikenCageHepg2NucleolusTotalTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2NucleusLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell HepG2
 composite wgEncodeRikenCage
@@ -7924,7 +7897,7 @@ lab RIKEN
 labVersion Delve version 0.9
 localization nucleus
 md5sum 53561b0344a0a0dd0816a302464d962d,c2c23a5afe21df4d184c52856ec1343c
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7934,7 +7907,7 @@ tableName wgEncodeRikenCageHepg2NucleusLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageHepg2NucleusLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HepG2
 composite wgEncodeRikenCage
@@ -7952,7 +7925,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
 md5sum 8c20300cab17417cde04b9f2137b72d3
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7962,7 +7935,7 @@ tableName wgEncodeRikenCageHepg2NucleusLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HepG2
 composite wgEncodeRikenCage
@@ -7980,7 +7953,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
 md5sum 43f9c074b1d343f2bf9d8bd9e7125f38
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -8251,7 +8224,7 @@ tableName wgEncodeRikenCageHepg2NucleusPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageHepg2NucleusPapMinusClustersRep1
-objType table
+objType file
 bioRep 013N
 cell HepG2
 composite wgEncodeRikenCage
@@ -8269,7 +8242,7 @@ labExpId J98
 labProtocolId 013N+cage
 localization nucleus
 md5sum 92814b7e04f59782da8ea5890d0521a2
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8279,7 +8252,7 @@ tableName wgEncodeRikenCageHepg2NucleusPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapMinusClustersRep2
-objType table
+objType file
 bioRep 014N
 cell HepG2
 composite wgEncodeRikenCage
@@ -8297,7 +8270,7 @@ labExpId J99
 labProtocolId 014N+cage
 localization nucleus
 md5sum 5a1c86cb20a5d05c51e425094ee36dac
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8361,7 +8334,7 @@ tableName wgEncodeRikenCageHepg2NucleusPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapPlusClustersRep1
-objType table
+objType file
 bioRep 013N
 cell HepG2
 composite wgEncodeRikenCage
@@ -8379,7 +8352,7 @@ labExpId J98
 labProtocolId 013N+cage
 localization nucleus
 md5sum eef2741f84bc636e4a0e93ad2519359e
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8389,7 +8362,7 @@ tableName wgEncodeRikenCageHepg2NucleusPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageHepg2NucleusPapPlusClustersRep2
-objType table
+objType file
 bioRep 014N
 cell HepG2
 composite wgEncodeRikenCage
@@ -8407,7 +8380,7 @@ labExpId J99
 labProtocolId 014N+cage
 localization nucleus
 md5sum 4aaba67241aa3e10eedf931262b3b043
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10526,7 +10499,7 @@ tableName wgEncodeRikenCageHuvecCellPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageHuvecCellPapMinusClustersRep1
-objType table
+objType file
 bioRep 009WC
 cell HUVEC
 composite wgEncodeRikenCage
@@ -10544,7 +10517,7 @@ labExpId J78
 labProtocolId 009WC+cage
 localization cell
 md5sum 605d5f495f9db3ea5d60413739956ea8
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10554,7 +10527,7 @@ tableName wgEncodeRikenCageHuvecCellPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapMinusClustersRep2
-objType table
+objType file
 bioRep 010WC
 cell HUVEC
 composite wgEncodeRikenCage
@@ -10572,7 +10545,7 @@ labExpId J79
 labProtocolId 010WC+cage
 localization cell
 md5sum ef982e6ab9386be510f833d95e3207a7
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10636,7 +10609,7 @@ tableName wgEncodeRikenCageHuvecCellPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapPlusClustersRep1
-objType table
+objType file
 bioRep 009WC
 cell HUVEC
 composite wgEncodeRikenCage
@@ -10654,7 +10627,7 @@ labExpId J78
 labProtocolId 009WC+cage
 localization cell
 md5sum 01dfb230ab89be13d8f70c2078362da8
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10664,7 +10637,7 @@ tableName wgEncodeRikenCageHuvecCellPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageHuvecCellPapPlusClustersRep2
-objType table
+objType file
 bioRep 010WC
 cell HUVEC
 composite wgEncodeRikenCage
@@ -10682,7 +10655,7 @@ labExpId J79
 labProtocolId 010WC+cage
 localization cell
 md5sum e8c8190de5ff0064026fa1ac9b466bf9
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10848,7 +10821,7 @@ tableName wgEncodeRikenCageHuvecCellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHuvecCytosolLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell HUVEC
 composite wgEncodeRikenCage
@@ -10866,7 +10839,7 @@ lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
 md5sum a52493b98f0fa3a92d3b6a0185cb4b77,6a9e4f8d3b34acd2b73c548cc9a5a8e2
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -10876,7 +10849,7 @@ tableName wgEncodeRikenCageHuvecCytosolLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageHuvecCytosolLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HUVEC
 composite wgEncodeRikenCage
@@ -10894,7 +10867,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
 md5sum 0a572af5457e703ee9514005f13edf19
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -10904,7 +10877,7 @@ tableName wgEncodeRikenCageHuvecCytosolLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell HUVEC
 composite wgEncodeRikenCage
@@ -10922,7 +10895,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
 md5sum 6291b1e05295a86e8b2aa7e0b8ae0c05
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -11193,7 +11166,7 @@ tableName wgEncodeRikenCageHuvecCytosolPapAlnRep4
 view Alignments
 
 metaObject wgEncodeRikenCageHuvecCytosolPapMinusClustersRep3
-objType table
+objType file
 bioRep 029C
 cell HUVEC
 composite wgEncodeRikenCage
@@ -11211,7 +11184,7 @@ labExpId K03
 labProtocolId 029C+cage
 localization cytosol
 md5sum 0af38b6061decd89498c9b035cefe734
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -11221,7 +11194,7 @@ tableName wgEncodeRikenCageHuvecCytosolPapMinusClustersRep3
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapMinusClustersRep4
-objType table
+objType file
 bioRep 030C
 cell HUVEC
 composite wgEncodeRikenCage
@@ -11239,7 +11212,7 @@ labExpId K04
 labProtocolId 030C+cage
 localization cytosol
 md5sum 11384c6a20004845a1908588c9ce7f01
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -11303,7 +11276,7 @@ tableName wgEncodeRikenCageHuvecCytosolPapMinusSignalRep4
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapPlusClustersRep3
-objType table
+objType file
 bioRep 029C
 cell HUVEC
 composite wgEncodeRikenCage
@@ -11321,7 +11294,7 @@ labExpId K03
 labProtocolId 029C+cage
 localization cytosol
 md5sum 78d7a2c1fbecbbcebf31141e47a4c3bd
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -11331,7 +11304,7 @@ tableName wgEncodeRikenCageHuvecCytosolPapPlusClustersRep3
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageHuvecCytosolPapPlusClustersRep4
-objType table
+objType file
 bioRep 030C
 cell HUVEC
 composite wgEncodeRikenCage
@@ -11349,7 +11322,7 @@ labExpId K04
 labProtocolId 030C+cage
 localization cytosol
 md5sum b7587592dd6dfd8ed87dabd3ee6df2c3
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -11682,7 +11655,7 @@ tableName wgEncodeRikenCageHuvecNucleusPapAlnRep4
 view Alignments
 
 metaObject wgEncodeRikenCageHuvecNucleusPapMinusClustersRep3
-objType table
+objType file
 bioRep 029N
 cell HUVEC
 composite wgEncodeRikenCage
@@ -11700,7 +11673,7 @@ labExpId K05
 labProtocolId 029N+cage
 localization nucleus
 md5sum 4b4c9685bc810855c8120de03a190608
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -11710,7 +11683,7 @@ tableName wgEncodeRikenCageHuvecNucleusPapMinusClustersRep3
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapMinusClustersRep4
-objType table
+objType file
 bioRep 030N
 cell HUVEC
 composite wgEncodeRikenCage
@@ -11728,7 +11701,7 @@ labExpId K06
 labProtocolId 030N+cage
 localization nucleus
 md5sum 36c37d8e3a87cb4ec71181fc38b2ab42
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -11792,7 +11765,7 @@ tableName wgEncodeRikenCageHuvecNucleusPapMinusSignalRep4
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapPlusClustersRep3
-objType table
+objType file
 bioRep 029N
 cell HUVEC
 composite wgEncodeRikenCage
@@ -11810,7 +11783,7 @@ labExpId K05
 labProtocolId 029N+cage
 localization nucleus
 md5sum 5e374fa9c298c3b3201108e0d5ae6ae3
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -11820,7 +11793,7 @@ tableName wgEncodeRikenCageHuvecNucleusPapPlusClustersRep3
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageHuvecNucleusPapPlusClustersRep4
-objType table
+objType file
 bioRep 030N
 cell HUVEC
 composite wgEncodeRikenCage
@@ -11838,7 +11811,7 @@ labExpId K06
 labProtocolId 030N+cage
 localization nucleus
 md5sum ee75882cf87e463a5773b62139320725
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -13168,7 +13141,7 @@ tableName wgEncodeRikenCageK562CellPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageK562CellPapMinusClustersRep1
-objType table
+objType file
 bioRep 001WC
 cell K562
 composite wgEncodeRikenCage
@@ -13186,7 +13159,7 @@ labExpId J70
 labProtocolId 001WC+cage
 localization cell
 md5sum 6f086cc3562ae92ff913d473c0c43871
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13196,7 +13169,7 @@ tableName wgEncodeRikenCageK562CellPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562CellPapMinusClustersRep2
-objType table
+objType file
 bioRep 002WC
 cell K562
 composite wgEncodeRikenCage
@@ -13214,7 +13187,7 @@ labExpId J71
 labProtocolId 002WC+cage
 localization cell
 md5sum fe038ad751c4879be5e432d34d020907
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13278,7 +13251,7 @@ tableName wgEncodeRikenCageK562CellPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562CellPapPlusClustersRep1
-objType table
+objType file
 bioRep 001WC
 cell K562
 composite wgEncodeRikenCage
@@ -13296,7 +13269,7 @@ labExpId J70
 labProtocolId 001WC+cage
 localization cell
 md5sum 78696f2a0d7ebf7fa80ac6fbc2101a0e
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13306,7 +13279,7 @@ tableName wgEncodeRikenCageK562CellPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageK562CellPapPlusClustersRep2
-objType table
+objType file
 bioRep 002WC
 cell K562
 composite wgEncodeRikenCage
@@ -13324,7 +13297,7 @@ labExpId J71
 labProtocolId 002WC+cage
 localization cell
 md5sum a61180a4b5b5c4dc75f09eff75be3e34
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13518,7 +13491,7 @@ tableName wgEncodeRikenCageK562ChromatinTotalAln
 view Alignments
 
 metaObject wgEncodeRikenCageK562ChromatinTotalMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -13536,7 +13509,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization chromatin
 md5sum 18d6ebd6a5f4e8c9b46e28ab6c2caf7a
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -13574,7 +13547,7 @@ tableName wgEncodeRikenCageK562ChromatinTotalMinusSignal
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562ChromatinTotalPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -13592,7 +13565,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization chromatin
 md5sum 71d8a7f9110b6ceb708acc2bc8e775ce
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -13679,33 +13652,6 @@ rnaExtract total
 subId 4516
 view TssGencV7
 
-metaObject wgEncodeRikenCageK562ChromatinTotalTssHmm
-objType file
-bioRep gen0134CH
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
-dccAccession wgEncodeEH000334
-dccRep 1
-expId 334
-fileName wgEncodeRikenCageK562ChromatinTotalTssHmm.bedRnaElements.gz
-grant Gingeras
-lab RIKEN
-labExpId I35
-labProtocolId gen0134CHtcage
-labVersion IDR
-localization chromatin
-md5sum eb338642e7ec879be9ec11fe43da98e0
-objStatus replaced - this version has scores that exceed chromosome lengths
-origAssembly hg19
-project wgEncode
-rnaExtract total
-subId 5065
-view TssHmm
-
 metaObject wgEncodeRikenCageK562ChromatinTotalTssHmmV2
 objType file
 bioRep gen0134CH
@@ -13755,7 +13701,7 @@ tableName wgEncodeRikenCageK562ChromatinTotalTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageK562CytosolLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -13772,7 +13718,7 @@ grant Gingeras
 lab RIKEN
 localization cytosol
 md5sum 40da6c19aac1826ae56d9d1240a031db,b6d8d17af59357f22e473693624ba048
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -13783,7 +13729,7 @@ tableName wgEncodeRikenCageK562CytosolLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -13800,7 +13746,7 @@ grant Gingeras
 lab RIKEN
 localization cytosol
 md5sum 25a45b47cf8b88b03a2adbdb3af5aed7
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -13811,7 +13757,7 @@ tableName wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -13828,7 +13774,7 @@ grant Gingeras
 lab RIKEN
 localization cytosol
 md5sum ca6b99fc622308a19d709dd7557f52f3
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -14183,7 +14129,7 @@ tableName wgEncodeRikenCageK562CytosolPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -14201,7 +14147,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
 md5sum 6bfd6923f449ef9a7153601d03a25c96
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -14211,7 +14157,7 @@ tableName wgEncodeRikenCageK562CytosolPapMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusClustersRep1
-objType table
+objType file
 bioRep 001C
 cell K562
 composite wgEncodeRikenCage
@@ -14229,7 +14175,7 @@ labExpId J82
 labProtocolId 001C+cage
 localization cytosol
 md5sum a2d833c942e225c4ae693c0122fddcb8
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14239,7 +14185,7 @@ tableName wgEncodeRikenCageK562CytosolPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusClustersRep2
-objType table
+objType file
 bioRep 002C
 cell K562
 composite wgEncodeRikenCage
@@ -14257,7 +14203,7 @@ labExpId J83
 labProtocolId 002C+cage
 localization cytosol
 md5sum ba8ce41a46b5e708fd93e387fb1eedf8
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14349,7 +14295,7 @@ tableName wgEncodeRikenCageK562CytosolPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -14367,7 +14313,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
 md5sum 7581b8936432aa99d1ec01329e202789
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -14377,7 +14323,7 @@ tableName wgEncodeRikenCageK562CytosolPapPlusClusters
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusClustersRep1
-objType table
+objType file
 bioRep 001C
 cell K562
 composite wgEncodeRikenCage
@@ -14395,7 +14341,7 @@ labExpId J82
 labProtocolId 001C+cage
 localization cytosol
 md5sum bb9304ed152e51a9926377537039a95d
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14405,7 +14351,7 @@ tableName wgEncodeRikenCageK562CytosolPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusClustersRep2
-objType table
+objType file
 bioRep 002C
 cell K562
 composite wgEncodeRikenCage
@@ -14423,7 +14369,7 @@ labExpId J83
 labProtocolId 002C+cage
 localization cytosol
 md5sum a0855e5cb17e07b485a58c9ec00b71cb
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14770,33 +14716,6 @@ rnaExtract total
 subId 4507
 view TssGencV7
 
-metaObject wgEncodeRikenCageK562NucleolusTotalTssHmm
-objType file
-bioRep gen0144NL
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
-dccAccession wgEncodeEH000335
-dccRep 1
-expId 335
-fileName wgEncodeRikenCageK562NucleolusTotalTssHmm.bedRnaElements.gz
-grant Gingeras
-lab RIKEN
-labExpId I33
-labProtocolId gen0144NLtcage
-labVersion IDR
-localization nucleolus
-md5sum 25a8b99de440b531dd14432df0274159
-objStatus replaced - this version has scores that exceed chromosome lengths
-origAssembly hg19
-project wgEncode
-rnaExtract total
-subId 5056
-view TssHmm
-
 metaObject wgEncodeRikenCageK562NucleolusTotalTssHmmV2
 objType file
 bioRep gen0144NL
@@ -14874,7 +14793,7 @@ tableName wgEncodeRikenCageK562NucleoplasmTotalAln
 view Alignments
 
 metaObject wgEncodeRikenCageK562NucleoplasmTotalMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -14892,7 +14811,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleoplasm
 md5sum 4deb2a5079895e41d1912971f390f3fa
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -14930,7 +14849,7 @@ tableName wgEncodeRikenCageK562NucleoplasmTotalMinusSignal
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562NucleoplasmTotalPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -14948,7 +14867,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleoplasm
 md5sum b1025cf17ea4d9ae297fb89fba57fe0b
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -15035,33 +14954,6 @@ rnaExtract total
 subId 4525
 view TssGencV7
 
-metaObject wgEncodeRikenCageK562NucleoplasmTotalTssHmm
-objType file
-bioRep gen0147NP
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
-dccAccession wgEncodeEH000336
-dccRep 1
-expId 336
-fileName wgEncodeRikenCageK562NucleoplasmTotalTssHmm.bedRnaElements.gz
-grant Gingeras
-lab RIKEN
-labExpId I34
-labProtocolId gen0147NPtcage
-labVersion IDR
-localization nucleoplasm
-md5sum bd5cf0866d75661595d208f490df77a4
-objStatus replaced - this version has scores that exceed chromosome lengths
-origAssembly hg19
-project wgEncode
-rnaExtract total
-subId 5076
-view TssHmm
-
 metaObject wgEncodeRikenCageK562NucleoplasmTotalTssHmmV2
 objType file
 bioRep gen0147NP
@@ -15111,7 +15003,7 @@ tableName wgEncodeRikenCageK562NucleoplasmTotalTssHmmV3
 view TssHmm
 
 metaObject wgEncodeRikenCageK562NucleusLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -15128,7 +15020,7 @@ grant Gingeras
 lab RIKEN
 localization nucleus
 md5sum a77cd54e73cd13920cbd94f9d411b334,1d8e0f06468efeffd4639cc82672d959
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -15138,7 +15030,7 @@ tableName wgEncodeRikenCageK562NucleusLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -15155,7 +15047,7 @@ grant Gingeras
 lab RIKEN
 localization nucleus
 md5sum f1ecbb07206d715ab314c3deb96307fd
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -15165,7 +15057,7 @@ tableName wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -15182,7 +15074,7 @@ grant Gingeras
 lab RIKEN
 localization nucleus
 md5sum 4925d0a5508ed083b599c0bc5cdc02b1
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -15504,7 +15396,7 @@ tableName wgEncodeRikenCageK562NucleusPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageK562NucleusPapMinusClustersRep1
-objType table
+objType file
 bioRep 001N
 cell K562
 composite wgEncodeRikenCage
@@ -15522,7 +15414,7 @@ labExpId J91
 labProtocolId 001N+cage
 localization nucleus
 md5sum b5fd0f7d76d85c01c7f2ce1fb8594ded
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15532,7 +15424,7 @@ tableName wgEncodeRikenCageK562NucleusPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapMinusClustersRep2
-objType table
+objType file
 bioRep 002N
 cell K562
 composite wgEncodeRikenCage
@@ -15550,7 +15442,7 @@ labExpId J92
 labProtocolId 002N+cage
 localization nucleus
 md5sum 15af3feafc52f392285999ffb37d1c63
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15614,7 +15506,7 @@ tableName wgEncodeRikenCageK562NucleusPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapPlusClustersRep1
-objType table
+objType file
 bioRep 001N
 cell K562
 composite wgEncodeRikenCage
@@ -15632,7 +15524,7 @@ labExpId J91
 labProtocolId 001N+cage
 localization nucleus
 md5sum 4668f5224bb32d2f95ecfb32c80200d3
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15642,7 +15534,7 @@ tableName wgEncodeRikenCageK562NucleusPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageK562NucleusPapPlusClustersRep2
-objType table
+objType file
 bioRep 002N
 cell K562
 composite wgEncodeRikenCage
@@ -15660,7 +15552,7 @@ labExpId J92
 labProtocolId 002N+cage
 localization nucleus
 md5sum 36303939dc404d37bc19cd51620e6e33
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15826,7 +15718,7 @@ tableName wgEncodeRikenCageK562NucleusPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageK562PolysomeLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -15844,7 +15736,7 @@ lab RIKEN
 labVersion Delve version 0.9
 localization polysome
 md5sum 6e5c518d2b24e9b5f819a7f8e12e4e13,58ccd47a6621c8c23b815a3d4d80a8c2
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -15854,7 +15746,7 @@ tableName wgEncodeRikenCageK562PolysomeLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -15872,7 +15764,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization polysome
 md5sum 2a67aaedcdcb0db5677862869690a278
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -15882,7 +15774,7 @@ tableName wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell K562
 composite wgEncodeRikenCage
@@ -15900,7 +15792,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization polysome
 md5sum bedc4bae7b7243f4eed278ceb8ca8158
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -16171,7 +16063,7 @@ tableName wgEncodeRikenCageMcf7CellPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageMcf7CellPapMinusClustersRep1
-objType table
+objType file
 bioRep 015WC
 cell MCF-7
 composite wgEncodeRikenCage
@@ -16189,7 +16081,7 @@ labExpId K07
 labProtocolId 015WC+cage
 localization cell
 md5sum eb8a6806e1430468c0fb7a7376d42fd8
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16253,7 +16145,7 @@ tableName wgEncodeRikenCageMcf7CellPapMinusSignalRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageMcf7CellPapPlusClustersRep1
-objType table
+objType file
 bioRep 015WC
 cell MCF-7
 composite wgEncodeRikenCage
@@ -16271,7 +16163,7 @@ labExpId K07
 labProtocolId 015WC+cage
 localization cell
 md5sum 5e98104d551182c37b3b820bdbc822c8
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17361,7 +17253,7 @@ tableName wgEncodeRikenCageNhekCellPapAlnRep2
 view Alignments
 
 metaObject wgEncodeRikenCageNhekCellPapMinusClustersRep1
-objType table
+objType file
 bioRep 007WC
 cell NHEK
 composite wgEncodeRikenCage
@@ -17379,7 +17271,7 @@ labExpId J76
 labProtocolId 007WC+cage
 localization cell
 md5sum cb87b610e265b22898e57000cce919f8
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17389,7 +17281,7 @@ tableName wgEncodeRikenCageNhekCellPapMinusClustersRep1
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageNhekCellPapMinusClustersRep2
-objType table
+objType file
 bioRep 008WC
 cell NHEK
 composite wgEncodeRikenCage
@@ -17407,7 +17299,7 @@ labExpId J77
 labProtocolId 008WC+cage
 localization cell
 md5sum f6130549c92a04c88a95771417f92546
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17471,7 +17363,7 @@ tableName wgEncodeRikenCageNhekCellPapMinusSignalRep2
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageNhekCellPapPlusClustersRep1
-objType table
+objType file
 bioRep 007WC
 cell NHEK
 composite wgEncodeRikenCage
@@ -17489,7 +17381,7 @@ labExpId J76
 labProtocolId 007WC+cage
 localization cell
 md5sum 81a5abe828ab0b1b4987b4bcbe20643b
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17499,7 +17391,7 @@ tableName wgEncodeRikenCageNhekCellPapPlusClustersRep1
 view PlusRawSignal
 
 metaObject wgEncodeRikenCageNhekCellPapPlusClustersRep2
-objType table
+objType file
 bioRep 008WC
 cell NHEK
 composite wgEncodeRikenCage
@@ -17517,7 +17409,7 @@ labExpId J77
 labProtocolId 008WC+cage
 localization cell
 md5sum e26630bd52e58208c4acd1c11cbe4b46
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17683,7 +17575,7 @@ tableName wgEncodeRikenCageNhekCellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageNhekCytosolLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell NHEK
 composite wgEncodeRikenCage
@@ -17701,7 +17593,7 @@ lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
 md5sum 893a566d89dae3fa2944c35f6c339c96,291520a2a946b56c432c2d0f2684c005
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -17711,7 +17603,7 @@ tableName wgEncodeRikenCageNhekCytosolLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell NHEK
 composite wgEncodeRikenCage
@@ -17729,7 +17621,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
 md5sum 599d873f455c6a2804433bbd979862db
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -17739,7 +17631,7 @@ tableName wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell NHEK
 composite wgEncodeRikenCage
@@ -17757,7 +17649,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
 md5sum 665dbad88c377d41c6ab12cda3fabc97
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -18028,7 +17920,7 @@ tableName wgEncodeRikenCageNhekCytosolPapAlnRep4
 view Alignments
 
 metaObject wgEncodeRikenCageNhekCytosolPapMinusClustersRep3
-objType table
+objType file
 bioRep 027C
 cell NHEK
 composite wgEncodeRikenCage
@@ -18046,7 +17938,7 @@ labExpId K08
 labProtocolId 027C+cage
 localization cytosol
 md5sum 41920333b916209b8881297a58fd6e0b
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -18110,7 +18002,7 @@ tableName wgEncodeRikenCageNhekCytosolPapMinusSignalRep3
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageNhekCytosolPapPlusClustersRep3
-objType table
+objType file
 bioRep 027C
 cell NHEK
 composite wgEncodeRikenCage
@@ -18128,7 +18020,7 @@ labExpId K08
 labProtocolId 027C+cage
 localization cytosol
 md5sum 7dfd1736962c08aa755f321bb8848e8c
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -18294,7 +18186,7 @@ tableName wgEncodeRikenCageNhekCytosolPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageNhekNucleusLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell NHEK
 composite wgEncodeRikenCage
@@ -18312,7 +18204,7 @@ lab RIKEN
 labVersion Delve version 0.9
 localization nucleus
 md5sum ea5528ee53c5fe8fd0ee3c41be3942e7,c609c9316bbc0e80e8c43d57802c0fa2
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -18322,7 +18214,7 @@ tableName wgEncodeRikenCageNhekNucleusLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageNhekNucleusLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell NHEK
 composite wgEncodeRikenCage
@@ -18340,7 +18232,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
 md5sum 7585ee170197c1585a4483590dcb92eb
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -18350,7 +18242,7 @@ tableName wgEncodeRikenCageNhekNucleusLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell NHEK
 composite wgEncodeRikenCage
@@ -18368,7 +18260,7 @@ lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
 md5sum 5aa7077b8e7071e16411d442e9941dbb
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -18638,7 +18530,7 @@ tableName wgEncodeRikenCageNhekNucleusPapAlnRep4
 view Alignments
 
 metaObject wgEncodeRikenCageNhekNucleusPapMinusClustersRep3
-objType table
+objType file
 bioRep 027N
 cell NHEK
 composite wgEncodeRikenCage
@@ -18656,7 +18548,7 @@ labExpId K09
 labProtocolId 027N+cage
 localization nucleus
 md5sum ec648f02819365949f5daed76290dc0d
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -18719,7 +18611,7 @@ tableName wgEncodeRikenCageNhekNucleusPapMinusSignalRep3
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageNhekNucleusPapPlusClustersRep3
-objType table
+objType file
 bioRep 027N
 cell NHEK
 composite wgEncodeRikenCage
@@ -18737,7 +18629,7 @@ labExpId K09
 labProtocolId 027N+cage
 localization nucleus
 md5sum 94507040dc098a73dac79897197dab11
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -18874,33 +18766,6 @@ project wgEncode
 rnaExtract longPolyA
 subId 4529
 view TssGencV7
-
-metaObject wgEncodeRikenCageNhekNucleusPapTssHmm
-objType file
-bioRep 027N
-cell NHEK
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2011-11-04
-dateUnrestricted 2012-08-04
-dccAccession wgEncodeEH001154
-dccRep 1
-expId 1154
-fileName wgEncodeRikenCageNhekNucleusPapTssHmm.bedRnaElements.gz
-grant Gingeras
-lab RIKEN
-labExpId K09
-labProtocolId 027N+cage
-labVersion IDR
-localization nucleus
-md5sum 61b623a918f76f2b37d4c2dd36528213
-objStatus replaced - this version has scores that exceed chromosome lengths
-origAssembly hg19
-project wgEncode
-rnaExtract longPolyA
-subId 5078
-view TssHmm
 
 metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV2
 objType file
@@ -19421,7 +19286,7 @@ tableName wgEncodeRikenCageNhemm2CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageProstateCellLongnonpolyaAln
-objType table
+objType file
 bioRep Generation 0
 cell prostate
 composite wgEncodeRikenCage
@@ -19438,7 +19303,7 @@ grant Gingeras
 lab RIKEN
 localization cell
 md5sum 1d926e84501daaf20f7cde1c46108b77,014c00e373ac850d626e74af1997afce
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -19449,7 +19314,7 @@ tableName wgEncodeRikenCageProstateCellLongnonpolyaAln
 view Alignments
 
 metaObject wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters
-objType table
+objType file
 bioRep Generation 0
 cell prostate
 composite wgEncodeRikenCage
@@ -19466,7 +19331,7 @@ grant Gingeras
 lab RIKEN
 localization cell
 md5sum 78471d5d5a867cd1642a09261f239926
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -19477,7 +19342,7 @@ tableName wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters
 view MinusRawSignal
 
 metaObject wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
-objType table
+objType file
 bioRep Generation 0
 cell prostate
 composite wgEncodeRikenCage
@@ -19494,7 +19359,7 @@ grant Gingeras
 lab RIKEN
 localization cell
 md5sum 5e23eeff74cfa82ed6bfcbcda7eb02c4
-objStatus revoked - bad data from old release
+objStatus renamed
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -20817,4 +20682,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: 2008792687
+# MAGIC: -804806276
