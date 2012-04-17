@@ -6,10 +6,12 @@
 #include "ra.h"
 #include "portable.h"
 #include "obscure.h"
+#include "errabort.h"
 #include "asParse.h"
 
 /* Command line options. */
 boolean partialOk = FALSE;
+boolean mergeOk = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -36,13 +38,19 @@ errAbort(
   "   description2 Information on a car including its owner\n"
   "   sharedKey ssn\n"
   "The result will be .as and .tab files for table1 and table2 in outDir\n"
+  "Note that the new table1 will have as many fields as the old table, while the\n"
+  "new one will just have one row for each unique sharedKey\n"
   "options:\n"
   "   -partialOk - if set, ok for not all fields in old table to be in output\n"
+  "   -mergeOk - if set, won't be considered an error to have multiple rows\n"
+  "              corresponding to one sharedKey in table2.  Just first row will\n"
+  "              be output, rest will be in outDir/mergeErrs.txt\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"partialOk", OPTION_BOOLEAN},
+   {"mergeOk", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -69,6 +77,20 @@ for (el = list; el != NULL; el = el->next)
     }
 }
 
+void checkSharedKeyInList(char *sharedKey, char *splitSpec, char *fields, struct slPair *fieldList)
+/* Make sure that sharedKey really is in fieldList. splitSpec and fields are just 
+ * for error reporting*/
+{
+struct slPair *el;
+for (el = fieldList; el != NULL; el = el->next)
+    {
+    char *field = el->val;
+    if (sameString(field, sharedKey))
+        return;  // We are good
+    }
+errAbort("Error: sharedKey %s not found after equals in '%s'", sharedKey, fields);
+}
+
 void outputPartialAs(struct asObject *as, char *newTable, struct slPair *newFieldList,
     char *newDescription, char *outDir)
 /* Create outdir/newTable.as based on a subset of as. */
@@ -84,7 +106,7 @@ fprintf(f, "\"%s\"\n", newDescription);
 char *indent = "    ";
 fprintf(f, "%s(\n", indent);
 
-/* Print selecte columns. */
+/* Print selected columns. */
 struct slPair *fieldPair;
 for (fieldPair = newFieldList; fieldPair != NULL; fieldPair = fieldPair->next)
     {
@@ -97,6 +119,143 @@ for (fieldPair = newFieldList; fieldPair != NULL; fieldPair = fieldPair->next)
 /* Close out table and file. */
 fprintf(f, "%s)\n", indent);
 carefulClose(&f);
+}
+
+int *makeNewToOldArray(struct asObject *as, struct slPair *fieldList)
+/* Return an array where we can lookup old index given new index. */
+{
+int oldFieldCount = slCount(as->columnList);
+int newFieldCount = slCount(fieldList);
+int *oldIx;
+AllocArray(oldIx, newFieldCount);
+int i;
+struct slPair *fieldPair;
+for (i=0, fieldPair = fieldList; i<newFieldCount; ++i, fieldPair = fieldPair->next)
+    {
+    char *oldName = fieldPair->val;
+    struct asColumn *col = asColumnFind(as, oldName);
+    assert(col != NULL);  /* We checked earlier but... */
+    int ix = slIxFromElement(as->columnList, col);
+    assert(ix >= 0 && ix <= oldFieldCount);
+    oldIx[i] = ix;
+    }
+return oldIx;
+}
+
+void outputPartialTab(char *inTab, struct asObject *as, struct slPair *fieldList, char *outName)
+/* Output columns in fieldList from inTab (described by as) into outName */
+{
+/* Open input and output. */
+struct lineFile *lf = lineFileOpen(inTab, TRUE);
+FILE *f = mustOpen(outName, "w");
+
+/* Set up array for input fields with more than we expect for better error reporting. */
+int oldFieldCount = slCount(as->columnList);
+int newFieldCount = slCount(fieldList);
+int allocFields = oldFieldCount+10;
+char *words[allocFields];
+
+/* Set up array for output fields that says where to find them in input. */
+int *oldIx = makeNewToOldArray(as, fieldList);
+
+/* Go through each line of input, outputting selected columns. */
+int fieldCount;
+while ((fieldCount = lineFileChopNextTab(lf, words, allocFields)) > 0)
+    {
+    lineFileExpectWords(lf, oldFieldCount, fieldCount);
+    fprintf(f, "%s", words[oldIx[0]]);
+    int i;
+    for (i=1; i<newFieldCount; ++i)
+	fprintf(f, "\t%s", words[oldIx[i]]);
+    fprintf(f, "\n");
+    }
+
+/* Clean up and go home. */
+freez(&oldIx);
+carefulClose(&f);
+lineFileClose(&lf);
+}
+
+void outputUniqueOnSharedKey(char *inTab, struct asObject *as, struct asColumn *keyCol,
+    struct slPair *fieldList, char *outTab, char *outErr)
+/* Scan through tab-separated file inTab and output fields in fieldList to
+ * outTab. Make sure there is only one row for each value of sharedKey field. 
+ * If there would be multiple different rows in output with sharedKey, 
+ * complain about it in outErr. */
+{
+/* Open input and output. */
+struct lineFile *lf = lineFileOpen(inTab, TRUE);
+FILE *f = mustOpen(outTab, "w");
+FILE *fErr = mustOpen(outErr, "w");
+
+/* Set up array for input fields with more than we expect for better error reporting. */
+int oldFieldCount = slCount(as->columnList);
+int newFieldCount = slCount(fieldList);
+int allocFields = oldFieldCount+10;
+char *words[allocFields];
+
+/* Set up array for output fields that says where to find them in input. */
+int *oldIx = makeNewToOldArray(as, fieldList);
+
+/* Figure out index of key field. */
+int keyIx = slIxFromElement(as->columnList, keyCol);
+
+/* Go through each line of input, outputting selected columns. */
+struct hash *uniqHash = hashNew(18); 
+struct hash *errHash = hashNew(0);
+struct dyString *dy = dyStringNew(1024);
+int fieldCount;
+while ((fieldCount = lineFileChopNextTab(lf, words, allocFields)) > 0)
+    {
+    lineFileExpectWords(lf, oldFieldCount, fieldCount);
+
+    /* Collect possible output into dy. */
+    dyStringClear(dy);
+    dyStringPrintf(dy, "%s", words[oldIx[0]]);
+    int i;
+    for (i=1; i<newFieldCount; ++i)
+	dyStringPrintf(dy,  "\t%s", words[oldIx[i]]);
+    dyStringPrintf(dy, "\n");
+
+    /* Check that this line is either unique for this key, or the same as previous lines
+     * for the key. */
+    char *key = words[keyIx];
+    char *oldVal = hashFindVal(uniqHash, key);
+    if (oldVal != NULL)
+        {
+	if (!sameString(oldVal, dy->string))
+	    {
+	    /* Error reporting is a little complex.  We want to output all lines associated
+	     * with key, including the first one, but we only want to do first line once. */
+	    if (!hashLookup(errHash, key))
+	        {
+		hashAdd(errHash, key, NULL);
+		fputs(oldVal, fErr);
+		}
+	    fputs(dy->string, fErr);
+	    }
+	}
+    else
+	{
+	hashAdd(uniqHash, key, cloneString(dy->string));
+        fputs(dy->string, f);
+	}
+    }
+
+/* Report error summary */
+if (errHash->elCount > 0)
+    {
+    warn("Warning: %d shared keys have multiple values in table 2. See %s.\n"
+         "Only first row for each key put in %s" , errHash->elCount, outErr, outTab);
+    if (!mergeOk)
+        noWarnAbort();
+    }
+
+/* Clean up and go home. */
+freez(&oldIx);
+carefulClose(&fErr);
+carefulClose(&f);
+lineFileClose(&lf);
 }
 
 void verticalSplitSqlTable(char *oldTab, char *oldAs, char *splitSpec, char *outDir)
@@ -115,22 +274,22 @@ char *description1 = mustFindInSplitSpec("description1", ra, splitSpec);
 char *table2 = mustFindInSplitSpec("table2", ra, splitSpec);
 char *fields2 = mustFindInSplitSpec("fields2", ra, splitSpec);
 char *description2 = mustFindInSplitSpec("description2", ra, splitSpec);
-char *sharedKey = mustFindInSplitSpec("table1", ra, splitSpec);
+char *sharedKey = mustFindInSplitSpec("sharedKey", ra, splitSpec);
 if (ra->elCount > 7)
     errAbort("Extra fields in %s", splitSpec);
 
-if (sameString(table1, table2))
-    errAbort("Error: table1 and table2 are the same (%s) in %s", table1, splitSpec);
-
-/* Convert fieEld this=that strings to lists of pairs. */
+/* Convert this=that strings to lists of pairs. */
 struct slPair *fieldList1 = slPairFromString(fields1);
 struct slPair *fieldList2 = slPairFromString(fields2);
 
-uglyf("%s - %s\n", table1, description1);
-uglyf(" %s has %d fields\n", table1, slCount(fieldList1));
-uglyf("%s - %s\n", table2, description2);
-uglyf(" %s has %d fields\n", table2, slCount(fieldList2));
-uglyf("sharedKey %s\n", sharedKey);
+/* Do some more checks */
+if (sameString(table1, table2))
+    errAbort("Error: table1 and table2 are the same (%s) in %s", table1, splitSpec);
+checkSharedKeyInList(sharedKey, splitSpec, fields1, fieldList1);
+checkSharedKeyInList(sharedKey, splitSpec, fields2, fieldList2);
+struct asColumn *keyCol = asColumnFind(as, sharedKey);
+if (keyCol == NULL)
+    errAbort("The sharedKey '%s' is not in %s", sharedKey, oldAs);
 
 /* Make sure that all fields in splitSpec are actually in the oldAs file. */
 checkFieldsInAs(fieldList1, splitSpec, as, oldAs);
@@ -159,8 +318,21 @@ if (lastChar(outDir) == '/')
     trimLastChar(outDir);
 makeDirsOnPath(outDir);
 
+/* Output .as files. */
 outputPartialAs(as, table1, fieldList1, description1, outDir);
 outputPartialAs(as, table2, fieldList2, description2, outDir);
+
+/* Output first split file - a straight up subset of columns. */
+char path[PATH_LEN];
+safef(path, sizeof(path), "%s/%s.tab", outDir, table1);
+outputPartialTab(oldTab, as, fieldList1, path);
+
+
+/* Output second split file */
+char errPath[PATH_LEN];
+safef(path, sizeof(path), "%s/%s.tab", outDir, table2);
+safef(errPath, sizeof(path), "%s/mergeErrs.txt", outDir);
+outputUniqueOnSharedKey(oldTab, as, keyCol, fieldList2, path, errPath);
 }
 
 
@@ -169,6 +341,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 partialOk = optionExists("partialOk");
+mergeOk = optionExists("mergeOk");
 if (argc != 5)
     usage();
 verticalSplitSqlTable(argv[1], argv[2], argv[3], argv[4]);
