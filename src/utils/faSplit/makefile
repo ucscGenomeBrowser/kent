@@ -5,7 +5,7 @@ CFLAGS=-ggdb
 O = faSplit.o 
 
 faSplit: ${O}
-	${CC} ${COPT} -ggdb -lm -o ${BINDIR}/faSplit $O \
+	${CC} ${COPT} -ggdb -o ${BINDIR}/faSplit $O \
 	../../lib/${MACHTYPE}/jkweb.a ${L}
 	${STRIP} ${BINDIR}/faSplit${EXE}
 
