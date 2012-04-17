@@ -16,7 +16,7 @@ char *motif = (char *)NULL;	/*	specified motif string */
 unsigned motifLen = 0;		/*	length of motif	*/
 unsigned long long motifVal;	/*	motif converted to a number	*/
 unsigned long long complementVal;	/*	- strand complement	*/
-boolean bedOutput = TRUE;	/*	output bed file (default) */
+boolean bedOutputOpt = TRUE;	/*	output bed file (default) */
 boolean wigOutput = FALSE;	/*  output wiggle format instead of bed file */
 char *strand = (char *)NULL;
 boolean doPlusStrand = TRUE;	/*	output bed file instead of wiggle */
@@ -110,7 +110,7 @@ for (i=0; i < seq->size; ++i)
 		}
 	    inGap = FALSE;
 	    ++incomingLength;
-	    
+
 	    if (doPlusStrand && (incomingLength >= motifLen)
 		&& (incomingVal == posNeedle))
 		{
@@ -119,7 +119,7 @@ for (i=0; i < seq->size; ++i)
 		    printf("%llu 1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,posNeedle);
 		else
 		    printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", seq->name, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "+");
-		
+
 		if ((posPreviousPosition + motifLen) > chromPosition)
 		    verbose(2, "#\toverlapping + at: %s:%llu-%llu\n", seq->name, posPreviousPosition, chromPosition);
 		posPreviousPosition = chromPosition;
@@ -133,13 +133,13 @@ for (i=0; i < seq->size; ++i)
 		    printf("%llu -1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,negNeedle);
 		else
 		    printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", seq->name, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "-");
-		
+
 		if ((negPreviousPosition + motifLen) > chromPosition)
 		    verbose(2, "#\toverlapping - at: %s:%llu-%llu\n", seq->name, negPreviousPosition, chromPosition);
 		negPreviousPosition = chromPosition;
 		}
 	    break;
-	    
+
 	default:
 	    if (incomingLength)
 		{
@@ -176,7 +176,7 @@ static void findMotif(char *input)
 /* findMotif - find specified motif in sequence file. */
 {
 struct dnaLoad *dl = dnaLoadOpen(input);
-struct dnaSeq *seq; 
+struct dnaSeq *seq;
 
 while ((seq = dnaLoadNext(dl)) != NULL)
     {
@@ -213,13 +213,13 @@ dnaUtilOpen();
 motif = optionVal("motif", NULL);
 chr = optionVal("chr", NULL);
 strand = optionVal("strand", NULL);
-bedOutput = optionExists("bedOutput");
+bedOutputOpt = optionExists("bedOutput");
 wigOutput = optionExists("wigOutput");
 
 if (wigOutput)
-    bedOutput = FALSE;
+    bedOutputOpt = FALSE;
 else
-    bedOutput = TRUE;
+    bedOutputOpt = TRUE;
 
 if (chr)
     verbose(2, "#\tprocessing chr: %s\n", chr);

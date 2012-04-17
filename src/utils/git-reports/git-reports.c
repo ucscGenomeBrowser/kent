@@ -478,7 +478,7 @@ for(c = commits; c; c = c->next)
 	//fprintf(h, "%s\n", c->date);
 
 	char *cc = htmlEncode(c->comment);
-	char *ccc = replaceChars(cc, "\n", "<br>\n");
+	char *ccc = replaceChars(cc, "&#x0A;", "<br>\n");
 	fprintf(h, "<li>%s\n", ccc);
 	freeMem(cc);
 	freeMem(ccc);
@@ -701,7 +701,7 @@ for(cf = comFiles; cf; cf = cf->next)
     //fprintf(h, "  %s\n", c->commitId);
     //fprintf(h, "  %s\n", c->date);
     char *cc = htmlEncode(c->comment);
-    char *ccc = replaceChars(cc, "\n", "<br>\n");
+    char *ccc = replaceChars(cc, "&#x0A;", "<br>\n");
     fprintf(h, "    %s\n", ccc);
     freeMem(cc);
     freeMem(ccc);
