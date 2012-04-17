@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Placental Chain/Net
 longLabel Placental Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aMegabat=Megabat bMicrobat=Microbat cPanda=Panda dDog=Dog eCat=Cat fHorse=Horse gCow=Cow hSheep=Sheep iDolphin=Dolphin jAlpaca=Alpaca kPig=Pig lHedgehog=Hedgehog mShrew=Shrew nSloth=Sloth oArmadillo=Armadillo pRHyrax=Rock_hyrax qTenrec=Tenrec rManatee=Manatee sElephant=Elephant
+subGroup2 species Species aMegabat=Megabat bMicrobat=Microbat cPanda=Panda dDog=Dog eCat=Cat fHorse=Horse gCow=Cow hSheep=Sheep iDolphin=Dolphin jAlpaca=Alpaca kPig=Pig lHedgehog=Hedgehog mShrew=Shrew nSloth=Sloth oArmadillo=Armadillo pTenrec=Tenrec qManatee=Manatee  rRHyrax=Rock_hyrax sElephant=Elephant
 subGroup3 clade Clade aAfro=Afrotheria bXena=Xenarthra cLaura=Laurasiatheria dCarn=Carnivora eInsect=Insectivora fChir=Chiroptera
 dragAndDrop subTracks
 visibility hide
@@ -149,7 +149,7 @@ html chainNet
 
         track chainProCap1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=pRHyrax clade=aAfro
+        subGroups view=chain species=rRHyrax clade=aAfro
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain proCap1
@@ -157,7 +157,7 @@ html chainNet
 
         track chainEchTel1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=qTenrec clade=aAfro
+        subGroups view=chain species=pTenrec clade=aAfro
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain echTel1
@@ -165,7 +165,7 @@ html chainNet
 
         track chainTriMan1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=rManatee clade=aAfro
+        subGroups view=chain species=qManatee clade=aAfro
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain triMan1
@@ -307,7 +307,7 @@ html chainNet
 
         track netProCap1
         subTrack placentalChainNetViewnet on
-        subGroups view=net species=pRHyrax clade=aAfro
+        subGroups view=net species=rRHyrax clade=aAfro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign proCap1 chainProCap1
@@ -315,7 +315,7 @@ html chainNet
 
         track netEchTel1
         subTrack placentalChainNetViewnet on
-        subGroups view=net species=qTenrec clade=aAfro
+        subGroups view=net species=pTenrec clade=aAfro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign echTel1 chainEchTel1
@@ -323,7 +323,7 @@ html chainNet
 
         track netTriMan1
         subTrack placentalChainNetViewnet on
-        subGroups view=net species=rManatee clade=aAfro
+        subGroups view=net species=qManatee clade=aAfro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign triMan1 chainTriMan1
