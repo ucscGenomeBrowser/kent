@@ -6,6 +6,7 @@
 # Project ID:  68323
 #    http://www.ncbi.nlm.nih.gov/bioproject/68323
 #    http://www.ncbi.nlm.nih.gov/nuccore?term=AFSB00000000[pacc]
+#    http://www.ncbi.nlm.nih.gov/nuccore/AFSB00000000.1
 #   Beijing Genomics Institute, Shenzhen
  
 # Whole Genome Shotgun sequencing project:
