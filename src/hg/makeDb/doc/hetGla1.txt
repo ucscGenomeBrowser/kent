@@ -607,7 +607,7 @@ done
 
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - ( working 2012-01-04 - Chin)
+# all.joiner update, downloads and in pushQ - ( DONE 2012-04-18 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     # add hetGla after myoLuc
@@ -616,7 +616,6 @@ done
     mkdir /hive/data/genomes/hetGla1/goldenPath
     cd /hive/data/genomes/hetGla1/goldenPath
     makeDownloads.pl hetGla1 > do.log 2>&1
-XXXX 2012-01-04 TODO: read the do.log and edit README before push!!
 
     #	now ready for pushQ entry
     mkdir /hive/data/genomes/hetGla1/pushQ
@@ -629,9 +628,6 @@ XXXX 2012-01-04 TODO: read the do.log and edit README before push!!
     # WARNING: hetGla1 does not have seq
     # WARNING: hetGla1 does not have extFile
     # 
-    # WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
-    # supporting and genbank tables) which tracks to assign these tables to:
-    #   ctgPos2
 
     #	copy it to hgwbeta
     scp -p hetGla1.pushQ.sql hgwbeta:/tmp
