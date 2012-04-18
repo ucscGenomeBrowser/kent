@@ -18,8 +18,8 @@ void usage()
 {
 errAbort(
   "verticalSplitSqlTable - Split a database table into two new related tables that share a field.\n"
-  "Note, this program just creates tab-separated files for the split tables, it does not actually\n"
-  "alter the database.\n"
+  "Note, this program just works on tab-separated files for the split tables, it does not actually\n"
+  "use a database.\n"
   "usage:\n"
   "   verticalSplitSqlTable oldTab oldAs splitSpec outDir\n"
   "where:\n"
