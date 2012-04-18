@@ -98,10 +98,6 @@ var encodeProject = (function () {
             return ($.browser.msie  && parseInt($.browser.version, 10) === 8);
         }, 
 
-        getSearchType: function () {
-            return $('input:radio[name=searchType]:checked').val();
-        },
-
         // Experiments, data types and cell types
 
         expIdFromAccession: function(accession) {

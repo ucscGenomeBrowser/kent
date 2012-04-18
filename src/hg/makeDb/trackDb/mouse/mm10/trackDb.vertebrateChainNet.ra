@@ -3,8 +3,8 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aWallaby=Wallaby bTDevil=Tasmanian_devil cOpossum=Opossum dPlatypus=Platypus eBudgerigar=Budgerigar fChicken=Chicken gZFinch=Zebra_finch hTurkey=Turkey iLizard=Lizard jTurtle=Turtle kFrog=Frog lCoelacanth=Coelacanth mACod=Atlantic_cod nStickleback=Stickleback oFugu=Fugu pTilapia=Tilapia qTetraodon=Tetraodon rZebrafish=Zebrafish sMedaka=Medaka tLamprey=Lamprey
-subGroup3 clade Clade aMeta=Metatheria bAves=Aves cEutel=Euteleostomi dPerco=Percomorpha ePetro=Petromyzon
+subGroup2 species Species aWallaby=Wallaby bTDevil=Tasmanian_devil cOpossum=Opossum dPlatypus=Platypus eBudgerigar=Budgerigar fZFinch=Zebra_finch gChicken=Chicken hTurkey=Turkey iLizard=Lizard jTurtle=Turtle kFrog=Frog lCoelacanth=Coelacanth  mACod=Atlantic_cod nZebrafish=Zebrafish oStickleback=Stickleback pFugu=Fugu qTetraodon=Tetraodon rTilapia=Tilapia sMedaka=Medaka tLamprey=Lamprey
+subGroup3 clade Clade aMeta=Metatheria bAves=Aves cEutel=Euteleostomi dTeleostei=Teleostei ePerco=Percomorpha fPetro=Petromyzon
 dragAndDrop subTracks
 visibility hide
 group compGeno
@@ -69,7 +69,7 @@ html chainNet
 
         track chainGalGal4
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=fChicken clade=bAves
+        subGroups view=chain species=gChicken clade=bAves
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain galGal4
@@ -77,7 +77,7 @@ html chainNet
 
         track chainTaeGut1
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=gZFinch clade=bAves
+        subGroups view=chain species=fZFinch clade=bAves
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain taeGut1
@@ -125,7 +125,7 @@ html chainNet
 
         track chainGadMor1
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=mACod clade=cEutel
+        subGroups view=chain species=mACod clade=dTeleostei
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain gadMor1
@@ -133,7 +133,7 @@ html chainNet
 
         track chainGasAcu1
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=nStickleback clade=dPerco
+        subGroups view=chain species=oStickleback clade=ePerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain gasAcu1
@@ -141,7 +141,7 @@ html chainNet
 
         track chainFr3
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=oFugu clade=dPerco
+        subGroups view=chain species=pFugu clade=ePerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain fr3
@@ -149,7 +149,7 @@ html chainNet
 
         track chainOreNil2
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=pTilapia clade=dPerco
+        subGroups view=chain species=rTilapia clade=ePerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain oreNil2
@@ -157,7 +157,7 @@ html chainNet
 
         track chainTetNig2
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=qTetraodon clade=dPerco
+        subGroups view=chain species=qTetraodon clade=ePerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain tetNig2
@@ -165,7 +165,7 @@ html chainNet
 
         track chainDanRer7
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=rZebrafish clade=dPerco
+        subGroups view=chain species=nZebrafish clade=dTeleostei
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain danRer7
@@ -173,7 +173,7 @@ html chainNet
 
         track chainOryLat2
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=sMedaka clade=dPerco
+        subGroups view=chain species=sMedaka clade=ePerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain oryLat2
@@ -181,7 +181,7 @@ html chainNet
 
         track chainPetMar1
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=tLamprey clade=ePetro
+        subGroups view=chain species=tLamprey clade=fPetro
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain petMar1
@@ -235,7 +235,7 @@ html chainNet
 
         track netGalGal4
         subTrack vertebrateChainNetViewnet off
-        subGroups view=net species=fChicken clade=bAves
+        subGroups view=net species=gChicken clade=bAves
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign galGal4 chainGalGal4
@@ -243,7 +243,7 @@ html chainNet
 
         track netTaeGut1
         subTrack vertebrateChainNetViewnet on 
-        subGroups view=net species=gZFinch clade=bAves
+        subGroups view=net species=fZFinch clade=bAves
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign taeGut1 chainTaeGut1
@@ -291,7 +291,7 @@ html chainNet
 
         track netGadMor1
         subTrack vertebrateChainNetViewnet on 
-        subGroups view=net species=mACod clade=cEutel
+        subGroups view=net species=mACod clade=dTeleostei
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign gadMor1 chainGadMor1
@@ -299,7 +299,7 @@ html chainNet
 
         track netGasAcu1
         subTrack vertebrateChainNetViewnet off
-        subGroups view=net species=nStickleback clade=dPerco
+        subGroups view=net species=oStickleback clade=ePerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign gasAcu1 chainGasAcu1
@@ -307,7 +307,7 @@ html chainNet
 
         track netFr3
         subTrack vertebrateChainNetViewnet off
-        subGroups view=net species=oFugu clade=dPerco
+        subGroups view=net species=pFugu clade=ePerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign fr3 chainFr3
@@ -315,7 +315,7 @@ html chainNet
 
         track netOreNil2
         subTrack vertebrateChainNetViewnet on
-        subGroups view=net species=pTilapia clade=dPerco
+        subGroups view=net species=rTilapia clade=ePerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oreNil2 chainOreNil2
@@ -323,7 +323,7 @@ html chainNet
 
         track netTetNig2
         subTrack vertebrateChainNetViewnet on
-        subGroups view=net species=qTetraodon clade=dPerco
+        subGroups view=net species=qTetraodon clade=ePerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign tetNig2 chainTetNig2
@@ -331,7 +331,7 @@ html chainNet
 
         track netDanRer7
         subTrack vertebrateChainNetViewnet on
-        subGroups view=net species=rZebrafish clade=dPerco
+        subGroups view=net species=nZebrafish clade=dTeleostei
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign danRer7 chainDanRer7
@@ -339,7 +339,7 @@ html chainNet
 
         track netOryLat2
         subTrack vertebrateChainNetViewnet on
-        subGroups view=net species=sMedaka clade=dPerco
+        subGroups view=net species=sMedaka clade=ePerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oryLat2 chainOryLat2
@@ -347,7 +347,7 @@ html chainNet
 
         track netPetMar1
         subTrack vertebrateChainNetViewnet on
-        subGroups view=net species=tLamprey clade=ePetro
+        subGroups view=net species=tLamprey clade=fPetro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign petMar1 chainPetMar1
