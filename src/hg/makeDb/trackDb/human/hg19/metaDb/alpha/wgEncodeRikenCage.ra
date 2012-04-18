@@ -6435,7 +6435,7 @@ subId 4539
 view TssGencV7
 
 metaObject wgEncodeRikenCageHepg2CellPapTssHmm
-objType table
+objType file
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeRikenCage
@@ -6460,7 +6460,7 @@ tableName wgEncodeRikenCageHepg2CellPapTssHmm
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CellPapTssHmmV2
-objType file
+objType table
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeRikenCage
@@ -6481,6 +6481,7 @@ project wgEncode
 rnaExtract longPolyA
 subId 5147
 submittedDataVersion V2 - Filtered out the off end of chromosome reads
+tableName wgEncodeRikenCageHepg2CellPapTssHmmV2
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CytosolLongnonpolyaAln
@@ -19608,4 +19609,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -264976412
+# MAGIC: -1025781376
