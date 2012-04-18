@@ -106,13 +106,13 @@ wgEncode 1
         color 153,38,0
         # subId=5997 dateSubmitted=2012-04-16
 
-        track wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk
-        parent wgEncodePsuHistoneViewPeaks 
-        shortLabel G1E H3K4me1
-        longLabel G1E H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
-        subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=G1E control=INPUT sex=M strain=S129
-        type broadPeak
-        color 153,38,0
+        #track wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk
+        #parent wgEncodePsuHistoneViewPeaks 
+        #shortLabel G1E H3K4me1
+        #longLabel G1E H3K4me1 Histone Mods by ChIP-seq Peaks from ENCODE/PSU
+        #subGroups view=Peaks age=E0 factor=H3K04ME1 cellType=G1E control=INPUT sex=M strain=S129
+        #type broadPeak
+        #color 153,38,0
         # subId=5997 dateSubmitted=2012-04-16
 
         track wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk
@@ -349,14 +349,14 @@ wgEncode 1
 		viewLimits 2:450
         # subId=3042 dateSubmitted=2011-10-27
 
-        track wgEncodePsuHistoneG1eH3k04me1ME0S129InputSig
-        parent wgEncodePsuHistoneViewSignal
-        shortLabel G1E H3K4me1
-        longLabel G1E H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/PSU
-        subGroups view=Signal age=E0 factor=H3K04ME1 cellType=G1E control=INPUT sex=M strain=S129
-        type bigWig 1.000000 479.000000
-        color 153,38,0
-		viewLimits 2:150
+        #track wgEncodePsuHistoneG1eH3k04me1ME0S129InputSig
+        #parent wgEncodePsuHistoneViewSignal
+        #shortLabel G1E H3K4me1
+        #longLabel G1E H3K4me1 Histone Mods by ChIP-seq Signal from ENCODE/PSU
+        #subGroups view=Signal age=E0 factor=H3K04ME1 cellType=G1E control=INPUT sex=M strain=S129
+        #type bigWig 1.000000 479.000000
+        #color 153,38,0
+		#viewLimits 2:150
         # subId=3043 dateSubmitted=2011-10-31
 
         track wgEncodePsuHistoneG1eH3k36me3ME0S129InputSig
@@ -594,13 +594,13 @@ wgEncode 1
         color 86,180,233
         # subId=5239 dateSubmitted=2011-12-17
 
-        track wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
-        parent wgEncodePsuHistoneViewSignal off
-        shortLabel MEL Input
-        longLabel MEL C57BL/6 Input Histone Mods by ChIP-seq Signal from ENCODE/PSU
-        subGroups view=Signal age=IMMORTAL factor=zINPUT cellType=MEL control=INPUT sex=U strain=C57BL6
-        type bigWig 1.000000 132.000000
-        color 86,180,233
+        #track wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
+        #parent wgEncodePsuHistoneViewSignal off
+        #shortLabel MEL Input
+        #longLabel MEL C57BL/6 Input Histone Mods by ChIP-seq Signal from ENCODE/PSU
+        #subGroups view=Signal age=IMMORTAL factor=zINPUT cellType=MEL control=INPUT sex=U strain=C57BL6
+        #type bigWig 1.000000 132.000000
+        #color 86,180,233
         # subId=5240 dateSubmitted=2011-12-17
 
 
