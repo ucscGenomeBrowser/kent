@@ -13,7 +13,7 @@ struct soCall so;
 };
 
 struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
-    char **returnTranscript, char **returnCoding);
+    struct dnaSeq *transcriptSequence);
 // return the predicted effect(s) of a variation list on a genePred
 
 // number of bases up or downstream that we flag
