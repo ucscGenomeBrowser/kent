@@ -785,6 +785,9 @@ boolean endsWith(char *string, char *end);
 char lastChar(char *s);
 /* Return last character in string. */
 
+void trimLastChar(char *s);
+/* Erase last character in string. */
+
 char *lastNonwhitespaceChar(char *s);
 // Return pointer to last character in string that is not whitespace.
 

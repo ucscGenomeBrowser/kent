@@ -1347,6 +1347,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-09-26
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -1368,6 +1370,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-09-23
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep2.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -1620,4 +1624,4 @@ subId 4873
 tableName wgEncodeGisChiaPetNb4Pol2SigRep1
 view Signal
 
-# MAGIC: 1025816473
+# MAGIC: 651805271

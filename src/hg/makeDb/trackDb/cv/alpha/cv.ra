@@ -8284,7 +8284,7 @@ lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
 validation Human_-_ERalpha_a(Immunoprecipitation-Western_blot,MassSpect):human_ERalpha_a_validation_Myers.pdf
-label ERalpha_a (sc-543)
+label ERalpha a (sc-543)
 
 term ERalpha_b
 tag ERAB
@@ -8299,7 +8299,7 @@ lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
 validation 
-label ERalpha_b (MAb-009-050)
+label ERalpha b (MAb-009-050)
 ##This does not appear in metaDb
 
 term Egr-1
@@ -13670,6 +13670,13 @@ label Proteogenomics
 description Mass Spec Proteogenomic Mapping
 dataGroup Other
 
+term RepliChip
+tag REPLICHIP
+type dataType
+label Repli-chip
+description Assessment of DNA Replication Timing PROVISIONAL
+dataGroup Other
+
 term RepliSeq
 tag REPLISEQ
 type dataType
@@ -15864,17 +15871,4 @@ priority 035
 requiredVars term,tag,type,description,label #Provisional
 optionalVars label,deprecated #Provisional
 
-
-
-term mouseCellType
-tag MOUSECELLTYPE
-type typeOfTerm
-label Cell, tissue or DNA sample specific to mouse
-description NOT FOR USE! ONLY FOR VALIDATION. Cell line or tissue used as the source of experimental material specific to mouse.
-searchable multiSelect
-cvDefined yes
-validate cv or None
-priority 110
-requiredVars term,tag,type,description,organism,vendorName,orderUrl,age,strain,sex #Provisional
-optionalVars label,tissue,termId,termUrl,color,protocol,category,vendorId,lots,deprecated #Provisional
 

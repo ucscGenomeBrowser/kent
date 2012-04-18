@@ -9,6 +9,7 @@
 struct allele   // a single allele in a variant. 
     {
     struct allele *next;
+    struct variant *variant;
     int length;
     char *sequence;
     };

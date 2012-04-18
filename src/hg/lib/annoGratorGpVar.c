@@ -5,6 +5,8 @@
 #include "pgSnp.h"
 #include "variant.h"
 #include "gpFx.h"
+#include "twoBit.h"
+#include "annoGratorQuery.h"
 
 static char *annoGpVarDataLineAutoSqlString =
 "table genePredWithSO"
@@ -68,6 +70,14 @@ switch(effect->so.soNumber)
 	words[count++] = uintToString(effect->so.sub.intron.intronNumber);
 	break;
 
+    case non_synonymous_variant:
+	words[count++] = cloneString(effect->so.sub.codingChange.transcript);
+	words[count++] = uintToString(effect->so.sub.codingChange.exonNumber);
+	words[count++] = uintToString(effect->so.sub.codingChange.cDnaPosition);
+	words[count++] = uintToString(effect->so.sub.codingChange.cdsPosition);
+	words[count++] = uintToString(effect->so.sub.codingChange.pepPosition);
+	break;
+
     default:
 	// write out ancillary information
 	words[count++] = blankIfNull(effect->so.sub.generic.soOther0);
@@ -106,11 +116,61 @@ return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end,
     rowIn->rightJoinFail, wordsOut, self->streamer.numCols);
 }
 
+/* Get the sequence associated with a particular bed concatenated together. */
+struct dnaSeq *twoBitSeqFromBed(struct twoBitFile *tbf, struct bed *bed)
+{
+struct dnaSeq *block = NULL;
+struct dnaSeq *bedSeq = NULL;
+int i = 0 ;
+int size;
+assert(bed);
+/* Handle very simple beds and beds with blocks. */
+if(bed->blockCount == 0)
+    {
+    bedSeq = twoBitReadSeqFragExt(tbf, bed->chrom, bed->chromStart, bed->chromEnd, FALSE, &size);
+    freez(&bedSeq->name);
+    bedSeq->name = cloneString(bed->name);
+    }
+else
+    {
+    int offSet = bed->chromStart;
+    struct dyString *currentSeq = newDyString(2048);
+    //hNibForChrom(db, bed->chrom, fileName);
+    for(i=0; i<bed->blockCount; i++)
+	{
+	block = twoBitReadSeqFragExt(tbf, bed->chrom, 
+	      offSet+bed->chromStarts[i], offSet+bed->chromStarts[i]+bed->blockSizes[i], FALSE, &size);
+	dyStringAppendN(currentSeq, block->dna, block->size);
+	dnaSeqFree(&block);
+	}
+    AllocVar(bedSeq);
+    bedSeq->name = cloneString(bed->name);
+    bedSeq->dna = cloneString(currentSeq->string);
+    bedSeq->size = strlen(bedSeq->dna);
+    dyStringFree(&currentSeq);
+    }
+if(bed->strand[0] == '-')
+    reverseComplement(bedSeq->dna, bedSeq->size);
+return bedSeq;
+}
+
+struct dnaSeq *genePredToGenomicSequence(struct genePred *pred, struct twoBitFile *tbf)
+{
+struct bed *bed = bedFromGenePred(pred);
+struct dnaSeq *dnaSeq = twoBitSeqFromBed(tbf, bed);
+
+return dnaSeq;
+}
+
+
 static struct annoRow *aggvGenRows( struct annoGrator *self,
     struct variant *variant, struct genePred *pred, struct annoRow *inRow)
 // put out annoRows for all the gpFx that arise from variant and pred
 {
-struct gpFx *effects = gpFxPredEffect(variant, pred, NULL, NULL);
+// FIXME:  accessing query's tbf is probably bad
+struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, 
+    self->streamer.query->tbf);
+struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence);
 struct annoRow *rows = NULL;
 
 for(; effects; effects = effects->next)
