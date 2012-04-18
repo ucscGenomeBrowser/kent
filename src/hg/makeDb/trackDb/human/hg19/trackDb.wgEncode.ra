@@ -28,7 +28,7 @@ include wgEncodeReg.release2.ra alpha
 include wgEncodeUwRepliSeq.ra
 
 # FSU Repli-chip track (wrangler: venkat)
-include wgEncodeFsuRepliChip.ra alpha,beta
+include wgEncodeFsuRepliChip.ra
 
 #include wgEncodeRegNorm.ra alpha
 
