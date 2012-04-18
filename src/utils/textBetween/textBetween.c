@@ -17,7 +17,6 @@ errAbort(
   "   textBetween before after fileName\n"
   "options:\n"
   "   -withEnds - If set include the before and after strings in the output\n"
-  "   -xxx=XXX\n"
   );
 }
 
