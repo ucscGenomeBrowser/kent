@@ -196,6 +196,14 @@ CREATE TABLE featureType (
     INDEX(val(12))
 );
 
+#FeatureId table
+CREATE TABLE featureId (
+  id int(11) NOT NULL default '0',	# Database id -we make this up
+  val varchar(40) NOT NULL default '',  # UniProt feature Id
+  PRIMARY KEY  (id),
+  KEY val (val(14))
+) TYPE=MyISAM;
+
 #A description of part of a protein
 CREATE TABLE feature (
     acc char(12) not null,	# Primary accession
@@ -208,14 +216,6 @@ CREATE TABLE feature (
               #Indices
     INDEX(acc)
 );
-
-#FeatureId table
-CREATE TABLE featureId (
-  id int(11) NOT NULL default '0',	# Database id -we make this up
-  val varchar(40) NOT NULL default '',  # UniProt feature Id
-  PRIMARY KEY  (id),
-  KEY val (val(14))
-) TYPE=MyISAM;
 
 #A single author
 CREATE TABLE author (

@@ -15872,16 +15872,3 @@ requiredVars term,tag,type,description,label #Provisional
 optionalVars label,deprecated #Provisional
 
 
-
-term mouseCellType
-tag MOUSECELLTYPE
-type typeOfTerm
-label Cell, tissue or DNA sample specific to mouse
-description NOT FOR USE! ONLY FOR VALIDATION. Cell line or tissue used as the source of experimental material specific to mouse.
-searchable multiSelect
-cvDefined yes
-validate cv or None
-priority 110
-requiredVars term,tag,type,description,organism,vendorName,orderUrl,age,strain,sex #Provisional
-optionalVars label,tissue,termId,termUrl,color,protocol,category,vendorId,lots,deprecated #Provisional
-
