@@ -157,6 +157,7 @@ DIRS = \
 	undupFa \
 	upper \
 	venn \
+	verticalSplitSqlTable \
 	weedLines \
 	wigCorrelate \
 	wigToBigWig \

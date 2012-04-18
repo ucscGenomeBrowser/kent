@@ -7765,6 +7765,7 @@ errCatchFree(&errCatch);
 return asObj;
 }
 
+#ifdef OLD /* This got moved to main library . */
 struct asColumn *asColumnFind(struct asObject *asObj, char *name)
 // Return named column.
 {
@@ -7777,6 +7778,7 @@ if (asObj!= NULL)
     }
 return asCol;
 }
+#endif /* OLD */
 
 struct slName *asColNames(struct asObject *as)
 // Get list of column names.

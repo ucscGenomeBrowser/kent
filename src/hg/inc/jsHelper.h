@@ -160,6 +160,8 @@ typedef enum _jsonElementType
     jsonString   = 5
 } jsonElementType;
 
+// May turn the following into a union to avoid casts (still debating that with angie).
+
 struct jsonElement
 {
     jsonElementType type;
@@ -184,7 +186,28 @@ struct jsonStringElement
     char *str;
 };
 
+struct jsonBooleanElement
+{
+    jsonElementType type;
+    boolean val;
+};
+
+struct jsonNumberElement
+{
+    jsonElementType type;
+    long val;
+};
+
+struct jsonDoubleElement
+{
+    jsonElementType type;
+    double val;
+};
+
 struct jsonStringElement *newJsonString(char *str);
+struct jsonBooleanElement *newJsonBoolean(boolean val);
+struct jsonNumberElement *newJsonNumber(long val);
+struct jsonDoubleElement *newJsonDouble(double val);
 struct jsonHashElement *newJsonHash(struct hash *h);
 struct jsonListElement *newJsonList(struct slRef *list);
 
@@ -223,5 +246,8 @@ void jsonPrintGlobals(boolean wrapWithScriptTags);
 void jsonErrPrintf(struct dyString *ds, char *format, ...);
 //  Printf a json error to a dyString for communicating with ajax code; format is:
 //  {"error": error message here}
+
+struct jsonElement *jsonParse(char *str);
+// parse string into an in-memory json representation
 
 #endif /* JSHELPER_H */
