@@ -38,10 +38,16 @@ var encodeMatrix = (function () {
             return document.cookie.match(/encodeMatrix.search=file/);
         },
 
-        getSearchUrl: function (assembly) {
-            // Return URL for search of type requested in search panel
+        getSearchUrl: function () {
+            // Format a URL for search of type requested in search panel
+            // Args are objects having mdbVar/mdbVal properties
+            // Set each arg mdbValN to mdbVarN, empty out remaining vals to a total of 6
+            // (cheaper than querying for actual number)
 
-            var prog, cartVar, url;
+            var prog, cartVar, url, i, j;
+            var argsLen = arguments.length;
+            var mdbVals = [];
+
             if ($('input:radio[name=searchType]:checked').val() === "tracks") {
                 prog = 'hgTracks';
                 cartVar = 'hgt_tSearch';
@@ -49,13 +55,24 @@ var encodeMatrix = (function () {
                 prog = "hgFileSearch";
                 cartVar = "fsFileType=Any&hgfs_Search";
             }
-             url = '/cgi-bin/' + prog + '?db=' + assembly + '&' + cartVar + '=search' +
-                    '&tsCurTab=advancedTab&hgt_tsPage=';
+             url = '/cgi-bin/' + prog + '?db=' + encodeProject.getAssembly() + 
+                '&' + cartVar + '=search' + '&tsCurTab=advancedTab&hgt_tsPage=' +
+                '&tsName=&tsDescr=&tsGroup=Any';
+            for (i = 0; i < argsLen; i += 1) {
+                url += '&hgt_mdbVar' + (i + 1) + '=' + arguments[i].mdbVar;
+                // can pass an array or a single string -- so force to array for uniform handling
+                // Search sees multiple mdbValN= variables for the same mdbVarN as a list of vals
+                mdbVals = [].concat(arguments[i].mdbVal);
+                for (j = 0; j < mdbVals.length; j++) {
+                    url += '&hgt_mdbVal' + (i + 1) + '=' + mdbVals[j];
+                }
+            }
+            url += '&hgt_mdbVar' + (argsLen + 1) + '=view' +
+                    '&hgt_mdbVal' + (argsLen + 1) + '=Any';
+            for (i = argsLen + 1; i < 6; i += 1) {
+                url += '&hgt_mdbVar' + (i + 1) + '=[]';
+            }
             return (url);
-        },
-
-        getSearchType: function () {
-            return $('input:radio[name=searchType]:checked').val();
         },
 
         // General purpose functions
