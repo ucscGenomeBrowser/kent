@@ -13,6 +13,7 @@ controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 visibilityViewDefaults WaveSignal=hide 
 priority 0
+maxHeightPixels 100:32:16
 type bigWig
 windowingFunction mean+whiskers
 viewLimits -2:2
