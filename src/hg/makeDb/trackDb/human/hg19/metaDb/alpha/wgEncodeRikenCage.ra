@@ -1990,6 +1990,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageGm12878CytosolPamTssHmmV2
 objType table
+bioRep gen0104C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
@@ -2437,6 +2438,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageGm12878NucleolusTotalTssHmmV2
 objType table
+bioRep gen0109NL
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
@@ -2690,6 +2692,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageGm12878NucleusPamTssHmmV2
 objType table
+bioRep gen0110N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
@@ -3191,6 +3194,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageH1hescCellPamTssHmmV2
 objType table
+bioRep gen0113WC
 cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
@@ -5103,6 +5107,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageHelas3CytosolPamTssHmmV2
 objType table
+bioRep gen0121C
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
@@ -5647,6 +5652,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalTssHmmV2
 objType table
+bioRep gen0123NL
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
@@ -6722,6 +6728,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CytosolPamTssHmmV2
 objType table
+bioRep gen0125C
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
@@ -7270,6 +7277,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageHepg2NucleolusTotalTssHmmV3
 objType table
+bioRep gen0127NL
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
@@ -7535,6 +7543,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageHepg2NucleusPamTssHmmV2
 objType table
+bioRep gen0128N
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
@@ -10448,6 +10457,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageHuvecCytosolPamTssHmmV2
 objType table
+bioRep gen0116C
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
@@ -12951,6 +12961,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageK562ChromatinTotalTssHmmV3
 objType table
+bioRep gen0134CH
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -13265,6 +13276,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageK562CytosolPamTssHmmV2
 objType table
+bioRep gen0136C
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -13911,6 +13923,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageK562NucleolusTotalTssHmmV3
 objType table
+bioRep gen0144NL
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -14128,6 +14141,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageK562NucleoplasmTotalTssHmmV3
 objType table
+bioRep gen0147NP
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -14436,6 +14450,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageK562NucleusPamTssHmmV2
 objType table
+bioRep gen0149N
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -15037,6 +15052,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageK562PolysomePamTssHmmV2
 objType table
+bioRep gen0152P
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
@@ -16830,6 +16846,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageNhekCytosolPamTssHmmV2
 objType table
+bioRep gen0155C
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
@@ -17381,6 +17398,7 @@ view TssHmm
 
 metaObject wgEncodeRikenCageNhekNucleusPamTssHmmV2
 objType table
+bioRep gen0157N
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
@@ -19590,4 +19608,4 @@ subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -354435858
+# MAGIC: -264976412
