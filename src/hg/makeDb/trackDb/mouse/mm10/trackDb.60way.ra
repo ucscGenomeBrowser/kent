@@ -1,0 +1,195 @@
+track cons60way
+compositeTrack on
+shortLabel Conservation
+longLabel Vertebrate Multiz Alignment & Conservation (60 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+type bed 4
+group compGeno
+priority 103.29
+
+    track cons60wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons60way
+
+        track multiz60way
+        subTrack cons60wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 60 Vertebrates
+        subGroups view=align clade=vert
+        noInherit on
+        irows on
+        summary multiz60waySummary
+        frames multiz60wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault mm10
+        speciesGroups Primate Placental_Mammal Vertebrate
+        sGroup_Glires rn5 dipOrd1 hetGla2 cavPor3 speTri2 oryCun2 ochPri2 tupBel1
+        sGroup_Primate otoGar3 micMur1 tarSyr1 calJac3 saiBol1 papHam1 rheMac3 nomLeu2 ponAbe2 gorGor3 panTro4 hg19
+        sGroup_Placental_Mammal pteVam1 myoLuc2 ailMel1 canFam3 felCat5 eriEur1 sorAra1 equCab2 bosTau7 oviAri1 turTru2 vicPac1 susScr3 choHof1 dasNov3 echTel1 triMan1 proCap1 loxAfr3
+        sGroup_Vertebrate macEug2 sarHar1 monDom5 ornAna1 melUnd1 taeGut1 galGal4 melGal1 anoCar2 chrPic1 xenTro3 latCha1 gadMor1 danRer7 gasAcu1 fr3 tetNig2 oreNil2 oryLat2 petMar1
+        speciesDefaultOff panTro2 gorGor1 ponAbe2 papHam1 calJac1 tarSyr1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun2 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 macEug1 ornAna1 taeGut1 anoCar1 proCap1 tetNig2 fr2 gasAcu1 oryLat2 petMar1
+        itemFirstCharCase noChange
+        treeImage phylo/mm10_60way.gif
+        priority 100
+
+    track cons60wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons60way
+    viewLimits -.3:2
+    viewLimitsMax -15.41:7.13
+
+        # PhyloP conservation
+        track phyloP60wayPrimates
+        subTrack cons60wayViewphyloP off
+        subGroups view=phyloP clade=primate
+        shortLabel Primate Cons
+        longLabel Primate Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -9.06 0.66
+        maxHeightPixels 100:50:11
+        viewLimits -4:1
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,10,70
+        altColor 70,10,10
+        priority 1
+
+        track phyloP60wayPlacental
+        subTrack cons60wayViewphyloP on
+        subGroups view=phyloP clade=mammal
+        shortLabel Mammal Cons
+        longLabel Placental Mammal Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -13.80 2.94
+        maxHeightPixels 100:50:11
+        viewLimits -4:4
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 25,25,95
+        altColor 95,25,25
+        priority 3
+
+        track phyloP60wayAll
+        subTrack cons60wayViewphyloP off
+        subGroups view=phyloP clade=vert
+        shortLabel Vertebrate Cons
+        longLabel Vertebrate Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -14.08 6.42
+        maxHeightPixels 100:50:11
+        viewLimits -4:4
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,40,120
+        altColor 120,40,40
+        priority 4
+
+    track cons60wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons60way
+
+        # phastCons conservation
+        track phastCons60wayPrimates
+        subTrack cons60wayViewphastcons off
+        subGroups view=phastcons clade=primate
+        shortLabel Primate Cons
+        longLabel Primate Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,70,10
+        altColor 70,10,10
+        priority 10
+
+        track phastCons60wayPlacental
+        subTrack cons60wayViewphastcons on
+        subGroups view=phastcons clade=mammal
+        shortLabel Mammal Cons
+        longLabel Placental Mammal Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 25,95,25
+        altColor 95,25,25
+        priority 12
+
+        track phastCons60way
+        subTrack cons60wayViewphastcons off
+        subGroups view=phastcons clade=vert
+        shortLabel Vertebrate Cons
+        longLabel Vertebrate Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,120,40
+        altColor 120,40,40
+        priority 13
+
+    track cons60wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons60way
+
+        # Conserved Elements (Most Conserved)
+        track phastConsElements60wayPrimates
+        subTrack cons60wayViewelements off
+        subGroups view=elements clade=primate
+        shortLabel Primate El
+        longLabel Primate Conserved Elements
+        noInherit on
+        type bed 5 .
+        color 170,50,100
+        priority 20
+
+        track phastConsElements60wayPlacental
+        subTrack cons60wayViewelements on
+        subGroups view=elements clade=mammal
+        shortLabel Mammal El
+        longLabel Placental Mammal Conserved Elements
+        noInherit on
+        type bed 5 .
+        color 100,50,170
+        priority 22
+
+        track phastConsElements60way
+        subTrack cons60wayViewelements off
+        subGroups view=elements clade=vert
+        shortLabel Vertebrate El
+        longLabel Vertebrate Conserved Elements
+        noInherit on
+        color 170,100,50
+        type bed 5 .
+        priority 23
