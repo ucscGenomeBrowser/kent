@@ -48,49 +48,54 @@ int i;
   char firstMD5[MD5_DIGEST_LENGTH*2 + 1];
   char secondMD5[MD5_DIGEST_LENGTH*2 + 1];
   i = MD5_DIGEST_LENGTH;
-  printf("MD5_DIGEST_LENGT is -- %d\n",i);
+  // /*DEBUG*/ printf("MD5_DIGEST_LENGT is -- %d\n",i);
   MD5((unsigned char *) password, strlen(password), result1);
   // output
+/******************************************************  DEBUG
   printf("result1 array:\n");
   for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     printf("%02x", result1[i]);
   printf("\n");
+************************************************************/
   // Convert the first MD5 value to string
   printf("Convert result1 to firstMD5 .......\n");
   for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     {
     sprintf(&firstMD5[i*2], "%02x", result1[i]);
     }
+/******************************************************  DEBUG
   printf("\n");
   printf("firstMD5 string\n");
   printf("firstMD5 is: %s \n",firstMD5);
   printf("\n");
-
+***************************************************************/
   // add the salt with "-" 
   char saltDashMD5[256];
   strcpy(saltDashMD5,salt);
- printf("String3  is: %s \n",saltDashMD5);
+// /*DEBUG*/ printf("String3  is: %s \n",saltDashMD5);
   strcat(saltDashMD5,"-");
- printf("String3  is: %s \n",saltDashMD5);
+// /*DEBUG*/ printf("String3  is: %s \n",saltDashMD5);
   strcat(saltDashMD5,firstMD5);
-  printf("firstMD5 is: %s \n",firstMD5);
-  printf("saltDashMD5  is: %s \n",saltDashMD5);
+// /*DEBUG*/  printf("firstMD5 is: %s \n",firstMD5);
+// /*DEBUG*/  printf("saltDashMD5  is: %s \n",saltDashMD5);
   MD5((unsigned char *) saltDashMD5, strlen(saltDashMD5), result2);
  // output
+/******************************************************  DEBUG
   for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     printf("%02x", result2[i]);
   printf("\n");
  printf("Convert result2 to secondMD5 .......\n");
+***************************************************************/
   for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     {
     sprintf(&secondMD5[i*2], "%02x", result2[i]);
     }
+/*************************************************************** DEBUG 
   printf("\n");
-
   i = MD5_DIGEST_LENGTH;
   printf("MD5_DIGEST_LENGTH is %d\nLength of secondMD5 is %d\n",i,strlen(secondMD5));
   printf("secondMD5 before return is: \n%s\n", secondMD5);
-
+************************************************************************/
   strcpy(result, secondMD5);
 
 }
@@ -106,9 +111,8 @@ safecat(buf,bufsize,salt);
 safecat(buf,bufsize,":");
 safecat(buf,bufsize,md5Returned);
 
-//safef(buf,bufsize,md5Returned);
 
-printf("After encrypt, buf isL K\n%s\n bufsize is %d\n", buf, bufsize); 
+// /*DEBUG*/ printf("After encrypt, buf is \n%s\n bufsize is %d\n", buf, bufsize); 
 }
 
 void encryptNewPwd(char *password, char *buf, int bufsize)
@@ -127,13 +131,13 @@ seed[1] = getpid() ^ (seed[0] >> 14 & 0x30000);
 /* Turn it into printable characters from `seedchars'. */
 for (i = 0; i < 8; i++)
     salt[i] = seedchars[(seed[i/5] >> (i%5)*6) & 0x3f];
-printf("salt generated: %s\n", salt);
+// /*DEBUG*/ printf("salt generated: %s\n", salt);
 encryptPWD(password, salt, buf, bufsize);
 }
 
 void findSalt(char *encPassword, char *salt, int saltSize)
 {
-printf("encPassword from database is: %s\n",encPassword);
+// /*DEBUG*/ printf("encPassword from database is: %s\n",encPassword);
 char tempStr1[45];
 char tempStr2[45];
 
@@ -141,21 +145,21 @@ int i;
 // Skip the ":B:" part
 for (i = 3; i <= strlen(encPassword); i++)
     tempStr1[i-3] = encPassword[i];
-printf("encPassword is %s\n",encPassword);
-printf("Trim out the :B: to become %s\n",tempStr1);
+// /*DEBUG*/ printf("encPassword is %s\n",encPassword);
+// /*DEBUG*/ printf("Trim out the :B: to become %s\n",tempStr1);
 i = strcspn(tempStr1,":");
-printf(" : is at location %d\n", i);
+// /*DEBUG*/ printf(" : is at location %d\n", i);
 safencpy(tempStr2, sizeof(tempStr2), tempStr1, i);
-printf("Trimmed salt is %s\n", tempStr2);
+// /*DEBUG*/ printf("Trimmed salt is %s\n", tempStr2);
 safef(salt, saltSize,tempStr2);
-printf("Final salt is %s\n", salt);
+// /*DEBUG*/ printf("Final salt is %s\n", salt);
 
 }
 bool checkPwd(char *password, char *encPassword)
 /* check an encrypted password */
 {
 
-printf("password type in is: %s\n",password);
+// /*DEBUG*/ printf("password type in is: %s\n",password);
 char salt[14];
 int saltSize;
 saltSize = sizeof(salt);
@@ -693,7 +697,7 @@ hPrintf(
 , user
 );
 
-backToHgSession(15);
+backToHgSession(1);
 /*
 char *hgLoginHost = hgLoginLinkHost();
 
@@ -919,22 +923,6 @@ hPrintf(
 );
 /* return to session */
 backToHgSession(1);
-/*******************************
-hPrintf(
-"<script  language=\"JavaScript\">\n"
-"<!-- "
-"\n"
-"window.setTimeout(afterDelay, 1000);\n"
-"function afterDelay() {\n" 
-"window.location =\"http://%s/cgi-bin/hgSession?hgS_doMainPage=1\";"
-"\n}"
-"\n"
-"//-->"
-"\n"
-"</script>"
-,hgLoginHost);
-****************************/
-
 }
 
 
