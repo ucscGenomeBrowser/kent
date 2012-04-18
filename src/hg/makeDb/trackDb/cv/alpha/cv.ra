@@ -13150,7 +13150,7 @@ description Expression level estimates at the gene level for the GENCODE V7 anno
 term GeneGencV10
 tag GENEGENCV10
 type view
-label Genes Genoce V10
+label Genes Gencode V10
 description Expression level estimates at the gene level for the GENCODE V10 annotation in gtf format
 
 term GeneGencV3c
@@ -13162,7 +13162,7 @@ description Expression level estimates at the gene level for the GENCODE CRCh37.
 term GeneEnsV65IAcuff
 tag GENENSV65
 type view
-label Genese ENSEMBL V65
+label Genes ENSEMBL V65
 description Expression level estimates at the gene level for the ENSEMBL V65 annotation in gtf format
 
 term HMM
