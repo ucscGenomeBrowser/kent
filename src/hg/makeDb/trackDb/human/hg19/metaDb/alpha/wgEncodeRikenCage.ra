@@ -232,7 +232,7 @@ lab RIKEN
 labExpId K16,K17
 labVersion IDR
 localization cell
-md5sum c981394be73310954d2bbc10aead335a
+md5sum 7b0f3d45b0bc364e95bd918c835fdae5
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -255,6 +255,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10049
 localization cytosol
+md5sum 9d7c580e8eea5c2b193070069f0b9e51,46ed62f1350d8e9b3dd3a85f1f66d174
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -280,6 +281,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10059
 localization cytosol
+md5sum cd4e783624d01398f8f1ac961770b60f,9554cc029f1fb1aff7ecd492bbc627a1
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -305,6 +307,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10049
 localization cytosol
+md5sum 7a79e9bc5f9edf7308728252d3bf6e11
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -330,6 +333,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10059
 localization cytosol
+md5sum d5408590ab9ea722a02563e50cae78c3
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -355,6 +359,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10049
 localization cytosol
+md5sum 274bdd7e673e0c29c0981e389c661dcd
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -380,6 +385,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10059
 localization cytosol
+md5sum e14de5dee4e2a0c8c5ea6688dcaf9a4d
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -405,6 +411,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10049
 localization cytosol
+md5sum 9208e5ee1887657ac8d5a1416f3078a1
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -429,6 +436,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10059
 localization cytosol
+md5sum 64484988cb80ed64177b881392d1651a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -453,6 +461,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10049,CThi10059
 localization cytosol
+md5sum 3ca940aaac31db4c9cd99b250b381984
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -477,6 +486,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10106
 localization nucleus
+md5sum b2de372f2a14170431a7e2cf41c81b67,67fc850ed90dcd91200ca434bc78d335
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -502,6 +512,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10060
 localization nucleus
+md5sum 84172dcb11974dae3de0b18ba2f78c70,f69bb5158254ab8bfa56d4e17060676e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -527,6 +538,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10106
 localization nucleus
+md5sum bdecc7faa264379e9d6f630a450a81bc
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -552,6 +564,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10060
 localization nucleus
+md5sum 294fdaa0b30a6765b26962d5b8805480
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -577,6 +590,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10106
 localization nucleus
+md5sum 3a6e65f30ef737261aca751e9da261cd
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -602,6 +616,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10060
 localization nucleus
+md5sum fa33f011425e6b9cb4db74dc538a2862
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -627,6 +642,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10106
 localization nucleus
+md5sum 1edf5fc648f0880d45007083366e5231
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -651,6 +667,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10060
 localization nucleus
+md5sum f166417d95ae21529d5ecd95eecf618c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -675,6 +692,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10106,CThi10060
 localization nucleus
+md5sum a2e080e0849f65e0c15bf9553371b674
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -912,7 +930,7 @@ lab RIKEN
 labExpId K12,K13
 labVersion IDR
 localization cell
-md5sum 8793e7cbf5647cf03206a8175fdcda92
+md5sum ddc41e9f47db9fa7c2862b3ecdde70df
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -1148,7 +1166,7 @@ lab RIKEN
 labExpId K18,K19
 labVersion IDR
 localization cell
-md5sum a93ed798789b511066e6c4ae5b3c90c1
+md5sum 5384dc8d939943aceddf0fd66effe38b
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -1172,6 +1190,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10023
 localization cell
+md5sum 387094d340b1e6ef83273828fab72a6a,183b2c520f45473d819574114362531e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1198,6 +1217,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10024
 localization cell
+md5sum b49964c65715c71f32c7329504721599,4f2bf22b8f066c4cf14aca17fc418181
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1224,6 +1244,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10023
 localization cell
+md5sum 2053bfd291ad4fec1ffaea1a5517828b
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1250,6 +1271,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10024
 localization cell
+md5sum 0ea0e0130caaa4463c8df320d520d47e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1276,6 +1298,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10023
 localization cell
+md5sum 8b23418535fdb54eef063a684eb7380e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1302,6 +1325,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10024
 localization cell
+md5sum 290e3fee55b7c60fd32b705c1a012255
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1328,6 +1352,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10023
 localization cell
+md5sum 390ad3d5d7ef514709e5eaf772cb1fbd
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1353,6 +1378,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10024
 localization cell
+md5sum 62de2bb1c831e4e12e21d73ce6edeaa0
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1378,6 +1404,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10023,CThi10024
 localization cell
+md5sum c69036e9a1bf0eb39d0b73687fc31ec1
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1402,6 +1429,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10058
 localization cell
+md5sum 6473babe341854a82cd55454238b553c,52cf9687562f4ff6c690286732041c4c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1427,6 +1455,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10058
 localization cell
+md5sum d9ad2b6901d7044ac738e80d537c8cad
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1452,6 +1481,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10058
 localization cell
+md5sum b2ccda5c3c3645069e2cb640a85c4e98
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1477,6 +1507,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10058
 localization cell
+md5sum 4c2bcef04c267c5a53d08d79cf5fa702
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1501,6 +1532,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10058
 localization cell
+md5sum 2e5eed3122f7f47d7dbbf96aa27ed893
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -1738,7 +1770,7 @@ lab RIKEN
 labExpId J72,J73
 labVersion IDR
 localization cell
-md5sum 1e1b751b9ccf739f426cc00ac7b582c4
+md5sum 5f6e685ac94e68d1f8696df5f695fd1a
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -1982,7 +2014,7 @@ lab RIKEN
 labExpId I27
 labVersion IDR
 localization cytosol
-md5sum 73f87e504966e596f57a09881349dfed
+md5sum 329b5534c170df31bb68a5ec85fa29c7
 project wgEncode
 rnaExtract longNonPolyA
 subId 5075
@@ -2004,6 +2036,7 @@ grant Gingeras
 lab RIKEN
 labExpId I27
 localization cytosol
+md5sum 71a1a2c77cc44a6fe8096bcecd7c96e9
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -2240,7 +2273,7 @@ lab RIKEN
 labExpId J84,J85
 labVersion IDR
 localization cytosol
-md5sum 65495d5e51fb2a19fd802209d6841540
+md5sum cc58970f6a67f0e89db9c6d3095a5430
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -2430,7 +2463,7 @@ lab RIKEN
 labExpId I69
 labVersion IDR
 localization nucleolus
-md5sum de36fba7ca6d1fc56fcd9b3e6eebd325
+md5sum 4df3a4e87e01560e0815ae7f67cd95fc
 project wgEncode
 rnaExtract total
 subId 5057
@@ -2452,6 +2485,7 @@ grant Gingeras
 lab RIKEN
 labExpId I69
 localization nucleolus
+md5sum bca64a670503ff8ea90691646f083043
 project wgEncode
 rnaExtract total
 subId 5609
@@ -2684,7 +2718,7 @@ lab RIKEN
 labExpId J59
 labVersion IDR
 localization nucleus
-md5sum 9c4688266d3e5821615a3aab655f45e3
+md5sum d40d8717b6b1ec35024af5464aa7b766
 project wgEncode
 rnaExtract longNonPolyA
 subId 5059
@@ -2706,6 +2740,7 @@ grant Gingeras
 lab RIKEN
 labExpId J59
 localization nucleus
+md5sum a81778e4ff3a240be04062054910091b
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -2942,7 +2977,7 @@ lab RIKEN
 labExpId J93,J94
 labVersion IDR
 localization nucleus
-md5sum 7cb292e449dc50f0baeb6975b7397d50
+md5sum ac1075ac9fcb104a35a8159e7e9a8158
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -3186,7 +3221,7 @@ lab RIKEN
 labExpId I67
 labVersion IDR
 localization cell
-md5sum 788131e504a62339240a2cba9abf25fd
+md5sum f296e6036fcdafb7b93a666b3a74c584
 project wgEncode
 rnaExtract longNonPolyA
 subId 5080
@@ -3208,6 +3243,7 @@ grant Gingeras
 lab RIKEN
 labExpId I67
 localization cell
+md5sum 881c01c967f0041c0b64f9ec4228dccd
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -3544,7 +3580,7 @@ lab RIKEN
 labExpId J74,J75
 labVersion IDR
 localization cell
-md5sum e39512569cd08fd8778687476c2df0ce
+md5sum a4cdc93d8803820602fc68d664ff2882
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -3858,6 +3894,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100CTT
 localization cell
+md5sum 14cac2e94363cd4186e767507c947ced,40976046b6207905c0b3679bca68e51c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -3884,6 +3921,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103CTT
 localization cell
+md5sum 1fe0441116c966bc0a4f5d676530ab0c,a25753f23eae8c326be6b8ef4cce81bd
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -3910,6 +3948,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100CTT
 localization cell
+md5sum d1e5d63201342ee6cb3d16b6d10ed4a6
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -3936,6 +3975,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103CTT
 localization cell
+md5sum af214afeee4a9b5762c0441a9fe0f693
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -3962,6 +4002,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100CTT
 localization cell
+md5sum 31e4428286940cd660bc91e0a246b65c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -3988,6 +4029,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103CTT
 localization cell
+md5sum bafab25b12beb99256c91f574954349c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4014,6 +4056,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100CTT
 localization cell
+md5sum 5e007cdfad2b5126ec904d7ce337f7dd
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4039,6 +4082,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103CTT
 localization cell
+md5sum 6cce4e2914ba9a473ff32fad303b5f9c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4064,6 +4108,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100CTT,CThi10103CTT
 localization cell
+md5sum 1b8ba54c57dff258eac509de7724e475
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4089,6 +4134,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103GAT
 localization cell
+md5sum 5fb2f0484b691849bddc2a000bd5d44d,98a899503c089e072992e1a6c4a0f3db
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4115,6 +4161,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105CTT
 localization cell
+md5sum d450c5549102af6710b8a7e0a9d5ba16,471726698dc95a656899bbda943ff419
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4141,6 +4188,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103GAT
 localization cell
+md5sum 0c604bfa9c734c45bde7062c416ab2b0
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4167,6 +4215,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105CTT
 localization cell
+md5sum 5aecbc16a96c7a33805f62aa2addfe7b
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4193,6 +4242,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103GAT
 localization cell
+md5sum 0bde8e3bde46c8ce50e5cc7e2e0c6d28
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4219,6 +4269,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105CTT
 localization cell
+md5sum ee69c59c382028951cf330bd70f42178
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4245,6 +4296,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103GAT
 localization cell
+md5sum 95fa9e4be06560401c1bfc44042b1adf
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4270,6 +4322,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105CTT
 localization cell
+md5sum 526d791f2880746b0e1f63dd522d1370
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4295,6 +4348,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103GAT,CThi10105CTT
 localization cell
+md5sum b1d39d8b853b44e65f08702e998919a1
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4320,6 +4374,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104CTT
 localization cell
+md5sum dbb1648b53999f625db05b909894452a,c818925f26354d2fbe51294ddfcbae64
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4346,6 +4401,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104ACA
 localization cell
+md5sum 73e5b9c803359f325ce115c9152aa18e,f4d712f8aecb8f4fa5b8434853a94722
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4372,6 +4428,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104CTT
 localization cell
+md5sum d163e9d412b3229303633cd34d360e45
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4398,6 +4455,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104ACA
 localization cell
+md5sum fe289bca4cb7a0c9501527e7567be770
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4424,6 +4482,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104CTT
 localization cell
+md5sum 91b5da2e5ae77dab71fe7b7db39e3df2
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4450,6 +4509,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104ACA
 localization cell
+md5sum cb664f7fe3a37b9706789240f6e8e712
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4476,6 +4536,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104CTT
 localization cell
+md5sum 302c83b584b4f3b3d5bbb8a8dd4cb0d8
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4501,6 +4562,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104ACA
 localization cell
+md5sum 1fdcdfd8c47ef898a933a274b2305606
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4526,6 +4588,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104CTT,CThi10104ACA
 localization cell
+md5sum f41c9e3635733556e5eebfe5b78cf7b9
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -4863,7 +4926,7 @@ lab RIKEN
 labExpId J80,J81
 labVersion IDR
 localization cell
-md5sum 2c8b37394850124c84e208644852cdeb
+md5sum 3c9fa398b95e4deab207ceba9c866726
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -5099,7 +5162,7 @@ lab RIKEN
 labExpId J56
 labVersion IDR
 localization cytosol
-md5sum 532e2fc516d0af5a3c9fbbd77485b6bb
+md5sum 5f12a5131874544169d78864a0c7a75c
 project wgEncode
 rnaExtract longNonPolyA
 subId 5085
@@ -5121,6 +5184,7 @@ grant Gingeras
 lab RIKEN
 labExpId J56
 localization cytosol
+md5sum a14bb23d9df2699d7f279074bd1032d0
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -5457,7 +5521,7 @@ lab RIKEN
 labExpId J87,J88
 labVersion IDR
 localization cytosol
-md5sum db7055e2a48aa72184fddb2d819a509a
+md5sum c5254de3ecaa95be2021c22647c93923
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -5644,7 +5708,7 @@ lab RIKEN
 labExpId J58
 labVersion IDR
 localization nucleolus
-md5sum cc1a3387cd1473f032f1ad040ebdab55
+md5sum deb96e4d8a0a676cb6fed674a76ef8e7
 project wgEncode
 rnaExtract total
 subId 5083
@@ -5666,6 +5730,7 @@ grant Gingeras
 lab RIKEN
 labExpId J58
 localization nucleolus
+md5sum a0e3afe4f0962495f26c98c8cdad4cda
 project wgEncode
 rnaExtract total
 subId 5609
@@ -5687,6 +5752,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
+md5sum 12cf4273d216a86313df412a65018dd2,609d95f951f6dd3b3debea5b983b21b5
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -5710,6 +5776,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
+md5sum a2736d3a53110909cfb64cb8c5a09b53
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -5733,6 +5800,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
+md5sum 8128cae05f011c9427cb083b939322fe
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -5756,6 +5824,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
+md5sum 9c4345c4920025c53ca192df4808d32c
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -5778,6 +5847,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10028
 localization nucleus
+md5sum cd37ce793dbd53d4ec1e61e4ad3379c7
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -6115,7 +6185,7 @@ lab RIKEN
 labExpId J96,J97
 labVersion IDR
 localization nucleus
-md5sum d89593d4ac0c43172acfc4e735bdb940
+md5sum 891e9deb6113746f742f5f433f839042
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -6451,7 +6521,7 @@ lab RIKEN
 labExpId K01,K02
 labVersion IDR
 localization cell
-md5sum b4b91192506fd7d6b626f1518d4f197c
+md5sum d3b45b723d2bed66d9e44215424bc6f0
 objStatus replaced - this version has scores that exceed chromosome lengths
 project wgEncode
 rnaExtract longPolyA
@@ -6476,7 +6546,7 @@ lab RIKEN
 labExpId K01,K02
 labVersion IDR
 localization cell
-md5sum 478a4f0eb5aaf2e07a23c4a233558197
+md5sum 7f4369f9439d4874b8ca831ea97ca48e
 project wgEncode
 rnaExtract longPolyA
 subId 5147
@@ -6721,7 +6791,7 @@ lab RIKEN
 labExpId I42
 labVersion IDR
 localization cytosol
-md5sum 06ef0e693d2c5978ffeec6a132ac8f35
+md5sum d4cdb1627833ec5a2f31391ea545acb4
 project wgEncode
 rnaExtract longNonPolyA
 subId 5064
@@ -6743,6 +6813,7 @@ grant Gingeras
 lab RIKEN
 labExpId I42
 localization cytosol
+md5sum 6ebf486159b5a5f0510760d88b2fa1c3
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -7079,7 +7150,7 @@ lab RIKEN
 labExpId J89,J90
 labVersion IDR
 localization cytosol
-md5sum 27ddb2e1292d99fd91152f2416af800f
+md5sum 625b2bdfd9e1dce5eb66891f4f9366e1
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -7269,7 +7340,7 @@ lab RIKEN
 labExpId I68
 labVersion IDR
 localization nucleolus
-md5sum 8544bf73d168d50cf7355ed730a5b8c3
+md5sum 5d61ca1dd5a3b97a1c349cfe5529b70c
 project wgEncode
 rnaExtract total
 subId 5147
@@ -7292,6 +7363,7 @@ grant Gingeras
 lab RIKEN
 labExpId I68
 localization nucleolus
+md5sum aded59349b74b27d043035f7838240bd
 project wgEncode
 rnaExtract total
 subId 5611
@@ -7536,7 +7608,7 @@ lab RIKEN
 labExpId I44
 labVersion IDR
 localization nucleus
-md5sum 246064ebcc53866885a3a01a3e382805
+md5sum da9c284d8022126f3e65fb4aa9a9b673
 project wgEncode
 rnaExtract longNonPolyA
 subId 5061
@@ -7558,6 +7630,7 @@ grant Gingeras
 lab RIKEN
 labExpId I44
 localization nucleus
+md5sum 150d8bd99d00e357a68c51f38d8a2a4c
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -7894,7 +7967,7 @@ lab RIKEN
 labExpId J98,J99
 labVersion IDR
 localization nucleus
-md5sum ca6ebdfada6059bcd6c987dbf904b666
+md5sum 12474bb2ed3cc1498f0fdb1ac2a18f51
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -7918,6 +7991,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103ACA
 localization cell
+md5sum 1baf70bea2b671d77dc705dd3374ec20,41bbe92efeaa4fd893e40cdef6489782
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -7944,6 +8018,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100GAT
 localization cell
+md5sum 01a4934717b5e198e1978aced58db375,1dc602e2e80ac268b0168871332afcf0
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -7970,6 +8045,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103ACA
 localization cell
+md5sum c689a9e97c8a89b8325f2821fb05f6e8
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -7996,6 +8072,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100GAT
 localization cell
+md5sum 3f75e07bc611cddbae035fc5f1236d63
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8022,6 +8099,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103ACA
 localization cell
+md5sum 8a883c171601c88ba031a385ad956b85
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8048,6 +8126,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100GAT
 localization cell
+md5sum 8d9adbd1a0d366831eaf5a2ee4fa2bb1
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8074,6 +8153,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103ACA
 localization cell
+md5sum 4c4d15717956261850033f48573e49e5
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8099,6 +8179,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100GAT
 localization cell
+md5sum 2ecea8120606ae016b06c7e446b5e111
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8124,6 +8205,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103ACA,CThi10100GAT
 localization cell
+md5sum 428dec786b51127afa8a70d753228f8c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8149,6 +8231,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105GAT
 localization cell
+md5sum 2be4d9924e4951db44641dc2316b1c2a,0a1faac04b1e89f283228181464cdb42
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8175,6 +8258,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105GAT
 localization cell
+md5sum b68db89e4c98872955073d47d31b0386
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8201,6 +8285,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105GAT
 localization cell
+md5sum 3e389290cf9e48d636cf6b5891646515
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8227,6 +8312,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105GAT
 localization cell
+md5sum 8f51e124d754c1bdccb512e66aebc3d4
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8252,6 +8338,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105GAT
 localization cell
+md5sum e4b2412ea0297b966c88e5c0c48b953d
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8277,6 +8364,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105ACA
 localization cell
+md5sum 980046cc51b708327214eb2a634eb0e8,3a9804cc91fe78c3ee04812d65138d93
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8303,6 +8391,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104GAT
 localization cell
+md5sum e2dc0ad2bea4d51a66d104e1067edf98,bea4c76fc37b7a93cf55f5ecbc43bc5a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8329,6 +8418,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105ACA
 localization cell
+md5sum b57164643803da6826596760dc823507
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8355,6 +8445,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104GAT
 localization cell
+md5sum 5f941c27d13a5e8fac1d9df4750e16f7
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8381,6 +8472,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105ACA
 localization cell
+md5sum 9467c8e83ff1f795b26a311d45484d04
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8407,6 +8499,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104GAT
 localization cell
+md5sum 86d9b9ceeadaa1b88cca2d32fa8e18ad
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8433,6 +8526,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105ACA
 localization cell
+md5sum 601909b45f6cd13f0d746e0699d1f80f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8458,6 +8552,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104GAT
 localization cell
+md5sum bb080a462e532f415e905fd1efb33265
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8483,6 +8578,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105ACA,CThi10104GAT
 localization cell
+md5sum 19c4ad122a079e2041c4a2989085c7ff
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8508,6 +8604,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103ATC
 localization cell
+md5sum 8a0443fb6ab8a7ea9853179771ff8333,5f8000827e6b44903ed1c6205732394b
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8534,6 +8631,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100ACA
 localization cell
+md5sum 579776f5ec2b0142872a30eb1e53e419,ce8ebefbe1aa690030a712c465732f08
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8560,6 +8658,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103ATC
 localization cell
+md5sum 085fca3bf647fbe0a9c507acc06ff188
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8586,6 +8685,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100ACA
 localization cell
+md5sum a9bfecbd50178e599295da0d7290e542
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8612,6 +8712,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103ATC
 localization cell
+md5sum 120ee4dc72b1d20df23963c185cc8c14
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8638,6 +8739,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100ACA
 localization cell
+md5sum 27f7549d8ae1efe8549733a60c7a571b
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8664,6 +8766,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103ATC
 localization cell
+md5sum 0877bff47c35f382b23f3902679b2f4c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8689,6 +8792,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100ACA
 localization cell
+md5sum 1f46d6cf80a224507c450105aa42c236
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8714,6 +8818,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10103ATC,CThi10100ACA
 localization cell
+md5sum 7cfa0a9e8866bd43ebb02ce293b54102
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8739,6 +8844,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101CTT
 localization cell
+md5sum be3b67391fdf14fbdb3135d2047ce434,4fc482ef75f394323cf9b44668f14a07
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8765,6 +8871,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100ATC
 localization cell
+md5sum 0a69c061b50005b169d74c009cf6086a,76b9a4f767539d792e70c83a7bd97834
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8791,6 +8898,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101CTT
 localization cell
+md5sum c1e598de2fbfb2c96c1ab53697bfc74f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8817,6 +8925,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100ATC
 localization cell
+md5sum b521039b2ecca4881401c3022b668c9d
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8843,6 +8952,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101CTT
 localization cell
+md5sum de5fa530b3f3a11b421d72aeb6f129f7
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8869,6 +8979,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100ATC
 localization cell
+md5sum 0353c56ce570c4741371db0003d737fb
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8895,6 +9006,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101CTT
 localization cell
+md5sum b13b5f26bb1893d3cf0a2c9083379922
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8920,6 +9032,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10100ATC
 localization cell
+md5sum fde4f213ba6f3aee964e7167acc70a32
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8945,6 +9058,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101CTT,CThi10100ATC
 localization cell
+md5sum acfb53556a373b84f867e7f1ee2e805d
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8970,6 +9084,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10036
 localization cell
+md5sum 85bb887a0af49de0eb64695681d2c7b3,3803eaea75416c948dc58ffa93bbeaf4
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -8996,6 +9111,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10037
 localization cell
+md5sum 7e0523b3f331936f5a6c02acae139f88,e2f378c17e9abd3e7007cac4cee19d06
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9022,6 +9138,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10036
 localization cell
+md5sum f93551aae06acec990e950b96b5bc5cd
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9048,6 +9165,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10037
 localization cell
+md5sum 73c9b58a82de1c4b59dc07cb605896cd
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9074,6 +9192,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10036
 localization cell
+md5sum 10e14a33d547389bef49228efb06b431
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9100,6 +9219,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10037
 localization cell
+md5sum 294e2e3c2b8a3c030fd2ef6184853f99
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9126,6 +9246,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10036
 localization cell
+md5sum b2b468f53cfffef591e5373590e2baf2
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9151,6 +9272,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10037
 localization cell
+md5sum f0eb0e43c546394631334cfcab12379d
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9176,6 +9298,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10036,CThi10037
 localization cell
+md5sum 66d6a28d7dd699f81e2b2c9e1718e5da
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9201,6 +9324,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10057
 localization cell
+md5sum 530ec925fef20862f9fe9769d0b1c21a,e0e8a1ea4205ebc19b466108c33ad71b
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9227,6 +9351,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105ATC
 localization cell
+md5sum 6d73bb583fe274c89831579bc2aca3b0,d38c0a825824891a273bb7bc356a5b6b
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9253,6 +9378,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10057
 localization cell
+md5sum 1576d30e4978fb8846234c9b02565c1b
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9279,6 +9405,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105ATC
 localization cell
+md5sum 53e554a4290d7bda9306e8c131d28141
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9305,6 +9432,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10057
 localization cell
+md5sum 1c8c3f8e8680592033faf1530a4e777a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9331,6 +9459,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105ATC
 localization cell
+md5sum 4ee11ac3731de8868264605ed67182ef
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9357,6 +9486,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10057
 localization cell
+md5sum 2fc004fabb88bdfb50bccf7b433e7044
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9382,6 +9512,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10105ATC
 localization cell
+md5sum a8416111bb2c818b05857daff8acc9e2
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9407,6 +9538,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10057,CThi10105ATC
 localization cell
+md5sum 9391d21a6b8f779958ce2dbbc384d076
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9432,6 +9564,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104ATC
 localization cell
+md5sum 9f9cb217ccef09079dba2460eb54008c,5f685ef9b1d100d930cfc334297fac78
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9458,6 +9591,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101GAT
 localization cell
+md5sum f6e4abe3aca33a1e88becf0ce25cf11b,af44e35541853be7112327460716a6d0
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9484,6 +9618,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104ATC
 localization cell
+md5sum 0a3377455716db23914aceef8ab761e5
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9510,6 +9645,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101GAT
 localization cell
+md5sum 0b3d7328a67b0df52530a5e3d5345d40
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9536,6 +9672,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104ATC
 localization cell
+md5sum d79e654f44e248aaf1781ce4a7f537a6
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9562,6 +9699,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101GAT
 localization cell
+md5sum a8709a586ab01bcc73be2be002150efb
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9588,6 +9726,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104ATC
 localization cell
+md5sum ff32096d5b9edad58554df8054b696ff
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9613,6 +9752,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101GAT
 localization cell
+md5sum f537efe7b38a98b8ef4e37ff2189015f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9638,6 +9778,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10104ATC,CThi10101GAT
 localization cell
+md5sum cd52198e6b309dce58fc32b9cdd70088
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9663,6 +9804,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102ACA
 localization cell
+md5sum d8a789cc77f1e0e3be96e2d733321edb,03df28e1a279c8314e57fe56742e0edf
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9689,6 +9831,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102ATC
 localization cell
+md5sum 2e6a99fc78a6fd7c98c030c22ef69c11,a9876ca8257ed2bf83ebb53ecc965b72
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9715,6 +9858,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102ACA
 localization cell
+md5sum 5bcdaa0f32ac79bdb47b105f01374fc5
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9741,6 +9885,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102ATC
 localization cell
+md5sum e035bc418866b3e580bb12695a40cda4
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9767,6 +9912,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102ACA
 localization cell
+md5sum e348c0627c08f0e86d137e10a8ca3db0
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9793,6 +9939,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102ATC
 localization cell
+md5sum cc842f2ceb1685f8d8c5a7cba94d83fe
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9819,6 +9966,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102ACA
 localization cell
+md5sum d8234203a67f2d02bb0c405d2b9fb29a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9844,6 +9992,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102ATC
 localization cell
+md5sum db899de1400ffcd4416b5230d3ef9dec
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -9869,6 +10018,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102ACA,CThi10102ATC
 localization cell
+md5sum 534dba862caf1e62bacc5b7286bdc28c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -10206,7 +10356,7 @@ lab RIKEN
 labExpId J78,J79
 labVersion IDR
 localization cell
-md5sum ae957ee987c2f92d9fc3f6711679ade2
+md5sum f4239fd75aef86f7ca37999b30759f87
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -10450,7 +10600,7 @@ lab RIKEN
 labExpId I72
 labVersion IDR
 localization cytosol
-md5sum c96c33821d68852387c0e6dad4eb1e4c
+md5sum 9857646f0380943ac53a48cb5f9b18c1
 project wgEncode
 rnaExtract longNonPolyA
 subId 5073
@@ -10472,6 +10622,7 @@ grant Gingeras
 lab RIKEN
 labExpId I72
 localization cytosol
+md5sum c2e3a62a746f0915746e3471cd24827b
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -10808,7 +10959,7 @@ lab RIKEN
 labExpId K03,K04
 labVersion IDR
 localization cytosol
-md5sum 8b61e7f5f2b909587a11ff7cf7235287
+md5sum 2f4e1bce2a46cfeeedd6889929499d5d
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -10831,6 +10982,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
+md5sum 2036093cd1efd5f367f2f0d6c1344ff7,ea2fd5719f0a669e21196152b57e07c1
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -10856,6 +11008,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
+md5sum d7d6d4d6d6d6cbad8e155b9621909adc
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -10881,6 +11034,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
+md5sum c71d492d7c62fddc76b4efc098f1bc9d
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -10906,6 +11060,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
+md5sum 0168b76b9eb9c93889700d9cf488befc
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -10930,6 +11085,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10027
 localization nucleus
+md5sum 7bd8e72c15ed6942a0d867327ea9e1e2
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -11267,7 +11423,7 @@ lab RIKEN
 labExpId K05,K06
 labVersion IDR
 localization nucleus
-md5sum 70a90c63421dcd1a0de9a470db421dd3
+md5sum 57935352afce004be1f70f6f40a99ea0
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -11291,6 +11447,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10034
 localization cell
+md5sum b9d3b1c2f2908768756d57bdd4e08322,d6dc6494f9b0b93630ee382ba9fcce3f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11317,6 +11474,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10035
 localization cell
+md5sum dea871fe648c8d376e3b73f223d4b7fa,dd4b79a82e7f564b856f22fe3e643497
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11343,6 +11501,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10034
 localization cell
+md5sum 41c4630ad4208bc1469e7afd59390d3c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11369,6 +11528,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10035
 localization cell
+md5sum 1e6e8e6cfd9a8f7c4904c9e7ada5fd1e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11395,6 +11555,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10034
 localization cell
+md5sum f138ac1f31c150b07cf062249c47bd14
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11421,6 +11582,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10035
 localization cell
+md5sum 706f3e2b39370f47c84ac2ed1452f438
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11447,6 +11609,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10034
 localization cell
+md5sum 5fc59df23edea28a3d417e10d474fe45
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11472,6 +11635,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10035
 localization cell
+md5sum 101789c4fb73ae904a468529be5063f0
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11497,6 +11661,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10034,CThi10035
 localization cell
+md5sum e0759899d336dbf094ac38036181639f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11522,6 +11687,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101ACA
 localization cell
+md5sum 955a78cf6652d5977d4e79211c31e9d0,dfba5cadc6009bc4173eed89157c66d2
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11548,6 +11714,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101ATC
 localization cell
+md5sum 8ec97ae6d082538cea50ce81046f9dba,98c34734b79b380cd5408b9115ca79ab
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11574,6 +11741,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101ACA
 localization cell
+md5sum 6dfa2d709169cb3c93229ae0c25abc5d
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11600,6 +11768,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101ATC
 localization cell
+md5sum 7e1d87a6f9cfb09e3251d1d1f88668cf
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11626,6 +11795,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101ACA
 localization cell
+md5sum 7715e67aca62a27c51f2734b3deacdbb
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11652,6 +11822,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101ATC
 localization cell
+md5sum 9f2fa6a405dffc931cfa231a462236b4
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11678,6 +11849,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101ACA
 localization cell
+md5sum bfe0beccc15bd7111be03465e76523cb
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11703,6 +11875,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101ATC
 localization cell
+md5sum 4b39033f59c0b4eda0fb1d26e63b60bc
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11728,6 +11901,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10101ACA,CThi10101ATC
 localization cell
+md5sum f4fdfaecc08086094a6bc4968dbb2452
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11753,6 +11927,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10016
 localization cell
+md5sum c2335bded6de5331039157874f05cc4b,7738469cfaa9957e2bd0f96e01560460
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11779,6 +11954,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10018
 localization cell
+md5sum 5e684acbcc1101595867090c30c4248d,92c5defd0bbe610997a999cc1fc21dff
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11805,6 +11981,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10016
 localization cell
+md5sum b2d0c91d42af965d82596f89ee2bcaca
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11831,6 +12008,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10018
 localization cell
+md5sum 216063c7658e4339b814d03911880c7e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11857,6 +12035,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10016
 localization cell
+md5sum 563adaeef1fd7d4793b339c0893ccbee
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11883,6 +12062,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10018
 localization cell
+md5sum 5678a852bb2659e5d39f3175e57eafe2
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11909,6 +12089,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10016
 localization cell
+md5sum fd30013874d7b00aac4f0c096c285628
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11934,6 +12115,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10018
 localization cell
+md5sum a6616539e4546f6a68129faa766383d8
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11959,6 +12141,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10016,CThi10018
 localization cell
+md5sum ed8a42b89e625c6c81d4ebad776bd405
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -11984,6 +12167,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10017
 localization cytosol
+md5sum f122c6385dc0f344731461807b3db92d,1f60da97236f425a6c26f4afc4bde66b
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12010,6 +12194,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10019
 localization cytosol
+md5sum 697dc4edb97813385ec00964f6233e0e,ae91cc7ef4df204611bf7af138dd7b68
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12036,6 +12221,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10017
 localization cytosol
+md5sum d4e958a599f0c28f47f516b0e32c0901
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12062,6 +12248,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10019
 localization cytosol
+md5sum 676e843762c9928bd8259e354e7c9c67
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12088,6 +12275,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10017
 localization cytosol
+md5sum 25e760b51fe5be3a33da99a9193197bb
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12114,6 +12302,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10019
 localization cytosol
+md5sum 3d7e529799fd90aaec6c24d765ef3268
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12140,6 +12329,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10017
 localization cytosol
+md5sum dc92fbc1ab6eb9898acf2060b47302f1
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12165,6 +12355,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10019
 localization cytosol
+md5sum c34418680970e73d18e30c34b7efd929
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12190,6 +12381,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10017,CThi10019
 localization cytosol
+md5sum 1841fa887243d2fdb1735a574b00c840
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12215,6 +12407,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10025
 localization nucleus
+md5sum 6e57934b6bebc430b0ee9d601a611548,35afa06fb0ae3659a0ee6c70dc7b5b86
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12241,6 +12434,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10026
 localization nucleus
+md5sum 3472a0e19e670e505fbab834d7a7e22c,1d7ef806221488b825a2dd284f0bd922
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12267,6 +12461,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10025
 localization nucleus
+md5sum 93ef825b02d40e6adc9f92aa24f62f74
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12293,6 +12488,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10026
 localization nucleus
+md5sum c4b12ca600e85edef7235905cb99bb07
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12319,6 +12515,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10025
 localization nucleus
+md5sum 3b354dbcdd2f5c85ea335d59a018f711
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12345,6 +12542,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10026
 localization nucleus
+md5sum c10fa87ffac7ba4c2c3702f09c3a7e0a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12371,6 +12569,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10025
 localization nucleus
+md5sum cbcd86e519ee777e87e6fe14606bfec1
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12396,6 +12595,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10026
 localization nucleus
+md5sum 4720cb72dc8e4bcb44c96a666643f9c9
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12421,6 +12621,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10025,CThi10026
 localization nucleus
+md5sum 62e8c293813ed138b39231bf6b4bcf11
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -12758,7 +12959,7 @@ lab RIKEN
 labExpId J70,J71
 labVersion IDR
 localization cell
-md5sum b1aeb3a48f7bfb645394aa0947e85e81
+md5sum 510d14e533be6805b44fe0b0e1b8cf40
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -12953,7 +13154,7 @@ lab RIKEN
 labExpId I35
 labVersion IDR
 localization chromatin
-md5sum 372d3a6ed665356b34373f2f4b8b7ed9
+md5sum b2de7b3c8b8bcaa98996b53aa2f7684a
 project wgEncode
 rnaExtract total
 subId 5147
@@ -12976,6 +13177,7 @@ grant Gingeras
 lab RIKEN
 labExpId I35
 localization chromatin
+md5sum 07d66d862bcf35dbd3dcf5295f3ddf8c
 project wgEncode
 rnaExtract total
 subId 5611
@@ -13269,7 +13471,7 @@ lab RIKEN
 labExpId I22
 labVersion IDR
 localization cytosol
-md5sum a8c7e8882ca15436c382f2d4e8563dc1
+md5sum 3de7ed2820eaf82676ec0f717108f428
 project wgEncode
 rnaExtract longNonPolyA
 subId 5051
@@ -13291,6 +13493,7 @@ grant Gingeras
 lab RIKEN
 labExpId I22
 localization cytosol
+md5sum 8b21fc0f3bd9cf0f4ad0489f5477ce3a
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -13778,7 +13981,7 @@ lab RIKEN
 labExpId J82,J83
 labVersion IDR
 localization cytosol
-md5sum 3d43f20a26352f125ed54bc42ecf93f2
+md5sum 99a1bb924355c0881bc6616a6e28b34d
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -13915,7 +14118,7 @@ lab RIKEN
 labExpId I33
 labVersion IDR
 localization nucleolus
-md5sum 96203fb3b6f244658977f62c3ddef1fd
+md5sum 099d7b5a919825942021cb1932b92d51
 project wgEncode
 rnaExtract total
 subId 5147
@@ -13938,6 +14141,7 @@ grant Gingeras
 lab RIKEN
 labExpId I33
 localization nucleolus
+md5sum b563064e57ecacaac656b0392f4b611a
 project wgEncode
 rnaExtract total
 subId 5611
@@ -14133,7 +14337,7 @@ lab RIKEN
 labExpId I34
 labVersion IDR
 localization nucleoplasm
-md5sum 3c71c4d1ef4735472e7e08c7feef2adc
+md5sum 8ba003d8b609a42c5811d3bd3cdfb459
 project wgEncode
 rnaExtract total
 subId 5147
@@ -14156,6 +14360,7 @@ grant Gingeras
 lab RIKEN
 labExpId I34
 localization nucleoplasm
+md5sum 2eae11d16ec5e36eac5633473bc7f5f5
 project wgEncode
 rnaExtract total
 subId 5611
@@ -14443,7 +14648,7 @@ lab RIKEN
 labExpId I23
 labVersion IDR
 localization nucleus
-md5sum 707731b5554e857362e824bc00a50f43
+md5sum 3b004e336fb499508db2071e0dd28256
 project wgEncode
 rnaExtract longNonPolyA
 subId 5087
@@ -14465,6 +14670,7 @@ grant Gingeras
 lab RIKEN
 labExpId I23
 localization nucleus
+md5sum 91864157643c796f3ac73b564c9fe688
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -14801,7 +15007,7 @@ lab RIKEN
 labExpId J91,J92
 labVersion IDR
 localization nucleus
-md5sum 6a4bb813bee7fa3207812fd64262ba04
+md5sum c4cf529af320151c7948e604c45f45b3
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -15045,7 +15251,7 @@ lab RIKEN
 labExpId I32
 labVersion IDR
 localization polysome
-md5sum 591785d23817bd972e1918dfc2cc3827
+md5sum b8b0edaab7470ec3b5a23fc10352f63b
 project wgEncode
 rnaExtract longNonPolyA
 subId 5062
@@ -15067,6 +15273,7 @@ grant Gingeras
 lab RIKEN
 labExpId I32
 localization polysome
+md5sum f61ee82416ace47764beae04bbcddd94
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -15353,7 +15560,7 @@ lab RIKEN
 labExpId K07,K11
 labVersion IDR
 localization cell
-md5sum aa87ad4ec6b54026d83ab8e82b3c1dea
+md5sum 32fd7d2176d2f79b610fc49696232122
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -15376,6 +15583,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10051
 localization cytosol
+md5sum 790a2e0fd18ce20006120ef89adce32b,9ce76cdd9d5465ba03a9421e6a004e6a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15401,6 +15609,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10053
 localization cytosol
+md5sum 7f52832695331b51b7a91e295e8eab63,ece158469bd5cc4cbc795daa5b590d9a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15426,6 +15635,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10051
 localization cytosol
+md5sum 9da6bbc468e54e0cb32e15cea3572b3e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15451,6 +15661,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10053
 localization cytosol
+md5sum eb6427ffa72c876eaacef77828235d10
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15476,6 +15687,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10051
 localization cytosol
+md5sum d466d32670ca9eee35e756ee4d6fda23
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15501,6 +15713,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10053
 localization cytosol
+md5sum 42ee08ebf91a3869b1f476299d2d5c0e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15526,6 +15739,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10051
 localization cytosol
+md5sum 252ce99e9ad2fdc4e09952f2e011e977
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15550,6 +15764,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10053
 localization cytosol
+md5sum 0b8f1825f97fd516555d03a6fdc04e16
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15574,6 +15789,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10051,CThi10053
 localization cytosol
+md5sum 9b99df1d4a662162004889071f8d5f35
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15598,6 +15814,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10052
 localization nucleus
+md5sum e77c33cc1ed374784098ca11c942896c,ca8042b59036a336ded8bd0db61d7e4e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15623,6 +15840,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10054
 localization nucleus
+md5sum 2d60217c4e2133eb02ab17848630bdbe,9ce367b18e6d37f74d0e3d2eeb83bb21
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15648,6 +15866,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10052
 localization nucleus
+md5sum a61954a28f297b5d3cf1e24a49daa182
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15673,6 +15892,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10054
 localization nucleus
+md5sum cb00d6cf5f7987f5b830a9583d0ce14f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15698,6 +15918,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10052
 localization nucleus
+md5sum 509e54ada9595995afafcb9413e740bc
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15723,6 +15944,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10054
 localization nucleus
+md5sum 2f996af51e9645fa94b47096823874b2
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15748,6 +15970,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10052
 localization nucleus
+md5sum 561ea1f5367f35e6b0c68cd8c0926384
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15772,6 +15995,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10054
 localization nucleus
+md5sum 3b22221eab40e9bde8ba7b5faaa2539b
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15796,6 +16020,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10052,CThi10054
 localization nucleus
+md5sum 2cad78608842b890816b348a2f401faa
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15821,6 +16046,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10021
 localization cell
+md5sum 227796481580d16e5502d58297b33d31,8d4ef758fed28b6b34f06aa70b4bc5fe
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15847,6 +16073,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10022
 localization cell
+md5sum 4c8c7dfec9b4ef166d8fc55b62b5770d,ae81d4ca260f27eb2abe262d68be73f4
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15873,6 +16100,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10021
 localization cell
+md5sum ccb9c91e263282b3235e39b002f8bc0c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15899,6 +16127,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10022
 localization cell
+md5sum 7e8709967ca09e9e7959e5cd0d5b829c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15925,6 +16154,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10021
 localization cell
+md5sum 1849459d601e26a645ff55bdc1b4d913
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15951,6 +16181,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10022
 localization cell
+md5sum 9aa4c0910bafb529c27223690f8ced0a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -15977,6 +16208,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10021
 localization cell
+md5sum 77f1f2306ae9208dad1e0938509444dd
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16002,6 +16234,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10022
 localization cell
+md5sum b7ac3bdeecb796f7efcc375b782c9b39
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16027,6 +16260,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10021,CThi10022
 localization cell
+md5sum e44371b91fd0bb68b25c4231941fe096
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16052,6 +16286,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10032
 localization cell
+md5sum f8a20215289c5f3f5350100b6f2d5fc0,b3330e915ab29c8788baf882ac68b5eb
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16078,6 +16313,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10033
 localization cell
+md5sum 2afca48f2a1806ebb2fb6880c9ac3b4c,af76291ddb700a454f79652df8b844d3
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16104,6 +16340,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10032
 localization cell
+md5sum 790b563849165cb855ed4ffb324a91a2
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16130,6 +16367,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10033
 localization cell
+md5sum 5c593d1118d79c30fe111c356272593f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16156,6 +16394,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10032
 localization cell
+md5sum cb80d317a9ef95a15297d99a355b15d9
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16182,6 +16421,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10033
 localization cell
+md5sum 92ba0bc620b30dbe71f544d9ad71d91a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16208,6 +16448,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10032
 localization cell
+md5sum b43d322b489b0d416e7c2014cd356a47
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16233,6 +16474,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10033
 localization cell
+md5sum 7c15e090180a3b883344bf0f2ac3d730
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16258,6 +16500,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10032,CThi10033
 localization cell
+md5sum 590935f5c6400900191a9724fdd1eaff
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -16595,7 +16838,7 @@ lab RIKEN
 labExpId J76,J77
 labVersion IDR
 localization cell
-md5sum 3721faf6d9c6d1c6951ce2cb051ca694
+md5sum 6b12bf2ae2ba24248778617904d74267
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -16839,7 +17082,7 @@ lab RIKEN
 labExpId I70
 labVersion IDR
 localization cytosol
-md5sum 1d46d7f2abe256d35bdd3c59c5044c21
+md5sum a865b900474c1946fbe8e96550b0dbde
 project wgEncode
 rnaExtract longNonPolyA
 subId 5084
@@ -16861,6 +17104,7 @@ grant Gingeras
 lab RIKEN
 labExpId I70
 localization cytosol
+md5sum 3dedb59944d4684ea978ac85e5aecbe9
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -17147,7 +17391,7 @@ lab RIKEN
 labExpId K08,K20
 labVersion IDR
 localization cytosol
-md5sum 95a52b5cf4c4cf9ebb422fa7b4212d89
+md5sum 30acc9c063cd2ea29428b2dd192dd703
 project wgEncode
 rnaExtract longPolyA
 subId 5610
@@ -17391,7 +17635,7 @@ lab RIKEN
 labExpId I71
 labVersion IDR
 localization nucleus
-md5sum e88ba47c1248c733845af98127a2bbc2
+md5sum a5e0ef187812b3a05f84f09605d74799
 project wgEncode
 rnaExtract longNonPolyA
 subId 5088
@@ -17413,6 +17657,7 @@ grant Gingeras
 lab RIKEN
 labExpId I71
 localization nucleus
+md5sum 9308b023abaf86668128274b2c9d4160
 project wgEncode
 rnaExtract longNonPolyA
 subId 5609
@@ -17461,6 +17706,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10011
 localization nucleus
+md5sum 7b4403945dfd25eea68663f37daf72e3,fcf8ee6cab707d71e002b6568d5b44a2
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -17513,6 +17759,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10011
 localization nucleus
+md5sum 3e5f0de9c49e86c9179f1ecc601bb69c
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -17589,6 +17836,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10011
 localization nucleus
+md5sum 71787e0bf079b35c590f8b4bd5437162
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -17663,6 +17911,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10011
 localization nucleus
+md5sum 684839e3c1f080801890b4150b5ce00c
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -17711,7 +17960,7 @@ lab RIKEN
 labExpId K09
 labVersion IDR
 localization nucleus
-md5sum aaa3a404c3dc223cdecc8d8d71259ffc
+md5sum c6bc27fcd20b5adbf1c3c5ff105b2cd9
 project wgEncode
 rnaExtract longPolyA
 subId 5147
@@ -17733,6 +17982,7 @@ grant Gingeras
 lab RIKEN
 labExpId K09
 localization nucleus
+md5sum acfc0a827edee9ded634a97c9b701128
 project wgEncode
 rnaExtract longPolyA
 subId 5611
@@ -17757,6 +18007,7 @@ grant Gingeras
 lab RIKEN
 labExpId CTig10011
 localization nucleus
+md5sum d0d4b79df92e17a026fd3da074cb5075
 platform Illumina_GA2x
 project wgEncode
 readType 1x36
@@ -17784,6 +18035,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102CTT
 localization cell
+md5sum dd975f8815afa89508afea099a13ad7a,42ed789e3f98e00c15c6558b5450df9f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -17810,6 +18062,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10055
 localization cell
+md5sum c959efbe0f54573033c8dceb6897d543,ac55fbdc39b8ece4cf9d598a3be0874a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -17836,6 +18089,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102CTT
 localization cell
+md5sum 4384d883fb483dbec211fded03b6678a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -17862,6 +18116,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10055
 localization cell
+md5sum 29c71f67eabfafc3c453000e41153133
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -17888,6 +18143,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102CTT
 localization cell
+md5sum 46bc700d8a101f5e4dd1636a76be8fa4
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -17914,6 +18170,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10055
 localization cell
+md5sum 92ea6620594069e929cc461b23a73c7c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -17940,6 +18197,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102CTT
 localization cell
+md5sum 292f9de2ccf12cbc99259b965b9963ec
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -17965,6 +18223,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10055
 localization cell
+md5sum 4a2816adb4bd9b3e3581ddca2e04de71
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -17990,6 +18249,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102CTT,CThi10055
 localization cell
+md5sum 04bc7b8653648a4d0321c90876d67505
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18015,6 +18275,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10056
 localization cell
+md5sum ae918db6511e43f591df076f312f49ae,2d3be8a5f415d28e52fe88b682bfafe5
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18041,6 +18302,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102GAT
 localization cell
+md5sum 0767dbdff31cf0fab83385858214411d,452776aa5dd2c38c26a8347836578918
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18067,6 +18329,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10056
 localization cell
+md5sum 8a27c5f5c4281c88a9b8b2299b846fb3
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18093,6 +18356,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102GAT
 localization cell
+md5sum e6daea64e9383b534cefae2f2d0d1e81
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18119,6 +18383,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10056
 localization cell
+md5sum de44e6317874b1926943c8d037f9e4d9
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18145,6 +18410,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102GAT
 localization cell
+md5sum 24299f7c340356dd3fbeb95cc677b587
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18171,6 +18437,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10056
 localization cell
+md5sum 664198af214886cb91fb346cef8f151d
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18196,6 +18463,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10102GAT
 localization cell
+md5sum f80926a3d4112090861fc77173bb225e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18221,6 +18489,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10056,CThi10102GAT
 localization cell
+md5sum d1a323a4b8f419721d401ec71c5618e3
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18493,6 +18762,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10030
 localization cell
+md5sum b8f668de1bae74a6f04db7eb810abd51,048870092514ce709b9a6ec277c9b35c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18519,6 +18789,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10031
 localization cell
+md5sum c96c5c3ad06556b68e18136080c088c2,5e6466a7ddfa44b15808891afc3c6f6f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18545,6 +18816,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10030
 localization cell
+md5sum fbda9553d7cd84a2037e1fc4efe60ed2
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18571,6 +18843,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10031
 localization cell
+md5sum 259aad4e44798a0219472cc2a2dc9db7
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18597,6 +18870,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10030
 localization cell
+md5sum 77f4a41730e40a72cc94b108d4aa84d2
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18623,6 +18897,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10031
 localization cell
+md5sum f73c49e37a8d58060c000ad440eb46bd
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18649,6 +18924,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10030
 localization cell
+md5sum 2e86d7546804759d5105ce1d9deb9bc6
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18674,6 +18950,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10031
 localization cell
+md5sum 7bc5587bcdd437ed5562fe89d9ece389
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18699,6 +18976,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10030,CThi10031
 localization cell
+md5sum c87de368abf9533f40ea230bb6b504f7
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18723,6 +19001,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10043
 localization cell
+md5sum 7be510bc3ee8df879967caff196e31f0,342efb20e882d2d239f174028a49e3dc
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18748,6 +19027,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10046
 localization cell
+md5sum 0f9a4d2dbb049af17b4f056c064f4e4b,b1ba9fb0797167564cafcf3560763c8f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18773,6 +19053,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10043
 localization cell
+md5sum 00abbedf7b3eef7b8afb48d5f7a02b52
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18798,6 +19079,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10046
 localization cell
+md5sum 738025f00849434c3c10e107e7d18b4c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18823,6 +19105,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10043
 localization cell
+md5sum a1f2226f7a17ed6d313fb29a0012994e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18848,6 +19131,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10046
 localization cell
+md5sum f5ec03882d8cd9cb223795fd742aff53
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18873,6 +19157,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10043
 localization cell
+md5sum cb0927c3582e38f1c26fde7f99f4f9d5
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18897,6 +19182,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10046
 localization cell
+md5sum a74cb3a0b4d4340baf2b5f18f3267437
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18921,6 +19207,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10043,CThi10046
 localization cell
+md5sum bddbb755005f8023321aac770a03d6da
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18945,6 +19232,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10044
 localization cytosol
+md5sum 546680e2c14240eae469fd0b54ffe65a,b1ae519e91a76cd731ef0173b3b21d3e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18970,6 +19258,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10047
 localization cytosol
+md5sum 2246fe28882f890a8eeb799da4f27461,8e48b3f650a647779cc5368f3acfb05a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -18995,6 +19284,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10044
 localization cytosol
+md5sum c445e724eb436bae5eeeb527ff2e239f
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19020,6 +19310,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10047
 localization cytosol
+md5sum 947b8b462328a6f0876d9b052ee5c05a
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19045,6 +19336,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10044
 localization cytosol
+md5sum 844d0fea8302adb66f406df0f35f0cb1
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19070,6 +19362,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10047
 localization cytosol
+md5sum 1f8707a8f51ace83ff564bcc7945cdf6
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19095,6 +19388,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10044
 localization cytosol
+md5sum e9ef5a17836cca98aa8fba2cb63e95bd
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19119,6 +19413,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10047
 localization cytosol
+md5sum 76895e3e2960262ebb6ced908cad1955
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19143,6 +19438,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10044,CThi10047
 localization cytosol
+md5sum ef26aeb224dab37910b554481158714c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19167,6 +19463,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10045
 localization nucleus
+md5sum 13b0f544a005bfb6142984162c88a658,ebd59d8a52be4ede62a8f6307b783a04
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19192,6 +19489,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10048
 localization nucleus
+md5sum 4af03165898212fb069b0d437682e659,3083e871ff6f1e9c699168482d5d8d4e
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19217,6 +19515,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10045
 localization nucleus
+md5sum 4aaf542b41cb9248b74d89fa2faf3b29
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19242,6 +19541,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10048
 localization nucleus
+md5sum 2e2b660af8a977c608b509425132d753
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19267,6 +19567,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10045
 localization nucleus
+md5sum 9c16360249d4a46bca6bce97cf955152
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19292,6 +19593,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10048
 localization nucleus
+md5sum 08a0ba346c287ab6d809c5ab18c2b824
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19317,6 +19619,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10045
 localization nucleus
+md5sum 34f55979297e318b2273d16db8aa897b
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19341,6 +19644,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10048
 localization nucleus
+md5sum 8a87541d09f4b9fbd13e381469b57562
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19365,6 +19669,7 @@ grant Gingeras
 lab RIKEN
 labExpId CThi10045,CThi10048
 localization nucleus
+md5sum 146b4db17d96e77f46846daa198a0d4c
 platform Illumina_HiSeq_2000
 project wgEncode
 readType 1x50
@@ -19602,11 +19907,11 @@ lab RIKEN
 labExpId K14,K15
 labVersion IDR
 localization cell
-md5sum 0ca0d6d5149405dc2703b0a013d1a7e6
+md5sum 74a76af62ea7f81ecbb2503d9b3e61c9
 project wgEncode
 rnaExtract longPolyA
 subId 5610
 tableName wgEncodeRikenCageSknshraCellPapTssHmm
 view TssHmm
 
-# MAGIC: -1025781376
+# MAGIC: -1672818571
