@@ -479,6 +479,33 @@ ele->type = jsonString;
 return ele;
 }
 
+struct jsonBooleanElement *newJsonBoolean(boolean val)
+{
+struct jsonBooleanElement *ele;
+AllocVar(ele);
+ele->val = val;
+ele->type = jsonBoolean;
+return ele;
+}
+
+struct jsonNumberElement *newJsonNumber(long val)
+{
+struct jsonNumberElement *ele;
+AllocVar(ele);
+ele->val = val;
+ele->type = jsonNumber;
+return ele;
+}
+
+struct jsonDoubleElement *newJsonDouble(double val)
+{
+struct jsonDoubleElement *ele;
+AllocVar(ele);
+ele->val = val;
+ele->type = jsonDouble;
+return ele;
+}
+
 struct jsonHashElement *newJsonHash(struct hash *h)
 {
 struct jsonHashElement *ele;
@@ -512,36 +539,28 @@ void jsonHashAddString(struct jsonHashElement *h, char *name, char *val)
 {
 // Add a string to a hash which will be used to print a javascript object;
 // existing values are replaced.
-val = javaScriptLiteralEncode(val);
-char *str = needMem(strlen(val) + 3);
-sprintf(str, "\"%s\"", val);
-freez(&val);
-jsonHashAdd(h, name, (struct jsonElement *) newJsonString(str));
+jsonHashAdd(h, name, (struct jsonElement *) newJsonString(val));
 }
 
 void jsonHashAddNumber(struct jsonHashElement *h, char *name, long val)
 {
 // Add a number to a hash which will be used to print a javascript object;
 // existing values are replaced.
-char buf[256];
-safef(buf, sizeof(buf), "%ld", val);
-jsonHashAdd(h, name, (struct jsonElement *) newJsonString(buf));
+jsonHashAdd(h, name, (struct jsonElement *) newJsonNumber(val));
 }
 
 void jsonHashAddDouble(struct jsonHashElement *h, char *name, double val)
 {
 // Add a number to a hash which will be used to print a javascript object;
 // existing values are replaced.
-char buf[256];
-safef(buf, sizeof(buf), "%.10f", val);
-jsonHashAdd(h, name, (struct jsonElement *) newJsonString(buf));
+jsonHashAdd(h, name, (struct jsonElement *) newJsonDouble(val));
 }
 
 void jsonHashAddBoolean(struct jsonHashElement *h, char *name, boolean val)
 {
 // Add a boolean to a hash which will be used to print a javascript object;
 // existing values are replaced.
-jsonHashAdd(h, name, (struct jsonElement *) newJsonString(val ? "true" : "false"));
+jsonHashAdd(h, name, (struct jsonElement *) newJsonBoolean(val));
 }
 
 void jsonListAdd(struct slRef **list, struct jsonElement *ele)
@@ -554,25 +573,17 @@ slAddHead(list, e);
 
 void jsonListAddString(struct slRef **list, char *val)
 {
-val = javaScriptLiteralEncode(val);
-char *str = needMem(strlen(val) + 3);
-sprintf(str, "'%s'", val);
-freez(&val);
-jsonListAdd(list, (struct jsonElement *) newJsonString(str));
+jsonListAdd(list, (struct jsonElement *) newJsonString(val));
 }
 
 void jsonListAddNumber(struct slRef **list, long val)
 {
-char buf[256];
-safef(buf, sizeof(buf), "%ld", val);
-jsonListAdd(list, (struct jsonElement *) newJsonString(buf));
+jsonListAdd(list, (struct jsonElement *) newJsonNumber(val));
 }
 
 void jsonListAddDouble(struct slRef **list, double val)
 {
-char buf[256];
-safef(buf, sizeof(buf), "%.10f", val);
-jsonListAdd(list, (struct jsonElement *) newJsonString(buf));
+jsonListAdd(list, (struct jsonElement *) newJsonDouble(val));
 }
 
 void jsonListAddBoolean(struct slRef **list, boolean val)
@@ -645,7 +656,27 @@ switch (json->type)
         }
     case jsonString:
         {
-        hPrintf("%s", ((struct jsonStringElement *) json)->str);
+        char *val = javaScriptLiteralEncode(((struct jsonStringElement *) json)->str);
+        hPrintf("\"%s\"", val);
+        break;
+        }
+    case jsonBoolean:
+        {
+        hPrintf("%s", ((struct jsonBooleanElement *) json)->val ? "true" : "false");
+        break;
+        }
+    case jsonNumber:
+        {
+        char buf[256];
+        safef(buf, sizeof(buf), "%ld", ((struct jsonNumberElement *) json)->val);
+        hPrintf("%s", buf);
+        break;
+        }
+    case jsonDouble:
+        {
+        char buf[256];
+        safef(buf, sizeof(buf), "%.10f", ((struct jsonDoubleElement *) json)->val);
+        hPrintf("%s", buf);
         break;
         }
     default:
@@ -706,4 +737,154 @@ dyStringVaPrintf(buf, format, args);
 dyStringAppend(ds, javaScriptLiteralEncode(dyStringCannibalize(&buf)));
 dyStringPrintf(ds, "\"}");
 va_end(args);
+}
+
+static void skipLeadingSpacesWithPos(char *s, int *posPtr)
+/* skip leading white space. */
+{
+for (;;)
+    {
+    char c = s[*posPtr];
+    if (!isspace(c))
+	return;
+    (*posPtr)++;
+    }
+}
+
+static void getSpecificChar(char c, char *str, int *posPtr)
+{
+// get specified char from string or errAbort
+if(str[*posPtr] != c)
+    errAbort("Unexpected character '%c' (expected '%c') - string position %d\n", str[*posPtr], c, *posPtr);
+(*posPtr)++;
+}
+
+static struct jsonElement *jsonParseExpression(char *str, int *posPtr);
+
+static struct jsonElement *jsonParseObject(char *str, int *posPtr)
+{
+struct hash *h = newHash(0);
+getSpecificChar('{', str, posPtr);
+while(str[*posPtr] != '}')
+    {
+    int i;
+    skipLeadingSpacesWithPos(str, posPtr);
+    getSpecificChar('"', str, posPtr);
+    for(i = 0; str[*posPtr + i] && str[*posPtr + i] != '"'; i++)
+        ;
+    char *name = cloneStringZ(str + *posPtr, i);
+    *posPtr += i;
+    getSpecificChar('"', str, posPtr);
+
+    skipLeadingSpacesWithPos(str, posPtr);
+    getSpecificChar(':', str, posPtr);
+    skipLeadingSpacesWithPos(str, posPtr);
+
+    hashAdd(h, name, jsonParseExpression(str, posPtr));
+    skipLeadingSpacesWithPos(str, posPtr);
+    if(str[*posPtr] == ',')
+        (*posPtr)++;
+    else
+        break;
+    }
+skipLeadingSpacesWithPos(str, posPtr);
+getSpecificChar('}', str, posPtr);
+return (struct jsonElement *) newJsonHash(h);
+}
+
+static struct jsonElement *jsonParseList(char *str, int *posPtr)
+{
+struct slRef *list = NULL;
+getSpecificChar('[', str, posPtr);
+while(str[*posPtr] != ']')
+    {
+    struct slRef *e;
+    AllocVar(e);
+    skipLeadingSpacesWithPos(str, posPtr);
+    e->val = jsonParseExpression(str, posPtr);
+    slAddHead(&list, e);
+    skipLeadingSpacesWithPos(str, posPtr);
+    if(str[*posPtr] == ',')
+        (*posPtr)++;
+    else
+        break;
+    }
+skipLeadingSpacesWithPos(str, posPtr);
+getSpecificChar(']', str, posPtr);
+slReverse(&list);
+return (struct jsonElement *) newJsonList(list);
+}
+
+static struct jsonElement *jsonParseString(char *str, int *posPtr)
+{
+int i;
+getSpecificChar('"', str, posPtr);
+for(i = 0; str[*posPtr + i] && str[*posPtr + i] != '"'; i++)
+    ;
+char *val = cloneStringZ(str + *posPtr, i);
+*posPtr += i;
+getSpecificChar('"', str, posPtr);
+return (struct jsonElement *) newJsonString(val);
+}
+
+static struct jsonElement *jsonParseBoolean(char *str, int *posPtr)
+{
+struct jsonBooleanElement *ele;
+int i;
+for(i = 0; str[*posPtr + i] && isalpha(str[*posPtr + i]); i++);
+    ;
+char *val = cloneStringZ(str + *posPtr, i);
+if(sameWord(val, "true"))
+    ele = newJsonBoolean(TRUE);
+else if(sameWord(val, "false"))
+    ele =  newJsonBoolean(FALSE);
+else
+    errAbort("Invalid boolean value '%s'; pos: %d", val, *posPtr);
+*posPtr += i;
+return (struct jsonElement *) ele;
+}
+
+static struct jsonElement *jsonParseNumber(char *str, int *posPtr)
+{
+int i;
+for(i = 0;; i++)
+    {
+    char c = str[*posPtr + i];
+    if(!(c && (isdigit(c) || c == '.' || c == '-' || c == '+')))
+        break;
+    }
+char *val = cloneStringZ(str + *posPtr, i);
+*posPtr += i;
+if(strchr(val, '.') == NULL)
+    return (struct jsonElement *) newJsonNumber(sqlLongLong(val));
+else
+    return (struct jsonElement *) newJsonDouble(sqlDouble(val));
+}
+
+static struct jsonElement *jsonParseExpression(char *str, int *posPtr)
+{
+skipLeadingSpacesWithPos(str, posPtr);
+char c = str[*posPtr];
+if(c == '{')
+    return jsonParseObject(str, posPtr);
+else if (c == '[')
+    return jsonParseList(str, posPtr);
+else if (c == '"')
+    return jsonParseString(str, posPtr);
+else if (isdigit(c) || c == '-')
+    return jsonParseNumber(str, posPtr);
+else
+    return jsonParseBoolean(str, posPtr);
+// XXXX support null?
+}
+
+struct jsonElement *jsonParse(char *str)
+{
+// parse string into an in-memory json representation
+int pos = 0;
+struct jsonElement *ele = jsonParseExpression(str, &pos);
+skipLeadingSpacesWithPos(str, &pos);
+if(str[pos])
+    errAbort("Invalid JSON: unprocessed trailing string at position: %d: %s", pos, str + pos);
+return ele;
 }
