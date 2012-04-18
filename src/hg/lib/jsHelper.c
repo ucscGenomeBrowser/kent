@@ -829,7 +829,7 @@ return (struct jsonElement *) newJsonString(val);
 
 static struct jsonElement *jsonParseBoolean(char *str, int *posPtr)
 {
-struct jsonBooleanElement *ele;
+struct jsonBooleanElement *ele = NULL;
 int i;
 for(i = 0; str[*posPtr + i] && isalpha(str[*posPtr + i]); i++);
     ;
