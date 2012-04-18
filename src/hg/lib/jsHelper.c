@@ -759,6 +759,51 @@ if(str[*posPtr] != c)
 (*posPtr)++;
 }
 
+static char *getString(char *str, int *posPtr)
+{
+// read a double-quote delimited string; we handle backslash escaping.
+// returns allocated string.
+boolean escapeMode = FALSE;
+int i;
+struct dyString *ds = dyStringNew(1024);
+getSpecificChar('"', str, posPtr);
+for(i = 0;; i++)
+    {
+    char c = str[*posPtr + i];
+    if(!c)
+        errAbort("Premature end of string (missing trailing double-quote); string position '%d'", *posPtr);
+    else if(escapeMode)
+        {
+        switch(c)
+            {
+            case 'n':
+                c = '\n';
+                break;
+            case 'r':
+                c = '\r';
+                break;
+            case 't':
+                c = '\t';
+                break;
+            }
+        dyStringAppendC(ds, c);
+        escapeMode = FALSE;
+        }
+    else if(c == '"')
+        break;
+    else if(c == '\\')
+        escapeMode = TRUE;
+    else
+        {
+        dyStringAppendC(ds, c);
+        escapeMode = FALSE;
+        }
+    }
+*posPtr += i;
+getSpecificChar('"', str, posPtr);
+return dyStringCannibalize(&ds);
+}
+
 static struct jsonElement *jsonParseExpression(char *str, int *posPtr);
 
 static struct jsonElement *jsonParseObject(char *str, int *posPtr)
@@ -767,19 +812,12 @@ struct hash *h = newHash(0);
 getSpecificChar('{', str, posPtr);
 while(str[*posPtr] != '}')
     {
-    int i;
+    // parse out a name : val pair
     skipLeadingSpacesWithPos(str, posPtr);
-    getSpecificChar('"', str, posPtr);
-    for(i = 0; str[*posPtr + i] && str[*posPtr + i] != '"'; i++)
-        ;
-    char *name = cloneStringZ(str + *posPtr, i);
-    *posPtr += i;
-    getSpecificChar('"', str, posPtr);
-
+    char *name = getString(str, posPtr);
     skipLeadingSpacesWithPos(str, posPtr);
     getSpecificChar(':', str, posPtr);
     skipLeadingSpacesWithPos(str, posPtr);
-
     hashAdd(h, name, jsonParseExpression(str, posPtr));
     skipLeadingSpacesWithPos(str, posPtr);
     if(str[*posPtr] == ',')
@@ -817,14 +855,7 @@ return (struct jsonElement *) newJsonList(list);
 
 static struct jsonElement *jsonParseString(char *str, int *posPtr)
 {
-int i;
-getSpecificChar('"', str, posPtr);
-for(i = 0; str[*posPtr + i] && str[*posPtr + i] != '"'; i++)
-    ;
-char *val = cloneStringZ(str + *posPtr, i);
-*posPtr += i;
-getSpecificChar('"', str, posPtr);
-return (struct jsonElement *) newJsonString(val);
+return (struct jsonElement *) newJsonString(getString(str, posPtr));
 }
 
 static struct jsonElement *jsonParseBoolean(char *str, int *posPtr)
