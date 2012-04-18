@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 # recursive target to do install to DEST, with extra excludes EXCL.
 
-JQUERY_FILES=jquery-1.2.6.pack.js jquery.js jquery.tablednd.js \
+JQUERY_FILES=jquery.js jquery.tablednd.js \
     jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
     ui.dropdownchecklist.js \
     jquery.cookie.js jquery.watermarkinput.js \

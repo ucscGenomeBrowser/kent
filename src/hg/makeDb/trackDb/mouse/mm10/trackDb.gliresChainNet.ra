@@ -1,10 +1,10 @@
-track gliersChainNet
+track gliresChainNet
 compositeTrack on
-shortLabel Gliers Chain/Net
-longLabel Gliers Genomes, Chain and Net Alignments
+shortLabel Glires Chain/Net
+longLabel Glires Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aRat=Rat bSquirrel=Squirrel cKRat=Kangaroo_Rat dNMRat=Naked_mole_rat eGPig=Guinea_pig fRabbit=Rabbit gPika=Pika hTShrew=Tree_shrew
-subGroup3 clade Clade aRodent=Rodentia bScan=Scandentia
+subGroup2 species Species aRat=Rat bKRat=Kangaroo_Rat cNMRat=Naked_mole_rat dGPig=Guinea_pig  eSquirrel=Squirrel fRabbit=Rabbit gPika=Pika hTShrew=Tree_shrew
+subGroup3 clade Clade aRodent=Rodentia bLagomorpha=Lagomorpha cScan=Scandentia
 dragAndDrop subTracks
 visibility hide
 group compGeno
@@ -18,17 +18,17 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species 
 sortOrder species=+ view=+ clade=+
 configurable on
-html mm10gliersChainNet
+html chainNet
 
-    track gliersChainNetViewchain
+    track gliresChainNetViewchain
     shortLabel Chains
     view chain
     visibility pack
-    subTrack gliersChainNet
+    subTrack gliresChainNet
     spectrum on
 
         track chainRn5
-        subTrack gliersChainNetViewchain on
+        subTrack gliresChainNetViewchain on
         subGroups view=chain species=aRat clade=aRodent
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -36,69 +36,69 @@ html mm10gliersChainNet
         otherDb rn5
 
         track chainSpeTri2
-        subTrack gliersChainNetViewchain off
-        subGroups view=chain species=bSquirrel clade=aRodent
+        subTrack gliresChainNetViewchain off
+        subGroups view=chain species=eSquirrel clade=aRodent
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain speTri2
         otherDb speTri2
 
         track chainDipOrd1
-        subTrack gliersChainNetViewchain on
-        subGroups view=chain species=cKRat clade=aRodent
+        subTrack gliresChainNetViewchain on
+        subGroups view=chain species=bKRat clade=aRodent
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain dipOrd1
         otherDb dipOrd1
 
-        track chainHetGla1
-        subTrack gliersChainNetViewchain off
-        subGroups view=chain species=dNMRat clade=aRodent
+        track chainHetGla2
+        subTrack gliresChainNetViewchain off
+        subGroups view=chain species=cNMRat clade=aRodent
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain hetGla1
-        otherDb hetGla1
+        type chain hetGla2
+        otherDb hetGla2
 
         track chainCavPor3
-        subTrack gliersChainNetViewchain on
-        subGroups view=chain species=eGPig clade=aRodent
+        subTrack gliresChainNetViewchain on
+        subGroups view=chain species=dGPig clade=aRodent
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain cavPor3
         otherDb cavPor3
 
         track chainOryCun2
-        subTrack gliersChainNetViewchain off
-        subGroups view=chain species=fRabbit clade=aRodent
+        subTrack gliresChainNetViewchain off
+        subGroups view=chain species=fRabbit clade=bLagomorpha
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain oryCun2
         otherDb oryCun2
 
         track chainOchPri2
-        subTrack gliersChainNetViewchain on
-        subGroups view=chain species=gPika clade=aRodent
+        subTrack gliresChainNetViewchain on
+        subGroups view=chain species=gPika clade=bLagomorpha
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain ochPri2
         otherDb ochPri2
 
         track chainTupBel1
-        subTrack gliersChainNetViewchain off
-        subGroups view=chain species=hTShrew clade=bScan
+        subTrack gliresChainNetViewchain off
+        subGroups view=chain species=hTShrew clade=cScan
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain tupBel1
         otherDb tupBel1
 
-    track gliersChainNetViewnet
+    track gliresChainNetViewnet
     shortLabel Nets
     view net
     visibility dense
-    subTrack gliersChainNet
+    subTrack gliresChainNet
 
         track netRn5
-        subTrack gliersChainNetViewnet on 
+        subTrack gliresChainNetViewnet on
         subGroups view=net species=aRat clade=aRodent
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -106,56 +106,56 @@ html mm10gliersChainNet
         otherDb rn5
 
         track netSpeTri2
-        subTrack gliersChainNetViewnet off
-        subGroups view=net species=bSquirrel clade=aRodent
+        subTrack gliresChainNetViewnet off
+        subGroups view=net species=eSquirrel clade=aRodent
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign speTri2 chainSpeTri2
         otherDb speTri2
 
         track netDipOrd1
-        subTrack gliersChainNetViewnet on 
-        subGroups view=net species=cKRat clade=aRodent
+        subTrack gliresChainNetViewnet on
+        subGroups view=net species=bKRat clade=aRodent
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign dipOrd1 chainDipOrd1
         otherDb dipOrd1
 
-        track netHetGla1
-        subTrack gliersChainNetViewnet off
-        subGroups view=net species=dNMRat clade=aRodent
+        track netHetGla2
+        subTrack gliresChainNetViewnet off
+        subGroups view=net species=cNMRat clade=aRodent
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign hetGla1 chainHetGla1
-        otherDb hetGla1
+        type netAlign hetGla2 chainHetGla2
+        otherDb hetGla2
 
         track netCavPor3
-        subTrack gliersChainNetViewnet on 
-        subGroups view=net species=eGPig clade=aRodent
+        subTrack gliresChainNetViewnet on
+        subGroups view=net species=dGPig clade=aRodent
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign cavPor3 chainCavPor3
         otherDb cavPor3
 
         track netOryCun2
-        subTrack gliersChainNetViewnet off
-        subGroups view=net species=fRabbit clade=aRodent
+        subTrack gliresChainNetViewnet off
+        subGroups view=net species=fRabbit clade=bLagomorpha
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oryCun2 chainOryCun2
         otherDb oryCun2
 
         track netOchPri2
-        subTrack gliersChainNetViewnet on 
-        subGroups view=net species=gPika clade=aRodent
+        subTrack gliresChainNetViewnet on
+        subGroups view=net species=gPika clade=bLagomorpha
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ochPri2 chainOchPri2
         otherDb ochPri2
 
         track netTupBel1
-        subTrack gliersChainNetViewnet off
-        subGroups view=net species=hTShrew clade=bScan
+        subTrack gliresChainNetViewnet off
+        subGroups view=net species=hTShrew clade=cScan
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign tupBel1 chainTupBel1
