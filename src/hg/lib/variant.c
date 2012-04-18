@@ -49,6 +49,7 @@ for( ; alleleNumber < pgSnp->alleleCount; alleleNumber++)
     struct allele *allele;
     AllocVar(allele);
     slAddHead(&variant->alleles, allele);
+    allele->variant = variant;
     allele->length = alleleStringLength;
     allele->sequence = cloneString(thisAlleleString);
     }
